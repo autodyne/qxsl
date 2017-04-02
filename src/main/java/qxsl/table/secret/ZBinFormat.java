@@ -1,0 +1,697 @@
+/*****************************************************************************
+ * Amateur Radio Operational Logging Library 'qxsl' since 2013 February 16th
+ * Language: Java Standard Edition 8
+ *****************************************************************************
+ * License : GNU Lesser General Public License v3 (see LICENSE)
+ * Author: Journal of Hamradio Informatics http://pafelog.net
+*****************************************************************************/
+package qxsl.table.secret;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
+
+import qxsl.field.*;
+import qxsl.model.*;
+
+/**
+ * zLogバイナリデータで交信記録を直列化するフォーマットです。
+ * 
+ * 
+ * @author Journal of Hamradio Informatics
+ * 
+ * @since 2013/02/26
+ *
+ */
+public final class ZBinFormat extends BaseFormat {
+	/**
+	 * この書式を識別する完全な名前を返します。
+	 * 
+	 * @return 書式の名前
+	 */
+	@Override
+	public String getName() {
+		return "zbin";
+	}
+
+	/**
+	 * このフォーマットを適用するファイル名拡張子の不変のリストを返します。
+	 * 
+	 * @return ファイル名拡張子のリスト
+	 */
+	@Override
+	public List<String> getExtensions() {
+		return Collections.unmodifiableList(Arrays.asList("zlo"));
+	}
+
+	/**
+	 * このフォーマットの詳細をUIで表示するのに適した簡潔な文字列を返します。
+	 * 
+	 * @return フォーマットの説明
+	 */
+	@Override
+	public String toString() {
+		return "zLog binary file format";
+	}
+
+	/**
+	 * 指定したストリームをこの書式でデコードして交信記録を読み込みます。
+	 * 
+	 * @param in 交信記録を読み込むストリーム
+	 * @return 交信記録
+	 * @throws IOException 入出力時の例外
+	 */
+	public List<Item> decode(InputStream in) throws IOException {
+		return new ZBinDecoder(in).read();
+	}
+
+	/**
+	 * この書式でエンコードした交信記録を指定したストリームに書き込みます。
+	 * 
+	 * @param out 交信記録を書き込むストリーム
+	 * @param items 出力する交信記録
+	 * @throws IOException 入出力時の例外
+	 */
+	public void encode(OutputStream out, List<Item> items) throws IOException {
+		new ZBinEncoder(out).write(items);
+	}
+
+	/**
+	 * Delphi言語のTDateTime型を閏秒を無視して再現します。
+	 * 
+	 * 
+	 * @author Journal of Hamradio Informatics
+	 * 
+	 * @since 2013/02/23
+	 *
+	 */
+	private static final class TDateTime {
+		private static final int MS_OF_DAY = 86400000;
+		private static final Epoch epoch = new Epoch();
+
+		private TDateTime() {}
+
+		/**
+		 * 指定されたTDateTimeを日時にデコードします。
+		 * 
+		 * @param bits TDateTime型のビット列
+		 * @return 日時
+		 */
+		public static Time decode(long bits) {
+			bits = Long.reverseBytes(bits);
+			double d = Double.longBitsToDouble(bits);
+			int time = (int) (d % 1 * MS_OF_DAY);
+			int days = (int) d;
+			time = Math.abs(time);
+			Calendar c = epoch.getCalendar();
+			c.add(Calendar.DAY_OF_YEAR, days);
+			c.add(Calendar.MILLISECOND, time);
+			return new Time(c.getTime());
+		}
+
+		/**
+		 * 指定された日時をTDateTimeにエンコードします。
+		 * 
+		 * @param date 日時
+		 * @return TDateTime型のビット列
+		 */
+		public static long encode(Time date) {
+			long ms = epoch.getTimeInMillis(date);
+			double d = ms / MS_OF_DAY;
+			double t = ms % MS_OF_DAY;
+			d += (ms > 0L? t : -t) / MS_OF_DAY;
+			long b = Double.doubleToLongBits(d);
+			return Long.reverseBytes(b);
+		}
+
+		private static final class Epoch {
+			private final Calendar epoch;
+			private final long unixDiff;
+
+			public Epoch() {
+				epoch = Calendar.getInstance();
+				epoch.set(1899, 11, 30, 0, 0, 0);
+				unixDiff = epoch.getTimeInMillis();
+			}
+
+			public Calendar getCalendar() {
+				return (Calendar) epoch.clone();
+			}
+
+			public long getTimeInMillis(Time d) {
+				long t = d.value().getTime();
+				return t - unixDiff;
+			}
+		}
+	}
+
+	/**
+	 * zLogバイナリデータの周波数帯の列挙型です。
+	 * 
+	 * 
+	 * @author Journal of Hamradio Informatics
+	 * 
+	 * @since 2013/02/23
+	 *
+	 */
+	public enum BandEnum {
+		M1_9  (    1900),
+		M3_5  (    3500),
+		M7    (    7000),
+		M10   (   10000),
+		M14   (   14000),
+		M18   (   18000),
+		M21   (   21000),
+		M24   (   24000),
+		M28   (   28000),
+		M50   (   50000),
+		M144  (  144000),
+		M430  (  430000),
+		M1200 ( 1200000),
+		M2400 ( 2400000),
+		M5600 ( 5600000),
+		G10UP (10000000);
+
+		private final Band band;
+		private static BandEnum[] arr;
+
+		private BandEnum(int kHz) {
+			this.band = new Band(kHz);
+		}
+
+		@Override
+		public String toString() {
+			return band.toString();
+		}
+
+		/**
+		 * この列挙子に対応するバンドを返します。
+		 * 
+		 * @return バンド
+		 */
+		public Band toBand() {
+			return band;
+		}
+
+		/**
+		 * 指定された周波数に対応する列挙子を返します。
+		 * 
+		 * @param band 周波数
+		 * @return 対応する列挙子があれば返す
+		 */
+		public static BandEnum valueOf(Band band) {
+			if(arr == null) arr = values();
+			for(BandEnum b : arr) {
+				if(b.band.equals(band)) return b;
+			}
+			return null;
+		}
+
+		/**
+		 * 指定した序数に対応する列挙子を返します。
+		 * 
+		 * @param i 序数
+		 * @return 対応する列挙子があれば返す
+		 */
+		public static BandEnum forIndex(int i) {
+			if(arr == null) arr = values();
+			for(BandEnum m : arr) {
+				if(m.ordinal() == i) return m;
+			}
+			return null;
+		}
+	}
+
+	/**
+	 * zLogバイナリデータの通信方式の列挙型です。
+	 * 
+	 * 
+	 * @author Journal of Hamradio Informatics
+	 * 
+	 * @since 2013/02/23
+	 *
+	 */
+	public enum ModeEnum {
+		CW    ("CW"),
+		SSB   ("SSB"),
+		FM    ("FM"),
+		AM    ("AM"),
+		RTTY  ("RTTY"),
+		OTHERS("Others");
+
+		private final Mode mode;
+		private static ModeEnum[] arr;
+
+		private ModeEnum(String mode) {
+			this.mode = new Mode(mode);
+		}
+
+		/**
+		 * この列挙子に対応するモードを返します。
+		 * 
+		 * @return モード
+		 */
+		public Mode toMode() {
+			return mode;
+		}
+
+		/**
+		 * 指定されたモードに対応する列挙子を返します。
+		 * 
+		 * @param mode モード
+		 * @return 対応する列挙子があれば返す
+		 */
+		public static ModeEnum valueOf(Mode mode) {
+			if(arr == null) arr = values();
+			for(ModeEnum m : arr) {
+				if(m.mode.equals(mode)) return m;
+			}
+			return null;
+		}
+
+		/**
+		 * 指定した序数に対応する列挙子を返します。
+		 * 
+		 * @param i 序数
+		 * @return 対応する列挙子があれば返す
+		 */
+		public static ModeEnum forIndex(int i) {
+			if(arr == null) arr = values();
+			for(ModeEnum m : arr) {
+				if(m.ordinal() == i) return m;
+			}
+			return null;
+		}
+	}
+
+	/**
+	 * zLogバイナリデータの空中線出力の列挙型です。
+	 * 
+	 * 
+	 * @author Journal of Hamradio Informatics
+	 * 
+	 * @since 2013/02/23
+	 *
+	 */
+	public enum WattEnum {
+		P, L, M, H;
+
+		private final Watt watt;
+		private static WattEnum[] arr;
+
+		private WattEnum() {
+			watt = new Watt(name());
+		}
+
+		/**
+		 * この列挙子に対応する出力を返します。
+		 * 
+		 * @return 出力
+		 */
+		public Watt toWatt() {
+			return watt;
+		}
+
+		/**
+		 * 指定された出力に対応する列挙子を返します。
+		 * 
+		 * @param watt 出力
+		 * @return 対応する列挙子があれば返す
+		 */
+		public static WattEnum valueOf(Watt watt) {
+			if(arr == null) arr = values();
+			for(WattEnum p : arr) {
+				if(p.watt.equals(watt)) return p;
+			}
+			return null;
+		}
+
+		/**
+		 * 指定した序数に対応する列挙子を返します。
+		 * 
+		 * @param i 序数
+		 * @return 対応する列挙子があれば返す
+		 */
+		public static WattEnum forIndex(int i) {
+			if(arr == null) arr = values();
+			for(WattEnum p : arr) {
+				if(p.ordinal() == i) return p;
+			}
+			return null;
+		}
+	}
+
+	/**
+	 * zLogバイナリデータで直列化された交信記録をデコードします。
+	 * 
+	 * 
+	 * @author Journal of Hamradio Informatics
+	 * 
+	 * @since 2013/02/23
+	 *
+	 */
+	private static final class ZBinDecoder {
+		private final Fields fields;
+		private final DataInputStream stream;
+
+		/**
+		 * 指定されたストリームを読み込むデコーダを構築します。
+		 * 
+		 * @param in 読み込むストリーム
+		 */
+		public ZBinDecoder(InputStream in) {
+			fields = new Fields();
+			this.stream = new DataInputStream(in);
+		}
+
+		/**
+		 * 交信記録を読み込みます。ストリームは閉じられます。
+		 * 
+		 * @return 交信記録 交信記録がなければnull
+		 * @throws IOException 入出力の例外
+		 */
+		public List<Item> read() throws IOException {
+			try {
+				return logSheet();
+			} catch (IOException ex) {
+				throw ex;
+			} catch (Exception ex) {
+				throw new IOException(ex);
+			} finally {
+				stream.close();
+			}
+		}
+
+		/**
+		 * 冒頭をスキップして交信記録を1件読み込みます。
+		 * 
+		 * @return 読み込んだ交信記録
+		 * @throws Exception 読み込みに失敗した場合
+		 */
+		private List<Item> logSheet() throws Exception {
+			stream.readFully(new byte[256]);
+			List<Item> items = new ArrayList<>();
+			while(stream.available() > 0) {
+				items.add(item());
+			}
+			return Collections.unmodifiableList(items);
+		}
+
+		/**
+		 * ストリームから{@link Item}を1件読み込みます。
+		 * 
+		 * @return 読み込んだ{@link Item}
+		 * @throws Exception 読み込みに失敗した場合
+		 */
+		private Item item() throws Exception {
+			Item item = new Item();
+			date(item);
+			call(item);
+			sent(item);
+			rcvd(item);
+			stream.skipBytes(1);
+			sRSTQ(item);
+			rRSTQ(item);
+			stream.skipBytes(4);
+			mode(item);
+			band(item);
+			watt(item);
+			stream.skipBytes(65);
+			operator(item);
+			note(item);
+			stream.skipBytes(14);
+			return item;
+		}
+
+		/**
+		 * {@link Item}に交信日時を読み込みます。
+		 * 
+		 * @param item 設定する{@link Item}
+		 * @throws Exception 読み込みに失敗した場合
+		 */
+		private void date(Item item) throws Exception {
+			item.set(TDateTime.decode(stream.readLong()));
+		}
+
+		/**
+		 * {@link Item}に相手局のコールサインを読み込みます。
+		 * 
+		 * @param item 設定する{@link Item}
+		 * @throws Exception 読み込みに失敗した場合
+		 */
+		private void call(Item item) throws Exception {
+			String s = readString(12);
+			if(s != null) item.set(fields.cache(CALL, s));
+		}
+
+		/**
+		 * {@link Item}に相手局に送信したナンバーを読み込みます。
+		 * 
+		 * @param item 設定する{@link Item}
+		 * @throws Exception 読み込みに失敗した場合
+		 */
+		private void sent(Item item) throws Exception {
+			String s = readString(30);
+			if(s != null) item.getSent().set(fields.cache(CODE, s));
+		}
+
+		/**
+		 * {@link Item}に相手局から受信したナンバーを読み込みます。
+		 * 
+		 * @param item 設定する{@link Item}
+		 * @throws Exception 読み込みに失敗した場合
+		 */
+		private void rcvd(Item item) throws Exception {
+			String s = readString(30);
+			if(s != null) item.getRcvd().set(fields.cache(CODE, s));
+		}
+
+		/**
+		 * {@link Item}に相手局に送信したRSTQを読み込みます。
+		 * 
+		 * @param item 設定する{@link Item}
+		 * @throws Exception 読み込みに失敗した場合
+		 */
+		private void sRSTQ(Item item) throws Exception {
+			Short rst = Short.reverseBytes(stream.readShort());
+			item.getSent().set(fields.cache(RSTQ, rst.toString()));
+		}
+
+		/**
+		 * {@link Item}に相手局から受信したRSTQを読み込みます。
+		 * 
+		 * @param item 設定する{@link Item}
+		 * @throws Exception 読み込みに失敗した場合
+		 */
+		private void rRSTQ(Item item) throws Exception {
+			Short rst = Short.reverseBytes(stream.readShort());
+			item.getRcvd().set(fields.cache(RSTQ, rst.toString()));
+		}
+
+		/**
+		 * {@link Item}に通信方式を読み込みます。
+		 * 
+		 * @param item 設定する{@link Item}
+		 * @throws Exception 読み込みに失敗した場合
+		 */
+		private void mode(Item item) throws Exception {
+			item.set(ModeEnum.forIndex(stream.read()).toMode());
+		}
+
+		/**
+		 * {@link Item}に周波数帯を読み込みます。
+		 * 
+		 * @param item 設定する{@link Item}
+		 * @throws Exception 読み込みに失敗した場合
+		 */
+		private void band(Item item) throws Exception {
+			item.set(BandEnum.forIndex(stream.read()).toBand());
+		}
+
+		/**
+		 * {@link Item}に空中線出力を読み込みます。
+		 * 
+		 * @param item 設定する{@link Item}
+		 * @throws Exception 読み込みに失敗した場合
+		 */
+		private void watt(Item item) throws Exception {
+			item.getSent().set(WattEnum.forIndex(stream.read()).toWatt());
+		}
+
+		/**
+		 * {@link Item}に運用者名を読み込みます。
+		 * 
+		 * @param item 設定する{@link Item}
+		 * @throws Exception 読み込みに失敗した場合
+		 */
+		private void operator(Item item) throws Exception {
+			String s = readString(14);
+			if(s != null) item.set(fields.cache(NAME, s));
+		}
+
+		/**
+		 * {@link Item}に交信の備考を読み込みます。
+		 * 
+		 * @param item 設定する{@link Item}
+		 * @throws Exception 読み込みに失敗した場合
+		 */
+		private void note(Item item) throws Exception {
+			String s = readString(66);
+			if(s != null) item.set(fields.cache(NOTE, s));
+		}
+
+		/**
+		 * ストリームから指定された最大文字数の文字列を読み込みます。
+		 * 
+		 * @param len 最大文字数
+		 * @return 読み込んだ文字列
+		 * @throws IOException 読み込みに失敗した場合
+		 */
+		private String readString(int len) throws IOException {
+			byte[] buffer = new byte[stream.read()];
+			stream.readFully(buffer);
+			stream.skipBytes(len - buffer.length);
+			if(buffer.length == 0)return null;
+			return new String(buffer, "SJIS");
+		}
+	}
+
+	/**
+	 * 交信記録をzLogバイナリデータに直列化するエンコーダです。
+	 * 
+	 * 
+	 * @author Journal of Hamradio Informatics
+	 * 
+	 * @since 2013/02/23
+	 *
+	 */
+	private static final class ZBinEncoder {
+		private final DataOutputStream stream;
+
+		/**
+		 * 指定されたストリームに出力するエンコーダを構築します。
+		 * 
+		 * @param out 交信記録を書き込むストリーム
+		 */
+		public ZBinEncoder(OutputStream out) {
+			this.stream = new DataOutputStream(out);
+		}
+
+		/**
+		 * 交信記録を出力します。ストリームは閉じられます。
+		 * 
+		 * @param items 交信記録
+		 * @throws IOException 入出力の例外
+		 */
+		public void write(List<Item> items) throws IOException {
+			stream.write(new byte[256]);
+			for(Item r : items) item(r);
+			stream.close();
+		}
+
+		/**
+		 * {@link Item}をバイナリにシリアライズして出力します。
+		 * 
+		 * @param item 出力する{@link Item}
+		 * @throws IOException 出力に失敗した場合
+		 */
+		private void item(Item item) throws IOException {
+			int i = 0;
+			time(item.get(Time.class));
+			string(12, item.get(Call.class));
+			string(30, item.getSent().get(Code.class));
+			string(30, item.getRcvd().get(Code.class));
+			while(i++ < 1) stream.writeByte(0);
+			rst(item.getSent().get(RSTQ.class));
+			rst(item.getRcvd().get(RSTQ.class));
+			while(i++ < 6) stream.writeByte(0);
+			mode(item.get(Mode.class));
+			band(item.get(Band.class));
+			watt(item.getSent().get(Watt.class));
+			while(i++ < 72) stream.writeByte(0);
+			string(14, item.get(Name.class));
+			string(66, item.get(Note.class));
+			while(i++ < 87) stream.writeByte(0);
+			stream.flush();
+		}
+
+		/**
+		 * 交信日時をTDateTime型で読めるバイト列に変換して出力します。
+		 * 
+		 * @param date 交信日時
+		 * @throws IOException 出力に失敗した場合
+		 */
+		private void time(Time date) throws IOException {
+			if(date == null) stream.writeLong(0);
+			else stream.writeLong(TDateTime.encode(date));
+		}
+
+		/**
+		 * RSTQシグナルレポートを下位バイト、上位バイトの順に出力します。
+		 * 
+		 * @param rst RSTQシグナルレポート
+		 * @throws IOException 出力に失敗した場合
+		 */
+		private void rst(RSTQ rst) throws IOException {
+			int s = rst == null? 599 : rst.value();
+			stream.writeShort(Short.reverseBytes((short) s));
+		}
+
+		/**
+		 * 交信した通信方式を1バイトで出力します。
+		 * 
+		 * @param mode 通信方式
+		 * @throws IOException 出力に失敗した場合
+		 */
+		private void mode(Mode mode) throws IOException {
+			ModeEnum modes = ModeEnum.valueOf(mode);
+			if(mode == null) stream.writeByte(0);
+			else stream.writeByte(modes.ordinal());
+		}
+
+		/**
+		 * 交信した周波数帯を1バイトで出力します。
+		 * 
+		 * @param band 周波数帯
+		 * @throws IOException 出力に失敗した場合
+		 */
+		private void band(Band band) throws IOException {
+			BandEnum bands = BandEnum.valueOf(band);
+			if(bands == null) stream.writeByte(0);
+			else stream.writeByte(bands.ordinal());
+		}
+
+		/**
+		 * 交信時の空中線出力を1バイトで出力します。
+		 * 
+		 * @param watt 空中線出力
+		 * @throws IOException 出力に失敗した場合
+		 */
+		private void watt(Watt watt) throws IOException {
+			WattEnum watts = WattEnum.valueOf(watt);
+			if(watts == null) stream.writeByte(0);
+			else stream.writeByte(watts.ordinal());
+		}
+
+		/**
+		 * 指定された属性を指定された最大文字数で出力します。
+		 * 
+		 * @param len 最大文字数(超過しても例外にならない)
+		 * @param f 直列化する属性
+		 * @throws IOException 出力に失敗した場合
+		 */
+		private void string(int len, Field f) throws IOException {
+			String value = f != null? f.value().toString() : "";
+			byte[] bytes = value.getBytes("SJIS");
+			stream.writeByte(bytes.length);
+			stream.write(Arrays.copyOf(bytes, len));
+		}
+	}
+}

@@ -1,0 +1,23 @@
+apply plugin: 'java'
+
+def utf8 = 'UTF-8'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	testCompile 'junit:junit:+'
+	testCompile 'org.apache.commons:commons-lang3:+'
+}
+
+compileJava {
+	options.encoding = utf8
+}
+
+javadoc {
+	exclude '**/secret/*'
+	options.links('http://docs.oracle.com/javase/jp/8/docs/api/')
+	options.charSet = utf8
+	options.encoding = utf8
+}

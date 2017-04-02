@@ -1,0 +1,10 @@
+qxsl.field.Band$Format
+qxsl.field.Call$Format
+qxsl.field.City$Format
+qxsl.field.Code$Format
+qxsl.field.Mode$Format
+qxsl.field.Name$Format
+qxsl.field.Note$Format
+qxsl.field.RSTQ$Format
+qxsl.field.Time$Format
+qxsl.field.Watt$Format
