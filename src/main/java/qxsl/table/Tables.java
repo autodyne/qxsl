@@ -47,7 +47,7 @@ public final class Tables implements Iterable<TableFormat> {
 	}
 
 	@Override
-	public final Iterator<TableFormat> iterator() {
+	public Iterator<TableFormat> iterator() {
 		return loader.iterator();
 	}
 
