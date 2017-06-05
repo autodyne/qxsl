@@ -140,7 +140,6 @@ public final class City extends Field<String> {
 			public final String code;
 			public final String name;
 			public final String pref;
-			
 			/**
 			 * 番号と市区町村名と都道府県名を指定します。
 			 *
@@ -148,8 +147,12 @@ public final class City extends Field<String> {
 			 */
 			public CityEntry(String[] vals) {
 				this.code = vals[2];
-				this.name = vals[1];
 				this.pref = vals[0];
+				if(vals[1].equals(pref)) {
+					this.name = vals[1];
+				} else {
+					this.name = vals[0] + vals[1];
+				}
 			}
 		}
 	}
