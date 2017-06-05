@@ -616,6 +616,7 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 		 */
 		public String text(Object sexp) throws Exception {
 			final Object text = eval(sexp);
+			if(text == null) return null;
 			if(text instanceof String) return (String) text;
 			throw new Exception(sexp + " must be a string");
 		}
