@@ -132,9 +132,10 @@ public final class JarlFormat extends TextFormat {
 			List<Item> items = new ArrayList<>();
 			String line;
 			while((line = super.readLine()) != null) {
-				if(!line.isEmpty() && !line.startsWith("DATE")) {
-					items.add(item(line));
-				}
+				if(line.isEmpty()) continue;
+				if(line.startsWith("DATE")) continue;
+				if(line.startsWith("----")) continue;
+				items.add(item(line));
 			}
 			return Collections.unmodifiableList(items);
 		}
