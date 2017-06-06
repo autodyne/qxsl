@@ -59,7 +59,7 @@ public final class CTxtFormat extends TextFormat {
 	 */
 	@Override
 	public String toString() {
-		return "CTESTWIN ver1.0";
+		return "CTESTWIN ver1.0 logsheet format";
 	}
 
 	/**

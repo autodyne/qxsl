@@ -59,7 +59,7 @@ public final class Hl76Format extends TextFormat {
 	 */
 	@Override
 	public String toString() {
-		return "HLTST ver7.6";
+		return "HLTST ver7.6 logsheet format";
 	}
 
 	/**

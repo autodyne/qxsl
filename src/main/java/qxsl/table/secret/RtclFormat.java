@@ -59,7 +59,7 @@ public final class RtclFormat extends TextFormat {
 	 */
 	@Override
 	public String toString() {
-		return "RTCL";
+		return "RTCL logsheet format";
 	}
 
 	/**
