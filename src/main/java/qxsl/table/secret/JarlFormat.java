@@ -134,6 +134,7 @@ public final class JarlFormat extends TextFormat {
 			while((line = super.readLine()) != null) {
 				if(line.isEmpty()) continue;
 				if(line.startsWith("DATE")) continue;
+				if(line.startsWith("DATA")) continue;
 				if(line.startsWith("----")) continue;
 				items.add(item(line));
 			}
