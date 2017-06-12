@@ -12,14 +12,21 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import qxsl.field.*;
 import qxsl.model.*;
+
+import static java.time.temporal.ChronoUnit.DAYS;
+import static java.time.temporal.ChronoUnit.MILLIS;
 
 /**
  * zLogバイナリデータで交信記録を直列化するフォーマットです。
@@ -93,62 +100,47 @@ public final class ZBinFormat extends BaseFormat {
 	 *
 	 */
 	private static final class TDateTime {
-		private static final int MS_OF_DAY = 86400000;
-		private static final Epoch epoch = new Epoch();
-
-		private TDateTime() {}
+		private final int MS_D = 86400000;
+		private final LocalDateTime epoch;
+		private final ZoneId JST = ZoneId.of("UTC+9");
+		
+		/**
+		 * 1899年11月30日を起点にTDateTime型を構築します。
+		 */
+		public TDateTime() {
+			epoch = LocalDateTime.of(1899, 11, 30, 0, 0);
+		}
 
 		/**
 		 * 指定されたTDateTimeを日時にデコードします。
 		 * 
-		 * @param bits TDateTime型のビット列
+		 * @param led TDateTime型のビット列
 		 * @return 日時
 		 */
-		public static Time decode(long bits) {
-			bits = Long.reverseBytes(bits);
-			double d = Double.longBitsToDouble(bits);
-			int time = (int) (d % 1 * MS_OF_DAY);
-			int days = (int) d;
-			time = Math.abs(time);
-			Calendar c = epoch.getCalendar();
-			c.add(Calendar.DAY_OF_YEAR, days);
-			c.add(Calendar.MILLISECOND, time);
-			return new Time(c.getTime());
+		public Time decode(long led) {
+			final long bed = Long.reverseBytes(led);
+			double d = Double.longBitsToDouble(bed);
+			int time = (int) Math.abs(d % 1 * MS_D);
+			ZonedDateTime t = epoch.atZone(JST);
+			t = t.plus((int)d, DAYS);
+			t = t.plus(time, MILLIS);
+			return new Time(Date.from(t.toInstant()));
 		}
 
 		/**
 		 * 指定された日時をTDateTimeにエンコードします。
 		 * 
-		 * @param date 日時
+		 * @param field 日時
 		 * @return TDateTime型のビット列
 		 */
-		public static long encode(Time date) {
-			long ms = epoch.getTimeInMillis(date);
-			double d = ms / MS_OF_DAY;
-			double t = ms % MS_OF_DAY;
-			d += (ms > 0L? t : -t) / MS_OF_DAY;
-			long b = Double.doubleToLongBits(d);
-			return Long.reverseBytes(b);
-		}
-
-		private static final class Epoch {
-			private final Calendar epoch;
-			private final long unixDiff;
-
-			public Epoch() {
-				epoch = Calendar.getInstance();
-				epoch.set(1899, 11, 30, 0, 0, 0);
-				unixDiff = epoch.getTimeInMillis();
-			}
-
-			public Calendar getCalendar() {
-				return (Calendar) epoch.clone();
-			}
-
-			public long getTimeInMillis(Time d) {
-				long t = d.value().getTime();
-				return t - unixDiff;
-			}
+		public long encode(Time field) {
+			Instant unix = field.value().toInstant();
+			final ZonedDateTime t = unix.atZone(JST);
+			final double ms = epoch.until(t, MILLIS);
+			double time = Math.abs(ms) % MS_D / MS_D;
+			double date = ((long) ms) / MS_D + time;
+			long bit = Double.doubleToLongBits(date);
+			return Long.reverseBytes(bit);
 		}
 	}
 
@@ -359,6 +351,7 @@ public final class ZBinFormat extends BaseFormat {
 	 */
 	private static final class ZBinDecoder {
 		private final Fields fields;
+		private final TDateTime tDTime;
 		private final DataInputStream stream;
 
 		/**
@@ -367,7 +360,8 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param in 読み込むストリーム
 		 */
 		public ZBinDecoder(InputStream in) {
-			fields = new Fields();
+			this.fields = new Fields();
+			this.tDTime = new TDateTime();
 			this.stream = new DataInputStream(in);
 		}
 
@@ -437,7 +431,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void date(Item item) throws Exception {
-			item.set(TDateTime.decode(stream.readLong()));
+			item.set(tDTime.decode(stream.readLong()));
 		}
 
 		/**
@@ -573,6 +567,7 @@ public final class ZBinFormat extends BaseFormat {
 	 *
 	 */
 	private static final class ZBinEncoder {
+		private final TDateTime tDTime;
 		private final DataOutputStream stream;
 
 		/**
@@ -581,6 +576,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param out 交信記録を書き込むストリーム
 		 */
 		public ZBinEncoder(OutputStream out) {
+			this.tDTime = new TDateTime();
 			this.stream = new DataOutputStream(out);
 		}
 
@@ -630,7 +626,7 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		private void time(Time date) throws IOException {
 			if(date == null) stream.writeLong(0);
-			else stream.writeLong(TDateTime.encode(date));
+			else stream.writeLong(tDTime.encode(date));
 		}
 
 		/**
