@@ -19,7 +19,6 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import qxsl.field.*;
@@ -103,7 +102,7 @@ public final class ZBinFormat extends BaseFormat {
 		private final int MS_D = 86400000;
 		private final LocalDateTime epoch;
 		private final ZoneId JST = ZoneId.of("UTC+9");
-		
+
 		/**
 		 * 1899年11月30日を起点にTDateTime型を構築します。
 		 */
