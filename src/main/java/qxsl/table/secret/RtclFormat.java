@@ -148,14 +148,15 @@ public final class RtclFormat extends TextFormat {
 		 */
 		private Item item(String line) throws Exception {
 			Item item = new Item();
-			final String time = subLine(0,  15);
-			final String band = subLine(16, 24);
-			final String mode = subLine(25, 30);
-			final String call = subLine(31, 44);
-			final String srst = subLine(45, 48);
-			final String snum = subLine(49, 57);
-			final String rrst = subLine(58, 61);
-			final String rnum = subLine(62, 70);
+			String[] vals = getLine(9);
+			final String time = vals[0] + " " + vals[1];
+			final String band = vals[2];
+			final String mode = vals[3];
+			final String call = vals[4];
+			final String srst = vals[5];
+			final String snum = vals[6];
+			final String rrst = vals[7];
+			final String rnum = vals[8];
 
 			if(!time.isEmpty()) time(item, time);
 			if(!band.isEmpty()) band(item, band);
