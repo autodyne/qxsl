@@ -10,13 +10,11 @@ package qxsl.table.secret;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import qxsl.field.*;
@@ -59,7 +57,7 @@ public final class JarlFormat extends TextFormat {
 	 */
 	@Override
 	public String toString() {
-		return "JARL 2016";
+		return "JARL 2016 logsheet format";
 	}
 
 	/**
@@ -95,8 +93,8 @@ public final class JarlFormat extends TextFormat {
 	 */
 	@Deprecated
 	private static final class JarlDecoder extends TextDecoder {
+		private final DateTimeFormatter format;
 		private final Fields fields;
-		private final DateFormat format;
 
 		/**
 		 * 指定されたストリームを読み込むデコーダを構築します。
@@ -105,9 +103,9 @@ public final class JarlFormat extends TextFormat {
 		 * @throws IOException SJISに対応していない場合
 		 */
 		public JarlDecoder(InputStream in) throws IOException {
-			super(in, "sjis");
+			super(in, "JISAutoDetect");
 			fields = new Fields();
-			format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		}
 
 		/**
@@ -180,7 +178,7 @@ public final class JarlFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void time(Item item, String time) throws Exception {
-			item.set(new Time(format.parse(time)));
+			item.set(new Time(LocalDateTime.parse(time, format)));
 		}
 
 		/**
@@ -274,8 +272,8 @@ public final class JarlFormat extends TextFormat {
 	 */
 	@Deprecated
 	private static final class JarlEncoder extends TextEncoder {
-		private final Calendar calendar;
-
+		private final DateTimeFormatter format;
+		
 		/**
 		 * 指定されたストリームに出力するエンコーダを構築します。
 		 * 
@@ -284,7 +282,7 @@ public final class JarlFormat extends TextFormat {
 		 */
 		public JarlEncoder(OutputStream out) throws IOException {
 			super(out, "SJIS");
-			calendar = GregorianCalendar.getInstance();
+			format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		}
 
 		/**
@@ -297,7 +295,7 @@ public final class JarlFormat extends TextFormat {
 			print("DATE (JST) TIME   BAND MODE  CALLSIGN      ");
 			print("SENTNo      RCVDNo      Mlt    Pts");
 			println();
-			for(Item r : items) item(r);
+			for(Item r: items) item(r);
 			super.close();
 		}
 
@@ -333,15 +331,8 @@ public final class JarlFormat extends TextFormat {
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void time(Time date) throws IOException {
-			if(date != null) {
-				calendar.setTime(date.value());
-				int y = calendar.get(Calendar.YEAR);
-				int M = calendar.get(Calendar.MONTH) + 1;
-				int d = calendar.get(Calendar.DAY_OF_MONTH);
-				int H = calendar.get(Calendar.HOUR_OF_DAY);
-				int m = calendar.get(Calendar.MINUTE);
-				printf("%04d-%02d-%02d %02d:%02d", y, M, d, H, m);
-			} else printSpace(15);
+			if(date == null) printSpace(16);
+			else print(format.format(date.zoned()));
 		}
 
 		/**

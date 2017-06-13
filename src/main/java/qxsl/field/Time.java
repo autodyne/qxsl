@@ -7,8 +7,8 @@
 *****************************************************************************/
 package qxsl.field;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -16,8 +16,6 @@ import javax.xml.namespace.QName;
 import qxsl.model.Field;
 import qxsl.model.FieldFormat;
 import qxsl.table.secret.BaseFormat;
-
-import static java.time.format.DateTimeFormatter.ISO_ZONED_DATE_TIME;
 
 /**
  * 交信記録シートにおいて交信した日時を表現します。
@@ -44,7 +42,25 @@ public final class Time extends Field<Date> {
 	 * @param time 交信日時
 	 */
 	public Time(Date time) {
-		this(time.toInstant().atZone(ZoneId.systemDefault()));
+		this(time.toInstant());
+	}
+
+	/**
+	 * 交信日時を指定して{@link Time}を構築します。
+	 * 
+	 * @param time 交信日時
+	 */
+	public Time(Instant time) {
+		this(time.atZone(ZoneId.systemDefault()));
+	}
+
+	/**
+	 * 交信日時を指定して{@link Time}を構築します。
+	 * 
+	 * @param time 交信日時
+	 */
+	public Time(LocalDateTime time) {
+		this(time.atZone(ZoneId.systemDefault()));
 	}
 
 	/**
@@ -72,6 +88,15 @@ public final class Time extends Field<Date> {
 	}
 
 	/**
+	 * この交信時刻の地域化された値を返します。
+	 *
+	 * @return 地域化された時刻
+	 */
+	public ZonedDateTime zoned() {
+		return time;
+	}
+
+	/**
 	 * 指定されたオブジェクトと等値であるか確認します。
 	 * 対象が{@link Time}で、時刻が分まで等しい場合に、
 	 * trueを返します。
@@ -96,6 +121,12 @@ public final class Time extends Field<Date> {
 	 *
 	 */
 	public static final class Format implements FieldFormat {
+		private final DateTimeFormatter format;
+
+		public Format() {
+			this.format = DateTimeFormatter.ISO_ZONED_DATE_TIME;
+		}
+
 		@Override
 		public QName type() {
 			return BaseFormat.TIME;
@@ -103,12 +134,12 @@ public final class Time extends Field<Date> {
 	
 		@Override
 		public Time decode(String value) {
-			return new Time(ZonedDateTime.parse(value));
+			return new Time(ZonedDateTime.parse(value, format));
 		}
 	
 		@Override
 		public String encode(Field field) {
-			return ((Time) field).time.format(ISO_ZONED_DATE_TIME);
+			return ((Time) field).time.format(format);
 		}
 	}
 }
