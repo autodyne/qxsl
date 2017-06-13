@@ -12,10 +12,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,6 +21,7 @@ import java.util.List;
 import qxsl.field.*;
 import qxsl.model.*;
 
+import static java.time.ZoneOffset.UTC;
 import static java.time.temporal.ChronoUnit.DAYS;
 import static java.time.temporal.ChronoUnit.MILLIS;
 
@@ -64,7 +62,7 @@ public final class ZBinFormat extends BaseFormat {
 	 */
 	@Override
 	public String toString() {
-		return "zLog binary file format";
+		return "zLog binary format (*.zlo)";
 	}
 
 	/**
@@ -100,14 +98,14 @@ public final class ZBinFormat extends BaseFormat {
 	 */
 	private static final class TDateTime {
 		private final int MS_D = 86400000;
-		private final LocalDateTime epoch;
-		private final ZoneId JST = ZoneId.of("UTC+9");
+		private final ZonedDateTime epoch;
 
 		/**
 		 * 1899年11月30日を起点にTDateTime型を構築します。
 		 */
 		public TDateTime() {
-			epoch = LocalDateTime.of(1899, 11, 30, 0, 0);
+			LocalDate date = LocalDate.of(1899, 11, 30);
+			this.epoch = date.atStartOfDay(UTC);
 		}
 
 		/**
@@ -118,12 +116,10 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		public Time decode(long led) {
 			final long bed = Long.reverseBytes(led);
-			double d = Double.longBitsToDouble(bed);
-			int time = (int) Math.abs(d % 1 * MS_D);
-			ZonedDateTime t = epoch.atZone(JST);
-			t = t.plus((int)d, DAYS);
-			t = t.plus(time, MILLIS);
-			return new Time(t);
+			final double d = Double.longBitsToDouble(bed);
+			final int time = (int) Math.abs(d % 1 * MS_D);
+			ZonedDateTime zdt = epoch.plus((int) d, DAYS);
+			return new Time(zdt.plus(time, MILLIS));
 		}
 
 		/**
@@ -133,12 +129,10 @@ public final class ZBinFormat extends BaseFormat {
 		 * @return TDateTime型のビット列
 		 */
 		public long encode(Time field) {
-			Instant unix = field.value().toInstant();
-			final ZonedDateTime t = unix.atZone(JST);
-			final double ms = epoch.until(t, MILLIS);
-			double time = Math.abs(ms) % MS_D / MS_D;
-			double date = ((long) ms) / MS_D + time;
-			long bit = Double.doubleToLongBits(date);
+			double ms = epoch.until(field.value(), MILLIS);
+			final double time = Math.abs(ms) % MS_D / MS_D;
+			final double date = ((long) ms) / MS_D + time;
+			final long bit = Double.doubleToLongBits(date);
 			return Long.reverseBytes(bit);
 		}
 	}
@@ -391,9 +385,7 @@ public final class ZBinFormat extends BaseFormat {
 		private List<Item> logSheet() throws Exception {
 			stream.readFully(new byte[256]);
 			List<Item> items = new ArrayList<>();
-			while(stream.available() > 0) {
-				items.add(item());
-			}
+			while(stream.available() > 0) items.add(item());
 			return Collections.unmodifiableList(items);
 		}
 
@@ -417,7 +409,7 @@ public final class ZBinFormat extends BaseFormat {
 			band(item);
 			watt(item);
 			stream.skipBytes(65);
-			operator(item);
+			oprt(item);
 			note(item);
 			stream.skipBytes(14);
 			return item;
@@ -440,7 +432,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void call(Item item) throws Exception {
-			String s = readString(12);
+			final String s = readString(12);
 			if(s != null) item.set(fields.cache(CALL, s));
 		}
 
@@ -451,7 +443,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void sent(Item item) throws Exception {
-			String s = readString(30);
+			final String s = readString(30);
 			if(s != null) item.getSent().set(fields.cache(CODE, s));
 		}
 
@@ -462,7 +454,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void rcvd(Item item) throws Exception {
-			String s = readString(30);
+			final String s = readString(30);
 			if(s != null) item.getRcvd().set(fields.cache(CODE, s));
 		}
 
@@ -524,8 +516,8 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param item 設定する{@link Item}
 		 * @throws Exception 読み込みに失敗した場合
 		 */
-		private void operator(Item item) throws Exception {
-			String s = readString(14);
+		private void oprt(Item item) throws Exception {
+			final String s = readString(14);
 			if(s != null) item.set(fields.cache(NAME, s));
 		}
 
@@ -536,23 +528,23 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void note(Item item) throws Exception {
-			String s = readString(66);
+			final String s = readString(66);
 			if(s != null) item.set(fields.cache(NOTE, s));
 		}
 
 		/**
 		 * ストリームから指定された最大文字数の文字列を読み込みます。
 		 * 
-		 * @param len 最大文字数
+		 * @param limit 最大文字数
 		 * @return 読み込んだ文字列
 		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private String readString(int len) throws IOException {
-			byte[] buffer = new byte[stream.read()];
-			stream.readFully(buffer);
-			stream.skipBytes(len - buffer.length);
-			if(buffer.length == 0)return null;
-			return new String(buffer, "SJIS");
+		private String readString(int limit) throws IOException {
+			byte[] buff = new byte[stream.read()];
+			stream.readFully(buff);
+			stream.skipBytes(limit - buff.length);
+			String val = new String(buff, "SJIS");
+			return val.isEmpty()? null: val;
 		}
 	}
 
@@ -677,16 +669,17 @@ public final class ZBinFormat extends BaseFormat {
 
 		/**
 		 * 指定された属性を指定された最大文字数で出力します。
-		 * 
-		 * @param len 最大文字数(超過しても例外にならない)
+		 * 属性値が最大文字数を超過しても例外は発生しません。
+		 *
+		 * @param limit 最大文字数
 		 * @param f 直列化する属性
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private void string(int len, Field f) throws IOException {
-			String value = f != null? f.value().toString() : "";
-			byte[] bytes = value.getBytes("SJIS");
+		private void string(int limit, Field f) throws IOException {
+			final String value = f != null? f.value().toString() : "";
+			final byte[] bytes = value.getBytes("SJIS");
 			stream.writeByte(bytes.length);
-			stream.write(Arrays.copyOf(bytes, len));
+			stream.write(Arrays.copyOf(bytes, limit));
 		}
 	}
 }

@@ -7,4 +7,5 @@ qxsl.table.secret.CTxtFormat
 qxsl.table.secret.Hl76Format
 qxsl.table.secret.RtclFormat
 
+qxsl.table.secret.CBinFormat
 qxsl.table.secret.ZBinFormat

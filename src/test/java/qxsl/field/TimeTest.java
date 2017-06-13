@@ -7,7 +7,7 @@
 *****************************************************************************/
 package qxsl.field;
 
-import java.util.Date;
+import java.time.ZonedDateTime;
 import org.junit.Test;
 import qxsl.model.Fields;
 import static org.hamcrest.CoreMatchers.*;
@@ -27,8 +27,8 @@ public final class TimeTest extends junit.framework.TestCase {
 	private final Fields fields = new Fields(TIME);
 	@Test
 	public void testValue() {
-		final Date date = new Date();
-		assertThat(new Time(date).value(), is(date));
+		final ZonedDateTime zdtime = ZonedDateTime.now();
+		assertThat(new Time(zdtime).value(), is(zdtime));
 	}
 	@Test
 	public void testTime$Format() throws Exception {
