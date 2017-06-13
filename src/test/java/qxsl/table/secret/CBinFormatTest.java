@@ -19,26 +19,37 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 /**
- * {@see ZDosFormat}クラスのテスト用クラスです。
+ * {@see CBinFormat}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics
  * 
- * @since 2017/02/26
+ * @since 2017/06/13
  *
  */
-public final class ZDosFormatTest extends junit.framework.TestCase {
-	private final ZDosFormat format = new ZDosFormat();
+public final class CBinFormatTest extends junit.framework.TestCase {
+	private final CBinFormat format = new CBinFormat();
 	private final Tables tables = new Tables();
 	private final ArrayList<Band> bands = new ArrayList<>();
+	private final ArrayList<Mode> modes = new ArrayList<>();
+	private final ArrayList<Watt> watts = new ArrayList<>();
 	private final Random random = new Random();
-	public ZDosFormatTest() {
+	public CBinFormatTest() {
 		bands.add(new Band(    3_500));
 		bands.add(new Band(    7_000));
 		bands.add(new Band(   14_000));
 		bands.add(new Band(  144_000));
 		bands.add(new Band(1_200_000));
 		bands.add(new Band(5_600_000));
+		modes.add(new Mode(  "CW"));
+		modes.add(new Mode(  "AM"));
+		modes.add(new Mode(  "FM"));
+		modes.add(new Mode( "SSB"));
+		modes.add(new Mode("RTTY"));
+		watts.add(new Watt("H"));
+		watts.add(new Watt("M"));
+		watts.add(new Watt("L"));
+		watts.add(new Watt("P"));
 	}
 	@Test
 	public void testDecode() throws java.io.IOException {
@@ -48,11 +59,12 @@ public final class ZDosFormatTest extends junit.framework.TestCase {
 				final Item item = new Item();
 				item.set(new Time());
 				item.set(bands.get(random.nextInt(bands.size())));
-				item.set(new Call(util.RandText.alnum(10)));
-				item.set(new Mode(util.RandText.alnum(4)));
-				item.set(new Note(util.RandText.alnum(50)));
-				item.getRcvd().set(new Code(util.RandText.alnum(12)));
-				item.getSent().set(new Code(util.RandText.alnum(12)));
+				item.set(new Call(util.RandText.alnum(20)));
+				item.set(modes.get(random.nextInt(modes.size())));
+				item.set(new Note(util.RandText.alnum(52)));
+				item.set(new Name(util.RandText.alnum(20)));
+				item.getRcvd().set(new Code(util.RandText.alnum(30)));
+				item.getSent().set(new Code(util.RandText.alnum(30)));
 				items.add(item);
 			}
 			final ByteArrayOutputStream os = new ByteArrayOutputStream();

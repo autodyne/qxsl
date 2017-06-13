@@ -9,7 +9,6 @@ package qxsl.field;
 
 import org.junit.Test;
 import qxsl.model.Fields;
-import static org.apache.commons.lang3.RandomStringUtils.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 import static qxsl.table.secret.QxmlFormat.WATT;
@@ -27,13 +26,13 @@ public final class WattTest extends junit.framework.TestCase {
 	private final Fields fields = new Fields(WATT);
 	@Test
 	public void testValue() {
-		final String str = randomAlphanumeric(1, 100);
+		final String str = util.RandText.alnum(100);
 		assertThat(new Watt(str).value(), is(str));
 	}
 	@Test
 	public void testWatt$Format() throws Exception {
 		final Watt.Format $form = new Watt.Format();
-		final Watt watt = new Watt(randomAlphanumeric(1, 100));
+		final Watt watt = new Watt(util.RandText.alnum(100));
 		assertThat($form.decode($form.encode(watt)), is(watt));
 		assertThat(fields.cache($form.encode(watt)), is(watt));
 	}

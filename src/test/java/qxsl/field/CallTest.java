@@ -9,7 +9,6 @@ package qxsl.field;
 
 import org.junit.Test;
 import qxsl.model.Fields;
-import static org.apache.commons.lang3.RandomStringUtils.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 import static qxsl.table.secret.QxmlFormat.CALL;
@@ -33,7 +32,7 @@ public final class CallTest extends junit.framework.TestCase {
 	@Test
 	public void testCall$Format() throws Exception {
 		final Call.Format $form = new Call.Format();
-		final Call call = new Call(randomAlphanumeric(1, 100));
+		final Call call = new Call(util.RandText.alnum(100));
 		assertThat($form.decode($form.encode(call)), is(call));
 		assertThat(fields.cache($form.encode(call)), is(call));
 	}

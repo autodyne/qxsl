@@ -9,7 +9,6 @@ package qxsl.field;
 
 import org.junit.Test;
 import qxsl.model.Fields;
-import static org.apache.commons.lang3.RandomStringUtils.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 import static qxsl.table.secret.QxmlFormat.MODE;
@@ -27,13 +26,13 @@ public final class ModeTest extends junit.framework.TestCase {
 	private final Fields fields = new Fields(MODE);
 	@Test
 	public void testValue() {
-		final String str = randomAlphanumeric(1, 100);
+		final String str = util.RandText.alnum(100);
 		assertThat(new Mode(str).value(), is(str));
 	}
 	@Test
 	public void testMode$Format() throws Exception {
 		final Mode.Format $form = new Mode.Format();
-		final Mode mode = new Mode(randomAlphanumeric(1, 100));
+		final Mode mode = new Mode(util.RandText.alnum(100));
 		assertThat($form.decode($form.encode(mode)), is(mode));
 		assertThat(fields.cache($form.encode(mode)), is(mode));
 	}

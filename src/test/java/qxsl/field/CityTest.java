@@ -9,7 +9,6 @@ package qxsl.field;
 
 import org.junit.Test;
 import qxsl.model.Fields;
-import static org.apache.commons.lang3.RandomStringUtils.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 import static qxsl.table.secret.QxmlFormat.CITY;
@@ -27,7 +26,7 @@ public final class CityTest extends junit.framework.TestCase {
 	private final Fields fields = new Fields(CITY);
 	@Test
 	public void testValue() {
-		final String val = randomAlphanumeric(1, 100);
+		final String val = util.RandText.alnum(100);
 		assertThat(new City(val).value(), is(val));
 	}
 	@Test
@@ -99,7 +98,7 @@ public final class CityTest extends junit.framework.TestCase {
 	@Test
 	public void testCity$Format() throws Exception {
 		final City.Format $form = new City.Format();
-		final City city = new City(randomAlphanumeric(1, 100));
+		final City city = new City(util.RandText.alnum(100));
 		assertThat($form.decode($form.encode(city)), is(city));
 		assertThat(fields.cache($form.encode(city)), is(city));
 	}

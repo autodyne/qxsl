@@ -8,7 +8,6 @@ repositories {
 
 dependencies {
 	testCompile 'junit:junit:+'
-	testCompile 'org.apache.commons:commons-lang3:+'
 }
 
 compileJava {

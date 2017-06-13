@@ -15,7 +15,6 @@ import org.junit.Test;
 import qxsl.field.*;
 import qxsl.model.Item;
 import qxsl.table.Tables;
-import static org.apache.commons.lang3.RandomStringUtils.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
@@ -60,14 +59,14 @@ public final class ZBinFormatTest extends junit.framework.TestCase {
 				final Item item = new Item();
 				item.set(new Time());
 				item.set(bands.get(random.nextInt(bands.size())));
-				item.set(new Call(randomAlphanumeric(1, 13)));
+				item.set(new Call(util.RandText.alnum(12)));
 				item.set(modes.get(random.nextInt(modes.size())));
-				item.set(new Note(randomAlphanumeric(1, 67)));
-				item.set(new Name(randomAlphanumeric(1, 15)));
+				item.set(new Note(util.RandText.alnum(66)));
+				item.set(new Name(util.RandText.alnum(14)));
 				item.getRcvd().set(new RSTQ(random.nextInt(600)));
-				item.getRcvd().set(new Code(randomAlphanumeric(1, 31)));
+				item.getRcvd().set(new Code(util.RandText.alnum(30)));
 				item.getSent().set(new RSTQ(random.nextInt(600)));
-				item.getSent().set(new Code(randomAlphanumeric(1, 31)));
+				item.getSent().set(new Code(util.RandText.alnum(30)));
 				item.getSent().set(watts.get(random.nextInt(watts.size())));
 				items.add(item);
 			}

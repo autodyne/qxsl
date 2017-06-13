@@ -22,19 +22,18 @@ import qxsl.field.*;
 import qxsl.model.*;
 
 import static java.time.ZoneOffset.UTC;
-import static java.time.temporal.ChronoUnit.DAYS;
-import static java.time.temporal.ChronoUnit.MILLIS;
+import static java.time.temporal.ChronoUnit.SECONDS;
 
 /**
- * zLogバイナリデータで交信記録を直列化するフォーマットです。
+ * CTESTWINのLG8書式で交信記録を直列化するフォーマットです。
  * 
  * 
  * @author Journal of Hamradio Informatics
  * 
- * @since 2013/02/26
+ * @since 2017/06/12
  *
  */
-public final class ZBinFormat extends BaseFormat {
+public final class CBinFormat extends BaseFormat {
 	/**
 	 * この書式を識別する完全な名前を返します。
 	 * 
@@ -42,7 +41,7 @@ public final class ZBinFormat extends BaseFormat {
 	 */
 	@Override
 	public String getName() {
-		return "zbin";
+		return "cbin";
 	}
 
 	/**
@@ -52,7 +51,7 @@ public final class ZBinFormat extends BaseFormat {
 	 */
 	@Override
 	public List<String> getExtensions() {
-		return Collections.unmodifiableList(Arrays.asList("zlo"));
+		return Collections.unmodifiableList(Arrays.asList("lg8"));
 	}
 
 	/**
@@ -62,7 +61,7 @@ public final class ZBinFormat extends BaseFormat {
 	 */
 	@Override
 	public String toString() {
-		return "zLog binary format (*.zlo)";
+		return "CTESTWIN binary format (*.lg8)";
 	}
 
 	/**
@@ -73,7 +72,7 @@ public final class ZBinFormat extends BaseFormat {
 	 * @throws IOException 入出力時の例外
 	 */
 	public List<Item> decode(InputStream in) throws IOException {
-		return new ZBinDecoder(in).read();
+		return new CBinDecoder(in).read();
 	}
 
 	/**
@@ -84,85 +83,84 @@ public final class ZBinFormat extends BaseFormat {
 	 * @throws IOException 入出力時の例外
 	 */
 	public void encode(OutputStream out, List<Item> items) throws IOException {
-		new ZBinEncoder(out).write(items);
+		new CBinEncoder(out).write(items);
 	}
 
 	/**
-	 * Delphi言語のTDateTime型を閏秒を無視して再現します。
+	 * Delphi言語のCDateTime型を閏秒を無視して再現します。
 	 * 
 	 * 
 	 * @author Journal of Hamradio Informatics
 	 * 
-	 * @since 2013/02/23
+	 * @since 2017/06/12
 	 *
 	 */
-	private static final class TDateTime {
-		private final int MS_D = 86400000;
+	private static final class CDateTime {
 		private final ZonedDateTime epoch;
 
 		/**
-		 * 1899年11月30日を起点にTDateTime型を構築します。
+		 * 1970年1月1日を起点にCDateTime型を構築します。
 		 */
-		public TDateTime() {
-			LocalDate date = LocalDate.of(1899, 11, 30);
+		public CDateTime() {
+			LocalDate date = Year.of(1970).atDay(1);
 			this.epoch = date.atStartOfDay(UTC);
 		}
 
 		/**
-		 * 指定されたTDateTimeを日時にデコードします。
+		 * 指定されたCDateTimeを日時にデコードします。
 		 * 
-		 * @param led TDateTime型のビット列
+		 * @param led CDateTime型のビット列
 		 * @return 日時
 		 */
 		public Time decode(long led) {
 			final long bed = Long.reverseBytes(led);
-			final double d = Double.longBitsToDouble(bed);
-			final int time = (int) Math.abs(d % 1 * MS_D);
-			ZonedDateTime zdt = epoch.plus((int) d, DAYS);
-			return new Time(zdt.plus(time, MILLIS));
+			return new Time(epoch.plus(bed, SECONDS));
 		}
 
 		/**
-		 * 指定された日時をTDateTimeにエンコードします。
+		 * 指定された日時をCDateTimeにエンコードします。
 		 * 
 		 * @param field 日時
-		 * @return TDateTime型のビット列
+		 * @return CDateTime型のビット列
 		 */
 		public long encode(Time field) {
-			double ms = epoch.until(field.value(), MILLIS);
-			final double time = Math.abs(ms) % MS_D / MS_D;
-			final double date = ((long) ms) / MS_D + time;
-			final long bit = Double.doubleToLongBits(date);
-			return Long.reverseBytes(bit);
+			long ms = epoch.until(field.value(), SECONDS);
+			return Long.reverseBytes(ms);
 		}
 	}
 
 	/**
-	 * zLogバイナリデータの周波数帯の列挙型です。
+	 * LG8書式の周波数帯の列挙型です。
 	 * 
 	 * 
 	 * @author Journal of Hamradio Informatics
 	 * 
-	 * @since 2013/02/23
+	 * @since 2017/06/12
 	 *
 	 */
 	public enum BandEnum {
-		M1_9  (    1900),
-		M3_5  (    3500),
-		M7    (    7000),
-		M10   (   10000),
-		M14   (   14000),
-		M18   (   18000),
-		M21   (   21000),
-		M24   (   24000),
-		M28   (   28000),
-		M50   (   50000),
-		M144  (  144000),
-		M430  (  430000),
-		M1200 ( 1200000),
-		M2400 ( 2400000),
-		M5600 ( 5600000),
-		G10UP (10000000);
+		M1_9 (     1900),
+		M3_5 (     3500),
+		M7   (     7000),
+		M10  (    10000),
+		M14  (    14000),
+		M18  (    18000),
+		M21  (    21000),
+		M24  (    24000),
+		M28  (    28000),
+		M50  (    50000),
+		M144 (   144000),
+		M430 (   430000),
+		M1200(  1200000),
+		M2400(  2400000),
+		M5600(  5600000),
+		G10  ( 10000000),
+		G24  ( 24000000),
+		G47  ( 47000000),
+		G75  ( 75000000),
+		G77  ( 77000000),
+		G135 (135000000),
+		G248 (248000000);
 
 		private final Band band;
 		private static BandEnum[] arr;
@@ -215,21 +213,20 @@ public final class ZBinFormat extends BaseFormat {
 	}
 
 	/**
-	 * zLogバイナリデータの通信方式の列挙型です。
+	 * LG8書式の通信方式の列挙型です。
 	 * 
 	 * 
 	 * @author Journal of Hamradio Informatics
 	 * 
-	 * @since 2013/02/23
+	 * @since 2017/06/12
 	 *
 	 */
 	public enum ModeEnum {
-		CW    ("CW"),
-		SSB   ("SSB"),
-		FM    ("FM"),
-		AM    ("AM"),
-		RTTY  ("RTTY"),
-		OTHERS("Others");
+		CW  ("CW"),
+		RTTY("RTTY"),
+		SSB ("SSB"),
+		FM  ("FM"),
+		AM  ("AM");
 
 		private final Mode mode;
 		private static ModeEnum[] arr;
@@ -277,74 +274,17 @@ public final class ZBinFormat extends BaseFormat {
 	}
 
 	/**
-	 * zLogバイナリデータの空中線出力の列挙型です。
+	 * LG8書式で直列化された交信記録をデコードします。
 	 * 
 	 * 
 	 * @author Journal of Hamradio Informatics
 	 * 
-	 * @since 2013/02/23
+	 * @since 2017/06/12
 	 *
 	 */
-	public enum WattEnum {
-		P, L, M, H;
-
-		private final Watt watt;
-		private static WattEnum[] arr;
-
-		private WattEnum() {
-			watt = new Watt(name());
-		}
-
-		/**
-		 * この列挙子に対応する出力を返します。
-		 * 
-		 * @return 出力
-		 */
-		public Watt toWatt() {
-			return watt;
-		}
-
-		/**
-		 * 指定された出力に対応する列挙子を返します。
-		 * 
-		 * @param watt 出力
-		 * @return 対応する列挙子があれば返す
-		 */
-		public static WattEnum valueOf(Watt watt) {
-			if(arr == null) arr = values();
-			for(WattEnum p : arr) {
-				if(p.watt.equals(watt)) return p;
-			}
-			return null;
-		}
-
-		/**
-		 * 指定した序数に対応する列挙子を返します。
-		 * 
-		 * @param i 序数
-		 * @return 対応する列挙子があれば返す
-		 */
-		public static WattEnum forIndex(int i) {
-			if(arr == null) arr = values();
-			for(WattEnum p : arr) {
-				if(p.ordinal() == i) return p;
-			}
-			return null;
-		}
-	}
-
-	/**
-	 * zLogバイナリデータで直列化された交信記録をデコードします。
-	 * 
-	 * 
-	 * @author Journal of Hamradio Informatics
-	 * 
-	 * @since 2013/02/23
-	 *
-	 */
-	private static final class ZBinDecoder {
+	private static final class CBinDecoder {
 		private final Fields fields;
-		private final TDateTime tDTime;
+		private final CDateTime cDTime;
 		private final DataInputStream stream;
 
 		/**
@@ -352,9 +292,9 @@ public final class ZBinFormat extends BaseFormat {
 		 * 
 		 * @param in 読み込むストリーム
 		 */
-		public ZBinDecoder(InputStream in) {
+		public CBinDecoder(InputStream in) {
 			this.fields = new Fields();
-			this.tDTime = new TDateTime();
+			this.cDTime = new CDateTime();
 			this.stream = new DataInputStream(in);
 		}
 
@@ -383,10 +323,19 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private List<Item> logSheet() throws Exception {
-			stream.readFully(new byte[256]);
 			List<Item> items = new ArrayList<>();
-			while(stream.available() > 0) items.add(item());
-			return Collections.unmodifiableList(items);
+			final short hdr = stream.readShort();
+			final short rdh = Short.reverseBytes(hdr);
+			final long num = Short.toUnsignedInt(rdh);
+			stream.skipBytes(6);
+			byte[] tested = new byte[8];
+			byte[] answer = "CQsoData".getBytes("ASCII");
+			stream.readFully(tested);
+			if(Arrays.equals(tested, answer)) {
+				for(int i=0; i<num; i++) items.add(item());
+				return Collections.unmodifiableList(items);
+			}
+			else throw new IOException("malformed data");
 		}
 
 		/**
@@ -397,21 +346,18 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		private Item item() throws Exception {
 			Item item = new Item();
-			time(item);
 			call(item);
 			sent(item);
 			rcvd(item);
-			stream.skipBytes(1);
-			sRSTQ(item);
-			rRSTQ(item);
-			stream.skipBytes(4);
+			stream.read();
 			mode(item);
+			stream.read();
 			band(item);
-			watt(item);
-			stream.skipBytes(65);
+			stream.skipBytes(4);
+			time(item);
 			oprt(item);
+			stream.skipBytes(2);
 			note(item);
-			stream.skipBytes(14);
 			return item;
 		}
 
@@ -422,7 +368,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void time(Item item) throws Exception {
-			item.set(tDTime.decode(stream.readLong()));
+			item.set(cDTime.decode(stream.readLong()));
 		}
 
 		/**
@@ -432,7 +378,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void call(Item item) throws Exception {
-			final String s = readString(12);
+			final String s = readString(20);
 			if(s != null) item.set(fields.cache(CALL, s));
 		}
 
@@ -457,29 +403,7 @@ public final class ZBinFormat extends BaseFormat {
 			final String s = readString(30);
 			if(s != null) item.getRcvd().set(fields.cache(CODE, s));
 		}
-
-		/**
-		 * {@link Item}に相手局に送信したRSTQを読み込みます。
-		 * 
-		 * @param item 設定する{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
-		 */
-		private void sRSTQ(Item item) throws Exception {
-			Short rst = Short.reverseBytes(stream.readShort());
-			item.getSent().set(fields.cache(RSTQ, rst.toString()));
-		}
-
-		/**
-		 * {@link Item}に相手局から受信したRSTQを読み込みます。
-		 * 
-		 * @param item 設定する{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
-		 */
-		private void rRSTQ(Item item) throws Exception {
-			Short rst = Short.reverseBytes(stream.readShort());
-			item.getRcvd().set(fields.cache(RSTQ, rst.toString()));
-		}
-
+		
 		/**
 		 * {@link Item}に通信方式を読み込みます。
 		 * 
@@ -501,23 +425,13 @@ public final class ZBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に空中線出力を読み込みます。
-		 * 
-		 * @param item 設定する{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
-		 */
-		private void watt(Item item) throws Exception {
-			item.getSent().set(WattEnum.forIndex(stream.read()).toWatt());
-		}
-
-		/**
 		 * {@link Item}に運用者名を読み込みます。
 		 * 
 		 * @param item 設定する{@link Item}
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void oprt(Item item) throws Exception {
-			final String s = readString(14);
+			final String s = readString(20);
 			if(s != null) item.set(fields.cache(NAME, s));
 		}
 
@@ -528,7 +442,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void note(Item item) throws Exception {
-			final String s = readString(66);
+			final String s = readString(52);
 			if(s != null) item.set(fields.cache(NOTE, s));
 		}
 
@@ -540,25 +454,26 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private String readString(int limit) throws IOException {
-			byte[] buff = new byte[stream.read()];
+			byte[] buff = new byte[limit];
 			stream.readFully(buff);
-			stream.skipBytes(limit - buff.length);
-			String val = new String(buff, "SJIS");
-			return val.isEmpty()? null: val;
+			final String raw = new String(buff, "SJIS");
+			final int len = raw.indexOf(0);
+			if(len < 0) return raw;
+			return len > 0? raw.substring(0, len): null;
 		}
 	}
 
 	/**
-	 * 交信記録をzLogバイナリデータに直列化するエンコーダです。
+	 * 交信記録をLG8書式に直列化するエンコーダです。
 	 * 
 	 * 
 	 * @author Journal of Hamradio Informatics
 	 * 
-	 * @since 2013/02/23
+	 * @since 2017/06/12
 	 *
 	 */
-	private static final class ZBinEncoder {
-		private final TDateTime tDTime;
+	private static final class CBinEncoder {
+		private final CDateTime cDTime;
 		private final DataOutputStream stream;
 
 		/**
@@ -566,8 +481,8 @@ public final class ZBinFormat extends BaseFormat {
 		 * 
 		 * @param out 交信記録を書き込むストリーム
 		 */
-		public ZBinEncoder(OutputStream out) {
-			this.tDTime = new TDateTime();
+		public CBinEncoder(OutputStream out) {
+			this.cDTime = new CDateTime();
 			this.stream = new DataOutputStream(out);
 		}
 
@@ -578,8 +493,10 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws IOException 入出力の例外
 		 */
 		public void write(List<Item> items) throws IOException {
-			stream.write(new byte[256]);
-			for(Item r : items) item(r);
+			stream.writeShort(Short.reverseBytes((short) items.size()));
+			for(int i=0; i<6; i++) stream.writeByte(0);
+			for(char ch: "CQsoData".toCharArray()) stream.writeByte(ch);
+			for(Item r: items) item(r);
 			stream.close();
 		}
 
@@ -591,44 +508,30 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		private void item(Item item) throws IOException {
 			int i = 0;
-			time(item.get(Time.class));
-			string(12, item.get(Call.class));
+			string(20, item.get(Call.class));
 			string(30, item.getSent().get(Code.class));
 			string(30, item.getRcvd().get(Code.class));
-			while(i++ < 1) stream.writeByte(0);
-			rst(item.getSent().get(RSTQ.class));
-			rst(item.getRcvd().get(RSTQ.class));
-			while(i++ < 6) stream.writeByte(0);
+			stream.writeByte(0);
 			mode(item.get(Mode.class));
+			stream.writeByte(0);
 			band(item.get(Band.class));
-			watt(item.getSent().get(Watt.class));
-			while(i++ < 72) stream.writeByte(0);
-			string(14, item.get(Name.class));
-			string(66, item.get(Note.class));
-			while(i++ < 87) stream.writeByte(0);
+			while(i++ < 4) stream.writeByte(0);
+			time(item.get(Time.class));
+			string(20, item.get(Name.class));
+			while(i++ < 7) stream.writeByte(0);
+			string(52, item.get(Note.class));
 			stream.flush();
 		}
 
 		/**
-		 * 交信日時をTDateTime型で読めるバイト列に変換して出力します。
+		 * 交信日時をCDateTime型で読めるバイト列に変換して出力します。
 		 * 
 		 * @param time 交信日時
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void time(Time time) throws IOException {
 			if(time == null) stream.writeLong(0);
-			else stream.writeLong(tDTime.encode(time));
-		}
-
-		/**
-		 * RSTQシグナルレポートを下位バイト、上位バイトの順に出力します。
-		 * 
-		 * @param rst RSTQシグナルレポート
-		 * @throws IOException 出力に失敗した場合
-		 */
-		private void rst(RSTQ rst) throws IOException {
-			int s = rst == null? 599 : rst.value();
-			stream.writeShort(Short.reverseBytes((short) s));
+			else stream.writeLong(cDTime.encode(time));
 		}
 
 		/**
@@ -656,18 +559,6 @@ public final class ZBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * 交信時の空中線出力を1バイトで出力します。
-		 * 
-		 * @param watt 空中線出力
-		 * @throws IOException 出力に失敗した場合
-		 */
-		private void watt(Watt watt) throws IOException {
-			WattEnum watts = WattEnum.valueOf(watt);
-			if(watts == null) stream.writeByte(0);
-			else stream.writeByte(watts.ordinal());
-		}
-
-		/**
 		 * 指定された属性を指定された最大文字数で出力します。
 		 * 属性値が最大文字数を超過しても例外は発生しません。
 		 *
@@ -678,7 +569,6 @@ public final class ZBinFormat extends BaseFormat {
 		private void string(int limit, Field f) throws IOException {
 			final String value = f != null? f.value().toString() : "";
 			final byte[] bytes = value.getBytes("SJIS");
-			stream.writeByte(bytes.length);
 			stream.write(Arrays.copyOf(bytes, limit));
 		}
 	}

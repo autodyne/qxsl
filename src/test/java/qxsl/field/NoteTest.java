@@ -9,7 +9,6 @@ package qxsl.field;
 
 import org.junit.Test;
 import qxsl.model.Fields;
-import static org.apache.commons.lang3.RandomStringUtils.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 import static qxsl.table.secret.QxmlFormat.NOTE;
@@ -27,13 +26,13 @@ public final class NoteTest extends junit.framework.TestCase {
 	private final Fields fields = new Fields(NOTE);
 	@Test
 	public void testValue() {
-		final String str = randomAlphanumeric(1, 100);
+		final String str = util.RandText.alnum(100);
 		assertThat(new Note(str).value(), is(str));
 	}
 	@Test
 	public void testNote$Format() throws Exception {
 		final Note.Format $form = new Note.Format();
-		final Note note = new Note(randomAlphanumeric(1, 100));
+		final Note note = new Note(util.RandText.alnum(100));
 		assertThat($form.decode($form.encode(note)), is(note));
 		assertThat(fields.cache($form.encode(note)), is(note));
 	}

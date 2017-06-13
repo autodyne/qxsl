@@ -9,7 +9,6 @@ package qxsl.field;
 
 import org.junit.Test;
 import qxsl.model.Fields;
-import static org.apache.commons.lang3.RandomStringUtils.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 import static qxsl.table.secret.QxmlFormat.NAME;
@@ -27,13 +26,13 @@ public final class NameTest extends junit.framework.TestCase {
 	private final Fields fields = new Fields(NAME);
 	@Test
 	public void testValue() {
-		final String str = randomAlphanumeric(1, 100);
+		final String str = util.RandText.alnum(100);
 		assertThat(new Name(str).value(), is(str));
 	}
 	@Test
 	public void testName$Format() throws Exception {
 		final Name.Format $form = new Name.Format();
-		final Name name = new Name(randomAlphanumeric(1, 100));
+		final Name name = new Name(util.RandText.alnum(100));
 		assertThat($form.decode($form.encode(name)), is(name));
 		assertThat(fields.cache($form.encode(name)), is(name));
 	}
