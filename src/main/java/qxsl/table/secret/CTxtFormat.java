@@ -315,7 +315,7 @@ public final class CTxtFormat extends TextFormat {
 		 */
 		private void time(Time date) throws IOException {
 			if(date == null) printSpace(10);
-			else print(format.format(date.zoned()));
+			else print(format.format(date.value()));
 		}
 
 		/**

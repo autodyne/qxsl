@@ -19,7 +19,6 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import qxsl.field.*;
@@ -124,7 +123,7 @@ public final class ZBinFormat extends BaseFormat {
 			ZonedDateTime t = epoch.atZone(JST);
 			t = t.plus((int)d, DAYS);
 			t = t.plus(time, MILLIS);
-			return new Time(Date.from(t.toInstant()));
+			return new Time(t);
 		}
 
 		/**

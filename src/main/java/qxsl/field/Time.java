@@ -9,9 +9,7 @@ package qxsl.field;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoField;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
+import java.time.temporal.*;
 import javax.xml.namespace.QName;
 import qxsl.model.Field;
 import qxsl.model.FieldFormat;
@@ -26,7 +24,7 @@ import qxsl.table.secret.BaseFormat;
  * @since 2013/06/08
  *
  */
-public final class Time extends Field<Date> {
+public final class Time extends Field<ZonedDateTime> {
 	private final ZonedDateTime time;
 
 	/**
@@ -35,15 +33,6 @@ public final class Time extends Field<Date> {
 	 public Time() {
 		this(ZonedDateTime.now());
 	 }
-
-	/**
-	 * 交信日時を指定して{@link Time}を構築します。
-	 * 
-	 * @param time 交信日時
-	 */
-	public Time(Date time) {
-		this(time.toInstant());
-	}
 
 	/**
 	 * 交信日時を指定して{@link Time}を構築します。
@@ -83,16 +72,7 @@ public final class Time extends Field<Date> {
 	}
 
 	@Override
-	public Date value() {
-		return Date.from(time.toInstant());
-	}
-
-	/**
-	 * この交信時刻の地域化された値を返します。
-	 *
-	 * @return 地域化された時刻
-	 */
-	public ZonedDateTime zoned() {
+	public ZonedDateTime value() {
 		return time;
 	}
 
@@ -107,7 +87,7 @@ public final class Time extends Field<Date> {
 	@Override
 	public boolean equals(Object obj) {
 		if(!(obj instanceof Time)) return false;
-		ZonedDateTime comp = ((Time) obj).time;
+		final Temporal comp = ((Time) obj).time;
 		return comp.until(time, ChronoUnit.MINUTES) == 0;
 	}
 
