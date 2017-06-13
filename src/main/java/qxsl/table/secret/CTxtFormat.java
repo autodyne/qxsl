@@ -10,13 +10,13 @@ package qxsl.table.secret;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
+import java.time.LocalDateTime;
+import java.time.Year;
+import java.time.format.*;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import qxsl.field.*;
@@ -95,8 +95,8 @@ public final class CTxtFormat extends TextFormat {
 	 */
 	@Deprecated
 	private static final class CTxtDecoder extends TextDecoder {
+		private final DateTimeFormatter format;
 		private final Fields fields;
-		private final DateFormat format;
 
 		/**
 		 * 指定されたストリームを読み込むデコーダを構築します。
@@ -105,9 +105,11 @@ public final class CTxtFormat extends TextFormat {
 		 * @throws IOException SJISに対応していない場合
 		 */
 		public CTxtDecoder(InputStream in) throws IOException {
-			super(in, "sjis");
+			super(in, "JISAutoDetect");
 			fields = new Fields();
-			format = new SimpleDateFormat("MM/dd HHmm");
+			DateTimeFormatterBuilder fb = new DateTimeFormatterBuilder();
+			fb.parseDefaulting(ChronoField.YEAR, Year.now().getValue());
+			this.format = fb.appendPattern("M/ppd HHmm").toFormatter();
 		}
 
 		/**
@@ -173,12 +175,7 @@ public final class CTxtFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void time(Item item, String time) throws Exception {
-			java.util.Date date = format.parse(time);
-			Calendar c = Calendar.getInstance();
-			final int year = c.get(Calendar.YEAR);
-			c.setTime(date);
-			c.set(Calendar.YEAR, year);
-			item.set(new Time(c.getTime()));
+			item.set(new Time(LocalDateTime.parse(time, format)));
 		}
 
 		/**
@@ -258,7 +255,7 @@ public final class CTxtFormat extends TextFormat {
 	 * @deprecated この実装は概ね互換性がありますが、無保証です。
 	 */
 	private static final class CTxtEncoder extends TextEncoder {
-		private final Calendar calendar;
+		private final DateTimeFormatter format;
 
 		/**
 		 * 指定されたストリームに出力するエンコーダーを構築します。
@@ -268,7 +265,7 @@ public final class CTxtFormat extends TextFormat {
 		 */
 		public CTxtEncoder(OutputStream out) throws IOException {
 			super(out, "SJIS");
-			calendar = GregorianCalendar.getInstance();
+			format = DateTimeFormatter.ofPattern("MM/dd HHmm");
 		}
 
 		/**
@@ -317,14 +314,8 @@ public final class CTxtFormat extends TextFormat {
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void time(Time date) throws IOException {
-			if(date != null) {
-				calendar.setTime(date.value());
-				int M = calendar.get(Calendar.MONTH) + 1;
-				int d = calendar.get(Calendar.DAY_OF_MONTH);
-				int H = calendar.get(Calendar.HOUR_OF_DAY);
-				int m = calendar.get(Calendar.MINUTE);
-				printf("%2d/%2d %02d%02d", M, d, H, m);
-			} else printSpace(10);
+			if(date == null) printSpace(10);
+			else print(format.format(date.zoned()));
 		}
 
 		/**
