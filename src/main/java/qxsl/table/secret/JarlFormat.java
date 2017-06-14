@@ -57,7 +57,7 @@ public final class JarlFormat extends TextFormat {
 	 */
 	@Override
 	public String toString() {
-		return "JARL 2016 logsheet format";
+		return "JARL R2.0 logsheet format";
 	}
 
 	/**

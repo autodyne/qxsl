@@ -31,7 +31,7 @@ import qxsl.model.*;
  * @since 2013/07/02
  *
  */
-public final class CTxtFormat extends TextFormat {
+public final class CLogFormat extends TextFormat {
 	/**
 	 * この書式を識別する完全な名前を返します。
 	 * 
@@ -39,7 +39,7 @@ public final class CTxtFormat extends TextFormat {
 	 */
 	@Override
 	public String getName() {
-		return "ctxt";
+		return "clog";
 	}
 	
 	/**
@@ -59,7 +59,7 @@ public final class CTxtFormat extends TextFormat {
 	 */
 	@Override
 	public String toString() {
-		return "CTESTWIN ver1.0 logsheet format";
+		return "CTESTWIN logfile format (*.txt)";
 	}
 
 	/**
@@ -70,7 +70,7 @@ public final class CTxtFormat extends TextFormat {
 	 * @throws IOException 入出力時の例外
 	 */
 	public List<Item> decode(InputStream in) throws IOException {
-		return new CTxtDecoder(in).read();
+		return new CLogDecoder(in).read();
 	}
 
 	/**
@@ -81,7 +81,7 @@ public final class CTxtFormat extends TextFormat {
 	 * @throws IOException 入出力時の例外
 	 */
 	public void encode(OutputStream out, List<Item> items) throws IOException {
-		new CTxtEncoder(out).write(items);
+		new CLogEncoder(out).write(items);
 	}
 
 	/**
@@ -94,7 +94,7 @@ public final class CTxtFormat extends TextFormat {
 	 * @deprecated この実装は概ね互換性がありますが、無保証です。
 	 */
 	@Deprecated
-	private static final class CTxtDecoder extends TextDecoder {
+	private static final class CLogDecoder extends TextDecoder {
 		private final DateTimeFormatter format;
 		private final Fields fields;
 
@@ -104,7 +104,7 @@ public final class CTxtFormat extends TextFormat {
 		 * @param in 読み込むストリーム
 		 * @throws IOException SJISに対応していない場合
 		 */
-		public CTxtDecoder(InputStream in) throws IOException {
+		public CLogDecoder(InputStream in) throws IOException {
 			super(in, "JISAutoDetect");
 			fields = new Fields();
 			DateTimeFormatterBuilder fb = new DateTimeFormatterBuilder();
@@ -254,7 +254,7 @@ public final class CTxtFormat extends TextFormat {
 	 * @since 2013/07/02
 	 * @deprecated この実装は概ね互換性がありますが、無保証です。
 	 */
-	private static final class CTxtEncoder extends TextEncoder {
+	private static final class CLogEncoder extends TextEncoder {
 		private final DateTimeFormatter format;
 
 		/**
@@ -263,7 +263,7 @@ public final class CTxtFormat extends TextFormat {
 		 * @param out 交信記録を出力するストリーム
 		 * @throws IOException  SJISに対応していない場合
 		 */
-		public CTxtEncoder(OutputStream out) throws IOException {
+		public CLogEncoder(OutputStream out) throws IOException {
 			super(out, "SJIS");
 			format = DateTimeFormatter.ofPattern("MM/dd HHmm");
 		}

@@ -19,7 +19,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 /**
- * {@see CTxtFormat}クラスのテスト用クラスです。
+ * {@see CLogFormat}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -27,12 +27,12 @@ import static org.junit.Assert.assertThat;
  * @since 2017/02/26
  *
  */
-public final class CTxtFormatTest extends junit.framework.TestCase {
-	private final CTxtFormat format = new CTxtFormat();
+public final class CLogFormatTest extends junit.framework.TestCase {
+	private final CLogFormat format = new CLogFormat();
 	private final Tables tables = new Tables();
 	private final ArrayList<Band> bands = new ArrayList<>();
 	private final Random random = new Random();
-	public CTxtFormatTest() {
+	public CLogFormatTest() {
 		bands.add(new Band(    3_500));
 		bands.add(new Band(    7_000));
 		bands.add(new Band(   14_000));

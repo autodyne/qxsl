@@ -32,7 +32,7 @@ public final class ContestTest extends junit.framework.TestCase {
 	private final Tables tables = new Tables();
 	public ContestTest() throws Exception {
 		final Class cl = Contest.class;
-		logs.put("ctxt", tables.decode(cl.getResource("allja1.ctxt")));
+		logs.put("clog", tables.decode(cl.getResource("allja1.clog")));
 		logs.put("hl76", tables.decode(cl.getResource("allja1.hl76")));
 		logs.put("jarl", tables.decode(cl.getResource("allja1.jarl")));
 		logs.put("rtcl", tables.decode(cl.getResource("allja1.rtcl")));

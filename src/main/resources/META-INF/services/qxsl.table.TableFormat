@@ -3,7 +3,7 @@ qxsl.table.secret.QxmlFormat
 qxsl.table.secret.JarlFormat
 qxsl.table.secret.ZAllFormat
 qxsl.table.secret.ZDosFormat
-qxsl.table.secret.CTxtFormat
+qxsl.table.secret.CLogFormat
 qxsl.table.secret.Hl76Format
 qxsl.table.secret.RtclFormat
 

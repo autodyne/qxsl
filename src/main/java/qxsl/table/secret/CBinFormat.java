@@ -160,7 +160,8 @@ public final class CBinFormat extends BaseFormat {
 		G75  ( 75000000),
 		G77  ( 77000000),
 		G135 (135000000),
-		G248 (248000000);
+		G248 (248000000),
+		K136 (      136);
 
 		private final Band band;
 		private static BandEnum[] arr;
@@ -226,7 +227,16 @@ public final class CBinFormat extends BaseFormat {
 		RTTY("RTTY"),
 		SSB ("SSB"),
 		FM  ("FM"),
-		AM  ("AM");
+		AM  ("AM"),
+		ATV ("ATV"),
+		SSTV("SSTV"),
+		PSK ("PSK"),
+		GMSK("GMSK"),
+		MFSK("MFSK"),
+		QPSK("QPSK"),
+		FSK ("FSK"),
+		DSTAR("D-STAR"),
+		C4FM("C4FM");
 
 		private final Mode mode;
 		private static ModeEnum[] arr;
@@ -349,15 +359,15 @@ public final class CBinFormat extends BaseFormat {
 			call(item);
 			sent(item);
 			rcvd(item);
-			stream.read();
 			mode(item);
 			stream.read();
 			band(item);
-			stream.skipBytes(4);
+			stream.skipBytes(5);
 			time(item);
 			oprt(item);
 			stream.skipBytes(2);
 			note(item);
+			stream.skipBytes(2);
 			return item;
 		}
 
@@ -442,7 +452,7 @@ public final class CBinFormat extends BaseFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void note(Item item) throws Exception {
-			final String s = readString(52);
+			final String s = readString(50);
 			if(s != null) item.set(fields.cache(NOTE, s));
 		}
 
@@ -494,9 +504,18 @@ public final class CBinFormat extends BaseFormat {
 		 */
 		public void write(List<Item> items) throws IOException {
 			stream.writeShort(Short.reverseBytes((short) items.size()));
-			for(int i=0; i<6; i++) stream.writeByte(0);
+			//for(int i=0; i<6; i++) stream.writeByte(0);
+			stream.writeByte(0xff);
+			stream.writeByte(0xff);
+			stream.writeByte(0x00);
+			stream.writeByte(0x00);
+			stream.writeByte(0x08);
+			stream.writeByte(0x00);
+			
 			for(char ch: "CQsoData".toCharArray()) stream.writeByte(ch);
-			for(Item r: items) item(r);
+		//	for(Item r: items) item(r);
+			for(int i=0; i<items.size() - 1; i++) item(items.get(i), false);
+			if(!items.isEmpty()) item(items.get(items.size()-1), true);
 			stream.close();
 		}
 
@@ -506,20 +525,32 @@ public final class CBinFormat extends BaseFormat {
 		 * @param item 出力する{@link Item}
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private void item(Item item) throws IOException {
+		private void item(Item item, boolean tail) throws IOException {
 			int i = 0;
 			string(20, item.get(Call.class));
 			string(30, item.getSent().get(Code.class));
 			string(30, item.getRcvd().get(Code.class));
-			stream.writeByte(0);
 			mode(item.get(Mode.class));
 			stream.writeByte(0);
 			band(item.get(Band.class));
-			while(i++ < 4) stream.writeByte(0);
+			stream.writeByte(0);
+			stream.writeByte(0x0a);
+			stream.writeByte(0x00);
+			stream.writeByte(0x00);
+			stream.writeByte(0x80);
 			time(item.get(Time.class));
 			string(20, item.get(Name.class));
-			while(i++ < 7) stream.writeByte(0);
-			string(52, item.get(Note.class));
+			//while(i++ < 8) stream.writeByte(0);
+			stream.writeByte(0);
+			stream.writeByte(0);
+			string(50, item.get(Note.class));
+			if(tail) {
+				stream.writeByte(0x03);
+				stream.writeByte(0x00);
+			} else {
+				stream.writeByte(0x01);
+				stream.writeByte(0x80);
+			}
 			stream.flush();
 		}
 
