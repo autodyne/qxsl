@@ -8,7 +8,6 @@
 package qxsl.table.secret;
 
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -83,7 +82,7 @@ public final class CBinFormat extends BaseFormat {
 	 * @throws IOException 入出力時の例外
 	 */
 	public void encode(OutputStream out, List<Item> items) throws IOException {
-		new CBinEncoder(out).write(items);
+		throw new IOException(String.format("encoding %s not supported", this));
 	}
 
 	/**
@@ -470,137 +469,6 @@ public final class CBinFormat extends BaseFormat {
 			final int len = raw.indexOf(0);
 			if(len < 0) return raw;
 			return len > 0? raw.substring(0, len): null;
-		}
-	}
-
-	/**
-	 * 交信記録をLG8書式に直列化するエンコーダです。
-	 * 
-	 * 
-	 * @author Journal of Hamradio Informatics
-	 * 
-	 * @since 2017/06/12
-	 *
-	 */
-	private static final class CBinEncoder {
-		private final CDateTime cDTime;
-		private final DataOutputStream stream;
-
-		/**
-		 * 指定されたストリームに出力するエンコーダを構築します。
-		 * 
-		 * @param out 交信記録を書き込むストリーム
-		 */
-		public CBinEncoder(OutputStream out) {
-			this.cDTime = new CDateTime();
-			this.stream = new DataOutputStream(out);
-		}
-
-		/**
-		 * 交信記録を出力します。ストリームは閉じられます。
-		 * 
-		 * @param items 交信記録
-		 * @throws IOException 入出力の例外
-		 */
-		public void write(List<Item> items) throws IOException {
-			stream.writeShort(Short.reverseBytes((short) items.size()));
-			//for(int i=0; i<6; i++) stream.writeByte(0);
-			stream.writeByte(0xff);
-			stream.writeByte(0xff);
-			stream.writeByte(0x00);
-			stream.writeByte(0x00);
-			stream.writeByte(0x08);
-			stream.writeByte(0x00);
-			
-			for(char ch: "CQsoData".toCharArray()) stream.writeByte(ch);
-		//	for(Item r: items) item(r);
-			for(int i=0; i<items.size() - 1; i++) item(items.get(i), false);
-			if(!items.isEmpty()) item(items.get(items.size()-1), true);
-			stream.close();
-		}
-
-		/**
-		 * {@link Item}をバイナリにシリアライズして出力します。
-		 * 
-		 * @param item 出力する{@link Item}
-		 * @throws IOException 出力に失敗した場合
-		 */
-		private void item(Item item, boolean tail) throws IOException {
-			int i = 0;
-			string(20, item.get(Call.class));
-			string(30, item.getSent().get(Code.class));
-			string(30, item.getRcvd().get(Code.class));
-			mode(item.get(Mode.class));
-			stream.writeByte(0);
-			band(item.get(Band.class));
-			stream.writeByte(0);
-			stream.writeByte(0x0a);
-			stream.writeByte(0x00);
-			stream.writeByte(0x00);
-			stream.writeByte(0x80);
-			time(item.get(Time.class));
-			string(20, item.get(Name.class));
-			//while(i++ < 8) stream.writeByte(0);
-			stream.writeByte(0);
-			stream.writeByte(0);
-			string(50, item.get(Note.class));
-			if(tail) {
-				stream.writeByte(0x03);
-				stream.writeByte(0x00);
-			} else {
-				stream.writeByte(0x01);
-				stream.writeByte(0x80);
-			}
-			stream.flush();
-		}
-
-		/**
-		 * 交信日時をCDateTime型で読めるバイト列に変換して出力します。
-		 * 
-		 * @param time 交信日時
-		 * @throws IOException 出力に失敗した場合
-		 */
-		private void time(Time time) throws IOException {
-			if(time == null) stream.writeLong(0);
-			else stream.writeLong(cDTime.encode(time));
-		}
-
-		/**
-		 * 交信した通信方式を1バイトで出力します。
-		 * 
-		 * @param mode 通信方式
-		 * @throws IOException 出力に失敗した場合
-		 */
-		private void mode(Mode mode) throws IOException {
-			ModeEnum modes = ModeEnum.valueOf(mode);
-			if(mode == null) stream.writeByte(0);
-			else stream.writeByte(modes.ordinal());
-		}
-
-		/**
-		 * 交信した周波数帯を1バイトで出力します。
-		 * 
-		 * @param band 周波数帯
-		 * @throws IOException 出力に失敗した場合
-		 */
-		private void band(Band band) throws IOException {
-			BandEnum bands = BandEnum.valueOf(band);
-			if(bands == null) stream.writeByte(0);
-			else stream.writeByte(bands.ordinal());
-		}
-
-		/**
-		 * 指定された属性を指定された最大文字数で出力します。
-		 * 属性値が最大文字数を超過しても例外は発生しません。
-		 *
-		 * @param limit 最大文字数
-		 * @param f 直列化する属性
-		 * @throws IOException 出力に失敗した場合
-		 */
-		private void string(int limit, Field f) throws IOException {
-			final String value = f != null? f.value().toString() : "";
-			final byte[] bytes = value.getBytes("SJIS");
-			stream.write(Arrays.copyOf(bytes, limit));
 		}
 	}
 }
