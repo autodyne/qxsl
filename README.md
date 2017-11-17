@@ -8,7 +8,7 @@
 
 ## usage
 
-- see http://pafelog.net/ats4.pdf
+- see http://pafelog.net/ats4.pdf or http://pafelog.net/qxsl
 
 ## license
 
