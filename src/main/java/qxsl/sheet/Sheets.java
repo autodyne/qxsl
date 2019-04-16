@@ -104,6 +104,20 @@ public final class Sheets implements Iterable<SheetFormat> {
 	 * @throws IOException 入出力時の例外
 	 */
 	public Map<String, String> decode(java.net.URL url) throws IOException {
-		return decode(url.openStream());
+		try (InputStream is = url.openStream()) {
+			return decode(is);
+		}
+	}
+
+	/**
+	 * フォーマットを自動判別して提出書類を読み込みます。
+	 * 
+	 * @param bytes 提出書類を読み込むバイト列
+	 * @return 提出書類
+	 * 
+	 * @throws IOException 入出力時の例外
+	 */
+	public Map<String, String> decode(byte[] bytes) throws IOException {
+		return decode(new ByteArrayInputStream(bytes));
 	}
 }

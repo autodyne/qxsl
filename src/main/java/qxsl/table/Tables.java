@@ -105,6 +105,20 @@ public final class Tables implements Iterable<TableFormat> {
 	 * @throws IOException 入出力時の例外
 	 */
 	public List<Item> decode(java.net.URL url) throws IOException {
-		return decode(url.openStream());
+		try (InputStream is = url.openStream()) {
+			return decode(is);
+		}
+	}
+
+	/**
+	 * フォーマットを自動判別して交信記録を読み込みます。
+	 * 
+	 * @param bytes 交信記録を読み込むバイト列
+	 * @return 交信記録
+	 * 
+	 * @throws IOException 入出力時の例外
+	 */
+	public List<Item> decode(byte[] bytes) throws IOException {
+		return decode(new ByteArrayInputStream(bytes));
 	}
 }
