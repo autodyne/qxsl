@@ -19,26 +19,32 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 /**
- * {@see CLogFormat}クラスのテスト用クラスです。
+ * {@see CBinFormat}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics
  * 
- * @since 2017/02/26
+ * @since 2019/05/03
  *
  */
-public final class CLogFormatTest extends junit.framework.TestCase {
-	private final CLogFormat format = new CLogFormat();
+public final class CBinFormatTest extends junit.framework.TestCase {
+	private final CBinFormat format = new CBinFormat();
 	private final Tables tables = new Tables();
 	private final ArrayList<Band> bands = new ArrayList<>();
+	private final ArrayList<Mode> modes = new ArrayList<>();
 	private final Random random = new Random();
-	public CLogFormatTest() {
+	public CBinFormatTest() {
 		bands.add(new Band(    3_500));
 		bands.add(new Band(    7_000));
 		bands.add(new Band(   14_000));
 		bands.add(new Band(  144_000));
 		bands.add(new Band(1_200_000));
 		bands.add(new Band(5_600_000));
+		modes.add(new Mode(  "CW"));
+		modes.add(new Mode(  "AM"));
+		modes.add(new Mode(  "FM"));
+		modes.add(new Mode( "SSB"));
+		modes.add(new Mode("RTTY"));
 	}
 	@Test
 	public void testDecode() throws java.io.IOException {
@@ -48,10 +54,12 @@ public final class CLogFormatTest extends junit.framework.TestCase {
 				final Item item = new Item();
 				item.set(new Time());
 				item.set(bands.get(random.nextInt(bands.size())));
-				item.set(new Call(util.RandText.alnum(11)));
-				item.set(new Mode(util.RandText.alnum(4)));
-				item.getRcvd().set(new Code(util.RandText.alnum(12)));
-				item.getSent().set(new Code(util.RandText.alnum(12)));
+				item.set(new Call(util.RandText.alnum(19)));
+				item.set(modes.get(random.nextInt(modes.size())));
+				item.set(new Note(util.RandText.alnum(49)));
+				item.set(new Name(util.RandText.alnum(19)));
+				item.getRcvd().set(new Code(util.RandText.alnum(29)));
+				item.getSent().set(new Code(util.RandText.alnum(29)));
 				items.add(item);
 			}
 			final ByteArrayOutputStream os = new ByteArrayOutputStream();

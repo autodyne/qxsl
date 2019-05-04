@@ -97,10 +97,8 @@ public abstract class TextFormat extends BaseFormat {
 		public final String subLine(int s, int e) throws Exception {
 			if(line.length() <= s) return "";
 			if(e <= 0 || e >= line.length()) e = line.length();
-			final String temp = "\\P{IsC}{%d}(\\P{IsC}{%d})( .+)?";
-			final String regex = String.format(temp, s, e - s);
-			Matcher matcher = Pattern.compile(regex).matcher(line);
-			if(matcher.find()) return matcher.group(1).trim();
+			char next = e < line.length()? line.charAt(e): ' ';
+			if(next == ' ') return line.substring(s, e).trim();
 			throw parseError(e, "unexpected: " + line.substring(s));
 		}
 

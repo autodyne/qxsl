@@ -269,17 +269,17 @@ public final class JarlFormat implements qxsl.sheet.SheetFormat {
 		 * @throws IOException 入出力の例外
 		 */
 		public void write(Map<String, String> map) throws IOException {
-			final String version = map.remove("VERSION");
-			final String record = map.remove("LOGSHEET");
-			if(version == null) out.println("<SUMMARYSHEET>");
-			else out.printf("<SUMMARYSHEET VERSION=%s>%n", version);
+			final String round = map.getOrDefault("VERSION", "R2.0");
+			final String table = map.getOrDefault("LOGSHEET", "");
+			out.printf("<SUMMARYSHEET VERSION=%s>%n", round);
 			for(String key: map.keySet()) {
 				final String val = map.get(key).trim();
 				final String close = key.split(" ")[0];
+				if(val.matches("(VERSION|LOGSHEET)")) continue;
 				out.printf("<%s>%s</%s>%n", key, val, close);
 			}
 			out.println("</SUMMARYSHEET>");
-			if(record != null) out.printf("<LOGSHEET>%n%s%n</LOGSHEET>", record.trim());
+			out.printf("<LOGSHEET>%n%s%n</LOGSHEET>", table);
 			out.flush();
 			out.close();
 		}

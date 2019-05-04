@@ -57,7 +57,7 @@ public final class RtclFormat extends TextFormat {
 	 */
 	@Override
 	public String toString() {
-		return "RTCL logsheet format";
+		return "RTCL TXT FORMAT";
 	}
 
 	/**
@@ -105,7 +105,7 @@ public final class RtclFormat extends TextFormat {
 		public RtclDecoder(InputStream in) throws IOException {
 			super(in, "JISAutoDetect");
 			fields = new Fields();
-			format = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+			format = DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm");
 		}
 
 		/**
@@ -145,8 +145,8 @@ public final class RtclFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private Item item(String line) throws Exception {
-			Item item = new Item();
-			String[] vals = getLine(9);
+			final Item item = new Item();
+			final String[] vals = getLine(9);
 			final String time = vals[0] + " " + vals[1];
 			final String band = vals[2];
 			final String mode = vals[3];
@@ -279,7 +279,7 @@ public final class RtclFormat extends TextFormat {
 		 */
 		public RtclEncoder(OutputStream out) throws IOException {
 			super(out, "SJIS");
-			format = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+			format = DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm");
 		}
 
 		/**

@@ -57,7 +57,7 @@ public final class ZAllFormat extends TextFormat {
 	 */
 	@Override
 	public String toString() {
-		return "zLog text format (*.all)";
+		return "ZLOG ALL FORMAT";
 	}
 
 	/**
@@ -105,7 +105,7 @@ public final class ZAllFormat extends TextFormat {
 		public ZAllDecoder(InputStream in) throws IOException {
 			super(in, "JISAutoDetect");
 			fields = new Fields();
-			format = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
+			format = DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm");
 		}
 
 		/**
@@ -146,7 +146,7 @@ public final class ZAllFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private Item item(String line) throws Exception {
-			Item item = new Item();
+			final Item item = new Item();
 			String time = subLine(0,  16);
 			String call = subLine(17, 29);
 			String srst = subLine(30, 33);
@@ -155,11 +155,11 @@ public final class ZAllFormat extends TextFormat {
 			String rnum = subLine(46, 53);
 			String band = subLine(66, 70);
 			String mode = subLine(71, 75);
-			String memo = subLine(79, -1);
+			String note = subLine(79, -1);
 
-			final int i = memo.indexOf("%%", 2);
-			String oprt = i>0 ? memo.substring(2, i) : "";
-			if(i > 0) memo = memo.substring(i + 2).trim();
+			final int i = note.indexOf("%%", 2);
+			String oprt = i>0 ? note.substring(2, i) : "";
+			if(i > 0) note = note.substring(i + 2).trim();
 
 			if(!time.isEmpty()) time(item, time);
 			if(!call.isEmpty()) call(item, call);
@@ -170,7 +170,7 @@ public final class ZAllFormat extends TextFormat {
 			if(!band.isEmpty()) band(item, band);
 			if(!mode.isEmpty()) mode(item, mode);
 			if(!oprt.isEmpty()) oprt(item, oprt);
-			if(!memo.isEmpty()) memo(item, memo);
+			if(!note.isEmpty()) note(item, note);
 
 			return item;
 		}
@@ -285,11 +285,11 @@ public final class ZAllFormat extends TextFormat {
 		 * {@link Item}に交信の備考を設定します。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @param memo 備考の文字列
+		 * @param note 備考の文字列
 		 * @throws Exception 読み込みに失敗した場合
 		 */
-		private void memo(Item item, String memo) throws Exception {
-			item.set(fields.cache(NOTE, memo));
+		private void note(Item item, String note) throws Exception {
+			item.set(fields.cache(NOTE, note));
 		}
 	}
 
@@ -314,7 +314,7 @@ public final class ZAllFormat extends TextFormat {
 		 */
 		public ZAllEncoder(OutputStream out) throws IOException {
 			super(out, "SJIS");
-			format = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
+			format = DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm");
 		}
 
 		/**
@@ -397,11 +397,11 @@ public final class ZAllFormat extends TextFormat {
 		/**
 		 * 指定された備考を文字列として出力します。
 		 * 
-		 * @param memo 出力する備考
+		 * @param note 出力する備考
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private void note(Note memo) throws IOException {
-			if(memo != null) print(memo.value());
+		private void note(Note note) throws IOException {
+			if(note != null) print(note.value());
 		}
 	}
 }

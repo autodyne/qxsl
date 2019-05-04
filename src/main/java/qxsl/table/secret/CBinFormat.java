@@ -8,6 +8,7 @@
 package qxsl.table.secret;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -60,7 +61,7 @@ public final class CBinFormat extends BaseFormat {
 	 */
 	@Override
 	public String toString() {
-		return "CTESTWIN binary format (*.lg8)";
+		return "CTESTWIN LG8 FORMAT";
 	}
 
 	/**
@@ -82,7 +83,7 @@ public final class CBinFormat extends BaseFormat {
 	 * @throws IOException 入出力時の例外
 	 */
 	public void encode(OutputStream out, List<Item> items) throws IOException {
-		throw new IOException(String.format("encoding %s not supported", this));
+		new CBinEncoder(out).write(items);
 	}
 
 	/**
@@ -344,6 +345,14 @@ public final class CBinFormat extends BaseFormat {
 				for(int i=0; i<num; i++) items.add(item());
 				return Collections.unmodifiableList(items);
 			}
+			// footer: CTESTWIN internal status
+			//   2 bytes: mode
+			//   4 bytes: unknown
+			//   2 bytes: band
+			//   2 bytes: contest ID
+			//   2 bytes: global score multiplier
+			//  92 bytes: 23band score multiplier
+			// 600 bytes: operator names
 			else throw new IOException("malformed data");
 		}
 
@@ -354,7 +363,7 @@ public final class CBinFormat extends BaseFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private Item item() throws Exception {
-			Item item = new Item();
+			final Item item = new Item();
 			call(item);
 			sent(item);
 			rcvd(item);
@@ -469,6 +478,118 @@ public final class CBinFormat extends BaseFormat {
 			final int len = raw.indexOf(0);
 			if(len < 0) return raw;
 			return len > 0? raw.substring(0, len): null;
+		}
+	}
+
+	/**
+	 * 交信記録をLG8書式に直列化するエンコーダです。
+	 * 
+	 * 
+	 * @author Journal of Hamradio Informatics
+	 * 
+	 * @since 2019/05/04
+	 *
+	 */
+	private static final class CBinEncoder {
+		private final CDateTime cDTime;
+		private final DataOutputStream stream;
+
+		/**
+		 * 指定されたストリームに出力するエンコーダを構築します。
+		 * 
+		 * @param out 交信記録を書き込むストリーム
+		 */
+		public CBinEncoder(OutputStream out) {
+			this.cDTime = new CDateTime();
+			this.stream = new DataOutputStream(out);
+		}
+
+		/**
+		 * 交信記録を出力します。ストリームは閉じられます。
+		 * 
+		 * @param items 交信記録
+		 * @throws IOException 入出力の例外
+		 */
+		public void write(List<Item> items) throws IOException {
+			stream.writeShort(Short.reverseBytes((short) items.size()));
+			stream.write(new byte[6]);
+			stream.writeBytes("CQsoData");
+			for(Item r : items) item(r);
+			stream.close();
+		}
+
+		/**
+		 * {@link Item}をバイナリにシリアライズして出力します。
+		 * 
+		 * @param item 出力する{@link Item}
+		 * @throws IOException 出力に失敗した場合
+		 */
+		private void item(Item item) throws IOException {
+			string(20, item.get(Call.class));
+			string(30, item.getSent().get(Code.class));
+			string(30, item.getRcvd().get(Code.class));
+			mode(item.get(Mode.class));
+			stream.writeByte(0);
+			band(item.get(Band.class));
+			stream.write(new byte[5]);
+			time(item.get(Time.class));
+			string(20, item.get(Name.class));
+			stream.writeByte(0);
+			stream.writeByte(0);
+			string(50, item.get(Note.class));
+			stream.writeByte(0);
+			stream.writeByte(0);
+			stream.flush();
+		}
+
+		/**
+		 * 交信日時をCDateTime型で読めるバイト列に変換して出力します。
+		 * 
+		 * @param time 交信日時
+		 * @throws IOException 出力に失敗した場合
+		 */
+		private void time(Time time) throws IOException {
+			if(time == null) stream.writeLong(0);
+			else stream.writeLong(cDTime.encode(time));
+		}
+
+		/**
+		 * 交信した通信方式を1バイトで出力します。
+		 * 
+		 * @param mode 通信方式
+		 * @throws IOException 出力に失敗した場合
+		 */
+		private void mode(Mode mode) throws IOException {
+			ModeEnum modes = ModeEnum.valueOf(mode);
+			if(mode == null) stream.writeByte(0);
+			else stream.writeByte(modes.ordinal());
+		}
+
+		/**
+		 * 交信した周波数帯を1バイトで出力します。
+		 * 
+		 * @param band 周波数帯
+		 * @throws IOException 出力に失敗した場合
+		 */
+		private void band(Band band) throws IOException {
+			BandEnum bands = BandEnum.valueOf(band);
+			if(bands == null) stream.writeByte(0);
+			else stream.writeByte(bands.ordinal());
+		}
+
+		/**
+		 * 指定された属性を指定された最大文字数で出力します。
+		 * 属性値が最大文字数を超過しても例外は発生しません。
+		 *
+		 * @param limit 最大文字数
+		 * @param f 直列化する属性
+		 * @throws IOException 出力に失敗した場合
+		 */
+		private void string(int limit, Field f) throws IOException {
+			final String value = f != null? f.value().toString() : "";
+			final byte[] bytes = value.getBytes("SJIS");
+			stream.write(Arrays.copyOf(bytes, limit-1));
+			stream.writeByte(0);
 		}
 	}
 }

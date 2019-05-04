@@ -1,9 +1,10 @@
 qxsl.table.secret.QxmlFormat
 
+qxsl.table.secret.Cab3Format
 qxsl.table.secret.JarlFormat
 qxsl.table.secret.ZAllFormat
 qxsl.table.secret.ZDosFormat
-qxsl.table.secret.CLogFormat
+qxsl.table.secret.CTxtFormat
 qxsl.table.secret.Hl76Format
 qxsl.table.secret.RtclFormat
 

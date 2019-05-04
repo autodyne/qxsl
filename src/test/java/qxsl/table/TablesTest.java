@@ -30,14 +30,18 @@ public final class TablesTest extends junit.framework.TestCase {
 	}
 	@Test
 	public void testGetFormat() {
+		// XML format
 		assertThat(tables.getFormat("qxml"), is(instanceOf(QxmlFormat.class)));
-		assertThat(tables.getFormat("cbin"), is(instanceOf(CBinFormat.class)));
-		assertThat(tables.getFormat("clog"), is(instanceOf(CLogFormat.class)));
-		assertThat(tables.getFormat("hl76"), is(instanceOf(Hl76Format.class)));
+		// Text formats
+		assertThat(tables.getFormat("cab3"), is(instanceOf(Cab3Format.class)));
 		assertThat(tables.getFormat("jarl"), is(instanceOf(JarlFormat.class)));
+		assertThat(tables.getFormat("ctxt"), is(instanceOf(CTxtFormat.class)));
+		assertThat(tables.getFormat("hl76"), is(instanceOf(Hl76Format.class)));
 		assertThat(tables.getFormat("rtcl"), is(instanceOf(RtclFormat.class)));
 		assertThat(tables.getFormat("zall"), is(instanceOf(ZAllFormat.class)));
-		assertThat(tables.getFormat("zbin"), is(instanceOf(ZBinFormat.class)));
 		assertThat(tables.getFormat("zdos"), is(instanceOf(ZDosFormat.class)));
+		// Binary formats
+		assertThat(tables.getFormat("cbin"), is(instanceOf(CBinFormat.class)));
+		assertThat(tables.getFormat("zbin"), is(instanceOf(ZBinFormat.class)));
 	}
 }

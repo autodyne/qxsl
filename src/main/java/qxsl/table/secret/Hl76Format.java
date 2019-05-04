@@ -59,7 +59,7 @@ public final class Hl76Format extends TextFormat {
 	 */
 	@Override
 	public String toString() {
-		return "HLTST ver7.6 logsheet format";
+		return "HLTST VERSION 7.6 TXT FORMAT";
 	}
 
 	/**
@@ -150,7 +150,7 @@ public final class Hl76Format extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private Item item(String line) throws Exception {
-			Item item = new Item();
+			final Item item = new Item();
 			final String time = subLine(0,  11);
 			final String call = subLine(12, 22);
 			final String srst = subLine(23, 26);

@@ -62,7 +62,7 @@ public final class ZBinFormat extends BaseFormat {
 	 */
 	@Override
 	public String toString() {
-		return "zLog binary format (*.zlo)";
+		return "ZLOG ZLO FORMAT";
 	}
 
 	/**
@@ -396,7 +396,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private Item item() throws Exception {
-			Item item = new Item();
+			final Item item = new Item();
 			time(item);
 			call(item);
 			sent(item);

@@ -57,7 +57,7 @@ public final class JarlFormat extends TextFormat {
 	 */
 	@Override
 	public String toString() {
-		return "JARL R2.0 logsheet format";
+		return "JARL LOGSHEET FORMAT R2.0";
 	}
 
 	/**
@@ -105,7 +105,7 @@ public final class JarlFormat extends TextFormat {
 		public JarlDecoder(InputStream in) throws IOException {
 			super(in, "JISAutoDetect");
 			fields = new Fields();
-			format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+			format = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm");
 		}
 
 		/**
@@ -147,8 +147,8 @@ public final class JarlFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private Item item(String line) throws Exception {
-			Item item = new Item();
-			String[] vals = getLine(9);
+			final Item item = new Item();
+			final String[] vals = getLine(9);
 			final String time = vals[0] + " " + vals[1];
 			final String band = vals[2];
 			final String mode = vals[3];
@@ -282,7 +282,7 @@ public final class JarlFormat extends TextFormat {
 		 */
 		public JarlEncoder(OutputStream out) throws IOException {
 			super(out, "SJIS");
-			format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+			format = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm");
 		}
 
 		/**

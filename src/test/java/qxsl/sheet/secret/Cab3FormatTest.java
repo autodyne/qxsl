@@ -21,28 +21,30 @@ import qxsl.table.Tables;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
+import java.io.PrintStream;
+
 /**
- * {@see JarlFormat}クラスのテスト用クラスです。
+ * {@see Cab3Format}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics
  * 
- * @since 2017/03/12
+ * @since 2019/05/03
  *
  */
-public final class JarlFormatTest extends junit.framework.TestCase {
-	private final JarlFormat format = new JarlFormat();
+public final class Cab3FormatTest extends junit.framework.TestCase {
+	private final Cab3Format format = new Cab3Format();
 	private final Sheets sheets = new Sheets();
 	private final Tables tables = new Tables();
 	private final ArrayList<Band> bands = new ArrayList<>();
 	private final Random random = new Random();
-	public JarlFormatTest() {
-		bands.add(new Band(    3_500));
-		bands.add(new Band(    7_000));
-		bands.add(new Band(   14_000));
-		bands.add(new Band(  144_000));
-		bands.add(new Band(1_200_000));
-		bands.add(new Band(5_600_000));
+	public Cab3FormatTest() {
+		bands.add(new Band( 3_500));
+		bands.add(new Band( 7_000));
+		bands.add(new Band(14_000));
+		bands.add(new Band(21_000));
+		bands.add(new Band(28_000));
+		bands.add(new Band(50_000));
 	}
 	@Test
 	public void testDecode() throws java.io.IOException {
@@ -52,21 +54,20 @@ public final class JarlFormatTest extends junit.framework.TestCase {
 			item.set(new Time());
 			item.set(bands.get(random.nextInt(bands.size())));
 			item.set(new Call(util.RandText.alnum(13)));
-			item.set(new Mode(util.RandText.alnum(5)));
+			item.set(new Mode(util.RandText.alnum(2)));
 			item.getRcvd().set(new RSTQ(random.nextInt(600)));
-			item.getRcvd().set(new Code(util.RandText.alnum(7)));
+			item.getRcvd().set(new Code(util.RandText.alnum(6)));
 			item.getSent().set(new RSTQ(random.nextInt(600)));
-			item.getSent().set(new Code(util.RandText.alnum(7)));
+			item.getSent().set(new Code(util.RandText.alnum(6)));
 			items.add(item);
 		}
 		ByteArrayOutputStream os1 = new ByteArrayOutputStream();
 		ByteArrayOutputStream os2 = new ByteArrayOutputStream();
-		tables.getFormat("jarl").encode(os1, items);
+		tables.getFormat("cab3").encode(os1, items);
 		Map<String, String> kvals = new HashMap<>();
-		kvals.put("VERSION", "R2.0");
-		kvals.put("SCORE BAND=144MHz", "10,10,10");
-		kvals.put("SCORE BAND=430MHz", "20,20,20");
-		kvals.put("LOGSHEET", os1.toString("SJIS").trim());
+		kvals.put("CONTEST", "JIDX-CW");
+		kvals.put("CALLSIGN", "JA1ZLO");
+		kvals.put("QSO", os1.toString("UTF8").trim());
 		format.encode(os2, kvals);
 		final byte[] b = os2.toByteArray();
 		assertThat(format.decode(new ByteArrayInputStream(b)), is(kvals));

@@ -30,6 +30,7 @@ public final class SheetsTest extends junit.framework.TestCase {
 	}
 	@Test
 	public void testGetFormat() {
+		assertThat(sheets.getFormat("cab3"), is(instanceOf(Cab3Format.class)));
 		assertThat(sheets.getFormat("jarl"), is(instanceOf(JarlFormat.class)));
 	}
 }

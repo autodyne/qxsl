@@ -23,15 +23,15 @@ import qxsl.field.*;
 import qxsl.model.*;
 
 /**
- * 2016年4月以前のCTESTWIN書式で交信記録を直列化するフォーマットです。
+ * CQWWコンテスト用のCabrillo書式で交信記録を直列化するフォーマットです。
  * 
  * 
  * @author Journal of Hamradio Informatics
  * 
- * @since 2013/07/02
+ * @since 2019/05/04
  *
  */
-public final class CLogFormat extends TextFormat {
+public final class Cab3Format extends TextFormat {
 	/**
 	 * この書式を識別する完全な名前を返します。
 	 * 
@@ -39,9 +39,9 @@ public final class CLogFormat extends TextFormat {
 	 */
 	@Override
 	public String getName() {
-		return "clog";
+		return "cab3";
 	}
-	
+
 	/**
 	 * このフォーマットを適用するファイル名拡張子の不変のリストを返します。
 	 * 
@@ -49,7 +49,7 @@ public final class CLogFormat extends TextFormat {
 	 */
 	@Override
 	public List<String> getExtensions() {
-		return Collections.unmodifiableList(Arrays.asList("txt"));
+		return Collections.unmodifiableList(Arrays.asList("cbr"));
 	}
 
 	/**
@@ -59,7 +59,7 @@ public final class CLogFormat extends TextFormat {
 	 */
 	@Override
 	public String toString() {
-		return "CTESTWIN logfile format (*.txt)";
+		return "Cabrillo v3 QSO LIST";
 	}
 
 	/**
@@ -70,7 +70,7 @@ public final class CLogFormat extends TextFormat {
 	 * @throws IOException 入出力時の例外
 	 */
 	public List<Item> decode(InputStream in) throws IOException {
-		return new CLogDecoder(in).read();
+		return new Cab3Decoder(in).read();
 	}
 
 	/**
@@ -81,20 +81,19 @@ public final class CLogFormat extends TextFormat {
 	 * @throws IOException 入出力時の例外
 	 */
 	public void encode(OutputStream out, List<Item> items) throws IOException {
-		new CLogEncoder(out).write(items);
+		new Cab3Encoder(out).write(items);
 	}
 
 	/**
-	 * CTESTWIN書式で直列化された交信記録をデコードします。
+	 * Cabrillo書式で直列化された交信記録をデコードします。
 	 * 
 	 * 
 	 * @author Journal of Hamradio Informatics
 	 * 
-	 * @since 2013/07/02
-	 * @deprecated この実装は概ね互換性がありますが、無保証です。
+	 * @since 2019/05/04
+	 *
 	 */
-	@Deprecated
-	private static final class CLogDecoder extends TextDecoder {
+	private static final class Cab3Decoder extends TextDecoder {
 		private final DateTimeFormatter format;
 		private final Fields fields;
 
@@ -102,14 +101,13 @@ public final class CLogFormat extends TextFormat {
 		 * 指定されたストリームを読み込むデコーダを構築します。
 		 * 
 		 * @param in 読み込むストリーム
-		 * @throws IOException SJISに対応していない場合
+		 * @throws IOException UTF8に対応していない場合
 		 */
-		public CLogDecoder(InputStream in) throws IOException {
+		public Cab3Decoder(InputStream in) throws IOException {
 			super(in, "JISAutoDetect");
 			fields = new Fields();
 			DateTimeFormatterBuilder fb = new DateTimeFormatterBuilder();
-			fb.parseDefaulting(ChronoField.YEAR, Year.now().getValue());
-			this.format = fb.appendPattern("M/ppd HHmm").toFormatter();
+			this.format = fb.appendPattern("uuuu-MM-dd HHmm").toFormatter();
 		}
 
 		/**
@@ -134,7 +132,7 @@ public final class CLogFormat extends TextFormat {
 			List<Item> items = new ArrayList<>();
 			String line;
 			while((line = super.readLine()) != null) {
-				if(!line.matches("Worked\\s*[0-9]+\\s*stations|\\s*")) {
+				if(!line.isEmpty() && !line.startsWith("mon")) {
 					items.add(item(line));
 				}
 			}
@@ -149,20 +147,24 @@ public final class CLogFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private Item item(String line) throws Exception {
-			Item item = new Item();
-			final String time = subLine(5,  15);
-			final String call = subLine(16, 27);
-			final String band = subLine(28, 35);
-			final String mode = subLine(36, 40);
-			final String sent = subLine(41, 53);
-			final String rcvd = subLine(54, -1);
+			final Item item = new Item();
+			final String band = subLine( 0,  5);
+			final String mode = subLine( 6,  8);
+			final String time = subLine( 9, 24);
+			final String srst = subLine(39, 42);
+			final String snum = subLine(43, 49);
+			final String call = subLine(50, 63);
+			final String rrst = subLine(64, 67);
+			final String rnum = subLine(68, 74);
 
 			if(!time.isEmpty()) time(item, time);
 			if(!call.isEmpty()) call(item, call);
+			if(!srst.isEmpty()) srst(item, srst);
+			if(!snum.isEmpty()) snum(item, snum);
+			if(!rrst.isEmpty()) rrst(item, rrst);
+			if(!rnum.isEmpty()) rnum(item, rnum);
 			if(!band.isEmpty()) band(item, band);
 			if(!mode.isEmpty()) mode(item, mode);
-			if(!sent.isEmpty()) sent(item, sent);
-			if(!rcvd.isEmpty()) rcvd(item, rcvd);
 
 			return item;
 		}
@@ -190,6 +192,50 @@ public final class CLogFormat extends TextFormat {
 		}
 
 		/**
+		 * {@link Item}に相手局に送信したRSTQを設定します。
+		 * 
+		 * @param item 設定する{@link Item}
+		 * @param srst RSTQの文字列
+		 * @throws Exception 読み込みに失敗した場合
+		 */
+		private void srst(Item item, String srst) throws Exception {
+			item.getSent().set(fields.cache(RSTQ, srst));
+		}
+
+		/**
+		 * {@link Item}に相手局に送信したナンバーを設定します。
+		 * 
+		 * @param item 設定する{@link Item}
+		 * @param snum ナンバーの文字列
+		 * @throws Exception 読み込みに失敗した場合
+		 */
+		private void snum(Item item, String snum) throws Exception {
+			item.getSent().set(fields.cache(CODE, snum));
+		}
+
+		/**
+		 * {@link Item}に相手局から受信したRSTQを設定します。
+		 * 
+		 * @param item 設定する{@link Item}
+		 * @param rrst RSTQの文字列
+		 * @throws Exception 読み込みに失敗した場合
+		 */
+		private void rrst(Item item, String rrst) throws Exception {
+			item.getRcvd().set(fields.cache(RSTQ, rrst));
+		}
+
+		/**
+		 * {@link Item}に相手局から受信したナンバーを設定します。
+		 * 
+		 * @param item 設定する{@link Item}
+		 * @param rnum ナンバーの文字列
+		 * @throws Exception 読み込みに失敗した場合
+		 */
+		private void rnum(Item item, String rnum) throws Exception {
+			item.getRcvd().set(fields.cache(CODE, rnum));
+		}
+
+		/**
 		 * {@link Item}に周波数帯を設定します。
 		 * 
 		 * @param item 設定する{@link Item}
@@ -197,18 +243,7 @@ public final class CLogFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void band(Item item, String band) throws Exception {
-			Integer kHz;
-			if(band.contains("GHz")){
-				band = band.replace("GHz", "");
-				kHz = (int) (Double.parseDouble(band) * 1000_000);
-			} else if(band.contains("MHz")) {
-				band = band.replace("MHz", "");
-				kHz = (int) (Double.parseDouble(band) * 1000);
-			} else {
-				band = band.replace("kHz", "");
-				kHz = Integer.parseInt(band);
-			}
-			item.set(fields.cache(BAND, kHz.toString()));
+			item.set(fields.cache(BAND, band));
 		}
 
 		/**
@@ -221,51 +256,29 @@ public final class CLogFormat extends TextFormat {
 		private void mode(Item item, String mode) throws Exception {
 			item.set(fields.cache(MODE, mode));
 		}
-
-		/**
-		 * {@link Item}に相手局に送信したナンバーを設定します。
-		 * 
-		 * @param item 設定する{@link Item}
-		 * @param sent ナンバーの文字列
-		 * @throws Exception 読み込みに失敗した場合
-		 */
-		private void sent(Item item, String sent) throws Exception {
-			item.getSent().set(fields.cache(CODE, sent));
-		}
-
-		/**
-		 * {@link Item}に相手局から受信したナンバーを設定します。
-		 * 
-		 * @param item 設定する{@link Item}
-		 * @param rcvd ナンバーの文字列
-		 * @throws Exception 読み込みに失敗した場合
-		 */
-		private void rcvd(Item item, String rcvd) throws Exception {
-			item.getRcvd().set(fields.cache(CODE, rcvd));
-		}
 	}
 
 	/**
-	 * 交信記録をCTESTWIN書式に直列化するエンコーダーです。
+	 * 交信記録をCabrillo書式に直列化するエンコーダです。
 	 *
 	 *
 	 * @author Journal of Hamradio Informatics
 	 *
-	 * @since 2013/07/02
-	 * @deprecated この実装は概ね互換性がありますが、無保証です。
+	 * @since 2019/05/04
+	 *
 	 */
-	private static final class CLogEncoder extends TextEncoder {
+	private static final class Cab3Encoder extends TextEncoder {
 		private final DateTimeFormatter format;
 
 		/**
-		 * 指定されたストリームに出力するエンコーダーを構築します。
+		 * 指定されたストリームに出力するエンコーダを構築します。
 		 * 
 		 * @param out 交信記録を出力するストリーム
-		 * @throws IOException  SJISに対応していない場合
+		 * @throws IOException  UTF8に対応していない場合
 		 */
-		public CLogEncoder(OutputStream out) throws IOException {
-			super(out, "SJIS");
-			format = DateTimeFormatter.ofPattern("MM/dd HHmm");
+		public Cab3Encoder(OutputStream out) throws IOException {
+			super(out, "UTF8");
+			format = DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm");
 		}
 
 		/**
@@ -275,11 +288,7 @@ public final class CLogFormat extends TextFormat {
 		 * @throws IOException 入出力の例外
 		 */
 		public void write(List<Item> items) throws IOException {
-			printf("Worked %4s stations", items.size());
-			println();
-			println();
-			int counter = 1;
-			for(Item r : items) item(r, counter++);
+			for(Item r : items) item(r);
 			super.close();
 		}
 
@@ -287,23 +296,26 @@ public final class CLogFormat extends TextFormat {
 		 * 指定された{@link Item}をテキスト書式で出力します。
 		 * 
 		 * @param item 出力する{@link Item}
-		 * @param num 出力する{@link Item}の番号
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private void item(Item item, int num) throws IOException {
-			print(4, String.format("%4d", Integer.valueOf(num)));
+		private void item(Item item) throws IOException {
+			print(5, item.get(Band.class));
+			print(' ');
+			print(2, item.get(Mode.class));
 			print(' ');
 			time(item.get(Time.class));
 			print(' ');
-			print(11, item.get(Call.class));
+			print("*************");
 			print(' ');
-			band(item.get(Band.class));
+			print(3, item.getSent().get(RSTQ.class));
 			print(' ');
-			print(4, item.get(Mode.class));
+			print(6, item.getSent().get(Code.class));
 			print(' ');
-			print(12, item.getSent().get(Code.class));
+			print(13, item.get(Call.class));
 			print(' ');
-			print(12, item.getRcvd().get(Code.class));
+			print(3, item.getRcvd().get(RSTQ.class));
+			print(' ');
+			print(6, item.getRcvd().get(Code.class));
 			println();
 		}
 
@@ -314,7 +326,7 @@ public final class CLogFormat extends TextFormat {
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void time(Time date) throws IOException {
-			if(date == null) printSpace(10);
+			if(date == null) printSpace(15);
 			else print(format.format(date.value()));
 		}
 
@@ -325,7 +337,18 @@ public final class CLogFormat extends TextFormat {
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void band(Band band) throws IOException {
-			printf("%-7.7s", band != null? band.toString() : "");
+			if(band != null) printf("%-5.5s", band.value());
+			else print("     ");
+		}
+
+		/**
+		 * 指定された備考を文字列として出力します。
+		 * 
+		 * @param note 出力する備考
+		 * @throws IOException 出力に失敗した場合
+		 */
+		private void note(Note note) throws IOException {
+			if(note != null) print(note.value());
 		}
 	}
 }

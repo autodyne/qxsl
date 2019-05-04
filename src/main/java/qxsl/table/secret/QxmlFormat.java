@@ -16,9 +16,10 @@ import javax.xml.stream.events.*;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
 import org.xml.sax.SAXException;
+
 import qxsl.model.*;
+
 import static javax.xml.XMLConstants.*;
 
 /**
@@ -172,7 +173,7 @@ public final class QxmlFormat extends BaseFormat {
 		 * @throws Exception 文法エラーまたは入出力例外
 		 */
 		private Item item(StartElement e) throws Exception {
-			Item item = new Item();
+			final Item item = new Item();
 			while(reader.hasNextTag()) {
 				item.setRcvd(rcvd(reader.nextStartTag()));
 				item.setSent(sent(reader.nextStartTag()));
