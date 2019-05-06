@@ -33,7 +33,7 @@ public final class TablesTest extends junit.framework.TestCase {
 		// XML format
 		assertThat(tables.getFormat("qxml"), is(instanceOf(QxmlFormat.class)));
 		// Text formats
-		assertThat(tables.getFormat("cab3"), is(instanceOf(Cab3Format.class)));
+		assertThat(tables.getFormat("cqww"), is(instanceOf(CqwwFormat.class)));
 		assertThat(tables.getFormat("jarl"), is(instanceOf(JarlFormat.class)));
 		assertThat(tables.getFormat("ctxt"), is(instanceOf(CTxtFormat.class)));
 		assertThat(tables.getFormat("hl76"), is(instanceOf(Hl76Format.class)));

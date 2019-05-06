@@ -31,7 +31,7 @@ import qxsl.model.*;
  * @since 2019/05/04
  *
  */
-public final class Cab3Format extends TextFormat {
+public final class CqwwFormat extends TextFormat {
 	/**
 	 * この書式を識別する完全な名前を返します。
 	 * 
@@ -39,7 +39,7 @@ public final class Cab3Format extends TextFormat {
 	 */
 	@Override
 	public String getName() {
-		return "cab3";
+		return "cqww";
 	}
 
 	/**
@@ -59,7 +59,7 @@ public final class Cab3Format extends TextFormat {
 	 */
 	@Override
 	public String toString() {
-		return "Cabrillo v3 QSO LIST";
+		return "Cabrillo v3 QSO FORMAT for CQWW";
 	}
 
 	/**
@@ -70,7 +70,7 @@ public final class Cab3Format extends TextFormat {
 	 * @throws IOException 入出力時の例外
 	 */
 	public List<Item> decode(InputStream in) throws IOException {
-		return new Cab3Decoder(in).read();
+		return new CqwwDecoder(in).read();
 	}
 
 	/**
@@ -81,7 +81,7 @@ public final class Cab3Format extends TextFormat {
 	 * @throws IOException 入出力時の例外
 	 */
 	public void encode(OutputStream out, List<Item> items) throws IOException {
-		new Cab3Encoder(out).write(items);
+		new CqwwEncoder(out).write(items);
 	}
 
 	/**
@@ -93,7 +93,7 @@ public final class Cab3Format extends TextFormat {
 	 * @since 2019/05/04
 	 *
 	 */
-	private static final class Cab3Decoder extends TextDecoder {
+	private static final class CqwwDecoder extends TextDecoder {
 		private final DateTimeFormatter format;
 		private final Fields fields;
 
@@ -103,7 +103,7 @@ public final class Cab3Format extends TextFormat {
 		 * @param in 読み込むストリーム
 		 * @throws IOException UTF8に対応していない場合
 		 */
-		public Cab3Decoder(InputStream in) throws IOException {
+		public CqwwDecoder(InputStream in) throws IOException {
 			super(in, "JISAutoDetect");
 			fields = new Fields();
 			DateTimeFormatterBuilder fb = new DateTimeFormatterBuilder();
@@ -267,7 +267,7 @@ public final class Cab3Format extends TextFormat {
 	 * @since 2019/05/04
 	 *
 	 */
-	private static final class Cab3Encoder extends TextEncoder {
+	private static final class CqwwEncoder extends TextEncoder {
 		private final DateTimeFormatter format;
 
 		/**
@@ -276,7 +276,7 @@ public final class Cab3Format extends TextFormat {
 		 * @param out 交信記録を出力するストリーム
 		 * @throws IOException  UTF8に対応していない場合
 		 */
-		public Cab3Encoder(OutputStream out) throws IOException {
+		public CqwwEncoder(OutputStream out) throws IOException {
 			super(out, "UTF8");
 			format = DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm");
 		}

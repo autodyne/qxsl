@@ -19,7 +19,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 /**
- * {@see Cab3Format}クラスのテスト用クラスです。
+ * {@see CqwwFormat}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -27,12 +27,12 @@ import static org.junit.Assert.assertThat;
  * @since 2019/05/04
  *
  */
-public final class Cab3FormatTest extends junit.framework.TestCase {
-	private final Cab3Format format = new Cab3Format();
+public final class CqwwFormatTest extends junit.framework.TestCase {
+	private final CqwwFormat format = new CqwwFormat();
 	private final Tables tables = new Tables();
 	private final ArrayList<Band> bands = new ArrayList<>();
 	private final Random random = new Random();
-	public Cab3FormatTest() {
+	public CqwwFormatTest() {
 		bands.add(new Band( 1_900));
 		bands.add(new Band( 3_500));
 		bands.add(new Band( 7_000));

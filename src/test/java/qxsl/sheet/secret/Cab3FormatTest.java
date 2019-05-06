@@ -63,7 +63,7 @@ public final class Cab3FormatTest extends junit.framework.TestCase {
 		}
 		ByteArrayOutputStream os1 = new ByteArrayOutputStream();
 		ByteArrayOutputStream os2 = new ByteArrayOutputStream();
-		tables.getFormat("cab3").encode(os1, items);
+		tables.getFormat("cqww").encode(os1, items);
 		Map<String, String> kvals = new HashMap<>();
 		kvals.put("CONTEST", "JIDX-CW");
 		kvals.put("CALLSIGN", "JA1ZLO");
