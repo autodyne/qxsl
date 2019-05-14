@@ -21,7 +21,6 @@ import java.util.List;
 import qxsl.field.*;
 import qxsl.model.*;
 
-import static java.time.ZoneOffset.UTC;
 import static java.time.temporal.ChronoUnit.DAYS;
 import static java.time.temporal.ChronoUnit.MILLIS;
 
@@ -35,6 +34,8 @@ import static java.time.temporal.ChronoUnit.MILLIS;
  *
  */
 public final class ZBinFormat extends BaseFormat {
+	private static final short USEUTC = 0x7FFF;
+
 	/**
 	 * この書式を識別する完全な名前を返します。
 	 * 
@@ -105,7 +106,7 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		public TDateTime() {
 			LocalDate date = LocalDate.of(1899, 11, 30);
-			this.epoch = date.atStartOfDay(UTC);
+			this.epoch = date.atStartOfDay(ZoneOffset.UTC);
 		}
 
 		/**
@@ -346,6 +347,7 @@ public final class ZBinFormat extends BaseFormat {
 		private final Fields fields;
 		private final TDateTime tDTime;
 		private final DataInputStream stream;
+		private ZoneId zone = null;
 
 		/**
 		 * 指定されたストリームを読み込むデコーダを構築します。
@@ -383,10 +385,26 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private List<Item> logSheet() throws Exception {
-			stream.readFully(new byte[256]);
+			this.zone = head();
 			List<Item> items = new ArrayList<>();
 			while(stream.available() > 0) items.add(item());
 			return Collections.unmodifiableList(items);
+		}
+
+		/**
+		 * ストリームからヘッダを読み込んでタイムゾーンを返します。
+		 * 
+		 * @return 読み込んだ{@link ZoneId}
+		 * @throws IOException 読み込みに失敗した場合
+		 * 
+		 * @since 2019/05/14
+		 */
+		private ZoneId head() throws IOException {
+			stream.readFully(new byte[0x54]);
+			short zone = Short.reverseBytes(stream.readShort());
+			stream.readFully(new byte[0xAA]);
+			if(zone == USEUTC) return ZoneOffset.UTC;
+			return ZoneOffset.ofTotalSeconds(zone * 60);
 		}
 
 		/**
@@ -578,7 +596,9 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws IOException 入出力の例外
 		 */
 		public void write(List<Item> items) throws IOException {
-			stream.write(new byte[256]);
+			stream.write(new byte[0x54]);
+			stream.writeShort(Short.reverseBytes(USEUTC));
+			stream.write(new byte[0xAA]);
 			for(Item r : items) item(r);
 			stream.close();
 		}
