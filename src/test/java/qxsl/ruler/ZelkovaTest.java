@@ -14,6 +14,7 @@ import static java.util.Arrays.asList;
 import static javax.script.ScriptContext.ENGINE_SCOPE;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
+import static qxsl.ruler.Zelkova.List;
 
 /**
  * {@see Zelkova}クラスのテスト用クラスです。
@@ -32,6 +33,10 @@ public final class ZelkovaTest extends junit.framework.TestCase {
 		c.setBindings(lisp.createBindings(), ENGINE_SCOPE);
 	}
 	@Test
+	public void testNil() throws ScriptException {
+		assertThat(lisp.eval("nil", c), is(lisp.eval("()", c)));
+	}
+	@Test
 	public void testNull() throws ScriptException {
 		assertThat(lisp.eval("null", c), is(nullValue()));
 	}
@@ -39,6 +44,14 @@ public final class ZelkovaTest extends junit.framework.TestCase {
 	public void testQuote() throws ScriptException {
 		assertThat(lisp.eval("'114514", c), is(114514));
 		assertThat(lisp.eval("'\"ABC\"", c), is("ABC"));
+	}
+	@Test
+	public void testQuasi() throws ScriptException {
+		assertThat(lisp.eval("`(3 6)", c), is(new List(3, 6)));
+	}
+	@Test
+	public void testUquot() throws ScriptException {
+		assertThat(lisp.eval("`(3 ,(+ 3 3) 4)", c), is(new List(3, 6, 4)));
 	}
 	@Test
 	public void testProgn() throws ScriptException {
@@ -62,6 +75,12 @@ public final class ZelkovaTest extends junit.framework.TestCase {
 	@Test
 	public void testCdr() throws ScriptException {
 		assertThat(lisp.eval("(cdr (list 1 23))", c), is(asList(23)));
+	}
+	@Test
+	public void testLength() throws ScriptException {
+		assertThat(lisp.eval("(length (list 12345))", c), is(1));
+		assertThat(lisp.eval("(length (list 12 45))", c), is(2));
+		assertThat(lisp.eval("(length (list 1 2 3))", c), is(3));
 	}
 	@Test
 	public void testMember() throws ScriptException {
@@ -139,14 +158,14 @@ public final class ZelkovaTest extends junit.framework.TestCase {
 		assertThat(lisp.eval("(>= 5 3 (if true 5 3) 2 1)", c), is(false));
 	}
 	@Test
-	public void testHead() throws ScriptException {
-		assertThat(lisp.eval("(head \"HELLO\")", c), is("H"));
-		assertThat(lisp.eval("(head \"WORLD\")", c), is("W"));
+	public void testStrHead() throws ScriptException {
+		assertThat(lisp.eval("(str-head \"HELLO\")", c), is("H"));
+		assertThat(lisp.eval("(str-head \"WORLD\")", c), is("W"));
 	}
 	@Test
-	public void testTail() throws ScriptException {
-		assertThat(lisp.eval("(tail \"hello\")", c), is("ello"));
-		assertThat(lisp.eval("(tail \"world\")", c), is("orld"));
+	public void testStrTail() throws ScriptException {
+		assertThat(lisp.eval("(str-tail \"hello\")", c), is("ello"));
+		assertThat(lisp.eval("(str-tail \"world\")", c), is("orld"));
 	}
 	@Test
 	public void testLambda() throws ScriptException {

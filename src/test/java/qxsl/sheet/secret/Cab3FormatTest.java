@@ -49,7 +49,7 @@ public final class Cab3FormatTest extends junit.framework.TestCase {
 	@Test
 	public void testDecode() throws java.io.IOException {
 		final ArrayList<Item> items = new ArrayList<>();
-		for(int row = 0; row < random.nextInt(50); row++) {
+		for(int row = 0; row <= random.nextInt(50); row++) {
 			final Item item = new Item();
 			item.set(new Time());
 			item.set(bands.get(random.nextInt(bands.size())));
