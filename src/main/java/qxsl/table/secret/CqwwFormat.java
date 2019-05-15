@@ -10,10 +10,8 @@ package qxsl.table.secret;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.time.LocalDateTime;
-import java.time.Year;
-import java.time.format.*;
-import java.time.temporal.ChronoField;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,6 +19,8 @@ import java.util.List;
 
 import qxsl.field.*;
 import qxsl.model.*;
+
+import static java.time.ZoneOffset.UTC;
 
 /**
  * CQWWコンテスト用のCabrillo書式で交信記録を直列化するフォーマットです。
@@ -104,10 +104,9 @@ public final class CqwwFormat extends TextFormat {
 		 * @throws IOException UTF8に対応していない場合
 		 */
 		public CqwwDecoder(InputStream in) throws IOException {
-			super(in, "JISAutoDetect");
+			super(in, "UTF-8");
 			fields = new Fields();
-			DateTimeFormatterBuilder fb = new DateTimeFormatterBuilder();
-			this.format = fb.appendPattern("uuuu-MM-dd HHmm").toFormatter();
+			format = DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm").withZone(UTC);
 		}
 
 		/**
@@ -177,7 +176,7 @@ public final class CqwwFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void time(Item item, String time) throws Exception {
-			item.set(new Time(LocalDateTime.parse(time, format)));
+			item.set(new Time(ZonedDateTime.parse(time, format)));
 		}
 
 		/**
@@ -278,7 +277,7 @@ public final class CqwwFormat extends TextFormat {
 		 */
 		public CqwwEncoder(OutputStream out) throws IOException {
 			super(out, "UTF8");
-			format = DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm");
+			format = DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm").withZone(UTC);
 		}
 
 		/**
@@ -299,23 +298,23 @@ public final class CqwwFormat extends TextFormat {
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void item(Item item) throws IOException {
-			print(5, item.get(Band.class));
-			print(' ');
-			print(2, item.get(Mode.class));
-			print(' ');
+			printR(5, item.get(Band.class));
+			printSpace(1);
+			printR(2, item.get(Mode.class));
+			printSpace(1);
 			time(item.get(Time.class));
-			print(' ');
+			printSpace(1);
 			print("*************");
-			print(' ');
-			print(3, item.getSent().get(RSTQ.class));
-			print(' ');
-			print(6, item.getSent().get(Code.class));
-			print(' ');
-			print(13, item.get(Call.class));
-			print(' ');
-			print(3, item.getRcvd().get(RSTQ.class));
-			print(' ');
-			print(6, item.getRcvd().get(Code.class));
+			printSpace(1);
+			printR(3, item.getSent().get(RSTQ.class));
+			printSpace(1);
+			printR(6, item.getSent().get(Code.class));
+			printSpace(1);
+			printR(13, item.get(Call.class));
+			printSpace(1);
+			printR(3, item.getRcvd().get(RSTQ.class));
+			printSpace(1);
+			printR(6, item.getRcvd().get(Code.class));
 			println();
 		}
 

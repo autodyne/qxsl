@@ -14,6 +14,10 @@ compileJava {
 	options.encoding = utf8
 }
 
+compileTestJava {
+	options.compilerArgs << '-Xlint:deprecation'
+}
+
 javadoc {
 	exclude '**/secret/*'
 	options.links('http://docs.oracle.com/javase/jp/8/docs/api/')

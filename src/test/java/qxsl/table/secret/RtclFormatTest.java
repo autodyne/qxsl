@@ -19,7 +19,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 /**
- * {@see RtclFormat}クラスのテスト用クラスです。
+ * {@link RtclFormat}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics

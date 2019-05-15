@@ -306,12 +306,7 @@ public final class Hl76Format extends TextFormat {
 		 * @throws IOException 入出力の例外
 		 */
 		public void write(List<Item> items) throws IOException {
-			print("MM/DD HH:MM CallSign   ");
-			print("Rst  Sent   Rst Rcv    ");
-			print(" Multi  P  Ope    MHz  ");
-			println("Mode");
-			for(int i=0; i<73; i++) print('-');
-			println();
+			printHead("hl76");
 			for(Item r : items) item(r);
 			super.close();
 		}
@@ -324,23 +319,23 @@ public final class Hl76Format extends TextFormat {
 		 */
 		private void item(Item item) throws IOException {
 			time(item.get(Time.class));
-			print(' ');
-			print(10, item.get(Call.class));
-			print(' ');
-			print(3, item.getSent().get(RSTQ.class));
-			print(' ');
-			print(7, item.getSent().get(Code.class));
-			print(' ');
-			print(3, item.getRcvd().get(RSTQ.class));
-			print(' ');
-			print(7, item.getRcvd().get(Code.class));
+			printSpace(1);
+			printR(10, item.get(Call.class));
+			printSpace(1);
+			printR(3, item.getSent().get(RSTQ.class));
+			printSpace(1);
+			printR(7, item.getSent().get(Code.class));
+			printSpace(1);
+			printR(3, item.getRcvd().get(RSTQ.class));
+			printSpace(1);
+			printR(7, item.getRcvd().get(Code.class));
 			print("        ");
 			print("1 ");
-			print(7, item.get(Name.class));
-			print(' ');
+			printR(7, item.get(Name.class));
+			printSpace(1);
 			band(item.get(Band.class));
-			print(' ');
-			print(4, item.get(Mode.class));
+			printSpace(1);
+			printR(4, item.get(Mode.class));
 			println();
 		}
 

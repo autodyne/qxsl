@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 import static qxsl.ruler.Zelkova.List;
 
 /**
- * {@see Zelkova}クラスのテスト用クラスです。
+ * {@link Zelkova}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -88,6 +88,11 @@ public final class ZelkovaTest extends junit.framework.TestCase {
 		assertThat(lisp.eval("(member 'B (list 'A 'B 'C))", c), is(true));
 		assertThat(lisp.eval("(member 'C (list 'A 'B 'C))", c), is(true));
 		assertThat(lisp.eval("(not (member 'D (list 'A)))", c), is(true));
+	}
+	@Test
+	public void testMapCar() throws ScriptException {
+		lisp.eval("(set 'y (mapcar (lambda (x) (* x x)) '(1 2 3 4)))", c);
+		assertThat(lisp.eval("(equal y `(1 4 9 ,(* 2 8)))", c), is(true));
 	}
 	@Test
 	public void testEqual() throws ScriptException {

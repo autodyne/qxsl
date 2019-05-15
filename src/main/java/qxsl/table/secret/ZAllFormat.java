@@ -324,10 +324,7 @@ public final class ZAllFormat extends TextFormat {
 		 * @throws IOException 入出力の例外
 		 */
 		public void write(List<Item> items) throws IOException {
-			println("zLog for Windows");
-			print("Date       Time  Callsign    ");
-			print("RSTs ExSent RSTr ExRcvd  Mult");
-			println("  Mult2 MHz  Mode Pt Memo");
+			printHead("zall");
 			for(Item r : items) item(r);
 			super.close();
 		}
@@ -340,20 +337,20 @@ public final class ZAllFormat extends TextFormat {
 		 */
 		private void item(Item item) throws IOException {
 			time(item.get(Time.class));
-			print(' ');
-			print(12, item.get(Call.class));
-			print(' ');
-			print(3,  item.getSent().get(RSTQ.class));
-			print(' ');
-			print(7,  item.getSent().get(Code.class));
-			print(' ');
-			print(3,  item.getRcvd().get(RSTQ.class));
-			print(' ');
-			print(7,  item.getRcvd().get(Code.class));
+			printSpace(1);
+			printL(12, item.get(Call.class));
+			printSpace(1);
+			printL(3,  item.getSent().get(RSTQ.class));
+			printSpace(1);
+			printL(7,  item.getSent().get(Code.class));
+			printSpace(1);
+			printL(3,  item.getRcvd().get(RSTQ.class));
+			printSpace(1);
+			printL(7,  item.getRcvd().get(Code.class));
 			print(" -     -     ");
 			band(item.get(Band.class));
-			print(' ');
-			print(4, item.get(Mode.class));
+			printSpace(1);
+			printL(4, item.get(Mode.class));
 			print(" 1  ");
 			oprt(item.get(Name.class));
 			note(item.get(Note.class));

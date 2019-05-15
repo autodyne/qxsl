@@ -291,19 +291,19 @@ public final class CTxtFormat extends TextFormat {
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void item(Item item, int num) throws IOException {
-			print(4, String.format("%4d", Integer.valueOf(num)));
-			print(' ');
+			printR(4, String.valueOf(num));
+			printSpace(1);
 			time(item.get(Time.class));
-			print(' ');
-			print(11, item.get(Call.class));
-			print(' ');
+			printSpace(1);
+			printR(11, item.get(Call.class));
+			printSpace(1);
 			band(item.get(Band.class));
-			print(' ');
-			print(4, item.get(Mode.class));
-			print(' ');
-			print(12, item.getSent().get(Code.class));
-			print(' ');
-			print(12, item.getRcvd().get(Code.class));
+			printSpace(1);
+			printR(4, item.get(Mode.class));
+			printSpace(1);
+			printR(12, item.getSent().get(Code.class));
+			printSpace(1);
+			printR(12, item.getRcvd().get(Code.class));
 			println();
 		}
 

@@ -2,8 +2,10 @@
 
 (setq defun (syntax (name pars body) `(setq ,name (lambda ,pars ,body))))
 
-(defun AM? (it) (member (hour it) (list 09 10 11)))
-(defun PM? (it) (member (hour it) (list 16 17 18 19)))
+(defun toJST (hours) (mapcar (lambda (hour) (- hour 9)) hours))
+
+(defun AM? (it) (member (hour it) (toJST '(09 10 11))))
+(defun PM? (it) (member (hour it) (toJST '(16 17 18 19))))
 
 (defun CW? (it) (member (mode it) (list "cw" "CW")))
 

@@ -14,7 +14,7 @@ import static org.junit.Assert.assertThat;
 import static qxsl.table.secret.QxmlFormat.WATT;
 
 /**
- * {@see Watt}クラスのテスト用クラスです。
+ * {@link Watt}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics

@@ -19,7 +19,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 /**
- * {@see CqwwFormat}クラスのテスト用クラスです。
+ * {@link CqwwFormat}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics

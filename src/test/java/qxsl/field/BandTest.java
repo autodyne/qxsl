@@ -15,7 +15,7 @@ import static org.junit.Assert.assertThat;
 import static qxsl.table.secret.QxmlFormat.BAND;
 
 /**
- * {@see Band}クラスのテスト用クラスです。
+ * {@link Band}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics

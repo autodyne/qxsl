@@ -15,7 +15,7 @@ import static org.junit.Assert.assertThat;
 import static qxsl.table.secret.QxmlFormat.TIME;
 
 /**
- * {@see Time}クラスのテスト用クラスです。
+ * {@link Time}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics

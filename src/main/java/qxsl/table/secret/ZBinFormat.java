@@ -21,6 +21,7 @@ import java.util.List;
 import qxsl.field.*;
 import qxsl.model.*;
 
+import static java.time.ZoneOffset.UTC;
 import static java.time.temporal.ChronoUnit.DAYS;
 import static java.time.temporal.ChronoUnit.MILLIS;
 
@@ -103,10 +104,13 @@ public final class ZBinFormat extends BaseFormat {
 
 		/**
 		 * 1899年11月30日を起点にTDateTime型を構築します。
+		 *
+		 * @param zoneId タイムゾーン
+		 * @since 2019/05/15
 		 */
-		public TDateTime() {
+		public TDateTime(ZoneId zoneId) {
 			LocalDate date = LocalDate.of(1899, 11, 30);
-			this.epoch = date.atStartOfDay(ZoneOffset.UTC);
+			this.epoch = date.atStartOfDay(zoneId);
 		}
 
 		/**
@@ -344,10 +348,9 @@ public final class ZBinFormat extends BaseFormat {
 	 *
 	 */
 	private static final class ZBinDecoder {
-		private final Fields fields;
-		private final TDateTime tDTime;
 		private final DataInputStream stream;
-		private ZoneId zone = null;
+		private final Fields fields;
+		private TDateTime tDateTime;
 
 		/**
 		 * 指定されたストリームを読み込むデコーダを構築します。
@@ -356,7 +359,6 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		public ZBinDecoder(InputStream in) {
 			this.fields = new Fields();
-			this.tDTime = new TDateTime();
 			this.stream = new DataInputStream(in);
 		}
 
@@ -385,7 +387,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private List<Item> logSheet() throws Exception {
-			this.zone = head();
+			this.tDateTime = new TDateTime(head());
 			List<Item> items = new ArrayList<>();
 			while(stream.available() > 0) items.add(item());
 			return Collections.unmodifiableList(items);
@@ -401,10 +403,10 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		private ZoneId head() throws IOException {
 			stream.readFully(new byte[0x54]);
-			short zone = Short.reverseBytes(stream.readShort());
+			final short enoz = stream.readShort();
+			short zone = Short.reverseBytes(enoz);
 			stream.readFully(new byte[0xAA]);
-			if(zone == USEUTC) return ZoneOffset.UTC;
-			return ZoneOffset.ofTotalSeconds(zone * 60);
+			return zone == USEUTC? UTC: ZoneOffset.ofTotalSeconds(-60 * zone);
 		}
 
 		/**
@@ -440,7 +442,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void time(Item item) throws Exception {
-			item.set(tDTime.decode(stream.readLong()));
+			item.set(tDateTime.decode(stream.readLong()));
 		}
 
 		/**
@@ -576,7 +578,7 @@ public final class ZBinFormat extends BaseFormat {
 	 *
 	 */
 	private static final class ZBinEncoder {
-		private final TDateTime tDTime;
+		private final TDateTime tDateTime;
 		private final DataOutputStream stream;
 
 		/**
@@ -585,7 +587,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param out 交信記録を書き込むストリーム
 		 */
 		public ZBinEncoder(OutputStream out) {
-			this.tDTime = new TDateTime();
+			this.tDateTime = new TDateTime(ZoneOffset.systemDefault());
 			this.stream = new DataOutputStream(out);
 		}
 
@@ -596,8 +598,11 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws IOException 入出力の例外
 		 */
 		public void write(List<Item> items) throws IOException {
+			final ZoneOffset zone = tDateTime.epoch.getOffset();
+			final int secs = zone.getTotalSeconds();
+			final int bits = secs == 0? USEUTC: secs / -60;
 			stream.write(new byte[0x54]);
-			stream.writeShort(Short.reverseBytes(USEUTC));
+			stream.writeShort(Short.reverseBytes((short) bits));
 			stream.write(new byte[0xAA]);
 			for(Item r : items) item(r);
 			stream.close();
@@ -637,7 +642,7 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		private void time(Time time) throws IOException {
 			if(time == null) stream.writeLong(0);
-			else stream.writeLong(tDTime.encode(time));
+			else stream.writeLong(tDateTime.encode(time));
 		}
 
 		/**

@@ -87,7 +87,7 @@ public final class CBinFormat extends BaseFormat {
 	}
 
 	/**
-	 * Delphi言語のCDateTime型を閏秒を無視して再現します。
+	 * CTESTWINのCDateTime型を再現します。
 	 * 
 	 * 
 	 * @author Journal of Hamradio Informatics

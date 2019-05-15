@@ -14,7 +14,7 @@ import static org.junit.Assert.assertThat;
 import static qxsl.table.secret.QxmlFormat.RCVD;
 
 /**
- * {@see Rcvd}クラスのテスト用クラスです。
+ * {@link Rcvd}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics

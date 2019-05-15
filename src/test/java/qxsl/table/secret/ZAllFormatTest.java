@@ -19,7 +19,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 /**
- * {@see ZAllFormat}クラスのテスト用クラスです。
+ * {@link ZAllFormat}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics

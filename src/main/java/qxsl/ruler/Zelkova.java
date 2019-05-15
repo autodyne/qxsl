@@ -199,21 +199,6 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 			return list.size();
 		}
 		/**
-		 * このリストを関数適用の式として評価します。
-		 *
-		 * @param eval 評価を移譲する評価器
-		 * @return 評価により得た返り値
-		 * @throws ScriptException 評価により発生した例外
-		 */
-		public Object apply(Runtime eval) throws ScriptException {
-			if(this.equals(NIL)) return this;
-			Object car = eval.eval(this.car());
-			if(car instanceof Lambda) return ((Lambda) car).apply(cdr(), eval);
-			if(car instanceof Syntax) return ((Syntax) car).apply(cdr(), eval);
-			if(car instanceof Native) return ((Native) car).apply(cdr(), eval);
-			throw error("uncallable", this);
-		}
-		/**
 		 * このリストの文字列による表現を返します。
 		 *
 		 * @return 文字列
@@ -226,14 +211,14 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 	}
 
 	/**
-	 * LISP処理系のシステム関数が継承するインターフェースです。
-	 * 
-	 * 
+	 * LISP処理系の関数やマクロはこのインターフェースを実装します。
+	 *
+	 *
 	 * @author Journal of Hamradio Informatics
 	 *
-	 * @since 2017/02/18
+	 * @since 2019/05/15
 	 */
-	public static interface Native {
+	private static interface Operator extends java.io.Serializable {
 		/**
 		 * 指定された実引数と評価器に対し、返り値を求めます。
 		 *
@@ -244,6 +229,16 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 		 */
 		public Object apply(List args, Runtime eval) throws ScriptException;
 	}
+
+	/**
+	 * LISP処理系のシステム関数が継承するインターフェースです。
+	 * 
+	 * 
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2017/02/18
+	 */
+	private static interface Native extends Operator {}
 
 	/**
 	 * LISP処理系のシステム関数のうち特にエラー検証を実施する関数です。
@@ -263,7 +258,7 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 		 * @return 例外
 		 */
 		private ScriptException error(String msg, List args) {
-			java.util.List<Object> list = new ArrayList<>();
+			final ArrayList<Object> list = new ArrayList<>();
 			list.add(new Name(getClass().getSimpleName()));
 			list.addAll(args);
 			return error(msg, new List(list));
@@ -278,7 +273,7 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 	 *
 	 * @since 2017/02/18
 	 */
-	private static final class Lambda implements java.io.Serializable {
+	private static final class Lambda implements Operator {
 		private final List params;
 		private final Object body;
 		private final Runtime run;
@@ -330,7 +325,7 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 	 *
 	 * @since 2017/02/18
 	 */
-	private static final class Syntax implements java.io.Serializable {
+	private static final class Syntax implements Operator {
 		private final List params;
 		private final Object body;
 		private final Runtime run;
@@ -382,30 +377,25 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 	 *
 	 * @since 2017/02/20
 	 */
-	private static final class Contest extends qxsl.ruler.Contest {
+	private static final class ContestImpl extends qxsl.ruler.Contest {
 		private final String name;
-		private final java.util.List<qxsl.ruler.Section> sections;
+		private final java.util.List<Section> sections;
 		/**
-		 * 指定された名前と部門集合で部門を構築します。
+		 * 指定された識別名と部門集合で部門を構築します。
 		 *
-		 * @param args (名前 (部門1 部門2 ...))
-		 * @param eval 評価器
-		 * @throws ScriptException 評価により発生した例外
+		 * @param ident このコンテストの識別名
+		 * @param sects このコンテストの部門
 		 */
-		public Contest(List args, Runtime eval) throws ScriptException {
-			this.name = (String) eval.eval(args.get(0));
-			ArrayList<Section> list = new ArrayList<>();
-			for(Object v: args.subList(1, args.size())) {
-				list.add((Section) eval.eval(v));
-			}
-			this.sections = Collections.unmodifiableList(list);
+		public ContestImpl(String ident, java.util.List<Section> sects) {
+			this.name = ident;
+			this.sections = Collections.unmodifiableList(sects);
 		}
 		@Override
 		public String getName() {
 			return name;
 		}
 		@Override
-		public java.util.Iterator<qxsl.ruler.Section> iterator() {
+		public java.util.Iterator<Section> iterator() {
 			return sections.iterator();
 		}
 	}
@@ -418,21 +408,21 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 	 *
 	 * @since 2017/02/20
 	 */
-	private static final class Section extends qxsl.ruler.Section {
+	private static final class SectionImpl extends Section {
 		private final String name;
-		private final Lambda rule;
-		private final Runtime run;
+		private final Runtime eval;
+		private final Operator rule;
 		/**
 		 * 指定された名前と規約で部門を構築します。
 		 *
-		 * @param args (名前 規約)
+		 * @param name 部門名
+		 * @param rule 規約
 		 * @param eval 評価器
-		 * @throws ScriptException 評価により発生した例外
 		 */
-		public Section(List args, Runtime eval) throws ScriptException {
-			this.name = (String) eval.eval(args.get(0));
-			this.rule = (Lambda) eval.eval(args.get(1));
-			this.run = eval;
+		public SectionImpl(String name, Operator rule, Runtime eval) {
+			this.name = name;
+			this.rule = rule;
+			this.eval = eval;
 		}
 
 		@Override
@@ -442,12 +432,12 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 
 		@Override
 		public Message validate(Item item) throws ScriptException {
-			Object res = run.eval(new List(Arrays.asList(rule, item)));
-			if(res instanceof String) return new Failure((String) res);
+			Object list = eval.eval(new List(Arrays.asList(rule, item)));
+			if(list instanceof String) return new Failure((String) list);
 			try {
-				final Object callKey = ((List) res).get(0);
-				final Object multKey = ((List) res).get(1);
-				final int score = (int) ((List) res).get(2);
+				final Object callKey = ((List) list).get(0);
+				final Object multKey = ((List) list).get(1);
+				final int score = (int) ((List) list).get(2);
 				return new Success(callKey, multKey, score);
 			} catch (NullPointerException ex) {
 				return new Failure("lambda must return (call-key mult-key score)");
@@ -607,12 +597,11 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 		 * @return 返り値
 		 * @throws ScriptException 評価により発生した例外
 		 */
-		public int integral(Object sexp) throws ScriptException {
+		public int integer(Object sexp) throws ScriptException {
 			final Object bb = eval(sexp);
 			if(bb instanceof Integer) return (Integer) bb;
 			throw error("type error: an int is required", sexp);
 		}
-		
 		/**
 		 * 指定された式の値を求めて文字列として返します。
 		 *
@@ -625,6 +614,19 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 			if(text == null) return null;
 			if(text instanceof String) return (String) text;
 			throw error("type error: a string is required", sexp);
+		}
+		/**
+		 * 指定された式の値を求めて演算子として返します。
+		 *
+		 * @param sexp 式
+		 * @return 返り値
+		 * @throws ScriptException 評価により発生した例外
+		 */
+		public Operator oprt(Object sexp) throws ScriptException {
+			final Object oprt = eval(sexp);
+			if(oprt == null) return null;
+			if(oprt instanceof Operator) return (Operator) oprt;
+			throw error("type error: an operator is required", sexp);
 		}
 		/**
 		 * 指定された式の値を求めて{@link Exch}として返します。
@@ -659,8 +661,13 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 		 */
 		public Object eval(Object sexp) throws ScriptException {
 			if(sexp instanceof Name) return env.get(((Name) sexp).id);
-			if(sexp instanceof List) return ((List) sexp).apply(this);
-			return sexp;
+			if(sexp instanceof List) {
+				final List list = (List) sexp;
+				if(List.NIL.equals(sexp)) return sexp;
+				return oprt(list.car()).apply(list.cdr(), this);
+			} else {
+				return sexp;
+			}
 		}
 	}
 
@@ -673,7 +680,7 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 	 * @since 2017/02/18
 	 */
 	private static final class Scanner {
-		private final java.util.List<String> allTokens;
+		private final ArrayList<String> allTokens;
 		private final String sym = "['`,\\(\\)]";
 		private final String val = "[^'`,\\(\\)\"\\s]+";
 		private final String str = "\"([^\\\\]|\\\\\")*?\"";
@@ -761,7 +768,7 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 			return this.map((List) args.car(), eval);
 		}
 		private List map(List source, Runtime eval) throws ScriptException {
-			java.util.List<Object> target = new ArrayList<>();
+			final ArrayList<Object> target = new ArrayList<>();
 			for(Object obj: source) try {
 				final List list = (List) obj;
 				if(Scanner.UQUOT.equals(list.car())) target.add(eval.eval(obj));
@@ -816,6 +823,7 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 	 */
 	private static final class $Print extends NativeWithErrorValidation {
 		public Object apply(List args, Runtime eval) throws ScriptException {
+			if(args.size() != 1) throw error("a single argument required", args);
 			System.out.println(eval.print(eval.eval(args.car())));
 			return null;
 		}
@@ -831,6 +839,7 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 	 */
 	private static final class $Set extends NativeWithErrorValidation {
 		public Object apply(List args, Runtime eval) throws ScriptException {
+			if(args.size() != 2) throw error("two arguments required", args);
 			final Object value = eval.eval(args.get(1));
 			eval.env.put(eval.name(args.get(0)), value);
 			return value;
@@ -863,7 +872,7 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 	 */
 	private static final class $Car extends NativeWithErrorValidation {
 		public Object apply(List args, Runtime eval) throws ScriptException {
-			if(args.size() != 1) throw error("an argument required", args);
+			if(args.size() != 1) throw error("a single argument required", args);
 			return eval.list(args.car()).car();
 		}
 	}
@@ -878,7 +887,7 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 	 */
 	private static final class $Cdr extends NativeWithErrorValidation {
 		public Object apply(List args, Runtime eval) throws ScriptException {
-			if(args.size() != 1) throw error("an argument required", args);
+			if(args.size() != 1) throw error("a single argument required", args);
 			return eval.list(args.car()).cdr();
 		}
 	}
@@ -893,7 +902,7 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 	 */
 	private static final class $Length extends NativeWithErrorValidation {
 		public Object apply(List args, Runtime eval) throws ScriptException {
-			if(args.size() != 1) throw error("an argument required", args);
+			if(args.size() != 1) throw error("a single argument required", args);
 			return eval.list(args.car()).size();
 		}
 	}
@@ -908,9 +917,29 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 	 */
 	private static final class $Member extends NativeWithErrorValidation {
 		public Object apply(List args, Runtime eval) throws ScriptException {
+			if(args.size() != 2) throw error("two arguments required", args);
 			final Object val = eval.eval(args.car());
 			final List list = eval.list(args.get(1));
 			return list.contains(val);
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるmapcar関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2019/05/14
+	 */
+	private static final class $MapCar extends NativeWithErrorValidation {
+		public Object apply(List args, Runtime eval) throws ScriptException {
+			if(args.size() != 2) throw error("two arguments required", args);
+			final ArrayList<Object> target = new ArrayList<>();
+			final Operator op = eval.oprt(args.car());
+			final List source = eval.list(args.get(1));
+			for(Object e: source) target.add(op.apply(new List(e), eval));
+			return new List(target);
 		}
 	}
 
@@ -1005,8 +1034,8 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 	private static final class $Add extends NativeWithErrorValidation {
 		public Object apply(List args, Runtime eval) throws ScriptException {
 			if(args.isEmpty()) throw error("at least one argument required", args);
-			int val = eval.integral(args.car());
-			for(Object v: args.cdr()) val += eval.integral(v);
+			int val = eval.integer(args.car());
+			for(Object v: args.cdr()) val += eval.integer(v);
 			return val;
 		}
 	}
@@ -1022,8 +1051,8 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 	private static final class $Sub extends NativeWithErrorValidation {
 		public Object apply(List args, Runtime eval) throws ScriptException {
 			if(args.isEmpty()) throw error("at least one argument required", args);
-			int val = eval.integral(args.car());
-			for(Object v: args.cdr()) val -= eval.integral(v);
+			int val = eval.integer(args.car());
+			for(Object v: args.cdr()) val -= eval.integer(v);
 			return val;
 		}
 	}
@@ -1039,8 +1068,8 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 	private static final class $Mul extends NativeWithErrorValidation {
 		public Object apply(List args, Runtime eval) throws ScriptException {
 			if(args.isEmpty()) throw error("at least one argument required", args);
-			int val = eval.integral(args.car());
-			for(Object v: args.cdr()) val *= eval.integral(v);
+			int val = eval.integer(args.car());
+			for(Object v: args.cdr()) val *= eval.integer(v);
 			return val;
 		}
 	}
@@ -1056,8 +1085,8 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 	private static final class $Div extends NativeWithErrorValidation {
 		public Object apply(List args, Runtime eval) throws ScriptException {
 			if(args.isEmpty()) throw error("at least one argument required", args);
-			int val = eval.integral(args.car());
-			for(Object v: args.cdr()) val /= eval.integral(v);
+			int val = eval.integer(args.car());
+			for(Object v: args.cdr()) val /= eval.integer(v);
 			return val;
 		}
 	}
@@ -1074,7 +1103,7 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 		public Object apply(List args, Runtime eval) throws ScriptException {
 			if(args.isEmpty()) throw error("at least one argument required", args);
 			final ArrayList<Integer> vals = new ArrayList<>();
-			for(Object v: args) vals.add(eval.integral(v));
+			for(Object v: args) vals.add(eval.integer(v));
 			for(int i = 0; i < args.size() - 1; i++) {
 				if(vals.get(i) >= vals.get(i + 1)) return false;
 			}
@@ -1094,7 +1123,7 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 		public Object apply(List args, Runtime eval) throws ScriptException {
 			if(args.isEmpty()) throw error("at least one argument required", args);
 			final ArrayList<Integer> vals = new ArrayList<>();
-			for(Object v: args) vals.add(eval.integral(v));
+			for(Object v: args) vals.add(eval.integer(v));
 			for(int i = 0; i < args.size() - 1; i++) {
 				if(vals.get(i) <= vals.get(i + 1)) return false;
 			}
@@ -1114,7 +1143,7 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 		public Object apply(List args, Runtime eval) throws ScriptException {
 			if(args.isEmpty()) throw error("at least one argument required", args);
 			final ArrayList<Integer> vals = new ArrayList<>();
-			for(Object v: args) vals.add(eval.integral(v));
+			for(Object v: args) vals.add(eval.integer(v));
 			for(int i = 0; i < args.size() - 1; i++) {
 				if(vals.get(i) > vals.get(i + 1)) return false;
 			}
@@ -1134,7 +1163,7 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 		public Object apply(List args, Runtime eval) throws ScriptException {
 			if(args.isEmpty()) throw error("at least one argument required", args);
 			final ArrayList<Integer> vals = new ArrayList<>();
-			for(Object v: args) vals.add(eval.integral(v));
+			for(Object v: args) vals.add(eval.integer(v));
 			for(int i = 0; i < args.size() - 1; i++) {
 				if(vals.get(i) < vals.get(i + 1)) return false;
 			}
@@ -1213,6 +1242,43 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 	}
 
 	/**
+	 * LISP処理系で事前に定義されるcontest関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2019/05/15
+	 */
+	private static final class $Contest extends NativeWithErrorValidation {
+		public Object apply(List args, Runtime eval) throws ScriptException {
+			if(args.isEmpty()) throw error("make sure (contest name sections)", args);
+			final String ident = eval.text(args.car());
+			ArrayList<Section> list = new ArrayList<>();
+			for(Object v: args.subList(1, args.size())) try {
+				list.add((Section) eval.eval(v));
+			} catch (ClassCastException ex) {
+				throw error("make sure (contest name SECTIONS)", args);
+			}
+			return new ContestImpl(ident, list);
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるsection関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2019/05/15
+	 */
+	private static final class $Section extends NativeWithErrorValidation {
+		public Object apply(List args, Runtime eval) throws ScriptException {
+			if(args.size() != 2) throw error("make sure (section name (lambda))", args);
+			return new SectionImpl(eval.text(args.car()), eval.oprt(args.get(1)), eval);
+		}
+	}
+
+	/**
 	 * LISP処理系で事前に定義された関数や値を保持する環境を作成します。
 	 *
 	 * @return 事前に定義された環境
@@ -1271,6 +1337,13 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 		lude.put("cdr", new $Cdr());
 		lude.put("length", new $Length());
 		lude.put("member", new $Member());
+
+		/*
+		 * basic functions for mapping operation
+		 * 
+		 * (mapcar sequence)
+		 */
+		lude.put("mapcar", new $MapCar());
 
 		/*
 		 * basic functions for checking equality
@@ -1349,8 +1422,8 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 		 * (contest symbol-expression sections)
 		 * (special symbol-expression lambda)
 		 */
-		lude.put("contest", (args, eval) -> new Contest(args, eval));
-		lude.put("section", (args, eval) -> new Section(args, eval));
+		lude.put("contest", new $Contest());
+		lude.put("section", new $Section());
 
 		/*
 		 * preinstalled functions for rcvd & sent access

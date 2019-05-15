@@ -63,12 +63,12 @@ public final class Time extends Field<ZonedDateTime> {
 	}
 
 	/**
-	 * この交信の24時間制の時刻を返します。
+	 * この交信の協定世界時における24時間制の時刻を返します。
 	 *
 	 * @return 交信時刻の時
 	 */
 	public int hour() {
-		return time.get(ChronoField.HOUR_OF_DAY);
+		return time.withZoneSameInstant(ZoneOffset.UTC).getHour();
 	}
 
 	@Override

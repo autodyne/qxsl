@@ -19,7 +19,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 /**
- * {@see QxmlFormat}クラスのテスト用クラスです。
+ * {@link QxmlFormat}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics

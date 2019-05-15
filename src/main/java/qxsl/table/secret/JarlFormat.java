@@ -292,8 +292,7 @@ public final class JarlFormat extends TextFormat {
 		 * @throws IOException 入出力の例外
 		 */
 		public void write(List<Item> items) throws IOException {
-			print("DATE (JST) TIME   BAND MODE  CALLSIGN      ");
-			print("SENTNo      RCVDNo      Mlt    Pts");
+			printHead("jarl");
 			println();
 			for(Item r: items) item(r);
 			super.close();
@@ -307,20 +306,20 @@ public final class JarlFormat extends TextFormat {
 		 */
 		private void item(Item item) throws IOException {
 			time(item.get(Time.class));
-			print(' ');
+			printSpace(1);
 			band(item.get(Band.class));
-			print(' ');
-			print(5,  item.get(Mode.class));
-			print(' ');
-			print(13, item.get(Call.class));
-			print(' ');
-			print(3,  item.getSent().get(RSTQ.class));
-			print(' ');
-			print(7,  item.getSent().get(Code.class));
-			print(' ');
-			print(3,  item.getRcvd().get(RSTQ.class));
-			print(' ');
-			print(7,  item.getRcvd().get(Code.class));
+			printSpace(1);
+			printR(5,  item.get(Mode.class));
+			printSpace(1);
+			printR(13, item.get(Call.class));
+			printSpace(1);
+			printR(3,  item.getSent().get(RSTQ.class));
+			printSpace(1);
+			printR(7,  item.getSent().get(Code.class));
+			printSpace(1);
+			printR(3,  item.getRcvd().get(RSTQ.class));
+			printSpace(1);
+			printR(7,  item.getRcvd().get(Code.class));
 			println("          1");
 		}
 

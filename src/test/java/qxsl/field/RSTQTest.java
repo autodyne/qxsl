@@ -15,7 +15,7 @@ import static org.junit.Assert.assertThat;
 import static qxsl.table.secret.QxmlFormat.RSTQ;
 
 /**
- * {@see RSTQ}クラスのテスト用クラスです。
+ * {@link RSTQ}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics

@@ -7,12 +7,14 @@
 *****************************************************************************/
 package qxsl.table.secret;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -188,13 +190,19 @@ public abstract class TextFormat extends BaseFormat {
 		}
 
 		/**
-		 * 指定された文字を出力します。
+		 * 指定された名前の書式について規定されたヘッダ部を出力します。
+		 * このメソッドは規定されていない改行文字を独自に出力しません。
 		 * 
-		 * @param ch 出力する文字
+		 * @param fmt フォーマット名
 		 * @throws IOException 出力エラー発生時
 		 */
-		public final void print(char ch) throws IOException {
-			stream.append(ch);
+		public final void printHead(String fmt) throws IOException {
+			int len;
+			final byte[] buffer = new byte[1024];
+			final URL url = getClass().getResource(String.format("%s.fmt", fmt));
+			try(InputStream input = new BufferedInputStream(url.openStream())) {
+				while((len = input.read(buffer)) > 0) stream.write(buffer, 0, len);
+			}
 		}
 
 		/**
@@ -250,28 +258,53 @@ public abstract class TextFormat extends BaseFormat {
 		}
 
 		/**
-		 * 指定された文字数まで空白文字で穴埋めした文字列を出力します。
+		 * 指定された文字数まで空白文字で穴埋めした文字列を右詰で出力します。
 		 * 
 		 * @param len 文字列の長さ
 		 * @param s 出力する文字列
 		 * @throws IOException 出力エラー発生時
 		 */
-		public final void print(int len, String s) throws IOException {
+		public final void printR(int len, String s) throws IOException {
 			final String filled = String.format(String.format("%%%ds", len), s);
-			final String msg = "'%s' is too long. consider shortening to '%s'.";
+			final String msg = "'%s' is too long (consider shortening to '%s').";
 			if(filled.length() == len) stream.print(filled);
 			else throw new IOException(String.format(msg, s, s.substring(0, len)));
 		}
 
 		/**
-		 * 指定された文字数まで空白文字で穴埋めした{@link Field}を出力します。
+		 * 指定された文字数まで空白文字で穴埋めした文字列を左詰で出力します。
+		 * 
+		 * @param len 文字列の長さ
+		 * @param s 出力する文字列
+		 * @throws IOException 出力エラー発生時
+		 */
+		public final void printL(int len, String s) throws IOException {
+			final String filled = String.format(String.format("%%-%ds", len), s);
+			final String msg = "'%s' is too long (consider shortening to '%s').";
+			if(filled.length() == len) stream.print(filled);
+			else throw new IOException(String.format(msg, s, s.substring(0, len)));
+		}
+
+		/**
+		 * 指定された文字数まで右詰で穴埋めした{@link Field}を出力します。
 		 * 
 		 * @param len 文字列の長さ
 		 * @param f 出力する{@link Field}
 		 * @throws IOException 出力エラー発生時
 		 */
-		public final void print(int len, Field f) throws IOException {
-			print(len, f != null? String.valueOf(f.value()) : "");
+		public final void printR(int len, Field f) throws IOException {
+			printR(len, f != null? String.valueOf(f.value()) : "");
+		}
+
+		/**
+		 * 指定された文字数まで左詰で穴埋めした{@link Field}を出力します。
+		 * 
+		 * @param len 文字列の長さ
+		 * @param f 出力する{@link Field}
+		 * @throws IOException 出力エラー発生時
+		 */
+		public final void printL(int len, Field f) throws IOException {
+			printL(len, f != null? String.valueOf(f.value()) : "");
 		}
 	}
 }

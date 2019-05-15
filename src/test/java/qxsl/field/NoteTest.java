@@ -14,7 +14,7 @@ import static org.junit.Assert.assertThat;
 import static qxsl.table.secret.QxmlFormat.NOTE;
 
 /**
- * {@see Note}クラスのテスト用クラスです。
+ * {@link Note}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics

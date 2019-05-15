@@ -14,7 +14,7 @@ import static org.junit.Assert.assertThat;
 import static qxsl.table.secret.QxmlFormat.SENT;
 
 /**
- * {@see Sent}クラスのテスト用クラスです。
+ * {@link Sent}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics

@@ -19,7 +19,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 /**
- * {@see CBinFormat}クラスのテスト用クラスです。
+ * {@link CBinFormat}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics

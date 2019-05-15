@@ -13,7 +13,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 /**
- * {@see Sheets}クラスのテスト用クラスです。
+ * {@link Sheets}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics

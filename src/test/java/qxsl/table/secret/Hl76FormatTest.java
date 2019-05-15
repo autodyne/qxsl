@@ -19,7 +19,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 /**
- * {@see Hl76Format}クラスのテスト用クラスです。
+ * {@link Hl76Format}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics

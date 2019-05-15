@@ -22,7 +22,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 /**
- * {@see JarlFormat}クラスのテスト用クラスです。
+ * {@link JarlFormat}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics

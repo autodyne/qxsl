@@ -18,7 +18,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 /**
- * {@see Contest}クラスをALLJA1コンテストの規約でテストするクラスです。
+ * {@link Contest}クラスをALLJA1コンテストの規約でテストするクラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -32,12 +32,15 @@ public final class ContestTest extends junit.framework.TestCase {
 	private final Tables tables = new Tables();
 	public ContestTest() throws Exception {
 		final Class cl = Contest.class;
+		logs.put("cqww", tables.decode(cl.getResource("allja1.cqww")));
 		logs.put("ctxt", tables.decode(cl.getResource("allja1.ctxt")));
 		logs.put("hl76", tables.decode(cl.getResource("allja1.hl76")));
 		logs.put("jarl", tables.decode(cl.getResource("allja1.jarl")));
 		logs.put("rtcl", tables.decode(cl.getResource("allja1.rtcl")));
 		logs.put("zall", tables.decode(cl.getResource("allja1.zall")));
 		logs.put("zdos", tables.decode(cl.getResource("allja1.zdos")));
+		logs.put("cbin", tables.decode(cl.getResource("allja1.cbin")));
+		logs.put("zbin", tables.decode(cl.getResource("allja1.zbin")));
 	}
 	@Test
 	public void test() throws Exception {

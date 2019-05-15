@@ -301,10 +301,7 @@ public final class ZDosFormat extends TextFormat {
 		 * @throws IOException 入出力の例外
 		 */
 		public void write(List<Item> items) throws IOException {
-			print("mon day time  callsign      ");
-			print("sent         rcvd      multi");
-			print("   MHz mode pts memo");
-			println();
+			printHead("zdos");
 			for(Item r : items) item(r);
 			super.close();
 		}
@@ -317,16 +314,16 @@ public final class ZDosFormat extends TextFormat {
 		 */
 		private void item(Item item) throws IOException {
 			time(item.get(Time.class));
-			print(' ');
-			print(10, item.get(Call.class));
-			print(' ');
-			print(12, item.getSent().get(Code.class));
-			print(' ');
-			print(12, item.getRcvd().get(Code.class));
+			printSpace(1);
+			printR(10, item.get(Call.class));
+			printSpace(1);
+			printR(12, item.getSent().get(Code.class));
+			printSpace(1);
+			printR(12, item.getRcvd().get(Code.class));
 			print("        ");
 			band(item.get(Band.class));
-			print(' ');
-			print(4, item.get(Mode.class));
+			printSpace(1);
+			printR(4, item.get(Mode.class));
 			print(" 1   ");
 			oprt(item.get(Name.class));
 			note(item.get(Note.class));

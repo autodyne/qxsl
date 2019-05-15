@@ -24,7 +24,7 @@ import static org.junit.Assert.assertThat;
 import java.io.PrintStream;
 
 /**
- * {@see Cab3Format}クラスのテスト用クラスです。
+ * {@link Cab3Format}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics
