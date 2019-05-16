@@ -681,9 +681,9 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 	 */
 	private static final class Scanner {
 		private final ArrayList<String> allTokens;
-		private final String sym = "['`,\\(\\)]";
-		private final String val = "[^'`,\\(\\)\"\\s]+";
-		private final String str = "\"([^\\\\]|\\\\\")*?\"";
+		private final String SYM = "['`,\\(\\)]";
+		private final String VAL = "[^'`,\\(\\)\"\\s]+";
+		private final String STR = "\"([^\\\\]|\\\\[\"\\\\tbnrf])*?\"";
 		private static final Name QUOTE = new Name("quote");
 		private static final Name QUASI = new Name("quasi");
 		private static final Name UQUOT = new Name("uquot");
@@ -696,7 +696,7 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 		 */
 		public Scanner(String sexp) {
 			this.allTokens = new ArrayList<>();
-			final String lex = String.join("|", sym, val, str);
+			final String lex = String.join("|", SYM, VAL, STR);
 			Matcher matcher = Pattern.compile(lex).matcher(sexp);
 			while(matcher.find()) allTokens.add(matcher.group());
 		}
@@ -716,25 +716,49 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 		 */
 		public final Object next() throws ScriptException {
 			final String atom = allTokens.get(cursor++);
-			if(atom.equals(")")) throw new ScriptException("where's (?");
-			if(atom.equals("(")) {
-				final ArrayList<Object> list = new ArrayList<>();
-				boolean closed = false;
-				loop: while(cursor < allTokens.size()) {
-					switch(allTokens.get(cursor++)) {
-						case ")": closed = true; break loop;
-						default: --cursor; list.add(next());
-					}
-				}
-				if(!closed) throw new ScriptException("where's )?");
-				return list.isEmpty()? List.NIL: new List(list);
-			}
+			if(atom.equals("(")) return nextList();
+			if(atom.matches(STR)) return escape(atom);
 			if(atom.matches("\\d+")) return Integer.parseInt(atom);
 			if(atom.equals("'")) return new List(QUOTE, next());
 			if(atom.equals("`")) return new List(QUASI, next());
 			if(atom.equals(",")) return new List(UQUOT, next());
-			if(!atom.matches("\".*?\"")) return new Name(atom);
-			else return atom.substring(1, atom.length() - 1);
+			if(!atom.equals(")")) return new Name(atom);
+			throw new ScriptException("invalid syntax");
+		}
+		/**
+		 * 指定された文字列のエスケープ処理を行います。
+		 *
+		 * @param text 文字列
+		 * @return 処理された文字列
+		 */
+		private final String escape(String text) {
+			text = text.substring(1, text.length() - 1);
+			text = text.replace("\\t", "\t");
+			text = text.replace("\\b", "\b");
+			text = text.replace("\\n", "\n");
+			text = text.replace("\\r", "\r");
+			text = text.replace("\\f", "\f");
+			text = text.replace("\\\"", "\"");
+			text = text.replace("\\\\", "\\");
+			return text;
+		}
+		/**
+		 * 先頭の括弧が読まれた状態で以降のリスト式を返します。
+		 *
+		 * @return 次のリスト式
+		 * @throws ScriptException 構文に問題がある場合
+		 */
+		private final List nextList() throws ScriptException {
+			final ArrayList<Object> list = new ArrayList<>();
+			boolean closed = false;
+			loop: while(cursor < allTokens.size()) {
+				switch(allTokens.get(cursor++)) {
+					case ")": closed = true; break loop;
+					default: --cursor; list.add(next());
+				}
+			}
+			if(closed) return list.isEmpty()? List.NIL: new List(list);
+			else throw new ScriptException("unclosed parenthesis '('");
 		}
 	}
 
@@ -1202,6 +1226,21 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 	}
 
 	/**
+	 * LISP処理系で事前に定義されるmatch関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2019/05/16
+	 */
+	private static final class $Match extends NativeWithErrorValidation {
+		public Object apply(List args, Runtime eval) throws ScriptException {
+			if(args.size() != 2) throw error("a single argument required", args);
+			return eval.text(args.get(1)).matches(eval.text(args.car()));
+		}
+	}
+
+	/**
 	 * LISP処理系で事前に定義されるlambda関数です。
 	 *
 	 *
@@ -1406,6 +1445,13 @@ public final class Zelkova extends javax.script.AbstractScriptEngine {
 		 */
 		lude.put("str-head", new $StrHead());
 		lude.put("str-tail", new $StrTail());
+
+		/*
+		 * basic functions for regex matching
+		 *
+		 * (match pattern string)
+		 */
+		lude.put("match", new $Match());
 
 		/*
 		 * basic functions for lambda & syntax(macro) generation

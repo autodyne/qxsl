@@ -2,10 +2,10 @@
 
 (setq defun (syntax (name pars body) `(setq ,name (lambda ,pars ,body))))
 
-(defun toJST (hours) (mapcar (lambda (hour) (- hour 9)) hours))
+(defun JSTtoUTC (hours) (mapcar (lambda (hour) (- hour 9)) hours))
 
-(defun AM? (it) (member (hour it) (toJST '(09 10 11))))
-(defun PM? (it) (member (hour it) (toJST '(16 17 18 19))))
+(defun AM? (it) (member (hour it) (JSTtoUTC '(09 10 11))))
+(defun PM? (it) (member (hour it) (JSTtoUTC '(16 17 18 19))))
 
 (defun CW? (it) (member (mode it) (list "cw" "CW")))
 
@@ -18,7 +18,7 @@
 (defun PREF? (it) (equal (CITY it) (PREF it)))
 (defun AREA1? (it) (member (PREF it) (list "東京都" "神奈川県" "埼玉県" "千葉県" "群馬県" "茨城県" "栃木県" "山梨県")))
 (defun AREA8? (it) (equal (PREF it) "北海道"))
-(defun 支庁? (it) (member (CODE it) (list "101" "102" "103" "104" "105" "106" "107" "108" "109" "110" "111" "112" "113" "114")))
+(defun 支庁? (it) (match "1\\d{2}" (CODE it)))
 
 (defun 内? (it) (if (AREA1? it) (not (PREF? it)) (if (AREA8? it) (支庁? it) (PREF? it))))
 (defun 外? (it) (and (AREA1? it) (not (PREF? it))))
