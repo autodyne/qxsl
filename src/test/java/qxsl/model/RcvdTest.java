@@ -9,9 +9,9 @@ package qxsl.model;
 
 import org.junit.Test;
 import qxsl.field.*;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+
 import static qxsl.table.secret.QxmlFormat.RCVD;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * {@link Rcvd}クラスのテスト用クラスです。
@@ -29,22 +29,22 @@ public final class RcvdTest extends junit.framework.TestCase {
 	private final Watt watt = new Watt("H");
 	@Test
 	public void testType() {
-		assertThat(new Rcvd().type(), is(RCVD));
+		assertThat(new Rcvd().type()).isEqualTo(RCVD);
 	}
 	@Test
 	public void testEquals() {
 		final Rcvd rcvd1 = new Rcvd();
 		final Rcvd rcvd2 = new Rcvd();
-		assertThat(rcvd1, is(rcvd2));
-		assertThat(rcvd1.set(city).get(City.class), is(city));
-		assertThat(rcvd1.set(code).get(Code.class), is(code));
-		assertThat(rcvd1.set(rstq).get(RSTQ.class), is(rstq));
-		assertThat(rcvd1.set(watt).get(Watt.class), is(watt));
-		assertThat(rcvd1, is(not(rcvd2)));
-		assertThat(rcvd2.set(city).get(City.class), is(city));
-		assertThat(rcvd2.set(code).get(Code.class), is(code));
-		assertThat(rcvd2.set(rstq).get(RSTQ.class), is(rstq));
-		assertThat(rcvd2.set(watt).get(Watt.class), is(watt));
-		assertThat(rcvd1, is(rcvd2));
+		assertThat(rcvd1).isEqualTo(rcvd2);
+		assertThat(rcvd1.set(city).get(City.class)).isEqualTo(city);
+		assertThat(rcvd1.set(code).get(Code.class)).isEqualTo(code);
+		assertThat(rcvd1.set(rstq).get(RSTQ.class)).isEqualTo(rstq);
+		assertThat(rcvd1.set(watt).get(Watt.class)).isEqualTo(watt);
+		assertThat(rcvd1).isNotEqualTo(rcvd2);
+		assertThat(rcvd2.set(city).get(City.class)).isEqualTo(city);
+		assertThat(rcvd2.set(code).get(Code.class)).isEqualTo(code);
+		assertThat(rcvd2.set(rstq).get(RSTQ.class)).isEqualTo(rstq);
+		assertThat(rcvd2.set(watt).get(Watt.class)).isEqualTo(watt);
+		assertThat(rcvd1).isEqualTo(rcvd2);
 	}
 }

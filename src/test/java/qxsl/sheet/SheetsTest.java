@@ -9,8 +9,8 @@ package qxsl.sheet;
 
 import org.junit.Test;
 import qxsl.sheet.secret.*;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * {@link Sheets}クラスのテスト用クラスです。
@@ -25,12 +25,11 @@ public final class SheetsTest extends junit.framework.TestCase {
 	private final Sheets sheets = new Sheets();
 	@Test
 	public void testIterator() {
-		assertThat(sheets.iterator(), is(notNullValue()));
-		assertThat(sheets.iterator().hasNext(), is(true));
+		assertThat(sheets.iterator()).hasNext();
 	}
 	@Test
 	public void testGetFormat() {
-		assertThat(sheets.getFormat("cab3"), is(instanceOf(Cab3Format.class)));
-		assertThat(sheets.getFormat("jarl"), is(instanceOf(JarlFormat.class)));
+		assertThat(sheets.getFormat("cab3")).isInstanceOf(Cab3Format.class);
+		assertThat(sheets.getFormat("jarl")).isInstanceOf(JarlFormat.class);
 	}
 }

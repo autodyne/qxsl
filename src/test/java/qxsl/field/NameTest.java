@@ -9,9 +9,9 @@ package qxsl.field;
 
 import org.junit.Test;
 import qxsl.model.Fields;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+
 import static qxsl.table.secret.QxmlFormat.NAME;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * {@link Name}クラスのテスト用クラスです。
@@ -26,14 +26,19 @@ public final class NameTest extends junit.framework.TestCase {
 	private final Fields fields = new Fields(NAME);
 	@Test
 	public void testValue() {
-		final String str = util.RandText.alnum(100);
-		assertThat(new Name(str).value(), is(str));
+		assertThat(new Name("筑波大").value()).isEqualTo("筑波大");
+		assertThat(new Name("電通大").value()).isEqualTo("電通大");
+	}
+	@Test
+	public void testToString() {
+		final String text = util.RandText.alnum(100);
+		assertThat(new Name(text)).hasToString(text);
 	}
 	@Test
 	public void testName$Format() throws Exception {
 		final Name.Format $form = new Name.Format();
 		final Name name = new Name(util.RandText.alnum(100));
-		assertThat($form.decode($form.encode(name)), is(name));
-		assertThat(fields.cache($form.encode(name)), is(name));
+		assertThat($form.decode($form.encode(name))).isEqualTo(name);
+		assertThat(fields.cache($form.encode(name))).isEqualTo(name);
 	}
 }

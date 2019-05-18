@@ -7,6 +7,9 @@
 *****************************************************************************/
 package qxsl.ruler;
 
+import java.io.Serializable;
+import qxsl.model.Item;
+
 /**
  * 得点計算の処理に失敗した場合に返されます。
  * 
@@ -15,29 +18,20 @@ package qxsl.ruler;
  *
  * @since 2016/11/26
  */
-public final class Failure implements Message {
+public final class Failure implements Message, Serializable {
 	private static final long serialVersionUID = 1L;
-	private final Exception cause;
-	private final String message;
+	private final String text;
+	private final Item item;
 	
 	/**
 	 * 指定した内容の{@link Failure}を構築します。
 	 *
-	 * @param message 失敗の内容を説明する文字列
+	 * @param text 失敗の内容を説明する文字列
+	 * @param item 関連づけられる交信
 	 */
-	public Failure(String message) {
-		this.cause = null;
-		this.message = message;
-	}
-
-	/**
-	 * 指定した例外で{@link Failure}を構築します。
-	 *
-	 * @param cause 失敗の原因となった例外
-	 */
-	public Failure(Exception cause) {
-		this.cause = cause;
-		this.message = cause.getMessage();
+	public Failure(String text, Item item) {
+		this.text = text;
+		this.item = item;
 	}
 
 	/**
@@ -45,16 +39,12 @@ public final class Failure implements Message {
 	 * 
 	 * @return メッセージ
 	 */
-	public String getMessage() {
-		return message;
+	public final String getMessage() {
+		return text;
 	}
 
-	/**
-	 * 失敗の原因となった例外を返します。
-	 *
-	 * @return 例外
-	 */
-	public Exception getCause() {
-		return cause;
+	@Override
+	public final Item item() {
+		return item;
 	}
 }

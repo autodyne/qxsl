@@ -9,9 +9,9 @@ package qxsl.field;
 
 import org.junit.Test;
 import qxsl.model.Fields;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+
 import static qxsl.table.secret.QxmlFormat.CODE;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * {@link Code}クラスのテスト用クラスです。
@@ -26,14 +26,19 @@ public final class CodeTest extends junit.framework.TestCase {
 	private final Fields fields = new Fields(CODE);
 	@Test
 	public void testValue() {
-		final String str = util.RandText.alnum(100);
-		assertThat(new Code(str).value(), is(str));
+		assertThat(new Code("100110H").value()).isEqualTo("100110H");
+		assertThat(new Code("400105M").value()).isEqualTo("400105M");
+	}
+	@Test
+	public void testToString() {
+		final String text = util.RandText.alnum(100);
+		assertThat(new Code(text)).hasToString(text);
 	}
 	@Test
 	public void testCode$Format() throws Exception {
 		final Code.Format $form = new Code.Format();
 		final Code code = new Code(util.RandText.alnum(100));
-		assertThat($form.decode($form.encode(code)), is(code));
-		assertThat(fields.cache($form.encode(code)), is(code));
+		assertThat($form.decode($form.encode(code))).isEqualTo(code);
+		assertThat(fields.cache($form.encode(code))).isEqualTo(code);
 	}
 }

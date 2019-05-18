@@ -9,9 +9,9 @@ package qxsl.model;
 
 import org.junit.Test;
 import qxsl.field.*;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+
 import static qxsl.table.secret.BaseFormat.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * {@link Fields}クラスのテスト用クラスです。
@@ -26,20 +26,20 @@ public final class FieldsTest extends junit.framework.TestCase {
 	private final Fields fields = new Fields();
 	@Test
 	public void testIterator() {
-		assertThat(fields.iterator(), is(notNullValue()));
-		assertThat(fields.iterator().hasNext(), is(true));
+		assertThat(fields.iterator()).isNotNull();
+		assertThat(fields.iterator()).hasNext();
 	}
 	@Test
 	public void testGetFormat() {
-		assertThat(fields.getFormat(BAND), is(instanceOf(Band.Format.class)));
-		assertThat(fields.getFormat(CALL), is(instanceOf(Call.Format.class)));
-		assertThat(fields.getFormat(CITY), is(instanceOf(City.Format.class)));
-		assertThat(fields.getFormat(CODE), is(instanceOf(Code.Format.class)));
-		assertThat(fields.getFormat(MODE), is(instanceOf(Mode.Format.class)));
-		assertThat(fields.getFormat(NAME), is(instanceOf(Name.Format.class)));
-		assertThat(fields.getFormat(NOTE), is(instanceOf(Note.Format.class)));
-		assertThat(fields.getFormat(RSTQ), is(instanceOf(RSTQ.Format.class)));
-		assertThat(fields.getFormat(TIME), is(instanceOf(Time.Format.class)));
-		assertThat(fields.getFormat(WATT), is(instanceOf(Watt.Format.class)));
+		assertThat(fields.getFormat(BAND)).isInstanceOf(Band.Format.class);
+		assertThat(fields.getFormat(CALL)).isInstanceOf(Call.Format.class);
+		assertThat(fields.getFormat(CITY)).isInstanceOf(City.Format.class);
+		assertThat(fields.getFormat(CODE)).isInstanceOf(Code.Format.class);
+		assertThat(fields.getFormat(MODE)).isInstanceOf(Mode.Format.class);
+		assertThat(fields.getFormat(NAME)).isInstanceOf(Name.Format.class);
+		assertThat(fields.getFormat(NOTE)).isInstanceOf(Note.Format.class);
+		assertThat(fields.getFormat(RSTQ)).isInstanceOf(RSTQ.Format.class);
+		assertThat(fields.getFormat(TIME)).isInstanceOf(Time.Format.class);
+		assertThat(fields.getFormat(WATT)).isInstanceOf(Watt.Format.class);
 	}
 }

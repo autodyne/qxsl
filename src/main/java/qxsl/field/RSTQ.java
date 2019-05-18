@@ -13,7 +13,7 @@ import qxsl.model.FieldFormat;
 import qxsl.table.secret.BaseFormat;
 
 /**
- * 交信記録シートでRSTQレポートを表現します。
+ * 交信記録シートでRST/RSQレポートを表現します。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -25,7 +25,9 @@ public final class RSTQ extends Field<Integer> {
 	private final int r, s, t;
 	
 	/**
-	 * RSTQを整数で指定して{@link RSTQ}を構築します。
+	 * 指定された整数で{@link RSTQ}を構築します。
+	 * 3桁の整数の場合、音調レポートまで読み取ります。
+	 * 2桁の整数の場合、音調レポートを読み取りません。
 	 * 
 	 * @param rst RSTQをそのまま整数値にした値
 	 */
@@ -35,12 +37,12 @@ public final class RSTQ extends Field<Integer> {
 		int s = (rst / 10 ) % 10;
 		int t = (rst / 1  ) % 10;
 		if(r > 0) {
-			this.r = Math.max(0, Math.min(5, r));
-			this.s = Math.max(0, Math.min(9, s));
-			this.t = Math.max(0, Math.min(9, t));
+			this.r = Math.max(1, Math.min(5, r));
+			this.s = Math.max(1, Math.min(9, s));
+			this.t = Math.max(1, Math.min(9, t));
 		} else {
-			this.r = Math.max(0, Math.min(9, s));
-			this.s = Math.max(0, Math.min(9, t));
+			this.r = Math.max(1, Math.min(5, s));
+			this.s = Math.max(1, Math.min(9, t));
 			this.t = 0;
 		}
 	}
@@ -58,6 +60,7 @@ public final class RSTQ extends Field<Integer> {
 	
 	/**
 	 * 了解度レポートを返します。
+	 * この値は常に1以上5以下です。
 	 * 
 	 * @return 了解度
 	 */
@@ -67,6 +70,7 @@ public final class RSTQ extends Field<Integer> {
 	
 	/**
 	 * 信号強度レポートを返します。
+	 * この値は常に1以上9以下です。
 	 * 
 	 * @return 信号強度
 	 */
@@ -76,6 +80,7 @@ public final class RSTQ extends Field<Integer> {
 	
 	/**
 	 * 音調レポートを返します。
+	 * この値は常に0以上9以下です。
 	 * 
 	 * @return 音調 もしくは品質
 	 */
@@ -85,8 +90,8 @@ public final class RSTQ extends Field<Integer> {
 
 	@Override
 	public Integer value() {
-		if(t == 0)return r * 10 + s;
-		return r * 100 + s * 10 + t;
+		if(this.t < 1) return this.r * 10 + this.s;
+		return this.r * 100 + this.s * 10 + this.t;
 	}
 
 	/**

@@ -10,13 +10,13 @@ package qxsl.ruler;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import qxsl.model.Item;
 
+import static java.util.stream.IntStream.range;
+
 /**
- * 得点計算の結果を表現します。
+ * 有効な交信と無効な交信を保持するとともに識別子から得点を計算します。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -24,65 +24,67 @@ import qxsl.model.Item;
  * @since 2016/11/26
  */
 public final class Summary implements java.io.Serializable {
-	private final Map<Object, Object> count = new HashMap<>();
-	private final List<Item> accepted = new ArrayList<>();
-	private final List<Item> rejected = new ArrayList<>();
+	private final List<Success> accepted;
+	private final List<Failure> rejected;
 
 	/**
-	 * {@link Item}のリストと部門を指定してサマリを構築します。
+	 * 有効な交信と無効な交信を指定してサマリを構築します。
+	 * この時点で先頭の識別子が重複する有効な交信は削除されます。
 	 *
-	 * @param list 交信記録
-	 * @param sect 参加部門
-	 * @throws Exception LISPの評価で発生した何らかの例外
+	 * @param succ 受理された交信
+	 * @param fail 拒否された交信
 	 */
-	public Summary(List<Item> list, Section sect) throws Exception {
-		for(Item item: list) if(test(item, sect)) {
-			Success succ = (Success) sect.validate(item);
-			count.put(succ.call, succ.mult);
-			accepted.add(item);
-		} else {
-			rejected.add(item);
-		}
+	protected Summary(List<Success> succ, List<Failure> fail) {
+		final HashMap<Object, Success> map = new HashMap<>();
+		for(Success s: succ) map.putIfAbsent(s.key(0), s);
+		succ = new ArrayList<>(map.values());
+		this.accepted = Collections.unmodifiableList(succ);
+		this.rejected = Collections.unmodifiableList(fail);
 	}
 
 	/**
-	 * 指定された交信が有効かつ重複する交信がないか確認します。
+	 * 交信の得点の合計に乗数を乗算して総得点を計算します。
 	 *
-	 * @param item 交信記録
-	 * @param sect 部門
-	 * @return 交信が得点に数えられる場合true
+	 * @return 総得点
+	 * 
+	 * @since 2019/05/16
 	 */
-	private boolean test(Item item, Section sect) throws Exception {
-		final Message message = sect.validate(item);
-		if(message instanceof Failure) return false;
-		return !count.containsKey(((Success) message).call);
+	public int total() {
+		return score() * mults();
 	}
 
 	/**
-	 * 指定された部門で重複を排除した有効な交信回数を返します。
+	 * 重複を排除した交信の得点の合計を返します。
 	 *
-	 * @return 得点に数えられる交信回数
-	 */
-	public int calls() {
-		return count.size();
-	}
-
-	/**
-	 * 指定された部門で重複を排除した有効なマルチ数を返します。
-	 *
-	 * @return 得点に数えられるマルチ数
-	 */
-	public int mults() {
-		return new HashSet<Object>(count.values()).size();
-	}
-
-	/**
-	 * 交信回数にマルチ数を乗算して獲得した総得点を計算します。
-	 *
-	 * @return 獲得した総得点
+	 * @return 得点に数えられる交信の得点の合計
+	 * 
+	 * @since 2019/05/16
 	 */
 	public int score() {
-		return calls() * mults();
+		return accepted.stream().mapToInt(Success::score).sum();
+	}
+
+	/**
+	 * このサマリに含まれる全ての乗数の積を計算します。
+	 * 先頭の識別子の異なり数は乗数には考慮されません。
+	 *
+	 * @return 乗数
+	 */
+	public int mults() {
+		int cnt = accepted.stream().mapToInt(Success::countKeys).min().orElse(1);
+		return range(1, cnt).map(this::count).reduce(1, Math::multiplyExact);
+	}
+
+	/**
+	 * 指定された位置の識別子の異なり数を返します。
+	 *
+	 * @param keyNum 識別子の番号
+	 * @return 指定された乗数の値
+	 *
+	 * @since 2019/05/16
+	 */
+	public int count(int keyNum) {
+		return (int) accepted.stream().map(s -> s.key(keyNum)).distinct().count();
 	}
 
 	/**
@@ -90,8 +92,8 @@ public final class Summary implements java.io.Serializable {
 	 *
 	 * @return 有効な交信
 	 */
-	public List<Item> accepted() {
-		return Collections.unmodifiableList(accepted);
+	public List<Success> accepted() {
+		return accepted;
 	}
 
 	/**
@@ -99,7 +101,7 @@ public final class Summary implements java.io.Serializable {
 	 *
 	 * @return 無効な交信
 	 */
-	public List<Item> rejected() {
-		return Collections.unmodifiableList(rejected);
+	public List<Failure> rejected() {
+		return rejected;
 	}
 }

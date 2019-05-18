@@ -7,10 +7,14 @@
 *****************************************************************************/
 package qxsl.ruler;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.script.ScriptException;
 import qxsl.model.Item;
 
 /**
- * コンテストの部門を表現します。交信の有効と無効を判別します。
+ * コンテストの部門を表現します。
+ * 交信の有効と無効を判別します。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -38,9 +42,31 @@ public abstract class Section {
 	/**
 	 * 指定された{@link Item}が通過するか確認します。
 	 *
-	 * @param item 承認を要する交信記録
-	 * @return 通過する場合true
-	 * @throws Exception LISPの評価で発生した何らかの例外
+	 * @param item 検査対象の交信記録
+	 * @return 承認された場合はtrue
+	 * 
+	 * @throws ScriptException スクリプトの実行で発生した何らかの例外
 	 */
-	public abstract Message validate(Item item) throws Exception;
+	public abstract Message validate(Item item) throws ScriptException;
+
+	/**
+	 * 指定された交信記録に対して有効な交信を数え上げて得点を計算します。
+	 *
+	 * @param items 交信記録
+	 * @return 得点計算の結果
+	 * 
+	 * @since 2019/05/16
+	 * 
+	 * @throws ScriptException スクリプトの実行で発生した何らかの例外
+	 */
+	public Summary summarize(List<Item> items) throws ScriptException {
+		final List<Success> accepted = new ArrayList<>();
+		final List<Failure> rejected = new ArrayList<>();
+		for(Item item: items) {
+			final Message msg = this.validate(item);
+			if(msg instanceof Success) accepted.add((Success) msg);
+			if(msg instanceof Failure) rejected.add((Failure) msg);
+		}
+		return new Summary(accepted, rejected);
+	}
 }

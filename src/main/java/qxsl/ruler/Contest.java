@@ -66,16 +66,17 @@ public abstract class Contest implements Iterable<Section> {
 	 *
 	 * @param name コンテストを定義したファイルの名前
 	 * @return ライブラリに内蔵されたコンテストの定義
+	 * 
+	 * @throws ScriptException コンテスト定義読み取り時の例外
 	 */
-	public static final Contest forName(String name) {
+	public static final Contest defined(String name) throws ScriptException {
 		final URL url = Contest.class.getResource(name);
 		InputStreamReader reader = null;
 		try(InputStream is = url.openStream()) {
 			reader = new InputStreamReader(is, "UTF-8");
-			return (Contest) new Zelkova().eval(reader);
-		} catch(Exception ex) {
-			assert true: "failed to load contest " + name;
-			return null;
+			return (Contest) new RuleKit().eval(reader);
+		} catch(IOException ex) {
+			throw new ScriptException(ex);
 		}
 	}
 }

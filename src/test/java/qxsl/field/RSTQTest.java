@@ -10,9 +10,9 @@ package qxsl.field;
 import java.util.Random;
 import org.junit.Test;
 import qxsl.model.Fields;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+
 import static qxsl.table.secret.QxmlFormat.RSTQ;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * {@link RSTQ}クラスのテスト用クラスです。
@@ -28,15 +28,28 @@ public final class RSTQTest extends junit.framework.TestCase {
 	private final Random random = new Random();
 	@Test
 	public void testValue() {
-		final int rst = random.nextInt(489) + 111;
-		final int exp = rst % 10 == 0? rst / 10 : rst;
-		assertThat(new RSTQ(rst).value(), is(exp));
+		assertThat(new RSTQ(699).value()).isEqualTo(599);
+		assertThat(new RSTQ(599).value()).isEqualTo(599);
+		assertThat(new RSTQ(590).value()).isEqualTo(591);
+		assertThat(new RSTQ(101).value()).isEqualTo(111);
+		assertThat(new RSTQ(100).value()).isEqualTo(111);
+		assertThat(new RSTQ( 59).value()).isEqualTo( 59);
+		assertThat(new RSTQ( 11).value()).isEqualTo( 11);
+		assertThat(new RSTQ( 10).value()).isEqualTo( 11);
+	}
+	@Test
+	public void testToString() {
+		assertThat(new RSTQ(599)).hasToString("599");
+		assertThat(new RSTQ(590)).hasToString("591");
+		assertThat(new RSTQ(101)).hasToString("111");
+		assertThat(new RSTQ(100)).hasToString("111");
+		assertThat(new RSTQ( 59)).hasToString( "59");
 	}
 	@Test
 	public void testRSTQ$Format() throws Exception {
 		final RSTQ.Format $form = new RSTQ.Format();
 		final RSTQ rstq = new RSTQ(random.nextInt(489) + 111);
-		assertThat($form.decode($form.encode(rstq)), is(rstq));
-		assertThat(fields.cache($form.encode(rstq)), is(rstq));
+		assertThat($form.decode($form.encode(rstq))).isEqualTo(rstq);
+		assertThat(fields.cache($form.encode(rstq))).isEqualTo(rstq);
 	}
 }

@@ -9,9 +9,9 @@ package qxsl.field;
 
 import org.junit.Test;
 import qxsl.model.Fields;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+
 import static qxsl.table.secret.QxmlFormat.NOTE;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * {@link Note}クラスのテスト用クラスです。
@@ -26,14 +26,19 @@ public final class NoteTest extends junit.framework.TestCase {
 	private final Fields fields = new Fields(NOTE);
 	@Test
 	public void testValue() {
-		final String str = util.RandText.alnum(100);
-		assertThat(new Note(str).value(), is(str));
+		assertThat(new Note("RABBIT").value()).isEqualTo("RABBIT");
+		assertThat(new Note("GIBIER").value()).isEqualTo("GIBIER");
+	}
+	@Test
+	public void testToString() {
+		final String text = util.RandText.alnum(100);
+		assertThat(new Note(text)).hasToString(text);
 	}
 	@Test
 	public void testNote$Format() throws Exception {
 		final Note.Format $form = new Note.Format();
 		final Note note = new Note(util.RandText.alnum(100));
-		assertThat($form.decode($form.encode(note)), is(note));
-		assertThat(fields.cache($form.encode(note)), is(note));
+		assertThat($form.decode($form.encode(note))).isEqualTo(note);
+		assertThat(fields.cache($form.encode(note))).isEqualTo(note);
 	}
 }

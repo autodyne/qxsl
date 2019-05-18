@@ -7,18 +7,12 @@
 *****************************************************************************/
 package qxsl.ruler;
 
-import java.io.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.script.ScriptException;
 import org.junit.Test;
-import qxsl.model.Item;
-import qxsl.table.Tables;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * {@link Contest}クラスをALLJA1コンテストの規約でテストするクラスです。
+ * {@link Contest}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -27,34 +21,25 @@ import static org.junit.Assert.assertThat;
  *
  */
 public final class ContestTest extends junit.framework.TestCase {
-	private final Contest ruler = Contest.forName("allja1.lisp");
-	private final Map<String, List<Item>> logs = new HashMap<>();
-	private final Tables tables = new Tables();
-	public ContestTest() throws Exception {
-		final Class cl = Contest.class;
-		logs.put("cqww", tables.decode(cl.getResource("allja1.cqww")));
-		logs.put("ctxt", tables.decode(cl.getResource("allja1.ctxt")));
-		logs.put("hl76", tables.decode(cl.getResource("allja1.hl76")));
-		logs.put("jarl", tables.decode(cl.getResource("allja1.jarl")));
-		logs.put("rtcl", tables.decode(cl.getResource("allja1.rtcl")));
-		logs.put("zall", tables.decode(cl.getResource("allja1.zall")));
-		logs.put("zdos", tables.decode(cl.getResource("allja1.zdos")));
-		logs.put("cbin", tables.decode(cl.getResource("allja1.cbin")));
-		logs.put("zbin", tables.decode(cl.getResource("allja1.zbin")));
+	private Contest ja1 = null;
+	private Contest ja1() throws ScriptException {
+		if(ja1 == null) ja1 = Contest.defined("allja1.lisp");
+		return ja1;
 	}
 	@Test
-	public void test() throws Exception {
-		InputStream is = Contest.class.getResourceAsStream("allja1.test");
-		BufferedReader br = new BufferedReader(new InputStreamReader(is));
-		String line = null;
-		while((line = br.readLine()) != null) {
-			for(String tfmt: logs.keySet()) {
-				final String[] vals = line.split(",", 3);
-				final Section sec = ruler.getSection(vals[0].trim());
-				final Summary sum = new Summary(logs.get(tfmt), sec);
-				assertThat(sum.calls(), is(Integer.parseInt(vals[1].trim())));
-				assertThat(sum.mults(), is(Integer.parseInt(vals[2].trim())));
-			}
-		}
+	public void testForName() throws ScriptException {
+		assertThat(ja1()).isNotNull();
+	}
+	@Test
+	public void testGetName() throws ScriptException {
+		assertThat(ja1().getName()).isNotBlank();
+	}
+	@Test
+	public void testIterator() throws ScriptException {
+		assertThat(ja1().iterator()).hasNext();
+	}
+	@Test
+	public void testToString() throws ScriptException {
+		assertThat(ja1()).hasToString(ja1().getName());
 	}
 }

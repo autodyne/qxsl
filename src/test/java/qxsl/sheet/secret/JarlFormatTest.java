@@ -18,8 +18,8 @@ import qxsl.field.*;
 import qxsl.model.Item;
 import qxsl.sheet.Sheets;
 import qxsl.table.Tables;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * {@link JarlFormat}クラスのテスト用クラスです。
@@ -69,7 +69,7 @@ public final class JarlFormatTest extends junit.framework.TestCase {
 		kvals.put("LOGSHEET", os1.toString("SJIS").trim());
 		format.encode(os2, kvals);
 		final byte[] b = os2.toByteArray();
-		assertThat(format.decode(new ByteArrayInputStream(b)), is(kvals));
-		assertThat(sheets.decode(new ByteArrayInputStream(b)), is(kvals));
+		assertThat(format.decode(new ByteArrayInputStream(b))).isEqualTo(kvals);
+		assertThat(sheets.decode(new ByteArrayInputStream(b))).isEqualTo(kvals);
 	}
 }

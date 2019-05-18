@@ -9,9 +9,9 @@ package qxsl.field;
 
 import org.junit.Test;
 import qxsl.model.Fields;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+
 import static qxsl.table.secret.QxmlFormat.WATT;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * {@link Watt}クラスのテスト用クラスです。
@@ -26,14 +26,20 @@ public final class WattTest extends junit.framework.TestCase {
 	private final Fields fields = new Fields(WATT);
 	@Test
 	public void testValue() {
-		final String str = util.RandText.alnum(100);
-		assertThat(new Watt(str).value(), is(str));
+		assertThat(new Watt("10kW").value()).isEqualTo("10kW");
+		assertThat(new Watt("10MW").value()).isEqualTo("10MW");
+		assertThat(new Watt("10GW").value()).isEqualTo("10GW");
+	}
+	@Test
+	public void testToString() {
+		final String text = util.RandText.alnum(100);
+		assertThat(new Watt(text)).hasToString(text);
 	}
 	@Test
 	public void testWatt$Format() throws Exception {
 		final Watt.Format $form = new Watt.Format();
 		final Watt watt = new Watt(util.RandText.alnum(100));
-		assertThat($form.decode($form.encode(watt)), is(watt));
-		assertThat(fields.cache($form.encode(watt)), is(watt));
+		assertThat($form.decode($form.encode(watt))).isEqualTo(watt);
+		assertThat(fields.cache($form.encode(watt))).isEqualTo(watt);
 	}
 }

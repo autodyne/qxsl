@@ -8,14 +8,17 @@ repositories {
 
 dependencies {
 	testCompile 'junit:junit:+'
+	testCompile 'org.assertj:assertj-core:+'
+	testCompile 'org.junit.jupiter:junit-jupiter-engine:+'
+	testCompile 'org.junit.jupiter:junit-jupiter-params:+'
 }
 
 compileJava {
 	options.encoding = utf8
 }
 
-compileTestJava {
-	options.compilerArgs << '-Xlint:deprecation'
+test {
+	useJUnitPlatform()
 }
 
 javadoc {

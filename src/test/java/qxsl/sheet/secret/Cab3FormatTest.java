@@ -18,10 +18,8 @@ import qxsl.field.*;
 import qxsl.model.Item;
 import qxsl.sheet.Sheets;
 import qxsl.table.Tables;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
 
-import java.io.PrintStream;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * {@link Cab3Format}クラスのテスト用クラスです。
@@ -70,7 +68,7 @@ public final class Cab3FormatTest extends junit.framework.TestCase {
 		kvals.put("QSO", os1.toString("UTF8").trim());
 		format.encode(os2, kvals);
 		final byte[] b = os2.toByteArray();
-		assertThat(format.decode(new ByteArrayInputStream(b)), is(kvals));
-		assertThat(sheets.decode(new ByteArrayInputStream(b)), is(kvals));
+		assertThat(format.decode(new ByteArrayInputStream(b))).isEqualTo(kvals);
+		assertThat(sheets.decode(new ByteArrayInputStream(b))).isEqualTo(kvals);
 	}
 }

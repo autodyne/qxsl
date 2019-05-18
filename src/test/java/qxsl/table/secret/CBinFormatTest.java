@@ -15,8 +15,8 @@ import org.junit.Test;
 import qxsl.field.*;
 import qxsl.model.Item;
 import qxsl.table.Tables;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * {@link CBinFormat}クラスのテスト用クラスです。
@@ -65,8 +65,8 @@ public final class CBinFormatTest extends junit.framework.TestCase {
 			final ByteArrayOutputStream os = new ByteArrayOutputStream();
 			format.encode(os, items);
 			final byte[] b = os.toByteArray();
-			assertThat(format.decode(new ByteArrayInputStream(b)), is(items));
-			assertThat(tables.decode(new ByteArrayInputStream(b)), is(items));
+			assertThat(format.decode(new ByteArrayInputStream(b))).isEqualTo(items);
+			assertThat(tables.decode(new ByteArrayInputStream(b))).isEqualTo(items);
 		}
 	}
 }

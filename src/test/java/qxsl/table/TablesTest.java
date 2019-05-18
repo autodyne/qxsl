@@ -9,8 +9,8 @@ package qxsl.table;
 
 import org.junit.Test;
 import qxsl.table.secret.*;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * {@link Tables}クラスのテスト用クラスです。
@@ -25,23 +25,22 @@ public final class TablesTest extends junit.framework.TestCase {
 	private final Tables tables = new Tables();
 	@Test
 	public void testIterator() {
-		assertThat(tables.iterator(), is(notNullValue()));
-		assertThat(tables.iterator().hasNext(), is(true));
+		assertThat(tables.iterator()).hasNext();
 	}
 	@Test
 	public void testGetFormat() {
 		// XML format
-		assertThat(tables.getFormat("qxml"), is(instanceOf(QxmlFormat.class)));
+		assertThat(tables.getFormat("qxml")).isInstanceOf(QxmlFormat.class);
 		// Text formats
-		assertThat(tables.getFormat("cqww"), is(instanceOf(CqwwFormat.class)));
-		assertThat(tables.getFormat("jarl"), is(instanceOf(JarlFormat.class)));
-		assertThat(tables.getFormat("ctxt"), is(instanceOf(CTxtFormat.class)));
-		assertThat(tables.getFormat("hl76"), is(instanceOf(Hl76Format.class)));
-		assertThat(tables.getFormat("rtcl"), is(instanceOf(RtclFormat.class)));
-		assertThat(tables.getFormat("zall"), is(instanceOf(ZAllFormat.class)));
-		assertThat(tables.getFormat("zdos"), is(instanceOf(ZDosFormat.class)));
+		assertThat(tables.getFormat("cqww")).isInstanceOf(CqwwFormat.class);
+		assertThat(tables.getFormat("jarl")).isInstanceOf(JarlFormat.class);
+		assertThat(tables.getFormat("ctxt")).isInstanceOf(CTxtFormat.class);
+		assertThat(tables.getFormat("hl76")).isInstanceOf(Hl76Format.class);
+		assertThat(tables.getFormat("rtcl")).isInstanceOf(RtclFormat.class);
+		assertThat(tables.getFormat("zall")).isInstanceOf(ZAllFormat.class);
+		assertThat(tables.getFormat("zdos")).isInstanceOf(ZDosFormat.class);
 		// Binary formats
-		assertThat(tables.getFormat("cbin"), is(instanceOf(CBinFormat.class)));
-		assertThat(tables.getFormat("zbin"), is(instanceOf(ZBinFormat.class)));
+		assertThat(tables.getFormat("cbin")).isInstanceOf(CBinFormat.class);
+		assertThat(tables.getFormat("zbin")).isInstanceOf(ZBinFormat.class);
 	}
 }

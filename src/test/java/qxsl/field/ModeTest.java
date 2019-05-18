@@ -9,9 +9,9 @@ package qxsl.field;
 
 import org.junit.Test;
 import qxsl.model.Fields;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+
 import static qxsl.table.secret.QxmlFormat.MODE;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * {@link Mode}クラスのテスト用クラスです。
@@ -26,14 +26,19 @@ public final class ModeTest extends junit.framework.TestCase {
 	private final Fields fields = new Fields(MODE);
 	@Test
 	public void testValue() {
-		final String str = util.RandText.alnum(100);
-		assertThat(new Mode(str).value(), is(str));
+		assertThat(new Mode("CW").value()).isEqualTo("CW");
+		assertThat(new Mode("AM").value()).isEqualTo("AM");
+	}
+	@Test
+	public void testToString() {
+		final String text = util.RandText.alnum(100);
+		assertThat(new Mode(text)).hasToString(text);
 	}
 	@Test
 	public void testMode$Format() throws Exception {
 		final Mode.Format $form = new Mode.Format();
 		final Mode mode = new Mode(util.RandText.alnum(100));
-		assertThat($form.decode($form.encode(mode)), is(mode));
-		assertThat(fields.cache($form.encode(mode)), is(mode));
+		assertThat($form.decode($form.encode(mode))).isEqualTo(mode);
+		assertThat(fields.cache($form.encode(mode))).isEqualTo(mode);
 	}
 }

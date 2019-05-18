@@ -9,9 +9,9 @@ package qxsl.field;
 
 import org.junit.Test;
 import qxsl.model.Fields;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+
 import static qxsl.table.secret.QxmlFormat.CALL;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * {@link Call}クラスのテスト用クラスです。
@@ -26,14 +26,19 @@ public final class CallTest extends junit.framework.TestCase {
 	private final Fields fields = new Fields(CALL);
 	@Test
 	public void testValue() {
-		assertThat(new Call("JA1ZLO").value(), is("JA1ZLO"));
-		assertThat(new Call("JA1YWX").value(), is("JA1YWX"));
+		assertThat(new Call("JA1ZLO").value()).isEqualTo("JA1ZLO");
+		assertThat(new Call("JA1YWX").value()).isEqualTo("JA1YWX");
+	}
+	@Test
+	public void testToString() {
+		final String text = util.RandText.alnum(100);
+		assertThat(new Call(text)).hasToString(text);
 	}
 	@Test
 	public void testCall$Format() throws Exception {
 		final Call.Format $form = new Call.Format();
 		final Call call = new Call(util.RandText.alnum(100));
-		assertThat($form.decode($form.encode(call)), is(call));
-		assertThat(fields.cache($form.encode(call)), is(call));
+		assertThat($form.decode($form.encode(call))).isEqualTo(call);
+		assertThat(fields.cache($form.encode(call))).isEqualTo(call);
 	}
 }

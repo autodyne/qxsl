@@ -9,9 +9,9 @@ package qxsl.model;
 
 import org.junit.Test;
 import qxsl.field.*;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+
 import static qxsl.table.secret.QxmlFormat.ITEM;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * {@link Item}クラスのテスト用クラスです。
@@ -31,26 +31,26 @@ public final class ItemTest extends junit.framework.TestCase {
 	private final Time time = new Time();
 	@Test
 	public void testType() {
-		assertThat(new Item().type(), is(ITEM));
+		assertThat(new Item().type()).isEqualTo(ITEM);
 	}
 	@Test
 	public void testEquals() {
 		final Item item1 = new Item();
 		final Item item2 = new Item();
-		assertThat(item1, is(item2));
-		assertThat(item1.set(band).get(Band.class), is(band));
-		assertThat(item1.set(call).get(Call.class), is(call));
-		assertThat(item1.set(mode).get(Mode.class), is(mode));
-		assertThat(item1.set(name).get(Name.class), is(name));
-		assertThat(item1.set(note).get(Note.class), is(note));
-		assertThat(item1.set(time).get(Time.class), is(time));
-		assertThat(item1, is(not(item2)));
-		assertThat(item2.set(band).get(Band.class), is(band));
-		assertThat(item2.set(call).get(Call.class), is(call));
-		assertThat(item2.set(mode).get(Mode.class), is(mode));
-		assertThat(item2.set(name).get(Name.class), is(name));
-		assertThat(item2.set(note).get(Note.class), is(note));
-		assertThat(item2.set(time).get(Time.class), is(time));
-		assertThat(item1, is(item2));
+		assertThat(item1).isEqualTo(item2);
+		assertThat(item1.set(band).get(Band.class)).isEqualTo(band);
+		assertThat(item1.set(call).get(Call.class)).isEqualTo(call);
+		assertThat(item1.set(mode).get(Mode.class)).isEqualTo(mode);
+		assertThat(item1.set(name).get(Name.class)).isEqualTo(name);
+		assertThat(item1.set(note).get(Note.class)).isEqualTo(note);
+		assertThat(item1.set(time).get(Time.class)).isEqualTo(time);
+		assertThat(item1).isNotEqualTo(item2);
+		assertThat(item2.set(band).get(Band.class)).isEqualTo(band);
+		assertThat(item2.set(call).get(Call.class)).isEqualTo(call);
+		assertThat(item2.set(mode).get(Mode.class)).isEqualTo(mode);
+		assertThat(item2.set(name).get(Name.class)).isEqualTo(name);
+		assertThat(item2.set(note).get(Note.class)).isEqualTo(note);
+		assertThat(item2.set(time).get(Time.class)).isEqualTo(time);
+		assertThat(item1).isEqualTo(item2);
 	}
 }

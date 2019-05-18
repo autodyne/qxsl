@@ -9,9 +9,9 @@ package qxsl.model;
 
 import org.junit.Test;
 import qxsl.field.*;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+
 import static qxsl.table.secret.QxmlFormat.SENT;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * {@link Sent}クラスのテスト用クラスです。
@@ -29,22 +29,22 @@ public final class SentTest extends junit.framework.TestCase {
 	private final Watt watt = new Watt("M");
 	@Test
 	public void testType() {
-		assertThat(new Sent().type(), is(SENT));
+		assertThat(new Sent().type()).isEqualTo(SENT);
 	}
 	@Test
 	public void testEquals() {
 		final Sent sent1 = new Sent();
 		final Sent sent2 = new Sent();
-		assertThat(sent1, is(sent2));
-		assertThat(sent1.set(city).get(City.class), is(city));
-		assertThat(sent1.set(code).get(Code.class), is(code));
-		assertThat(sent1.set(rstq).get(RSTQ.class), is(rstq));
-		assertThat(sent1.set(watt).get(Watt.class), is(watt));
-		assertThat(sent1, is(not(sent2)));
-		assertThat(sent2.set(city).get(City.class), is(city));
-		assertThat(sent2.set(code).get(Code.class), is(code));
-		assertThat(sent2.set(rstq).get(RSTQ.class), is(rstq));
-		assertThat(sent2.set(watt).get(Watt.class), is(watt));
-		assertThat(sent1, is(sent2));
+		assertThat(sent1).isEqualTo(sent2);
+		assertThat(sent1.set(city).get(City.class)).isEqualTo(city);
+		assertThat(sent1.set(code).get(Code.class)).isEqualTo(code);
+		assertThat(sent1.set(rstq).get(RSTQ.class)).isEqualTo(rstq);
+		assertThat(sent1.set(watt).get(Watt.class)).isEqualTo(watt);
+		assertThat(sent1).isNotEqualTo(sent2);
+		assertThat(sent2.set(city).get(City.class)).isEqualTo(city);
+		assertThat(sent2.set(code).get(Code.class)).isEqualTo(code);
+		assertThat(sent2.set(rstq).get(RSTQ.class)).isEqualTo(rstq);
+		assertThat(sent2.set(watt).get(Watt.class)).isEqualTo(watt);
+		assertThat(sent1).isEqualTo(sent2);
 	}
 }
