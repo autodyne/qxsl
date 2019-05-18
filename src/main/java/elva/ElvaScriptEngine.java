@@ -63,7 +63,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	@Override
 	public Object eval(Reader r, ScriptContext c) throws ScriptException {
 		try(BufferedReader br = new BufferedReader(r)) {
-			return eval(br.lines().collect(Collectors.joining()), c);
+			return eval(br.lines().collect(Collectors.joining("\n")), c);
 		} catch(IOException ex) {
 			throw new ScriptException(ex);
 		}
@@ -98,7 +98,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	public final List<Object> scan(Reader r) throws ScriptException {
 		try(BufferedReader br = new BufferedReader(r)) {
-			return scan(br.lines().collect(Collectors.joining()));
+			return scan(br.lines().collect(Collectors.joining("\n")));
 		} catch(IOException ex) {
 			throw new ScriptException(ex);
 		}
@@ -514,7 +514,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 		public Name name(Object sexp) throws ScriptException {
 			final Object value = eval(sexp);
 			if(value instanceof Name) return (Name) value;
-			throw error(sexp, "type error: a name is required");
+			throw error(sexp, "name required but %s found", value);
 		}
 		/**
 		 * 指定された式の値を求めて{@link Seq}として返します。
@@ -526,7 +526,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 		public Seq list(Object sexp) throws ScriptException {
 			final Object value = eval(sexp);
 			if(value instanceof Seq) return (Seq) value;
-			throw error(sexp, "type error: a list is required but found a %s", value);
+			throw error(sexp, "list required but %s found", value);
 		}
 		/**
 		 * 指定された式の値を求めて真偽値として返します。
@@ -536,9 +536,9 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 		 * @throws ScriptException 評価により発生した例外
 		 */
 		public boolean bool(Object sexp) throws ScriptException {
-			final Object bb = eval(sexp);
-			if(bb instanceof Boolean) return (boolean) bb;
-			throw error(sexp, "type error: a bool is required");
+			final Object value = eval(sexp);
+			if(value instanceof Boolean) return (boolean) value;
+			throw error(sexp, "bool required but %s found", value);
 		}
 		/**
 		 * 指定された式の値を求めて整数値として返します。
@@ -548,9 +548,9 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 		 * @throws ScriptException 評価により発生した例外
 		 */
 		public int integer(Object sexp) throws ScriptException {
-			final Object bb = eval(sexp);
-			if(bb instanceof Integer) return (Integer) bb;
-			throw error(sexp, "type error: an int is required");
+			final Object value = eval(sexp);
+			if(value instanceof Integer) return (Integer) value;
+			throw error(sexp, "int required but %s found", value);
 		}
 		/**
 		 * 指定された式の値を求めて文字列として返します。
@@ -560,10 +560,9 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 		 * @throws ScriptException 評価により発生した例外
 		 */
 		public String text(Object sexp) throws ScriptException {
-			final Object text = eval(sexp);
-			if(text == null) return null;
-			if(text instanceof String) return (String) text;
-			throw error(sexp, "type error: a string is required");
+			final Object value = eval(sexp);
+			if(value instanceof String) return (String) value;
+			throw error(sexp, "string required but %s found", value);
 		}
 		/**
 		 * 指定された式の値を求めて演算子として返します。
@@ -573,10 +572,9 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 		 * @throws ScriptException 評価により発生した例外
 		 */
 		public Function func(Object sexp) throws ScriptException {
-			final Object func = eval(sexp);
-			if(func == null) return null;
-			if(func instanceof Function) return (Function) func;
-			throw error(sexp, "type error: an operator is required");
+			final Object value = eval(sexp);
+			if(value instanceof Function) return (Function) value;
+			throw error(sexp, "function required but %s found", value);
 		}
 		/**
 		 * 指定された式の値を求めます。
@@ -1091,6 +1089,23 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	}
 
 	/**
+	 * LISP処理系で事前に定義される剰余演算子です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2019/05/18
+	 */
+	@Arguments(min = 2, max = -1)
+	private static final class $Mod implements Function {
+		public Object apply(Seq args, Runtime eval) throws ScriptException {
+			int val = eval.integer(args.car());
+			for(Object v: args.cdr()) val %= eval.integer(v);
+			return val;
+		}
+	}
+
+	/**
 	 * LISP処理系で事前に定義される不等号&lt;の関数です。
 	 *
 	 *
@@ -1306,9 +1321,9 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 		 * (length list)
 		 * (member value list)
 		 */
-		lude.put("list", new $List());
-		lude.put("car", new $Car());
-		lude.put("cdr", new $Cdr());
+		lude.put("list",   new $List());
+		lude.put("car",    new $Car());
+		lude.put("cdr",    new $Cdr());
 		lude.put("empty?", new $Empty$());
 		lude.put("length", new $Length());
 		lude.put("member", new $Member());
@@ -1353,11 +1368,13 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 		 * (- expressions)
 		 * (* expressions)
 		 * (/ expressions)
+		 * (% expressions)
 		 */
-		lude.put("+", new $Add());
-		lude.put("-", new $Sub());
-		lude.put("*", new $Mul());
-		lude.put("/", new $Div());
+		lude.put("+",   new $Add());
+		lude.put("-",   new $Sub());
+		lude.put("*",   new $Mul());
+		lude.put("/",   new $Div());
+		lude.put("mod", new $Mod());
 
 		/*
 		 * basic functions for numerical comparison
