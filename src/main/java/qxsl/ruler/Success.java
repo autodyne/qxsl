@@ -43,20 +43,6 @@ public final class Success implements Message, Serializable {
 	}
 
 	/**
-	 * この交信の文字列による表現を返します。
-	 *
-	 * @return 文字列
-	 */
-	public final String toString() {
-		StringJoiner outer = new StringJoiner(" ", "{", "}");
-		StringJoiner inner = new StringJoiner(",", "[", "]");
-		outer.add(Success.class.getCanonicalName());
-		outer.add(String.format("score:%d", score));
-		for(Object k: keys) inner.add(String.valueOf(k));
-		return outer.add(String.format("keys:%s", inner)).toString();
-	}
-
-	/**
 	 * 交信の成立により得られる素点を返します。
 	 *
 	 * @return 交信1件の得点
@@ -89,5 +75,19 @@ public final class Success implements Message, Serializable {
 	 */
 	public final int countKeys() {
 		return keys.length;
+	}
+
+	/**
+	 * この交信の文字列による表現を返します。
+	 *
+	 * @return 文字列
+	 */
+	public final String toString() {
+		StringJoiner outer = new StringJoiner(" ", "{", "}");
+		StringJoiner inner = new StringJoiner(",", "[", "]");
+		outer.add(Success.class.getCanonicalName());
+		outer.add(String.format("score:%d", score));
+		for(Object k: keys) inner.add(String.valueOf(k));
+		return outer.add(String.format("keys:%s", inner)).toString();
 	}
 }

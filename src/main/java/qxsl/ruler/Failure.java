@@ -8,10 +8,12 @@
 package qxsl.ruler;
 
 import java.io.Serializable;
+import java.util.StringJoiner;
 import qxsl.model.Item;
 
 /**
- * 得点計算の処理に失敗した場合に返されます。
+ * 規約により拒否された交信に付与されます。
+ * 総得点や乗数の計算には反映されません。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -37,14 +39,26 @@ public final class Failure implements Message, Serializable {
 	/**
 	 * 失敗の内容を説明する文字列を返します。
 	 * 
-	 * @return メッセージ
+	 * @return 文字列
 	 */
-	public final String getMessage() {
+	public final String text() {
 		return text;
 	}
 
 	@Override
 	public final Item item() {
 		return item;
+	}
+
+	/**
+	 * この交信の文字列による表現を返します。
+	 *
+	 * @return 文字列
+	 */
+	public final String toString() {
+		StringJoiner sj = new StringJoiner(" ");
+		sj.add(Failure.class.getCanonicalName());
+		sj.add(String.format("message:%s", text()));
+		return String.format("{%s}", sj.toString());
 	}
 }
