@@ -502,20 +502,23 @@ public final class CBinFormat extends BaseFormat {
 		 * @throws IOException 入出力の例外
 		 */
 		public void write(List<Item> items) throws IOException {
-			stream.writeShort(Short.reverseBytes((short) items.size()));
+			final short size = (short) items.size();
+			stream.writeShort(Short.reverseBytes(size));
 			stream.writeShort(0xFFFF);
 			stream.writeShort(0x0000);
 			stream.writeShort(0x0800);
 			stream.writeBytes("CQsoData");
-			for(Item r : items) item(r);
-			stream.write(new byte[702]);
-			// footer 702 bytes:
-			// (1)   4 bytes: unknown
-			// (2)   2 bytes: console band
-			// (3)   2 bytes: contest ID
-			// (4)   2 bytes: global score multiplier
-			// (5)  92 bytes: 23band score multiplier
-			// (6) 600 bytes: operator names (max 30)
+			short count = 0;
+			for(Item r: items) item(r, ++count == size);
+			stream.write(new byte[704]);
+			// footer 704 bytes:
+			// (1)   2 bytes: console ModeEnum
+			// (2)   4 bytes: unknown
+			// (3)   2 bytes: console BandEnum
+			// (4)   2 bytes: contest ID
+			// (5)   2 bytes: global score multiplier
+			// (6)  92 bytes: 23band score multiplier
+			// (7) 600 bytes: operator names (max 30)
 			stream.close();
 		}
 
@@ -523,9 +526,11 @@ public final class CBinFormat extends BaseFormat {
 		 * {@link Item}をバイナリにシリアライズして出力します。
 		 * 
 		 * @param item 出力する{@link Item}
+		 * @param last 以降に交信記録がない場合true
+		 * 
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private void item(Item item) throws IOException {
+		private void item(Item item, boolean last) throws IOException {
 			string(20, item.get(Call.class));
 			string(30, item.getSent().get(Code.class));
 			string(30, item.getRcvd().get(Code.class));
@@ -538,8 +543,7 @@ public final class CBinFormat extends BaseFormat {
 			stream.writeByte(0);
 			stream.writeByte(0);
 			string(50, item.get(Note.class));
-			stream.writeByte(0); // TOCHECK: console mode?
-			stream.writeByte(0);
+			if(!last) stream.writeShort(0x0180);
 			stream.flush();
 		}
 
