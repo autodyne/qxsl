@@ -344,16 +344,7 @@ public final class CBinFormat extends BaseFormat {
 			if(Arrays.equals(tested, answer)) {
 				for(int i=0; i<num; i++) items.add(item());
 				return Collections.unmodifiableList(items);
-			}
-			// footer: CTESTWIN internal status
-			//   2 bytes: mode
-			//   4 bytes: unknown
-			//   2 bytes: band
-			//   2 bytes: contest ID
-			//   2 bytes: global score multiplier
-			//  92 bytes: 23band score multiplier
-			// 600 bytes: operator names
-			else throw new IOException("malformed data");
+			} else throw new IOException("malformed data");
 		}
 
 		/**
@@ -512,9 +503,19 @@ public final class CBinFormat extends BaseFormat {
 		 */
 		public void write(List<Item> items) throws IOException {
 			stream.writeShort(Short.reverseBytes((short) items.size()));
-			stream.write(new byte[6]);
+			stream.writeShort(0xFFFF);
+			stream.writeShort(0x0000);
+			stream.writeShort(0x0800);
 			stream.writeBytes("CQsoData");
 			for(Item r : items) item(r);
+			stream.write(new byte[702]);
+			// footer 702 bytes:
+			// (1)   4 bytes: unknown
+			// (2)   2 bytes: console band
+			// (3)   2 bytes: contest ID
+			// (4)   2 bytes: global score multiplier
+			// (5)  92 bytes: 23band score multiplier
+			// (6) 600 bytes: operator names (max 30)
 			stream.close();
 		}
 
@@ -537,7 +538,7 @@ public final class CBinFormat extends BaseFormat {
 			stream.writeByte(0);
 			stream.writeByte(0);
 			string(50, item.get(Note.class));
-			stream.writeByte(0);
+			stream.writeByte(0); // TOCHECK: console mode?
 			stream.writeByte(0);
 			stream.flush();
 		}
