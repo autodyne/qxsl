@@ -1,29 +1,70 @@
 ;; ALLJA1 CONTEST DEFINITION by 無線部開発班
 
-(set 'setq (syntax (name value) `(set ',name ,value)))
+(set 'setq
+	(syntax (name value)
+		`(set ',name ,value)))
 
-(setq defun (syntax (name pars body) `(setq ,name (lambda ,pars ,body))))
-(setq cond (syntax (conds) (if (empty? conds) null `(if ,(car (car conds)) ,(car (cdr (car conds))) (cond ,(cdr conds))))))
+(setq defun
+	(syntax (name pars body)
+		`(setq ,name (lambda ,pars ,body))))
 
-(defun JSTtoUTC (hours) (mapcar (lambda (hour) (mod (- hour 9)) 24) hours))
+(setq cond
+	(syntax (conds)
+		(if (empty? conds)
+			null
+			`(if
+				,(car (car conds))
+				,(car (cdr (car conds)))
+				(cond ,(cdr conds))))))
+
+(defun JSTtoUTC hours
+	(mapcar (lambda (hour) (mod (- hour 9)) 24) hours))
 
 (defun AM? it (member (hour it) (JSTtoUTC '(09 10 11))))
 (defun PM? it (member (hour it) (JSTtoUTC '(16 17 18 19))))
 
 (defun CW? it (member (mode it) (list "cw" "CW")))
 
-(defun trim (text n) (if (> n 0) (trim (str-tail text) (- n 1)) text))
-(defun CODE it (if (equal null (rstq (rcvd it))) (trim (code (rcvd it)) (if (CW? it) 3 2)) (code (rcvd it))))
+(defun trim (text n)
+	(if
+		(> n 0)
+		(trim (str-tail text) (- n 1))
+		text))
+
+(defun CODE it
+	(if
+		(equal null (rstq (rcvd it)))
+		(trim (code (rcvd it)) (if (CW? it) 3 2))
+		(code (rcvd it))))
 
 (defun CITY it (city (CODE it)))
 (defun PREF it (pref (CODE it)))
 
 (defun PREF? it (equal (CITY it) (PREF it)))
-(defun AREA1? it (member (PREF it) (list "東京都" "神奈川県" "埼玉県" "千葉県" "群馬県" "茨城県" "栃木県" "山梨県")))
+(defun AREA1? it
+	(member (PREF it)
+		(list
+			"東京都"
+			"神奈川県"
+			"埼玉県"
+			"千葉県"
+			"群馬県"
+			"茨城県"
+			"栃木県"
+			"山梨県")))
+
 (defun AREA8? it (equal (PREF it) "北海道"))
 (defun 支庁? it (match "1\\d{2}" (CODE it)))
 
-(defun 内? it (if (AREA1? it) (not (PREF? it)) (if (AREA8? it) (支庁? it) (PREF? it))))
+(defun 内? it
+	(if
+		(AREA1? it)
+		(not (PREF? it))
+		(if
+			(AREA8? it)
+			(支庁? it)
+			(PREF? it))))
+
 (defun 外? it (and (AREA1? it) (not (PREF? it))))
 
 (defun 1.9MHz? it (and (PM? it) (<=  1900 (band it) 1913)))
@@ -52,8 +93,19 @@
 (defun CALL-KEY it (list (call it) (BAND it) (mode it)))
 (defun MULT-KEY it (list (BAND it) (CODE it)))
 
-(defun forall (it conds) (if (empty? conds) true (and ((car conds) it) (forall it (cdr conds)))))
-(defun verify (it conds) (if (forall it conds) (success it 1 (CALL-KEY it) (MULT-KEY it)) (failure it "無効な交信")))
+(defun forall (it conds)
+	(if
+		(empty? conds)
+		true
+		(and
+			((car conds) it)
+			(forall it (cdr conds)))))
+
+(defun verify (it conds)
+	(if
+		(forall it conds)
+		(success it 1 (CALL-KEY it) (MULT-KEY it))
+		(failure it "無効な交信")))
 
 (contest "ALLJA1 TEST"
 	(section "1エリア内 個人 電信限定 1.9MHz部門"         (lambda it (verify it (list 内? CW? 1.9MHz?))))
