@@ -103,13 +103,13 @@ public final class ZBinFormat extends BaseFormat {
 		private final ZonedDateTime epoch;
 
 		/**
-		 * 1899年11月30日を起点にTDateTime型を構築します。
+		 * 1899年12月30日を起点にTDateTime型を構築します。
 		 *
 		 * @param zoneId タイムゾーン
 		 * @since 2019/05/15
 		 */
 		public TDateTime(ZoneId zoneId) {
-			LocalDate date = LocalDate.of(1899, 11, 30);
+			LocalDate date = LocalDate.of(1899, 12, 30);
 			this.epoch = date.atStartOfDay(zoneId);
 		}
 
@@ -121,10 +121,10 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		public Time decode(long led) {
 			final long bed = Long.reverseBytes(led);
-			final double d = Double.longBitsToDouble(bed);
-			final int time = (int) Math.abs(d % 1 * MS_D);
+			double d = Double.longBitsToDouble(bed);
+			double t = Math.round(Math.abs(d) % 1 * MS_D);
 			ZonedDateTime zdt = epoch.plus((int) d, DAYS);
-			return new Time(zdt.plus(time, MILLIS));
+			return new Time(zdt.plus((int) t, MILLIS));
 		}
 
 		/**
