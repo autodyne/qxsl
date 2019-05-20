@@ -5,6 +5,7 @@ qxsl: Hamradio Logging Library
 ![image](https://img.shields.io/badge/license-LGPL3-green.svg)
 
 qxsl is a Java Library for Logging & Scoring & Definition of Amateur-Radio Contests.
+qxsl is a vital component of [Automatic hamratio-contest Tabulation System (ATS)-4](https://github.com/nextzlog/ats4) for [ALLJA1 contest](http://ja1zlo.u-tokyo.org/allja1).
 
 ## Features
 
@@ -105,10 +106,6 @@ val contest: Contest = new RuleKit().eval("""(contest "Scalalian Contest")""")
 ## Contribution
 
 Feel free to contact [@nextzlog](https://twitter.com/nextzlog) on Twitter.
-
-## Other Projects
-
-- [Automatic hamratio-contest Tabulation System (ATS)-4](https://github.com/nextzlog/ats4) for [ALLJA1 contest](http://ja1zlo.u-tokyo.org/allja1).
 
 ## License
 
