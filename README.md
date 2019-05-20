@@ -104,7 +104,7 @@ val contest: Contest = new RuleKit().eval("""(contest "Scalalian Contest")""")
 
 ## Contribution
 
-Feel free to contact [無線部開発班 (Journal of Hamradio Informatics)](https://pafelog.net), [@nextzlog](https://twitter.com/nextzlog) on Twitter.
+Feel free to contact [@nextzlog](https://twitter.com/nextzlog) on Twitter.
 
 ## Other Projects
 
