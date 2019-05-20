@@ -69,7 +69,11 @@ import qxsl.ruler.Section // section provided by contest
 
 val contest: Contest = Contest.defined("allja1.lisp") // src/main/resources/qxsl/ruler/allja1.lisp
 val section: Section = contest.getSection("1エリア内 社団 電信電話 オールバンド部門")
+```
 
+Then, you may summarize an operation list into a Summary object, which involves scores, accepted and rejected items:
+
+``` Scala
 import qxsl.ruler.Summary
 
 val summary: Summary = section.summarize(elog) // List[Item]
@@ -84,6 +88,8 @@ summary.rejected.asScala.foreach(println)
 To define a new contest, utilize RuleKit class as follows:
 
 ```Scala
+import qxsl.ruler.RuleKit
+
 val contest: Contest = new RuleKit().eval("""(contest "Scalalian Contest")""")
 ```
 
