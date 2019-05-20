@@ -12,7 +12,7 @@ qxsl is a Java Library for Logging & Scoring & Definition of Amateur-Radio Conte
 - qxsl provides tabulation & scoring framework for contests and awards.
 - qxsl provides a LISP engine named Elva, and contest rules can be described in modern S-expression styles.
 
-## Simple Demo
+## Sample Codes
 
 Because we are [Scalalians](https://www.scala-lang.org/), 
 please be patient to read Scala codes!
