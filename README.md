@@ -44,7 +44,7 @@ val elog = new Tables().getFormat("zbin").decode(Files.newInputStream(path))
 To output the log into a file, write as follows:
 
 ```Scala
-val elog = new Tables().getFormat("qxml").encode(Files.newOutputStream(path), elog)
+new Tables().getFormat("qxml").encode(Files.newOutputStream(path), elog)
 ```
 
 You can obtain a list of formats implemented by qxsl as follows:
