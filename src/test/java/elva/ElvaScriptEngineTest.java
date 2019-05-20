@@ -17,7 +17,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import static elva.ElvaScriptEngine.Seq;
-import static javax.script.ScriptContext.ENGINE_SCOPE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**

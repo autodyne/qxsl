@@ -10,7 +10,8 @@
 
 (setq cond
 	(syntax (conds)
-		(if (empty? conds)
+		(if
+			(empty? conds)
 			null
 			`(if
 				,(car (car conds))

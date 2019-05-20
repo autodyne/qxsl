@@ -43,12 +43,12 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	public ElvaScriptEngine() {}
 
 	/**
-	 * LISP処理系のファクトリは未定義で、このメソッドはnullを返します。
+	 * LISP処理系に関連付けられる新たなファクトリを返します。
 	 *
-	 * @return null
+	 * @return ファクトリ
 	 */
 	public javax.script.ScriptEngineFactory getFactory() {
-		return null;
+		return new ElvaScriptEngineFactory();
 	}
 
 	/**

@@ -28,7 +28,6 @@ import static elva.ElvaScriptEngine.Function;
 import static elva.ElvaScriptEngine.Runtime;
 import static elva.ElvaScriptEngine.Seq;
 import static javax.script.ScriptContext.ENGINE_SCOPE;
-import static javax.script.ScriptContext.GLOBAL_SCOPE;
 
 /**
  * {@link Contest}をLISPベースのドメイン特化言語で表現する仕組みです。
@@ -49,9 +48,8 @@ public final class RuleKit {
 	 */
 	public RuleKit() {
 		this.elva = new ElvaScriptEngine();
-		this.context = new SimpleScriptContext();
-		context.setBindings(elva.createBindings(), GLOBAL_SCOPE);
-		context.setBindings(this.createBindings(), ENGINE_SCOPE);
+		context = new SimpleScriptContext();
+		context.setBindings(createBindings(), ENGINE_SCOPE);
 	}
 
 	/**
