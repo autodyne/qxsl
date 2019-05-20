@@ -59,7 +59,7 @@ via Java [ServiceLoader](https://docs.oracle.com/javase/8/docs/api/java/util/Ser
 
 ### Scoring for Awards & Contests
 
-qxsl provides [the script engine Elva](https://pafelog.net/qxsl/elva/ElvaScriptEngine.html) and a [rulemaking framework](https://pafelog.net/qxsl/qxsl/ruler/index.html).
+qxsl provides [the script engine Elva](https://pafelog.net/qxsl/elva/ElvaScriptEngine.html) and a [rulemaking framework](https://pafelog.net/qxsl/qxsl/ruler/package-summary.html).
 qxsl contains [the definition of ALLJA1 contest](src/main/resources/qxsl/ruler/allja1.lisp) as a sample inside the JAR file.
 To use the predefined definition, write a program as follows:
 
