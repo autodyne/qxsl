@@ -8,18 +8,9 @@ qxsl is a Java Library for Logging & Scoring & Contest-Rule Definition.
 
 ## Features
 
-### Logging
-
-qxsl provides log encoders/decoders for zLog, Cabrillo, etc.
-
-### Tabulation
-
-qxsl provides tabulation & scoring framework for contests and awards.
-
-### Rule Description
-
-qxsl provides a LISP engine named Elva,
-and contest rules can be described in the sophisticated S-expression style.
+- qxsl provides log encoders/decoders for zLog, Cabrillo, etc.
+- qxsl provides tabulation & scoring framework for contests and awards.
+- qxsl provides a LISP engine named Elva, and contest rules can be described in the sophisticated S-expression style.
 
 ## Simple Demo
 
