@@ -94,7 +94,7 @@ public final class ElvaScriptEngineFactory implements ScriptEngineFactory {
 	 * @return null
 	 */
 	@Override
-	public String getMethodCallSyntax(String obj, String m, String...keys) {
+	public String getMethodCallSyntax(String obj, String m, String...args) {
 		return null;
 	}
 

@@ -61,6 +61,7 @@ public final class RuleKit {
 	 * @return コンテストの定義
 	 *
 	 * @throws ClassCastException 返り値が不正な型の場合
+	 * @throws ScriptException 式の評価時に発生する例外
 	 */
 	public Contest eval(Reader reader) throws ScriptException {
 		return (Contest) this.elva.eval(reader, this.context);
@@ -75,6 +76,7 @@ public final class RuleKit {
 	 * @return コンテストの定義
 	 *
 	 * @throws ClassCastException 返り値が不正な型の場合
+	 * @throws ScriptException 式の評価時に発生する例外
 	 */
 	public Contest eval(String string) throws ScriptException {
 		return (Contest) this.elva.eval(string, this.context);
