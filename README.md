@@ -4,12 +4,12 @@ qxsl: Hamradio Logging Library
 ![image](https://img.shields.io/badge/Java-SE8-green.svg)
 ![image](https://img.shields.io/badge/license-LGPL3-green.svg)
 
-qxsl is a Java Library for Logging & Scoring & Definition of Amateur-Radio Contests.
+qxsl is a Java Library for Logging & Scoring & Regulation for Amateur-Radio Contests.
 qxsl is a vital component of [Automatic hamratio-contest Tabulation System (ATS)-4](https://github.com/nextzlog/ats4) for [ALLJA1 contest](http://ja1zlo.u-tokyo.org/allja1).
 
 ## Features
 
-- qxsl provides log encoders/decoders for zLog, Cabrillo, etc.
+- qxsl provides log encoders/decoders for zLog, qxml, Cabrillo, etc.
 - qxsl provides tabulation & scoring framework for contests and awards.
 - qxsl provides a LISP engine named Elva, and contest rules can be described in modern S-expression styles.
 
@@ -52,7 +52,7 @@ You can obtain a list of formats implemented by qxsl as follows:
 
 ```Scala
 val fmts = new Tables().asScala.toList
-fmts.foreach(println)
+fmts.foreach(System.out.println)
 ```
 
 It should be noted that qxsl can detect [format implementations](https://pafelog.net/qxsl/qxsl/table/TableFormat.html) automatically,
