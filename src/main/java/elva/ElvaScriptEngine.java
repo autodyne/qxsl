@@ -146,7 +146,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 *
 	 * @since 2017/02/18
 	 */
-	public static final class Name {
+	private static final class Name {
 		private final String id;
 		/**
 		 * 名前を指定して識別子を生成します。
