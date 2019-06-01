@@ -82,7 +82,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	public Object eval(String s, ScriptContext c) throws ScriptException {
 		final Scope glob = new Scope(c.getBindings(GLOBAL_SCOPE), root);
 		final Scope self = new Scope(c.getBindings(ENGINE_SCOPE), glob);
-		final Runtime eval = new Runtime(self);
+		final Lisp eval = new Lisp(self);
 		Object last = null;
 		for(Object sexp: this.scan(s)) last = eval.eval(sexp);
 		return last;
@@ -124,6 +124,27 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	}
 
 	/**
+	 * 指定されたLISPの式の文字列による表現を返します。
+	 *
+	 * @param sexp 式
+	 * @return 文字列による表現
+	 *
+	 * @since 2019/06/02
+	 */
+	public static final String toString(Object sexp) {
+		if(sexp instanceof String) {
+			return String.format("\"%s\"", sexp);
+		} else if(sexp instanceof Seq) {
+			final Seq list = (Seq) sexp;
+			StringJoiner sj = new StringJoiner(" ", "(", ")");
+			for(Object elem: list) sj.add(toString(elem));
+			return sj.toString();
+		} else {
+			return String.valueOf(sexp);
+		}
+	}
+
+	/**
 	 * LISP処理系で発生する実行時例外を{@link ScriptException}として生成します。
 	 *
 	 * @param exp エラーを発生させた式
@@ -134,7 +155,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	private static ScriptException error(Object exp, String msg, Object...arg) {
 		final String desc = String.format(msg, arg);
-		final String sexp = Runtime.print(exp);
+		final String sexp = ElvaScriptEngine.toString(exp);
 		return new ScriptException(String.format("error (%s) at %s", desc, sexp));
 	}
 
@@ -146,14 +167,14 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 *
 	 * @since 2017/02/18
 	 */
-	private static final class Name {
+	private static final class Symbol {
 		private final String id;
 		/**
 		 * 名前を指定して識別子を生成します。
 		 *
 		 * @param id 名前
 		 */
-		public Name(String id) {
+		public Symbol(String id) {
 			this.id = id;
 		}
 		/**
@@ -168,10 +189,10 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 		 * この識別子が指定された値と等価であればtrueを返します。
 		 *
 		 * @param obj 比較対象のオブジェクト
-		 * @return objが{@link Name}であり、同じ名前であればtrue
+		 * @return objが{@link Symbol}であり、同じ名前であればtrue
 		 */
 		public boolean equals(Object obj) {
-			if (!(obj instanceof Name)) return false;
+			if (!(obj instanceof Symbol)) return false;
 			return obj.toString().equals(toString());
 		}
 		/**
@@ -250,47 +271,6 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	}
 
 	/**
-	 * LISP処理系の関数やマクロはこのインターフェースを実装します。
-	 *
-	 *
-	 * @author Journal of Hamradio Informatics
-	 *
-	 * @since 2019/05/15
-	 */
-	@FunctionalInterface
-	public static interface Function {
-		/**
-		 * 指定された実引数と評価器に対し、返り値を求めます。
-		 *
-		 * @param args 実引数
-		 * @param eval 評価器
-		 * @return 返り値
-		 * @throws ScriptException 評価により生じた例外
-		 */
-		public Object apply(Seq args, Runtime eval) throws ScriptException;
-	}
-
-	/**
-	 * LISP処理系のシステム関数の引数の個数を指定する注釈型です。
-	 *
-	 * @since 2019/05/17
-	 */
-	public static @interface Arguments {
-		/**
-		 * 引数を評価する前の引数の最小限の個数です。
-		 *
-		 * @return 引数の個数
-		 */
-		public int min();
-		/**
-		 * 引数を評価する前の引数の最大限の個数です。
-		 *
-		 * @return 引数の個数
-		 */
-		public int max();
-	}
-
-	/**
 	 * LISP処理系のラムダ式の実装です。
 	 * 
 	 * 
@@ -299,21 +279,21 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 * @since 2017/02/18
 	 */
 	private static final class Lambda implements Function {
-		private final List<Name> pars;
+		private final List<Symbol> pars;
 		private final Object body;
-		private final Runtime run;
+		private final Lisp lisp;
 		/**
 		 * 指定された仮引数と式と評価器でラムダ式を生成します。
 		 *
 		 * @param pars 仮引数
 		 * @param body 値の式
-		 * @param run 評価器
+		 * @param lisp 評価器
 		 */
-		public Lambda(Seq pars, Object body, Runtime run) {
+		public Lambda(Seq pars, Object body, Lisp lisp) {
 			this.pars = new ArrayList<>();
-			for(Object p: pars) this.pars.add((Name) p);
+			for(Object p: pars) this.pars.add((Symbol) p);
 			this.body = body;
-			this.run = run;
+			this.lisp = lisp;
 		}
 		/**
 		 * このラムダ式の文字列による表現を返します。
@@ -321,8 +301,8 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 		 * @return 文字列
 		 */
 		public String toString() {
-			final String str1 = Runtime.print(pars);
-			final String str2 = Runtime.print(body);
+			final String str1 = ElvaScriptEngine.toString(pars);
+			final String str2 = ElvaScriptEngine.toString(body);
 			return String.format("(lambda %s %s)", str1, str2);
 		}
 		/**
@@ -333,13 +313,13 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 		 * @return 返り値
 		 * @throws ScriptException 評価により発生した例外
 		 */
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
-			final Scope env = new Scope(run.env);
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
+			final Scope env = new Scope(lisp.env);
 			if(args.size() == pars.size()) {
 				for(int i = 0; i < args.size(); i++) {
 					env.put(pars.get(i), eval.eval(args.get(i)));
 				}
-				return new Runtime(env).eval(body);
+				return new Lisp(env).eval(body);
 			} else throw error(this, "%d arguments required", pars.size());
 		}
 	}
@@ -353,21 +333,21 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 * @since 2017/02/18
 	 */
 	private static final class Syntax implements Function {
-		private final List<Name> pars;
+		private final List<Symbol> pars;
 		private final Object body;
-		private final Runtime run;
+		private final Lisp lisp;
 		/**
 		 * 指定された仮引数と式と評価器でラムダ式を生成します。
 		 *
 		 * @param pars 仮引数
 		 * @param body 値の式
-		 * @param run 評価器
+		 * @param lisp 評価器
 		 */
-		public Syntax(Seq pars, Object body, Runtime run) {
+		public Syntax(Seq pars, Object body, Lisp lisp) {
 			this.pars = new ArrayList<>();
-			for(Object p: pars) this.pars.add((Name) p);
+			for(Object p: pars) this.pars.add((Symbol) p);
 			this.body = body;
-			this.run = run;
+			this.lisp = lisp;
 		}
 		/**
 		 * このマクロ式の文字列による表現を返します。
@@ -375,8 +355,8 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 		 * @return 文字列
 		 */
 		public String toString() {
-			final String str1 = Runtime.print(pars);
-			final String str2 = Runtime.print(body);
+			final String str1 = ElvaScriptEngine.toString(pars);
+			final String str2 = ElvaScriptEngine.toString(body);
 			return String.format("(syntax %s %s)", str1, str2);
 		}
 		/**
@@ -387,13 +367,13 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 		 * @return 返り値
 		 * @throws ScriptException 評価により発生した例外
 		 */
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
-			final Scope env = new Scope(run.env);
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
+			final Scope env = new Scope(lisp.env);
 			if(args.size() == pars.size()) {
 				for(int i = 0; i < args.size(); i++) {
 					env.put(pars.get(i), args.get(i));
 				}
-				return eval.eval(new Runtime(env).eval(body));
+				return eval.eval(new Lisp(env).eval(body));
 			} else throw error(this, "%d arguments required", pars.size());
 		}
 	}
@@ -407,26 +387,26 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 * @since 2017/02/18
 	 */
 	private static final class Scope {
-		public final Scope enclosure;
-		public final Bindings bind;
+		public final Scope outer;
+		public final Bindings binds;
 		/**
 		 * 外側のスコープを指定してスコープを構築します。
 		 *
-		 * @param enclosure 外側のスコープ
+		 * @param outer 外側のスコープ
 		 */
-		public Scope(Scope enclosure) {
-			this.enclosure = enclosure;
-			this.bind = new SimpleBindings();
+		public Scope(Scope outer) {
+			this.outer = outer;
+			this.binds = new SimpleBindings();
 		}
 		/**
 		 * スコープの内容も指定してスコープを構築します。
 		 *
-		 * @param enclosure 外側のスコープ
-		 * @param bind スコープの内容
+		 * @param outer 外側のスコープ
+		 * @param binds スコープの内容
 		 */
-		public Scope(Bindings bind, Scope enclosure)  {
-			this.enclosure = enclosure;
-			this.bind = bind;
+		public Scope(Bindings binds, Scope outer)  {
+			this.outer = outer;
+			this.binds = binds;
 		}
 		/**
 		 * 指定された名前に束縛された値を返します。
@@ -436,10 +416,10 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 		 * @throws ScriptException 値が見つからない場合
 		 */
 		public Object get(String name) throws ScriptException {
-			if(bind != null && bind.containsKey(name)) {
-				return bind.get(name);
-			} else if(enclosure != null) {
-				return enclosure.get(name);
+			if(binds != null && binds.containsKey(name)) {
+				return binds.get(name);
+			} else if(outer != null) {
+				return outer.get(name);
 			}
 			throw error("variable not declared", name);
 		}
@@ -450,7 +430,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 		 * @param func 関数
 		 */
 		public void put(String name, Function func) {
-			bind.put(name, func);
+			binds.put(name, func);
 		}
 		/**
 		 * 指定された値を名前で束縛します。
@@ -459,7 +439,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 		 * @param target 値
 		 */
 		public void put(String id, Object target) {
-			bind.put(id, target);
+			binds.put(id, target);
 		}
 		/**
 		 * 指定された値を名前で束縛します。
@@ -467,57 +447,39 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 		 * @param name 名前
 		 * @param target 値
 		 */
-		public void put(Name name, Object target) {
-			bind.put(name.id, target);
+		public void put(Symbol name, Object target) {
+			binds.put(name.id, target);
 		}
 	}
 
 	/**
-	 * LISP処理系の評価器並びにプリンタの実装です。
+	 * LISP処理系のスコープ付きの評価器の実装です。
 	 * 
 	 * 
 	 * @author Journal of Hamradio Informatics
 	 *
 	 * @since 2017/02/18
 	 */
-	public static final class Runtime {
+	public static final class Lisp {
 		public final Scope env;
 		/**
 		 * 指定されたスコープに対する評価器を構築します。
 		 *
 		 * @param env 評価器のスコープ
 		 */
-		private Runtime(Scope env) {
+		private Lisp(Scope env) {
 			this.env = env;
 		}
 		/**
-		 * 指定された式の文字列による表現を返します。
-		 *
-		 * @param sexp 式
-		 * @return 文字列による表現
-		 */
-		public static final String print(Object sexp) {
-			if(sexp instanceof String) {
-				return String.format("\"%s\"", sexp);
-			} else if(sexp instanceof List<?>) {
-				final List<?> list = (List<?>) sexp;
-				StringJoiner sj = new StringJoiner(" ", "(", ")");
-				for(Object elem: list) sj.add(print(elem));
-				return sj.toString();
-			} else {
-				return String.valueOf(sexp);
-			}
-		}
-		/**
-		 * 指定された式の値を求めて{@link Name}として返します。
+		 * 指定された式の値を求めて{@link Symbol}として返します。
 		 *
 		 * @param sexp 式
 		 * @return 返り値
 		 * @throws ScriptException 評価により発生した例外
 		 */
-		public Name name(Object sexp) throws ScriptException {
+		private Symbol name(Object sexp) throws ScriptException {
 			final Object value = eval(sexp);
-			if(value instanceof Name) return (Name) value;
+			if(value instanceof Symbol) return (Symbol) value;
 			throw error(sexp, "name required but %s found", value);
 		}
 		/**
@@ -588,7 +550,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 		 * @throws ScriptException 評価により発生した例外
 		 */
 		public Object eval(Object sexp) throws ScriptException {
-			if(sexp instanceof Name) return env.get(((Name) sexp).id);
+			if(sexp instanceof Symbol) return env.get(((Symbol) sexp).id);
 			if(sexp instanceof Seq && !Seq.NIL.equals(sexp)) {
 				final Seq list = (Seq) sexp;
 				Function f = func(list.car());
@@ -696,7 +658,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 			if(atom.equals("'")) return new Seq($Quote.QUOTE, next());
 			if(atom.equals("`")) return new Seq($Quasi.QUASI, next());
 			if(atom.equals(",")) return new Seq($Uquot.UQUOT, next());
-			if(!atom.equals(")")) return new Name(atom);
+			if(!atom.equals(")")) return new Symbol(atom);
 			throw new ScriptException("invalid syntax");
 		}
 		/**
@@ -746,8 +708,8 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 1, max = 1)
 	private static final class $Quote implements Function {
-		private static final Name QUOTE = new Name("quote");
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		private static final Symbol QUOTE = new Symbol("quote");
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			return args.car();
 		}
 	}
@@ -762,12 +724,12 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 1, max = 1)
 	private static final class $Quasi implements Function {
-		private static final Name QUASI = new Name("quasi");
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		private static final Symbol QUASI = new Symbol("quasi");
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			if(!(args.car() instanceof Seq)) return args.car();
 			return this.map((Seq) args.car(), eval);
 		}
-		private Seq map(Seq source, Runtime eval) throws ScriptException {
+		private Seq map(Seq source, Lisp eval) throws ScriptException {
 			final ArrayList<Object> target = new ArrayList<>();
 			for(Object obj: source) try {
 				final Seq list = (Seq) obj;
@@ -792,8 +754,8 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 1, max = 1)
 	private static final class $Uquot implements Function {
-		private static final Name UQUOT = new Name("uquot");
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		private static final Symbol UQUOT = new Symbol("uquot");
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			return eval.eval(args.car());
 		}
 	}
@@ -808,7 +770,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 1, max = -1)
 	private static final class $Progn implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			Object last = null;
 			for(Object v: args) last = eval.eval(v);
 			return last;
@@ -825,7 +787,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 2, max = 2)
 	private static final class $Set implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final Object value = eval.eval(args.get(1));
 			eval.env.put(eval.name(args.get(0)), value);
 			return value;
@@ -842,7 +804,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 0, max = -1)
 	private static final class $List implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			ArrayList<Object> arguments = new ArrayList<>();
 			for(Object v: args) arguments.add(eval.eval(v));
 			return new Seq(arguments);
@@ -859,7 +821,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 1, max = 1)
 	private static final class $Car implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			return eval.list(args.car()).car();
 		}
 	}
@@ -874,7 +836,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 1, max = 1)
 	private static final class $Cdr implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			return eval.list(args.car()).cdr();
 		}
 	}
@@ -889,7 +851,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 1, max = 1)
 	private static final class $Empty$ implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			return eval.list(args.car()).isEmpty();
 		}
 	}
@@ -904,7 +866,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 1, max = 1)
 	private static final class $Length implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			return eval.list(args.car()).size();
 		}
 	}
@@ -919,7 +881,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 2, max = 2)
 	private static final class $Member implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final Object val = eval.eval(args.car());
 			final Seq list = eval.list(args.get(1));
 			return list.contains(val);
@@ -936,7 +898,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 2, max = 2)
 	private static final class $MapCar implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final ArrayList<Object> target = new ArrayList<>();
 			final Function op = eval.func(args.car());
 			final Seq source = eval.list(args.get(1));
@@ -955,7 +917,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 2, max = 2)
 	private static final class $Equal implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final Object l = eval.eval(args.get(0));
 			final Object r = eval.eval(args.get(1));
 			return l == null? r == null: l.equals(r);
@@ -972,7 +934,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 3, max = 3)
 	private static final class $If implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			return eval.eval(args.get(eval.bool(args.car())? 1:2));
 		}
 	}
@@ -987,7 +949,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 2, max = -1)
 	private static final class $And implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			for(Object v: args) if(!eval.bool(v)) return false;
 			return true;
 		}
@@ -1003,7 +965,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 2, max = -1)
 	private static final class $Or implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			for(Object v: args) if(eval.bool(v)) return true;
 			return false;
 		}
@@ -1019,7 +981,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 1, max = 1)
 	private static final class $Not implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			return !eval.bool(args.car());
 		}
 	}
@@ -1034,7 +996,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 2, max = -1)
 	private static final class $Add implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			int val = eval.integer(args.car());
 			for(Object v: args.cdr()) val += eval.integer(v);
 			return val;
@@ -1051,7 +1013,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 2, max = -1)
 	private static final class $Sub implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			int val = eval.integer(args.car());
 			for(Object v: args.cdr()) val -= eval.integer(v);
 			return val;
@@ -1068,7 +1030,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 2, max = -1)
 	private static final class $Mul implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			int val = eval.integer(args.car());
 			for(Object v: args.cdr()) val *= eval.integer(v);
 			return val;
@@ -1085,7 +1047,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 2, max = -1)
 	private static final class $Div implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			int val = eval.integer(args.car());
 			for(Object v: args.cdr()) val /= eval.integer(v);
 			return val;
@@ -1102,7 +1064,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 2, max = -1)
 	private static final class $Mod implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			int val = eval.integer(args.car());
 			for(Object v: args.cdr()) val %= eval.integer(v);
 			return val;
@@ -1119,7 +1081,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 2, max = -1)
 	private static final class $Lt implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final ArrayList<Integer> vals = new ArrayList<>();
 			for(Object v: args) vals.add(eval.integer(v));
 			for(int i = 0; i < args.size() - 1; i++) {
@@ -1139,7 +1101,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 2, max = -1)
 	private static final class $Gt implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final ArrayList<Integer> vals = new ArrayList<>();
 			for(Object v: args) vals.add(eval.integer(v));
 			for(int i = 0; i < args.size() - 1; i++) {
@@ -1159,7 +1121,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 2, max = -1)
 	private static final class $Le implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final ArrayList<Integer> vals = new ArrayList<>();
 			for(Object v: args) vals.add(eval.integer(v));
 			for(int i = 0; i < args.size() - 1; i++) {
@@ -1179,7 +1141,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 2, max = -1)
 	private static final class $Ge implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final ArrayList<Integer> vals = new ArrayList<>();
 			for(Object v: args) vals.add(eval.integer(v));
 			for(int i = 0; i < args.size() - 1; i++) {
@@ -1199,7 +1161,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 1, max = 1)
 	private static final class $StrHead implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			return eval.text(args.car()).substring(0, 1);
 		}
 	}
@@ -1214,7 +1176,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 1, max = 1)
 	private static final class $StrTail implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			return eval.text(args.car()).substring(1);
 		}
 	}
@@ -1229,7 +1191,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 2, max = 2)
 	private static final class $Match implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			return eval.text(args.get(1)).matches(eval.text(args.car()));
 		}
 	}
@@ -1244,10 +1206,10 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 2, max = 2)
 	private static final class $Lambda implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final Object p = args.get(0), body = args.get(1);
 			Seq pars = p instanceof Seq? (Seq) p: new Seq(p);
-			if(!pars.stream().allMatch(Name.class::isInstance)) {
+			if(!pars.stream().allMatch(Symbol.class::isInstance)) {
 				final ArrayList<Object> exp = new ArrayList<>();
 				exp.add(this);
 				exp.addAll(args);
@@ -1266,10 +1228,10 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 2, max = 2)
 	private static final class $Syntax implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final Object p = args.get(0), body = args.get(1);
 			Seq pars = p instanceof Seq? (Seq) p: new Seq(p);
-			if(!pars.stream().allMatch(Name.class::isInstance)) {
+			if(!pars.stream().allMatch(Symbol.class::isInstance)) {
 				final ArrayList<Object> exp = new ArrayList<>();
 				exp.add(this);
 				exp.addAll(args);
@@ -1417,6 +1379,6 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 		 */
 		lude.put("lambda", new $Lambda());
 		lude.put("syntax", new $Syntax());
-		return lude.bind;
+		return lude.binds;
 	}
 }

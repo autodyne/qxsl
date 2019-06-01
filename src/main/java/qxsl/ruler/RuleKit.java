@@ -7,7 +7,7 @@
 *****************************************************************************/
 package qxsl.ruler;
 
-import elva.ElvaScriptEngine;
+import elva.*;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,9 +23,7 @@ import qxsl.field.*;
 import qxsl.model.Exch;
 import qxsl.model.Item;
 
-import static elva.ElvaScriptEngine.Arguments;
-import static elva.ElvaScriptEngine.Function;
-import static elva.ElvaScriptEngine.Runtime;
+import static elva.ElvaScriptEngine.Lisp;
 import static elva.ElvaScriptEngine.Seq;
 import static javax.script.ScriptContext.ENGINE_SCOPE;
 
@@ -123,7 +121,7 @@ public final class RuleKit {
 	 */
 	private static final class SectionImpl extends Section {
 		private final String name;
-		private final Runtime eval;
+		private final Lisp eval;
 		private final Function rule;
 		/**
 		 * 指定された名前と規約で部門を構築します。
@@ -132,7 +130,7 @@ public final class RuleKit {
 		 * @param rule 規約
 		 * @param eval 評価器
 		 */
-		public SectionImpl(String name, Function rule, Runtime eval) {
+		public SectionImpl(String name, Function rule, Lisp eval) {
 			this.name = name;
 			this.rule = rule;
 			this.eval = eval;
@@ -163,7 +161,7 @@ public final class RuleKit {
 	 */
 	@Arguments(min = 1, max = -1)
 	private static final class $Contest implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final String contest = eval.text(args.car());
 			ArrayList<Section> sects = new ArrayList<>();
 			ArrayList<String> errors = new ArrayList<>();
@@ -190,7 +188,7 @@ public final class RuleKit {
 	 */
 	@Arguments(min = 2, max = 2)
 	private static final class $Section implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final String section = eval.text(args.car());
 			final Function body = eval.func(args.get(1));
 			return new SectionImpl(section, body, eval);
@@ -207,7 +205,7 @@ public final class RuleKit {
 	 */
 	@Arguments(min = 3, max = -1)
 	private static final class $Success implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final Object item = eval.eval(args.get(0));
 			final int score = eval.integer(args.get(1));
 			ArrayList<Object> klist = new ArrayList<>();
@@ -228,7 +226,7 @@ public final class RuleKit {
 	 */
 	@Arguments(min = 2, max = 2)
 	private static final class $Failure implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final Object item = eval.eval(args.get(0));
 			final String text = eval.text(args.get(1));
 			if(item instanceof Item) return new Failure(text, (Item) item);
@@ -246,7 +244,7 @@ public final class RuleKit {
 	 */
 	@Arguments(min = 1, max = 1)
 	private static final class $Rcvd implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final Object item = eval.eval(args.car());
 			if(item instanceof Item) return ((Item) item).getRcvd();
 			throw new ScriptException(String.format("%s is not an Item", item));
@@ -263,7 +261,7 @@ public final class RuleKit {
 	 */
 	@Arguments(min = 1, max = 1)
 	private static final class $Sent implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final Object item = eval.eval(args.car());
 			if(item instanceof Item) return ((Item) item).getSent();
 			throw new ScriptException(String.format("%s is not an Item", item));
@@ -280,7 +278,7 @@ public final class RuleKit {
 	 */
 	@Arguments(min = 1, max = 1)
 	private static final class $Hour implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final Object item = eval.eval(args.car());
 			if(item instanceof Item) return ((Item) item).get(Time.class).hour();
 			throw new ScriptException(String.format("%s is not an Item", item));
@@ -297,7 +295,7 @@ public final class RuleKit {
 	 */
 	@Arguments(min = 1, max = 1)
 	private static final class $Call implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final Object item = eval.eval(args.car());
 			if(item instanceof Item) return ((Item) item).value(Call.class);
 			throw new ScriptException(String.format("%s is not an Item", item));
@@ -314,7 +312,7 @@ public final class RuleKit {
 	 */
 	@Arguments(min = 1, max = 1)
 	private static final class $Band implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final Object item = eval.eval(args.car());
 			if(item instanceof Item) return ((Item) item).value(Band.class);
 			throw new ScriptException(String.format("%s is not an Item", item));
@@ -331,7 +329,7 @@ public final class RuleKit {
 	 */
 	@Arguments(min = 1, max = 1)
 	private static final class $Mode implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final Object item = eval.eval(args.car());
 			if(item instanceof Item) return ((Item) item).value(Mode.class);
 			throw new ScriptException(String.format("%s is not an Item", item));
@@ -348,7 +346,7 @@ public final class RuleKit {
 	 */
 	@Arguments(min = 1, max = 1)
 	private static final class $RSTQ implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final Object exch = eval.eval(args.car());
 			if(exch instanceof Exch) return ((Exch<?>) exch).value(RSTQ.class);
 			throw new ScriptException(String.format("%s is not an Exch", exch));
@@ -365,7 +363,7 @@ public final class RuleKit {
 	 */
 	@Arguments(min = 1, max = 1)
 	private static final class $Code implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final Object exch = eval.eval(args.car());
 			if(exch instanceof Exch) return ((Exch<?>) exch).value(Code.class);
 			throw new ScriptException(String.format("%s is not an Exch", exch));
@@ -382,7 +380,7 @@ public final class RuleKit {
 	 */
 	@Arguments(min = 1, max = 1)
 	private static final class $City implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			return new City(eval.text(args.car())).getCityName();
 		}
 	}
@@ -397,7 +395,7 @@ public final class RuleKit {
 	 */
 	@Arguments(min = 1, max = 1)
 	private static final class $Pref implements Function {
-		public Object apply(Seq args, Runtime eval) throws ScriptException {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			return new City(eval.text(args.car())).getPrefName();
 		}
 	}
