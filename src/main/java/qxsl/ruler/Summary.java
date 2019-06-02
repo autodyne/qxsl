@@ -10,6 +10,7 @@ package qxsl.ruler;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import qxsl.model.Item;
 
@@ -35,7 +36,7 @@ public final class Summary implements java.io.Serializable {
 	 * @param fail 拒否された交信
 	 */
 	protected Summary(List<Success> succ, List<Failure> fail) {
-		final HashMap<Object, Success> map = new HashMap<>();
+		final HashMap<Object, Success> map = new LinkedHashMap<>();
 		for(Success s: succ) map.putIfAbsent(s.key(0), s);
 		succ = new ArrayList<>(map.values());
 		this.accepted = Collections.unmodifiableList(succ);
