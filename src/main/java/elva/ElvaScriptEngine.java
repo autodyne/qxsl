@@ -598,6 +598,27 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	}
 
 	/**
+	 * LISP処理系で事前に定義されるクォート識別子です。
+	 *
+	 * @since 2019/06/07
+	 */
+	private static final String QUOTE = "quote";
+
+	/**
+	 * LISP処理系で事前に定義される準クォート識別子です。
+	 *
+	 * @since 2019/06/07
+	 */
+	private static final String QUASI = "quasi";
+
+	/**
+	 * LISP処理系で事前に定義されるアンクォート識別子です。
+	 *
+	 * @since 2019/06/07
+	 */
+	private static final String UQUOT = "uquot";
+
+	/**
 	 * LISP処理系の構文解析器の実装です。
 	 * 
 	 * 
@@ -655,9 +676,9 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 			if(atom.equals("(")) return nextList();
 			if(atom.matches("\".*\"")) return escape(atom);
 			if(atom.matches("-?\\d+")) return Integer.parseInt(atom);
-			if(atom.equals("'")) return new Seq($Quote.QUOTE, next());
-			if(atom.equals("`")) return new Seq($Quasi.QUASI, next());
-			if(atom.equals(",")) return new Seq($Uquot.UQUOT, next());
+			if(atom.equals("'")) return new Seq(new Symbol(QUOTE), next());
+			if(atom.equals("`")) return new Seq(new Symbol(QUASI), next());
+			if(atom.equals(",")) return new Seq(new Symbol(UQUOT), next());
 			if(!atom.equals(")")) return new Symbol(atom);
 			throw new ScriptException("invalid syntax");
 		}
@@ -708,7 +729,6 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 1, max = 1)
 	private static final class $Quote implements Function {
-		private static final Symbol QUOTE = new Symbol("quote");
 		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			return args.car();
 		}
@@ -724,7 +744,6 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 1, max = 1)
 	private static final class $Quasi implements Function {
-		private static final Symbol QUASI = new Symbol("quasi");
 		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			if(!(args.car() instanceof Seq)) return args.car();
 			return this.map((Seq) args.car(), eval);
@@ -733,8 +752,13 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 			final ArrayList<Object> target = new ArrayList<>();
 			for(Object obj: source) try {
 				final Seq list = (Seq) obj;
-				if($Uquot.UQUOT.equals(list.car())) target.add(eval.eval(obj));
-				else target.add(map(list, eval));
+				if(list.car() instanceof Symbol) {
+					switch(list.car().toString()) {
+						case UQUOT: target.add(eval.eval(obj)); continue;
+						case QUASI: target.add(obj); continue;
+					}
+				}
+				target.add(map(list, eval));
 			} catch (ClassCastException ex) {
 				target.add(obj);
 			} catch (IndexOutOfBoundsException ex) {
@@ -754,7 +778,6 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 1, max = 1)
 	private static final class $Uquot implements Function {
-		private static final Symbol UQUOT = new Symbol("uquot");
 		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			return eval.eval(args.car());
 		}
@@ -1260,9 +1283,9 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 		 * (quasi expression)
 		 * (uquot expression)
 		 */
-		lude.put($Quote.QUOTE.toString(), new $Quote());
-		lude.put($Quasi.QUASI.toString(), new $Quasi());
-		lude.put($Uquot.UQUOT.toString(), new $Uquot());
+		lude.put(QUOTE, new $Quote());
+		lude.put(QUASI, new $Quasi());
+		lude.put(UQUOT, new $Uquot());
 
 		/*
 		 * basic functions for sequential processing
