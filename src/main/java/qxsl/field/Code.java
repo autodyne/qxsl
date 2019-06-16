@@ -10,7 +10,7 @@ package qxsl.field;
 import javax.xml.namespace.QName;
 import qxsl.model.Field;
 import qxsl.model.FieldFormat;
-import qxsl.table.secret.BaseFormat;
+import qxsl.table.secret.QxmlFields;
 
 /**
  * コンテストで相手局と交換するシリアル番号です。
@@ -30,7 +30,7 @@ public final class Code extends Field<String> {
 	 * @param code シリアル番号
 	 */
 	public Code(String code) {
-		super(BaseFormat.CODE);
+		super(QxmlFields.CODE);
 		this.value = code;
 	}
 	
@@ -51,7 +51,7 @@ public final class Code extends Field<String> {
 	public static final class Format implements FieldFormat {
 		@Override
 		public QName type() {
-			return BaseFormat.CODE;
+			return QxmlFields.CODE;
 		}
 	
 		@Override

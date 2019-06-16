@@ -10,7 +10,7 @@ package qxsl.field;
 import javax.xml.namespace.QName;
 import qxsl.model.Field;
 import qxsl.model.FieldFormat;
-import qxsl.table.secret.BaseFormat;
+import qxsl.table.secret.QxmlFields;
 
 /**
  * 交信記録シートにおいて無線局のコールサインを表現します。
@@ -30,7 +30,7 @@ public final class Call extends Field<String> {
 	 * @param callSign コールサイン
 	 */
 	public Call(String callSign) {
-		super(BaseFormat.CALL);
+		super(QxmlFields.CALL);
 		this.callSign = callSign;
 	}
 
@@ -51,7 +51,7 @@ public final class Call extends Field<String> {
 	public static final class Format implements FieldFormat {
 		@Override
 		public QName type() {
-			return BaseFormat.CALL;
+			return QxmlFields.CALL;
 		}
 	
 		@Override

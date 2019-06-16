@@ -35,33 +35,10 @@ import static java.time.temporal.ChronoUnit.SECONDS;
  */
 public final class CBinFormat extends BaseFormat {
 	/**
-	 * この書式を識別する完全な名前を返します。
-	 * 
-	 * @return 書式の名前
+	 * 書式を構築します。
 	 */
-	@Override
-	public String getName() {
-		return "cbin";
-	}
-
-	/**
-	 * このフォーマットを適用するファイル名拡張子の不変のリストを返します。
-	 * 
-	 * @return ファイル名拡張子のリスト
-	 */
-	@Override
-	public List<String> getExtensions() {
-		return Collections.unmodifiableList(Arrays.asList("lg8"));
-	}
-
-	/**
-	 * このフォーマットの詳細をUIで表示するのに適した簡潔な文字列を返します。
-	 * 
-	 * @return フォーマットの説明
-	 */
-	@Override
-	public String toString() {
-		return "CTESTWIN LG8 FORMAT";
+	public CBinFormat() {
+		super("cbin");
 	}
 
 	/**
@@ -388,7 +365,7 @@ public final class CBinFormat extends BaseFormat {
 		 */
 		private void call(Item item) throws Exception {
 			final String s = readString(20);
-			if(s != null) item.set(fields.cache(CALL, s));
+			if(s != null) item.set(fields.cache(QxmlFields.CALL, s));
 		}
 
 		/**
@@ -399,7 +376,7 @@ public final class CBinFormat extends BaseFormat {
 		 */
 		private void sent(Item item) throws Exception {
 			final String s = readString(30);
-			if(s != null) item.getSent().set(fields.cache(CODE, s));
+			if(s != null) item.getSent().set(fields.cache(QxmlFields.CODE, s));
 		}
 
 		/**
@@ -410,7 +387,7 @@ public final class CBinFormat extends BaseFormat {
 		 */
 		private void rcvd(Item item) throws Exception {
 			final String s = readString(30);
-			if(s != null) item.getRcvd().set(fields.cache(CODE, s));
+			if(s != null) item.getRcvd().set(fields.cache(QxmlFields.CODE, s));
 		}
 		
 		/**
@@ -441,7 +418,7 @@ public final class CBinFormat extends BaseFormat {
 		 */
 		private void oprt(Item item) throws Exception {
 			final String s = readString(20);
-			if(s != null) item.set(fields.cache(NAME, s));
+			if(s != null) item.set(fields.cache(QxmlFields.NAME, s));
 		}
 
 		/**
@@ -452,7 +429,7 @@ public final class CBinFormat extends BaseFormat {
 		 */
 		private void note(Item item) throws Exception {
 			final String s = readString(50);
-			if(s != null) item.set(fields.cache(NOTE, s));
+			if(s != null) item.set(fields.cache(QxmlFields.NOTE, s));
 		}
 
 		/**

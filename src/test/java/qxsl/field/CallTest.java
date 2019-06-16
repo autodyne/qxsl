@@ -10,7 +10,7 @@ package qxsl.field;
 import org.junit.Test;
 import qxsl.model.Fields;
 
-import static qxsl.table.secret.QxmlFormat.CALL;
+import static qxsl.table.secret.QxmlFields.CALL;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**

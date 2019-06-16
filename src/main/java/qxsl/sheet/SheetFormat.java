@@ -10,6 +10,7 @@ package qxsl.sheet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,11 +31,25 @@ public interface SheetFormat {
 	public String getName();
 
 	/**
-	 * この書式の詳細を表示するのに適した文字列を返します。
+	 * この書式のUIへの表示に適した文字列を返します。
+	 * 
+	 * @return 書式のUI文字列
+	 */
+	public String toString();
+
+	/**
+	 * この書式の詳細を説明する複数行の文字列を返します。
 	 * 
 	 * @return 書式の説明
 	 */
-	public String toString();
+	public String getDescription();
+
+	/**
+	 * この書式を適用するファイル名拡張子の不変のリストを返します。
+	 * 
+	 * @return ファイル名拡張子のリスト
+	 */
+	public List<String> getExtensions();
 
 	/**
 	 * 指定したストリームをこの書式でデコードして提出書類を読み込みます。

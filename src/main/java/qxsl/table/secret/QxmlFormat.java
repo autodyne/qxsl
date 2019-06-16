@@ -44,37 +44,9 @@ public final class QxmlFormat extends BaseFormat {
 	 * @throws SAXException qxml文書のスキーマに問題がある場合
 	 **/
 	public QxmlFormat() throws SAXException {
+		super("qxml");
 		SchemaFactory sf = SchemaFactory.newInstance(W3C_XML_SCHEMA_NS_URI);
 		this.schema = sf.newSchema(this.getClass().getResource("qxml.xsd"));
-	}
-	/**
-	 * この書式を識別する完全な名前を返します。
-	 * 
-	 * @return 書式の名前
-	 */
-	@Override
-	public String getName() {
-		return "qxml";
-	}
-
-	/**
-	 * このフォーマットを適用するファイル名拡張子の不変のリストを返します。
-	 * 
-	 * @return ファイル名拡張子のリスト
-	 */
-	@Override
-	public List<String> getExtensions() {
-		return Collections.unmodifiableList(Arrays.asList("xml", "qxml"));
-	}
-
-	/**
-	 * このフォーマットの詳細をUIで表示するのに適した簡潔な文字列を返します。
-	 * 
-	 * @return フォーマットの説明
-	 */
-	@Override
-	public String toString() {
-		return "QXML";
 	}
 
 	/**
@@ -326,7 +298,7 @@ public final class QxmlFormat extends BaseFormat {
 			streamWriter.writeStartDocument();
 			streamWriter.writeNewLine();
 			streamWriter.writeStartElement(LIST);
-			streamWriter.writeNamespace(CALL);
+			streamWriter.writeNamespace(QxmlFields.CALL);
 			streamWriter.writeNewLine();
 			for(Item item : items) item(item);
 			streamWriter.writeEndElement();

@@ -10,7 +10,7 @@ package qxsl.field;
 import javax.xml.namespace.QName;
 import qxsl.model.Field;
 import qxsl.model.FieldFormat;
-import qxsl.table.secret.BaseFormat;
+import qxsl.table.secret.QxmlFields;
 
 /**
  * 交信記録シートにおいて運用者個人の名前を表現します。
@@ -30,7 +30,7 @@ public final class Name extends Field<String> {
 	 * @param name 運用者名
 	 */
 	public Name(String name) {
-		super(BaseFormat.NAME);
+		super(QxmlFields.NAME);
 		this.name = name;
 	}
 
@@ -51,7 +51,7 @@ public final class Name extends Field<String> {
 	public static final class Format implements FieldFormat {
 		@Override
 		public QName type() {
-			return BaseFormat.NAME;
+			return QxmlFields.NAME;
 		}
 	
 		@Override

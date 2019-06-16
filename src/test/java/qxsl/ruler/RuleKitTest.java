@@ -16,7 +16,6 @@ import java.util.Map;
 import qxsl.model.Item;
 import qxsl.table.Tables;
 
-import org.junit.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import static org.assertj.core.api.Assertions.assertThat;

@@ -11,7 +11,7 @@ import java.time.ZonedDateTime;
 import org.junit.Test;
 import qxsl.model.Fields;
 
-import static qxsl.table.secret.QxmlFormat.TIME;
+import static qxsl.table.secret.QxmlFields.TIME;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**

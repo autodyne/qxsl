@@ -11,7 +11,7 @@ import java.util.Random;
 import org.junit.Test;
 import qxsl.model.Fields;
 
-import static qxsl.table.secret.QxmlFormat.BAND;
+import static qxsl.table.secret.QxmlFields.BAND;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**

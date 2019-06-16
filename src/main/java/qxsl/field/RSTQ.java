@@ -10,7 +10,7 @@ package qxsl.field;
 import javax.xml.namespace.QName;
 import qxsl.model.Field;
 import qxsl.model.FieldFormat;
-import qxsl.table.secret.BaseFormat;
+import qxsl.table.secret.QxmlFields;
 
 /**
  * 交信記録シートでRST/RSQレポートを表現します。
@@ -32,7 +32,7 @@ public final class RSTQ extends Field<Integer> {
 	 * @param rst RSTQをそのまま整数値にした値
 	 */
 	public RSTQ(int rst) {
-		super(BaseFormat.RSTQ);
+		super(QxmlFields.RSTQ);
 		int r = (rst / 100) % 10;
 		int s = (rst / 10 ) % 10;
 		int t = (rst / 1  ) % 10;
@@ -106,7 +106,7 @@ public final class RSTQ extends Field<Integer> {
 	public static final class Format implements FieldFormat {
 		@Override
 		public QName type() {
-			return BaseFormat.RSTQ;
+			return QxmlFields.RSTQ;
 		}
 	
 		@Override

@@ -13,7 +13,7 @@ import java.time.temporal.*;
 import javax.xml.namespace.QName;
 import qxsl.model.Field;
 import qxsl.model.FieldFormat;
-import qxsl.table.secret.BaseFormat;
+import qxsl.table.secret.QxmlFields;
 
 /**
  * 交信記録シートにおいて交信した日時を表現します。
@@ -58,7 +58,7 @@ public final class Time extends Field<ZonedDateTime> {
 	 * @param time 交信日時
 	 */
 	public Time(ZonedDateTime time) {
-		super(BaseFormat.TIME);
+		super(QxmlFields.TIME);
 		this.time = time;
 	}
 
@@ -109,7 +109,7 @@ public final class Time extends Field<ZonedDateTime> {
 
 		@Override
 		public QName type() {
-			return BaseFormat.TIME;
+			return QxmlFields.TIME;
 		}
 	
 		@Override

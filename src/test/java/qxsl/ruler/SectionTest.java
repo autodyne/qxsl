@@ -10,6 +10,7 @@ package qxsl.ruler;
 import java.util.ArrayList;
 import java.util.List;
 import javax.script.ScriptException;
+
 import org.junit.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;

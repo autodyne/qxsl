@@ -10,7 +10,7 @@ package qxsl.field;
 import javax.xml.namespace.QName;
 import qxsl.model.Field;
 import qxsl.model.FieldFormat;
-import qxsl.table.secret.BaseFormat;
+import qxsl.table.secret.QxmlFields;
 
 /**
  * 交信記録シートにおいて備考を表現します。
@@ -30,7 +30,7 @@ public final class Note extends Field<String> {
 	 * @param note 備考
 	 */
 	public Note(String note) {
-		super(BaseFormat.NOTE);
+		super(QxmlFields.NOTE);
 		this.note = note;
 	}
 
@@ -51,7 +51,7 @@ public final class Note extends Field<String> {
 	public static final class Format implements FieldFormat {
 		@Override
 		public QName type() {
-			return BaseFormat.NOTE;
+			return QxmlFields.NOTE;
 		}
 	
 		@Override

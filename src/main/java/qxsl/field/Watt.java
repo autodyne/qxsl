@@ -10,7 +10,7 @@ package qxsl.field;
 import javax.xml.namespace.QName;
 import qxsl.model.Field;
 import qxsl.model.FieldFormat;
-import qxsl.table.secret.BaseFormat;
+import qxsl.table.secret.QxmlFields;
 
 /**
  * 交信記録シートで空中線出力を表現します。
@@ -30,7 +30,7 @@ public final class Watt extends Field<String> {
 	 * @param watt 空中線出力
 	 */
 	public Watt(String watt) {
-		super(BaseFormat.WATT);
+		super(QxmlFields.WATT);
 		this.watt = watt;
 	}
 
@@ -51,7 +51,7 @@ public final class Watt extends Field<String> {
 	public static final class Format implements FieldFormat {
 		@Override
 		public QName type() {
-			return BaseFormat.WATT;
+			return QxmlFields.WATT;
 		}
 	
 		@Override

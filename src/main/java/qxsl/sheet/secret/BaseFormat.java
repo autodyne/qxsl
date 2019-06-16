@@ -5,7 +5,7 @@
  * License : GNU Lesser General Public License v3 (see LICENSE)
  * Author: Journal of Hamradio Informatics http://pafelog.net
 *****************************************************************************/
-package qxsl.table.secret;
+package qxsl.sheet.secret;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
-import qxsl.table.TableFormat;
+import qxsl.sheet.SheetFormat;
 
 /**
  * 書式の説明を設定ファイルから取得する仕組みを提供します。
@@ -25,7 +25,7 @@ import qxsl.table.TableFormat;
  * @since 2019/06/16
  *
  */
-public abstract class BaseFormat implements TableFormat {
+public abstract class BaseFormat implements SheetFormat {
 	private final String name;
 	private final Properties conf;
 

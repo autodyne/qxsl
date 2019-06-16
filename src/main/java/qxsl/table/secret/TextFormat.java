@@ -31,6 +31,15 @@ import qxsl.model.Field;
  */
 public abstract class TextFormat extends BaseFormat {
 	/**
+	 * 指定した名前の書式を構築します。
+	 *
+	 * @param name 書式の名前
+	 */
+	public TextFormat(String name) {
+		super(name);
+	}
+
+	/**
 	 * プレインテキスト書式の交信記録を読み込むためのデコーダです。
 	 * 
 	 * 

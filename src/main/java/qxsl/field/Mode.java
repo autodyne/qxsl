@@ -10,7 +10,7 @@ package qxsl.field;
 import javax.xml.namespace.QName;
 import qxsl.model.Field;
 import qxsl.model.FieldFormat;
-import qxsl.table.secret.BaseFormat;
+import qxsl.table.secret.QxmlFields;
 
 /**
  * 交信記録シートにおいて通信方式を表現します。
@@ -30,7 +30,7 @@ public final class Mode extends Field<String> {
 	 * @param mode モード名
 	 */
 	public Mode(String mode) {
-		super(BaseFormat.MODE);
+		super(QxmlFields.MODE);
 		this.mode = mode;
 	}
 
@@ -51,7 +51,7 @@ public final class Mode extends Field<String> {
 	public static final class Format implements FieldFormat {
 		@Override
 		public QName type() {
-			return BaseFormat.MODE;
+			return QxmlFields.MODE;
 		}
 	
 		@Override

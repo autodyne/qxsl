@@ -10,7 +10,7 @@ package qxsl.field;
 import javax.xml.namespace.QName;
 import qxsl.model.Field;
 import qxsl.model.FieldFormat;
-import qxsl.table.secret.BaseFormat;
+import qxsl.table.secret.QxmlFields;
 
 /**
  * 交信記録シートにおいて交信した周波数帯を表現します。
@@ -30,7 +30,7 @@ public final class Band extends Field<Integer> {
 	 * @param kHz kHz単位の周波数
 	 */
 	public Band(int kHz) {
-		super(BaseFormat.BAND);
+		super(QxmlFields.BAND);
 		this.kHz = kHz;
 	}
 
@@ -112,7 +112,7 @@ public final class Band extends Field<Integer> {
 	public static final class Format implements FieldFormat {
 		@Override
 		public QName type() {
-			return BaseFormat.BAND;
+			return QxmlFields.BAND;
 		}
 	
 		@Override

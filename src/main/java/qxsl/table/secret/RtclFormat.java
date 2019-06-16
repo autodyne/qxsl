@@ -13,7 +13,6 @@ import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,33 +30,10 @@ import qxsl.model.*;
  */
 public final class RtclFormat extends TextFormat {
 	/**
-	 * この書式を識別する完全な名前を返します。
-	 * 
-	 * @return 書式の名前
+	 * 書式を構築します。
 	 */
-	@Override
-	public String getName() {
-		return "rtcl";
-	}
-
-	/**
-	 * このフォーマットを適用するファイル名拡張子の不変のリストを返します。
-	 * 
-	 * @return ファイル名拡張子のリスト
-	 */
-	@Override
-	public List<String> getExtensions() {
-		return Collections.unmodifiableList(Arrays.asList("txt"));
-	}
-
-	/**
-	 * このフォーマットの詳細をUIで表示するのに適した簡潔な文字列を返します。
-	 * 
-	 * @return フォーマットの説明
-	 */
-	@Override
-	public String toString() {
-		return "RTCL TXT FORMAT";
+	public RtclFormat() {
+		super("rtcl");
 	}
 
 	/**
@@ -188,7 +164,7 @@ public final class RtclFormat extends TextFormat {
 		 */
 		private void band(Item item, String band) throws Exception {
 			Integer kHz = Integer.parseInt(band);
-			item.set(fields.cache(BAND, kHz.toString()));
+			item.set(fields.cache(QxmlFields.BAND, kHz.toString()));
 		}
 
 		/**
@@ -199,7 +175,7 @@ public final class RtclFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void mode(Item item, String mode) throws Exception {
-			item.set(fields.cache(MODE, mode));
+			item.set(fields.cache(QxmlFields.MODE, mode));
 		}
 
 		/**
@@ -210,7 +186,7 @@ public final class RtclFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void call(Item item, String call) throws Exception {
-			item.set(fields.cache(CALL, call));
+			item.set(fields.cache(QxmlFields.CALL, call));
 		}
 
 		/**
@@ -221,7 +197,7 @@ public final class RtclFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void srst(Item item, String srst) throws Exception {
-			item.getSent().set(fields.cache(RSTQ, srst));
+			item.getSent().set(fields.cache(QxmlFields.RSTQ, srst));
 		}
 
 		/**
@@ -232,7 +208,7 @@ public final class RtclFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void snum(Item item, String snum) throws Exception {
-			item.getSent().set(fields.cache(CODE, snum));
+			item.getSent().set(fields.cache(QxmlFields.CODE, snum));
 		}
 
 		/**
@@ -243,7 +219,7 @@ public final class RtclFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void rrst(Item item, String rrst) throws Exception {
-			item.getRcvd().set(fields.cache(RSTQ, rrst));
+			item.getRcvd().set(fields.cache(QxmlFields.RSTQ, rrst));
 		}
 
 		/**
@@ -254,7 +230,7 @@ public final class RtclFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void rnum(Item item, String rnum) throws Exception {
-			item.getRcvd().set(fields.cache(CODE, rnum));
+			item.getRcvd().set(fields.cache(QxmlFields.CODE, rnum));
 		}
 	}
 

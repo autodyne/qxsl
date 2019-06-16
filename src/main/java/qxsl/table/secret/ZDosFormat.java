@@ -15,7 +15,6 @@ import java.time.Year;
 import java.time.format.*;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,33 +32,10 @@ import qxsl.model.*;
  */
 public final class ZDosFormat extends TextFormat {
 	/**
-	 * この書式を識別する完全な名前を返します。
-	 * 
-	 * @return 書式の名前
+	 * 書式を構築します。
 	 */
-	@Override
-	public String getName() {
-		return "zdos";
-	}
-
-	/**
-	 * このフォーマットを適用するファイル名拡張子の不変のリストを返します。
-	 * 
-	 * @return ファイル名拡張子のリスト
-	 */
-	@Override
-	public List<String> getExtensions() {
-		return Collections.unmodifiableList(Arrays.asList("txt"));
-	}
-
-	/**
-	 * このフォーマットの詳細をUIで表示するのに適した簡潔な文字列を返します。
-	 * 
-	 * @return フォーマットの説明
-	 */
-	@Override
-	public String toString() {
-		return "ZLOG TXT FORMAT";
+	public ZDosFormat() {
+		super("zdos");
 	}
 
 	/**
@@ -193,7 +169,7 @@ public final class ZDosFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void call(Item item, String call) throws Exception {
-			item.set(fields.cache(CALL, call));
+			item.set(fields.cache(QxmlFields.CALL, call));
 		}
 
 		/**
@@ -204,7 +180,7 @@ public final class ZDosFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void sent(Item item, String sent) throws Exception {
-			item.getSent().set(fields.cache(CODE, sent));
+			item.getSent().set(fields.cache(QxmlFields.CODE, sent));
 		}
 
 		/**
@@ -215,7 +191,7 @@ public final class ZDosFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void rcvd(Item item, String rcvd) throws Exception {
-			item.getRcvd().set(fields.cache(CODE, rcvd));
+			item.getRcvd().set(fields.cache(QxmlFields.CODE, rcvd));
 		}
 
 		/**
@@ -233,7 +209,7 @@ public final class ZDosFormat extends TextFormat {
 			} else {
 				kHz = (int) (Double.parseDouble(band) * 1000);
 			}
-			item.set(fields.cache(BAND, kHz.toString()));
+			item.set(fields.cache(QxmlFields.BAND, kHz.toString()));
 		}
 
 		/**
@@ -244,7 +220,7 @@ public final class ZDosFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void mode(Item item, String mode) throws Exception {
-			item.set(fields.cache(MODE, mode));
+			item.set(fields.cache(QxmlFields.MODE, mode));
 		}
 
 		/**
@@ -255,7 +231,7 @@ public final class ZDosFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void oprt(Item item, String op) throws Exception {
-			item.set(fields.cache(NAME, op));
+			item.set(fields.cache(QxmlFields.NAME, op));
 		}
 
 		/**
@@ -266,7 +242,7 @@ public final class ZDosFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void note(Item item, String note) throws Exception {
-			item.set(fields.cache(NOTE, note));
+			item.set(fields.cache(QxmlFields.NOTE, note));
 		}
 	}
 

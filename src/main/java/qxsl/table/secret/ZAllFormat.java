@@ -13,7 +13,6 @@ import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.time.format.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,33 +30,10 @@ import qxsl.model.*;
  */
 public final class ZAllFormat extends TextFormat {
 	/**
-	 * この書式を識別する完全な名前を返します。
-	 * 
-	 * @return 書式の名前
+	 * 書式を構築します。
 	 */
-	@Override
-	public String getName() {
-		return "zall";
-	}
-
-	/**
-	 * このフォーマットを適用するファイル名拡張子の不変のリストを返します。
-	 * 
-	 * @return ファイル名拡張子のリスト
-	 */
-	@Override
-	public List<String> getExtensions() {
-		return Collections.unmodifiableList(Arrays.asList("all"));
-	}
-
-	/**
-	 * このフォーマットの詳細をUIで表示するのに適した簡潔な文字列を返します。
-	 * 
-	 * @return フォーマットの説明
-	 */
-	@Override
-	public String toString() {
-		return "ZLOG ALL FORMAT";
+	public ZAllFormat() {
+		super("zall");
 	}
 
 	/**
@@ -194,7 +170,7 @@ public final class ZAllFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void call(Item item, String call) throws Exception {
-			item.set(fields.cache(CALL, call));
+			item.set(fields.cache(QxmlFields.CALL, call));
 		}
 
 		/**
@@ -205,7 +181,7 @@ public final class ZAllFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void srst(Item item, String srst) throws Exception {
-			item.getSent().set(fields.cache(RSTQ, srst));
+			item.getSent().set(fields.cache(QxmlFields.RSTQ, srst));
 		}
 
 		/**
@@ -216,7 +192,7 @@ public final class ZAllFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void snum(Item item, String snum) throws Exception {
-			item.getSent().set(fields.cache(CODE, snum));
+			item.getSent().set(fields.cache(QxmlFields.CODE, snum));
 		}
 
 		/**
@@ -227,7 +203,7 @@ public final class ZAllFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void rrst(Item item, String rrst) throws Exception {
-			item.getRcvd().set(fields.cache(RSTQ, rrst));
+			item.getRcvd().set(fields.cache(QxmlFields.RSTQ, rrst));
 		}
 
 		/**
@@ -238,7 +214,7 @@ public final class ZAllFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void rnum(Item item, String rnum) throws Exception {
-			item.getRcvd().set(fields.cache(CODE, rnum));
+			item.getRcvd().set(fields.cache(QxmlFields.CODE, rnum));
 		}
 
 		/**
@@ -256,7 +232,7 @@ public final class ZAllFormat extends TextFormat {
 			} else {
 				kHz = (int) (Double.parseDouble(band) * 1000);
 			}
-			item.set(fields.cache(BAND, kHz.toString()));
+			item.set(fields.cache(QxmlFields.BAND, kHz.toString()));
 		}
 
 		/**
@@ -267,7 +243,7 @@ public final class ZAllFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void mode(Item item, String mode) throws Exception {
-			item.set(fields.cache(MODE, mode));
+			item.set(fields.cache(QxmlFields.MODE, mode));
 		}
 
 		/**
@@ -278,7 +254,7 @@ public final class ZAllFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void oprt(Item item, String op) throws Exception {
-			item.set(fields.cache(NAME, op));
+			item.set(fields.cache(QxmlFields.NAME, op));
 		}
 
 		/**
@@ -289,7 +265,7 @@ public final class ZAllFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void note(Item item, String note) throws Exception {
-			item.set(fields.cache(NOTE, note));
+			item.set(fields.cache(QxmlFields.NOTE, note));
 		}
 	}
 

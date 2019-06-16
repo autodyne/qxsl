@@ -25,25 +25,12 @@ import org.xml.sax.helpers.DefaultHandler;
  * @since 2017/03/11
  *
  */
-public final class JarlFormat implements qxsl.sheet.SheetFormat {
+public final class JarlFormat extends BaseFormat {
 	/**
-	 * この書式を識別する完全な名前を返します。
-	 * 
-	 * @return 書式の名前
+	 * 書式を構築します。
 	 */
-	@Override
-	public String getName() {
-		return "jarl";
-	}
-
-	/**
-	 * この書式の詳細を表示するのに適した文字列を返します。
-	 * 
-	 * @return 書式の説明
-	 */
-	@Override
-	public final String toString() {
-		return "JARL SUMMARY SHEET";
+	public JarlFormat() {
+		super("jarl");
 	}
 
 	/**
