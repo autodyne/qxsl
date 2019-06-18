@@ -62,13 +62,14 @@ public final class Cab3FormatTest extends junit.framework.TestCase {
 		ByteArrayOutputStream os1 = new ByteArrayOutputStream();
 		ByteArrayOutputStream os2 = new ByteArrayOutputStream();
 		tables.getFormat("cqww").encode(os1, items);
+		String table = os1.toString("UTF-8").trim();
 		Map<String, String> kvals = new HashMap<>();
 		kvals.put("CONTEST", "JIDX-CW");
 		kvals.put("CALLSIGN", "JA1ZLO");
-		kvals.put("QSO", os1.toString("UTF8").trim());
+		kvals.put("QSO", table);
 		format.encode(os2, kvals);
 		final byte[] b = os2.toByteArray();
 		assertThat(format.decode(new ByteArrayInputStream(b))).isEqualTo(kvals);
-		assertThat(sheets.decode(new ByteArrayInputStream(b))).isEqualTo(kvals);
+		assertThat(sheets.unseal(new ByteArrayInputStream(b))).isEqualTo(table);
 	}
 }

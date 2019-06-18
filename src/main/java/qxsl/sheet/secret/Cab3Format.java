@@ -103,6 +103,7 @@ public final class Cab3Format extends BaseFormat {
 			while((line = reader.readLine()) != null) {
 				if(!line.trim().isEmpty()) break;
 			}
+			if(line.trim().equals("START-OF-LOG: 2.0")) return body();
 			if(line.trim().equals("START-OF-LOG: 3.0")) return body();
 			throw new IOException("Tag 'START-OF-LOG:' is not found");
 		}

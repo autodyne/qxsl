@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.ServiceLoader;
@@ -30,28 +31,34 @@ public final class Sheets implements Iterable<SheetFormat> {
 	private final ServiceLoader<SheetFormat> loader;
 
 	/**
-	 * スレッドの{@link ClassLoader}を指定して機構を構築します。
+	 * 現在の{@link ClassLoader}から書式を検索します。
 	 */
 	public Sheets() {
 		this(Thread.currentThread().getContextClassLoader());
 	}
 
 	/**
-	 * 指定された{@link ClassLoader}から検索する機構を構築します。
+	 * 指定の{@link ClassLoader}から書式を検索します。
 	 * 
-	 * @param cl クラスローダー
+	 * @param cl 書式の実装を検出するクラスローダ
 	 */
 	public Sheets(ClassLoader cl) {
 		loader = ServiceLoader.load(SheetFormat.class, cl);
 	}
 
+	/**
+	 * クラスパスから検出された{@link SheetFormat}を返します。
+	 *
+	 * @return 書式のイテレータ
+	 */
 	@Override
-	public final Iterator<SheetFormat> iterator() {
+	public Iterator<SheetFormat> iterator() {
 		return loader.iterator();
 	}
 
 	/**
 	 * 指定された名前を持つ{@link SheetFormat}を検索して返します。
+	 * 
 	 * 
 	 * @param name 属性の名前
 	 * @return 対応するフォーマット 存在しない場合null
@@ -64,60 +71,69 @@ public final class Sheets implements Iterable<SheetFormat> {
 	}
 
 	/**
-	 * フォーマットを自動判別して提出書類を読み込みます。
+	 * 指定されたストリームを主記憶に読み込みます。
 	 * 
-	 * @param in 提出書類を読み込むストリーム
-	 * @return 提出書類 提出書類がなければnull
 	 * 
-	 * @throws IOException 入出力時の例外
+	 * @param in 内容を読み込むストリーム
+	 * @return 内容をコピーしたストリーム
 	 */
-	public Map<String, String> decode(InputStream in) throws IOException {
-		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+	private InputStream fetch(InputStream in) throws IOException {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		final byte[] buffer = new byte[1024];
 		int len = 0;
 		try (InputStream inputStream = in) {
-			while((len = in.read(buffer)) > 0) {
-				bout.write(buffer, 0, len);
-			}
+			while((len = in.read(buffer)) > 0) out.write(buffer, 0, len);
 		}
-		final byte[] mem = bout.toByteArray();
-		ByteArrayInputStream bin = new ByteArrayInputStream(mem);
+		return new ByteArrayInputStream(out.toByteArray());
+	}
+
+	/**
+	 * 指定された入力から提出書類を読み取って交信記録を抽出します。
+	 * 
+	 * 
+	 * @param in 提出書類を読み込むストリーム
+	 * @return 交信記録の文字列
+	 * 
+	 * @throws IOException 入出力例外もしくは対応する書式がない場合
+	 */
+	public String unseal(InputStream in) throws IOException {
+		InputStream bin = this.fetch(in);
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
-		for(SheetFormat format: loader) try {
-			return format.decode(bin);
-		} catch(IOException ex) {
-			pw.print(format.getName());
-			pw.print(": ");
-			pw.println(ex.getMessage());
+		for(SheetFormat format: this) try {
+			return format.decode(bin).get(format.getTableKey());
+		} catch (IOException ex) {
+			pw.printf("%s: %s%n", format, ex.getMessage());
 			bin.reset();
 		}
 		throw new IOException("unsupported format:\n" + sw);
 	}
 
 	/**
-	 * フォーマットを自動判別して提出書類を読み込みます。
+	 * 指定された入力から提出書類を読み取って交信記録を抽出します。
+	 * 
 	 * 
 	 * @param url 提出書類を読み込むURL
-	 * @return 提出書類
+	 * @return 交信記録の文字列
 	 * 
-	 * @throws IOException 入出力時の例外
+	 * @throws IOException 入出力例外もしくは対応する書式がない場合
 	 */
-	public Map<String, String> decode(java.net.URL url) throws IOException {
+	public String unseal(URL url) throws IOException {
 		try (InputStream is = url.openStream()) {
-			return decode(is);
+			return unseal(is);
 		}
 	}
 
 	/**
-	 * フォーマットを自動判別して提出書類を読み込みます。
+	 * 指定された入力から提出書類を読み取って交信記録を抽出します。
+	 * 
 	 * 
 	 * @param bytes 提出書類を読み込むバイト列
-	 * @return 提出書類
+	 * @return 交信記録の文字列
 	 * 
-	 * @throws IOException 入出力時の例外
+	 * @throws IOException 入出力例外もしくは対応する書式がない場合
 	 */
-	public Map<String, String> decode(byte[] bytes) throws IOException {
-		return decode(new ByteArrayInputStream(bytes));
+	public String unseal(byte[] bytes) throws IOException {
+		return unseal(new ByteArrayInputStream(bytes));
 	}
 }

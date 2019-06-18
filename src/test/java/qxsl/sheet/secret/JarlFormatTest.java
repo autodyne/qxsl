@@ -62,6 +62,7 @@ public final class JarlFormatTest extends junit.framework.TestCase {
 		ByteArrayOutputStream os1 = new ByteArrayOutputStream();
 		ByteArrayOutputStream os2 = new ByteArrayOutputStream();
 		tables.getFormat("jarl").encode(os1, items);
+		String table = os1.toString("UTF-8").trim();
 		Map<String, String> kvals = new HashMap<>();
 		kvals.put("VERSION", "R2.0");
 		kvals.put("SCORE BAND=144MHz", "10,10,10");
@@ -70,6 +71,6 @@ public final class JarlFormatTest extends junit.framework.TestCase {
 		format.encode(os2, kvals);
 		final byte[] b = os2.toByteArray();
 		assertThat(format.decode(new ByteArrayInputStream(b))).isEqualTo(kvals);
-		assertThat(sheets.decode(new ByteArrayInputStream(b))).isEqualTo(kvals);
+		assertThat(sheets.unseal(new ByteArrayInputStream(b))).isEqualTo(table);
 	}
 }

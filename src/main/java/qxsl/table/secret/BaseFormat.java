@@ -61,7 +61,7 @@ public abstract class BaseFormat implements TableFormat {
 	 */
 	@Override
 	public final String toString() {
-		return conf.getProperty("short-label");
+		return conf.getProperty("label");
 	}
 
 	/**

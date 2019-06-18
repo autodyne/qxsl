@@ -52,6 +52,13 @@ public interface SheetFormat {
 	public List<String> getExtensions();
 
 	/**
+	 * この書式で交信記録を抽出する際に鍵として使用する文字列を返します。
+	 *
+	 * @return 交信記録を指す鍵
+	 */
+	public String getTableKey();
+
+	/**
 	 * 指定したストリームをこの書式でデコードして提出書類を読み込みます。
 	 * 
 	 * @param reader 提出書類を読み込むストリーム

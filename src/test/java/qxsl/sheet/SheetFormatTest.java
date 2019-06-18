@@ -46,11 +46,16 @@ public final class SheetFormatTest extends junit.framework.TestCase {
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void testGetDescription(SheetFormat format) {
-		assertThat(format.getDescription()).isNotNull();
+		assertThat(format.getDescription()).isNotEmpty();
 	}
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void testGetExtensions(SheetFormat format) {
 		assertThat(format.getExtensions()).isNotEmpty();
+	}
+	@ParameterizedTest
+	@MethodSource("testMethodSource")
+	public void testGetTableKey(SheetFormat format) {
+		assertThat(format.getTableKey()).isNotEmpty();
 	}
 }

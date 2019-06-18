@@ -61,7 +61,7 @@ public abstract class BaseFormat implements SheetFormat {
 	 */
 	@Override
 	public final String toString() {
-		return conf.getProperty("short-label");
+		return conf.getProperty("label");
 	}
 
 	/**
@@ -83,5 +83,15 @@ public abstract class BaseFormat implements SheetFormat {
 	public final List<String> getExtensions() {
 		String[] exts = conf.getProperty("extensions").split(",");
 		return Collections.unmodifiableList(Arrays.asList(exts));
+	}
+
+	/**
+	 * この書式で交信記録を抽出する際に鍵として使用する文字列を返します。
+	 *
+	 * @return 交信記録を指す鍵
+	 */
+	@Override
+	public final String getTableKey() {
+		return conf.getProperty("table");
 	}
 }
