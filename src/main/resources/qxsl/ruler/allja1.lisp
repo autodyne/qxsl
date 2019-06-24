@@ -149,10 +149,10 @@
 
 	(section "1エリア内 個人 電信限定 総合部門"           (lambda it (verify it (list 内? CW? 全周波?))))
 	(section "1エリア内 個人 電信電話 総合部門"           (lambda it (verify it (list 内?     全周波?))))
-	(section "1エリア内 社団 電信限定 オールバンド部門"   (lambda it (verify it (list 内? CW? 全周波?))))
-	(section "1エリア内 社団 電信電話 オールバンド部門"   (lambda it (verify it (list 内?     全周波?))))
-
 	(section "1エリア外 個人 電信限定 総合部門"           (lambda it (verify it (list 外? CW? 全周波?))))
 	(section "1エリア外 個人 電信電話 総合部門"           (lambda it (verify it (list 外?     全周波?))))
+
+	(section "1エリア内 社団 電信限定 オールバンド部門"   (lambda it (verify it (list 内? CW? 全周波?))))
+	(section "1エリア内 社団 電信電話 オールバンド部門"   (lambda it (verify it (list 内?     全周波?))))
 	(section "1エリア外 社団 電信限定 オールバンド部門"   (lambda it (verify it (list 外? CW? 全周波?))))
 	(section "1エリア外 社団 電信電話 オールバンド部門"   (lambda it (verify it (list 外?     全周波?)))))
