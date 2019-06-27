@@ -8,7 +8,7 @@
 package qxsl.sheet;
 
 import org.junit.Test;
-import qxsl.sheet.secret.*;
+import qxsl.extra.sheet.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

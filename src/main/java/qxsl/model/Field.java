@@ -11,7 +11,7 @@ import java.util.Objects;
 import javax.xml.namespace.QName;
 
 /**
- * 交信記録シートにおいて各属性の値を表現します。
+ * {@link Tuple}に付随する各種の属性は{@link Field}クラスを実装します。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -21,15 +21,15 @@ import javax.xml.namespace.QName;
  * @param <V> 属性の属性値の総称型
  */
 public abstract class Field<V> {
-	private final QName type;
+	private final QName name;
 
 	/**
 	 * 指定した属性名を持つ属性を構築します。
 	 * 
-	 * @param type 属性名
+	 * @param name 属性名
 	 */
-	public Field(QName type) {
-		this.type = type;
+	public Field(QName name) {
+		this.name = name;
 	}
 
 	/**
@@ -37,8 +37,8 @@ public abstract class Field<V> {
 	 *
 	 * @return 属性の名前
 	 */
-	public QName type() {
-		return type;
+	public QName name() {
+		return name;
 	}
 
 	/**
@@ -65,7 +65,7 @@ public abstract class Field<V> {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(type(), value());
+		return Objects.hash(name(), value());
 	}
 
 	/**
@@ -87,4 +87,24 @@ public abstract class Field<V> {
 		}
 		return false;
 	}
+
+	/**
+	 * この属性をADIFの名前空間の属性に変換します。
+	 * デフォルトでこのメソッドは変換を行いません。
+	 *
+	 * @param tuple この属性を格納しているタプル
+	 *
+	 * @since 2019/06/27
+	 */
+	public void toADIF(Tuple tuple) {}
+
+	/**
+	 * この属性をQXSLの名前空間の属性に変換します。
+	 * デフォルトでこのメソッドは変換を行いません。
+	 *
+	 * @param tuple この属性を格納しているタプル
+	 *
+	 * @since 2019/06/27
+	 */
+	public void toQXSL(Tuple tuple) {}
 }

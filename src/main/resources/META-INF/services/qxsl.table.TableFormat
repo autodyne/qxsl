@@ -1,12 +1,13 @@
-qxsl.table.secret.QxmlFormat
+qxsl.extra.table.QxmlFormat
+qxsl.extra.table.AdxsFormat
 
-qxsl.table.secret.CqwwFormat
-qxsl.table.secret.JarlFormat
-qxsl.table.secret.ZAllFormat
-qxsl.table.secret.ZDosFormat
-qxsl.table.secret.CTxtFormat
-qxsl.table.secret.Hl76Format
-qxsl.table.secret.RtclFormat
+qxsl.extra.table.CqwwFormat
+qxsl.extra.table.JarlFormat
+qxsl.extra.table.ZAllFormat
+qxsl.extra.table.ZDosFormat
+qxsl.extra.table.CTxtFormat
+qxsl.extra.table.Hl76Format
+qxsl.extra.table.RtclFormat
 
-qxsl.table.secret.CBinFormat
-qxsl.table.secret.ZBinFormat
+qxsl.extra.table.CBinFormat
+qxsl.extra.table.ZBinFormat

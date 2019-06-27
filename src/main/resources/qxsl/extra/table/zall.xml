@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<entry key="label">zLog text format (Windows)</entry>
+<entry key="extensions">all</entry>
+<entry key="desc-text">
+Template:
+yyyy/MM/dd HH:mm CCCCCCCCCCCC sss SSSSSSS rrr RRRRRRR ***** ***** BBBB EEEE ** NNNN
+
+Examples:
+2017/06/04 01:17 QV1DOK       599 100110  599 120103  120103-     14   CW   1
+2017/06/04 01:51 QC2SOA       599 100110  599 1308    1308  -     50   CW   1
+</entry>
+</properties>

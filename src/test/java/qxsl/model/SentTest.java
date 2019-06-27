@@ -8,9 +8,9 @@
 package qxsl.model;
 
 import org.junit.Test;
-import qxsl.field.*;
+import qxsl.extra.field.qxsl.*;
 
-import static qxsl.table.secret.QxmlFormat.SENT;
+import static qxsl.extra.table.QxmlFormat.SENT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -23,25 +23,22 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  */
 public final class SentTest extends junit.framework.TestCase {
-	private final City city = new City("100105");
 	private final Code code = new Code("591420");
 	private final RSTQ rstq = new RSTQ(1, 1, 1);
 	private final Watt watt = new Watt("M");
 	@Test
 	public void testType() {
-		assertThat(new Sent().type()).isEqualTo(SENT);
+		assertThat(new Sent().name()).isEqualTo(SENT);
 	}
 	@Test
 	public void testEquals() {
 		final Sent sent1 = new Sent();
 		final Sent sent2 = new Sent();
 		assertThat(sent1).isEqualTo(sent2);
-		assertThat(sent1.set(city).get(City.class)).isEqualTo(city);
 		assertThat(sent1.set(code).get(Code.class)).isEqualTo(code);
 		assertThat(sent1.set(rstq).get(RSTQ.class)).isEqualTo(rstq);
 		assertThat(sent1.set(watt).get(Watt.class)).isEqualTo(watt);
 		assertThat(sent1).isNotEqualTo(sent2);
-		assertThat(sent2.set(city).get(City.class)).isEqualTo(city);
 		assertThat(sent2.set(code).get(Code.class)).isEqualTo(code);
 		assertThat(sent2.set(rstq).get(RSTQ.class)).isEqualTo(rstq);
 		assertThat(sent2.set(watt).get(Watt.class)).isEqualTo(watt);

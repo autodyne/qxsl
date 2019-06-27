@@ -7,13 +7,15 @@
 *****************************************************************************/
 package qxsl.model;
 
+import java.util.Iterator;
 import java.util.StringJoiner;
+import java.util.stream.Stream;
 import javax.xml.namespace.QName;
-import qxsl.field.*;
-import qxsl.table.secret.QxmlFormat;
+
+import static qxsl.extra.table.QxmlFormat.ITEM;
 
 /**
- * 交信記録シートにおいて1回の不可分な交信を表現するタプルです。
+ * 交信記録で1件の不可分な交信を表現する{@link Tuple}実装クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -21,7 +23,7 @@ import qxsl.table.secret.QxmlFormat;
  * @since 2013/06/04
  *
  */
-public final class Item extends Tuple<Item> {
+public final class Item extends Tuple {
 	private Rcvd rcvd;
 	private Sent sent;
 
@@ -29,7 +31,7 @@ public final class Item extends Tuple<Item> {
 	 * 空のタプルを構築します。
 	 */
 	public Item() {
-		super(QxmlFormat.ITEM);
+		super(ITEM);
 	}
 
 	/**
@@ -55,8 +57,7 @@ public final class Item extends Tuple<Item> {
 	@Override
 	public String toString() {
 		StringJoiner sj = new StringJoiner(" ");
-		sj.add(type().getLocalPart());
-		Fields fields = new Fields();
+		sj.add(name().getLocalPart());
 		for(Field f: this) sj.add(f.toString());
 		sj.add(getRcvd().toString());
 		sj.add(getSent().toString());
@@ -66,38 +67,25 @@ public final class Item extends Tuple<Item> {
 	/**
 	 * タプル直下にある{@link Rcvd}を返します。
 	 * 
-	 * @return {@link Rcvd} 存在しない場合は生成される
+	 * @return {@link Rcvd}
 	 */
 	public Rcvd getRcvd() {
-		if(rcvd == null) setRcvd(new Rcvd());
+		if(rcvd == null) rcvd = new Rcvd();
 		return rcvd;
-	}
-
-	/**
-	 * タプル直下に{@link Rcvd}を追加します。
-	 * 
-	 * @param rcvd 追加する子
-	 */
-	public void setRcvd(Rcvd rcvd) {
-		this.rcvd = rcvd;
 	}
 
 	/**
 	 * タプル直下にある{@link Sent}を返します。
 	 * 
-	 * @return {@link Sent} 存在しない場合は生成される
+	 * @return {@link Sent}
 	 */
 	public Sent getSent() {
 		if(sent == null) sent = new Sent();
 		return sent;
 	}
 
-	/**
-	 * タプル直下に{@link Sent}を追加します。
-	 * 
-	 * @param sent 追加する子
-	 */
-	public void setSent(Sent sent) {
-		this.sent = sent;
+	@Override
+	public final Iterator<Tuple> children() {
+		return Stream.<Tuple>of(getRcvd(), getSent()).iterator();
 	}
 }

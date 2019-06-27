@@ -14,7 +14,7 @@ import java.util.Objects;
 import javax.xml.namespace.QName;
 
 /**
- * 属性として複数の{@link Field}を設定可能なデータ構造です。
+ * {@link Item}クラスや{@link Exch}クラスはこのクラスを実装します。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -22,37 +22,37 @@ import javax.xml.namespace.QName;
  * @since 2015/08/05
  *
  */
-public abstract class Tuple<T extends Tuple<T>> implements Iterable<Field> {
-	private final QName type;
+public abstract class Tuple implements Iterable<Field> {
+	private final QName name;
 	private final Map<QName, Field> table;
 
 	/**
-	 * 指定した種別の空のタプルを構築します。
+	 * 指定した名前の空の{@link Tuple}を構築します。
 	 * 
-	 * @param type 種別
+	 * @param name 名前
 	 */
-	public Tuple(QName type) {
-		this.type = type;
+	public Tuple(QName name) {
+		this.name = name;
 		table = new HashMap<>();
 	}
 
 	/**
-	 * このタプルの名前を返します。
+	 * この{@link Tuple}の名前を返します。
 	 *
 	 * @return タプルの名前
 	 */
-	public final QName type() {
-		return type;
+	public final QName name() {
+		return name;
 	}
 
 	/**
-	 * このタプルのハッシュ値を計算します。
+	 * この{@link Tuple}のハッシュ値を計算します。
 	 * 
 	 * @return ハッシュ値
 	 */
 	@Override
 	public int hashCode() {
-		int val = Objects.hash(type(), table);
+		int val = Objects.hash(name(), table);
 		if(this instanceof Item) {
 			final Rcvd rcvd = ((Item) this).getRcvd();
 			final Sent sent = ((Item) this).getSent();
@@ -74,14 +74,22 @@ public abstract class Tuple<T extends Tuple<T>> implements Iterable<Field> {
 	}
 
 	/**
-	 * 全ての属性値を要素に持つ{@link Iterator}を返します。
+	 * この要素に設定された全ての属性をイテレータで反復します。
+	 * 隷下の要素に設定された属性はイテレーターに含まれません。
 	 * 
-	 * @return 全ての属性値を列挙した反復子
+	 * @return 全ての属性を列挙したイテレータ
 	 */
 	@Override
 	public final Iterator<Field> iterator() {
 		return table.values().iterator();
 	}
+
+	/**
+	 * この要素の隷下にある全ての要素をイテレータで返します。
+	 * 
+	 * @return 全ての要素を列挙した反復子
+	 */
+	public abstract Iterator<Tuple> children();
 
 	/**
 	 * 指定した{@link QName}に対応する属性を返します。
@@ -127,24 +135,40 @@ public abstract class Tuple<T extends Tuple<T>> implements Iterable<Field> {
 	 * @param qname 属性の名前
 	 * @return このタプル
 	 */
-	public final T remove(QName qname) {
+	public final Tuple remove(QName qname) {
 		table.remove(qname);
-		@SuppressWarnings("unchecked")
-		T thisNode = (T) this;
-		return thisNode;
+		return this;
 	}
 
 	/**
-	 * 指定した属性をこのタプルに設定します。
+	 * 指定した属性をこの{@link Tuple}に設定します。
 	 * 
 	 * @param field 設定する属性
 	 * @return このタプル
 	 * @throws NullPointerException 属性がnullの場合
 	 */
-	public final T set(Field field) throws NullPointerException {
-		table.put(field.type(), field);
-		@SuppressWarnings("unchecked")
-		T thisNode = (T) this;
-		return thisNode;
+	public final Tuple set(Field field) {
+		table.put(field.name(), field);
+		return this;
+	}
+
+	/**
+	 * 隷下の属性をADIFの名前空間の属性に変換します。
+	 *
+	 * @since 2019/06/27
+	 */
+	public final void toADIF() {
+		iterator().forEachRemaining(f->f.toADIF(this));
+		children().forEachRemaining(Tuple::toADIF);
+	}
+
+	/**
+	 * 隷下の属性をQXSLの名前空間の属性に変換します。
+	 *
+	 * @since 2019/06/27
+	 */
+	public final void toQXSL() {
+		iterator().forEachRemaining(f->f.toQXSL(this));
+		children().forEachRemaining(Tuple::toQXSL);
 	}
 }

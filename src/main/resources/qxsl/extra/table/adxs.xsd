@@ -1,0 +1,28 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:element name="ADX">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="HEADER">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="RECORDS">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="RECORD" minOccurs="0" maxOccurs="unbounded">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

@@ -7,12 +7,13 @@
 *****************************************************************************/
 package qxsl.model;
 
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.StringJoiner;
 import javax.xml.namespace.QName;
-import qxsl.field.*;
 
 /**
- * 交信時に相手局と交換したメッセージを表現するタプルです。
+ * 交信時に相手局と交換した情報を表現する{@link Tuple}実装クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -20,7 +21,7 @@ import qxsl.field.*;
  * @since 2013/06/15
  *
  */
-public abstract class Exch<E extends Exch<E>> extends Tuple<E> {
+public abstract class Exch extends Tuple {
 	/**
 	 * 指定された要素名を持つ空のタプルを構築します。
 	 * 
@@ -38,9 +39,13 @@ public abstract class Exch<E extends Exch<E>> extends Tuple<E> {
 	@Override
 	public String toString() {
 		StringJoiner sj = new StringJoiner(" ");
-		sj.add(type().getLocalPart());
-		Fields fields = new Fields();
+		sj.add(name().getLocalPart());
 		for(Field f: this) sj.add(f.toString());
 		return String.format("{%s}", sj);
+	}
+
+	@Override
+	public final Iterator<Tuple> children() {
+		return Collections.emptyIterator();
 	}
 }

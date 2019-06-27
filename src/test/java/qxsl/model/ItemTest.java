@@ -8,9 +8,9 @@
 package qxsl.model;
 
 import org.junit.Test;
-import qxsl.field.*;
+import qxsl.extra.field.qxsl.*;
 
-import static qxsl.table.secret.QxmlFormat.ITEM;
+import static qxsl.extra.table.QxmlFormat.ITEM;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -31,7 +31,7 @@ public final class ItemTest extends junit.framework.TestCase {
 	private final Time time = new Time();
 	@Test
 	public void testType() {
-		assertThat(new Item().type()).isEqualTo(ITEM);
+		assertThat(new Item().name()).isEqualTo(ITEM);
 	}
 	@Test
 	public void testEquals() {

@@ -19,7 +19,9 @@ import javax.script.ScriptContext;
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 import javax.script.SimpleScriptContext;
-import qxsl.field.*;
+
+import qxsl.extra.field.jarl.City;
+import qxsl.extra.field.qxsl.*;
 import qxsl.model.Exch;
 import qxsl.model.Item;
 
@@ -348,7 +350,7 @@ public final class RuleKit {
 	private static final class $RSTQ implements Function {
 		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final Object exch = eval.eval(args.car());
-			if(exch instanceof Exch) return ((Exch<?>) exch).value(RSTQ.class);
+			if(exch instanceof Exch) return ((Exch) exch).value(RSTQ.class);
 			throw new ScriptException(String.format("%s is not an Exch", exch));
 		}
 	}
@@ -365,7 +367,7 @@ public final class RuleKit {
 	private static final class $Code implements Function {
 		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final Object exch = eval.eval(args.car());
-			if(exch instanceof Exch) return ((Exch<?>) exch).value(Code.class);
+			if(exch instanceof Exch) return ((Exch) exch).value(Code.class);
 			throw new ScriptException(String.format("%s is not an Exch", exch));
 		}
 	}

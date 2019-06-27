@@ -31,14 +31,14 @@ public final class Sheets implements Iterable<SheetFormat> {
 	private final ServiceLoader<SheetFormat> loader;
 
 	/**
-	 * 現在の{@link ClassLoader}から書式を検索します。
+	 * 現在のクラスローダからインスタンス化機構を構築します。
 	 */
 	public Sheets() {
 		this(Thread.currentThread().getContextClassLoader());
 	}
 
 	/**
-	 * 指定の{@link ClassLoader}から書式を検索します。
+	 * 指定のクラスローダからインスタンス化機構を構築します。
 	 * 
 	 * @param cl 書式の実装を検出するクラスローダ
 	 */

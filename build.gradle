@@ -22,7 +22,7 @@ test {
 }
 
 javadoc {
-	exclude '**/secret/*'
+	exclude 'qxsl/extra/**'
 	options.links('http://docs.oracle.com/javase/jp/8/docs/api/')
 	options.charSet = utf8
 	options.encoding = utf8

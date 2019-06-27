@@ -7,10 +7,10 @@
 *****************************************************************************/
 package qxsl.model;
 
-import qxsl.table.secret.QxmlFormat;
+import static qxsl.extra.table.QxmlFormat.RCVD;
 
 /**
- * 交信記録シートにおいて相手局から受信したメッセージを表現します。
+ * 交信記録で相手局から受信した情報を格納する{@link Tuple}実装クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -18,12 +18,12 @@ import qxsl.table.secret.QxmlFormat;
  * @since 2013/06/08
  *
  */
-public final class Rcvd extends Exch<Rcvd> {
+public final class Rcvd extends Exch {
 	/**
 	 * 空の{@link Rcvd}を構築します。
 	 */
 	public Rcvd() {
-		super(QxmlFormat.RCVD);
+		super(RCVD);
 	}
 
 }

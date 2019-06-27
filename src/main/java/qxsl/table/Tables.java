@@ -32,14 +32,14 @@ public final class Tables implements Iterable<TableFormat> {
 	private final ServiceLoader<TableFormat> loader;
 
 	/**
-	 * 現在の{@link ClassLoader}から書式を検索します。
+	 * 現在のクラスローダからインスタンス化機構を構築します。
 	 */
 	public Tables() {
 		this(Thread.currentThread().getContextClassLoader());
 	}
 
 	/**
-	 * 指定の{@link ClassLoader}から書式を検索します。
+	 * 指定のクラスローダからインスタンス化機構を構築します。
 	 * 
 	 * @param cl 書式の実装を検出するクラスローダ
 	 */

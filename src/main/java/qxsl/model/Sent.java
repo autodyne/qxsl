@@ -7,10 +7,10 @@
 *****************************************************************************/
 package qxsl.model;
 
-import qxsl.table.secret.QxmlFormat;
+import static qxsl.extra.table.QxmlFormat.SENT;
 
 /**
- * 交信記録シートにおいて相手局に送信したメッセージを表現します。
+ * 交信記録で相手局に送信した情報を格納する{@link Tuple}実装クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -18,12 +18,12 @@ import qxsl.table.secret.QxmlFormat;
  * @since 2013/06/08
  *
  */
-public final class Sent extends Exch<Sent> {
+public final class Sent extends Exch {
 	/**
 	 * 空の{@link Sent}を構築します。
 	 */
 	public Sent() {
-		super(QxmlFormat.SENT);
+		super(SENT);
 	}
 
 }
