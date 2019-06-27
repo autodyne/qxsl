@@ -195,15 +195,15 @@ public final class QxmlFormat extends BaseFormat {
 		/**
 		 * ストリームから{@link Field}を生成して交信記録に設定します。
 		 * 
-		 * @param n タプル
-		 * @param e タプルの開始タグ
+		 * @param node タプル
+		 * @param elem タプルの開始タグ
 		 * @throws Exception 誤った値で生成した場合に発生する例外
 		 */
-		private void fields(Tuple n, StartElement e) throws Exception {
-			Iterator<?> iterator = e.getAttributes();
+		private void fields(Tuple node, StartElement elem) throws Exception {
+			Iterator<?> iterator = elem.getAttributes();
 			while(iterator.hasNext()) {
 				Attribute att = (Attribute) iterator.next();
-				n.set(fields.cache(att.getName()).field(att.getValue()));
+				node.set(fields.cache(att.getName()).field(att.getValue()));
 			}
 		}
 	}
@@ -293,10 +293,12 @@ public final class QxmlFormat extends BaseFormat {
 		 * @throws Exception 属性の直列化もしくはXMLの出力に伴う例外
 		 */
 		private void rcvd(Rcvd rcvd) throws Exception {
-			streamWriter.writeEmptyElement(RCVD);
-			for(Field f: rcvd) field(f);
-			streamWriter.writeNewLine();
-			streamWriter.flush();
+			if(rcvd.iterator().hasNext()) {
+				streamWriter.writeEmptyElement(RCVD);
+				for(Field f: rcvd) field(f);
+				streamWriter.writeNewLine();
+				streamWriter.flush();
+			}
 		}
 
 		/**
@@ -306,10 +308,12 @@ public final class QxmlFormat extends BaseFormat {
 		 * @throws Exception 属性の直列化もしくはXMLの出力に伴う例外
 		 */
 		private void sent(Sent sent) throws Exception {
-			streamWriter.writeEmptyElement(SENT);
-			for(Field f: sent) field(f);
-			streamWriter.writeNewLine();
-			streamWriter.flush();
+			if(sent.iterator().hasNext()) {
+				streamWriter.writeEmptyElement(SENT);
+				for(Field f: sent) field(f);
+				streamWriter.writeNewLine();
+				streamWriter.flush();
+			}
 		}
 
 		/**

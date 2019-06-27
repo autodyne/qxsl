@@ -6,12 +6,12 @@
 				<xsd:element name="item" minOccurs="0" maxOccurs="unbounded">
 					<xsd:complexType>
 						<xsd:sequence>
-							<xsd:element name="rcvd">
+							<xsd:element name="rcvd" minOccurs="0">
 								<xsd:complexType>
 									<xsd:anyAttribute processContents="lax"/>
 								</xsd:complexType>
 							</xsd:element>
-							<xsd:element name="sent">
+							<xsd:element name="sent" minOccurs="0">
 								<xsd:complexType>
 									<xsd:anyAttribute processContents="lax"/>
 								</xsd:complexType>

@@ -1,5 +1,6 @@
 qxsl.extra.field.qxsl.Band$Format
 qxsl.extra.field.qxsl.Call$Format
+qxsl.extra.field.qxsl.City$Format
 qxsl.extra.field.qxsl.Code$Format
 qxsl.extra.field.qxsl.Mode$Format
 qxsl.extra.field.qxsl.Name$Format
@@ -7,5 +8,3 @@ qxsl.extra.field.qxsl.Note$Format
 qxsl.extra.field.qxsl.RSTQ$Format
 qxsl.extra.field.qxsl.Time$Format
 qxsl.extra.field.qxsl.Watt$Format
-
-qxsl.extra.field.jarl.City$Format
