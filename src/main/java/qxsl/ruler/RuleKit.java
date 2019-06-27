@@ -20,7 +20,6 @@ import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 import javax.script.SimpleScriptContext;
 
-import qxsl.extra.field.jarl.City;
 import qxsl.extra.field.qxsl.*;
 import qxsl.model.Exch;
 import qxsl.model.Item;
@@ -383,22 +382,10 @@ public final class RuleKit {
 	@Arguments(min = 1, max = 1)
 	private static final class $City implements Function {
 		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			return new City(eval.text(args.car())).getCityName();
-		}
-	}
-
-	/**
-	 * LISP処理系で事前に定義されるpref関数です。
-	 *
-	 *
-	 * @author Journal of Hamradio Informatics
-	 *
-	 * @since 2019/05/18
-	 */
-	@Arguments(min = 1, max = 1)
-	private static final class $Pref implements Function {
-		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			return new City(eval.text(args.car())).getPrefName();
+			final String base = eval.text(args.car());
+			final String code = eval.text(args.get(1));
+			final int level = eval.integer(args.get(2));
+			return new City(base, code).getName(level);
 		}
 	}
 
@@ -461,13 +448,11 @@ public final class RuleKit {
 		lude.put("code", new $Code());
 
 		/*
-		 * preinstalled functions for city / pref access
+		 * preinstalled functions for city access
 		 *
-		 * (city JCC/JCG-code)
-		 * (pref JCC/JCG-code)
+		 * (city database-name code region-level)
 		 */
 		lude.put("city", new $City());
-		lude.put("pref", new $Pref());
 		return lude;
 	}
 }

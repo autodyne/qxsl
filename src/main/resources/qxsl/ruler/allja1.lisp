@@ -38,8 +38,8 @@
 		(trim (code (rcvd it)) (if (CW? it) 3 2))
 		(code (rcvd it))))
 
-(defun CITY it (city (CODE it)))
-(defun PREF it (pref (CODE it)))
+(defun CITY it (city "jarl" (CODE it) 1))
+(defun PREF it (city "jarl" (CODE it) 0))
 
 (defun PREF? it (equal (CITY it) (PREF it)))
 (defun AREA1? it

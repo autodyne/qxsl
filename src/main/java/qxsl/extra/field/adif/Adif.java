@@ -23,10 +23,9 @@ import qxsl.model.Tuple;
  * @param <V> 属性の属性値の総称型
  */
 public abstract class Adif<V> extends Field<V> {
-	public static final String NAMESPACE = "adif.org";
-	public static final QName BAND = new QName(NAMESPACE, "band", "adif");
-	public static final QName CALL = new QName(NAMESPACE, "call", "adif");
-	public static final QName MODE = new QName(NAMESPACE, "mode", "adif");
+	public static final QName BAND = new QName("adif.org", "band", "adif");
+	public static final QName CALL = new QName("adif.org", "call", "adif");
+	public static final QName MODE = new QName("adif.org", "mode", "adif");
 
 	/**
 	 * 指定した属性名を持つ属性を構築します。

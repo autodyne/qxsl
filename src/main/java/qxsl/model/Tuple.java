@@ -158,7 +158,7 @@ public abstract class Tuple implements Iterable<Field> {
 	 * @since 2019/06/27
 	 */
 	public final void toADIF() {
-		iterator().forEachRemaining(f->f.toADIF(this));
+		iterator().forEachRemaining(f -> f.toADIF(this));
 		children().forEachRemaining(Tuple::toADIF);
 	}
 
@@ -168,7 +168,7 @@ public abstract class Tuple implements Iterable<Field> {
 	 * @since 2019/06/27
 	 */
 	public final void toQXSL() {
-		iterator().forEachRemaining(f->f.toQXSL(this));
+		iterator().forEachRemaining(f -> f.toQXSL(this));
 		children().forEachRemaining(Tuple::toQXSL);
 	}
 }
