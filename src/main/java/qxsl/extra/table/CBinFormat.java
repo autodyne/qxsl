@@ -143,7 +143,7 @@ public final class CBinFormat extends BaseFormat {
 		K136 (      136);
 
 		private final Band band;
-		private static BandEnum[] arr;
+		private static BandEnum[] values;
 
 		private BandEnum(int kHz) {
 			this.band = new Band(kHz);
@@ -170,8 +170,8 @@ public final class CBinFormat extends BaseFormat {
 		 * @return 対応する列挙子があれば返す
 		 */
 		public static BandEnum valueOf(Band band) {
-			if(arr == null) arr = values();
-			for(BandEnum b : arr) {
+			if(values == null) values = values();
+			for(BandEnum b : values) {
 				if(b.band.equals(band)) return b;
 			}
 			return null;
@@ -184,8 +184,8 @@ public final class CBinFormat extends BaseFormat {
 		 * @return 対応する列挙子があれば返す
 		 */
 		public static BandEnum forIndex(int i) {
-			if(arr == null) arr = values();
-			for(BandEnum m : arr) {
+			if(values == null) values = values();
+			for(BandEnum m : values) {
 				if(m.ordinal() == i) return m;
 			}
 			return null;
@@ -218,7 +218,7 @@ public final class CBinFormat extends BaseFormat {
 		C4FM("C4FM");
 
 		private final Mode mode;
-		private static ModeEnum[] arr;
+		private static ModeEnum[] values;
 
 		private ModeEnum(String mode) {
 			this.mode = new Mode(mode);
@@ -240,8 +240,8 @@ public final class CBinFormat extends BaseFormat {
 		 * @return 対応する列挙子があれば返す
 		 */
 		public static ModeEnum valueOf(Mode mode) {
-			if(arr == null) arr = values();
-			for(ModeEnum m : arr) {
+			if(values == null) values = values();
+			for(ModeEnum m : values) {
 				if(m.mode.equals(mode)) return m;
 			}
 			return null;
@@ -254,8 +254,8 @@ public final class CBinFormat extends BaseFormat {
 		 * @return 対応する列挙子があれば返す
 		 */
 		public static ModeEnum forIndex(int i) {
-			if(arr == null) arr = values();
-			for(ModeEnum m : arr) {
+			if(values == null) values = values();
+			for(ModeEnum m : values) {
 				if(m.ordinal() == i) return m;
 			}
 			return null;
@@ -356,7 +356,7 @@ public final class CBinFormat extends BaseFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void time(Item item) throws Exception {
-			item.set(cDTime.decode(stream.readLong()));
+			item.add(cDTime.decode(stream.readLong()));
 		}
 
 		/**
@@ -367,7 +367,7 @@ public final class CBinFormat extends BaseFormat {
 		 */
 		private void call(Item item) throws Exception {
 			final String s = readString(20);
-			item.set(fields.cache(Qxsl.CALL).field(s));
+			item.add(fields.cache(Qxsl.CALL).field(s));
 		}
 
 		/**
@@ -378,7 +378,7 @@ public final class CBinFormat extends BaseFormat {
 		 */
 		private void sent(Item item) throws Exception {
 			final String s = readString(30);
-			item.getSent().set(fields.cache(Qxsl.CODE).field(s));
+			item.getSent().add(fields.cache(Qxsl.CODE).field(s));
 		}
 
 		/**
@@ -389,7 +389,7 @@ public final class CBinFormat extends BaseFormat {
 		 */
 		private void rcvd(Item item) throws Exception {
 			final String s = readString(30);
-			item.getRcvd().set(fields.cache(Qxsl.CODE).field(s));
+			item.getRcvd().add(fields.cache(Qxsl.CODE).field(s));
 		}
 		
 		/**
@@ -399,7 +399,7 @@ public final class CBinFormat extends BaseFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void mode(Item item) throws Exception {
-			item.set(ModeEnum.forIndex(stream.read()).toMode());
+			item.add(ModeEnum.forIndex(stream.read()).toMode());
 		}
 
 		/**
@@ -409,7 +409,7 @@ public final class CBinFormat extends BaseFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void band(Item item) throws Exception {
-			item.set(BandEnum.forIndex(stream.read()).toBand());
+			item.add(BandEnum.forIndex(stream.read()).toBand());
 		}
 
 		/**
@@ -420,7 +420,7 @@ public final class CBinFormat extends BaseFormat {
 		 */
 		private void oprt(Item item) throws Exception {
 			final String s = readString(20);
-			item.set(fields.cache(Qxsl.NAME).field(s));
+			item.add(fields.cache(Qxsl.NAME).field(s));
 		}
 
 		/**
@@ -431,7 +431,7 @@ public final class CBinFormat extends BaseFormat {
 		 */
 		private void note(Item item) throws Exception {
 			final String s = readString(50);
-			item.set(fields.cache(Qxsl.NOTE).field(s));
+			item.add(fields.cache(Qxsl.NOTE).field(s));
 		}
 
 		/**

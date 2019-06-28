@@ -153,7 +153,7 @@ public final class RtclFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void time(Item item, String time) throws Exception {
-			item.set(new Time(LocalDateTime.parse(time, format)));
+			item.add(new Time(LocalDateTime.parse(time, format)));
 		}
 
 		/**
@@ -165,7 +165,7 @@ public final class RtclFormat extends TextFormat {
 		 */
 		private void band(Item item, String band) throws Exception {
 			Integer kHz = Integer.parseInt(band);
-			item.set(fields.cache(Qxsl.BAND).field(kHz.toString()));
+			item.add(fields.cache(Qxsl.BAND).field(kHz.toString()));
 		}
 
 		/**
@@ -176,7 +176,7 @@ public final class RtclFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void mode(Item item, String mode) throws Exception {
-			item.set(fields.cache(Qxsl.MODE).field(mode));
+			item.add(fields.cache(Qxsl.MODE).field(mode));
 		}
 
 		/**
@@ -187,7 +187,7 @@ public final class RtclFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void call(Item item, String call) throws Exception {
-			item.set(fields.cache(Qxsl.CALL).field(call));
+			item.add(fields.cache(Qxsl.CALL).field(call));
 		}
 
 		/**
@@ -198,7 +198,7 @@ public final class RtclFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void srst(Item item, String srst) throws Exception {
-			item.getSent().set(fields.cache(Qxsl.RSTQ).field(srst));
+			item.getSent().add(fields.cache(Qxsl.RSTQ).field(srst));
 		}
 
 		/**
@@ -209,7 +209,7 @@ public final class RtclFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void snum(Item item, String snum) throws Exception {
-			item.getSent().set(fields.cache(Qxsl.CODE).field(snum));
+			item.getSent().add(fields.cache(Qxsl.CODE).field(snum));
 		}
 
 		/**
@@ -220,7 +220,7 @@ public final class RtclFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void rrst(Item item, String rrst) throws Exception {
-			item.getRcvd().set(fields.cache(Qxsl.RSTQ).field(rrst));
+			item.getRcvd().add(fields.cache(Qxsl.RSTQ).field(rrst));
 		}
 
 		/**
@@ -231,7 +231,7 @@ public final class RtclFormat extends TextFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void rnum(Item item, String rnum) throws Exception {
-			item.getRcvd().set(fields.cache(Qxsl.CODE).field(rnum));
+			item.getRcvd().add(fields.cache(Qxsl.CODE).field(rnum));
 		}
 	}
 

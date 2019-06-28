@@ -22,7 +22,7 @@ import qxsl.table.FieldFormat;
  */
 public final class Watt extends Qxsl<String> {
 	private final String watt;
-	
+
 	/**
 	 * 空中線出力を指定して{@link Watt}を構築します。
 	 * 
@@ -52,12 +52,12 @@ public final class Watt extends Qxsl<String> {
 		public QName name() {
 			return WATT;
 		}
-	
+
 		@Override
 		public Watt decode(String value) {
 			return new Watt(value);
 		}
-	
+
 		@Override
 		public String encode(Field field) {
 			return field.value().toString();

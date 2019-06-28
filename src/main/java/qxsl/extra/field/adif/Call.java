@@ -5,41 +5,41 @@
  * License : GNU Lesser General Public License v3 (see LICENSE)
  * Author: Journal of Hamradio Informatics http://pafelog.net
 *****************************************************************************/
-package qxsl.extra.field.qxsl;
+package qxsl.extra.field.adif;
 
 import javax.xml.namespace.QName;
 import qxsl.model.Field;
 import qxsl.table.FieldFormat;
 
 /**
- * 交信を行なった運用者の個人の名前を表現します。
+ * 交信の相手局の呼出符号を表現する{@link Field}実装クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics
  * 
- * @since 2013/06/08
+ * @since 2019/06/28
  *
  */
-public final class Name extends Qxsl<String> {
-	private final String name;
+public final class Call extends Adif<String> {
+	private final String callSign;
 
 	/**
-	 * 運用者名を指定して{@link Name}を構築します。
+	 * コールサインを指定して{@link Call}を構築します。
 	 * 
-	 * @param name 運用者名
+	 * @param callSign コールサイン
 	 */
-	public Name(String name) {
-		super(NAME);
-		this.name = name;
+	public Call(String callSign) {
+		super(CALL);
+		this.callSign = callSign;
 	}
 
 	@Override
 	public String value() {
-		return name;
+		return callSign;
 	}
 
 	/**
-	 * {@link Name}を生成するフォーマットです。
+	 * {@link Call}を生成するフォーマットです。
 	 * 
 	 * 
 	 * @author Journal of Hamradio Informatics
@@ -50,12 +50,12 @@ public final class Name extends Qxsl<String> {
 	public static final class Format implements FieldFormat {
 		@Override
 		public QName name() {
-			return NAME;
+			return CALL;
 		}
 
 		@Override
-		public Name decode(String value) {
-			return new Name(value);
+		public Call decode(String value) {
+			return new Call(value);
 		}
 
 		@Override

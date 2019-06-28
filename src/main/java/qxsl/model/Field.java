@@ -87,24 +87,4 @@ public abstract class Field<V> {
 		}
 		return false;
 	}
-
-	/**
-	 * この属性をADIFの名前空間の属性に変換します。
-	 * デフォルトでこのメソッドは変換を行いません。
-	 *
-	 * @param tuple この属性を格納しているタプル
-	 *
-	 * @since 2019/06/27
-	 */
-	public void toADIF(Tuple tuple) {}
-
-	/**
-	 * この属性をQXSLの名前空間の属性に変換します。
-	 * デフォルトでこのメソッドは変換を行いません。
-	 *
-	 * @param tuple この属性を格納しているタプル
-	 *
-	 * @since 2019/06/27
-	 */
-	public void toQXSL(Tuple tuple) {}
 }

@@ -5,62 +5,71 @@
  * License : GNU Lesser General Public License v3 (see LICENSE)
  * Author: Journal of Hamradio Informatics http://pafelog.net
 *****************************************************************************/
-package qxsl.extra.field.qxsl;
+package qxsl.extra.field.adif;
 
+import java.time.ZoneOffset;
+import java.time.LocalDate;
 import javax.xml.namespace.QName;
 import qxsl.model.Field;
 import qxsl.table.FieldFormat;
 
+import static java.time.format.DateTimeFormatter.BASIC_ISO_DATE;
+
 /**
- * 交信を行なった運用者の個人の名前を表現します。
+ * 交信の協定世界時の日付を表現する{@link Field}実装クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics
  * 
- * @since 2013/06/08
+ * @since 2019/06/28
  *
  */
-public final class Name extends Qxsl<String> {
-	private final String name;
+public final class Date extends Adif<LocalDate> {
+	private final LocalDate date;
 
 	/**
-	 * 運用者名を指定して{@link Name}を構築します。
+	 * 協定世界時の日付を指定して{@link Date}を構築します。
 	 * 
-	 * @param name 運用者名
+	 * @param date 日付
 	 */
-	public Name(String name) {
-		super(NAME);
-		this.name = name;
-	}
-
-	@Override
-	public String value() {
-		return name;
+	public Date(LocalDate date) {
+		super(DATE);
+		this.date = date;
 	}
 
 	/**
-	 * {@link Name}を生成するフォーマットです。
+	 * 協定世界時の日付を返します。
+	 *
+	 * @return 日付
+	 */
+	@Override
+	public LocalDate value() {
+		return date;
+	}
+
+	/**
+	 * {@link Date}を生成するフォーマットです。
 	 * 
 	 * 
 	 * @author Journal of Hamradio Informatics
 	 * 
-	 * @since 2013/06/08
+	 * @since 2013/06/09
 	 *
 	 */
 	public static final class Format implements FieldFormat {
 		@Override
 		public QName name() {
-			return NAME;
+			return DATE;
 		}
 
 		@Override
-		public Name decode(String value) {
-			return new Name(value);
+		public Date decode(String value) {
+			return new Date(LocalDate.parse(value, BASIC_ISO_DATE));
 		}
 
 		@Override
 		public String encode(Field field) {
-			return field.value().toString();
+			return ((Date) field).value().format(BASIC_ISO_DATE);
 		}
 	}
 }

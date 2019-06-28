@@ -82,7 +82,7 @@ public final class City extends Qxsl<String> {
 	private static final DataBase getDataBase(String base) {
 		return bases.computeIfAbsent(base, DataBase::new);
 	}
-	
+
 	/**
 	 * ライブラリが内蔵する地域データベースを表現します。
 	 * 
@@ -154,13 +154,13 @@ public final class City extends Qxsl<String> {
 		public QName name() {
 			return CITY;
 		}
-	
+
 		@Override
 		public City decode(String value) {
 			String[] values = value.split(":", 2);
 			return new City(values[0], values[1]);
 		}
-	
+
 		@Override
 		public String encode(Field field) {
 			return field.value().toString();

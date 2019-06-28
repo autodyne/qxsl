@@ -38,18 +38,18 @@ public final class QxmlFormatTest extends junit.framework.TestCase {
 			final ArrayList<Item> items = new ArrayList<>();
 			for(int row = 0; row < numItems; row++) {
 				final Item item = new Item();
-				item.set(new Time());
-				item.set(new Band(random.nextInt(10_000_000)));
-				item.set(new Call(util.RandText.alnum(10)));
-				item.set(new Name(util.RandText.alnum(10)));
-				item.set(new Note(util.RandText.alnum(10)));
-				item.set(new Mode(util.RandText.alnum(10)));
-				item.getRcvd().set(new RSTQ(random.nextInt(600)));
-				item.getRcvd().set(new Code(util.RandText.alnum(10)));
-				item.getRcvd().set(new Watt(util.RandText.alnum(10)));
-				item.getSent().set(new RSTQ(random.nextInt(600)));
-				item.getSent().set(new Code(util.RandText.alnum(10)));
-				item.getSent().set(new Watt(util.RandText.alnum(10)));
+				item.add(new Time());
+				item.add(new Band(random.nextInt(10_000_000)));
+				item.add(new Call(util.RandText.alnum(10)));
+				item.add(new Name(util.RandText.alnum(10)));
+				item.add(new Note(util.RandText.alnum(10)));
+				item.add(new Mode(util.RandText.alnum(10)));
+				item.getRcvd().add(new RSTQ(random.nextInt(600)));
+				item.getRcvd().add(new Code(util.RandText.alnum(10)));
+				item.getRcvd().add(new Watt(util.RandText.alnum(10)));
+				item.getSent().add(new RSTQ(random.nextInt(600)));
+				item.getSent().add(new Code(util.RandText.alnum(10)));
+				item.getSent().add(new Watt(util.RandText.alnum(10)));
 				items.add(item);
 			}
 			final ByteArrayOutputStream os = new ByteArrayOutputStream();

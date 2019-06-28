@@ -22,7 +22,7 @@ import qxsl.table.FieldFormat;
  */
 public final class RSTQ extends Qxsl<Integer> {
 	private final int r, s, t;
-	
+
 	/**
 	 * 指定された整数で{@link RSTQ}を構築します。
 	 * 3桁の整数の場合、音調レポートまで読み取ります。
@@ -45,7 +45,7 @@ public final class RSTQ extends Qxsl<Integer> {
 			this.t = 0;
 		}
 	}
-	
+
 	/**
 	 * RSTQを整数で指定して{@link RSTQ}を構築します。
 	 * 
@@ -56,7 +56,7 @@ public final class RSTQ extends Qxsl<Integer> {
 	public RSTQ(int r, int s, int t) {
 		this(r * 100 + s * 10 + t);
 	}
-	
+
 	/**
 	 * 了解度レポートを返します。
 	 * この値は常に1以上5以下です。
@@ -66,7 +66,7 @@ public final class RSTQ extends Qxsl<Integer> {
 	public int getR() {
 		return r;
 	}
-	
+
 	/**
 	 * 信号強度レポートを返します。
 	 * この値は常に1以上9以下です。
@@ -76,7 +76,7 @@ public final class RSTQ extends Qxsl<Integer> {
 	public int getS() {
 		return s;
 	}
-	
+
 	/**
 	 * 音調レポートを返します。
 	 * この値は常に0以上9以下です。
@@ -107,12 +107,12 @@ public final class RSTQ extends Qxsl<Integer> {
 		public QName name() {
 			return RSTQ;
 		}
-	
+
 		@Override
 		public RSTQ decode(String value) {
 			return new RSTQ(Integer.parseInt(value));
 		}
-	
+
 		@Override
 		public String encode(Field field) {
 			return field.value().toString();

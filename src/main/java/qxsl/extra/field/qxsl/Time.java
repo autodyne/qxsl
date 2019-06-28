@@ -9,7 +9,8 @@ package qxsl.extra.field.qxsl;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.*;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.Temporal;
 import javax.xml.namespace.QName;
 import qxsl.model.Field;
 import qxsl.table.FieldFormat;
@@ -110,12 +111,12 @@ public final class Time extends Qxsl<ZonedDateTime> {
 		public QName name() {
 			return TIME;
 		}
-	
+
 		@Override
 		public Time decode(String value) {
 			return new Time(ZonedDateTime.parse(value, format));
 		}
-	
+
 		@Override
 		public String encode(Field field) {
 			return ((Time) field).time.format(format);

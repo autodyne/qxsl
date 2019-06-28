@@ -149,7 +149,7 @@ public final class ZBinFormat extends BaseFormat {
 		G10UP (10000000);
 
 		private final Band band;
-		private static BandEnum[] arr;
+		private static BandEnum[] values;
 
 		private BandEnum(int kHz) {
 			this.band = new Band(kHz);
@@ -176,8 +176,8 @@ public final class ZBinFormat extends BaseFormat {
 		 * @return 対応する列挙子があれば返す
 		 */
 		public static BandEnum valueOf(Band band) {
-			if(arr == null) arr = values();
-			for(BandEnum b : arr) {
+			if(values == null) values = values();
+			for(BandEnum b : values) {
 				if(b.band.equals(band)) return b;
 			}
 			return null;
@@ -190,8 +190,8 @@ public final class ZBinFormat extends BaseFormat {
 		 * @return 対応する列挙子があれば返す
 		 */
 		public static BandEnum forIndex(int i) {
-			if(arr == null) arr = values();
-			for(BandEnum m : arr) {
+			if(values == null) values = values();
+			for(BandEnum m : values) {
 				if(m.ordinal() == i) return m;
 			}
 			return null;
@@ -216,7 +216,7 @@ public final class ZBinFormat extends BaseFormat {
 		OTHERS("Others");
 
 		private final Mode mode;
-		private static ModeEnum[] arr;
+		private static ModeEnum[] values;
 
 		private ModeEnum(String mode) {
 			this.mode = new Mode(mode);
@@ -238,8 +238,8 @@ public final class ZBinFormat extends BaseFormat {
 		 * @return 対応する列挙子があれば返す
 		 */
 		public static ModeEnum valueOf(Mode mode) {
-			if(arr == null) arr = values();
-			for(ModeEnum m : arr) {
+			if(values == null) values = values();
+			for(ModeEnum m : values) {
 				if(m.mode.equals(mode)) return m;
 			}
 			return null;
@@ -252,8 +252,8 @@ public final class ZBinFormat extends BaseFormat {
 		 * @return 対応する列挙子があれば返す
 		 */
 		public static ModeEnum forIndex(int i) {
-			if(arr == null) arr = values();
-			for(ModeEnum m : arr) {
+			if(values == null) values = values();
+			for(ModeEnum m : values) {
 				if(m.ordinal() == i) return m;
 			}
 			return null;
@@ -273,7 +273,7 @@ public final class ZBinFormat extends BaseFormat {
 		P, L, M, H;
 
 		private final Watt watt;
-		private static WattEnum[] arr;
+		private static WattEnum[] values;
 
 		private WattEnum() {
 			watt = new Watt(name());
@@ -295,8 +295,8 @@ public final class ZBinFormat extends BaseFormat {
 		 * @return 対応する列挙子があれば返す
 		 */
 		public static WattEnum valueOf(Watt watt) {
-			if(arr == null) arr = values();
-			for(WattEnum p : arr) {
+			if(values == null) values = values();
+			for(WattEnum p : values) {
 				if(p.watt.equals(watt)) return p;
 			}
 			return null;
@@ -309,8 +309,8 @@ public final class ZBinFormat extends BaseFormat {
 		 * @return 対応する列挙子があれば返す
 		 */
 		public static WattEnum forIndex(int i) {
-			if(arr == null) arr = values();
-			for(WattEnum p : arr) {
+			if(values == null) values = values();
+			for(WattEnum p : values) {
 				if(p.ordinal() == i) return p;
 			}
 			return null;
@@ -421,7 +421,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void time(Item item) throws Exception {
-			item.set(tDateTime.decode(stream.readLong()));
+			item.add(tDateTime.decode(stream.readLong()));
 		}
 
 		/**
@@ -432,7 +432,7 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		private void call(Item item) throws Exception {
 			final String s = readString(12);
-			item.set(fields.cache(Qxsl.CALL).field(s));
+			item.add(fields.cache(Qxsl.CALL).field(s));
 		}
 
 		/**
@@ -443,7 +443,7 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		private void sent(Item item) throws Exception {
 			final String s = readString(30);
-			item.getSent().set(fields.cache(Qxsl.CODE).field(s));
+			item.getSent().add(fields.cache(Qxsl.CODE).field(s));
 		}
 
 		/**
@@ -454,7 +454,7 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		private void rcvd(Item item) throws Exception {
 			final String s = readString(30);
-			item.getRcvd().set(fields.cache(Qxsl.CODE).field(s));
+			item.getRcvd().add(fields.cache(Qxsl.CODE).field(s));
 		}
 
 		/**
@@ -465,7 +465,7 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		private void sRSTQ(Item item) throws Exception {
 			String rst = String.valueOf(Short.reverseBytes(stream.readShort()));
-			item.getSent().set(fields.cache(Qxsl.RSTQ).field(rst));
+			item.getSent().add(fields.cache(Qxsl.RSTQ).field(rst));
 		}
 
 		/**
@@ -476,7 +476,7 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		private void rRSTQ(Item item) throws Exception {
 			String rst = String.valueOf(Short.reverseBytes(stream.readShort()));
-			item.getRcvd().set(fields.cache(Qxsl.RSTQ).field(rst));
+			item.getRcvd().add(fields.cache(Qxsl.RSTQ).field(rst));
 		}
 
 		/**
@@ -486,7 +486,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void mode(Item item) throws Exception {
-			item.set(ModeEnum.forIndex(stream.read()).toMode());
+			item.add(ModeEnum.forIndex(stream.read()).toMode());
 		}
 
 		/**
@@ -496,7 +496,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void band(Item item) throws Exception {
-			item.set(BandEnum.forIndex(stream.read()).toBand());
+			item.add(BandEnum.forIndex(stream.read()).toBand());
 		}
 
 		/**
@@ -506,7 +506,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private void watt(Item item) throws Exception {
-			item.getSent().set(WattEnum.forIndex(stream.read()).toWatt());
+			item.getSent().add(WattEnum.forIndex(stream.read()).toWatt());
 		}
 
 		/**
@@ -517,7 +517,7 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		private void oprt(Item item) throws Exception {
 			final String s = readString(14);
-			item.set(fields.cache(Qxsl.NAME).field(s));
+			item.add(fields.cache(Qxsl.NAME).field(s));
 		}
 
 		/**
@@ -528,7 +528,7 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		private void note(Item item) throws Exception {
 			final String s = readString(66);
-			item.set(fields.cache(Qxsl.NOTE).field(s));
+			item.add(fields.cache(Qxsl.NOTE).field(s));
 		}
 
 		/**

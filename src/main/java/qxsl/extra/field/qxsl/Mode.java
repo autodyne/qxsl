@@ -22,7 +22,7 @@ import qxsl.table.FieldFormat;
  */
 public final class Mode extends Qxsl<String> {
 	private final String mode;
-	
+
 	/**
 	 * モード名を指定して{@link Mode}を構築します。
 	 * 
@@ -52,12 +52,12 @@ public final class Mode extends Qxsl<String> {
 		public QName name() {
 			return MODE;
 		}
-	
+
 		@Override
 		public Mode decode(String value) {
 			return new Mode(value);
 		}
-	
+
 		@Override
 		public String encode(Field field) {
 			return field.value().toString();

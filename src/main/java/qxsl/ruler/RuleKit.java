@@ -315,7 +315,7 @@ public final class RuleKit {
 	private static final class $Band implements Function {
 		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final Object item = eval.eval(args.car());
-			if(item instanceof Item) return ((Item) item).value(Band.class);
+			if(item instanceof Item) return ((Item) item).get(Band.class).toInt();
 			throw new ScriptException(String.format("%s is not an Item", item));
 		}
 	}

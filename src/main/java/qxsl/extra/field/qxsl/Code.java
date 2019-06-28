@@ -32,7 +32,7 @@ public final class Code extends Qxsl<String> {
 		super(CODE);
 		this.value = code;
 	}
-	
+
 	@Override
 	public String value() {
 		return value;
@@ -52,12 +52,12 @@ public final class Code extends Qxsl<String> {
 		public QName name() {
 			return CODE;
 		}
-	
+
 		@Override
 		public Code decode(String value) {
 			return new Code(value);
 		}
-	
+
 		@Override
 		public String encode(Field field) {
 			return field.value().toString();

@@ -50,14 +50,14 @@ public final class CqwwFormatTest extends junit.framework.TestCase {
 			final ArrayList<Item> items = new ArrayList<>();
 			for(int row = 0; row < numItems; row++) {
 				final Item item = new Item();
-				item.set(new Time());
-				item.set(bands.get(random.nextInt(bands.size())));
-				item.set(new Call(util.RandText.alnum(13)));
-				item.set(new Mode(util.RandText.alnum(2)));
-				item.getRcvd().set(new RSTQ(random.nextInt(600)));
-				item.getRcvd().set(new Code(util.RandText.alnum(6)));
-				item.getSent().set(new RSTQ(random.nextInt(600)));
-				item.getSent().set(new Code(util.RandText.alnum(6)));
+				item.add(new Time());
+				item.add(bands.get(random.nextInt(bands.size())));
+				item.add(new Call(util.RandText.alnum(13)));
+				item.add(new Mode(util.RandText.alnum(2)));
+				item.getRcvd().add(new RSTQ(random.nextInt(600)));
+				item.getRcvd().add(new Code(util.RandText.alnum(6)));
+				item.getSent().add(new RSTQ(random.nextInt(600)));
+				item.getSent().add(new Code(util.RandText.alnum(6)));
 				items.add(item);
 			}
 			final ByteArrayOutputStream os = new ByteArrayOutputStream();

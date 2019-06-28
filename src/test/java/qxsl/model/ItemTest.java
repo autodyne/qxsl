@@ -38,19 +38,19 @@ public final class ItemTest extends junit.framework.TestCase {
 		final Item item1 = new Item();
 		final Item item2 = new Item();
 		assertThat(item1).isEqualTo(item2);
-		assertThat(item1.set(band).get(Band.class)).isEqualTo(band);
-		assertThat(item1.set(call).get(Call.class)).isEqualTo(call);
-		assertThat(item1.set(mode).get(Mode.class)).isEqualTo(mode);
-		assertThat(item1.set(name).get(Name.class)).isEqualTo(name);
-		assertThat(item1.set(note).get(Note.class)).isEqualTo(note);
-		assertThat(item1.set(time).get(Time.class)).isEqualTo(time);
+		assertThat(item1.add(band).get(Band.class)).isEqualTo(band);
+		assertThat(item1.add(call).get(Call.class)).isEqualTo(call);
+		assertThat(item1.add(mode).get(Mode.class)).isEqualTo(mode);
+		assertThat(item1.add(name).get(Name.class)).isEqualTo(name);
+		assertThat(item1.add(note).get(Note.class)).isEqualTo(note);
+		assertThat(item1.add(time).get(Time.class)).isEqualTo(time);
 		assertThat(item1).isNotEqualTo(item2);
-		assertThat(item2.set(band).get(Band.class)).isEqualTo(band);
-		assertThat(item2.set(call).get(Call.class)).isEqualTo(call);
-		assertThat(item2.set(mode).get(Mode.class)).isEqualTo(mode);
-		assertThat(item2.set(name).get(Name.class)).isEqualTo(name);
-		assertThat(item2.set(note).get(Note.class)).isEqualTo(note);
-		assertThat(item2.set(time).get(Time.class)).isEqualTo(time);
+		assertThat(item2.add(band).get(Band.class)).isEqualTo(band);
+		assertThat(item2.add(call).get(Call.class)).isEqualTo(call);
+		assertThat(item2.add(mode).get(Mode.class)).isEqualTo(mode);
+		assertThat(item2.add(name).get(Name.class)).isEqualTo(name);
+		assertThat(item2.add(note).get(Note.class)).isEqualTo(note);
+		assertThat(item2.add(time).get(Time.class)).isEqualTo(time);
 		assertThat(item1).isEqualTo(item2);
 	}
 }

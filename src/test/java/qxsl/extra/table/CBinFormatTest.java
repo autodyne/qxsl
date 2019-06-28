@@ -53,14 +53,14 @@ public final class CBinFormatTest extends junit.framework.TestCase {
 			final ArrayList<Item> items = new ArrayList<>();
 			for(int row = 0; row < numItems; row++) {
 				final Item item = new Item();
-				item.set(new Time());
-				item.set(bands.get(random.nextInt(bands.size())));
-				item.set(new Call(util.RandText.alnum(19)));
-				item.set(modes.get(random.nextInt(modes.size())));
-				item.set(new Note(util.RandText.alnum(49)));
-				item.set(new Name(util.RandText.alnum(19)));
-				item.getRcvd().set(new Code(util.RandText.alnum(29)));
-				item.getSent().set(new Code(util.RandText.alnum(29)));
+				item.add(new Time());
+				item.add(bands.get(random.nextInt(bands.size())));
+				item.add(new Call(util.RandText.alnum(19)));
+				item.add(modes.get(random.nextInt(modes.size())));
+				item.add(new Note(util.RandText.alnum(49)));
+				item.add(new Name(util.RandText.alnum(19)));
+				item.getRcvd().add(new Code(util.RandText.alnum(29)));
+				item.getSent().add(new Code(util.RandText.alnum(29)));
 				items.add(item);
 			}
 			final ByteArrayOutputStream os = new ByteArrayOutputStream();

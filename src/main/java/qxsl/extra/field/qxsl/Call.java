@@ -21,21 +21,21 @@ import qxsl.table.FieldFormat;
  *
  */
 public final class Call extends Qxsl<String> {
-	private final String callSign;
-	
+	private final String call;
+
 	/**
 	 * コールサインを指定して{@link Call}を構築します。
 	 * 
-	 * @param callSign コールサイン
+	 * @param call コールサイン
 	 */
-	public Call(String callSign) {
+	public Call(String call) {
 		super(CALL);
-		this.callSign = callSign;
+		this.call = call;
 	}
 
 	@Override
 	public String value() {
-		return callSign;
+		return call;
 	}
 
 	/**
@@ -52,12 +52,12 @@ public final class Call extends Qxsl<String> {
 		public QName name() {
 			return CALL;
 		}
-	
+
 		@Override
 		public Call decode(String value) {
 			return new Call(value);
 		}
-	
+
 		@Override
 		public String encode(Field field) {
 			return field.value().toString();

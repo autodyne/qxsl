@@ -47,13 +47,13 @@ public final class ZDosFormatTest extends junit.framework.TestCase {
 			final ArrayList<Item> items = new ArrayList<>();
 			for(int row = 0; row < numItems; row++) {
 				final Item item = new Item();
-				item.set(new Time());
-				item.set(bands.get(random.nextInt(bands.size())));
-				item.set(new Call(util.RandText.alnum(10)));
-				item.set(new Mode(util.RandText.alnum(4)));
-				item.set(new Note(util.RandText.alnum(50)));
-				item.getRcvd().set(new Code(util.RandText.alnum(12)));
-				item.getSent().set(new Code(util.RandText.alnum(12)));
+				item.add(new Time());
+				item.add(bands.get(random.nextInt(bands.size())));
+				item.add(new Call(util.RandText.alnum(10)));
+				item.add(new Mode(util.RandText.alnum(4)));
+				item.add(new Note(util.RandText.alnum(50)));
+				item.getRcvd().add(new Code(util.RandText.alnum(12)));
+				item.getSent().add(new Code(util.RandText.alnum(12)));
 				items.add(item);
 			}
 			final ByteArrayOutputStream os = new ByteArrayOutputStream();

@@ -22,7 +22,7 @@ import qxsl.table.FieldFormat;
  */
 public final class Note extends Qxsl<String> {
 	private final String note;
-	
+
 	/**
 	 * 備考を指定して{@link Note}を構築します。
 	 * 
@@ -52,12 +52,12 @@ public final class Note extends Qxsl<String> {
 		public QName name() {
 			return NOTE;
 		}
-	
+
 		@Override
 		public Note decode(String value) {
 			return new Note(value);
 		}
-	
+
 		@Override
 		public String encode(Field field) {
 			return field.value().toString();

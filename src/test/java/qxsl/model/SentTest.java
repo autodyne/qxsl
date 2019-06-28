@@ -35,13 +35,13 @@ public final class SentTest extends junit.framework.TestCase {
 		final Sent sent1 = new Sent();
 		final Sent sent2 = new Sent();
 		assertThat(sent1).isEqualTo(sent2);
-		assertThat(sent1.set(code).get(Code.class)).isEqualTo(code);
-		assertThat(sent1.set(rstq).get(RSTQ.class)).isEqualTo(rstq);
-		assertThat(sent1.set(watt).get(Watt.class)).isEqualTo(watt);
+		assertThat(sent1.add(code).get(Code.class)).isEqualTo(code);
+		assertThat(sent1.add(rstq).get(RSTQ.class)).isEqualTo(rstq);
+		assertThat(sent1.add(watt).get(Watt.class)).isEqualTo(watt);
 		assertThat(sent1).isNotEqualTo(sent2);
-		assertThat(sent2.set(code).get(Code.class)).isEqualTo(code);
-		assertThat(sent2.set(rstq).get(RSTQ.class)).isEqualTo(rstq);
-		assertThat(sent2.set(watt).get(Watt.class)).isEqualTo(watt);
+		assertThat(sent2.add(code).get(Code.class)).isEqualTo(code);
+		assertThat(sent2.add(rstq).get(RSTQ.class)).isEqualTo(rstq);
+		assertThat(sent2.add(watt).get(Watt.class)).isEqualTo(watt);
 		assertThat(sent1).isEqualTo(sent2);
 	}
 }

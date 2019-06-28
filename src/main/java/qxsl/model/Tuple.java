@@ -147,28 +147,8 @@ public abstract class Tuple implements Iterable<Field> {
 	 * @return このタプル
 	 * @throws NullPointerException 属性がnullの場合
 	 */
-	public final Tuple set(Field field) {
+	public final Tuple add(Field field) {
 		table.put(field.name(), field);
 		return this;
-	}
-
-	/**
-	 * 隷下の属性をADIFの名前空間の属性に変換します。
-	 *
-	 * @since 2019/06/27
-	 */
-	public final void toADIF() {
-		iterator().forEachRemaining(f -> f.toADIF(this));
-		children().forEachRemaining(Tuple::toADIF);
-	}
-
-	/**
-	 * 隷下の属性をQXSLの名前空間の属性に変換します。
-	 *
-	 * @since 2019/06/27
-	 */
-	public final void toQXSL() {
-		iterator().forEachRemaining(f -> f.toQXSL(this));
-		children().forEachRemaining(Tuple::toQXSL);
 	}
 }

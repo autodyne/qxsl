@@ -203,7 +203,7 @@ public final class QxmlFormat extends BaseFormat {
 			Iterator<?> iterator = elem.getAttributes();
 			while(iterator.hasNext()) {
 				Attribute att = (Attribute) iterator.next();
-				node.set(fields.cache(att.getName()).field(att.getValue()));
+				node.add(fields.cache(att.getName()).field(att.getValue()));
 			}
 		}
 	}
