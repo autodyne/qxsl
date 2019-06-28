@@ -5,7 +5,7 @@
  * License : GNU Lesser General Public License v3 (see LICENSE)
  * Author: Journal of Hamradio Informatics http://pafelog.net
 *****************************************************************************/
-package qxsl.extra.field.qxsl;
+package qxsl.field;
 
 import org.junit.Test;
 import qxsl.table.Fields;
@@ -13,7 +13,7 @@ import qxsl.table.Fields;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * {@link Mode}クラスのテスト用クラスです。
+ * {@link Call}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -21,23 +21,23 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/02/24
  *
  */
-public final class ModeTest extends junit.framework.TestCase {
-	private final Fields.Cache cache = new Fields().cache(Qxsl.MODE);
+public final class CallTest extends junit.framework.TestCase {
+	private final Fields.Cache cache = new Fields().cache(Qxsl.CALL);
 	@Test
 	public void testValue() {
-		assertThat(new Mode("CW").value()).isEqualTo("CW");
-		assertThat(new Mode("AM").value()).isEqualTo("AM");
+		assertThat(new Call("JA1ZLO").value()).isEqualTo("JA1ZLO");
+		assertThat(new Call("JA1YWX").value()).isEqualTo("JA1YWX");
 	}
 	@Test
 	public void testToString() {
 		final String text = util.RandText.alnum(100);
-		assertThat(new Mode(text)).hasToString(text);
+		assertThat(new Call(text)).hasToString(text);
 	}
 	@Test
-	public void testMode$Format() throws Exception {
-		final Mode.Format form = new Mode.Format();
-		final Mode mode = new Mode(util.RandText.alnum(100));
-		assertThat(form.decode(form.encode(mode))).isEqualTo(mode);
-		assertThat(cache.field(form.encode(mode))).isEqualTo(mode);
+	public void testCall$Format() throws Exception {
+		final Call.Format form = new Call.Format();
+		final Call call = new Call(util.RandText.alnum(100));
+		assertThat(form.decode(form.encode(call))).isEqualTo(call);
+		assertThat(cache.field(form.encode(call))).isEqualTo(call);
 	}
 }

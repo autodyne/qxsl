@@ -8,7 +8,7 @@
 package qxsl.table;
 
 import org.junit.Test;
-import qxsl.extra.field.qxsl.*;
+import qxsl.field.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -5,15 +5,13 @@
  * License : GNU Lesser General Public License v3 (see LICENSE)
  * Author: Journal of Hamradio Informatics http://pafelog.net
 *****************************************************************************/
-package qxsl.extra.field.qxsl;
+package qxsl.field;
 
 import java.math.BigDecimal;
 import javax.xml.namespace.QName;
 import qxsl.model.Field;
 import qxsl.model.Tuple;
 import qxsl.table.FieldFormat;
-
-import static java.math.BigDecimal.ROUND_UP;
 
 /**
  * 交信の周波数帯を表現する{@link Field}実装クラスです。
@@ -107,18 +105,6 @@ public final class Band extends Qxsl<BigDecimal> {
 	 */
 	private String toDecimalString(int scale) {
 		return kHz.scaleByPowerOfTen(-scale).toPlainString();
-	}
-
-	/**
-	 * この周波数で真空中の光速を除して波長に変換します。
-	 * 小数点以下の数値は正の無限大の方向に丸められます。
-	 * 
-	 * @return メートル単位の波長
-	 */
-	public qxsl.extra.field.adif.Band convert() {
-		BigDecimal lspd = BigDecimal.valueOf(299792.458);
-		BigDecimal band = lspd.divide(value(), ROUND_UP);
-		return new qxsl.extra.field.adif.Band(band);
 	}
 
 	/**

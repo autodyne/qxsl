@@ -5,59 +5,59 @@
  * License : GNU Lesser General Public License v3 (see LICENSE)
  * Author: Journal of Hamradio Informatics http://pafelog.net
 *****************************************************************************/
-package qxsl.extra.field.adif;
+package qxsl.field;
 
 import javax.xml.namespace.QName;
 import qxsl.model.Field;
 import qxsl.table.FieldFormat;
 
 /**
- * 交信の変調方式を表現する{@link Field}実装クラスです。
+ * 交信の備考を表現する{@link Field}実装クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics
  * 
- * @since 2019/06/28
+ * @since 2013/06/08
  *
  */
-public final class Mode extends Adif<String> {
-	private final String mode;
-	
+public final class Note extends Qxsl<String> {
+	private final String note;
+
 	/**
-	 * モード名を指定して{@link Mode}を構築します。
+	 * 備考を指定して{@link Note}を構築します。
 	 * 
-	 * @param mode モード名
+	 * @param note 備考
 	 */
-	public Mode(String mode) {
-		super(MODE);
-		this.mode = mode;
+	public Note(String note) {
+		super(NOTE);
+		this.note = note;
 	}
 
 	@Override
 	public String value() {
-		return mode;
+		return note;
 	}
 
 	/**
-	 * {@link Mode}を生成するフォーマットです。
+	 * {@link Note}を生成するフォーマットです。
 	 * 
 	 * 
 	 * @author Journal of Hamradio Informatics
 	 * 
-	 * @since 2013/06/09
+	 * @since 2013/06/08
 	 *
 	 */
 	public static final class Format implements FieldFormat {
 		@Override
 		public QName name() {
-			return MODE;
+			return NOTE;
 		}
-	
+
 		@Override
-		public Mode decode(String value) {
-			return new Mode(value);
+		public Note decode(String value) {
+			return new Note(value);
 		}
-	
+
 		@Override
 		public String encode(Field field) {
 			return field.value().toString();

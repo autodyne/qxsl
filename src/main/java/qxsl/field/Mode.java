@@ -5,14 +5,14 @@
  * License : GNU Lesser General Public License v3 (see LICENSE)
  * Author: Journal of Hamradio Informatics http://pafelog.net
 *****************************************************************************/
-package qxsl.extra.field.qxsl;
+package qxsl.field;
 
 import javax.xml.namespace.QName;
 import qxsl.model.Field;
 import qxsl.table.FieldFormat;
 
 /**
- * 交信の備考を表現する{@link Field}実装クラスです。
+ * 交信の変調方式を表現する{@link Field}実装クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -20,42 +20,42 @@ import qxsl.table.FieldFormat;
  * @since 2013/06/08
  *
  */
-public final class Note extends Qxsl<String> {
-	private final String note;
+public final class Mode extends Qxsl<String> {
+	private final String mode;
 
 	/**
-	 * 備考を指定して{@link Note}を構築します。
+	 * モード名を指定して{@link Mode}を構築します。
 	 * 
-	 * @param note 備考
+	 * @param mode モード名
 	 */
-	public Note(String note) {
-		super(NOTE);
-		this.note = note;
+	public Mode(String mode) {
+		super(MODE);
+		this.mode = mode;
 	}
 
 	@Override
 	public String value() {
-		return note;
+		return mode;
 	}
 
 	/**
-	 * {@link Note}を生成するフォーマットです。
+	 * {@link Mode}を生成するフォーマットです。
 	 * 
 	 * 
 	 * @author Journal of Hamradio Informatics
 	 * 
-	 * @since 2013/06/08
+	 * @since 2013/06/09
 	 *
 	 */
 	public static final class Format implements FieldFormat {
 		@Override
 		public QName name() {
-			return NOTE;
+			return MODE;
 		}
 
 		@Override
-		public Note decode(String value) {
-			return new Note(value);
+		public Mode decode(String value) {
+			return new Mode(value);
 		}
 
 		@Override

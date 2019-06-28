@@ -10,4 +10,4 @@
  * QXMLの標準仕様(QXSL)で定義される属性を提供します。
  */
 
-package qxsl.extra.field.qxsl;
+package qxsl.field;

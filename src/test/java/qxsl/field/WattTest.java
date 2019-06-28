@@ -5,7 +5,7 @@
  * License : GNU Lesser General Public License v3 (see LICENSE)
  * Author: Journal of Hamradio Informatics http://pafelog.net
 *****************************************************************************/
-package qxsl.extra.field.qxsl;
+package qxsl.field;
 
 import org.junit.Test;
 import qxsl.table.Fields;
@@ -13,7 +13,7 @@ import qxsl.table.Fields;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * {@link Name}クラスのテスト用クラスです。
+ * {@link Watt}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -21,23 +21,24 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/02/24
  *
  */
-public final class NameTest extends junit.framework.TestCase {
-	private final Fields.Cache cache = new Fields().cache(Qxsl.NAME);
+public final class WattTest extends junit.framework.TestCase {
+	private final Fields.Cache cache = new Fields().cache(Qxsl.WATT);
 	@Test
 	public void testValue() {
-		assertThat(new Name("筑波大").value()).isEqualTo("筑波大");
-		assertThat(new Name("電通大").value()).isEqualTo("電通大");
+		assertThat(new Watt("10kW").value()).isEqualTo("10kW");
+		assertThat(new Watt("10MW").value()).isEqualTo("10MW");
+		assertThat(new Watt("10GW").value()).isEqualTo("10GW");
 	}
 	@Test
 	public void testToString() {
 		final String text = util.RandText.alnum(100);
-		assertThat(new Name(text)).hasToString(text);
+		assertThat(new Watt(text)).hasToString(text);
 	}
 	@Test
-	public void testName$Format() throws Exception {
-		final Name.Format form = new Name.Format();
-		final Name name = new Name(util.RandText.alnum(100));
-		assertThat(form.decode(form.encode(name))).isEqualTo(name);
-		assertThat(cache.field(form.encode(name))).isEqualTo(name);
+	public void testWatt$Format() throws Exception {
+		final Watt.Format form = new Watt.Format();
+		final Watt watt = new Watt(util.RandText.alnum(100));
+		assertThat(form.decode(form.encode(watt))).isEqualTo(watt);
+		assertThat(cache.field(form.encode(watt))).isEqualTo(watt);
 	}
 }

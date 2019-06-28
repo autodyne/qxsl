@@ -5,7 +5,7 @@
  * License : GNU Lesser General Public License v3 (see LICENSE)
  * Author: Journal of Hamradio Informatics http://pafelog.net
 *****************************************************************************/
-package qxsl.extra.field.qxsl;
+package qxsl.field;
 
 import javax.xml.namespace.QName;
 import qxsl.model.Field;

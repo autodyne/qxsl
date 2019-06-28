@@ -23,7 +23,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import org.xml.sax.SAXException;
 
-import qxsl.extra.field.qxsl.Qxsl;
+import qxsl.field.Qxsl;
 import qxsl.model.Field;
 import qxsl.model.Item;
 import qxsl.model.Rcvd;
