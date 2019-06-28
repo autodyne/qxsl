@@ -8,7 +8,7 @@
 package qxsl.model;
 
 import org.junit.Test;
-import qxsl.field.*;
+import qxsl.extra.field.*;
 
 import static qxsl.extra.table.QxmlFormat.RCVD;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,20 +28,20 @@ public final class RcvdTest extends junit.framework.TestCase {
 	private final Watt watt = new Watt("H");
 	@Test
 	public void testType() {
-		assertThat(new Rcvd().name()).isEqualTo(RCVD);
+		assertThat(new Rcvd(new Item()).name()).isEqualTo(RCVD);
 	}
 	@Test
 	public void testEquals() {
-		final Rcvd rcvd1 = new Rcvd();
-		final Rcvd rcvd2 = new Rcvd();
+		final Rcvd rcvd1 = new Rcvd(new Item());
+		final Rcvd rcvd2 = new Rcvd(new Item());
 		assertThat(rcvd1).isEqualTo(rcvd2);
-		assertThat(rcvd1.add(code).get(Code.class)).isEqualTo(code);
-		assertThat(rcvd1.add(rstq).get(RSTQ.class)).isEqualTo(rstq);
-		assertThat(rcvd1.add(watt).get(Watt.class)).isEqualTo(watt);
+		assertThat(rcvd1.add(code).get(Qxsl.CODE)).isEqualTo(code);
+		assertThat(rcvd1.add(rstq).get(Qxsl.RSTQ)).isEqualTo(rstq);
+		assertThat(rcvd1.add(watt).get(Qxsl.WATT)).isEqualTo(watt);
 		assertThat(rcvd1).isNotEqualTo(rcvd2);
-		assertThat(rcvd2.add(code).get(Code.class)).isEqualTo(code);
-		assertThat(rcvd2.add(rstq).get(RSTQ.class)).isEqualTo(rstq);
-		assertThat(rcvd2.add(watt).get(Watt.class)).isEqualTo(watt);
+		assertThat(rcvd2.add(code).get(Qxsl.CODE)).isEqualTo(code);
+		assertThat(rcvd2.add(rstq).get(Qxsl.RSTQ)).isEqualTo(rstq);
+		assertThat(rcvd2.add(watt).get(Qxsl.WATT)).isEqualTo(watt);
 		assertThat(rcvd1).isEqualTo(rcvd2);
 	}
 }

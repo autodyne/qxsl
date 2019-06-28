@@ -22,13 +22,26 @@ import javax.xml.namespace.QName;
  *
  */
 public abstract class Exch extends Tuple {
+	private final Item item;
+
 	/**
-	 * 指定された要素名を持つ空のタプルを構築します。
+	 * 指定された要素名と親を持つ空のタプルを構築します。
 	 * 
+	 * @param item 親となる要素
 	 * @param name タプルの名前
 	 */
-	public Exch(QName name) {
+	protected Exch(Item item, QName name) {
 		super(name);
+		this.item = item;
+	}
+
+	/**
+	 * この要素の親である要素を返します。
+	 *
+	 * @return 親
+	 */
+	public final Item getItem() {
+		return item;
 	}
 
 	/**

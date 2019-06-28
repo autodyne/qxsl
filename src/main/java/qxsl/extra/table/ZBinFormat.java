@@ -18,10 +18,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import qxsl.field.*;
+import qxsl.extra.field.*;
+import qxsl.field.FieldFormats;
 import qxsl.model.Field;
 import qxsl.model.Item;
-import qxsl.table.Fields;
 
 import static java.time.ZoneOffset.UTC;
 import static java.time.temporal.ChronoUnit.DAYS;
@@ -328,7 +328,7 @@ public final class ZBinFormat extends BaseFormat {
 	 */
 	private final class ZBinDecoder {
 		private final DataInputStream stream;
-		private final Fields fields;
+		private final FieldFormats fields;
 		private TDateTime tDateTime;
 
 		/**
@@ -337,7 +337,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param in 読み込むストリーム
 		 */
 		public ZBinDecoder(InputStream in) {
-			this.fields = new Fields();
+			this.fields = new FieldFormats();
 			this.stream = new DataInputStream(in);
 		}
 
@@ -594,20 +594,20 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		private void item(Item item) throws IOException {
 			int i = 0;
-			time(item.get(Time.class));
-			string(12, item.get(Call.class));
-			string(30, item.getSent().get(Code.class));
-			string(30, item.getRcvd().get(Code.class));
+			time((Time) item.get(Qxsl.TIME));
+			string(12, (Call) item.get(Qxsl.CALL));
+			string(30, (Code) item.getSent().get(Qxsl.CODE));
+			string(30, (Code) item.getRcvd().get(Qxsl.CODE));
 			while(i++ < 1) stream.writeByte(0);
-			rst(item.getSent().get(RSTQ.class));
-			rst(item.getRcvd().get(RSTQ.class));
+			rst((RSTQ) item.getSent().get(Qxsl.RSTQ));
+			rst((RSTQ) item.getRcvd().get(Qxsl.RSTQ));
 			while(i++ < 6) stream.writeByte(0);
-			mode(item.get(Mode.class));
-			band(item.get(Band.class));
-			watt(item.getSent().get(Watt.class));
+			mode((Mode) item.get(Qxsl.MODE));
+			band((Band) item.get(Qxsl.BAND));
+			watt((Watt) item.getSent().get(Qxsl.WATT));
 			while(i++ < 72) stream.writeByte(0);
-			string(14, item.get(Name.class));
-			string(66, item.get(Note.class));
+			string(14, (Name) item.get(Qxsl.NAME));
+			string(66, (Note) item.get(Qxsl.NOTE));
 			while(i++ < 87) stream.writeByte(0);
 			stream.flush();
 		}

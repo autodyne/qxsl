@@ -23,13 +23,13 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import org.xml.sax.SAXException;
 
-import qxsl.field.Qxsl;
+import qxsl.extra.field.Qxsl;
+import qxsl.field.FieldFormats;
 import qxsl.model.Field;
 import qxsl.model.Item;
 import qxsl.model.Rcvd;
 import qxsl.model.Sent;
 import qxsl.model.Tuple;
-import qxsl.table.Fields;
 
 import static javax.xml.XMLConstants.*;
 
@@ -93,7 +93,7 @@ public final class QxmlFormat extends BaseFormat {
 	 */
 	private final class QxmlDecoder {
 		private final EventReader reader;
-		private final Fields fields;
+		private final FieldFormats fields;
 		
 		/**
 		 * 指定したストリームから交信記録を読み込むデコーダを構築します。
@@ -104,7 +104,7 @@ public final class QxmlFormat extends BaseFormat {
 		public QxmlDecoder(InputStream stream) throws IOException {
 			InputStream rstream = new ReusableInputStream(stream);
 			StreamSource source = new StreamSource(rstream);
-			this.fields = new Fields();
+			this.fields = new FieldFormats();
 			try {
 				schema.newValidator().validate(source);
 				rstream.reset();
@@ -219,7 +219,7 @@ public final class QxmlFormat extends BaseFormat {
 	 */
 	private final class QxmlEncoder {
 		private final StreamWriter streamWriter;
-		private final Fields fields;
+		private final FieldFormats fields;
 
 		/**
 		 * 指定されたストリームに出力するエンコーダを構築します。
@@ -233,7 +233,7 @@ public final class QxmlFormat extends BaseFormat {
 			} catch(XMLStreamException ex) {
 				throw new IOException(ex);
 			}
-			fields = new Fields();
+			fields = new FieldFormats();
 		}
 
 		/**

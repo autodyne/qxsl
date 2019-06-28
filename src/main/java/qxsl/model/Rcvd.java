@@ -20,10 +20,12 @@ import static qxsl.extra.table.QxmlFormat.RCVD;
  */
 public final class Rcvd extends Exch {
 	/**
-	 * 空の{@link Rcvd}を構築します。
+	 * 指定した親の隷下に{@link Rcvd}を構築します。
+	 *
+	 * @param item 親
 	 */
-	public Rcvd() {
-		super(RCVD);
+	protected Rcvd(Item item) {
+		super(item, RCVD);
 	}
 
 }

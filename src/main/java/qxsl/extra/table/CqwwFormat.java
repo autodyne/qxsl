@@ -16,9 +16,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import qxsl.field.*;
+import qxsl.extra.field.*;
+import qxsl.field.FieldFormats;
 import qxsl.model.Item;
-import qxsl.table.Fields;
 
 import static java.time.ZoneOffset.UTC;
 
@@ -72,7 +72,7 @@ public final class CqwwFormat extends TextFormat {
 	 */
 	private final class CqwwDecoder extends TextDecoder {
 		private final DateTimeFormatter format;
-		private final Fields fields;
+		private final FieldFormats fields;
 
 		/**
 		 * 指定されたストリームを読み込むデコーダを構築します。
@@ -82,7 +82,7 @@ public final class CqwwFormat extends TextFormat {
 		 */
 		public CqwwDecoder(InputStream in) throws IOException {
 			super(in, "UTF-8");
-			fields = new Fields();
+			fields = new FieldFormats();
 			format = DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm").withZone(UTC);
 		}
 
@@ -275,23 +275,23 @@ public final class CqwwFormat extends TextFormat {
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void item(Item item) throws IOException {
-			printR(5, item.get(Band.class));
+			printR(5, (Band) item.get(Qxsl.BAND));
 			printSpace(1);
-			printR(2, item.get(Mode.class));
+			printR(2, (Mode) item.get(Qxsl.MODE));
 			printSpace(1);
-			time(item.get(Time.class));
+			time((Time) item.get(Qxsl.TIME));
 			printSpace(1);
 			print("*************");
 			printSpace(1);
-			printR(3, item.getSent().get(RSTQ.class));
+			printR(3,  (RSTQ) item.getSent().get(Qxsl.RSTQ));
 			printSpace(1);
-			printR(6, item.getSent().get(Code.class));
+			printR(6,  (Code) item.getSent().get(Qxsl.CODE));
 			printSpace(1);
-			printR(13, item.get(Call.class));
+			printR(13, (Call) item.get(Qxsl.CALL));
 			printSpace(1);
-			printR(3, item.getRcvd().get(RSTQ.class));
+			printR(3,  (RSTQ) item.getRcvd().get(Qxsl.RSTQ));
 			printSpace(1);
-			printR(6, item.getRcvd().get(Code.class));
+			printR(6,  (Code) item.getRcvd().get(Qxsl.CODE));
 			println();
 		}
 

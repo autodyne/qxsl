@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import javax.xml.namespace.QName;
+import qxsl.field.FieldMappers;
 
 /**
  * {@link Item}クラスや{@link Exch}クラスはこのクラスを実装します。
@@ -23,8 +24,9 @@ import javax.xml.namespace.QName;
  *
  */
 public abstract class Tuple implements Iterable<Field> {
-	private final QName name;
+	private static final FieldMappers maps = new FieldMappers();
 	private final Map<QName, Field> table;
+	private final QName name;
 
 	/**
 	 * 指定した名前の空の{@link Tuple}を構築します。
@@ -92,41 +94,38 @@ public abstract class Tuple implements Iterable<Field> {
 	public abstract Iterator<Tuple> children();
 
 	/**
+	 * 指定した属性をこの{@link Tuple}に追加します。
+	 * 
+	 * @param field 追加する属性
+	 * @return このタプル
+	 * @throws NullPointerException 属性がnullの場合
+	 */
+	public final Tuple add(Field field) {
+		table.put(field.name(), field);
+		return this;
+	}
+
+	/**
 	 * 指定した{@link QName}に対応する属性を返します。
 	 * 
 	 * @param name 属性の名前
 	 * @return 設定されている属性
 	 */
 	public final Field get(QName name) {
-		return table.get(name);
+		Field field = table.get(name);
+		if(field != null) return field;
+		return maps.search(name, this);
 	}
 
 	/**
-	 * 指定した{@link Field}クラスに対応する属性を返します。
+	 * 指定した{@link QName}に対応する属性の値を返します。
 	 * 
-	 * @param <F> 属性の総称型
-	 * @param field 属性のクラス
-	 * @return 設定されている属性
-	 */
-	public final <F extends Field> F get(Class<F> field) {
-		for(Field f: this) if(field.equals(f.getClass())) {
-			@SuppressWarnings ("unchecked")
-			final F found = (F) f;
-			return found;
-		}
-		return null;
-	}
-
-	/**
-	 * 指定した{@link Field}クラスに対応する属性の値を返します。
-	 * 
-	 * @param <F> 属性の総称型
-	 * @param <V> 属性の値の総称型
-	 * @param field 属性のクラス
+	 * @param name 属性の名前
 	 * @return 設定されている属性の値
 	 */
-	public final <F extends Field<V>, V> V value(Class<F> field) {
-		return get(field) != null? get(field).value() : null;
+	public final Object value(QName name) {
+		final Field field = this.get(name);
+		return field != null? field.value(): null;
 	}
 
 	/**
@@ -137,18 +136,6 @@ public abstract class Tuple implements Iterable<Field> {
 	 */
 	public final Tuple remove(QName qname) {
 		table.remove(qname);
-		return this;
-	}
-
-	/**
-	 * 指定した属性をこの{@link Tuple}に設定します。
-	 * 
-	 * @param field 設定する属性
-	 * @return このタプル
-	 * @throws NullPointerException 属性がnullの場合
-	 */
-	public final Tuple add(Field field) {
-		table.put(field.name(), field);
 		return this;
 	}
 }

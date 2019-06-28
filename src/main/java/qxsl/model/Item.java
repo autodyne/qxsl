@@ -70,7 +70,7 @@ public final class Item extends Tuple {
 	 * @return {@link Rcvd}
 	 */
 	public Rcvd getRcvd() {
-		if(rcvd == null) rcvd = new Rcvd();
+		if(rcvd == null) rcvd = new Rcvd(this);
 		return rcvd;
 	}
 
@@ -80,7 +80,7 @@ public final class Item extends Tuple {
 	 * @return {@link Sent}
 	 */
 	public Sent getSent() {
-		if(sent == null) sent = new Sent();
+		if(sent == null) sent = new Sent(this);
 		return sent;
 	}
 

@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.Random;
 import org.junit.Test;
 
-import qxsl.field.*;
+import qxsl.extra.field.*;
 import qxsl.model.Item;
-import qxsl.table.Tables;
+import qxsl.table.TableFormats;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public final class ZDosFormatTest extends junit.framework.TestCase {
 	private final ZDosFormat format = new ZDosFormat();
-	private final Tables tables = new Tables();
+	private final TableFormats tables = new TableFormats();
 	private final ArrayList<Band> bands = new ArrayList<>();
 	private final Random random = new Random();
 	public ZDosFormatTest() {

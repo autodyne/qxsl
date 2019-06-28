@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import qxsl.model.Item;
-import qxsl.table.Tables;
+import qxsl.table.TableFormats;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -73,7 +73,7 @@ public final class RuleKitTest extends junit.framework.TestCase {
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void test(URL path) throws Exception {
-		final List<Item> list = (new Tables()).decode(path);
+		List<Item> list = (new TableFormats()).decode(path);
 		final Map<String, int[]> scores = this.loadScores();
 		final Contest test = Contest.defined("allja1.lisp");
 		for(String sect: scores.keySet()) {

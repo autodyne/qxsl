@@ -15,10 +15,10 @@ import java.util.Map;
 import java.util.Random;
 import org.junit.Test;
 
-import qxsl.field.*;
+import qxsl.extra.field.*;
 import qxsl.model.Item;
-import qxsl.sheet.Sheets;
-import qxsl.table.Tables;
+import qxsl.sheet.SheetFormats;
+import qxsl.table.TableFormats;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,8 +33,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public final class JarlFormatTest extends junit.framework.TestCase {
 	private final JarlFormat format = new JarlFormat();
-	private final Sheets sheets = new Sheets();
-	private final Tables tables = new Tables();
+	private final SheetFormats sheets = new SheetFormats();
+	private final TableFormats tables = new TableFormats();
 	private final ArrayList<Band> bands = new ArrayList<>();
 	private final Random random = new Random();
 	public JarlFormatTest() {

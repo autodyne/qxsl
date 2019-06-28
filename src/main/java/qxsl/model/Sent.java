@@ -20,10 +20,12 @@ import static qxsl.extra.table.QxmlFormat.SENT;
  */
 public final class Sent extends Exch {
 	/**
-	 * 空の{@link Sent}を構築します。
+	 * 指定した親の隷下に{@link Rcvd}を構築します。
+	 *
+	 * @param item 親
 	 */
-	public Sent() {
-		super(SENT);
+	protected Sent(Item item) {
+		super(item, SENT);
 	}
 
 }

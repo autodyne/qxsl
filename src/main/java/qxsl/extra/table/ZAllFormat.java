@@ -16,9 +16,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import qxsl.field.*;
+import qxsl.extra.field.*;
+import qxsl.field.FieldFormats;
 import qxsl.model.Item;
-import qxsl.table.Fields;
 
 /**
  * zLog ALL書式で交信記録を直列化するフォーマットです。
@@ -71,7 +71,7 @@ public final class ZAllFormat extends TextFormat {
 	@Deprecated
 	private final class ZAllDecoder extends TextDecoder {
 		private final DateTimeFormatter format;
-		private final Fields fields;
+		private final FieldFormats fields;
 
 		/**
 		 * 指定されたストリームを読み込むデコーダを構築します。
@@ -81,7 +81,7 @@ public final class ZAllFormat extends TextFormat {
 		 */
 		public ZAllDecoder(InputStream in) throws IOException {
 			super(in, "JISAutoDetect");
-			fields = new Fields();
+			fields = new FieldFormats();
 			format = DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm");
 		}
 
@@ -313,24 +313,24 @@ public final class ZAllFormat extends TextFormat {
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void item(Item item) throws IOException {
-			time(item.get(Time.class));
+			time((Time) item.get(Qxsl.TIME));
 			printSpace(1);
-			printL(12, item.get(Call.class));
+			printL(12, (Call) item.get(Qxsl.CALL));
 			printSpace(1);
-			printL(3,  item.getSent().get(RSTQ.class));
+			printL(3,  (RSTQ) item.getSent().get(Qxsl.RSTQ));
 			printSpace(1);
-			printL(7,  item.getSent().get(Code.class));
+			printL(7,  (Code) item.getSent().get(Qxsl.CODE));
 			printSpace(1);
-			printL(3,  item.getRcvd().get(RSTQ.class));
+			printL(3,  (RSTQ) item.getRcvd().get(Qxsl.RSTQ));
 			printSpace(1);
-			printL(7,  item.getRcvd().get(Code.class));
+			printL(7,  (Code) item.getRcvd().get(Qxsl.CODE));
 			print(" -     -     ");
-			band(item.get(Band.class));
+			band((Band) item.get(Qxsl.BAND));
 			printSpace(1);
-			printL(4, item.get(Mode.class));
+			printL(4, (Mode) item.get(Qxsl.MODE));
 			print(" 1  ");
-			oprt(item.get(Name.class));
-			note(item.get(Note.class));
+			oprt((Name) item.get(Qxsl.NAME));
+			note((Note) item.get(Qxsl.NOTE));
 			println();
 		}
 

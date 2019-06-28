@@ -18,9 +18,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import qxsl.field.*;
+import qxsl.extra.field.*;
+import qxsl.field.FieldFormats;
 import qxsl.model.Item;
-import qxsl.table.Fields;
 
 /**
  * 2016年4月以前のCTESTWIN書式で交信記録を直列化するフォーマットです。
@@ -73,7 +73,7 @@ public final class CTxtFormat extends TextFormat {
 	@Deprecated
 	private final class CTxtDecoder extends TextDecoder {
 		private final DateTimeFormatter format;
-		private final Fields fields;
+		private final FieldFormats fields;
 
 		/**
 		 * 指定されたストリームを読み込むデコーダを構築します。
@@ -83,7 +83,7 @@ public final class CTxtFormat extends TextFormat {
 		 */
 		public CTxtDecoder(InputStream in) throws IOException {
 			super(in, "JISAutoDetect");
-			fields = new Fields();
+			fields = new FieldFormats();
 			DateTimeFormatterBuilder fb = new DateTimeFormatterBuilder();
 			fb.parseDefaulting(ChronoField.YEAR, Year.now().getValue());
 			this.format = fb.appendPattern("M/ppd HHmm").toFormatter();
@@ -270,17 +270,17 @@ public final class CTxtFormat extends TextFormat {
 		private void item(Item item, int num) throws IOException {
 			printR(4, String.valueOf(num));
 			printSpace(1);
-			time(item.get(Time.class));
+			time((Time) item.get(Qxsl.TIME));
 			printSpace(1);
-			printR(11, item.get(Call.class));
+			printR(11, (Call) item.get(Qxsl.CALL));
 			printSpace(1);
-			band(item.get(Band.class));
+			band((Band) item.get(Qxsl.BAND));
 			printSpace(1);
-			printR(4, item.get(Mode.class));
+			printR(4,  (Mode) item.get(Qxsl.MODE));
 			printSpace(1);
-			printR(12, item.getSent().get(Code.class));
+			printR(12, (Code) item.getSent().get(Qxsl.CODE));
 			printSpace(1);
-			printR(12, item.getRcvd().get(Code.class));
+			printR(12, (Code) item.getRcvd().get(Qxsl.CODE));
 			println();
 		}
 

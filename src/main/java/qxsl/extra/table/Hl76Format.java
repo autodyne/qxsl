@@ -18,9 +18,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import qxsl.field.*;
+import qxsl.extra.field.*;
+import qxsl.field.FieldFormats;
 import qxsl.model.Item;
-import qxsl.table.Fields;
 
 /**
  * 2016年4月以前のHLTST書式で交信記録を直列化するフォーマットです。
@@ -73,7 +73,7 @@ public final class Hl76Format extends TextFormat {
 	@Deprecated
 	private final class Hl76Decoder extends TextDecoder {
 		private final DateTimeFormatter format;
-		private final Fields fields;
+		private final FieldFormats fields;
 
 		/**
 		 * 指定されたストリームを読み込むデコーダを構築します。
@@ -83,7 +83,7 @@ public final class Hl76Format extends TextFormat {
 		 */
 		public Hl76Decoder(InputStream in) throws IOException {
 			super(in, "JISAutoDetect");
-			fields = new Fields();
+			fields = new FieldFormats();
 			DateTimeFormatterBuilder fb = new DateTimeFormatterBuilder();
 			fb.parseDefaulting(ChronoField.YEAR, Year.now().getValue());
 			this.format = fb.appendPattern("M/ppd HH:mm").toFormatter();
@@ -295,24 +295,24 @@ public final class Hl76Format extends TextFormat {
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void item(Item item) throws IOException {
-			time(item.get(Time.class));
+			time((Time) item.get(Qxsl.TIME));
 			printSpace(1);
-			printR(10, item.get(Call.class));
+			printR(10, (Call) item.get(Qxsl.CALL));
 			printSpace(1);
-			printR(3, item.getSent().get(RSTQ.class));
+			printR(3,  (RSTQ) item.getSent().get(Qxsl.RSTQ));
 			printSpace(1);
-			printR(7, item.getSent().get(Code.class));
+			printR(7,  (Code) item.getSent().get(Qxsl.CODE));
 			printSpace(1);
-			printR(3, item.getRcvd().get(RSTQ.class));
+			printR(3,  (RSTQ) item.getRcvd().get(Qxsl.RSTQ));
 			printSpace(1);
-			printR(7, item.getRcvd().get(Code.class));
+			printR(7,  (Code) item.getRcvd().get(Qxsl.CODE));
 			print("        ");
 			print("1 ");
-			printR(7, item.get(Name.class));
+			printR(7,  (Name) item.get(Qxsl.NAME));
 			printSpace(1);
-			band(item.get(Band.class));
+			band((Band) item.get(Qxsl.BAND));
 			printSpace(1);
-			printR(4, item.get(Mode.class));
+			printR(4,  (Mode) item.get(Qxsl.MODE));
 			println();
 		}
 

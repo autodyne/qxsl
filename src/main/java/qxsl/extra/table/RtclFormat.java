@@ -16,9 +16,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import qxsl.field.*;
+import qxsl.extra.field.*;
+import qxsl.field.FieldFormats;
 import qxsl.model.Item;
-import qxsl.table.Fields;
 
 /**
  * RTCL書式で交信記録を直列化するフォーマットです。
@@ -71,7 +71,7 @@ public final class RtclFormat extends TextFormat {
 	@Deprecated
 	public final class RtclDecoder extends TextDecoder {
 		private final DateTimeFormatter format;
-		private final Fields fields;
+		private final FieldFormats fields;
 
 		/**
 		 * 指定されたストリームを読み込むデコーダを構築します。
@@ -81,7 +81,7 @@ public final class RtclFormat extends TextFormat {
 		 */
 		public RtclDecoder(InputStream in) throws IOException {
 			super(in, "JISAutoDetect");
-			fields = new Fields();
+			fields = new FieldFormats();
 			format = DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm");
 		}
 
@@ -278,21 +278,21 @@ public final class RtclFormat extends TextFormat {
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void item(Item item) throws IOException {
-			time(item.get(Time.class));
+			time((Time) item.get(Qxsl.TIME));
 			printSpace(1);
-			printR(8,  item.get(Band.class));
+			printR(8,  (Band) item.get(Qxsl.BAND));
 			printSpace(1);
-			printR(5,  item.get(Mode.class));
+			printR(5,  (Mode) item.get(Qxsl.MODE));
 			printSpace(1);
-			printR(13, item.get(Call.class));
+			printR(13, (Call) item.get(Qxsl.CALL));
 			printSpace(1);
-			printR(3,  item.getSent().get(RSTQ.class));
+			printR(3,  (RSTQ) item.getSent().get(Qxsl.RSTQ));
 			printSpace(1);
-			printR(8,  item.getSent().get(Code.class));
+			printR(8,  (Code) item.getSent().get(Qxsl.CODE));
 			printSpace(1);
-			printR(3,  item.getRcvd().get(RSTQ.class));
+			printR(3,  (RSTQ) item.getRcvd().get(Qxsl.RSTQ));
 			printSpace(1);
-			printR(8,  item.getRcvd().get(Code.class));
+			printR(8,  (Code) item.getRcvd().get(Qxsl.CODE));
 			println("          1");
 		}
 

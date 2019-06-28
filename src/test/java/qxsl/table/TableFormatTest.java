@@ -23,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  */
 public final class TableFormatTest extends junit.framework.TestCase {
-	private final Tables tables = new Tables();
 	/**
 	 * クラスパスにある全ての書式を返します。
 	 *
@@ -31,7 +30,7 @@ public final class TableFormatTest extends junit.framework.TestCase {
 	 * @return 書式のイテレータ
 	 */
 	public static Iterator<TableFormat> testMethodSource() {
-		return new Tables().iterator();
+		return new TableFormats().iterator();
 	}
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
