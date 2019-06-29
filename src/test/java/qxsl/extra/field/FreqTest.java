@@ -28,7 +28,7 @@ public final class FreqTest extends junit.framework.TestCase {
 	private final Random random = new Random();
 	@Test
 	public void testValue() {
-		final Integer freq = random.nextInt(Integer.MAX_VALUE);
+		final int freq = random.nextInt(Integer.MAX_VALUE);
 		assertThat(new Freq(freq).value()).isEqualTo(freq);
 	}
 	@Test

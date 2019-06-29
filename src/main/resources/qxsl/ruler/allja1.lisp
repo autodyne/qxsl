@@ -68,31 +68,36 @@
 
 (defun 外? it (and (AREA1? it) (not (PREF? it))))
 
-(defun 1.9MHz? it (and (PM? it) (<=  1810 (freq it) 1913)))
-(defun 3.5MHz? it (and (PM? it) (<=  3500 (freq it) 3687)))
-(defun   7MHz? it (and (PM? it) (<=  7000 (freq it) 7200)))
-                                           
-(defun  14MHz? it (and (AM? it) (<= 14000 (freq it) 14350)))
-(defun  21MHz? it (and (AM? it) (<= 21000 (freq it) 21450)))
-(defun  28MHz? it (and (AM? it) (<= 28000 (freq it) 29700)))
-(defun  50MHz? it (and (AM? it) (<= 50000 (freq it) 54000)))
+(defun BAND it
+	(if
+		(equal null (band it))
+		(cond (
+			((<=  1810 (freq it) 1913) 160)
+			((<=  3500 (freq it) 3687)  80)
+			((<=  7000 (freq it) 7200)  40)
+			((<= 14000 (freq it) 14350) 20)
+			((<= 21000 (freq it) 21450) 15)
+			((<= 28000 (freq it) 29700) 10)
+			((<= 50000 (freq it) 54000)  6)))
+		(band it)))
+
+; lower-bands
+(defun 1.9MHz? it (and (PM? it) (equal (BAND it) 160)))
+(defun 3.5MHz? it (and (PM? it) (equal (BAND it)  80)))
+(defun   7MHz? it (and (PM? it) (equal (BAND it)  40)))
+
+; upper-bands
+(defun  14MHz? it (and (AM? it) (equal (BAND it)  20)))
+(defun  21MHz? it (and (AM? it) (equal (BAND it)  15)))
+(defun  28MHz? it (and (AM? it) (equal (BAND it)  10)))
+(defun  50MHz? it (and (AM? it) (equal (BAND it)   6)))
 
 (defun 低周波? it (or (1.9MHz? it) (3.5MHz? it) ( 7MHz? it)))
 (defun 高周波? it (or ( 14MHz? it) ( 21MHz? it) (28MHz? it) (50MHz? it)))
 (defun 全周波? it (or (低周波? it) (高周波? it)))
 
-(defun FREQ it
-	(cond(
-		((1.9MHz? it)  1900)
-		((3.5MHz? it)  3500)
-		((  7MHz? it)  7000)
-		(( 14MHz? it) 14000)
-		(( 21MHz? it) 21000)
-		(( 28MHz? it) 28000)
-		(( 50MHz? it) 50000))))
-
-(defun CALL-KEY it (list (call it) (FREQ it) (mode it)))
-(defun MULT-KEY it (list (FREQ it) (CODE it)))
+(defun CALL-KEY it (list (call it) (BAND it) (mode it)))
+(defun MULT-KEY it (list (BAND it) (CODE it)))
 
 (defun forall (it conds)
 	(if

@@ -28,8 +28,12 @@ public final class BandTest extends junit.framework.TestCase {
 	private final Random random = new Random();
 	@Test
 	public void testValue() {
-		final Integer band = random.nextInt(Integer.MAX_VALUE);
+		final int band = random.nextInt(Integer.MAX_VALUE);
 		assertThat(new Band(band).value()).isEqualTo(band);
+		assertThat(new Band(".63km").value()).isEqualTo(63e2);
+		assertThat(new Band("2190m").value()).isEqualTo(2190);
+		assertThat(new Band("125cm").value()).isEqualTo(1.25);
+		assertThat(new Band("125mm").value()).isEqualTo(.125);
 	}
 	@Test
 	public void testToString() {

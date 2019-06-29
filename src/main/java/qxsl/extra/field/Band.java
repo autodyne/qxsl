@@ -56,6 +56,15 @@ public final class Band extends Qxsl<BigDecimal> {
 		this.meter = meter;
 	}
 
+	/**
+	 * 単位付きの文字列から{@link Band}を構築します。
+	 *
+	 * @param text 単位(km,m,cm,mm)付きの文字列
+	 */
+	public Band(String text) {
+		this(Band.parse(text));
+	}
+
 	@Override
 	public BigDecimal value() {
 		return meter;
@@ -69,6 +78,24 @@ public final class Band extends Qxsl<BigDecimal> {
 	@Override
 	public String toString() {
 		return meter.toPlainString().concat("m");
+	}
+
+	/**
+	 * 単位付き文字列を解析してメートル単位の値を返します。
+	 *
+	 * @param text 単位付き文字列 "160m"等
+	 * @return メートル単位の波長
+	 */
+	private static BigDecimal parse(String text) {
+		final String FIX = "(?<=\\d)(?=[kcm]?m)";
+		String[] tup = text.toLowerCase().split(FIX);
+		final BigDecimal bd = new BigDecimal(tup[0]);
+		switch(tup[1]) {
+			case "km": return bd.scaleByPowerOfTen(+3);
+			case "cm": return bd.scaleByPowerOfTen(-2);
+			case "mm": return bd.scaleByPowerOfTen(-3);
+		}
+		return bd;
 	}
 
 	/**
@@ -107,8 +134,6 @@ public final class Band extends Qxsl<BigDecimal> {
 	 *
 	 */
 	public static final class Mapper implements FieldMapper {
-		private static final String FIX = "(?<=\\d)(?=[cm]?m)";
-
 		@Override
 		public QName target() {
 			return BAND;
@@ -116,14 +141,8 @@ public final class Band extends Qxsl<BigDecimal> {
 
 		@Override
 		public Band search(Item item) {
-			final Object band = item.value(new QName(ADIF, "BAND"));
-			String[] tup = band.toString().toLowerCase().split(FIX);
-			BigDecimal m = new BigDecimal(tup[0]);
-			switch(tup[1]) {
-				case "cm": return new Band(m.scaleByPowerOfTen(-2));
-				case "mm": return new Band(m.scaleByPowerOfTen(-3));
-			}
-			return new Band(m);
+			Object call = item.value(new QName(ADIF, "BAND"));
+			return call != null? new Band(call.toString()): null;
 		}
 	}
 }
