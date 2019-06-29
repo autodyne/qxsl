@@ -14,7 +14,9 @@ import java.time.temporal.Temporal;
 import javax.xml.namespace.QName;
 
 import qxsl.field.FieldFormat;
+import qxsl.field.FieldMapper;
 import qxsl.model.Field;
+import qxsl.model.Item;
 
 /**
  * 交信の日時を表現する{@link Field}実装クラスです。
@@ -97,7 +99,7 @@ public final class Time extends Qxsl<ZonedDateTime> {
 	 * 
 	 * 
 	 * @author Journal of Hamradio Informatics
-	 * 
+	 *
 	 * @since 2013/06/08
 	 *
 	 */
@@ -121,6 +123,48 @@ public final class Time extends Qxsl<ZonedDateTime> {
 		@Override
 		public String encode(Field field) {
 			return ((Time) field).time.format(format);
+		}
+	}
+
+	/**
+	 * {@link Time}への変換を行う変換器です。
+	 * 
+	 * 
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2019/06/29
+	 *
+	 */
+	public static final class Mapper implements FieldMapper {
+		private final static String FORMAT = "yyyyMMddHHmm[ss]VV";
+		private final DateTimeFormatter format;
+
+		public Mapper() {
+			this.format = DateTimeFormatter.ofPattern(FORMAT);
+		}
+
+		@Override
+		public QName target() {
+			return TIME;
+		}
+
+		/**
+		 * 指定された日付と時刻から{@link Time}を生成します。
+		 *
+		 * @param date 日付の文字列 "20190629"
+		 * @param time 時刻の文字列 "120030"
+		 * @return 交信の日時
+		 */
+		private final Time adif(Object date, Object time) {
+			String text = String.format("%s%sZ", date, time);
+			return new Time(ZonedDateTime.parse(text, format));
+		}
+
+		@Override
+		public Time search(Item item) {
+			Object d = item.value(new QName(ADIF, "QSL_DATE"));
+			Object t = item.value(new QName(ADIF, "TIME_ON"));
+			return (d != null && t != null)? adif(d, t): null;
 		}
 	}
 }
