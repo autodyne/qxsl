@@ -9,6 +9,7 @@ package qxsl.ruler;
 
 import elva.*;
 import java.io.Reader;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -233,11 +234,11 @@ public final class RuleKit {
 	@Arguments(min = 3, max = -1)
 	private static final class $Success implements Function {
 		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			final Object item = eval.eval(args.get(0));
-			final int score = eval.integer(args.get(1));
-			ArrayList<Object> klist = new ArrayList<>();
-			for(Object k: args.cdr().cdr()) klist.add(eval.eval(k));
-			final Object[] ks = klist.toArray();
+			final List<Object> ls = new ArrayList<>();
+			final Object item = eval.eval(args.car());
+			final int score = eval.real(args.get(1)).intValueExact();
+			for(Object key: args.cdr().cdr()) ls.add(eval.eval(key));
+			final Object[] ks = ls.toArray();
 			if(item instanceof Item) return new Success(score, (Item) item, ks);
 			throw new ScriptException("make sure (success ITEM score keys...)");
 		}
@@ -303,7 +304,7 @@ public final class RuleKit {
 	private static final class $Hour implements Function {
 		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final Time time = (Time) item(args.car(), eval).get(Qxsl.TIME);
-			return time != null? time.hour(): null;
+			return time != null? BigDecimal.valueOf(time.hour()): null;
 		}
 	}
 
@@ -333,7 +334,7 @@ public final class RuleKit {
 	@Arguments(min = 1, max = 1)
 	private static final class $Band implements Function {
 		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			return ((Band) item(args.car(), eval).get(Qxsl.BAND)).value();
+			return item(args.car(), eval).value(Qxsl.BAND);
 		}
 	}
 
@@ -348,8 +349,7 @@ public final class RuleKit {
 	@Arguments(min = 1, max = 1)
 	private static final class $Freq implements Function {
 		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			final Freq freq = (Freq) item(args.car(), eval).get(Qxsl.FREQ);
-			return freq != null? freq.toInt(): null;
+			return item(args.car(), eval).value(Qxsl.FREQ);
 		}
 	}
 
@@ -379,7 +379,8 @@ public final class RuleKit {
 	@Arguments(min = 1, max = 1)
 	private static final class $RSTQ implements Function {
 		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			return exch(args.car(), eval).value(Qxsl.RSTQ);
+			final RSTQ rstq = (RSTQ) exch(args.car(), eval).get(Qxsl.RSTQ);
+			return rstq != null? BigDecimal.valueOf(rstq.value()): null;
 		}
 	}
 
@@ -411,7 +412,7 @@ public final class RuleKit {
 		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final String base = eval.text(args.car());
 			final String code = eval.text(args.get(1));
-			final int level = eval.integer(args.get(2));
+			final int level = eval.real(args.get(2)).intValueExact();
 			return new City(base, code).getName(level);
 		}
 	}

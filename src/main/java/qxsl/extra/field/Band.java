@@ -40,6 +40,15 @@ public final class Band extends Qxsl<BigDecimal> {
 	/**
 	 * 波長を指定して{@link Band}を構築します。
 	 * 
+	 * @param meter メートル単位の波長
+	 */
+	public Band(double meter) {
+		this(BigDecimal.valueOf(meter));
+	}
+
+	/**
+	 * 波長を指定して{@link Band}を構築します。
+	 * 
 	 * @param meter meter単位の波長
 	 */
 	public Band(BigDecimal meter) {

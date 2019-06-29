@@ -54,7 +54,7 @@ public final class Freq extends Qxsl<BigDecimal> {
 	 * @return kHz単位の周波数
 	 */
 	public int toInt() {
-		return value().intValue();
+		return value().intValueExact();
 	}
 
 	/**

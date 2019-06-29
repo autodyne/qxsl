@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -19,7 +20,6 @@ import java.util.List;
 import java.util.StringJoiner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Collectors;
 import javax.script.*;
 
@@ -507,16 +507,16 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 			throw error(sexp, "bool required but %s found", value);
 		}
 		/**
-		 * 指定された式の値を求めて整数値として返します。
+		 * 指定された式の値を求めて実数値として返します。
 		 *
 		 * @param sexp 式
 		 * @return 返り値
 		 * @throws ScriptException 評価により発生した例外
 		 */
-		public int integer(Object sexp) throws ScriptException {
+		public BigDecimal real(Object sexp) throws ScriptException {
 			final Object value = eval(sexp);
-			if(value instanceof Integer) return (Integer) value;
-			throw error(sexp, "int required but %s found", value);
+			if(value instanceof BigDecimal) return (BigDecimal) value;
+			throw error(sexp, "real required but %s found", value);
 		}
 		/**
 		 * 指定された式の値を求めて文字列として返します。
@@ -558,7 +558,6 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 				return f.apply(list.cdr(), this);
 			} else return sexp;
 		}
-
 		/**
 		 * 引数の個数を検査して必要なら{@link ScriptException}を発生させます。
 		 *
@@ -578,23 +577,6 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 			exp.addAll(list);
 			if(len < min || len > max) throw error(exp, temp, min, max);
 		}
-	}
-
-	/**
-	 * LISP処理系のトークンの正規表現を提供します。
-	 *
-	 *
-	 * @author Journal of Hamradio Informatics
-	  *
-	 * @since 2019/05/18
-	 */
-	private static interface Lexical {
-		final String SKIP = ";.*?$|#\\|[\\S\\s]*?\\|#|\\s";
-		final String DELI = "['`,\\(\\)]";
-		final String ATOM = "[^;'`,\\(\\)\"\\s]+";
-		final String TEXT = "\"([^\\\\]|\\\\[\"\\\\tbnrf])*?\"";
-		final String SEXP = String.join("|", DELI, ATOM, TEXT);
-		final String LISP = String.format("\\G(?:%s)*(%s)", SKIP, SEXP);
 	}
 
 	/**
@@ -675,12 +657,11 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 			final String atom = allTokens.get(cursor++);
 			if(atom.equals("(")) return nextList();
 			if(atom.matches("\".*\"")) return escape(atom);
-			if(atom.matches("-?\\d+")) return Integer.parseInt(atom);
 			if(atom.equals("'")) return new Seq(new Symbol(QUOTE), next());
 			if(atom.equals("`")) return new Seq(new Symbol(QUASI), next());
 			if(atom.equals(",")) return new Seq(new Symbol(UQUOT), next());
-			if(!atom.equals(")")) return new Symbol(atom);
-			throw new ScriptException("invalid syntax");
+			if(atom.equals(")")) throw new ScriptException("isolated ')'");
+			return asSymbolOrReal(atom);
 		}
 		/**
 		 * 指定された文字列のエスケープ処理を行います。
@@ -698,6 +679,19 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 			text = text.replace("\\\"", "\"");
 			text = text.replace("\\\\", "\\");
 			return text;
+		}
+		/**
+		 * 指定されたアトムをシンボルまたは実数として返します。
+		 *
+		 * @return 実数値
+		 */
+		private final Object asSymbolOrReal(String atom) {
+			try {
+				if(atom.contains(".")) return new BigDecimal(atom);
+				return BigDecimal.valueOf(+Integer.parseInt(atom));
+			} catch (NumberFormatException ex) {
+				return new Symbol(atom);
+			}
 		}
 		/**
 		 * 先頭の括弧が読まれた状態で以降のリスト式を返します。
@@ -890,7 +884,7 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	@Arguments(min = 1, max = 1)
 	private static final class $Length implements Function {
 		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			return eval.list(args.car()).size();
+			return BigDecimal.valueOf(eval.list(args.car()).size());
 		}
 	}
 
@@ -1020,8 +1014,8 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	@Arguments(min = 2, max = -1)
 	private static final class $Add implements Function {
 		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			int val = eval.integer(args.car());
-			for(Object v: args.cdr()) val += eval.integer(v);
+			BigDecimal val = eval.real(args.car());
+			for(Object v: args.cdr()) val = val.add(eval.real(v));
 			return val;
 		}
 	}
@@ -1037,8 +1031,8 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	@Arguments(min = 2, max = -1)
 	private static final class $Sub implements Function {
 		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			int val = eval.integer(args.car());
-			for(Object v: args.cdr()) val -= eval.integer(v);
+			BigDecimal val = eval.real(args.car());
+			for(Object v: args.cdr()) val = val.subtract(eval.real(v));
 			return val;
 		}
 	}
@@ -1054,8 +1048,8 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	@Arguments(min = 2, max = -1)
 	private static final class $Mul implements Function {
 		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			int val = eval.integer(args.car());
-			for(Object v: args.cdr()) val *= eval.integer(v);
+			BigDecimal val = eval.real(args.car());
+			for(Object v: args.cdr()) val = val.multiply(eval.real(v));
 			return val;
 		}
 	}
@@ -1070,9 +1064,10 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	 */
 	@Arguments(min = 2, max = -1)
 	private static final class $Div implements Function {
+		private final int MODE = BigDecimal.ROUND_FLOOR;
 		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			int val = eval.integer(args.car());
-			for(Object v: args.cdr()) val /= eval.integer(v);
+			BigDecimal val = eval.real(args.car());
+			for(Object v: args.cdr()) val = val.divide(eval.real(v), MODE);
 			return val;
 		}
 	}
@@ -1088,8 +1083,8 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	@Arguments(min = 2, max = -1)
 	private static final class $Mod implements Function {
 		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			int val = eval.integer(args.car());
-			for(Object v: args.cdr()) val %= eval.integer(v);
+			BigDecimal val = eval.real(args.car());
+			for(Object v: args.cdr()) val = val.remainder(eval.real(v));
 			return val;
 		}
 	}
@@ -1105,10 +1100,10 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	@Arguments(min = 2, max = -1)
 	private static final class $Lt implements Function {
 		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			final ArrayList<Integer> vals = new ArrayList<>();
-			for(Object v: args) vals.add(eval.integer(v));
+			final List<BigDecimal> vals = new ArrayList<>();
+			for(Object v: args) vals.add(eval.real(v));
 			for(int i = 0; i < args.size() - 1; i++) {
-				if(vals.get(i) >= vals.get(i + 1)) return false;
+				if(vals.get(i).compareTo(vals.get(i + 1)) >= 0) return false;
 			}
 			return true;
 		}
@@ -1125,10 +1120,10 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	@Arguments(min = 2, max = -1)
 	private static final class $Gt implements Function {
 		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			final ArrayList<Integer> vals = new ArrayList<>();
-			for(Object v: args) vals.add(eval.integer(v));
+			final ArrayList<BigDecimal> vals = new ArrayList<>();
+			for(Object v: args) vals.add(eval.real(v));
 			for(int i = 0; i < args.size() - 1; i++) {
-				if(vals.get(i) <= vals.get(i + 1)) return false;
+				if(vals.get(i).compareTo(vals.get(i + 1)) <= 0) return false;
 			}
 			return true;
 		}
@@ -1145,10 +1140,10 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	@Arguments(min = 2, max = -1)
 	private static final class $Le implements Function {
 		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			final ArrayList<Integer> vals = new ArrayList<>();
-			for(Object v: args) vals.add(eval.integer(v));
+			final ArrayList<BigDecimal> vals = new ArrayList<>();
+			for(Object v: args) vals.add(eval.real(v));
 			for(int i = 0; i < args.size() - 1; i++) {
-				if(vals.get(i) > vals.get(i + 1)) return false;
+				if(vals.get(i).compareTo(vals.get(i + 1)) > 0) return false;
 			}
 			return true;
 		}
@@ -1165,10 +1160,10 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 	@Arguments(min = 2, max = -1)
 	private static final class $Ge implements Function {
 		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			final ArrayList<Integer> vals = new ArrayList<>();
-			for(Object v: args) vals.add(eval.integer(v));
+			final ArrayList<BigDecimal> vals = new ArrayList<>();
+			for(Object v: args) vals.add(eval.real(v));
 			for(int i = 0; i < args.size() - 1; i++) {
-				if(vals.get(i) < vals.get(i + 1)) return false;
+				if(vals.get(i).compareTo(vals.get(i + 1)) < 0) return false;
 			}
 			return true;
 		}
