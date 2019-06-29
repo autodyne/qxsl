@@ -333,8 +333,23 @@ public final class RuleKit {
 	@Arguments(min = 1, max = 1)
 	private static final class $Band implements Function {
 		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			final Band band = (Band) item(args.car(), eval).get(Qxsl.BAND);
-			return band != null? band.toInt(): null;
+			return ((Band) item(args.car(), eval).get(Qxsl.BAND)).value();
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるfreq関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2019/06/29
+	 */
+	@Arguments(min = 1, max = 1)
+	private static final class $Freq implements Function {
+		public Object apply(Seq args, Lisp eval) throws ScriptException {
+			final Freq freq = (Freq) item(args.car(), eval).get(Qxsl.FREQ);
+			return freq != null? freq.toInt(): null;
 		}
 	}
 
@@ -441,11 +456,13 @@ public final class RuleKit {
 		 * (hour item-expression)
 		 * (call item-expression)
 		 * (band item-expression)
+		 * (freq item-expression)
 		 * (mode item-expression)
 		 */
 		lude.put("hour", new $Hour());
 		lude.put("call", new $Call());
 		lude.put("band", new $Band());
+		lude.put("freq", new $Freq());
 		lude.put("mode", new $Mode());
 
 		/*

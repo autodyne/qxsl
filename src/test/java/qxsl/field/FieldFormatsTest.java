@@ -30,7 +30,7 @@ public final class FieldFormatsTest extends junit.framework.TestCase {
 	}
 	@Test
 	public void testGetFormat() {
-		assertThat(fields.getFormat(Qxsl.BAND)).isInstanceOf(Band.Format.class);
+		assertThat(fields.getFormat(Qxsl.FREQ)).isInstanceOf(Freq.Format.class);
 		assertThat(fields.getFormat(Qxsl.CALL)).isInstanceOf(Call.Format.class);
 		assertThat(fields.getFormat(Qxsl.CITY)).isInstanceOf(City.Format.class);
 		assertThat(fields.getFormat(Qxsl.CODE)).isInstanceOf(Code.Format.class);

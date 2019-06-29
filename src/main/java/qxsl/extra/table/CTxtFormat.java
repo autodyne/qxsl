@@ -129,14 +129,14 @@ public final class CTxtFormat extends TextFormat {
 			final Item item = new Item();
 			final String time = subLine(5,  15);
 			final String call = subLine(16, 27);
-			final String band = subLine(28, 35);
+			final String freq = subLine(28, 35);
 			final String mode = subLine(36, 40);
 			final String sent = subLine(41, 53);
 			final String rcvd = subLine(54, -1);
 
 			if(!time.isEmpty()) time(item, time);
 			if(!call.isEmpty()) call(item, call);
-			if(!band.isEmpty()) band(item, band);
+			if(!freq.isEmpty()) freq(item, freq);
 			if(!mode.isEmpty()) mode(item, mode);
 			if(!sent.isEmpty()) sent(item, sent);
 			if(!rcvd.isEmpty()) rcvd(item, rcvd);
@@ -170,22 +170,22 @@ public final class CTxtFormat extends TextFormat {
 		 * {@link Item}に周波数帯を設定します。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @param band 周波数帯の文字列
+		 * @param freq 周波数帯の文字列
 		 * @throws Exception 読み込みに失敗した場合
 		 */
-		private void band(Item item, String band) throws Exception {
+		private void freq(Item item, String freq) throws Exception {
 			Integer kHz;
-			if(band.contains("GHz")){
-				band = band.replace("GHz", "");
-				kHz = (int) (Double.parseDouble(band) * 1000_000);
-			} else if(band.contains("MHz")) {
-				band = band.replace("MHz", "");
-				kHz = (int) (Double.parseDouble(band) * 1000);
+			if(freq.contains("GHz")){
+				freq = freq.replace("GHz", "");
+				kHz = (int) (Double.parseDouble(freq) * 1000_000);
+			} else if(freq.contains("MHz")) {
+				freq = freq.replace("MHz", "");
+				kHz = (int) (Double.parseDouble(freq) * 1000);
 			} else {
-				band = band.replace("kHz", "");
-				kHz = Integer.parseInt(band);
+				freq = freq.replace("kHz", "");
+				kHz = Integer.parseInt(freq);
 			}
-			item.add(fields.cache(Qxsl.BAND).field(kHz.toString()));
+			item.add(fields.cache(Qxsl.FREQ).field(kHz.toString()));
 		}
 
 		/**
@@ -274,7 +274,7 @@ public final class CTxtFormat extends TextFormat {
 			printSpace(1);
 			printR(11, (Call) item.get(Qxsl.CALL));
 			printSpace(1);
-			band((Band) item.get(Qxsl.BAND));
+			freq((Freq) item.get(Qxsl.FREQ));
 			printSpace(1);
 			printR(4,  (Mode) item.get(Qxsl.MODE));
 			printSpace(1);
@@ -298,11 +298,11 @@ public final class CTxtFormat extends TextFormat {
 		/**
 		 * 指定された周波数帯を文字列として出力します。
 		 * 
-		 * @param band 出力する周波数帯
+		 * @param freq 出力する周波数帯
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private void band(Band band) throws IOException {
-			printf("%-7.7s", band != null? band.toString() : "");
+		private void freq(Freq freq) throws IOException {
+			printf("%-7.7s", freq != null? freq.toString() : "");
 		}
 	}
 }

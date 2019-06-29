@@ -1,4 +1,4 @@
-#qxsl.extra.field.Band$Mapper
+qxsl.extra.field.Band$Mapper
 qxsl.extra.field.Call$Mapper
 qxsl.extra.field.Code$Mapper
 qxsl.extra.field.Mode$Mapper

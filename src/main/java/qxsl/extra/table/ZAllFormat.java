@@ -130,7 +130,7 @@ public final class ZAllFormat extends TextFormat {
 			String snum = subLine(34, 41);
 			String rrst = subLine(42, 45);
 			String rnum = subLine(46, 53);
-			String band = subLine(66, 70);
+			String freq = subLine(66, 70);
 			String mode = subLine(71, 75);
 			String note = subLine(79, -1);
 
@@ -144,7 +144,7 @@ public final class ZAllFormat extends TextFormat {
 			if(!snum.isEmpty()) snum(item, snum);
 			if(!rrst.isEmpty()) rrst(item, rrst);
 			if(!rnum.isEmpty()) rnum(item, rnum);
-			if(!band.isEmpty()) band(item, band);
+			if(!freq.isEmpty()) freq(item, freq);
 			if(!mode.isEmpty()) mode(item, mode);
 			if(!oprt.isEmpty()) oprt(item, oprt);
 			if(!note.isEmpty()) note(item, note);
@@ -222,18 +222,18 @@ public final class ZAllFormat extends TextFormat {
 		 * {@link Item}に周波数帯を設定します。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @param band 周波数帯の文字列
+		 * @param freq 周波数帯の文字列
 		 * @throws Exception 読み込みに失敗した場合
 		 */
-		private void band(Item item, String band) throws Exception {
+		private void freq(Item item, String freq) throws Exception {
 			Integer kHz;
-			if(band.matches("^[0-9]+[gG]$")) {
-				band = band.replaceAll("[gG]", "");
-				kHz = (int) (Double.parseDouble(band) * 1000_000);
+			if(freq.matches("^[0-9]+[gG]$")) {
+				freq = freq.replaceAll("[gG]", "");
+				kHz = (int) (Double.parseDouble(freq) * 1000_000);
 			} else {
-				kHz = (int) (Double.parseDouble(band) * 1000);
+				kHz = (int) (Double.parseDouble(freq) * 1000);
 			}
-			item.add(fields.cache(Qxsl.BAND).field(kHz.toString()));
+			item.add(fields.cache(Qxsl.FREQ).field(kHz.toString()));
 		}
 
 		/**
@@ -325,7 +325,7 @@ public final class ZAllFormat extends TextFormat {
 			printSpace(1);
 			printL(7,  (Code) item.getRcvd().get(Qxsl.CODE));
 			print(" -     -     ");
-			band((Band) item.get(Qxsl.BAND));
+			freq((Freq) item.get(Qxsl.FREQ));
 			printSpace(1);
 			printL(4, (Mode) item.get(Qxsl.MODE));
 			print(" 1  ");
@@ -348,12 +348,12 @@ public final class ZAllFormat extends TextFormat {
 		/**
 		 * 指定された周波数帯を文字列として出力します。
 		 * 
-		 * @param band 出力する周波数帯
+		 * @param freq 出力する周波数帯
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private void band(Band band) throws IOException {
-			if(band.toInt() < 10_000_000) {
-				final String MHz = band.toMHzString();
+		private void freq(Freq freq) throws IOException {
+			if(freq.toInt() < 10_000_000) {
+				final String MHz = freq.toMHzString();
 				printf("%4.4s", MHz.substring(0, MHz.length() - 3));
 			} else print(" 10G");
 		}

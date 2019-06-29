@@ -39,7 +39,7 @@ public final class QxmlFormatTest extends junit.framework.TestCase {
 			for(int row = 0; row < numItems; row++) {
 				final Item item = new Item();
 				item.add(new Time());
-				item.add(new Band(random.nextInt(10_000_000)));
+				item.add(new Freq(random.nextInt(10_000_000)));
 				item.add(new Call(util.RandText.alnum(10)));
 				item.add(new Name(util.RandText.alnum(10)));
 				item.add(new Note(util.RandText.alnum(10)));

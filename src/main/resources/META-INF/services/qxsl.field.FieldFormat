@@ -2,6 +2,7 @@ qxsl.extra.field.Band$Format
 qxsl.extra.field.Call$Format
 qxsl.extra.field.City$Format
 qxsl.extra.field.Code$Format
+qxsl.extra.field.Freq$Format
 qxsl.extra.field.Mode$Format
 qxsl.extra.field.Name$Format
 qxsl.extra.field.Note$Format

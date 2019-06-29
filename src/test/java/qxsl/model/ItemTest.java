@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  */
 public final class ItemTest extends junit.framework.TestCase {
-	private final Band band = new Band(7_000);
+	private final Freq freq = new Freq(7_000);
 	private final Call call = new Call("JA1YYE");
 	private final Mode mode = new Mode("SSB");
 	private final Name name = new Name("pafelog");
@@ -38,14 +38,14 @@ public final class ItemTest extends junit.framework.TestCase {
 		final Item item1 = new Item();
 		final Item item2 = new Item();
 		assertThat(item1).isEqualTo(item2);
-		assertThat(item1.add(band).get(Qxsl.BAND)).isEqualTo(band);
+		assertThat(item1.add(freq).get(Qxsl.FREQ)).isEqualTo(freq);
 		assertThat(item1.add(call).get(Qxsl.CALL)).isEqualTo(call);
 		assertThat(item1.add(mode).get(Qxsl.MODE)).isEqualTo(mode);
 		assertThat(item1.add(name).get(Qxsl.NAME)).isEqualTo(name);
 		assertThat(item1.add(note).get(Qxsl.NOTE)).isEqualTo(note);
 		assertThat(item1.add(time).get(Qxsl.TIME)).isEqualTo(time);
 		assertThat(item1).isNotEqualTo(item2);
-		assertThat(item2.add(band).get(Qxsl.BAND)).isEqualTo(band);
+		assertThat(item2.add(freq).get(Qxsl.FREQ)).isEqualTo(freq);
 		assertThat(item2.add(call).get(Qxsl.CALL)).isEqualTo(call);
 		assertThat(item2.add(mode).get(Qxsl.MODE)).isEqualTo(mode);
 		assertThat(item2.add(name).get(Qxsl.NAME)).isEqualTo(name);

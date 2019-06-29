@@ -31,15 +31,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public final class ZAllFormatTest extends junit.framework.TestCase {
 	private final ZAllFormat format = new ZAllFormat();
 	private final TableFormats tables = new TableFormats();
-	private final ArrayList<Band> bands = new ArrayList<>();
+	private final ArrayList<Freq> freqs = new ArrayList<>();
 	private final Random random = new Random();
 	public ZAllFormatTest() {
-		bands.add(new Band(    3_500));
-		bands.add(new Band(    7_000));
-		bands.add(new Band(   14_000));
-		bands.add(new Band(  144_000));
-		bands.add(new Band(1_200_000));
-		bands.add(new Band(5_600_000));
+		freqs.add(new Freq(    3_500));
+		freqs.add(new Freq(    7_000));
+		freqs.add(new Freq(   14_000));
+		freqs.add(new Freq(  144_000));
+		freqs.add(new Freq(1_200_000));
+		freqs.add(new Freq(5_600_000));
 	}
 	@Test
 	public void testDecode() throws java.io.IOException {
@@ -48,7 +48,7 @@ public final class ZAllFormatTest extends junit.framework.TestCase {
 			for(int row = 0; row < numItems; row++) {
 				final Item item = new Item();
 				item.add(new Time());
-				item.add(bands.get(random.nextInt(bands.size())));
+				item.add(freqs.get(random.nextInt(freqs.size())));
 				item.add(new Call(util.RandText.alnum(12)));
 				item.add(new Mode(util.RandText.alnum(4)));
 				item.add(new Note(util.RandText.alnum(50)));

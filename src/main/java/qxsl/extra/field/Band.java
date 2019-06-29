@@ -10,101 +10,56 @@ package qxsl.extra.field;
 import java.math.BigDecimal;
 import javax.xml.namespace.QName;
 import qxsl.field.FieldFormat;
+import qxsl.field.FieldMapper;
 import qxsl.model.Field;
-import qxsl.model.Tuple;
+import qxsl.model.Item;
+
+import static java.math.BigDecimal.ROUND_DOWN;
 
 /**
- * 交信の周波数帯を表現する{@link Field}実装クラスです。
+ * 交信の波長帯を表現する{@link Field}実装クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics
  * 
- * @since 2013/06/08
+ * @since 2019/06/29
  *
  */
 public final class Band extends Qxsl<BigDecimal> {
-	private final BigDecimal kHz;
+	private final BigDecimal meter;
 
 	/**
-	 * 周波数を指定して{@link Band}を構築します。
+	 * 波長を指定して{@link Band}を構築します。
 	 * 
-	 * @param kHz kHz単位の周波数
+	 * @param meter メートル単位の波長
 	 */
-	public Band(int kHz) {
-		this(BigDecimal.valueOf(kHz));
+	public Band(int meter) {
+		this(BigDecimal.valueOf(meter));
 	}
 
 	/**
-	 * 周波数を指定して{@link Band}を構築します。
+	 * 波長を指定して{@link Band}を構築します。
 	 * 
-	 * @param kHz kHz単位の周波数
+	 * @param meter meter単位の波長
 	 */
-	public Band(BigDecimal kHz) {
+	public Band(BigDecimal meter) {
 		super(BAND);
-		this.kHz = kHz;
+		this.meter = meter;
 	}
 
 	@Override
 	public BigDecimal value() {
-		return kHz;
+		return meter;
 	}
 
 	/**
-	 * 周波数帯をキロヘルツ単位の整数値で返します。
-	 *
-	 * @return kHz単位の周波数
-	 */
-	public int toInt() {
-		return value().intValue();
-	}
-
-	/**
-	 * 周波数帯を表す適切な単位の文字列を返します。
+	 * 波長帯を表すメートル単位付きの文字列を返します。
 	 * 
 	 * @return UI表示に適した文字列
 	 */
 	@Override
 	public String toString() {
-		if(kHz.doubleValue() > 1e6) return toGHzString();
-		if(kHz.doubleValue() > 1e3) return toMHzString();
-		return toKHzString();
-	}
-
-	/**
-	 * 周波数帯をキロヘルツ単位の文字列で返します。
-	 * 
-	 * @return kHz単位のUI表示に適した文字列
-	 */
-	public String toKHzString() {
-		return toDecimalString(0) + "kHz";
-	}
-
-	/**
-	 * 周波数帯をメガヘルツ単位の文字列で返します。
-	 * 
-	 * @return MHz単位のUI表示に適した文字列
-	 */
-	public String toMHzString() {
-		return toDecimalString(3) + "MHz";
-	}
-
-	/**
-	 * 周波数帯をギガヘルツ単位の文字列で返します。
-	 * 
-	 * @return GHz単位のUI表示に適した文字列
-	 */
-	public String toGHzString() {
-		return toDecimalString(6) + "GHz";
-	}
-
-	/**
-	 * この周波数帯を小数で表現する文字列を返します。
-	 * 
-	 * @param scale 小数点の位置
-	 * @return 小数により表される周波数帯
-	 */
-	private String toDecimalString(int scale) {
-		return kHz.scaleByPowerOfTen(-scale).toPlainString();
+		return meter.toPlainString().concat("m");
 	}
 
 	/**
@@ -113,7 +68,7 @@ public final class Band extends Qxsl<BigDecimal> {
 	 * 
 	 * @author Journal of Hamradio Informatics
 	 * 
-	 * @since 2013/06/08
+	 * @since 2019/06/29
 	 *
 	 */
 	public static final class Format implements FieldFormat {
@@ -130,6 +85,36 @@ public final class Band extends Qxsl<BigDecimal> {
 		@Override
 		public String encode(Field field) {
 			return ((Band) field).value().toPlainString();
+		}
+	}
+
+	/**
+	 * {@link Band}への変換を行う変換器です。
+	 * 
+	 * 
+	 * @author Journal of Hamradio Informatics
+	 * 
+	 * @since 2019/06/29
+	 *
+	 */
+	public static final class Mapper implements FieldMapper {
+		private static final String FIX = "(?<=\\d)(?=[cm]?m)";
+
+		@Override
+		public QName target() {
+			return BAND;
+		}
+
+		@Override
+		public Band search(Item item) {
+			final Object band = item.value(new QName(ADIF, "BAND"));
+			String[] tup = band.toString().toLowerCase().split(FIX);
+			BigDecimal m = new BigDecimal(tup[0]);
+			switch(tup[1]) {
+				case "cm": return new Band(m.scaleByPowerOfTen(-2));
+				case "mm": return new Band(m.scaleByPowerOfTen(-3));
+			}
+			return new Band(m);
 		}
 	}
 }

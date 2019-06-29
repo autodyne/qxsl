@@ -28,6 +28,7 @@ public abstract class Qxsl<V> extends Field<V> {
 	public static final QName CALL = new QName(QXSL, "call", "qxsl");
 	public static final QName CITY = new QName(QXSL, "city", "qxsl");
 	public static final QName CODE = new QName(QXSL, "code", "qxsl");
+	public static final QName FREQ = new QName(QXSL, "freq", "qxsl");
 	public static final QName MODE = new QName(QXSL, "mode", "qxsl");
 	public static final QName NAME = new QName(QXSL, "name", "qxsl");
 	public static final QName NOTE = new QName(QXSL, "note", "qxsl");
