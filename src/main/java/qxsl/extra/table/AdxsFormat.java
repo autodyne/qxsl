@@ -79,13 +79,20 @@ public final class AdxsFormat extends BaseFormat {
 	}
 
 	/**
-	 * この操作はサポートされません。常に例外を発生します。
+	 * この書式でエンコードした交信記録を指定したストリームに書き込みます。
 	 * 
 	 * @param out 交信記録を書き込むストリーム
 	 * @param items 出力する交信記録
 	 * @throws IOException 入出力時の例外
 	 */
 	public void encode(OutputStream out, List<Item> items) throws IOException {
-		throw new UnsupportedOperationException("encoding is not supported");
+		try {
+			final ByteArrayOutputStream buf = new ByteArrayOutputStream();
+			new QxmlFormat().encode(buf, items);
+			InputStream in = new ByteArrayInputStream(buf.toByteArray());
+			former.transform(new StreamSource(in), new StreamResult(out));
+		} catch(SAXException | TransformerException ex) {
+			throw new IOException(ex.getMessage(), ex);
+		}
 	}
 }

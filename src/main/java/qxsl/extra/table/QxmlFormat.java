@@ -324,9 +324,11 @@ public final class QxmlFormat extends BaseFormat {
 		 */
 		private void field(Field field) throws Exception {
 			final QName qname = field.name();
-			try {
-				String f = fields.getFormat(qname).encode(field);
-				streamWriter.writeAttribute(qname, f);
+			if(field instanceof FieldFormats.Any) {
+				streamWriter.writeAttribute(qname, field.toString());
+			} else try {
+				String value = fields.getFormat(qname).encode(field);
+				streamWriter.writeAttribute(qname, value);
 			} catch(NullPointerException ex) {
 				throw new IOException("unknown field: " + qname);
 			}

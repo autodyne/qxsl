@@ -32,7 +32,7 @@
 	<!-- conversion from QXSL to ADX -->
 	<xsl:template match="item">
 		<RECORD>
-			<xsl:for-each select="@*">
+			<xsl:for-each select="@adif:*" xmlns:adif="adif.org">
 				<xsl:element name="{local-name()}">
 					<xsl:value-of select="."/>
 				</xsl:element>
