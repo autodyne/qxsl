@@ -11,7 +11,7 @@ import javax.xml.namespace.QName;
 import qxsl.model.Field;
 
 /**
- * {@link TableFormat}から呼び出され、{@link Field}と文字列の変換を実行します。
+ * {@link Field}と文字列による表現を相互に変換する仕組みを提供します。
  * 
  * 
  * @author Journal of Hamradio Informatics

@@ -159,6 +159,8 @@ public final class RuleKit {
 	 * @param sexp 式
 	 * @param eval 評価器
 	 * @return 要素
+	 *
+	 * @throws ScriptException 式の評価時に発生する例外 特にItemでない場合
 	 */
 	private static Item item(Object sexp, Lisp eval) throws ScriptException {
 		final Object item = eval.eval(sexp);
@@ -172,6 +174,8 @@ public final class RuleKit {
 	 * @param sexp 式
 	 * @param eval 評価器
 	 * @return 要素
+	 *
+	 * @throws ScriptException 式の評価時に発生する例外 特にExchでない場合
 	 */
 	private static Exch exch(Object sexp, Lisp eval) throws ScriptException {
 		final Object exch = eval.eval(sexp);

@@ -76,6 +76,8 @@ public final class SheetFormats implements Iterable<SheetFormat> {
 	 * 
 	 * @param in 内容を読み込むストリーム
 	 * @return 内容をコピーしたストリーム
+	 *
+	 * @throws IOException 入力時の例外
 	 */
 	private InputStream fetch(InputStream in) throws IOException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();

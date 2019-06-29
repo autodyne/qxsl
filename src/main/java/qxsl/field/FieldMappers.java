@@ -53,9 +53,9 @@ public final class FieldMappers implements Iterable<FieldMapper> {
 	 * @param tuple 属性を検索するタプル
 	 * @return 変換後の属性 存在しない場合null
 	 */
-	public Field search(QName name, Tuple tuple) {
+	public Field search(QName qname, Tuple tuple) {
 		for(FieldMapper fm: loader) {
-			if(fm.target().equals(name)) {
+			if(fm.target().equals(qname)) {
 				Field field = fm.search(tuple);
 				if(field != null) return field;
 			}

@@ -681,9 +681,10 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 			return text;
 		}
 		/**
-		 * 指定されたアトムをシンボルまたは実数として返します。
+		 * 指定されたアトムを実数またはシンボルとして返します。
 		 *
-		 * @return 実数値
+		 * @param atom アトム式
+		 * @return 実数値 もしくはシンボル
 		 */
 		private final Object asSymbolOrReal(String atom) {
 			try {

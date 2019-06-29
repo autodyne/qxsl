@@ -129,6 +129,7 @@ public final class FieldFormats implements Iterable<FieldFormat> {
 		 * 指定された値の{@link Field}を生成します。
 		 *
 		 * @param value 属性値の文字列
+		 * @return 読み込まれた属性
 		 */
 		private Field createField(String value) {
 			try {

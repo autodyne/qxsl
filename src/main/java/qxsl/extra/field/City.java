@@ -68,6 +68,7 @@ public final class City extends Qxsl<String> {
 	/**
 	 * ライブラリが内蔵する全ての地域番号を返します。
 	 *
+	 * @param base 地域データベースの名前
 	 * @return 全ての利用可能な地域番号
 	 */
 	public static final Set<String> getCodes(String base) {
@@ -113,6 +114,7 @@ public final class City extends Qxsl<String> {
 		 * 指定された入力からデータを読み込みます。
 		 *
 		 * @param is 入力となるストリーム
+		 * @throws IOException 特にファイルが存在しない場合
 		 */
 		private void load(InputStream is) throws IOException {
 			final Reader r = new InputStreamReader(is, "UTF-8");
@@ -125,6 +127,7 @@ public final class City extends Qxsl<String> {
 		 * 指定された地域番号に対して地域名の配列を返します。
 		 *
 		 * @param code 地域番号
+		 * @return 地域名の配列
 		 */
 		public final String[] get(String code) {
 			final String[] name = map.get(code);
