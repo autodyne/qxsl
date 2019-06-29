@@ -8,7 +8,7 @@
 package qxsl.extra.field;
 
 import java.util.Random;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import qxsl.field.FieldFormats;
 import qxsl.field.FieldFormats.Cache;
 

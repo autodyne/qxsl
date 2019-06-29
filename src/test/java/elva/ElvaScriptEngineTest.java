@@ -8,12 +8,13 @@
 package elva;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.script.ScriptException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -41,8 +42,8 @@ public final class ElvaScriptEngineTest extends junit.framework.TestCase {
 	}
 	@Test
 	public void testInt() throws ScriptException {
-		assertThat(elva.eval("114514")).isEqualTo(114514);
-		assertThat(elva.eval("364364")).isEqualTo(364364);
+		assertThat(elva.eval("114")).isEqualTo(BigDecimal.valueOf(114));
+		assertThat(elva.eval("514")).isEqualTo(BigDecimal.valueOf(514));
 	}
 	@Test
 	public void testTrue() throws ScriptException {

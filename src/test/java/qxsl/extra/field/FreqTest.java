@@ -7,10 +7,11 @@
 *****************************************************************************/
 package qxsl.extra.field;
 
+import java.math.BigDecimal;
 import java.util.Random;
-import org.junit.Test;
-import qxsl.field.FieldFormats;
+import org.junit.jupiter.api.Test;
 import qxsl.field.FieldFormats.Cache;
+import qxsl.field.FieldFormats;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,8 +29,10 @@ public final class FreqTest extends junit.framework.TestCase {
 	private final Random random = new Random();
 	@Test
 	public void testValue() {
-		final int freq = random.nextInt(Integer.MAX_VALUE);
-		assertThat(new Freq(freq).value()).isEqualTo(freq);
+		assertThat(new Freq("1.9MHz")).isEqualTo(new Freq(    1_900));
+		assertThat(new Freq("3.5MHz")).isEqualTo(new Freq(    3_500));
+		assertThat(new Freq("144MHz")).isEqualTo(new Freq(  144_000));
+		assertThat(new Freq("2.4GHz")).isEqualTo(new Freq(2_400_000));
 	}
 	@Test
 	public void testToString() {

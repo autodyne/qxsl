@@ -8,10 +8,10 @@
 package qxsl.extra.field;
 
 import java.util.Iterator;
-import org.junit.Test;
 import qxsl.field.FieldFormats;
 import qxsl.field.FieldFormats.Cache;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -39,7 +39,7 @@ public final class CityTest extends junit.framework.TestCase {
 	@Test
 	public void testToString() {
 		final String text = util.RandText.alnum(100);
-		assertThat(jarl(text)).hasToString(text);
+		assertThat(jarl(text)).hasToString("jarl:".concat(text));
 	}
 	/**
 	 * JARLのJCC/JCGコードをイテレータで返します。

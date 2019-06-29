@@ -81,8 +81,7 @@ public final class Time extends Qxsl<ZonedDateTime> {
 
 	/**
 	 * 指定されたオブジェクトと等値であるか確認します。
-	 * 対象が{@link Time}で、時刻が分まで等しい場合に、
-	 * trueを返します。
+	 * 対象が分まで同じ{@link Time}の場合にtrueを返します。
 	 * 
 	 * @param obj 比較するオブジェクト
 	 * @return この属性と等しい場合true

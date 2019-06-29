@@ -8,6 +8,8 @@
 package qxsl.field;
 
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ServiceLoader;
 import javax.xml.namespace.QName;
 import qxsl.model.Field;
@@ -47,6 +49,20 @@ public final class FieldMappers implements Iterable<FieldMapper> {
 	}
 
 	/**
+	 * 指定された属性の入出力を行う{@link FieldMapper}を返します。
+	 * 
+	 * @param name 属性の名前
+	 * @return 対応する書式 存在しない場合null
+	 */
+	public List<FieldMapper> getMappers(QName name) {
+		List<FieldMapper> result = new LinkedList<>();
+		for(FieldMapper map: loader) {
+			if(map.target().equals(name)) result.add(map);
+		}
+		return result;
+	}
+
+	/**
 	 * 指定された属性に相当する属性を検索し、変換後の属性を返します。
 	 * 
 	 * @param qname 変換後の属性の名前
@@ -54,11 +70,9 @@ public final class FieldMappers implements Iterable<FieldMapper> {
 	 * @return 変換後の属性 存在しない場合null
 	 */
 	public Field search(QName qname, Tuple tuple) {
-		for(FieldMapper fm: loader) {
-			if(fm.target().equals(qname)) {
-				Field field = fm.search(tuple);
-				if(field != null) return field;
-			}
+		for(FieldMapper fm: getMappers(qname)) {
+			Field field = fm.search(tuple);
+			if(field != null) return field;
 		}
 		return null;
 	}

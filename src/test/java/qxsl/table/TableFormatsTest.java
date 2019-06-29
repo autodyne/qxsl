@@ -7,7 +7,7 @@
 *****************************************************************************/
 package qxsl.table;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import qxsl.extra.table.*;
 
 import static org.assertj.core.api.Assertions.assertThat;

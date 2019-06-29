@@ -5,32 +5,26 @@
  * License : GNU Lesser General Public License v3 (see LICENSE)
  * Author: Journal of Hamradio Informatics http://pafelog.net
 *****************************************************************************/
-package qxsl.ruler;
+package qxsl.field;
 
-import qxsl.model.Item;
 import org.junit.jupiter.api.Test;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * {@link Failure}クラスのテスト用クラスです。
+ * {@link FieldMappers}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics
  * 
- * @since 2019/05/18
+ * @since 2019/06/29
  *
  */
-public final class FailureTest extends junit.framework.TestCase {
+public final class FieldMappersTest extends junit.framework.TestCase {
+	private final FieldMappers fields = new FieldMappers();
 	@Test
-	public void testGetMessage() {
-		final Item item = new Item();
-		String text = util.RandText.alnum(100);
-		assertThat(new Failure(text, item).text()).isSameAs(text);
-	}
-	@Test
-	public void testGetItem() {
-		final Item item = new Item();
-		String text = util.RandText.alnum(100);
-		assertThat(new Failure(text, item).item()).isSameAs(item);
+	public void testIterator() {
+		assertThat(fields.iterator()).isNotNull();
+		assertThat(fields.iterator()).hasNext();
 	}
 }

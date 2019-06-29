@@ -7,7 +7,7 @@
 *****************************************************************************/
 package qxsl.model;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import qxsl.extra.field.*;
 
 import static qxsl.extra.table.QxmlFormat.RCVD;

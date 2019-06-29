@@ -938,7 +938,15 @@ public final class ElvaScriptEngine extends AbstractScriptEngine {
 		public Object apply(Seq args, Lisp eval) throws ScriptException {
 			final Object l = eval.eval(args.get(0));
 			final Object r = eval.eval(args.get(1));
-			return l == null? r == null: l.equals(r);
+			try {
+				final BigDecimal lbd = (BigDecimal) l;
+				final BigDecimal rbd = (BigDecimal) r;
+				return lbd.compareTo(rbd) == 0;
+			} catch (ClassCastException ex) {
+				return l.equals(r);
+			} catch (NullPointerException ex) {
+				return l == r;
+			}
 		}
 	}
 

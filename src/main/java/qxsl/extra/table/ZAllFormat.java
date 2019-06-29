@@ -302,6 +302,7 @@ public final class ZAllFormat extends TextFormat {
 		 */
 		public void write(List<Item> items) throws IOException {
 			printHead();
+			println();
 			for(Item r : items) item(r);
 			super.close();
 		}
@@ -352,7 +353,7 @@ public final class ZAllFormat extends TextFormat {
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void freq(Freq freq) throws IOException {
-			if(freq.toInt() < 10_000_000) {
+			if(freq.value().intValueExact() < 10_000_000) {
 				final String MHz = freq.toMHzString();
 				printf("%4.4s", MHz.substring(0, MHz.length() - 3));
 			} else print(" 10G");

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import qxsl.extra.field.*;
 import qxsl.model.Item;

@@ -9,14 +9,17 @@ package qxsl.extra.table;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-import org.junit.Test;
+import java.util.stream.IntStream;
 
 import qxsl.extra.field.*;
 import qxsl.model.Item;
 import qxsl.table.TableFormats;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -41,25 +44,27 @@ public final class CTxtFormatTest extends junit.framework.TestCase {
 		freqs.add(new Freq(1_200_000));
 		freqs.add(new Freq(5_600_000));
 	}
-	@Test
-	public void testDecode() throws java.io.IOException {
-		for(int numItems = 0; numItems <= 100; numItems++) {
-			final ArrayList<Item> items = new ArrayList<>();
-			for(int row = 0; row < numItems; row++) {
-				final Item item = new Item();
-				item.add(new Time());
-				item.add(freqs.get(random.nextInt(freqs.size())));
-				item.add(new Call(util.RandText.alnum(11)));
-				item.add(new Mode(util.RandText.alnum(4)));
-				item.getRcvd().add(new Code(util.RandText.alnum(12)));
-				item.getSent().add(new Code(util.RandText.alnum(12)));
-				items.add(item);
-			}
-			final ByteArrayOutputStream os = new ByteArrayOutputStream();
-			format.encode(os, items);
-			final byte[] b = os.toByteArray();
-			assertThat(format.decode(new ByteArrayInputStream(b))).isEqualTo(items);
-			assertThat(tables.decode(new ByteArrayInputStream(b))).isEqualTo(items);
+	public static IntStream testMethodSource() {
+		return IntStream.range(0, 100);
+	}
+	@ParameterizedTest
+	@MethodSource("testMethodSource")
+	public void testDecode(int numItems) throws IOException {
+		final ArrayList<Item> items = new ArrayList<>();
+		for(int row = 0; row < numItems; row++) {
+			final Item item = new Item();
+			item.add(new Time());
+			item.add(freqs.get(random.nextInt(freqs.size())));
+			item.add(new Call(util.RandText.alnum(11)));
+			item.add(new Mode(util.RandText.alnum(4)));
+			item.getRcvd().add(new Code(util.RandText.alnum(12)));
+			item.getSent().add(new Code(util.RandText.alnum(12)));
+			items.add(item);
 		}
+		final ByteArrayOutputStream os = new ByteArrayOutputStream();
+		format.encode(os, items);
+		final byte[] b = os.toByteArray();
+		assertThat(format.decode(new ByteArrayInputStream(b))).isEqualTo(items);
+		assertThat(tables.decode(new ByteArrayInputStream(b))).isEqualTo(items);
 	}
 }

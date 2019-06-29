@@ -22,39 +22,39 @@ import qxsl.model.Field;
  *
  */
 public final class Freq extends Qxsl<BigDecimal> {
-	private final BigDecimal kHz;
+	private final BigDecimal freq;
 
 	/**
 	 * 周波数を指定して{@link Freq}を構築します。
 	 * 
-	 * @param kHz kHz単位の周波数
+	 * @param freq キロヘルツ単位の周波数
 	 */
-	public Freq(int kHz) {
-		this(BigDecimal.valueOf(kHz));
+	public Freq(int freq) {
+		this(BigDecimal.valueOf(freq));
 	}
 
 	/**
 	 * 周波数を指定して{@link Freq}を構築します。
 	 * 
-	 * @param kHz kHz単位の周波数
+	 * @param freq キロヘルツ単位の周波数
 	 */
-	public Freq(BigDecimal kHz) {
+	public Freq(BigDecimal freq) {
 		super(FREQ);
-		this.kHz = kHz;
+		this.freq = freq;
+	}
+
+	/**
+	 * 単位付きの文字列から{@link Freq}を構築します。
+	 *
+	 * @param text 単位付きの文字列
+	 */
+	public Freq(String text) {
+		this(Freq.parse(text));
 	}
 
 	@Override
 	public BigDecimal value() {
-		return kHz;
-	}
-
-	/**
-	 * 周波数をキロヘルツ単位の整数値で返します。
-	 *
-	 * @return kHz単位の周波数
-	 */
-	public int toInt() {
-		return value().intValueExact();
+		return freq;
 	}
 
 	/**
@@ -64,15 +64,15 @@ public final class Freq extends Qxsl<BigDecimal> {
 	 */
 	@Override
 	public String toString() {
-		if(kHz.doubleValue() > 1e6) return toGHzString();
-		if(kHz.doubleValue() > 1e3) return toMHzString();
+		if(freq.doubleValue() > 1e6) return toGHzString();
+		if(freq.doubleValue() > 1e3) return toMHzString();
 		return toKHzString();
 	}
 
 	/**
 	 * 周波数をキロヘルツ単位の文字列で返します。
 	 * 
-	 * @return kHz単位のUI表示に適した文字列
+	 * @return キロヘルツ単位のUI表示に適した文字列
 	 */
 	public String toKHzString() {
 		return toDecimalString(0).concat("kHz");
@@ -81,7 +81,7 @@ public final class Freq extends Qxsl<BigDecimal> {
 	/**
 	 * 周波数をメガヘルツ単位の文字列で返します。
 	 * 
-	 * @return MHz単位のUI表示に適した文字列
+	 * @return メガヘルツ単位のUI表示に適した文字列
 	 */
 	public String toMHzString() {
 		return toDecimalString(3).concat("MHz");
@@ -90,7 +90,7 @@ public final class Freq extends Qxsl<BigDecimal> {
 	/**
 	 * 周波数をギガヘルツ単位の文字列で返します。
 	 * 
-	 * @return GHz単位のUI表示に適した文字列
+	 * @return ギガヘルツ単位のUI表示に適した文字列
 	 */
 	public String toGHzString() {
 		return toDecimalString(6).concat("GHz");
@@ -103,7 +103,40 @@ public final class Freq extends Qxsl<BigDecimal> {
 	 * @return 実数により表される周波数
 	 */
 	private String toDecimalString(int scale) {
-		return kHz.scaleByPowerOfTen(-scale).toPlainString();
+		BigDecimal d = freq.scaleByPowerOfTen(-scale);
+		return d.stripTrailingZeros().toPlainString();
+	}
+
+	/**
+	 * 単位付き文字列を解析してキロヘルツ単位の値を返します。
+	 *
+	 * @param text 単位付き文字列 "1.9MHz"等
+	 * @return キロヘルツ単位の波長
+	 */
+	private static BigDecimal parse(String text) {
+		final String FIX = "(?<=\\d)(?=[kMG]?Hz)";
+		String[] tup = text.split(FIX);
+		final BigDecimal bd = new BigDecimal(tup[0]);
+		switch(tup[1]) {
+			case  "Hz": return bd.scaleByPowerOfTen(-3);
+			case "kHz": return bd.scaleByPowerOfTen(+0);
+			case "MHz": return bd.scaleByPowerOfTen(+3);
+			case "GHz": return bd.scaleByPowerOfTen(+6);
+		}
+		throw new NumberFormatException(text);
+	}
+
+	/**
+	 * 指定されたオブジェクトと等値であるか確認します。
+	 * 同じ周波数の{@link Freq}に対してtrueを返します。
+	 * 
+	 * @param obj 比較するオブジェクト
+	 * @return この属性と等しい場合true
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Freq)) return false;
+		return freq.compareTo(((Freq) obj).freq) == 0;
 	}
 
 	/**

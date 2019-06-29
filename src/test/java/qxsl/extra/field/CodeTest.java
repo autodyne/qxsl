@@ -7,7 +7,7 @@
 *****************************************************************************/
 package qxsl.extra.field;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import qxsl.field.FieldFormats;
 import qxsl.field.FieldFormats.Cache;
 

@@ -7,7 +7,7 @@
 *****************************************************************************/
 package qxsl.sheet;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import qxsl.extra.sheet.*;
 
 import static org.assertj.core.api.Assertions.assertThat;

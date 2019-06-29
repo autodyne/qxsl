@@ -9,14 +9,17 @@ package qxsl.extra.table;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-import org.junit.Test;
+import java.util.stream.IntStream;
 
 import qxsl.extra.field.*;
 import qxsl.model.Item;
 import qxsl.table.TableFormats;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -52,30 +55,32 @@ public final class ZBinFormatTest extends junit.framework.TestCase {
 		watts.add(new Watt("L"));
 		watts.add(new Watt("P"));
 	}
-	@Test
-	public void testDecode() throws java.io.IOException {
-		for(int numItems = 0; numItems <= 100; numItems++) {
-			final ArrayList<Item> items = new ArrayList<>();
-			for(int row = 0; row < numItems; row++) {
-				final Item item = new Item();
-				item.add(new Time());
-				item.add(freqs.get(random.nextInt(freqs.size())));
-				item.add(new Call(util.RandText.alnum(12)));
-				item.add(modes.get(random.nextInt(modes.size())));
-				item.add(new Note(util.RandText.alnum(66)));
-				item.add(new Name(util.RandText.alnum(14)));
-				item.getRcvd().add(new RSTQ(random.nextInt(600)));
-				item.getRcvd().add(new Code(util.RandText.alnum(30)));
-				item.getSent().add(new RSTQ(random.nextInt(600)));
-				item.getSent().add(new Code(util.RandText.alnum(30)));
-				item.getSent().add(watts.get(random.nextInt(watts.size())));
-				items.add(item);
-			}
-			final ByteArrayOutputStream os = new ByteArrayOutputStream();
-			format.encode(os, items);
-			final byte[] b = os.toByteArray();
-			assertThat(format.decode(new ByteArrayInputStream(b))).isEqualTo(items);
-			assertThat(tables.decode(new ByteArrayInputStream(b))).isEqualTo(items);
+	public static IntStream testMethodSource() {
+		return IntStream.range(0, 100);
+	}
+	@ParameterizedTest
+	@MethodSource("testMethodSource")
+	public void testDecode(int numItems) throws IOException {
+		final ArrayList<Item> items = new ArrayList<>();
+		for(int row = 0; row < numItems; row++) {
+			final Item item = new Item();
+			item.add(new Time());
+			item.add(freqs.get(random.nextInt(freqs.size())));
+			item.add(new Call(util.RandText.alnum(12)));
+			item.add(modes.get(random.nextInt(modes.size())));
+			item.add(new Note(util.RandText.alnum(66)));
+			item.add(new Name(util.RandText.alnum(14)));
+			item.getRcvd().add(new RSTQ(random.nextInt(600)));
+			item.getRcvd().add(new Code(util.RandText.alnum(30)));
+			item.getSent().add(new RSTQ(random.nextInt(600)));
+			item.getSent().add(new Code(util.RandText.alnum(30)));
+			item.getSent().add(watts.get(random.nextInt(watts.size())));
+			items.add(item);
 		}
+		final ByteArrayOutputStream os = new ByteArrayOutputStream();
+		format.encode(os, items);
+		final byte[] b = os.toByteArray();
+		assertThat(format.decode(new ByteArrayInputStream(b))).isEqualTo(items);
+		assertThat(tables.decode(new ByteArrayInputStream(b))).isEqualTo(items);
 	}
 }

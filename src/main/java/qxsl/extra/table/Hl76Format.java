@@ -284,6 +284,7 @@ public final class Hl76Format extends TextFormat {
 		 */
 		public void write(List<Item> items) throws IOException {
 			printHead();
+			println();
 			for(Item r : items) item(r);
 			super.close();
 		}

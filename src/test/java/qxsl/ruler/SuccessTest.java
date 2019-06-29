@@ -8,7 +8,7 @@
 package qxsl.ruler;
 
 import qxsl.model.Item;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
