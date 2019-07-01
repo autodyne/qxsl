@@ -34,10 +34,7 @@ public enum Quotes {
 		return name;
 	}
 
-	public static Quotes valueOf(Symbol name) {
-		for(Quotes q: values()) {
-			if(q.name.equals(name)) return q;
-		}
-		return null;
+	public boolean same(Symbol name) {
+		return name.equals(this.name);
 	}
 }

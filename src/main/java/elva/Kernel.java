@@ -7,6 +7,8 @@
 *****************************************************************************/
 package elva;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.math.BigDecimal;
 
 /**
@@ -131,6 +133,30 @@ public final class Kernel {
 	public final Object call(Struct sexp) {
 		final Function func = eval(sexp.car(), Function.class);
 		return valid(func, sexp.cdr()).apply(sexp.cdr(), this);
+	}
+
+	/**
+	 * 準引用を表現する識別子です。
+	 */
+	private final Symbol UQUOT = Quotes.UQUOT.toSymbol();
+
+	/**
+	 * 指定された式を準引用の被引用式として評価した値を返します。
+	 *
+	 * @param quoted 式
+	 * @return 返り値
+	 *
+	 * @throws ElvaRuntimeException 評価により発生した例外
+	 */
+	public final Object quasi(Object quoted) {
+		if(quoted instanceof Struct) {
+			final Struct list = (Struct) quoted;
+			if(Struct.NIL.equals(list)) return Struct.NIL;
+			if(UQUOT.equals(list.car())) return eval(list);
+			final List<Object> target = new ArrayList<>();
+			for(Object sexp: list) target.add(quasi(sexp));
+			return new Struct(target);
+		} else return quoted;
 	}
 
 	/**

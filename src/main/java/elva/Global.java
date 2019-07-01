@@ -195,26 +195,7 @@ public final class Global extends SimpleBindings {
 	@Params(min = 1, max = 1)
 	private static final class $Quasi implements Function {
 		public Object apply(Struct args, Kernel eval) {
-			if(!(args.car() instanceof Struct)) return args.car();
-			return this.map((Struct) args.car(), eval);
-		}
-		private Struct map(Struct source, Kernel eval) {
-			final ArrayList<Object> target = new ArrayList<>();
-			for(Object obj: source) try {
-				final Struct list = (Struct) obj;
-				if(list.car() instanceof Symbol) try {
-					switch(Quotes.valueOf((Symbol) list.car())) {
-						case UQUOT: target.add(eval.eval(obj)); continue;
-						case QUASI: target.add(obj); continue;
-					}
-				} catch (Exception ex) {}
-				target.add(map(list, eval));
-			} catch (ClassCastException ex) {
-				target.add(obj);
-			} catch (IndexOutOfBoundsException ex) {
-				target.add(obj);
-			}
-			return new Struct(target);
+			return eval.quasi(args.car());
 		}
 	}
 
