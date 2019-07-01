@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/02/24
  *
  */
-public final class NameTest extends junit.framework.TestCase {
+public final class NameTest extends test.RandTest {
 	private final Cache cache = new FieldFormats().cache(Qxsl.NAME);
 	@Test
 	public void testValue() {
@@ -31,13 +31,13 @@ public final class NameTest extends junit.framework.TestCase {
 	}
 	@Test
 	public void testToString() {
-		final String text = util.RandText.alnum(100);
+		final String text = alnum(100);
 		assertThat(new Name(text)).hasToString(text);
 	}
 	@Test
 	public void testName$Format() throws Exception {
 		final Name.Format form = new Name.Format();
-		final Name name = new Name(util.RandText.alnum(100));
+		final Name name = new Name(alnum(100));
 		assertThat(form.decode(form.encode(name))).isEqualTo(name);
 		assertThat(cache.field(form.encode(name))).isEqualTo(name);
 	}

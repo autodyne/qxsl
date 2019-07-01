@@ -147,12 +147,16 @@
 (>= 5 4 2 3 1) false
 
 ; str-head
-(str-head "HELLO") "H"
-(str-head "WORLD") "W"
+(str-head "HELLO" 1) "H"
+(str-head "WORLD" 1) "W"
+(str-head "HELLO" 2) "HE"
+(str-head "WORLD" 2) "WO"
 
 ; str-tail
-(str-tail "HELLO") "ELLO"
-(str-tail "WORLD") "ORLD"
+(str-tail "HELLO" 1) "ELLO"
+(str-tail "WORLD" 1) "ORLD"
+(str-tail "HELLO" 2) "LLO"
+(str-tail "WORLD" 2) "RLD"
 
 ; match
 (match "\\d{6}" (if (equal 114 514) "114514" "364364")) true

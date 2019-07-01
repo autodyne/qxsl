@@ -11,7 +11,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.stream.IntStream;
 import org.xml.sax.SAXException;
 
@@ -32,9 +31,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/02/26
  *
  */
-public final class QxmlFormatTest extends junit.framework.TestCase {
+public final class QxmlFormatTest extends test.RandTest {
 	private final TableFormats tables = new TableFormats();
-	private final Random random = new Random();
 	public static IntStream testMethodSource() {
 		return IntStream.range(0, 100);
 	}
@@ -46,17 +44,17 @@ public final class QxmlFormatTest extends junit.framework.TestCase {
 		for(int row = 0; row < numItems; row++) {
 			final Item item = new Item();
 			item.add(new Time());
-			item.add(new Freq(random.nextInt(10_000_000)));
-			item.add(new Call(util.RandText.alnum(10)));
-			item.add(new Name(util.RandText.alnum(10)));
-			item.add(new Note(util.RandText.alnum(10)));
-			item.add(new Mode(util.RandText.alnum(10)));
-			item.getRcvd().add(new RSTQ(random.nextInt(600)));
-			item.getRcvd().add(new Code(util.RandText.alnum(10)));
-			item.getRcvd().add(new Watt(util.RandText.alnum(10)));
-			item.getSent().add(new RSTQ(random.nextInt(600)));
-			item.getSent().add(new Code(util.RandText.alnum(10)));
-			item.getSent().add(new Watt(util.RandText.alnum(10)));
+			item.add(new Band(randInt(10_000_000)));
+			item.add(new Call(alnum(10)));
+			item.add(new Name(alnum(10)));
+			item.add(new Note(alnum(10)));
+			item.add(new Mode(alnum(10)));
+			item.getRcvd().add(new RSTQ(randInt(600)));
+			item.getRcvd().add(new Code(alnum(10)));
+			item.getRcvd().add(new Watt(alnum(10)));
+			item.getSent().add(new RSTQ(randInt(600)));
+			item.getSent().add(new Code(alnum(10)));
+			item.getSent().add(new Watt(alnum(10)));
 			items.add(item);
 		}
 		final ByteArrayOutputStream os = new ByteArrayOutputStream();

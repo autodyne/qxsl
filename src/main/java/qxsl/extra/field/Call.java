@@ -9,9 +9,7 @@ package qxsl.extra.field;
 
 import javax.xml.namespace.QName;
 import qxsl.field.FieldFormat;
-import qxsl.field.FieldMapper;
 import qxsl.model.Field;
-import qxsl.model.Item;
 
 /**
  * 交信の相手局の呼出符号を表現する{@link Field}実装クラスです。
@@ -63,28 +61,6 @@ public final class Call extends Qxsl<String> {
 		@Override
 		public String encode(Field field) {
 			return field.value().toString();
-		}
-	}
-
-	/**
-	 * {@link Call}への変換を行う変換器です。
-	 * 
-	 * 
-	 * @author Journal of Hamradio Informatics
-	 * 
-	 * @since 2019/06/29
-	 *
-	 */
-	public static final class Mapper implements FieldMapper {
-		@Override
-		public QName target() {
-			return CALL;
-		}
-
-		@Override
-		public Call search(Item item) {
-			Object call = item.value(new QName(ADIF, "CALL"));
-			return call != null? new Call(call.toString()): null;
 		}
 	}
 }

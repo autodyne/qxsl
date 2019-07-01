@@ -12,7 +12,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import javax.xml.namespace.QName;
-import qxsl.field.FieldMappers;
+
+import qxsl.field.FieldFormat;
+import qxsl.field.FieldFormats;
 
 /**
  * {@link Item}クラスや{@link Exch}クラスはこのクラスを実装します。
@@ -24,31 +26,30 @@ import qxsl.field.FieldMappers;
  *
  */
 public abstract class Tuple implements Iterable<Field> {
-	private static final FieldMappers maps = new FieldMappers();
 	private final Map<QName, Field> table;
-	private final QName name;
+	private final QName qname;
 
 	/**
-	 * 指定した名前の空の{@link Tuple}を構築します。
+	 * 指定された名前の空の要素を構築します。
 	 * 
-	 * @param name 名前
+	 * @param qname 名前
 	 */
-	public Tuple(QName name) {
-		this.name = name;
+	public Tuple(QName qname) {
+		this.qname = qname;
 		table = new HashMap<>();
 	}
 
 	/**
-	 * この{@link Tuple}の名前を返します。
+	 * この要素の名前を返します。
 	 *
-	 * @return タプルの名前
+	 * @return 要素の名前
 	 */
 	public final QName name() {
-		return name;
+		return qname;
 	}
 
 	/**
-	 * この{@link Tuple}のハッシュ値を計算します。
+	 * この要素のハッシュ値を計算します。
 	 * 
 	 * @return ハッシュ値
 	 */
@@ -67,7 +68,7 @@ public abstract class Tuple implements Iterable<Field> {
 	 * 指定されたオブジェクトと等値であるか確認します。
 	 * 
 	 * @param obj 比較するオブジェクト
-	 * @return このタプルと等しい場合true
+	 * @return この要素と等しい場合true
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -94,10 +95,10 @@ public abstract class Tuple implements Iterable<Field> {
 	public abstract Iterator<Tuple> children();
 
 	/**
-	 * 指定した属性をこの{@link Tuple}に追加します。
+	 * 指定された属性をこの要素の隷下に追加します。
 	 * 
 	 * @param field 追加する属性
-	 * @return このタプル
+	 * @return この要素
 	 * @throws NullPointerException 属性がnullの場合
 	 */
 	public final Tuple add(Field field) {
@@ -106,36 +107,76 @@ public abstract class Tuple implements Iterable<Field> {
 	}
 
 	/**
-	 * 指定した{@link QName}に対応する属性を返します。
-	 * 
-	 * @param name 属性の名前
-	 * @return 設定されている属性
+	 * 指定された属性をこの要素の隷下に設定します。
+	 * 属性がnullの場合、その属性が削除されます。
+	 *
+	 * @param qname 属性の名前
+	 * @param field 対象の属性
+	 * @return この要素
+	 *
+	 * @throws NullPointerException 属性名がnullの場合
+	 * @throws IllegalArgumentException 属性名と属性が異なる場合
+	 *
+	 * @since 2019/06/30
 	 */
-	public final Field get(QName name) {
-		Field field = table.get(name);
-		if(field != null) return field;
-		return maps.search(name, this);
+	public final Tuple set(QName qname, Field field) {
+		if(field == null) return remove(qname);
+		if(qname.equals(field.name())) return add(field);
+		String fmt = "field (%s)'s name must be '%s'";
+		String msg = String.format(fmt, field, qname);
+		throw new IllegalArgumentException(msg);
 	}
 
 	/**
-	 * 指定した{@link QName}に対応する属性の値を返します。
-	 * 
-	 * @param name 属性の名前
-	 * @return 設定されている属性の値
+	 * 指定された文字列を属性に変換して追加します。
+	 * 文字列がnullの場合、その属性が削除されます。
+	 *
+	 * @param qname 属性の名前
+	 * @param value 属性値の文字列
+	 * @return この要素
+	 *
+	 * @throws NullPointerException 属性名がnullの場合
+	 * @throws IllegalArgumentException 属性名が未知の場合
+	 *
+	 * @since 2019/06/30
 	 */
-	public final Object value(QName name) {
-		final Field field = this.get(name);
-		return field != null? field.value(): null;
+	public final Tuple set(QName qname, String value) {
+		if(value == null) return remove(qname);
+		final FieldFormats formats = new FieldFormats();
+		final FieldFormat fmt = formats.getFormat(qname);
+		if(fmt != null) return set(qname, fmt.decode(value));
+		throw new IllegalArgumentException(qname.toString());
 	}
 
 	/**
-	 * 指定した{@link QName}に対応する属性を削除します。
+	 * 指定された属性名に対応する属性を削除します。
 	 * 
 	 * @param qname 属性の名前
-	 * @return このタプル
+	 * @return この要素
 	 */
 	public final Tuple remove(QName qname) {
 		table.remove(qname);
 		return this;
+	}
+
+	/**
+	 * 指定された属性名に対応する属性を返します。
+	 * 
+	 * @param qname 属性の名前
+	 * @return 設定されている属性
+	 */
+	public final Field get(QName qname) {
+		return table.get(qname);
+	}
+
+	/**
+	 * 指定された属性名に対応する属性の値を返します。
+	 * 
+	 * @param qname 属性の名前
+	 * @return 設定されている属性の値
+	 */
+	public final Object value(QName qname) {
+		final Field field = this.get(qname);
+		return field != null? field.value(): null;
 	}
 }

@@ -7,26 +7,25 @@
 *****************************************************************************/
 package qxsl.ruler;
 
-import elva.*;
 import java.io.Reader;
 import java.math.BigDecimal;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringJoiner;
-import javax.script.Bindings;
-import javax.script.ScriptContext;
-import javax.script.ScriptException;
-import javax.script.SimpleBindings;
-import javax.script.SimpleScriptContext;
+import javax.script.*;
+import javax.xml.namespace.QName;
 
-import qxsl.extra.field.*;
+import elva.*;
+
+import qxsl.extra.field.City;
+import qxsl.extra.field.Time;
 import qxsl.model.Exch;
 import qxsl.model.Item;
+import qxsl.model.Tuple;
 
-import static elva.ElvaScriptEngine.Lisp;
-import static elva.ElvaScriptEngine.Seq;
 import static javax.script.ScriptContext.ENGINE_SCOPE;
 
 /**
@@ -37,17 +36,17 @@ import static javax.script.ScriptContext.ENGINE_SCOPE;
  *
  * @since 2017/02/27
  *
- * @see ElvaScriptEngine 内部で使用されるLISP処理系
+ * @see ElvaLisp 内部で使用されるLISP処理系
  */
 public final class RuleKit {
-	private final ElvaScriptEngine elva;
+	private final ElvaLisp elva;
 	private final ScriptContext context;
 
 	/**
 	 * LISP処理系を構築します。
 	 */
 	public RuleKit() {
-		this.elva = new ElvaScriptEngine();
+		this.elva = new ElvaLisp();
 		context = new SimpleScriptContext();
 		context.setBindings(createBindings(), ENGINE_SCOPE);
 	}
@@ -123,7 +122,7 @@ public final class RuleKit {
 	 */
 	private static final class SectionImpl extends Section {
 		private final String name;
-		private final Lisp eval;
+		private final Kernel eval;
 		private final Function rule;
 		/**
 		 * 指定された名前と規約で部門を構築します。
@@ -132,7 +131,7 @@ public final class RuleKit {
 		 * @param rule 規約
 		 * @param eval 評価器
 		 */
-		public SectionImpl(String name, Function rule, Lisp eval) {
+		public SectionImpl(String name, Function rule, Kernel eval) {
 			this.name = name;
 			this.rule = rule;
 			this.eval = eval;
@@ -145,279 +144,11 @@ public final class RuleKit {
 
 		@Override
 		public Message validate(Item item) throws ScriptException {
-			Object sexp = eval.eval(new Seq(rule, item));
+			Object sexp = eval.eval(new Struct(rule, item));
 			if(sexp instanceof Success) return (Success) sexp;
 			if(sexp instanceof Failure) return (Failure) sexp;
 			String temp = "%s must return  a success or failure";
 			throw new ScriptException(String.format(temp, rule));
-		}
-	}
-
-	/**
-	 * 指定された式を評価して値を{@link Item}として返します。
-	 *
-	 * @param sexp 式
-	 * @param eval 評価器
-	 * @return 要素
-	 *
-	 * @throws ScriptException 式の評価時に発生する例外 特にItemでない場合
-	 */
-	private static Item item(Object sexp, Lisp eval) throws ScriptException {
-		final Object item = eval.eval(sexp);
-		if(item instanceof Item) return (Item) item;
-		throw new ScriptException(String.format("%s is not an Item", item));
-	}
-
-	/**
-	 * 指定された式を評価して値を{@link Exch}として返します。
-	 *
-	 * @param sexp 式
-	 * @param eval 評価器
-	 * @return 要素
-	 *
-	 * @throws ScriptException 式の評価時に発生する例外 特にExchでない場合
-	 */
-	private static Exch exch(Object sexp, Lisp eval) throws ScriptException {
-		final Object exch = eval.eval(sexp);
-		if(exch instanceof Exch) return (Exch) exch;
-		throw new ScriptException(String.format("%s is not an Exch", exch));
-	}
-
-	/**
-	 * LISP処理系で事前に定義されるcontest関数です。
-	 *
-	 *
-	 * @author Journal of Hamradio Informatics
-	 *
-	 * @since 2019/05/15
-	 */
-	@Arguments(min = 1, max = -1)
-	private static final class $Contest implements Function {
-		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			final String contest = eval.text(args.car());
-			ArrayList<Section> sects = new ArrayList<>();
-			ArrayList<String> errors = new ArrayList<>();
-			for(Object arg: args.cdr()) {
-				final Object o = eval.eval(arg);
-				if(o instanceof Section) sects.add((Section) o);
-				else errors.add(String.format("%s must be a section", o));
-			}
-			if(errors.isEmpty()) return new ContestImpl(contest, sects);
-			final String temp = "contest construction failed by:{";
-			final StringJoiner sj = new StringJoiner("\n", temp, "\n}");
-			for(String msg: errors) sj.add(msg);
-			throw new ScriptException(sj.toString());
-		}
-	}
-
-	/**
-	 * LISP処理系で事前に定義されるsection関数です。
-	 *
-	 *
-	 * @author Journal of Hamradio Informatics
-	 *
-	 * @since 2019/05/15
-	 */
-	@Arguments(min = 2, max = 2)
-	private static final class $Section implements Function {
-		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			final String section = eval.text(args.car());
-			final Function body = eval.func(args.get(1));
-			return new SectionImpl(section, body, eval);
-		}
-	}
-
-	/**
-	 * LISP処理系で事前に定義されるsuccess関数です。
-	 *
-	 *
-	 * @author Journal of Hamradio Informatics
-	 *
-	 * @since 2019/05/18
-	 */
-	@Arguments(min = 3, max = -1)
-	private static final class $Success implements Function {
-		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			final List<Object> ls = new ArrayList<>();
-			final Object item = eval.eval(args.car());
-			final int score = eval.real(args.get(1)).intValueExact();
-			for(Object key: args.cdr().cdr()) ls.add(eval.eval(key));
-			final Object[] ks = ls.toArray();
-			if(item instanceof Item) return new Success(score, (Item) item, ks);
-			throw new ScriptException("make sure (success ITEM score keys...)");
-		}
-	}
-
-	/**
-	 * LISP処理系で事前に定義されるfailure関数です。
-	 *
-	 *
-	 * @author Journal of Hamradio Informatics
-	 *
-	 * @since 2019/05/18
-	 */
-	@Arguments(min = 2, max = 2)
-	private static final class $Failure implements Function {
-		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			final Object item = eval.eval(args.get(0));
-			final String text = eval.text(args.get(1));
-			if(item instanceof Item) return new Failure(text, (Item) item);
-			throw new ScriptException("make sure (failure ITEM message)");
-		}
-	}
-
-	/**
-	 * LISP処理系で事前に定義されるrcvd関数です。
-	 *
-	 *
-	 * @author Journal of Hamradio Informatics
-	 *
-	 * @since 2019/05/18
-	 */
-	@Arguments(min = 1, max = 1)
-	private static final class $Rcvd implements Function {
-		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			return item(args.car(), eval).getRcvd();
-		}
-	}
-
-	/**
-	 * LISP処理系で事前に定義されるsent関数です。
-	 *
-	 *
-	 * @author Journal of Hamradio Informatics
-	 *
-	 * @since 2019/05/18
-	 */
-	@Arguments(min = 1, max = 1)
-	private static final class $Sent implements Function {
-		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			return item(args.car(), eval).getSent();
-		}
-	}
-
-	/**
-	 * LISP処理系で事前に定義されるhour関数です。
-	 *
-	 *
-	 * @author Journal of Hamradio Informatics
-	 *
-	 * @since 2019/05/18
-	 */
-	@Arguments(min = 1, max = 1)
-	private static final class $Hour implements Function {
-		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			final Time time = (Time) item(args.car(), eval).get(Qxsl.TIME);
-			return time != null? BigDecimal.valueOf(time.hour()): null;
-		}
-	}
-
-	/**
-	 * LISP処理系で事前に定義されるcall関数です。
-	 *
-	 *
-	 * @author Journal of Hamradio Informatics
-	 *
-	 * @since 2019/05/18
-	 */
-	@Arguments(min = 1, max = 1)
-	private static final class $Call implements Function {
-		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			return item(args.car(), eval).value(Qxsl.CALL);
-		}
-	}
-
-	/**
-	 * LISP処理系で事前に定義されるband関数です。
-	 *
-	 *
-	 * @author Journal of Hamradio Informatics
-	 *
-	 * @since 2019/05/18
-	 */
-	@Arguments(min = 1, max = 1)
-	private static final class $Band implements Function {
-		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			return item(args.car(), eval).value(Qxsl.BAND);
-		}
-	}
-
-	/**
-	 * LISP処理系で事前に定義されるfreq関数です。
-	 *
-	 *
-	 * @author Journal of Hamradio Informatics
-	 *
-	 * @since 2019/06/29
-	 */
-	@Arguments(min = 1, max = 1)
-	private static final class $Freq implements Function {
-		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			return item(args.car(), eval).value(Qxsl.FREQ);
-		}
-	}
-
-	/**
-	 * LISP処理系で事前に定義されるmode関数です。
-	 *
-	 *
-	 * @author Journal of Hamradio Informatics
-	 *
-	 * @since 2019/05/18
-	 */
-	@Arguments(min = 1, max = 1)
-	private static final class $Mode implements Function {
-		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			return item(args.car(), eval).value(Qxsl.MODE);
-		}
-	}
-
-	/**
-	 * LISP処理系で事前に定義されるrstq関数です。
-	 *
-	 *
-	 * @author Journal of Hamradio Informatics
-	 *
-	 * @since 2019/05/18
-	 */
-	@Arguments(min = 1, max = 1)
-	private static final class $RSTQ implements Function {
-		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			final RSTQ rstq = (RSTQ) exch(args.car(), eval).get(Qxsl.RSTQ);
-			return rstq != null? BigDecimal.valueOf(rstq.value()): null;
-		}
-	}
-
-	/**
-	 * LISP処理系で事前に定義されるcode関数です。
-	 *
-	 *
-	 * @author Journal of Hamradio Informatics
-	 *
-	 * @since 2019/05/18
-	 */
-	@Arguments(min = 1, max = 1)
-	private static final class $Code implements Function {
-		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			return exch(args.car(), eval).value(Qxsl.CODE);
-		}
-	}
-
-	/**
-	 * LISP処理系で事前に定義されるcity関数です。
-	 *
-	 *
-	 * @author Journal of Hamradio Informatics
-	 *
-	 * @since 2019/05/18
-	 */
-	@Arguments(min = 1, max = 1)
-	private static final class $City implements Function {
-		public Object apply(Seq args, Lisp eval) throws ScriptException {
-			final String base = eval.text(args.car());
-			final String code = eval.text(args.get(1));
-			final int level = eval.real(args.get(2)).intValueExact();
-			return new City(base, code).getName(level);
 		}
 	}
 
@@ -449,8 +180,8 @@ public final class RuleKit {
 		/*
 		 * preinstalled functions for rcvd & sent access
 		 *
-		 * (rcvd item-expression)
-		 * (sent item-expression)
+		 * (rcvd item)
+		 * (sent item)
 		 */
 		lude.put("rcvd", new $Rcvd());
 		lude.put("sent", new $Sent());
@@ -458,28 +189,18 @@ public final class RuleKit {
 		/*
 		 * preinstalled functions for field access
 		 *
-		 * (hour item-expression)
-		 * (call item-expression)
-		 * (band item-expression)
-		 * (freq item-expression)
-		 * (mode item-expression)
+		 * (get-field item namespace name)
+		 * (set-field item namespace name value-string)
 		 */
-		lude.put("hour", new $Hour());
-		lude.put("call", new $Call());
-		lude.put("band", new $Band());
-		lude.put("freq", new $Freq());
-		lude.put("mode", new $Mode());
+		lude.put("get-field", new $GetField());
+		lude.put("set-field", new $SefField());
 
 		/*
-		 * preinstalled functions for rcvd / sent field access
+		 * preinstalled functions for time access
 		 *
-		 * (rstq exch-expression)
-		 * (code exch-expression)
-		 *
-		 * @since 2016/11/25
+		 * (hour item)
 		 */
-		lude.put("rstq", new $RSTQ());
-		lude.put("code", new $Code());
+		lude.put("hour", new $Hour());
 
 		/*
 		 * preinstalled functions for city access
@@ -488,5 +209,178 @@ public final class RuleKit {
 		 */
 		lude.put("city", new $City());
 		return lude;
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるcontest関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2019/05/15
+	 */
+	@Params(min = 1, max = -1)
+	private static final class $Contest implements Function {
+		public Object apply(Struct args, Kernel eval) {
+			final String contest = eval.text(args.car());
+			ArrayList<Section> sects = new ArrayList<>();
+			ArrayList<String> errors = new ArrayList<>();
+			for(Object a: args.cdr()) sects.add(eval.eval(a, Section.class));
+			return new ContestImpl(contest, sects);
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるsection関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2019/05/15
+	 */
+	@Params(min = 2, max = 2)
+	private static final class $Section implements Function {
+		public Object apply(Struct args, Kernel eval) {
+			final String section = eval.text(args.car());
+			final Function body = eval.eval(args.get(1), Function.class);
+			return new SectionImpl(section, body, eval);
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるsuccess関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2019/05/18
+	 */
+	@Params(min = 3, max = -1)
+	private static final class $Success implements Function {
+		public Object apply(Struct args, Kernel eval) {
+			final List<Object> ks = new ArrayList<>();
+			final Item item = eval.eval(args.car(), Item.class);
+			final int score = eval.real(args.get(1)).intValueExact();
+			for(Object key: args.cdr().cdr()) ks.add(eval.eval(key));
+			return new Success(score, item, ks.toArray());
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるfailure関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2019/05/18
+	 */
+	@Params(min = 2, max = 2)
+	private static final class $Failure implements Function {
+		public Object apply(Struct args, Kernel eval) {
+			final Item item = eval.eval(args.car(), Item.class);
+			return new Failure(eval.text(args.get(1)), item);
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるrcvd関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2019/05/18
+	 */
+	@Params(min = 1, max = 1)
+	private static final class $Rcvd implements Function {
+		public Object apply(Struct args, Kernel eval) {
+			return eval.eval(args.car(), Item.class).getRcvd();
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるsent関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2019/05/18
+	 */
+	@Params(min = 1, max = 1)
+	private static final class $Sent implements Function {
+		public Object apply(Struct args, Kernel eval) {
+			return eval.eval(args.car(), Item.class).getSent();
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるget-field関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2019/06/29
+	 */
+	@Params(min = 3, max = 3)
+	private static final class $GetField implements Function {
+		public Object apply(Struct args, Kernel eval) {
+			final Tuple tuple = eval.eval(args.car(), Tuple.class);
+			final String space = eval.text(args.get(1));
+			final String local = eval.text(args.get(2));
+			return tuple.value(new QName(space, local));
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるset-field関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2019/06/29
+	 */
+	@Params(min = 4, max = 4)
+	private static final class $SefField implements Function {
+		public Object apply(Struct args, Kernel eval) {
+			final Tuple tuple = eval.eval(args.car(), Tuple.class);
+			final String space = eval.text(args.get(1));
+			final String local = eval.text(args.get(2));
+			final Object value = eval.eval(args.get(3));
+			return tuple.set(new QName(space, local), value.toString());
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるhour関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2019/05/18
+	 */
+	@Params(min = 2, max = 2)
+	private static final class $Hour implements Function {
+		public Object apply(Struct args, Kernel eval) {
+			ZonedDateTime time = eval.eval(args.car(), ZonedDateTime.class);
+			ZoneId id = ZoneId.of(eval.text(args.get(1)), ZoneId.SHORT_IDS);
+			return BigDecimal.valueOf(time.withZoneSameInstant(id).getHour());
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるcity関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2019/05/18
+	 */
+	@Params(min = 3, max = 3)
+	private static final class $City implements Function {
+		public Object apply(Struct args, Kernel eval) {
+			final String base = eval.text(args.car());
+			final String code = eval.text(args.get(1));
+			final int level = eval.real(args.get(2)).intValueExact();
+			return new City(base, code).getName(level);
+		}
 	}
 }

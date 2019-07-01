@@ -9,10 +9,7 @@ package qxsl.extra.field;
 
 import javax.xml.namespace.QName;
 import qxsl.field.FieldFormat;
-import qxsl.field.FieldMapper;
 import qxsl.model.Field;
-import qxsl.model.Rcvd;
-import qxsl.model.Sent;
 
 /**
  * コンテストで相手局と交換するシリアル番号です。
@@ -64,34 +61,6 @@ public final class Code extends Qxsl<String> {
 		@Override
 		public String encode(Field field) {
 			return field.value().toString();
-		}
-	}
-
-	/**
-	 * {@link Code}への変換を行う変換器です。
-	 * 
-	 * 
-	 * @author Journal of Hamradio Informatics
-	 * 
-	 * @since 2019/06/29
-	 *
-	 */
-	public static final class Mapper implements FieldMapper {
-		@Override
-		public QName target() {
-			return CODE;
-		}
-
-		@Override
-		public Code search(Rcvd rcvd) {
-			Object code = rcvd.getItem().value(new QName(ADIF, "SRX"));
-			return code != null? new Code(code.toString()): null;
-		}
-
-		@Override
-		public Code search(Sent sent) {
-			Object code = sent.getItem().value(new QName(ADIF, "STX"));
-			return code != null? new Code(code.toString()): null;
 		}
 	}
 }

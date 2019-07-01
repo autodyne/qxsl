@@ -20,17 +20,17 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2019/05/18
  *
  */
-public final class FailureTest extends junit.framework.TestCase {
+public final class FailureTest extends test.RandTest {
 	@Test
 	public void testGetMessage() {
 		final Item item = new Item();
-		String text = util.RandText.alnum(100);
+		final String text = alnum(100);
 		assertThat(new Failure(text, item).text()).isSameAs(text);
 	}
 	@Test
 	public void testGetItem() {
 		final Item item = new Item();
-		String text = util.RandText.alnum(100);
+		final String text = alnum(100);
 		assertThat(new Failure(text, item).item()).isSameAs(item);
 	}
 }

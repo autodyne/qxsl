@@ -125,7 +125,7 @@ public final class RtclFormat extends TextFormat {
 			final Item item = new Item();
 			final String[] vals = getLine(9);
 			final String time = vals[0] + " " + vals[1];
-			final String freq = vals[2];
+			final String band = vals[2];
 			final String mode = vals[3];
 			final String call = vals[4];
 			final String srst = vals[5];
@@ -134,7 +134,7 @@ public final class RtclFormat extends TextFormat {
 			final String rnum = vals[8];
 
 			if(!time.isEmpty()) time(item, time);
-			if(!freq.isEmpty()) freq(item, freq);
+			if(!band.isEmpty()) band(item, band);
 			if(!mode.isEmpty()) mode(item, mode);
 			if(!call.isEmpty()) call(item, call);
 			if(!srst.isEmpty()) srst(item, srst);
@@ -160,12 +160,12 @@ public final class RtclFormat extends TextFormat {
 		 * {@link Item}に周波数を設定します。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @param freq 周波数の文字列
+		 * @param band 周波数の文字列
 		 * @throws Exception 読み込みに失敗した場合
 		 */
-		private void freq(Item item, String freq) throws Exception {
-			Integer kHz = Integer.parseInt(freq);
-			item.add(fields.cache(Qxsl.FREQ).field(kHz.toString()));
+		private void band(Item item, String band) throws Exception {
+			Integer kHz = Integer.parseInt(band);
+			item.add(fields.cache(Qxsl.BAND).field(kHz.toString()));
 		}
 
 		/**
@@ -281,7 +281,7 @@ public final class RtclFormat extends TextFormat {
 		private void item(Item item) throws IOException {
 			time((Time) item.get(Qxsl.TIME));
 			printSpace(1);
-			printR(8,  (Freq) item.get(Qxsl.FREQ));
+			printR(8,  (Band) item.get(Qxsl.BAND));
 			printSpace(1);
 			printR(5,  (Mode) item.get(Qxsl.MODE));
 			printSpace(1);

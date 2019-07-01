@@ -7,7 +7,6 @@
 *****************************************************************************/
 package qxsl.extra.field;
 
-import java.util.Random;
 import org.junit.jupiter.api.Test;
 import qxsl.field.FieldFormats;
 import qxsl.field.FieldFormats.Cache;
@@ -23,9 +22,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/02/24
  *
  */
-public final class RSTQTest extends junit.framework.TestCase {
+public final class RSTQTest extends test.RandTest {
 	private final Cache cache = new FieldFormats().cache(Qxsl.RSTQ);
-	private final Random random = new Random();
 	@Test
 	public void testValue() {
 		assertThat(new RSTQ(699).value()).isEqualTo(599);
@@ -48,7 +46,7 @@ public final class RSTQTest extends junit.framework.TestCase {
 	@Test
 	public void testRSTQ$Format() throws Exception {
 		final RSTQ.Format form = new RSTQ.Format();
-		final RSTQ rstq = new RSTQ(random.nextInt(489) + 111);
+		final RSTQ rstq = new RSTQ(randInt(489) + 111);
 		assertThat(form.decode(form.encode(rstq))).isEqualTo(rstq);
 		assertThat(cache.field(form.encode(rstq))).isEqualTo(rstq);
 	}

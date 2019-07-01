@@ -5,7 +5,7 @@
  * License : GNU Lesser General Public License v3 (see LICENSE)
  * Author: Journal of Hamradio Informatics http://pafelog.net
 *****************************************************************************/
-package util;
+package test;
 
 import java.security.SecureRandom;
 
@@ -18,15 +18,26 @@ import java.security.SecureRandom;
  * @since 2017/06/14
  *
  */
-public final class RandText {
-	private static final SecureRandom rand = new SecureRandom();
+public class RandTest {
+	private final SecureRandom rand = new SecureRandom();
+
+	/**
+	 * 指定された整数値未満の正の整数を返します。
+	 *
+	 * @param max 最大値 (含まない)
+	 * @return 整数
+	 */
+	public final int randInt(int max) {
+		return rand.nextInt(max);
+	}
+
 	/**
 	 * 任意の英数字で構成される文字列を所定の最大文字数で返します。
 	 *
 	 * @param max 最大文字数
 	 * @return 文字列
 	 */
-	public static final String alnum(int max) {
+	public final String alnum(int max) {
 		char[] text = new char[1+rand.nextInt(max)];
 		for(int i=0; i<text.length; i++) switch(rand.nextInt(3)) {
 			case 0: text[i] = (char)('0' + rand.nextInt(10)); break;

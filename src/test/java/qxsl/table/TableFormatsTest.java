@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/02/26
  *
  */
-public final class TableFormatsTest extends junit.framework.TestCase {
+public final class TableFormatsTest extends test.RandTest {
 	private final TableFormats tables = new TableFormats();
 	@Test
 	public void testIterator() {

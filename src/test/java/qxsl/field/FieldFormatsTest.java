@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/02/25
  *
  */
-public final class FieldFormatsTest extends junit.framework.TestCase {
+public final class FieldFormatsTest extends test.RandTest {
 	private final FieldFormats fields = new FieldFormats();
 	@Test
 	public void testIterator() {
@@ -34,7 +34,7 @@ public final class FieldFormatsTest extends junit.framework.TestCase {
 		assertThat(fields.getFormat(Qxsl.CALL)).isInstanceOf(Call.Format.class);
 		assertThat(fields.getFormat(Qxsl.CITY)).isInstanceOf(City.Format.class);
 		assertThat(fields.getFormat(Qxsl.CODE)).isInstanceOf(Code.Format.class);
-		assertThat(fields.getFormat(Qxsl.FREQ)).isInstanceOf(Freq.Format.class);
+		assertThat(fields.getFormat(Qxsl.BAND)).isInstanceOf(Band.Format.class);
 		assertThat(fields.getFormat(Qxsl.MODE)).isInstanceOf(Mode.Format.class);
 		assertThat(fields.getFormat(Qxsl.NAME)).isInstanceOf(Name.Format.class);
 		assertThat(fields.getFormat(Qxsl.NOTE)).isInstanceOf(Note.Format.class);

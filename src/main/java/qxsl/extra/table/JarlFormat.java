@@ -127,7 +127,7 @@ public final class JarlFormat extends TextFormat {
 			final Item item = new Item();
 			final String[] vals = getLine(9);
 			final String time = vals[0] + " " + vals[1];
-			final String freq = vals[2];
+			final String band = vals[2];
 			final String mode = vals[3];
 			final String call = vals[4];
 			final String srst = vals[5];
@@ -136,7 +136,7 @@ public final class JarlFormat extends TextFormat {
 			final String rnum = vals[8];
 
 			if(!time.isEmpty()) time(item, time);
-			if(!freq.isEmpty()) freq(item, freq);
+			if(!band.isEmpty()) band(item, band);
 			if(!mode.isEmpty()) mode(item, mode);
 			if(!call.isEmpty()) call(item, call);
 			if(!srst.isEmpty()) srst(item, srst);
@@ -162,12 +162,12 @@ public final class JarlFormat extends TextFormat {
 		 * {@link Item}に周波数帯を設定します。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @param freq 周波数帯の文字列
+		 * @param band 周波数帯の文字列
 		 * @throws Exception 読み込みに失敗した場合
 		 */
-		private void freq(Item item, String freq) throws Exception {
-			Integer kHz = (int) (Double.parseDouble(freq) * 1000);
-			item.add(fields.cache(Qxsl.FREQ).field(kHz.toString()));
+		private void band(Item item, String band) throws Exception {
+			Integer kHz = (int) (Double.parseDouble(band) * 1000);
+			item.add(fields.cache(Qxsl.BAND).field(kHz.toString()));
 		}
 
 		/**
@@ -284,7 +284,7 @@ public final class JarlFormat extends TextFormat {
 		private void item(Item item) throws IOException {
 			time((Time) item.get(Qxsl.TIME));
 			printSpace(1);
-			freq((Freq) item.get(Qxsl.FREQ));
+			band((Band) item.get(Qxsl.BAND));
 			printSpace(1);
 			printR(5,  (Mode) item.get(Qxsl.MODE));
 			printSpace(1);
@@ -314,11 +314,11 @@ public final class JarlFormat extends TextFormat {
 		/**
 		 * 指定された周波数帯を文字列として出力します。
 		 * 
-		 * @param freq 出力する周波数帯
+		 * @param band 出力する周波数帯
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private void freq(Freq freq) throws IOException {
-			final String MHz = freq.toMHzString();
+		private void band(Band band) throws IOException {
+			final String MHz = band.toMHzString();
 			printf("%5.5s", MHz.substring(0, MHz.length() - 3));
 		}
 	}

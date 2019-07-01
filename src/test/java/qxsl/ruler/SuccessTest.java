@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2019/05/18
  *
  */
-public final class SuccessTest extends junit.framework.TestCase {
+public final class SuccessTest extends test.RandTest {
 	@Test
 	public void testScore() {
 		assertThat(new Success(1, new Item()).score()).isEqualTo(1);

@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/02/24
  *
  */
-public final class WattTest extends junit.framework.TestCase {
+public final class WattTest extends test.RandTest {
 	private final Cache cache = new FieldFormats().cache(Qxsl.WATT);
 	@Test
 	public void testValue() {
@@ -32,13 +32,13 @@ public final class WattTest extends junit.framework.TestCase {
 	}
 	@Test
 	public void testToString() {
-		final String text = util.RandText.alnum(100);
+		final String text = alnum(100);
 		assertThat(new Watt(text)).hasToString(text);
 	}
 	@Test
 	public void testWatt$Format() throws Exception {
 		final Watt.Format form = new Watt.Format();
-		final Watt watt = new Watt(util.RandText.alnum(100));
+		final Watt watt = new Watt(alnum(100));
 		assertThat(form.decode(form.encode(watt))).isEqualTo(watt);
 		assertThat(cache.field(form.encode(watt))).isEqualTo(watt);
 	}

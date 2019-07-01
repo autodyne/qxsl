@@ -8,21 +8,36 @@
 package elva;
 
 /**
- * LISP処理系でシンボルが参照する関数やマクロの実体を表現します。
+ * LISP処理系で構文解析時に参照される特殊な引用演算子を列挙します。
  *
  *
  * @author Journal of Hamradio Informatics
  *
- * @since 2019/05/15
+ * @since 2019/07/01
  */
-@FunctionalInterface
-public interface Function {
-	/**
-	 * 指定された実引数と評価器に対し、返り値を求めます。
-	 *
-	 * @param args 実引数
-	 * @param eval 評価器
-	 * @return 返り値
-	 */
-	public Object apply(Struct args, Kernel eval);
+public enum Quotes {
+	QUOTE ("quote"),
+	UQUOT ("unquote"),
+	QUASI ("quasiquote");
+
+	private final Symbol name;
+	private Quotes(String name) {
+		this.name = new Symbol(name);
+	}
+
+	@Override
+	public String toString() {
+		return name.toString();
+	}
+
+	public Symbol toSymbol() {
+		return name;
+	}
+
+	public static Quotes valueOf(Symbol name) {
+		for(Quotes q: values()) {
+			if(q.name.equals(name)) return q;
+		}
+		return null;
+	}
 }

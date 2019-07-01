@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/02/25
  *
  */
-public final class SentTest extends junit.framework.TestCase {
+public final class SentTest extends test.RandTest {
 	private final Code code = new Code("591420");
 	private final RSTQ rstq = new RSTQ(1, 1, 1);
 	private final Watt watt = new Watt("M");

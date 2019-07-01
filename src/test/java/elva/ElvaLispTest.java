@@ -18,11 +18,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import static elva.ElvaScriptEngine.Seq;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * {@link ElvaScriptEngine}クラスのテスト用クラスです。
+ * {@link ElvaLisp}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -30,11 +29,11 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/02/26
  *
  */
-public final class ElvaScriptEngineTest extends junit.framework.TestCase {
-	private final ElvaScriptEngine elva = new ElvaScriptEngine();
+public final class ElvaLispTest extends test.RandTest {
+	private final ElvaLisp elva = new ElvaLisp();
 	@Test
 	public void testNil() throws ScriptException {
-		assertThat(elva.eval("()")).isEqualTo(Seq.NIL);
+		assertThat(elva.eval("()")).isEqualTo(Struct.NIL);
 	}
 	@Test
 	public void testNull() throws ScriptException {
@@ -67,7 +66,7 @@ public final class ElvaScriptEngineTest extends junit.framework.TestCase {
 		}
 	}
 	public static Stream<String> testMethodSource() throws IOException {
-		URL path = ElvaScriptEngine.class.getResource("elva.test.lisp");
+		URL path = ElvaLisp.class.getResource("elva.test.lisp");
 		final Reader source = new InputStreamReader(path.openStream());
 		try (final BufferedReader reader = new BufferedReader(source)) {
 			return reader.lines().collect(Collectors.toList()).stream();

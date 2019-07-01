@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2019/06/16
  *
  */
-public final class SheetFormatTest extends junit.framework.TestCase {
+public final class SheetFormatTest extends test.RandTest {
 	/**
 	 * クラスパスにある全ての書式を返します。
 	 *

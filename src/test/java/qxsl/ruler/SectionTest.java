@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2019/05/18
  *
  */
-public final class SectionTest extends junit.framework.TestCase {
+public final class SectionTest extends test.RandTest {
 	public static List<Section> sections() throws ScriptException {
 		final Contest ja1 = Contest.defined("allja1.lisp");
 		final List<Section> sects = new ArrayList<>();

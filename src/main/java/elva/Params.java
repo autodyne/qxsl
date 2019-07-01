@@ -7,12 +7,22 @@
 *****************************************************************************/
 package elva;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
  * LISP処理系のシステム関数の引数の個数を指定する注釈型です。
  *
+ *
+ * @author Journal of Hamradio Informatics
+ *
  * @since 2019/05/17
  */
-public @interface Arguments {
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Params {
 	/**
 	 * 引数を評価する前の引数の最小限の個数です。
 	 *

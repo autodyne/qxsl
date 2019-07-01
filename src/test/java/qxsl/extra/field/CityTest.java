@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/02/24
  *
  */
-public final class CityTest extends junit.framework.TestCase {
+public final class CityTest extends test.RandTest {
 	private final Cache cache = new FieldFormats().cache(Qxsl.CITY);
 	private City jarl(String code) {
 		return new City("jarl", code);
@@ -38,7 +38,7 @@ public final class CityTest extends junit.framework.TestCase {
 	}
 	@Test
 	public void testToString() {
-		final String text = util.RandText.alnum(100);
+		final String text = alnum(100);
 		assertThat(jarl(text)).hasToString("jarl:".concat(text));
 	}
 	/**
@@ -63,7 +63,7 @@ public final class CityTest extends junit.framework.TestCase {
 	@Test
 	public void testCity$Format() throws Exception {
 		final City.Format form = new City.Format();
-		final City city = jarl(util.RandText.alnum(100));
+		final City city = jarl(alnum(100));
 		assertThat(form.decode(form.encode(city))).isEqualTo(city);
 		assertThat(cache.field(form.encode(city))).isEqualTo(city);
 	}

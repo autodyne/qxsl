@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/02/26
  *
  */
-public final class RuleKitTest extends junit.framework.TestCase {
+public final class RuleKitTest extends test.RandTest {
 	/**
 	 * ALLJA1コンテストの各部門の名前と得点の正解を返します。
 	 *
@@ -59,6 +59,7 @@ public final class RuleKitTest extends junit.framework.TestCase {
 	 */
 	public static List<URL> testMethodSource() {
 		return Arrays.asList(
+			RuleKit.class.getResource("allja1.adxs"),
 			RuleKit.class.getResource("allja1.cqww"),
 			RuleKit.class.getResource("allja1.ctxt"),
 			RuleKit.class.getResource("allja1.hl76"),

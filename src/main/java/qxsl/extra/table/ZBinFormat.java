@@ -130,7 +130,7 @@ public final class ZBinFormat extends BaseFormat {
 	 * @since 2013/02/23
 	 *
 	 */
-	public enum FreqEnum {
+	public enum BandEnum {
 		M1_9  (    1900),
 		M3_5  (    3500),
 		M7    (    7000),
@@ -148,16 +148,16 @@ public final class ZBinFormat extends BaseFormat {
 		M5600 ( 5600000),
 		G10UP (10000000);
 
-		private final Freq freq;
-		private static FreqEnum[] values;
+		private final Band band;
+		private static BandEnum[] values;
 
-		private FreqEnum(int kHz) {
-			this.freq = new Freq(kHz);
+		private BandEnum(int kHz) {
+			this.band = new Band(kHz);
 		}
 
 		@Override
 		public String toString() {
-			return freq.toString();
+			return band.toString();
 		}
 
 		/**
@@ -165,20 +165,20 @@ public final class ZBinFormat extends BaseFormat {
 		 * 
 		 * @return バンド
 		 */
-		public Freq toFreq() {
-			return freq;
+		public Band toBand() {
+			return band;
 		}
 
 		/**
 		 * 指定された周波数に対応する列挙子を返します。
 		 * 
-		 * @param freq 周波数
+		 * @param band 周波数
 		 * @return 対応する列挙子があれば返す
 		 */
-		public static FreqEnum valueOf(Freq freq) {
+		public static BandEnum valueOf(Band band) {
 			if(values == null) values = values();
-			for(FreqEnum b : values) {
-				if(b.freq.equals(freq)) return b;
+			for(BandEnum b : values) {
+				if(b.band.equals(band)) return b;
 			}
 			return null;
 		}
@@ -189,9 +189,9 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param i 序数
 		 * @return 対応する列挙子があれば返す
 		 */
-		public static FreqEnum forIndex(int i) {
+		public static BandEnum forIndex(int i) {
 			if(values == null) values = values();
-			for(FreqEnum m : values) {
+			for(BandEnum m : values) {
 				if(m.ordinal() == i) return m;
 			}
 			return null;
@@ -405,7 +405,7 @@ public final class ZBinFormat extends BaseFormat {
 			rRSTQ(item);
 			stream.skipBytes(4);
 			mode(item);
-			freq(item);
+			band(item);
 			watt(item);
 			stream.skipBytes(65);
 			oprt(item);
@@ -495,8 +495,8 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param item 設定する{@link Item}
 		 * @throws Exception 読み込みに失敗した場合
 		 */
-		private void freq(Item item) throws Exception {
-			item.add(FreqEnum.forIndex(stream.read()).toFreq());
+		private void band(Item item) throws Exception {
+			item.add(BandEnum.forIndex(stream.read()).toBand());
 		}
 
 		/**
@@ -603,7 +603,7 @@ public final class ZBinFormat extends BaseFormat {
 			rst((RSTQ) item.getRcvd().get(Qxsl.RSTQ));
 			while(i++ < 6) stream.writeByte(0);
 			mode((Mode) item.get(Qxsl.MODE));
-			freq((Freq) item.get(Qxsl.FREQ));
+			band((Band) item.get(Qxsl.BAND));
 			watt((Watt) item.getSent().get(Qxsl.WATT));
 			while(i++ < 72) stream.writeByte(0);
 			string(14, (Name) item.get(Qxsl.NAME));
@@ -649,13 +649,13 @@ public final class ZBinFormat extends BaseFormat {
 		/**
 		 * 交信した周波数帯を1バイトで出力します。
 		 * 
-		 * @param freq 周波数帯
+		 * @param band 周波数帯
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private void freq(Freq freq) throws IOException {
-			FreqEnum freqs = FreqEnum.valueOf(freq);
-			if(freqs == null) stream.writeByte(0);
-			else stream.writeByte(freqs.ordinal());
+		private void band(Band band) throws IOException {
+			BandEnum bands = BandEnum.valueOf(band);
+			if(bands == null) stream.writeByte(0);
+			else stream.writeByte(bands.ordinal());
 		}
 
 		/**

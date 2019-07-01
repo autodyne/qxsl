@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/02/26
  *
  */
-public final class ContestTest extends junit.framework.TestCase {
+public final class ContestTest extends test.RandTest {
 	private Contest ja1 = null;
 	private Contest ja1() throws ScriptException {
 		if(ja1 == null) ja1 = Contest.defined("allja1.lisp");

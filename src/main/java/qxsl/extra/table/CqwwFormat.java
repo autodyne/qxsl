@@ -124,7 +124,7 @@ public final class CqwwFormat extends TextFormat {
 		 */
 		private Item item(String line) throws Exception {
 			final Item item = new Item();
-			final String freq = subLine( 0,  5);
+			final String band = subLine( 0,  5);
 			final String mode = subLine( 6,  8);
 			final String time = subLine( 9, 24);
 			final String srst = subLine(39, 42);
@@ -139,7 +139,7 @@ public final class CqwwFormat extends TextFormat {
 			if(!snum.isEmpty()) snum(item, snum);
 			if(!rrst.isEmpty()) rrst(item, rrst);
 			if(!rnum.isEmpty()) rnum(item, rnum);
-			if(!freq.isEmpty()) freq(item, freq);
+			if(!band.isEmpty()) band(item, band);
 			if(!mode.isEmpty()) mode(item, mode);
 
 			return item;
@@ -215,11 +215,11 @@ public final class CqwwFormat extends TextFormat {
 		 * {@link Item}に周波数帯を設定します。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @param freq 周波数帯の文字列
+		 * @param band 周波数帯の文字列
 		 * @throws Exception 読み込みに失敗した場合
 		 */
-		private void freq(Item item, String freq) throws Exception {
-			item.add(fields.cache(Qxsl.FREQ).field(freq));
+		private void band(Item item, String band) throws Exception {
+			item.add(fields.cache(Qxsl.BAND).field(band));
 		}
 
 		/**
@@ -275,7 +275,7 @@ public final class CqwwFormat extends TextFormat {
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void item(Item item) throws IOException {
-			printR(5, (Freq) item.get(Qxsl.FREQ));
+			printR(5, (Band) item.get(Qxsl.BAND));
 			printSpace(1);
 			printR(2, (Mode) item.get(Qxsl.MODE));
 			printSpace(1);
@@ -309,11 +309,11 @@ public final class CqwwFormat extends TextFormat {
 		/**
 		 * 指定された周波数帯を文字列として出力します。
 		 * 
-		 * @param freq 出力する周波数帯
+		 * @param band 出力する周波数帯
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private void freq(Freq freq) throws IOException {
-			if(freq != null) printf("%-5.5s", freq.value());
+		private void band(Band band) throws IOException {
+			if(band != null) printf("%-5.5s", band.value());
 			else print("     ");
 		}
 

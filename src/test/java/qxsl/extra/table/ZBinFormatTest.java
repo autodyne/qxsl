@@ -11,7 +11,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.stream.IntStream;
 
 import qxsl.extra.field.*;
@@ -31,20 +30,19 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/02/26
  *
  */
-public final class ZBinFormatTest extends junit.framework.TestCase {
+public final class ZBinFormatTest extends test.RandTest {
 	private final ZBinFormat format = new ZBinFormat();
 	private final TableFormats tables = new TableFormats();
-	private final ArrayList<Freq> freqs = new ArrayList<>();
+	private final ArrayList<Band> bands = new ArrayList<>();
 	private final ArrayList<Mode> modes = new ArrayList<>();
 	private final ArrayList<Watt> watts = new ArrayList<>();
-	private final Random random = new Random();
 	public ZBinFormatTest() {
-		freqs.add(new Freq(    3_500));
-		freqs.add(new Freq(    7_000));
-		freqs.add(new Freq(   14_000));
-		freqs.add(new Freq(  144_000));
-		freqs.add(new Freq(1_200_000));
-		freqs.add(new Freq(5_600_000));
+		bands.add(new Band(    3_500));
+		bands.add(new Band(    7_000));
+		bands.add(new Band(   14_000));
+		bands.add(new Band(  144_000));
+		bands.add(new Band(1_200_000));
+		bands.add(new Band(5_600_000));
 		modes.add(new Mode(  "CW"));
 		modes.add(new Mode(  "AM"));
 		modes.add(new Mode(  "FM"));
@@ -65,16 +63,16 @@ public final class ZBinFormatTest extends junit.framework.TestCase {
 		for(int row = 0; row < numItems; row++) {
 			final Item item = new Item();
 			item.add(new Time());
-			item.add(freqs.get(random.nextInt(freqs.size())));
-			item.add(new Call(util.RandText.alnum(12)));
-			item.add(modes.get(random.nextInt(modes.size())));
-			item.add(new Note(util.RandText.alnum(66)));
-			item.add(new Name(util.RandText.alnum(14)));
-			item.getRcvd().add(new RSTQ(random.nextInt(600)));
-			item.getRcvd().add(new Code(util.RandText.alnum(30)));
-			item.getSent().add(new RSTQ(random.nextInt(600)));
-			item.getSent().add(new Code(util.RandText.alnum(30)));
-			item.getSent().add(watts.get(random.nextInt(watts.size())));
+			item.add(bands.get(randInt(bands.size())));
+			item.add(new Call(alnum(12)));
+			item.add(modes.get(randInt(modes.size())));
+			item.add(new Note(alnum(66)));
+			item.add(new Name(alnum(14)));
+			item.getRcvd().add(new RSTQ(randInt(600)));
+			item.getRcvd().add(new Code(alnum(30)));
+			item.getSent().add(new RSTQ(randInt(600)));
+			item.getSent().add(new Code(alnum(30)));
+			item.getSent().add(watts.get(randInt(watts.size())));
 			items.add(item);
 		}
 		final ByteArrayOutputStream os = new ByteArrayOutputStream();

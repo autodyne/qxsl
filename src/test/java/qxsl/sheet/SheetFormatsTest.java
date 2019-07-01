@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/03/12
  *
  */
-public final class SheetFormatsTest extends junit.framework.TestCase {
+public final class SheetFormatsTest extends test.RandTest {
 	private final SheetFormats sheets = new SheetFormats();
 	@Test
 	public void testIterator() {

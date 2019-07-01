@@ -9,10 +9,7 @@ package qxsl.extra.field;
 
 import javax.xml.namespace.QName;
 import qxsl.field.FieldFormat;
-import qxsl.field.FieldMapper;
 import qxsl.model.Field;
-import qxsl.model.Rcvd;
-import qxsl.model.Sent;
 
 /**
  * 交信のRST(RSQ)レポートを表現する{@link Field}実装クラスです。
@@ -119,34 +116,6 @@ public final class RSTQ extends Qxsl<Integer> {
 		@Override
 		public String encode(Field field) {
 			return field.value().toString();
-		}
-	}
-
-	/**
-	 * {@link RSTQ}への変換を行う変換器です。
-	 * 
-	 * 
-	 * @author Journal of Hamradio Informatics
-	 * 
-	 * @since 2019/06/29
-	 *
-	 */
-	public static final class Mapper implements FieldMapper {
-		@Override
-		public QName target() {
-			return RSTQ;
-		}
-
-		@Override
-		public RSTQ search(Rcvd rcvd) {
-			final Object rst = rcvd.getItem().value(new QName(ADIF, "RST_RCVD"));
-			return rst != null? new RSTQ(Integer.parseInt(rst.toString())): null;
-		}
-
-		@Override
-		public RSTQ search(Sent sent) {
-			final Object rst = sent.getItem().value(new QName(ADIF, "RST_SENT"));
-			return rst != null? new RSTQ(Integer.parseInt(rst.toString())): null;
 		}
 	}
 }

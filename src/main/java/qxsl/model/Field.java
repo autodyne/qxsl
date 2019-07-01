@@ -21,15 +21,15 @@ import javax.xml.namespace.QName;
  * @param <V> 属性の属性値の総称型
  */
 public abstract class Field<V> {
-	private final QName name;
+	private final QName qname;
 
 	/**
-	 * 指定した属性名を持つ属性を構築します。
+	 * 指定された属性名を持つ属性を構築します。
 	 * 
-	 * @param name 属性名
+	 * @param qname 属性名
 	 */
-	public Field(QName name) {
-		this.name = name;
+	public Field(QName qname) {
+		this.qname = qname;
 	}
 
 	/**
@@ -38,7 +38,7 @@ public abstract class Field<V> {
 	 * @return 属性の名前
 	 */
 	public QName name() {
-		return name;
+		return qname;
 	}
 
 	/**

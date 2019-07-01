@@ -135,7 +135,7 @@ public final class Hl76Format extends TextFormat {
 			final String rrst = subLine(35, 38);
 			final String rnum = subLine(39, 46);
 			final String oprt = subLine(56, 63);
-			final String freq = subLine(64, 68);
+			final String band = subLine(64, 68);
 			final String mode = subLine(69, -1);
 
 			if(!time.isEmpty()) time(item, time);
@@ -145,7 +145,7 @@ public final class Hl76Format extends TextFormat {
 			if(!rrst.isEmpty()) rrst(item, rrst);
 			if(!rnum.isEmpty()) rnum(item, rnum);
 			if(!oprt.isEmpty()) oprt(item, oprt);
-			if(!freq.isEmpty()) freq(item, freq);
+			if(!band.isEmpty()) band(item, band);
 			if(!mode.isEmpty()) mode(item, mode);
 
 			return item;
@@ -232,12 +232,12 @@ public final class Hl76Format extends TextFormat {
 		 * {@link Item}に周波数帯を設定します。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @param freq 周波数帯の文字列
+		 * @param band 周波数帯の文字列
 		 * @throws Exception 読み込みに失敗した場合
 		 */
-		private void freq(Item item, String freq) throws Exception {
-			Integer kHz = (int) (Double.parseDouble(freq) * 1000);
-			item.add(fields.cache(Qxsl.FREQ).field(kHz.toString()));
+		private void band(Item item, String band) throws Exception {
+			Integer kHz = (int) (Double.parseDouble(band) * 1000);
+			item.add(fields.cache(Qxsl.BAND).field(kHz.toString()));
 		}
 
 		/**
@@ -311,7 +311,7 @@ public final class Hl76Format extends TextFormat {
 			print("1 ");
 			printR(7,  (Name) item.get(Qxsl.NAME));
 			printSpace(1);
-			freq((Freq) item.get(Qxsl.FREQ));
+			band((Band) item.get(Qxsl.BAND));
 			printSpace(1);
 			printR(4,  (Mode) item.get(Qxsl.MODE));
 			println();
@@ -331,11 +331,11 @@ public final class Hl76Format extends TextFormat {
 		/**
 		 * 指定された周波数帯を文字列として出力します。
 		 * 
-		 * @param freq 出力する周波数帯
+		 * @param band 出力する周波数帯
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private void freq(Freq freq) throws IOException {
-			final String MHz = freq.toMHzString();
+		private void band(Band band) throws IOException {
+			final String MHz = band.toMHzString();
 			printf("%-4.4s", MHz.substring(0, MHz.length() - 3));
 		}
 	}

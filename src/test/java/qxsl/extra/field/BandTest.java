@@ -7,10 +7,9 @@
 *****************************************************************************/
 package qxsl.extra.field;
 
-import java.util.Random;
 import org.junit.jupiter.api.Test;
-import qxsl.field.FieldFormats;
 import qxsl.field.FieldFormats.Cache;
+import qxsl.field.FieldFormats;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,43 +19,47 @@ import static org.assertj.core.api.Assertions.assertThat;
  * 
  * @author Journal of Hamradio Informatics
  * 
- * @since 2019/06/29
+ * @since 2017/02/24
  *
  */
-public final class BandTest extends junit.framework.TestCase {
+public final class BandTest extends test.RandTest {
 	private final Cache cache = new FieldFormats().cache(Qxsl.BAND);
-	private final Random random = new Random();
 	@Test
 	public void testValue() {
-		assertThat(new Band("21900m")).isEqualTo(new Band(2190e+1));
-		assertThat(new Band("21.9cm")).isEqualTo(new Band(2.19e-1));
-		assertThat(new Band("2.19mm")).isEqualTo(new Band(2.19e-3));
+		assertThat(new Band("1.9MHz")).isEqualTo(new Band(    1_900));
+		assertThat(new Band("3.5MHz")).isEqualTo(new Band(    3_500));
+		assertThat(new Band("144MHz")).isEqualTo(new Band(  144_000));
+		assertThat(new Band("2.4GHz")).isEqualTo(new Band(2_400_000));
 	}
 	@Test
 	public void testToString() {
-		assertThat(new Band(21.9e+3)).hasToString("21900m");
-		assertThat(new Band(21.9e-2)).hasToString("21.9cm");
-		assertThat(new Band(2.19e-3)).hasToString("2.19mm");
+		assertThat(new Band(    1_900)).hasToString("1.9MHz");
+		assertThat(new Band(    3_500)).hasToString("3.5MHz");
+		assertThat(new Band(  430_000)).hasToString("430MHz");
+		assertThat(new Band(5_600_000)).hasToString("5.6GHz");
 	}
 	@Test
-	public void testToMString() {
-		assertThat(new Band(2190).toMString()).isEqualTo("2190m");
-		assertThat(new Band(2.19).toMString()).isEqualTo("2.19m");
+	public void testToKHzString() {
+		assertThat(new Band(1_900).toKHzString()).isEqualTo("1900kHz");
+		assertThat(new Band(3_500).toKHzString()).isEqualTo("3500kHz");
+		assertThat(new Band(7_000).toKHzString()).isEqualTo("7000kHz");
 	}
 	@Test
-	public void testToCMtring() {
-		assertThat(new Band(0.006).toCMString()).isEqualTo("0.6cm");
-		assertThat(new Band(6.000).toCMString()).isEqualTo("600cm");
+	public void testToMHzString() {
+		assertThat(new Band(1_900).toMHzString()).isEqualTo("1.9MHz");
+		assertThat(new Band(3_500).toMHzString()).isEqualTo("3.5MHz");
+		assertThat(new Band(7_000).toMHzString()).isEqualTo(  "7MHz");
 	}
 	@Test
-	public void testToMMString() {
-		assertThat(new Band(0.0006).toMMString()).isEqualTo("0.6mm");
-		assertThat(new Band(0.6000).toMMString()).isEqualTo("600mm");
+	public void testToGHzString() {
+		assertThat(new Band(1_200_000).toGHzString()).isEqualTo("1.2GHz");
+		assertThat(new Band(2_400_000).toGHzString()).isEqualTo("2.4GHz");
+		assertThat(new Band(5_600_000).toGHzString()).isEqualTo("5.6GHz");
 	}
 	@Test
 	public void testBand$Format() throws Exception {
 		final Band.Format form = new Band.Format();
-		final Band band = new Band(random.nextInt(Integer.MAX_VALUE));
+		final Band band = new Band(randInt(Integer.MAX_VALUE));
 		assertThat(form.decode(form.encode(band))).isEqualTo(band);
 		assertThat(cache.field(form.encode(band))).isEqualTo(band);
 	}

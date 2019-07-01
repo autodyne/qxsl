@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/02/24
  *
  */
-public final class TimeTest extends junit.framework.TestCase {
+public final class TimeTest extends test.RandTest {
 	private final Cache cache = new FieldFormats().cache(Qxsl.TIME);
 	@Test
 	public void testValue() {
