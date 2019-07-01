@@ -10,10 +10,11 @@ package qxsl.extra.field;
 import java.io.*;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Stream;
 import javax.xml.namespace.QName;
 
@@ -35,7 +36,7 @@ public final class City extends Qxsl<String> {
 	private final String code;
 
 	/**
-	 * 地域番号を指定して{@link City}を構築します。
+	 * 地域番号を指定して運用地域を構築します。
 	 * 
 	 * @param base 地域データベースの名前
 	 * @param code 地域番号
@@ -52,7 +53,7 @@ public final class City extends Qxsl<String> {
 	}
 
 	/**
-	 * 指定された区分におけるこの{@link City}の名前を返します。
+	 * 指定された区分におけるこの運用地域の名前を返します。
 	 *
 	 * @param level 区分の階層
 	 * @return 地域名 見つからない場合null
@@ -66,13 +67,36 @@ public final class City extends Qxsl<String> {
 	}
 
 	/**
+	 * この運用地域が末端区分の要素であるか確認します。
+	 * 例えば、日本の市区町村である場合は真を返します。
+	 *
+	 * @return 末端区分の要素である場合true
+	 */
+	public boolean isTerminal() {
+		try {
+			String[] codes = getDataBase(base).get(code);
+			final String upper = codes[codes.length-2];
+			final String lower = codes[codes.length-1];
+			return !upper.equals(lower);
+		} catch (NullPointerException ex) {
+			return false;
+		} catch (IndexOutOfBoundsException ex) {
+			return true;
+		}
+	}
+
+	/**
 	 * ライブラリが内蔵する全ての地域番号を返します。
 	 *
 	 * @param base 地域データベースの名前
 	 * @return 全ての利用可能な地域番号
 	 */
-	public static final Set<String> getCodes(String base) {
-		return getDataBase(base).keySet();
+	public static final Collection<String> getCodes(String base) {
+		try {
+			return getDataBase(base).keys();
+		} catch(NullPointerException ex) {
+			return null;
+		}
 	}
 
 	/**
@@ -102,7 +126,7 @@ public final class City extends Qxsl<String> {
 		 * @param name データベースの名前
 		 */
 		public DataBase(String name) {
-			this.map = new HashMap<>();
+			this.map = new LinkedHashMap<>();
 			final String file = name.concat(".dat");
 			URL path = City.class.getResource(file);
 			try(InputStream is = path.openStream()) {
@@ -139,8 +163,8 @@ public final class City extends Qxsl<String> {
 		 *
 		 * @return 地域番号の集合
 		 */
-		public final Set<String> keySet() {
-			return Collections.unmodifiableSet(map.keySet());
+		public final Collection<String> keys() {
+			return Collections.unmodifiableCollection(map.keySet());
 		}
 	}
 
