@@ -51,6 +51,15 @@ public final class Nested extends SimpleBindings {
 	}
 
 	/**
+	 * 指定された関数をこの環境に登録します。
+	 *
+	 * @param func 登録する関数
+	 */
+	public final void put(Function func) {
+		this.put(func.toString(), func);
+	}
+
+	/**
 	 * 指定された値を名前で束縛します。
 	 *
 	 * @param name 名前

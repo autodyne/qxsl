@@ -56,6 +56,14 @@ public final class CityTest extends test.RandTest {
 		assertThat(jarl(code).getName(0)).isNotEmpty();
 		assertThat(jarl(code).getName(1)).isNotEmpty();
 	}
+	@ParameterizedTest
+	@MethodSource("testMethodSource")
+	public void testIsTerminal(String code) {
+		final String pref = jarl(code).getName(0);
+		final String city = jarl(code).getName(1);
+		final boolean tgt = jarl(code).isTerminal();
+		assertThat(tgt).isEqualTo(!pref.equals(city));
+	}
 	@Test
 	public void testGetCodes() {
 		assertThat(City.getCodes("jarl").size()).isNotZero();

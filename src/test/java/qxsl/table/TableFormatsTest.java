@@ -29,9 +29,10 @@ public final class TableFormatsTest extends test.RandTest {
 	}
 	@Test
 	public void testGetFormat() {
-		// XML format
+		// XML
 		assertThat(tables.getFormat("qxml")).isInstanceOf(QxmlFormat.class);
-		// Text formats
+		assertThat(tables.getFormat("adxs")).isInstanceOf(AdxsFormat.class);
+		// text
 		assertThat(tables.getFormat("cqww")).isInstanceOf(CqwwFormat.class);
 		assertThat(tables.getFormat("jarl")).isInstanceOf(JarlFormat.class);
 		assertThat(tables.getFormat("ctxt")).isInstanceOf(CTxtFormat.class);
@@ -39,7 +40,7 @@ public final class TableFormatsTest extends test.RandTest {
 		assertThat(tables.getFormat("rtcl")).isInstanceOf(RtclFormat.class);
 		assertThat(tables.getFormat("zall")).isInstanceOf(ZAllFormat.class);
 		assertThat(tables.getFormat("zdos")).isInstanceOf(ZDosFormat.class);
-		// Binary formats
+		// binary
 		assertThat(tables.getFormat("cbin")).isInstanceOf(CBinFormat.class);
 		assertThat(tables.getFormat("zbin")).isInstanceOf(ZBinFormat.class);
 	}

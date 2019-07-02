@@ -40,17 +40,14 @@ public final class ElvaLispTest extends test.RandTest {
 		assertThat(elva.eval("null")).isNull();
 	}
 	@Test
-	public void testInt() throws ScriptException {
+	public void testReal() throws ScriptException {
 		assertThat(elva.eval("114")).isEqualTo(BigDecimal.valueOf(114));
 		assertThat(elva.eval("514")).isEqualTo(BigDecimal.valueOf(514));
 	}
 	@Test
-	public void testTrue() throws ScriptException {
-		assertThat(elva.eval("true")).isEqualTo(true);
-	}
-	@Test
-	public void testFalse() throws ScriptException {
-		assertThat(elva.eval("false")).isEqualTo(false);
+	public void testBool() throws ScriptException {
+		assertThat(elva.eval("true")).isEqualTo(!false);
+		assertThat(elva.eval("false")).isEqualTo(!true);
 	}
 	@Test
 	public void testString() throws ScriptException {

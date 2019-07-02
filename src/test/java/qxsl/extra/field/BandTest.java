@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public final class BandTest extends test.RandTest {
 	private final Cache cache = new FieldFormats().cache(Qxsl.BAND);
 	@Test
-	public void testValue() {
+	public void testEquals() {
 		assertThat(new Band("1.9MHz")).isEqualTo(new Band(    1_900));
 		assertThat(new Band("3.5MHz")).isEqualTo(new Band(    3_500));
 		assertThat(new Band("144MHz")).isEqualTo(new Band(  144_000));

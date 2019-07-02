@@ -7,10 +7,6 @@
 *****************************************************************************/
 package elva;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * LISP処理系のラムダ式の実装です。
  * 
@@ -20,21 +16,21 @@ import java.util.List;
  * @since 2017/02/18
  */
 @Params(min = 0, max = -1)
-public final class Lambda implements Function {
-	private final List<Symbol> pars;
+public final class Lambda extends Function {
+	private final Struct pars;
 	private final Object body;
 	private final Kernel lisp;
 
 	/**
 	 * 指定された仮引数と式と評価器でラムダ式を生成します。
+	 * 仮引数の各要素がシンボルであるかの検査は行いません。
 	 *
 	 * @param pars 仮引数
 	 * @param body 値の式
 	 * @param lisp 評価器
 	 */
 	public Lambda(Struct pars, Object body, Kernel lisp) {
-		this.pars = new ArrayList<>();
-		for(Object p: pars) this.pars.add((Symbol) p);
+		this.pars = pars;
 		this.body = body;
 		this.lisp = lisp;
 	}
@@ -62,7 +58,9 @@ public final class Lambda implements Function {
 		final Nested env = new Nested(null, lisp.scope);
 		if(args.size() == pars.size()) {
 			for(int i = 0; i < args.size(); i++) {
-				env.put(pars.get(i), eval.eval(args.get(i)));
+				final Object par = pars.get(i);
+				final Object arg = args.get(i);
+				env.put((Symbol) par, eval.eval(arg));
 			}
 			return new Kernel(env).eval(body);
 		}

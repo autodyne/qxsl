@@ -10,7 +10,6 @@ package elva;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,7 +51,7 @@ public final class ElvaLisp extends AbstractScriptEngine {
 	 * @return 環境
 	 */
 	public Bindings createBindings() {
-		return new Nested(null, root);
+		return new Nested(null, null);
 	}
 
 	/**
@@ -123,7 +122,7 @@ public final class ElvaLisp extends AbstractScriptEngine {
 	 * @throws ScriptException 式の構文上の例外
 	 */
 	public final List<Object> scan(String s) throws ScriptException {
-		final ArrayList<Object> exps = new ArrayList<>();
+		final List<Object> exps = new ArrayList<>();
 		try {
 			final Parser scan = new Parser(s);
 			while(scan.hasNext()) exps.add(scan.next());

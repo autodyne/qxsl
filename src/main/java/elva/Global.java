@@ -24,7 +24,7 @@ import javax.script.SimpleBindings;
  */
 public final class Global extends SimpleBindings {
 	/**
-	 * 組み込み関数を定義したスコープを構築します。
+	 * システム関数を定義するスコープを構築します。
 	 */
 	public Global() {
 		this.put("nil", Struct.NIL);
@@ -48,14 +48,14 @@ public final class Global extends SimpleBindings {
 		 *
 		 * (progn statements)
 		 */
-		this.put("progn", new $Progn());
+		this.put(new $Progn());
 
 		/*
 		 * basic functions for variable assignment
 		 *
 		 * (set symbol-expression expression)
 		 */
-		this.put("set", new $Set());
+		this.put(new $Set());
 
 		/*
 		 * basic functions for list operation
@@ -66,26 +66,26 @@ public final class Global extends SimpleBindings {
 		 * (length list)
 		 * (member value list)
 		 */
-		this.put("list",   new $List());
-		this.put("car",    new $Car());
-		this.put("cdr",    new $Cdr());
-		this.put("empty?", new $Empty$());
-		this.put("length", new $Length());
-		this.put("member", new $Member());
+		this.put(new $List());
+		this.put(new $Car());
+		this.put(new $Cdr());
+		this.put(new $Empty$());
+		this.put(new $Length());
+		this.put(new $Member());
 
 		/*
 		 * basic functions for mapping operation
 		 * 
 		 * (mapcar sequence)
 		 */
-		this.put("mapcar", new $MapCar());
+		this.put(new $MapCar());
 
 		/*
 		 * basic functions for checking equality
 		 *
 		 * (equal expression expression)
 		 */
-		this.put("equal", new $Equal());
+		this.put(new $Equal());
 
 		/*
 		 * conditional operators
@@ -93,7 +93,7 @@ public final class Global extends SimpleBindings {
 		 * (if condition then else)
 		 * (cond (condition statements)*)
 		 */
-		this.put("if",   new $If());
+		this.put(new $If());
 
 		/*
 		 * basic functions for logical operation
@@ -102,9 +102,9 @@ public final class Global extends SimpleBindings {
 		 * (or  expressions)
 		 * (not expression)
 		 */
-		this.put("and", new $And());
-		this.put("or",  new $Or());
-		this.put("not", new $Not());
+		this.put(new $And());
+		this.put(new $Or());
+		this.put(new $Not());
 
 		/*
 		 * basic functions for arithmetical operation
@@ -115,11 +115,11 @@ public final class Global extends SimpleBindings {
 		 * (/ expressions)
 		 * (% expressions)
 		 */
-		this.put("+",   new $Add());
-		this.put("-",   new $Sub());
-		this.put("*",   new $Mul());
-		this.put("/",   new $Div());
-		this.put("mod", new $Mod());
+		this.put(new $Add());
+		this.put(new $Sub());
+		this.put(new $Mul());
+		this.put(new $Div());
+		this.put(new $Mod());
 
 		/*
 		 * basic functions for numerical comparison
@@ -129,10 +129,10 @@ public final class Global extends SimpleBindings {
 		 * (<= expressions)
 		 * (>= expressions)
 		 */
-		this.put("<",  new $Lt());
-		this.put(">",  new $Gt());
-		this.put("<=", new $Le());
-		this.put(">=", new $Ge());
+		this.put(new $Lt());
+		this.put(new $Gt());
+		this.put(new $Le());
+		this.put(new $Ge());
 
 		/*
 		 * basic functions for string triming
@@ -140,8 +140,8 @@ public final class Global extends SimpleBindings {
 		 * (str-head string-expression)
 		 * (str-tail string-expression)
 		 */
-		this.put("str-head", new $StrHead());
-		this.put("str-tail", new $StrTail());
+		this.put(new $StrHead());
+		this.put(new $StrTail());
 
 		/*
 		 * basic functions for type conversion
@@ -149,15 +149,15 @@ public final class Global extends SimpleBindings {
 		 * (number string-expression)
 		 * (string number-expression)
 		 */
-		this.put("number", new $Number());
-		this.put("string", new $String());
+		this.put(new $Number());
+		this.put(new $String());
 
 		/*
 		 * basic functions for regex matching
 		 *
 		 * (match pattern string)
 		 */
-		this.put("match", new $Match());
+		this.put(new $Match());
 
 		/*
 		 * basic functions for lambda & syntax(macro) generation
@@ -165,8 +165,17 @@ public final class Global extends SimpleBindings {
 		 * (lambda (parameters) value)
 		 * (syntax (parameters) macro)
 		 */
-		this.put("lambda", new $Lambda());
-		this.put("syntax", new $Syntax());
+		this.put(new $Lambda());
+		this.put(new $Syntax());
+	}
+
+	/**
+	 * 指定された関数をこの環境に登録します。
+	 *
+	 * @param func 登録する関数
+	 */
+	private final void put(Function func) {
+		this.put(func.toString(), func);
 	}
 
 	/**
@@ -177,8 +186,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/14
 	 */
+	@Native("quote")
 	@Params(min = 1, max = 1)
-	private static final class $Quote implements Function {
+	private static final class $Quote extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			return args.car();
 		}
@@ -192,8 +202,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/14
 	 */
+	@Native("quasiquote")
 	@Params(min = 1, max = 1)
-	private static final class $Quasi implements Function {
+	private static final class $Quasi extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			return eval.quasi(args.car());
 		}
@@ -207,8 +218,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/14
 	 */
+	@Native("unquote")
 	@Params(min = 1, max = 1)
-	private static final class $Uquot implements Function {
+	private static final class $Uquot extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			return eval.eval(args.car());
 		}
@@ -222,8 +234,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/02/27
 	 */
+	@Native("progn")
 	@Params(min = 1, max = -1)
-	private static final class $Progn implements Function {
+	private static final class $Progn extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			Object last = null;
 			for(Object v: args) last = eval.eval(v);
@@ -239,8 +252,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/02/27
 	 */
+	@Native("set")
 	@Params(min = 2, max = 2)
-	private static final class $Set implements Function {
+	private static final class $Set extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final Object value = eval.eval(args.get(1));
 			eval.scope.put(eval.name(args.get(0)), value);
@@ -256,8 +270,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/14
 	 */
+	@Native("list")
 	@Params(min = 0, max = -1)
-	private static final class $List implements Function {
+	private static final class $List extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			ArrayList<Object> arguments = new ArrayList<>();
 			for(Object v: args) arguments.add(eval.eval(v));
@@ -273,8 +288,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/14
 	 */
+	@Native("car")
 	@Params(min = 1, max = 1)
-	private static final class $Car implements Function {
+	private static final class $Car extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			return eval.list(args.car()).car();
 		}
@@ -288,8 +304,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/14
 	 */
+	@Native("cdr")
 	@Params(min = 1, max = 1)
-	private static final class $Cdr implements Function {
+	private static final class $Cdr extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			return eval.list(args.car()).cdr();
 		}
@@ -303,8 +320,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/17
 	 */
+	@Native("empty?")
 	@Params(min = 1, max = 1)
-	private static final class $Empty$ implements Function {
+	private static final class $Empty$ extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			return eval.list(args.car()).isEmpty();
 		}
@@ -318,8 +336,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/14
 	 */
+	@Native("length")
 	@Params(min = 1, max = 1)
-	private static final class $Length implements Function {
+	private static final class $Length extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			return BigDecimal.valueOf(eval.list(args.car()).size());
 		}
@@ -333,8 +352,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/02/27
 	 */
+	@Native("member")
 	@Params(min = 2, max = 2)
-	private static final class $Member implements Function {
+	private static final class $Member extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final Object val = eval.eval(args.car());
 			final Struct list = eval.list(args.get(1));
@@ -350,8 +370,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/14
 	 */
+	@Native("mapcar")
 	@Params(min = 2, max = 2)
-	private static final class $MapCar implements Function {
+	private static final class $MapCar extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final ArrayList<Object> target = new ArrayList<>();
 			Function f = eval.eval(args.car(), Function.class);
@@ -370,8 +391,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/02/27
 	 */
+	@Native("equal")
 	@Params(min = 2, max = 2)
-	private static final class $Equal implements Function {
+	private static final class $Equal extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final Object l = eval.eval(args.get(0));
 			final Object r = eval.eval(args.get(1));
@@ -394,8 +416,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/02/27
 	 */
+	@Native("if")
 	@Params(min = 3, max = 3)
-	private static final class $If implements Function {
+	private static final class $If extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			return eval.eval(args.get(eval.bool(args.car())? 1:2));
 		}
@@ -409,8 +432,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/02/27
 	 */
+	@Native("and")
 	@Params(min = 2, max = -1)
-	private static final class $And implements Function {
+	private static final class $And extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			for(Object v: args) if(!eval.bool(v)) return false;
 			return true;
@@ -425,8 +449,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/02/27
 	 */
+	@Native("or")
 	@Params(min = 2, max = -1)
-	private static final class $Or implements Function {
+	private static final class $Or extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			for(Object v: args) if(eval.bool(v)) return true;
 			return false;
@@ -441,8 +466,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/18
 	 */
+	@Native("not")
 	@Params(min = 1, max = 1)
-	private static final class $Not implements Function {
+	private static final class $Not extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			return !eval.bool(args.car());
 		}
@@ -456,8 +482,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/03/19
 	 */
+	@Native("+")
 	@Params(min = 2, max = -1)
-	private static final class $Add implements Function {
+	private static final class $Add extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			BigDecimal val = eval.real(args.car());
 			for(Object v: args.cdr()) val = val.add(eval.real(v));
@@ -473,8 +500,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/03/19
 	 */
+	@Native("-")
 	@Params(min = 2, max = -1)
-	private static final class $Sub implements Function {
+	private static final class $Sub extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			BigDecimal val = eval.real(args.car());
 			for(Object v: args.cdr()) val = val.subtract(eval.real(v));
@@ -490,8 +518,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/03/19
 	 */
+	@Native("*")
 	@Params(min = 2, max = -1)
-	private static final class $Mul implements Function {
+	private static final class $Mul extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			BigDecimal val = eval.real(args.car());
 			for(Object v: args.cdr()) val = val.multiply(eval.real(v));
@@ -507,8 +536,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/03/19
 	 */
+	@Native("/")
 	@Params(min = 2, max = -1)
-	private static final class $Div implements Function {
+	private static final class $Div extends Function {
 		private final int MODE = BigDecimal.ROUND_FLOOR;
 		public Object apply(Struct args, Kernel eval) {
 			BigDecimal val = eval.real(args.car());
@@ -525,8 +555,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/18
 	 */
+	@Native("mod")
 	@Params(min = 2, max = -1)
-	private static final class $Mod implements Function {
+	private static final class $Mod extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			BigDecimal val = eval.real(args.car());
 			for(Object v: args.cdr()) val = val.remainder(eval.real(v));
@@ -542,8 +573,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/03/17
 	 */
+	@Native("<")
 	@Params(min = 2, max = -1)
-	private static final class $Lt implements Function {
+	private static final class $Lt extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final List<BigDecimal> vals = new ArrayList<>();
 			for(Object v: args) vals.add(eval.real(v));
@@ -562,8 +594,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/03/17
 	 */
+	@Native(">")
 	@Params(min = 2, max = -1)
-	private static final class $Gt implements Function {
+	private static final class $Gt extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final ArrayList<BigDecimal> vals = new ArrayList<>();
 			for(Object v: args) vals.add(eval.real(v));
@@ -582,8 +615,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/03/17
 	 */
+	@Native("<=")
 	@Params(min = 2, max = -1)
-	private static final class $Le implements Function {
+	private static final class $Le extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final ArrayList<BigDecimal> vals = new ArrayList<>();
 			for(Object v: args) vals.add(eval.real(v));
@@ -602,8 +636,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/03/17
 	 */
+	@Native(">=")
 	@Params(min = 2, max = -1)
-	private static final class $Ge implements Function {
+	private static final class $Ge extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final ArrayList<BigDecimal> vals = new ArrayList<>();
 			for(Object v: args) vals.add(eval.real(v));
@@ -622,8 +657,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/14
 	 */
+	@Native("str-head")
 	@Params(min = 2, max = 2)
-	private static final class $StrHead implements Function {
+	private static final class $StrHead extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final String str = eval.text(args.car());
 			BigDecimal trim = eval.real(args.get(1));
@@ -639,8 +675,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/14
 	 */
+	@Native("str-tail")
 	@Params(min = 2, max = 2)
-	private static final class $StrTail implements Function {
+	private static final class $StrTail extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final String str = eval.text(args.car());
 			BigDecimal trim = eval.real(args.get(1));
@@ -656,8 +693,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/06/30
 	 */
+	@Native("number")
 	@Params(min = 1, max = 1)
-	private static final class $Number implements Function {
+	private static final class $Number extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			return new BigDecimal(eval.text(args.car()));
 		}
@@ -671,8 +709,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/06/30
 	 */
+	@Native("string")
 	@Params(min = 1, max = 1)
-	private static final class $String implements Function {
+	private static final class $String extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			return String.valueOf(eval.eval(args.car()));
 		}
@@ -686,8 +725,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/16
 	 */
+	@Native("match")
 	@Params(min = 2, max = 2)
-	private static final class $Match implements Function {
+	private static final class $Match extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			return eval.text(args.get(1)).matches(eval.text(args.car()));
 		}
@@ -701,8 +741,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/14
 	 */
+	@Native("lambda")
 	@Params(min = 2, max = 2)
-	private static final class $Lambda implements Function {
+	private static final class $Lambda extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final Object p = args.get(0), body = args.get(1);
 			Struct pars = p instanceof Struct? (Struct) p: new Struct(p);
@@ -721,8 +762,9 @@ public final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/14
 	 */
+	@Native("syntax")
 	@Params(min = 2, max = 2)
-	private static final class $Syntax implements Function {
+	private static final class $Syntax extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final Object p = args.get(0), body = args.get(1);
 			Struct pars = p instanceof Struct? (Struct) p: new Struct(p);

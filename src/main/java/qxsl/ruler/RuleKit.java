@@ -158,15 +158,15 @@ public final class RuleKit {
 	 * @return 事前に定義された環境
 	 */
 	public Bindings createBindings() {
-		final Bindings lude = new SimpleBindings();
+		final Nested lude = new Nested(null, null);
 		/*
 		 * preinstalled functions for contest & section definition
 		 * 
 		 * (contest symbol-expression sections...)
 		 * (special symbol-expression lambda)
 		 */
-		lude.put("contest", new $Contest());
-		lude.put("section", new $Section());
+		lude.put(new $Contest());
+		lude.put(new $Section());
 
 		/*
 		 * preinstalled functions for success & failure construction
@@ -174,8 +174,8 @@ public final class RuleKit {
 		 * (success ITEM score keys...)
 		 * (failure ITEM message)
 		 */
-		lude.put("success", new $Success());
-		lude.put("failure", new $Failure());
+		lude.put(new $Success());
+		lude.put(new $Failure());
 
 		/*
 		 * preinstalled functions for rcvd & sent access
@@ -183,8 +183,8 @@ public final class RuleKit {
 		 * (rcvd item)
 		 * (sent item)
 		 */
-		lude.put("rcvd", new $Rcvd());
-		lude.put("sent", new $Sent());
+		lude.put(new $Rcvd());
+		lude.put(new $Sent());
 
 		/*
 		 * preinstalled functions for field access
@@ -192,22 +192,22 @@ public final class RuleKit {
 		 * (get-field item namespace name)
 		 * (set-field item namespace name value-string)
 		 */
-		lude.put("get-field", new $GetField());
-		lude.put("set-field", new $SefField());
+		lude.put(new $GetField());
+		lude.put(new $SefField());
 
 		/*
 		 * preinstalled functions for time access
 		 *
 		 * (hour item)
 		 */
-		lude.put("hour", new $Hour());
+		lude.put(new $Hour());
 
 		/*
 		 * preinstalled functions for city access
 		 *
 		 * (city database-name code region-level)
 		 */
-		lude.put("city", new $City());
+		lude.put(new $City());
 		return lude;
 	}
 
@@ -219,8 +219,9 @@ public final class RuleKit {
 	 *
 	 * @since 2019/05/15
 	 */
+	@Native("contest")
 	@Params(min = 1, max = -1)
-	private static final class $Contest implements Function {
+	private static final class $Contest extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final String contest = eval.text(args.car());
 			ArrayList<Section> sects = new ArrayList<>();
@@ -238,8 +239,9 @@ public final class RuleKit {
 	 *
 	 * @since 2019/05/15
 	 */
+	@Native("section")
 	@Params(min = 2, max = 2)
-	private static final class $Section implements Function {
+	private static final class $Section extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final String section = eval.text(args.car());
 			final Function body = eval.eval(args.get(1), Function.class);
@@ -255,8 +257,9 @@ public final class RuleKit {
 	 *
 	 * @since 2019/05/18
 	 */
+	@Native("success")
 	@Params(min = 3, max = -1)
-	private static final class $Success implements Function {
+	private static final class $Success extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final List<Object> ks = new ArrayList<>();
 			final Item item = eval.eval(args.car(), Item.class);
@@ -274,8 +277,9 @@ public final class RuleKit {
 	 *
 	 * @since 2019/05/18
 	 */
+	@Native("failure")
 	@Params(min = 2, max = 2)
-	private static final class $Failure implements Function {
+	private static final class $Failure extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final Item item = eval.eval(args.car(), Item.class);
 			return new Failure(eval.text(args.get(1)), item);
@@ -290,8 +294,9 @@ public final class RuleKit {
 	 *
 	 * @since 2019/05/18
 	 */
+	@Native("rcvd")
 	@Params(min = 1, max = 1)
-	private static final class $Rcvd implements Function {
+	private static final class $Rcvd extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			return eval.eval(args.car(), Item.class).getRcvd();
 		}
@@ -305,8 +310,9 @@ public final class RuleKit {
 	 *
 	 * @since 2019/05/18
 	 */
+	@Native("sent")
 	@Params(min = 1, max = 1)
-	private static final class $Sent implements Function {
+	private static final class $Sent extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			return eval.eval(args.car(), Item.class).getSent();
 		}
@@ -320,8 +326,9 @@ public final class RuleKit {
 	 *
 	 * @since 2019/06/29
 	 */
+	@Native("get-field")
 	@Params(min = 3, max = 3)
-	private static final class $GetField implements Function {
+	private static final class $GetField extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final Tuple tuple = eval.eval(args.car(), Tuple.class);
 			final String space = eval.text(args.get(1));
@@ -338,8 +345,9 @@ public final class RuleKit {
 	 *
 	 * @since 2019/06/29
 	 */
+	@Native("set-field")
 	@Params(min = 4, max = 4)
-	private static final class $SefField implements Function {
+	private static final class $SefField extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final Tuple tuple = eval.eval(args.car(), Tuple.class);
 			final String space = eval.text(args.get(1));
@@ -357,8 +365,9 @@ public final class RuleKit {
 	 *
 	 * @since 2019/05/18
 	 */
+	@Native("hour")
 	@Params(min = 2, max = 2)
-	private static final class $Hour implements Function {
+	private static final class $Hour extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			ZonedDateTime time = eval.eval(args.car(), ZonedDateTime.class);
 			ZoneId id = ZoneId.of(eval.text(args.get(1)), ZoneId.SHORT_IDS);
@@ -374,8 +383,9 @@ public final class RuleKit {
 	 *
 	 * @since 2019/05/18
 	 */
+	@Native("city")
 	@Params(min = 3, max = 3)
-	private static final class $City implements Function {
+	private static final class $City extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final String base = eval.text(args.car());
 			final String code = eval.text(args.get(1));

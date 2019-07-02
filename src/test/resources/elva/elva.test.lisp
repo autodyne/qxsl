@@ -158,6 +158,18 @@
 (str-tail "HELLO" 2) "LLO"
 (str-tail "WORLD" 2) "RLD"
 
+; number
+(number "114.514") 114.514
+(number "1919810") 1919810
+
+; string
+(string +) "+"
+(string -) "-"
+(string 514.114) "514.114"
+(string 8101919) "8101919"
+(string (lambda x (+ x x))) "(lambda (x) (+ x x))"
+(string (syntax x (+ x x))) "(syntax (x) (+ x x))"
+
 ; match
 (match "\\d{6}" (if (equal 114 514) "114514" "364364")) true
 (match "\\D{6}" (if (equal 114 514) "114514" "364364")) false

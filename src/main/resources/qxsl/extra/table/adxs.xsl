@@ -14,6 +14,9 @@
 	<!-- conversion from QXSL to ADX -->
 	<xsl:template match="list">
 		<ADX>
+			<HEADER>
+				<PROGRAMID>qxsl</PROGRAMID>
+			</HEADER>
 			<RECORDS>
 				<xsl:apply-templates select="item"/>
 			</RECORDS>
