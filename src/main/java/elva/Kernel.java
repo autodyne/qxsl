@@ -22,8 +22,6 @@ import java.math.BigDecimal;
 public final class Kernel {
 	/**
 	 * この評価器に関連づけられたスコープです。
-	 *
-	 * @return スコープ
 	 */
 	public final Nested scope;
 
@@ -41,6 +39,7 @@ public final class Kernel {
 	 *
 	 * @param sexp 式
 	 * @return 返り値
+	 *
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
 	public Symbol name(Object sexp) {
@@ -52,6 +51,7 @@ public final class Kernel {
 	 *
 	 * @param sexp 式
 	 * @return 返り値
+	 *
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
 	public Struct list(Object sexp) {
@@ -63,6 +63,7 @@ public final class Kernel {
 	 *
 	 * @param sexp 式
 	 * @return 返り値
+	 *
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
 	public boolean bool(Object sexp) {
@@ -74,6 +75,7 @@ public final class Kernel {
 	 *
 	 * @param sexp 式
 	 * @return 返り値
+	 *
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
 	public BigDecimal real(Object sexp) {
@@ -85,6 +87,7 @@ public final class Kernel {
 	 *
 	 * @param sexp 式
 	 * @return 返り値
+	 *
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
 	public String text(Object sexp) {
@@ -96,6 +99,7 @@ public final class Kernel {
 	 *
 	 * @param sexp 式
 	 * @return 返り値
+	 *
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
 	public Object eval(Object sexp) {
@@ -111,6 +115,9 @@ public final class Kernel {
 	 * @param sexp 式
 	 * @param type 型
 	 * @return 返り値
+	 *
+	 * @param <V> 返り値の総称型
+	 *
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
 	public <V> V eval(Object sexp, Class<V> type) {

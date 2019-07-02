@@ -179,6 +179,20 @@ public final class Global extends SimpleBindings {
 	}
 
 	/**
+	 * 指定された名前に束縛された値を返します。
+	 *
+	 * @param name 名前
+	 * @return 束縛された値
+	 */
+	@Override
+	public final Object get(Object name) {
+		final String key = name.toString();
+		if(containsKey(key)) return super.get(key);
+		final String msg = "unknown symbol '%s'";
+		throw new ElvaRuntimeException(msg, name);
+	}
+
+	/**
 	 * LISP処理系で事前に定義されるクォート関数です。
 	 *
 	 *
