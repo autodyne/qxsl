@@ -24,7 +24,7 @@ public final class Failure implements Message, Serializable {
 	private static final long serialVersionUID = 1L;
 	private final String text;
 	private final Item item;
-	
+
 	/**
 	 * 指定した内容の{@link Failure}を構築します。
 	 *

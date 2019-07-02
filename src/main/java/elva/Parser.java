@@ -72,6 +72,17 @@ public final class Parser implements Iterator<Object> {
 	}
 
 	/**
+	 * 現在の位置の直前の字句をまとめた文字列を返します。
+	 *
+	 * @return 現在位置の直前の文字列
+	 */
+	public final String getLocal() {
+		final int sindex = Math.max(cursor - 10, 0);
+		List<String> strm = allTokens.subList(sindex, cursor);
+		return strm.stream().collect(Collectors.joining(" "));
+	}
+
+	/**
 	 * 次の式を返します。
 	 *
 	 * @return 次の式
@@ -86,7 +97,7 @@ public final class Parser implements Iterator<Object> {
 		if(atom.equals("`")) return new Struct(Quotes.QUASI, next());
 		if(atom.equals(",")) return new Struct(Quotes.UQUOT, next());
 		if(!atom.equals(")")) return asSymbolOrReal(atom);
-		throw new ElvaLexicalException(cursor, "unopened parenthesis ')'");
+		throw new ElvaLexicalException("isolated ')'", this);
 	}
 
 	/**
@@ -137,7 +148,7 @@ public final class Parser implements Iterator<Object> {
 				default: --cursor; list.add(next());
 			}
 		}
-		if(closed) return list.isEmpty()? Struct.NIL: new Struct(list);
-		throw new ElvaLexicalException(cursor, "unclosed parenthesis '('");
+		if(closed) return Struct.of(list);
+		throw new ElvaLexicalException("isolated '('", this);
 	}
 }

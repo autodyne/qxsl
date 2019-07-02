@@ -48,7 +48,7 @@ public final class QxmlFormat extends BaseFormat {
 	public static final QName RCVD = new QName("rcvd");
 	public static final QName SENT = new QName("sent");
 	private final Schema schema;
-	
+
 	/**
 	 * {@link Schema}の定義を読み込んでフォーマットを初期化します。
 	 *
@@ -94,7 +94,7 @@ public final class QxmlFormat extends BaseFormat {
 	private final class QxmlDecoder {
 		private final EventReader reader;
 		private final FieldFormats fields;
-		
+
 		/**
 		 * 指定したストリームから交信記録を読み込むデコーダを構築します。
 		 * 

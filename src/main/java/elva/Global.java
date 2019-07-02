@@ -8,8 +8,8 @@
 package elva;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import javax.script.Bindings;
 import javax.script.SimpleBindings;
@@ -274,9 +274,9 @@ public final class Global extends SimpleBindings {
 	@Params(min = 0, max = -1)
 	private static final class $List extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			ArrayList<Object> arguments = new ArrayList<>();
-			for(Object v: args) arguments.add(eval.eval(v));
-			return new Struct(arguments);
+			final List<Object> list = new LinkedList<>();
+			for(Object el: args) list.add(eval.eval(el));
+			return Struct.of(list);
 		}
 	}
 
@@ -374,12 +374,12 @@ public final class Global extends SimpleBindings {
 	@Params(min = 2, max = 2)
 	private static final class $MapCar extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			final ArrayList<Object> target = new ArrayList<>();
+			final List<Object> target = new LinkedList<>();
 			Function f = eval.eval(args.car(), Function.class);
-			for(Object e: eval.list(args.get(1))) {
-				target.add(f.apply(new Struct(e), eval));
+			for(Object e: eval.list(args.cdr().car())) {
+				target.add(f.apply(Struct.of(e), eval));
 			}
-			return new Struct(target);
+			return Struct.of(target);
 		}
 	}
 
@@ -577,10 +577,11 @@ public final class Global extends SimpleBindings {
 	@Params(min = 2, max = -1)
 	private static final class $Lt extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			final List<BigDecimal> vals = new ArrayList<>();
-			for(Object v: args) vals.add(eval.real(v));
-			for(int i = 0; i < args.size() - 1; i++) {
-				if(vals.get(i).compareTo(vals.get(i + 1)) >= 0) return false;
+			BigDecimal left = eval.real(args.car());
+			for(Object sexp: args.cdr()) {
+				final BigDecimal next = eval.real(sexp);
+				if(left.compareTo(next) >= 0) return false;
+				left = next;
 			}
 			return true;
 		}
@@ -598,10 +599,11 @@ public final class Global extends SimpleBindings {
 	@Params(min = 2, max = -1)
 	private static final class $Gt extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			final ArrayList<BigDecimal> vals = new ArrayList<>();
-			for(Object v: args) vals.add(eval.real(v));
-			for(int i = 0; i < args.size() - 1; i++) {
-				if(vals.get(i).compareTo(vals.get(i + 1)) <= 0) return false;
+			BigDecimal left = eval.real(args.car());
+			for(Object sexp: args.cdr()) {
+				final BigDecimal next = eval.real(sexp);
+				if(left.compareTo(next) <= 0) return false;
+				left = next;
 			}
 			return true;
 		}
@@ -619,10 +621,11 @@ public final class Global extends SimpleBindings {
 	@Params(min = 2, max = -1)
 	private static final class $Le extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			final ArrayList<BigDecimal> vals = new ArrayList<>();
-			for(Object v: args) vals.add(eval.real(v));
-			for(int i = 0; i < args.size() - 1; i++) {
-				if(vals.get(i).compareTo(vals.get(i + 1)) > 0) return false;
+			BigDecimal left = eval.real(args.car());
+			for(Object sexp: args.cdr()) {
+				final BigDecimal next = eval.real(sexp);
+				if(left.compareTo(next) > 0) return false;
+				left = next;
 			}
 			return true;
 		}
@@ -640,10 +643,11 @@ public final class Global extends SimpleBindings {
 	@Params(min = 2, max = -1)
 	private static final class $Ge extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			final ArrayList<BigDecimal> vals = new ArrayList<>();
-			for(Object v: args) vals.add(eval.real(v));
-			for(int i = 0; i < args.size() - 1; i++) {
-				if(vals.get(i).compareTo(vals.get(i + 1)) < 0) return false;
+			BigDecimal left = eval.real(args.car());
+			for(Object sexp: args.cdr()) {
+				final BigDecimal next = eval.real(sexp);
+				if(left.compareTo(next) < 0) return false;
+				left = next;
 			}
 			return true;
 		}
@@ -746,7 +750,7 @@ public final class Global extends SimpleBindings {
 	private static final class $Lambda extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final Object p = args.get(0), body = args.get(1);
-			Struct pars = p instanceof Struct? (Struct) p: new Struct(p);
+			Struct pars = p instanceof Struct? (Struct) p: Struct.of(p);
 			if(!pars.stream().allMatch(Symbol.class::isInstance)) {
 				final String msg = "%s contains non-name";
 				throw new ElvaRuntimeException(msg, pars);
@@ -767,7 +771,7 @@ public final class Global extends SimpleBindings {
 	private static final class $Syntax extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final Object p = args.get(0), body = args.get(1);
-			Struct pars = p instanceof Struct? (Struct) p: new Struct(p);
+			Struct pars = p instanceof Struct? (Struct) p: Struct.of(p);
 			if(!pars.stream().allMatch(Symbol.class::isInstance)) {
 				final String msg = "%s contains non-name";
 				throw new ElvaRuntimeException(msg, pars);

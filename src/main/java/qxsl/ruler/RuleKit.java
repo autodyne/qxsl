@@ -144,7 +144,7 @@ public final class RuleKit {
 
 		@Override
 		public Message validate(Item item) throws ScriptException {
-			Object sexp = eval.eval(new Struct(rule, item));
+			final Object sexp = eval.eval(Struct.of(rule, item));
 			if(sexp instanceof Success) return (Success) sexp;
 			if(sexp instanceof Failure) return (Failure) sexp;
 			String temp = "%s must return  a success or failure";

@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 import javax.script.*;
 
@@ -108,8 +109,6 @@ public final class ElvaLisp extends AbstractScriptEngine {
 			return scan(br.lines().collect(Collectors.joining("\n")));
 		} catch (IOException ex) {
 			throw new ScriptException(ex);
-		} catch (ElvaLexicalException ex) {
-			throw ex.toScriptException();
 		}
 	}
 
@@ -129,6 +128,8 @@ public final class ElvaLisp extends AbstractScriptEngine {
 			return exps;
 		} catch (IOException ex) {
 			throw new ScriptException(ex);
+		} catch (ElvaLexicalException ex) {
+			throw new ScriptException(ex.getMessage());
 		}
 	}
 }
@@ -143,27 +144,16 @@ public final class ElvaLisp extends AbstractScriptEngine {
  * @since 2019/07/01
  */
 final class ElvaLexicalException extends RuntimeException {
-	private final String TMP = "lexical error: %s at token[%d]";
-	private final int tokenId;
+	private static final String TEMP = "lexical error: %s\n%s";
 
 	/**
 	 * 字句番号と内容を示す文字列を指定して例外を構築します。
 	 *
-	 * @param tokenId 字句番号
 	 * @param message 例外の内容
+	 * @param parser 構文解析器
 	 */
-	public ElvaLexicalException(int tokenId, String message) {
-		super(message);
-		this.tokenId = tokenId;
-	}
-
-	/**
-	 * この例外を処理系外に公開するための変換処理を行います。
-	 *
-	 * @return 変換された例外
-	 */
-	public final ScriptException toScriptException() {
-		return new ScriptException(String.format(TMP, tokenId));
+	public ElvaLexicalException(String message, Parser parser) {
+		super(String.format(TEMP, message, parser.getLocal()));
 	}
 }
 
@@ -177,7 +167,7 @@ final class ElvaLexicalException extends RuntimeException {
  * @since 2019/07/01
  */
 final class ElvaRuntimeException extends RuntimeException {
-	private final String TMP = "runtime error: %s at %%s";
+	private static final String TEMP = "runtime error: %s\n%%s";
 
 	/**
 	 * 内容を示す書式文字列とその引数を指定して例外を構築します。
@@ -186,24 +176,7 @@ final class ElvaRuntimeException extends RuntimeException {
 	 * @param args 書式文字列の引数
 	 */
 	public ElvaRuntimeException(String message, Object...args) {
-		super(String.format(message, args));
-	}
-
-	/**
-	 * LISPの式の評価順序が明確になるように例外を変換します。
-	 *
-	 * @return スタックトレース
-	 */
-	@Override
-	public final StackTraceElement[] getStackTrace() {
-		List<StackTraceElement> list = new ArrayList<>();
-		for(StackTraceElement e: super.getStackTrace()) {
-			try {
-				final Class<?> c = Class.forName(e.getClassName());
-				if(Function.class.isAssignableFrom(c)) list.add(e);
-			} catch (ClassNotFoundException ex) {}
-		}
-		return list.toArray(new StackTraceElement[list.size()]);
+		super(String.format(TEMP, String.format(message, args)));
 	}
 
 	/**
@@ -213,9 +186,13 @@ final class ElvaRuntimeException extends RuntimeException {
 	 * @return 変換された例外
 	 */
 	public final ScriptException toScriptException(Object top) {
-		final String message = String.format(getMessage(), top);
-		final ScriptException ex = new ScriptException(message);
-		ex.setStackTrace(getStackTrace());
-		return ex;
+		final StringJoiner trace = new StringJoiner("\n");
+		for(StackTraceElement ste: getStackTrace()) try {
+			final Class<?> c = Class.forName(ste.getClassName());
+			final Native nat = c.getAnnotation(Native.class);
+			if(nat != null) trace.add("at ".concat(nat.value()));
+		} catch (ClassNotFoundException ex) {}
+		final String text = trace.add(String.valueOf(top)).toString();
+		return new ScriptException(String.format(getMessage(), text));
 	}
 }

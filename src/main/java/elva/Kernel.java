@@ -155,7 +155,7 @@ public final class Kernel {
 			if(UQUOT.equals(list.car())) return eval(list);
 			final List<Object> target = new ArrayList<>();
 			for(Object sexp: list) target.add(quasi(sexp));
-			return new Struct(target);
+			return Struct.of(target);
 		} else return quoted;
 	}
 

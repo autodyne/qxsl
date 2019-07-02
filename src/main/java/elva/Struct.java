@@ -23,30 +23,37 @@ import java.util.stream.Stream;
  * @since 2017/02/18
  */
 public final class Struct extends AbstractList<Object> {
-	private final List<Object> list;
+	private final Object head;
+	private final Struct tail;
+	private final int size;
 
 	/**
-	 * 空のリストを利用する際はこのインスタンスを参照します。
+	 * 先頭と末尾の構成要素を指定してリストを構築します。
+	 *
+	 * @param head 先頭の要素
+	 * @param tail 末尾の要素
+	 *
+	 * @throws NullPointerException tailがnullの場合
+	 */
+	private Struct(Object head, Struct tail) {
+		this.head = head;
+		this.tail = tail;
+		this.size = tail.size + 1;
+	}
+
+	/**
+	 * {@link #NIL}のための専用のコンストラクタです。
+	 */
+	private Struct() {
+		this.head = null;
+		this.tail = null;
+		this.size = 0;
+	}
+
+	/**
+	 * 内容が空のリストを示す特別なインスタンスです。
 	 */
 	public static final Struct NIL = new Struct();
-
-	/**
-	 * 指定された要素を持つリストを構築します。
-	 *
-	 * @param list 要素
-	 */
-	public Struct(List<Object> list) {
-		this.list = list;
-	}
-
-	/**
-	 * 指定された要素を持つリストを構築します。
-	 *
-	 * @param vals 要素
-	 */
-	public Struct(Object...vals) {
-		this(Arrays.asList(vals));
-	}
 
 	/**
 	 * 指定された要素を持つ引用式を構築します。
@@ -55,7 +62,30 @@ public final class Struct extends AbstractList<Object> {
 	 * @param value 要素
 	 */
 	public Struct(Quotes quote, Object value) {
-		this(quote.toSymbol(), value);
+		this(quote.toSymbol(), new Struct(value, NIL));
+	}
+
+	/**
+	 * 指定された要素を持つリストを構築します。
+	 *
+	 * @param vals 要素
+	 * @return リスト 空の場合は{@link #NIL}
+	 */
+	public static final Struct of(Object...vals) {
+		return Struct.of(Arrays.asList(vals));
+	}
+
+	/**
+	 * 指定された要素を持つリストを構築します。
+	 *
+	 * @param vals 要素
+	 * @return リスト 空の場合は{@link #NIL}
+	 */
+	public static final Struct of(List<Object> vals) {
+		final int size = vals.size();
+		if(size == 0) return Struct.NIL;
+		final Object head = vals.get(0);
+		return new Struct(head, of(vals.subList(1, size)));
 	}
 
 	/**
@@ -64,7 +94,7 @@ public final class Struct extends AbstractList<Object> {
 	 * @return CAR部
 	 */
 	public final Object car() {
-		return list.get(0);
+		return this == NIL? NIL: head;
 	}
 
 	/**
@@ -73,7 +103,7 @@ public final class Struct extends AbstractList<Object> {
 	 * @return CDR部
 	 */
 	public final Struct cdr() {
-		return new Struct(list.subList(1, list.size()));
+		return this == NIL? NIL: tail;
 	}
 
 	/**
@@ -83,7 +113,9 @@ public final class Struct extends AbstractList<Object> {
 	 * @return 要素
 	 */
 	public final Object get(int index) {
-		return list.get(index);
+		if(index == 0) return car();
+		if(index >= 0) return tail.get(index - 1);
+		throw new IndexOutOfBoundsException("index: " + index);
 	}
 
 	/**
@@ -92,7 +124,7 @@ public final class Struct extends AbstractList<Object> {
 	 * @return 要素数
 	 */
 	public final int size() {
-		return list.size();
+		return this.size;
 	}
 
 	/**
