@@ -59,13 +59,15 @@ public final class Global extends SimpleBindings {
 
 		/*
 		 * basic functions for list operation
-		 * 
+		 *
+		 * (cons car cdr)
 		 * (list elements)
 		 * (car list)
 		 * (cdr list)
 		 * (length list)
 		 * (member value list)
 		 */
+		this.put(new $Cons());
 		this.put(new $List());
 		this.put(new $Car());
 		this.put(new $Cdr());
@@ -273,6 +275,24 @@ public final class Global extends SimpleBindings {
 			final Object value = eval.eval(args.get(1));
 			eval.scope.put(eval.name(args.get(0)), value);
 			return value;
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるcons関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2019/07/03
+	 */
+	@Native("cons")
+	@Params(min = 2, max = 2)
+	private static final class $Cons extends Function {
+		public Object apply(Struct args, Kernel eval) {
+			final Object head = eval.eval(args.car());
+			final Struct tail = eval.list(args.get(1));
+			return new Struct(head, tail);
 		}
 	}
 

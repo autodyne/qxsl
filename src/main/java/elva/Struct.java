@@ -32,13 +32,11 @@ public final class Struct extends AbstractList<Object> {
 	 *
 	 * @param head 先頭の要素
 	 * @param tail 末尾の要素
-	 *
-	 * @throws NullPointerException tailがnullの場合
 	 */
-	private Struct(Object head, Struct tail) {
+	public Struct(Object head, Struct tail) {
 		this.head = head;
-		this.tail = tail;
-		this.size = tail.size + 1;
+		this.tail = tail == null? NIL: tail;
+		this.size = this.tail.size + 1;
 	}
 
 	/**
@@ -62,7 +60,7 @@ public final class Struct extends AbstractList<Object> {
 	 * @param value 要素
 	 */
 	public Struct(Quotes quote, Object value) {
-		this(quote.toSymbol(), new Struct(value, NIL));
+		this(quote.toSymbol(), Struct.of(value));
 	}
 
 	/**
@@ -114,8 +112,9 @@ public final class Struct extends AbstractList<Object> {
 	 */
 	public final Object get(int index) {
 		if(index == 0) return car();
-		if(index >= 0) return tail.get(index - 1);
-		throw new IndexOutOfBoundsException("index: " + index);
+		if(index >= 0) return tail.get(index -1);
+		final String msg = String.valueOf(index);
+		throw new IndexOutOfBoundsException(msg);
 	}
 
 	/**

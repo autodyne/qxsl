@@ -5,13 +5,13 @@
 		<xsl:apply-templates select="ADX"/>
 		<xsl:apply-templates select="list"/>
 	</xsl:template>
-	<!-- conversion from ADX to QXSL -->
+	<!-- conversion from ADX to QXML -->
 	<xsl:template match="ADX">
 		<list xmlns:adif="adif.org">
 			<xsl:apply-templates select="RECORDS/RECORD"/>
 		</list>
 	</xsl:template>
-	<!-- conversion from QXSL to ADX -->
+	<!-- conversion from QXML to ADX -->
 	<xsl:template match="list">
 		<ADX>
 			<HEADER>
@@ -22,7 +22,7 @@
 			</RECORDS>
 		</ADX>
 	</xsl:template>
-	<!-- conversion from ADX to QXSL -->
+	<!-- conversion from ADX to QXML -->
 	<xsl:template match="RECORD">
 		<item>
 			<xsl:for-each select="*">
@@ -32,7 +32,7 @@
 			</xsl:for-each>
 		</item>
 	</xsl:template>
-	<!-- conversion from QXSL to ADX -->
+	<!-- conversion from QXML to ADX -->
 	<xsl:template match="item">
 		<RECORD>
 			<xsl:for-each select="@adif:*" xmlns:adif="adif.org">

@@ -18,6 +18,10 @@
 (progn (set 'foo 29) (set 'bar 97) foo) 29
 (progn (set 'foo 29) (set 'bar 97) bar) 97
 
+; cons
+(cons 1 ()) (list 1)
+(cons 2 (list 3 4)) (list 2 3 4)
+
 ; list
 (list) '()
 (list 1) '(1)
