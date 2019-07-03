@@ -11,7 +11,7 @@ qxsl is a vital component of [Automatic Acceptance & Tabulation System (ATS)-4](
 
 - qxsl provides log encoders/decoders for QXML, [ADIF(ADX)](http://adif.org), [Cabrillo](https://wwrof.org/cabrillo/), etc.
 - qxsl provides tabulation & scoring framework for contests and awards.
-- qxsl provides a LISP engine named Elva, and contest rules can be described in modern S-expression styles.
+- qxsl provides a LISP engine named **elva**, and contest rules can be described in modern S-expression styles.
 
 ## Sample Codes
 
@@ -27,10 +27,10 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.List
 import qxsl.model.Item
-import qxsl.table.Tables
+import qxsl.table.TableFormats
 
 val path = Paths.get("Users", "foo", "allja1.ZLO")
-val elog: List[Item] = new Tables().decode(Files.newInputStream(path))
+val elog: List[Item] = new TableFormats().decode(Files.newInputStream(path))
 
 import scala.collection.JavaConverters._
 elog.asScala.foreach(System.out.println)
@@ -39,19 +39,19 @@ elog.asScala.foreach(System.out.println)
 To specify the format, write as follows:
 
 ```Scala
-val elog = new Tables().getFormat("zbin").decode(Files.newInputStream(path))
+val elog = new TableFormats().getFormat("zbin").decode(Files.newInputStream(path))
 ```
 
 To output the log into a file, write as follows:
 
 ```Scala
-new Tables().getFormat("qxml").encode(Files.newOutputStream(path), elog)
+new TableFormats().getFormat("qxml").encode(Files.newOutputStream(path), elog)
 ```
 
 You can obtain a list of formats implemented by qxsl as follows:
 
 ```Scala
-val fmts = new Tables().asScala.toList
+val fmts = new TableFormats().asScala.toList
 fmts.foreach(System.out.println)
 ```
 
@@ -60,7 +60,18 @@ via Java [ServiceLoader](https://docs.oracle.com/javase/8/docs/api/java/util/Ser
 
 ### Scoring for Awards & Contests
 
-qxsl provides [the script engine Elva](https://pafelog.net/qxsl/elva/ElvaScriptEngine.html) and a [rulemaking framework](https://pafelog.net/qxsl/qxsl/ruler/package-summary.html).
+qxsl provides [the script engine **elva**](https://pafelog.net/qxsl/elva/ElvaScriptEngine.html) and a [rulemaking framework](https://pafelog.net/qxsl/qxsl/ruler/package-summary.html).
+
+```Lisp
+(contest "CQ AWESOME CONTEST"
+  (section "CW 14MHz"  (lambda it (verify it (list CW? 14MHz?))))
+  (section "CW 21MHz"  (lambda it (verify it (list CW? 21MHz?))))
+  (section "CW 28MHz"  (lambda it (verify it (list CW? 28MHz?))))
+  (section "PH 14MHz"  (lambda it (verify it (list PH? 14MHz?))))
+  (section "PH 21MHz"  (lambda it (verify it (list PH? 21MHz?))))
+  (section "PH 28MHz"  (lambda it (verify it (list PH? 28MHz?)))))
+```
+
 qxsl contains [the definition of ALLJA1 contest](src/main/resources/qxsl/ruler/allja1.lisp) as a sample inside the JAR file.
 To use the predefined definition, write a program as follows:
 
