@@ -409,9 +409,8 @@ public final class Global extends SimpleBindings {
 	private static final class $MapCar extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final List<Object> target = new LinkedList<>();
-			Function f = eval.eval(args.car(), Function.class);
 			for(Object e: eval.list(args.cdr().car())) {
-				target.add(f.apply(Struct.of(e), eval));
+				target.add(eval.call(Struct.of(args.car(), e)));
 			}
 			return Struct.of(target);
 		}
