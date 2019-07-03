@@ -87,13 +87,13 @@ public final class ElvaLisp extends AbstractScriptEngine {
 		final Nested glob = new Nested(c.getBindings(GLOBAL_SCOPE), root);
 		final Nested self = new Nested(c.getBindings(ENGINE_SCOPE), glob);
 		final Kernel eval = new Kernel(self);
-		Object last = null;
-		for(Object sexp: scan(s)) try {
-			last = eval.eval(sexp);
+		try {
+			Object last = null;
+			for(Object sexp: scan(s)) last = eval.eval(sexp);
+			return last;
 		} catch (ElvaRuntimeException ex) {
-			throw ex.toScriptException(sexp);
+			throw ex.toScriptException();
 		}
-		return last;
 	}
 
 	/**
@@ -168,31 +168,35 @@ final class ElvaLexicalException extends RuntimeException {
  */
 final class ElvaRuntimeException extends RuntimeException {
 	private static final String TEMP = "runtime error: %s\n%%s";
+	private final StringJoiner trace;
 
 	/**
-	 * 内容を示す書式文字列とその引数を指定して例外を構築します。
+	 * 問題を示す書式文字列とその引数を指定して例外を構築します。
 	 *
 	 * @param message 例外の内容
 	 * @param args 書式文字列の引数
 	 */
 	public ElvaRuntimeException(String message, Object...args) {
 		super(String.format(TEMP, String.format(message, args)));
+		this.trace = new StringJoiner("\n");
 	}
 
 	/**
-	 * この例外を処理系外に公開するための変換処理を行います。
+	 * 指定された式をこの例外まで辿れる式の追跡履歴に追加します。
 	 *
-	 * @param top この例外を発生させたトップレベルの式
+	 * @param sexp 追加する式
+	 */
+	public final ElvaRuntimeException add(Object sexp) {
+		this.trace.add(String.format(" at: '%s'", sexp));
+		return this;
+	}
+
+	/**
+	 * この例外を処理系の外部に公開するための変換処理を行います。
+	 *
 	 * @return 変換された例外
 	 */
-	public final ScriptException toScriptException(Object top) {
-		final StringJoiner trace = new StringJoiner("\n");
-		for(StackTraceElement ste: getStackTrace()) try {
-			final Class<?> c = Class.forName(ste.getClassName());
-			final Native nat = c.getAnnotation(Native.class);
-			if(nat != null) trace.add("at ".concat(nat.value()));
-		} catch (ClassNotFoundException ex) {}
-		final String text = trace.add(String.valueOf(top)).toString();
-		return new ScriptException(String.format(getMessage(), text));
+	public final ScriptException toScriptException() {
+		return new ScriptException(String.format(getMessage(), trace));
 	}
 }

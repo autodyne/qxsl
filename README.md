@@ -62,14 +62,17 @@ via Java [ServiceLoader](https://docs.oracle.com/javase/8/docs/api/java/util/Ser
 
 qxsl provides [the script engine **elva**](https://pafelog.net/qxsl/elva/ElvaScriptEngine.html) and a [rulemaking framework](https://pafelog.net/qxsl/qxsl/ruler/package-summary.html).
 
-```Lisp
+```Scala
+import qxsl.ruler.RuleKit
+
+val contest: Contest = new RuleKit().eval("""
 (contest "CQ AWESOME CONTEST"
   (section "CW 14MHz"  (lambda it (verify it (list CW? 14MHz?))))
   (section "CW 21MHz"  (lambda it (verify it (list CW? 21MHz?))))
   (section "CW 28MHz"  (lambda it (verify it (list CW? 28MHz?))))
   (section "PH 14MHz"  (lambda it (verify it (list PH? 14MHz?))))
   (section "PH 21MHz"  (lambda it (verify it (list PH? 21MHz?))))
-  (section "PH 28MHz"  (lambda it (verify it (list PH? 28MHz?)))))
+  (section "PH 28MHz"  (lambda it (verify it (list PH? 28MHz?)))))"""
 ```
 
 qxsl contains [the definition of ALLJA1 contest](src/main/resources/qxsl/ruler/allja1.lisp) as a sample inside the JAR file.
@@ -95,14 +98,6 @@ println(summary.total) // is score * mults
 
 summary.accepted.asScala.foreach(println)
 summary.rejected.asScala.foreach(println)
-```
-
-To define a new contest, utilize RuleKit class as follows:
-
-```Scala
-import qxsl.ruler.RuleKit
-
-val contest: Contest = new RuleKit().eval("""(contest "Scalalian Contest")""")
 ```
 
 ## Documents

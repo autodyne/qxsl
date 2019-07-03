@@ -103,10 +103,9 @@ public final class Kernel {
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
 	public Object eval(Object sexp) {
-		if(Struct.NIL.equals(sexp)) return Struct.NIL;
-		if(sexp instanceof Symbol) return scope.get(sexp);
-		if(sexp instanceof Struct) return call((Struct) sexp);
-		return sexp;
+		if (Struct.NIL.equals(sexp)) return Struct.NIL;
+		if (sexp instanceof Struct) return call((Struct) sexp);
+		return (sexp instanceof Symbol)? scope.get(sexp): sexp;
 	}
 
 	/**
@@ -138,8 +137,12 @@ public final class Kernel {
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
 	public final Object call(Struct sexp) {
-		final Function func = eval(sexp.car(), Function.class);
-		return valid(func, sexp.cdr()).apply(sexp.cdr(), this);
+		try {
+			final Function func = eval(sexp.car(), Function.class);
+			return valid(func, sexp.cdr()).apply(sexp.cdr(), this);
+		} catch (ElvaRuntimeException ex) {
+			throw ex.add(sexp);
+		}
 	}
 
 	/**
@@ -156,12 +159,12 @@ public final class Kernel {
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
 	public final Object quasi(Object quoted) {
-		if(quoted instanceof Struct) {
+		if (quoted instanceof Struct) {
 			final Struct list = (Struct) quoted;
-			if(Struct.NIL.equals(list)) return Struct.NIL;
-			if(UQUOT.equals(list.car())) return eval(list);
+			if (Struct.NIL.equals(list)) return Struct.NIL;
+			if (UQUOT.equals(list.car())) return eval(list);
 			final List<Object> target = new ArrayList<>();
-			for(Object sexp: list) target.add(quasi(sexp));
+			for (Object sexp: list) target.add(quasi(sexp));
 			return Struct.of(target);
 		} else return quoted;
 	}
