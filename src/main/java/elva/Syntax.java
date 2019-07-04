@@ -16,7 +16,7 @@ package elva;
  * @since 2017/02/18
  */
 @Params(min = 0, max = -1)
-public final class Syntax extends Function {
+final class Syntax extends Function {
 	private final Struct pars;
 	private final Object body;
 	private final Kernel lisp;

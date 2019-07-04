@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  *
  * @since 2017/02/18
  */
-public final class Parser implements Iterator<Object> {
+final class Parser implements Iterator<Object> {
 	private final List<String> allTokens;
 	private int cursor = 0;
 

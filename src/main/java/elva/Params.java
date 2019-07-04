@@ -24,13 +24,13 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Params {
 	/**
-	 * 引数を評価する前の引数の最小限の個数です。
+	 * 評価前の引数の最小限の個数です。
 	 *
 	 * @return 引数の個数
 	 */
 	public int min();
 	/**
-	 * 引数を評価する前の引数の最大限の個数です。
+	 * 評価前の引数の最大限の個数です。
 	 *
 	 * @return 引数の個数
 	 */

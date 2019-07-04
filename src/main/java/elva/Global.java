@@ -22,7 +22,7 @@ import javax.script.SimpleBindings;
  *
  * @since 2019/07/01
  */
-public final class Global extends SimpleBindings {
+final class Global extends SimpleBindings {
 	/**
 	 * システム関数を定義するスコープを構築します。
 	 */

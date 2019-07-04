@@ -15,7 +15,7 @@ package elva;
  *
  * @since 2019/07/01
  */
-public enum Quotes {
+enum Quotes {
 	QUOTE ("quote"),
 	UQUOT ("unquote"),
 	QUASI ("quasiquote");
@@ -32,9 +32,5 @@ public enum Quotes {
 
 	public Symbol toSymbol() {
 		return name;
-	}
-
-	public boolean same(Symbol name) {
-		return name.equals(this.name);
 	}
 }

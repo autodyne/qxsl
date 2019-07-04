@@ -174,6 +174,8 @@ public final class Kernel {
 	 *
 	 * @param func 演算子
 	 * @param list 引数の式
+	 * @return 対象の演算子
+	 *
 	 * @throws ElvaRuntimeException 引数の個数が誤っている場合
 	 */
 	private final Function valid(Function func, Struct list) {

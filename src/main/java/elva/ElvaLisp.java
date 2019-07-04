@@ -185,6 +185,7 @@ final class ElvaRuntimeException extends RuntimeException {
 	 * 指定された式をこの例外まで辿れる式の追跡履歴に追加します。
 	 *
 	 * @param sexp 追加する式
+	 * @return この例外
 	 */
 	public final ElvaRuntimeException add(Object sexp) {
 		this.trace.add(String.format(" at: '%s'", sexp));
