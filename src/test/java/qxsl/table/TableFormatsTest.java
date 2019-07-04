@@ -35,9 +35,6 @@ public final class TableFormatsTest extends test.RandTest {
 		// text
 		assertThat(tables.getFormat("cqww")).isInstanceOf(CqwwFormat.class);
 		assertThat(tables.getFormat("jarl")).isInstanceOf(JarlFormat.class);
-		assertThat(tables.getFormat("ctxt")).isInstanceOf(CTxtFormat.class);
-		assertThat(tables.getFormat("hl76")).isInstanceOf(Hl76Format.class);
-		assertThat(tables.getFormat("rtcl")).isInstanceOf(RtclFormat.class);
 		assertThat(tables.getFormat("zall")).isInstanceOf(ZAllFormat.class);
 		assertThat(tables.getFormat("zdos")).isInstanceOf(ZDosFormat.class);
 		// binary

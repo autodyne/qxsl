@@ -20,7 +20,7 @@ please be patient to read Scala codes!
 
 ### Decoding & Encoding
 
-If you don't know the log format in advance, write a program as follows:
+qxsl provides an automatic format detector:
 
 ```Scala
 import java.nio.file.Files
@@ -30,33 +30,23 @@ import qxsl.model.Item
 import qxsl.table.TableFormats
 
 val path = Paths.get("Users", "foo", "allja1.ZLO")
-val elog: List[Item] = new TableFormats().decode(Files.newInputStream(path))
+val table: List[Item] = new TableFormats().decode(Files.newInputStream(path))
 
 import scala.collection.JavaConverters._
-elog.asScala.foreach(System.out.println)
+table.asScala.foreach(System.out.println)
 ```
 
-To specify the format, write as follows:
+To output the data into a file in some format, specify [`TableFormat`](https://pafelog.net/qxsl/qxsl/table/TableFormat.html) explicitly:
 
 ```Scala
-val elog = new TableFormats().getFormat("zbin").decode(Files.newInputStream(path))
+new TableFormats().getFormat("qxml").encode(Files.newOutputStream(path), table)
 ```
 
-To output the log into a file, write as follows:
+You can obtain a list of format implementations as follows, using Java [ServiceLoader](https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html) mechanism:
 
 ```Scala
-new TableFormats().getFormat("qxml").encode(Files.newOutputStream(path), elog)
+new TableFormats().asScala.toList.foreach(System.out.println)
 ```
-
-You can obtain a list of formats implemented by qxsl as follows:
-
-```Scala
-val fmts = new TableFormats().asScala.toList
-fmts.foreach(System.out.println)
-```
-
-It should be noted that qxsl can detect [format implementations](https://pafelog.net/qxsl/qxsl/table/TableFormat.html) automatically,
-via Java [ServiceLoader](https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html) mechanism.
 
 ### Scoring for Awards & Contests
 
@@ -77,7 +67,7 @@ val contest: Contest = new RuleKit().eval("""
 ```
 
 qxsl contains [the definition of ALLJA1 contest](src/main/resources/qxsl/ruler/allja1.lisp) as a sample inside the JAR file.
-To use the predefined definition, write a program as follows:
+You can try the predefined definition as follows:
 
 ```Scala
 import qxsl.ruler.Contest // contest
@@ -92,7 +82,7 @@ Then, you may summarize an operation list into a Summary object, which involves 
 ``` Scala
 import qxsl.ruler.Summary
 
-val summary: Summary = section.summarize(elog) // List[Item]
+val summary: Summary = section.summarize(table) // List[Item]
 println(summary.score) // sum of scores for accepted items
 println(summary.mults) // multiplication of multipliers
 println(summary.total) // is score * mults

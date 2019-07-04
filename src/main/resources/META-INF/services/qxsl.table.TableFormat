@@ -5,9 +5,6 @@ qxsl.extra.table.CqwwFormat
 qxsl.extra.table.JarlFormat
 qxsl.extra.table.ZAllFormat
 qxsl.extra.table.ZDosFormat
-qxsl.extra.table.CTxtFormat
-qxsl.extra.table.Hl76Format
-qxsl.extra.table.RtclFormat
 
 qxsl.extra.table.CBinFormat
 qxsl.extra.table.ZBinFormat
