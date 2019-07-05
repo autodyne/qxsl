@@ -297,9 +297,9 @@ public final class CBinFormat extends BaseFormat {
 		 * 冒頭をスキップして交信記録を1件読み込みます。
 		 * 
 		 * @return 読み込んだ交信記録
-		 * @throws Exception 読み込みに失敗した場合
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private List<Item> logSheet() throws Exception {
+		private List<Item> logSheet() throws IOException {
 			final List<Item> items = new ArrayList<>();
 			final short hdr = stream.readShort();
 			final short rdh = Short.reverseBytes(hdr);
@@ -318,9 +318,9 @@ public final class CBinFormat extends BaseFormat {
 		 * ストリームから{@link Item}を1件読み込みます。
 		 * 
 		 * @return 読み込んだ{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private Item item() throws Exception {
+		private Item item() throws IOException {
 			final Item item = new Item();
 			call(item);
 			sent(item);
@@ -341,9 +341,9 @@ public final class CBinFormat extends BaseFormat {
 		 * {@link Item}に交信日時を読み込みます。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void time(Item item) throws Exception {
+		private void time(Item item) throws IOException {
 			item.add(cDTime.decode(stream.readLong()));
 		}
 
@@ -351,9 +351,9 @@ public final class CBinFormat extends BaseFormat {
 		 * {@link Item}に相手局のコールサインを読み込みます。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void call(Item item) throws Exception {
+		private void call(Item item) throws IOException {
 			final String s = readString(20);
 			item.add(fields.cache(Qxsl.CALL).field(s));
 		}
@@ -362,9 +362,9 @@ public final class CBinFormat extends BaseFormat {
 		 * {@link Item}に相手局に送信したナンバーを読み込みます。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void sent(Item item) throws Exception {
+		private void sent(Item item) throws IOException {
 			final String s = readString(30);
 			item.getSent().add(fields.cache(Qxsl.CODE).field(s));
 		}
@@ -373,9 +373,9 @@ public final class CBinFormat extends BaseFormat {
 		 * {@link Item}に相手局から受信したナンバーを読み込みます。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void rcvd(Item item) throws Exception {
+		private void rcvd(Item item) throws IOException {
 			final String s = readString(30);
 			item.getRcvd().add(fields.cache(Qxsl.CODE).field(s));
 		}
@@ -384,9 +384,9 @@ public final class CBinFormat extends BaseFormat {
 		 * {@link Item}に通信方式を読み込みます。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void mode(Item item) throws Exception {
+		private void mode(Item item) throws IOException {
 			item.add(ModeEnum.forIndex(stream.read()).toMode());
 		}
 
@@ -394,9 +394,9 @@ public final class CBinFormat extends BaseFormat {
 		 * {@link Item}に周波数帯を読み込みます。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void band(Item item) throws Exception {
+		private void band(Item item) throws IOException {
 			item.add(BandEnum.forIndex(stream.read()).toBand());
 		}
 
@@ -404,9 +404,9 @@ public final class CBinFormat extends BaseFormat {
 		 * {@link Item}に運用者名を読み込みます。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void oprt(Item item) throws Exception {
+		private void oprt(Item item) throws IOException {
 			final String s = readString(20);
 			item.add(fields.cache(Qxsl.NAME).field(s));
 		}
@@ -415,9 +415,9 @@ public final class CBinFormat extends BaseFormat {
 		 * {@link Item}に交信の備考を読み込みます。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void note(Item item) throws Exception {
+		private void note(Item item) throws IOException {
 			final String s = readString(50);
 			item.add(fields.cache(Qxsl.NOTE).field(s));
 		}

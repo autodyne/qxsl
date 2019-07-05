@@ -37,7 +37,7 @@ public final class CqwwFormat extends TextFormat {
 	 * 書式を構築します。
 	 */
 	public CqwwFormat() {
-		super("cqww");
+		super("cqww", "ASCII");
 	}
 
 	@Override
@@ -67,10 +67,9 @@ public final class CqwwFormat extends TextFormat {
 		 * 指定されたストリームを読み込むデコーダを構築します。
 		 * 
 		 * @param in 読み込むストリーム
-		 * @throws IOException UTF8に対応していない場合
 		 */
-		public CqwwDecoder(InputStream in) throws IOException {
-			super(in, "UTF-8");
+		public CqwwDecoder(InputStream in) {
+			super(in);
 			fields = new FieldFormats();
 			format = DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm").withZone(UTC);
 		}
@@ -84,16 +83,14 @@ public final class CqwwFormat extends TextFormat {
 		public List<Item> read() throws IOException {
 			try {
 				return logSheet();
-			} catch (IOException ex) {
-				throw ex;
-			} catch (Exception ex) {
-				throw parseError(ex);
+			} catch(RuntimeException ex) {
+				throw new IOException(ex);
 			} finally {
 				super.close();
 			}
 		}
 
-		private List<Item> logSheet() throws Exception {
+		private List<Item> logSheet() throws IOException {
 			final List<Item> items = new ArrayList<>();
 			String line;
 			while((line = super.readLine()) != null) {
@@ -109,18 +106,22 @@ public final class CqwwFormat extends TextFormat {
 		 * 
 		 * @param line 1行
 		 * @return 読み込んだ{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private Item item(String line) throws Exception {
+		private Item item(String line) throws IOException {
 			final Item item = new Item();
-			final String band = subLine( 0,  5);
-			final String mode = subLine( 6,  8);
-			final String time = subLine( 9, 24);
-			final String srst = subLine(39, 42);
-			final String snum = subLine(43, 49);
-			final String call = subLine(50, 63);
-			final String rrst = subLine(64, 67);
-			final String rnum = subLine(68, 74);
+			final String[] vals = split(line,
+				0, 6, 9, 25, 39, 43, 50, 64, 68, -1
+			);
+
+			final String band = vals[0];
+			final String mode = vals[1];
+			final String time = vals[2];
+			final String srst = vals[4];
+			final String snum = vals[5];
+			final String call = vals[6];
+			final String rrst = vals[7];
+			final String rnum = vals[8];
 
 			if(!time.isEmpty()) time(item, time);
 			if(!call.isEmpty()) call(item, call);
@@ -139,9 +140,8 @@ public final class CqwwFormat extends TextFormat {
 		 * 
 		 * @param item 設定する{@link Item}
 		 * @param time 交信日時の文字列
-		 * @throws Exception 読み込みに失敗した場合
 		 */
-		private void time(Item item, String time) throws Exception {
+		private void time(Item item, String time) {
 			item.add(new Time(ZonedDateTime.parse(time, format)));
 		}
 
@@ -150,9 +150,8 @@ public final class CqwwFormat extends TextFormat {
 		 * 
 		 * @param item 設定する{@link Item}
 		 * @param call コールサインの文字列
-		 * @throws Exception 読み込みに失敗した場合
 		 */
-		private void call(Item item, String call) throws Exception {
+		private void call(Item item, String call) {
 			item.add(fields.cache(Qxsl.CALL).field(call));
 		}
 
@@ -161,9 +160,8 @@ public final class CqwwFormat extends TextFormat {
 		 * 
 		 * @param item 設定する{@link Item}
 		 * @param srst RSTQの文字列
-		 * @throws Exception 読み込みに失敗した場合
 		 */
-		private void srst(Item item, String srst) throws Exception {
+		private void srst(Item item, String srst) {
 			item.getSent().add(fields.cache(Qxsl.RSTQ).field(srst));
 		}
 
@@ -172,9 +170,8 @@ public final class CqwwFormat extends TextFormat {
 		 * 
 		 * @param item 設定する{@link Item}
 		 * @param snum ナンバーの文字列
-		 * @throws Exception 読み込みに失敗した場合
 		 */
-		private void snum(Item item, String snum) throws Exception {
+		private void snum(Item item, String snum) {
 			item.getSent().add(fields.cache(Qxsl.CODE).field(snum));
 		}
 
@@ -183,9 +180,8 @@ public final class CqwwFormat extends TextFormat {
 		 * 
 		 * @param item 設定する{@link Item}
 		 * @param rrst RSTQの文字列
-		 * @throws Exception 読み込みに失敗した場合
 		 */
-		private void rrst(Item item, String rrst) throws Exception {
+		private void rrst(Item item, String rrst) {
 			item.getRcvd().add(fields.cache(Qxsl.RSTQ).field(rrst));
 		}
 
@@ -194,9 +190,8 @@ public final class CqwwFormat extends TextFormat {
 		 * 
 		 * @param item 設定する{@link Item}
 		 * @param rnum ナンバーの文字列
-		 * @throws Exception 読み込みに失敗した場合
 		 */
-		private void rnum(Item item, String rnum) throws Exception {
+		private void rnum(Item item, String rnum) {
 			item.getRcvd().add(fields.cache(Qxsl.CODE).field(rnum));
 		}
 
@@ -205,9 +200,8 @@ public final class CqwwFormat extends TextFormat {
 		 * 
 		 * @param item 設定する{@link Item}
 		 * @param band 周波数帯の文字列
-		 * @throws Exception 読み込みに失敗した場合
 		 */
-		private void band(Item item, String band) throws Exception {
+		private void band(Item item, String band) {
 			item.add(fields.cache(Qxsl.BAND).field(band));
 		}
 
@@ -216,9 +210,8 @@ public final class CqwwFormat extends TextFormat {
 		 * 
 		 * @param item 設定する{@link Item}
 		 * @param mode 通信方式の文字列
-		 * @throws Exception 読み込みに失敗した場合
 		 */
-		private void mode(Item item, String mode) throws Exception {
+		private void mode(Item item, String mode) {
 			item.add(fields.cache(Qxsl.MODE).field(mode));
 		}
 	}
@@ -239,10 +232,9 @@ public final class CqwwFormat extends TextFormat {
 		 * 指定されたストリームに出力するエンコーダを構築します。
 		 * 
 		 * @param out 交信記録を出力するストリーム
-		 * @throws IOException  UTF8に対応していない場合
 		 */
-		public CqwwEncoder(OutputStream out) throws IOException {
-			super(out, "UTF8");
+		public CqwwEncoder(OutputStream out) {
+			super(out);
 			format = DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm").withZone(UTC);
 		}
 

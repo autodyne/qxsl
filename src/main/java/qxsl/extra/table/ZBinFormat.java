@@ -351,9 +351,9 @@ public final class ZBinFormat extends BaseFormat {
 		 * 冒頭をスキップして交信記録を1件読み込みます。
 		 * 
 		 * @return 読み込んだ交信記録
-		 * @throws Exception 読み込みに失敗した場合
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private List<Item> logSheet() throws Exception {
+		private List<Item> logSheet() throws IOException {
 			this.tDateTime = new TDateTime(head());
 			final List<Item> items = new ArrayList<>();
 			while(stream.available() > 0) items.add(item());
@@ -380,9 +380,9 @@ public final class ZBinFormat extends BaseFormat {
 		 * ストリームから{@link Item}を1件読み込みます。
 		 * 
 		 * @return 読み込んだ{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private Item item() throws Exception {
+		private Item item() throws IOException {
 			final Item item = new Item();
 			time(item);
 			call(item);
@@ -406,9 +406,9 @@ public final class ZBinFormat extends BaseFormat {
 		 * {@link Item}に交信日時を読み込みます。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void time(Item item) throws Exception {
+		private void time(Item item) throws IOException {
 			item.add(tDateTime.decode(stream.readLong()));
 		}
 
@@ -416,9 +416,9 @@ public final class ZBinFormat extends BaseFormat {
 		 * {@link Item}に相手局のコールサインを読み込みます。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void call(Item item) throws Exception {
+		private void call(Item item) throws IOException {
 			final String s = readString(12);
 			item.add(fields.cache(Qxsl.CALL).field(s));
 		}
@@ -427,9 +427,9 @@ public final class ZBinFormat extends BaseFormat {
 		 * {@link Item}に相手局に送信したナンバーを読み込みます。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void sent(Item item) throws Exception {
+		private void sent(Item item) throws IOException {
 			final String s = readString(30);
 			item.getSent().add(fields.cache(Qxsl.CODE).field(s));
 		}
@@ -438,9 +438,9 @@ public final class ZBinFormat extends BaseFormat {
 		 * {@link Item}に相手局から受信したナンバーを読み込みます。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void rcvd(Item item) throws Exception {
+		private void rcvd(Item item) throws IOException {
 			final String s = readString(30);
 			item.getRcvd().add(fields.cache(Qxsl.CODE).field(s));
 		}
@@ -449,9 +449,9 @@ public final class ZBinFormat extends BaseFormat {
 		 * {@link Item}に相手局に送信したRSTQを読み込みます。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void sRSTQ(Item item) throws Exception {
+		private void sRSTQ(Item item) throws IOException {
 			String rst = String.valueOf(Short.reverseBytes(stream.readShort()));
 			item.getSent().add(fields.cache(Qxsl.RSTQ).field(rst));
 		}
@@ -460,9 +460,9 @@ public final class ZBinFormat extends BaseFormat {
 		 * {@link Item}に相手局から受信したRSTQを読み込みます。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void rRSTQ(Item item) throws Exception {
+		private void rRSTQ(Item item) throws IOException {
 			String rst = String.valueOf(Short.reverseBytes(stream.readShort()));
 			item.getRcvd().add(fields.cache(Qxsl.RSTQ).field(rst));
 		}
@@ -471,9 +471,9 @@ public final class ZBinFormat extends BaseFormat {
 		 * {@link Item}に通信方式を読み込みます。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void mode(Item item) throws Exception {
+		private void mode(Item item) throws IOException {
 			item.add(ModeEnum.forIndex(stream.read()).toMode());
 		}
 
@@ -481,9 +481,9 @@ public final class ZBinFormat extends BaseFormat {
 		 * {@link Item}に周波数帯を読み込みます。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void band(Item item) throws Exception {
+		private void band(Item item) throws IOException {
 			item.add(BandEnum.forIndex(stream.read()).toBand());
 		}
 
@@ -491,9 +491,9 @@ public final class ZBinFormat extends BaseFormat {
 		 * {@link Item}に空中線出力を読み込みます。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void watt(Item item) throws Exception {
+		private void watt(Item item) throws IOException {
 			item.getSent().add(WattEnum.forIndex(stream.read()).toWatt());
 		}
 
@@ -501,9 +501,9 @@ public final class ZBinFormat extends BaseFormat {
 		 * {@link Item}に運用者名を読み込みます。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void oprt(Item item) throws Exception {
+		private void oprt(Item item) throws IOException {
 			final String s = readString(14);
 			item.add(fields.cache(Qxsl.NAME).field(s));
 		}
@@ -512,9 +512,9 @@ public final class ZBinFormat extends BaseFormat {
 		 * {@link Item}に交信の備考を読み込みます。
 		 * 
 		 * @param item 設定する{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void note(Item item) throws Exception {
+		private void note(Item item) throws IOException {
 			final String s = readString(66);
 			item.add(fields.cache(Qxsl.NOTE).field(s));
 		}

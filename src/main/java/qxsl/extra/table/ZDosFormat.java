@@ -37,7 +37,7 @@ public final class ZDosFormat extends TextFormat {
 	 * 書式を構築します。
 	 */
 	public ZDosFormat() {
-		super("zdos");
+		super("zdos", "SJIS");
 	}
 
 	@Override
@@ -68,10 +68,9 @@ public final class ZDosFormat extends TextFormat {
 		 * 指定されたストリームを読み込むデコーダを構築します。
 		 * 
 		 * @param in 読み込むストリーム
-		 * @throws IOException SJISに対応していない場合
 		 */
-		public ZDosDecoder(InputStream in) throws IOException {
-			super(in, "JISAutoDetect");
+		public ZDosDecoder(InputStream in) {
+			super(in);
 			fields = new FieldFormats();
 			DateTimeFormatterBuilder fb = new DateTimeFormatterBuilder();
 			fb.parseDefaulting(ChronoField.YEAR, Year.now().getValue());
@@ -87,16 +86,14 @@ public final class ZDosFormat extends TextFormat {
 		public List<Item> read() throws IOException {
 			try {
 				return logSheet();
-			} catch (IOException ex) {
-				throw ex;
-			} catch (Exception ex) {
-				throw parseError(ex);
+			} catch(RuntimeException ex) {
+				throw new IOException(ex);
 			} finally {
 				super.close();
 			}
 		}
 
-		private List<Item> logSheet() throws Exception {
+		private List<Item> logSheet() throws IOException {
 			final List<Item> items = new ArrayList<>();
 			String line;
 			while((line = super.readLine()) != null) {
@@ -112,17 +109,21 @@ public final class ZDosFormat extends TextFormat {
 		 * 
 		 * @param line 1行
 		 * @return 読み込んだ{@link Item}
-		 * @throws Exception 読み込みに失敗した場合
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private Item item(String line) throws Exception {
+		private Item item(String line) throws IOException {
 			final Item item = new Item();
-			String time = subLine( 0, 12);
-			String call = subLine(13, 23);
-			String sent = subLine(24, 36);
-			String rcvd = subLine(37, 49);
-			String band = subLine(57, 62);
-			String mode = subLine(63, 67);
-			String note = subLine(72, -1);
+			final String[] vals = split(line,
+				0, 13, 24, 37, 50, 57, 63, 68, 72, -1
+			);
+
+			String time = vals[0];
+			String call = vals[1];
+			String sent = vals[2];
+			String rcvd = vals[3];
+			String band = vals[5];
+			String mode = vals[6];
+			String note = vals[8];
 
 			final int i = note.indexOf("%%", 2);
 			String oprt = i>0 ? note.substring(2, i) : "";
@@ -145,9 +146,8 @@ public final class ZDosFormat extends TextFormat {
 		 * 
 		 * @param item 設定する{@link Item}
 		 * @param time 交信日時の文字列
-		 * @throws Exception 読み込みに失敗した場合
 		 */
-		private void time(Item item, String time) throws Exception {
+		private void time(Item item, String time) {
 			item.add(new Time(LocalDateTime.parse(time, format)));
 		}
 
@@ -156,9 +156,8 @@ public final class ZDosFormat extends TextFormat {
 		 * 
 		 * @param item 設定する{@link Item}
 		 * @param call コールサインの文字列
-		 * @throws Exception 読み込みに失敗した場合
 		 */
-		private void call(Item item, String call) throws Exception {
+		private void call(Item item, String call) {
 			item.add(fields.cache(Qxsl.CALL).field(call));
 		}
 
@@ -167,9 +166,8 @@ public final class ZDosFormat extends TextFormat {
 		 * 
 		 * @param item 設定する{@link Item}
 		 * @param sent ナンバーの文字列
-		 * @throws Exception 読み込みに失敗した場合
 		 */
-		private void sent(Item item, String sent) throws Exception {
+		private void sent(Item item, String sent) {
 			item.getSent().add(fields.cache(Qxsl.CODE).field(sent));
 		}
 
@@ -178,9 +176,8 @@ public final class ZDosFormat extends TextFormat {
 		 * 
 		 * @param item 設定する{@link Item}
 		 * @param rcvd ナンバーの文字列
-		 * @throws Exception 読み込みに失敗した場合
 		 */
-		private void rcvd(Item item, String rcvd) throws Exception {
+		private void rcvd(Item item, String rcvd) {
 			item.getRcvd().add(fields.cache(Qxsl.CODE).field(rcvd));
 		}
 
@@ -189,9 +186,8 @@ public final class ZDosFormat extends TextFormat {
 		 * 
 		 * @param item 設定する{@link Item}
 		 * @param band 周波数帯の文字列
-		 * @throws Exception 読み込みに失敗した場合
 		 */
-		private void band(Item item, String band) throws Exception {
+		private void band(Item item, String band) {
 			Integer kHz;
 			if(band.matches("^[0-9]+[gG]$")) {
 				band = band.replaceAll("[gG]", "");
@@ -207,9 +203,8 @@ public final class ZDosFormat extends TextFormat {
 		 * 
 		 * @param item 設定する{@link Item}
 		 * @param mode 通信方式の文字列
-		 * @throws Exception 読み込みに失敗した場合
 		 */
-		private void mode(Item item, String mode) throws Exception {
+		private void mode(Item item, String mode) {
 			item.add(fields.cache(Qxsl.MODE).field(mode));
 		}
 
@@ -218,9 +213,8 @@ public final class ZDosFormat extends TextFormat {
 		 * 
 		 * @param item 設定する{@link Item}
 		 * @param op 運用者名の文字列
-		 * @throws Exception 読み込みに失敗した場合
 		 */
-		private void oprt(Item item, String op) throws Exception {
+		private void oprt(Item item, String op) {
 			item.add(fields.cache(Qxsl.NAME).field(op));
 		}
 
@@ -229,9 +223,8 @@ public final class ZDosFormat extends TextFormat {
 		 * 
 		 * @param item 設定する{@link Item}
 		 * @param note 備考の文字列
-		 * @throws Exception 読み込みに失敗した場合
 		 */
-		private void note(Item item, String note) throws Exception {
+		private void note(Item item, String note) {
 			item.add(fields.cache(Qxsl.NOTE).field(note));
 		}
 	}
@@ -253,10 +246,9 @@ public final class ZDosFormat extends TextFormat {
 		 * 指定されたストリームに出力するエンコーダを構築します。
 		 * 
 		 * @param out 交信記録を出力するストリーム
-		 * @throws IOException  SJISに対応していない場合
 		 */
-		public ZDosEncoder(OutputStream out) throws IOException {
-			super(out, "SJIS");
+		public ZDosEncoder(OutputStream out) {
+			super(out);
 			format = DateTimeFormatter.ofPattern(" MM  dd HHmm");
 		}
 

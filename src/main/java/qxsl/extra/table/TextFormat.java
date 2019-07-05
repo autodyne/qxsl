@@ -11,18 +11,21 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import qxsl.model.Field;
+import qxsl.table.TableFormat;
 
 /**
- * プレインテキスト書式の交信記録用の{@link BaseFormat}です。
+ * プレインテキスト符号化による{@link TableFormat}の共通実装です。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -30,14 +33,18 @@ import qxsl.model.Field;
  * @since 2016/06/03
  *
  */
-public abstract class TextFormat extends BaseFormat {
+public abstract class TextFormat extends BaseFormat implements TableFormat {
+	private final Charset charset;
+
 	/**
-	 * 指定した名前の書式を構築します。
+	 * 指定された名前の書式を指定された文字セットで構築します。
 	 *
 	 * @param name 書式の名前
+	 * @param cset 文字セット名
 	 */
-	public TextFormat(String name) {
+	public TextFormat(String name, String cset) {
 		super(name);
+		this.charset = Charset.forName(cset);
 	}
 
 	/**
@@ -49,19 +56,17 @@ public abstract class TextFormat extends BaseFormat {
 	 * @since 2013/06/24
 	 *
 	 */
-	public abstract class TextDecoder {
-		private final LineNumberReader reader;
+	protected abstract class TextDecoder implements AutoCloseable {
+		private final BufferedReader reader;
 		private String line;
 
 		/**
 		 * 指定されたストリームを読み込むデコーダを構築します。
 		 * 
 		 * @param in 読み込むストリーム
-		 * @param en 文字セット名
-		 * @throws IOException 文字セットが利用できない場合
 		 */
-		public TextDecoder(InputStream in, String en) throws IOException {
-			reader = new LineNumberReader(new InputStreamReader(in, en));
+		public TextDecoder(InputStream in) {
+			reader = new BufferedReader(new InputStreamReader(in, charset));
 		}
 
 		/**
@@ -69,91 +74,68 @@ public abstract class TextFormat extends BaseFormat {
 		 * 
 		 * @throws IOException 入力エラーが発生した場合
 		 */
-		public final void close() throws IOException {
+		public void close() throws IOException {
 			reader.close();
 		}
 
 		/**
-		 * 1行の文字列を読み込みます。終端の空白は除去されます。
-		 * 
-		 * @return 1行 ストリームが終端に達した場合null
-		 * @throws IOException 入力エラーが発生した場合
+		 * 文字列を改行文字まで読み込みます。
+		 *
+		 * @return 切り出された文字列
+		 *
+		 * @throws IOException 読み込み時の例外
 		 */
-		public final String readLine() throws IOException {
-			if((line = reader.readLine()) == null) return null;
-			char[] val = line.toCharArray();
-			int len = val.length;
-			while((0 < len) && (val[len - 1] <= ' ')) len--;
-			if(len < val.length) line = line.substring(0, len);
-			return line;
+		public String readLine() throws IOException {
+			return reader.readLine();
 		}
 
 		/**
-		 * 現在の行の文字列の指定された範囲を切り出して返します。
-		 * 
-		 * @param s 開始位置
-		 * @param e 終了位置
-		 * @return 切り出された字句
-		 * @throws Exception 終了位置に空白でない文字がある場合
+		 * 指定された区切り文字列を発見するまで読み込みます。
+		 * 区切り文字列のうち大文字と小文字は区別されません。
+		 *
+		 * @param delims 区切り文字列の選択肢となる配列
+		 * @return 切り出された文字列
+		 *
+		 * @throws IOException 読み込み時の例外
 		 */
-		public final String subLine(int s, int e) throws Exception {
-			if(line.length() <= s) return "";
-			if(e <= 0 || e >= line.length()) e = line.length();
-			char next = e < line.length()? line.charAt(e): ' ';
-			if(next == ' ') return line.substring(s, e).trim();
-			throw parseError(e, "unexpected: " + line.substring(s));
+		public String split(String...delims) throws IOException {
+			final StringBuilder sb = new StringBuilder();
+			for(int index = 0, start = 0; true; index++) {
+				final int code = reader.read();
+				if(code == -1) break;
+				sb.append(code);
+				for(String delim: delims) {
+					final int from = index - delim.length();
+					final String trail = sb.substring(from);
+					if(trail.equalsIgnoreCase(delim)) break;
+				}
+			}
+			return sb.toString();
 		}
 
 		/**
-		 * 現在の行で発生した構文エラーを{@link IOException}で報告します。
-		 * 
-		 * @param cause エラーの原因
-		 * @return  生成された例外
+		 * 指定された文字列を指定された桁位置で分割します。
+		 * 分割位置に空白以外の文字がある場合に例外を発生します。
+		 *
+		 * @param splits 文字列を分割する位置
+		 * @return 分割された文字列
+		 *
+		 * @throws IOException 読み込み時の例外または構文上の例外
 		 */
-		public final IOException parseError(Throwable cause) {
-			final String msg = cause.getMessage();
-			final int ln = reader.getLineNumber();
-			final String temp = "%s at line %d\n'%s'";
-			return new IOException(String.format(temp, msg, ln, line), cause);
-		}
-
-		/**
-		 * 現在の行で発生した構文エラーを{@link IOException}で報告します。
-		 * 
-		 * @param msg エラーメッセージ
-		 * @return 生成された例外
-		 */
-		public final IOException parseError(String msg) {
-			final int ln = reader.getLineNumber();
-			final String temp = "%s at line %d\n'%s'";
-			return new IOException(String.format(temp, msg, ln, line));
-		}
-
-		/**
-		 * 現在の行で発生した構文エラーを{@link IOException}で報告します。
-		 * 
-		 * @param col エラーがある列
-		 * @param cause エラーの原因
-		 * @return  生成された例外
-		 */
-		public final IOException parseError(int col, Throwable cause) {
-			final String msg = cause.getMessage();
-			final int ln = reader.getLineNumber();
-			final String temp = "%s at line %d column %d\n'%s'";
-			return new IOException(String.format(temp, msg, ln, col, line));
-		}
-
-		/**
-		 * 現在の行で発生した構文エラーを{@link IOException}で報告します。
-		 * 
-		 * @param col エラーがある列
-		 * @param msg エラーメッセージ
-		 * @return  生成された例外
-		 */
-		public final IOException parseError(int col, String msg) {
-			final int ln = reader.getLineNumber();
-			final String temp = "%s at line %d column %d\n'%s'";
-			return new IOException(String.format(temp, msg, ln, col, line));
+		public String[] split(String line, int...splits) throws IOException {
+			final List<String> list = new ArrayList<>();
+			boolean valid = true;
+			for(int i = 0; i < splits.length - 1; i++) try {
+				final int from = splits[i];
+				final int last = splits[i+1];
+				if(last >= 0) list.add(line.substring(from, last).trim());
+				else list.add(line.substring(from, line.length()).trim());
+				if(last > 0 && line.charAt(last - 1) != ' ') valid = false;
+			} catch (IndexOutOfBoundsException ex) {
+				valid = false;
+			}
+			if(valid) return list.toArray(new String[list.size()]);
+			throw new IOException(String.format("unexpected: '%s'", line));
 		}
 	}
 
@@ -166,18 +148,16 @@ public abstract class TextFormat extends BaseFormat {
 	 * @since 2013/06/24
 	 *
 	 */
-	public abstract class TextEncoder {
+	public abstract class TextEncoder implements AutoCloseable {
 		private final PrintStream stream;
 
 		/**
 		 * 指定されたストリームに出力するエンコーダを構築します。
 		 * 
 		 * @param out 交信記録を出力するストリーム
-		 * @param en  文字セット
-		 * @throws IOException 文字セットが利用できない場合
 		 */
-		public TextEncoder(OutputStream out, String en) throws IOException {
-			stream = new PrintStream(out, true, en);
+		public TextEncoder(OutputStream out) {
+			stream = new PrintStream(out, true, charset);
 		}
 
 		/**
@@ -185,7 +165,7 @@ public abstract class TextFormat extends BaseFormat {
 		 * 
 		 * @throws IOException 出力エラーが発生した場合
 		 */
-		public final void close() throws IOException {
+		public void close() throws IOException {
 			stream.close();
 		}
 
@@ -195,7 +175,7 @@ public abstract class TextFormat extends BaseFormat {
 		 * 
 		 * @throws IOException 出力エラー発生時
 		 */
-		public final void printHead() throws IOException {
+		public void printHead() throws IOException {
 			final String file = getName().concat(".fmt");
 			final URL url = getClass().getResource(file);
 			try(InputStream is = url.openStream()) {
@@ -211,7 +191,7 @@ public abstract class TextFormat extends BaseFormat {
 		 * @param s 出力する文字列
 		 * @throws IOException 出力エラー発生時
 		 */
-		public final void print(String s) throws IOException {
+		public void print(String s) throws IOException {
 			stream.print(s);
 		}
 
@@ -220,7 +200,7 @@ public abstract class TextFormat extends BaseFormat {
 		 * 
 		 * @throws IOException 出力エラー発生時
 		 */
-		public final void println() throws IOException {
+		public void println() throws IOException {
 			stream.println();
 		}
 
@@ -230,7 +210,7 @@ public abstract class TextFormat extends BaseFormat {
 		 * @param s 出力する文字列
 		 * @throws IOException 出力エラー発生時
 		 */
-		public final void println(String s) throws IOException {
+		public void println(String s) throws IOException {
 			stream.println(s);
 		}
 
@@ -240,7 +220,7 @@ public abstract class TextFormat extends BaseFormat {
 		 * @param len 文字数
 		 * @throws IOException 出力エラー発生時
 		 */
-		public final void printSpace(int len) throws IOException {
+		public void printSpace(int len) throws IOException {
 			char[] arr = new char[len];
 			Arrays.fill(arr, ' ');
 			stream.print(arr);
@@ -253,7 +233,7 @@ public abstract class TextFormat extends BaseFormat {
 		 * @param args  引数
 		 * @throws IOException 出力エラー発生時
 		 */
-		public final void printf(String f, Object...args) throws IOException {
+		public void printf(String f, Object...args) throws IOException {
 			stream.printf(f, args);
 		}
 
@@ -264,7 +244,7 @@ public abstract class TextFormat extends BaseFormat {
 		 * @param s 出力する文字列
 		 * @throws IOException 出力エラー発生時
 		 */
-		public final void printR(int len, String s) throws IOException {
+		public void printR(int len, String s) throws IOException {
 			final String filled = String.format(String.format("%%%ds", len), s);
 			final String msg = "'%s' is too long (consider shortening to '%s').";
 			if(filled.length() == len) stream.print(filled);
@@ -278,7 +258,7 @@ public abstract class TextFormat extends BaseFormat {
 		 * @param s 出力する文字列
 		 * @throws IOException 出力エラー発生時
 		 */
-		public final void printL(int len, String s) throws IOException {
+		public void printL(int len, String s) throws IOException {
 			final String filled = String.format(String.format("%%-%ds", len), s);
 			final String msg = "'%s' is too long (consider shortening to '%s').";
 			if(filled.length() == len) stream.print(filled);
@@ -292,7 +272,7 @@ public abstract class TextFormat extends BaseFormat {
 		 * @param f 出力する{@link Field}
 		 * @throws IOException 出力エラー発生時
 		 */
-		public final void printR(int len, Field f) throws IOException {
+		public void printR(int len, Field f) throws IOException {
 			printR(len, f != null? String.valueOf(f.value()) : "");
 		}
 
@@ -303,7 +283,7 @@ public abstract class TextFormat extends BaseFormat {
 		 * @param f 出力する{@link Field}
 		 * @throws IOException 出力エラー発生時
 		 */
-		public final void printL(int len, Field f) throws IOException {
+		public void printL(int len, Field f) throws IOException {
 			printL(len, f != null? String.valueOf(f.value()) : "");
 		}
 	}
