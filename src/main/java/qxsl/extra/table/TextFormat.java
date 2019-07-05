@@ -17,8 +17,6 @@ import java.io.PrintStream;
 import java.io.Reader;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import qxsl.model.Field;
@@ -88,16 +86,6 @@ public abstract class TextFormat extends BaseFormat {
 			while((0 < len) && (val[len - 1] <= ' ')) len--;
 			if(len < val.length) line = line.substring(0, len);
 			return line;
-		}
-
-		/**
-		 * 現在の行を空白文字で分割して属性値を表す文字列の配列を返します。
-		 * 
-		 * @param numAttributes 属性の個数
-		 * @return 切り出された字句の配列
-		 */
-		public final String[] getLine(int numAttributes) {
-			return Arrays.copyOf(line.split(" +"), numAttributes);
 		}
 
 		/**

@@ -1,7 +1,7 @@
 qxsl: Hamradio Logging Library
 ====
 
-![image](https://img.shields.io/badge/Java-SE8-green.svg)
+![image](https://img.shields.io/badge/Java-SE11-green.svg)
 ![image](https://img.shields.io/badge/license-LGPL3-green.svg)
 
 qxsl is a Java Library for Logging & Scoring & Regulation for Amateur-Radio Contests.

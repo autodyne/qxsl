@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.time.Year;
+import java.time.ZoneId;
 import java.time.format.*;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
@@ -39,26 +40,14 @@ public final class ZDosFormat extends TextFormat {
 		super("zdos");
 	}
 
-	/**
-	 * 指定したストリームをこの書式でデコードして交信記録を読み込みます。
-	 * 
-	 * @param in 交信記録を読み込むストリーム
-	 * @return 交信記録
-	 * @throws IOException 入出力時の例外
-	 */
-	public List<Item> decode(InputStream in) throws IOException {
-		return new ZDosDecoder(in).read();
+	@Override
+	public List<Item> decode(InputStream strm, ZoneId zone) throws IOException {
+		return new ZDosDecoder(strm).read();
 	}
 
-	/**
-	 * この書式でエンコードした交信記録を指定したストリームに書き込みます。
-	 * 
-	 * @param out 交信記録を書き込むストリーム
-	 * @param items 出力する交信記録
-	 * @throws IOException 入出力時の例外
-	 */
-	public void encode(OutputStream out, List<Item> items) throws IOException {
-		new ZDosEncoder(out).write(items);
+	@Override
+	public void encode(OutputStream strm, List<Item> items) throws IOException {
+		new ZDosEncoder(strm).write(items);
 	}
 
 	/**
@@ -108,7 +97,7 @@ public final class ZDosFormat extends TextFormat {
 		}
 
 		private List<Item> logSheet() throws Exception {
-			List<Item> items = new ArrayList<>();
+			final List<Item> items = new ArrayList<>();
 			String line;
 			while((line = super.readLine()) != null) {
 				if(!line.isEmpty() && !line.startsWith("mon")) {

@@ -8,8 +8,6 @@
 package qxsl.extra.table;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -99,49 +97,5 @@ public abstract class BaseFormat implements TableFormat {
 	public final List<String> getExtensions() {
 		String[] exts = conf.getProperty("extensions").split(",");
 		return Collections.unmodifiableList(Arrays.asList(exts));
-	}
-
-	/**
-	 * ストリームの内容をメモリに展開して何度でも走査可能にするストリームです。
-	 *
-	 *
-	 * @author Journal of Hamradio Informatics
-	 *
-	 * @since 2017/04/02
-	 *
-	 */
-	public static final class ReusableInputStream extends InputStream {
-		private final ByteArrayInputStream data;
-
-		/**
-		 * 指定されたストリームをメモリに展開します。
-		 *
-		 * @param input 読み込むストリーム
-		 * @throws IOException 読み込みに失敗した場合
-		 */
-		public ReusableInputStream(InputStream input) throws IOException {
-			final ByteArrayOutputStream bout = new ByteArrayOutputStream();
-			final byte[] buffer = new byte[1024];
-			int len = 0;
-			try (InputStream s = input) {
-				while((len = s.read(buffer)) > 0) bout.write(buffer, 0, len);
-			}
-			this.data = new ByteArrayInputStream(bout.toByteArray());
-		}
-
-		@Override
-		public int available() {
-			return data.available();
-		}
-
-		@Override
-		public int read() {
-			return data.read();
-		}
-
-		@Override
-		public void reset() {
-			data.reset();
-		}
 	}
 }

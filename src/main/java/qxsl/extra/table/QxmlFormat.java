@@ -10,6 +10,8 @@ package qxsl.extra.table;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -31,7 +33,8 @@ import qxsl.model.Rcvd;
 import qxsl.model.Sent;
 import qxsl.model.Tuple;
 
-import static javax.xml.XMLConstants.*;
+import static javax.xml.XMLConstants.DEFAULT_NS_PREFIX;
+import static javax.xml.XMLConstants.NULL_NS_URI;
 
 /**
  * qxml書式で交信記録を直列化するフォーマットです。
@@ -47,39 +50,34 @@ public final class QxmlFormat extends BaseFormat {
 	public static final QName ITEM = new QName("item");
 	public static final QName RCVD = new QName("rcvd");
 	public static final QName SENT = new QName("sent");
-	private final Schema schema;
+	private final SchemaFactory schema;
+	private final URL xsdURL;
 
-	/**
-	 * {@link Schema}の定義を読み込んでフォーマットを初期化します。
-	 *
-	 * @throws SAXException qxml文書のスキーマに問題がある場合
-	 */
-	public QxmlFormat() throws SAXException {
+	public QxmlFormat() {
 		super("qxml");
-		SchemaFactory sf = SchemaFactory.newInstance(W3C_XML_SCHEMA_NS_URI);
-		this.schema = sf.newSchema(this.getClass().getResource("qxml.xsd"));
+		this.schema = SchemaFactory.newDefaultInstance();
+		this.xsdURL = getClass().getResource("qxml.xsd");
 	}
 
-	/**
-	 * 指定したストリームをこの書式でデコードして交信記録を読み込みます。
-	 * 
-	 * @param in 交信記録を読み込むストリーム
-	 * @return 交信記録
-	 * @throws IOException 入出力時の例外
-	 */
-	public List<Item> decode(InputStream in) throws IOException {
-		return new QxmlDecoder(in).read();
+	@Override
+	public boolean validate(InputStream strm) {
+		try {
+			Schema schema = this.schema.newSchema(this.xsdURL);
+			schema.newValidator().validate(new StreamSource(strm));
+			return true;
+		} catch(SAXException | IOException ex) {
+			return false;
+		}
 	}
 
-	/**
-	 * この書式でエンコードした交信記録を指定したストリームに書き込みます。
-	 * 
-	 * @param out 交信記録を書き込むストリーム
-	 * @param items 出力する交信記録
-	 * @throws IOException 入出力時の例外
-	 */
-	public void encode(OutputStream out, List<Item> items) throws IOException {
-		new QxmlEncoder(out).write(items);
+	@Override
+	public List<Item> decode(InputStream strm, ZoneId zone) throws IOException {
+		return new QxmlDecoder(strm).read();
+	}
+
+	@Override
+	public void encode(OutputStream strm, List<Item> items) throws IOException {
+		new QxmlEncoder(strm).write(items);
 	}
 
 	/**
@@ -99,17 +97,13 @@ public final class QxmlFormat extends BaseFormat {
 		 * 指定したストリームから交信記録を読み込むデコーダを構築します。
 		 * 
 		 * @param stream 読み込むストリーム
-		 * @throws IOException XMLの検証もしくは解析の準備に失敗した場合
+		 * @throws IOException 解析の準備に失敗した場合
 		 */
 		public QxmlDecoder(InputStream stream) throws IOException {
-			InputStream rstream = new ReusableInputStream(stream);
-			StreamSource source = new StreamSource(rstream);
 			this.fields = new FieldFormats();
 			try {
-				schema.newValidator().validate(source);
-				rstream.reset();
-				this.reader = new EventReader(rstream);
-			} catch(SAXException | XMLStreamException ex) {
+				this.reader = new EventReader(stream);
+			} catch (XMLStreamException ex) {
 				throw new IOException(ex.getMessage(), ex);
 			}
 		}
@@ -139,7 +133,7 @@ public final class QxmlFormat extends BaseFormat {
 		 * @throws Exception 文法エラーまたは入出力例外
 		 */
 		private List<Item> items() throws Exception {
-			List<Item> items = new ArrayList<>();
+			final List<Item> items = new ArrayList<>();
 			reader.nextStartTag();
 			StartElement se = null;
 			while(reader.hasNextTag()) {

@@ -10,6 +10,7 @@ package qxsl.table;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.time.ZoneId;
 import java.util.List;
 import qxsl.model.Item;
 
@@ -52,21 +53,52 @@ public interface TableFormat {
 	public List<String> getExtensions();
 
 	/**
-	 * 指定したストリームをこの書式でデコードして交信記録を読み込みます。
-	 * 
-	 * @param in 交信記録を読み込むストリーム
-	 * @return 交信記録
-	 * @throws IOException 入出力時の例外
+	 * 指定されたストリームの内容がこの書式に従う交信記録であるか検証します。
+	 *
+	 * @param strm 交信記録を読み込むストリーム
+	 * @return 交信記録が読み込める場合に限り真
 	 */
-	public List<Item> decode(InputStream in) throws IOException;
+	public default boolean validate(InputStream strm) {
+		try {
+			decode(strm);
+			return true;
+		} catch (IOException ex) {
+			return false;
+		}
+	}
 
 	/**
-	 * この書式でエンコードした交信記録を指定したストリームに書き込みます。
+	 * 指定されたストリームをこの書式でデコードして、交信記録を読み込みます。
+	 * これは{@link #decode decode(strm, ZoneId#systemDefault())}と同等です。
+	 * 
+	 * @param strm 交信記録を読み込むストリーム
+	 * @return 交信記録
+	 *
+	 * @throws IOException 読み込み時の例外
+	 */
+	public default List<Item> decode(InputStream strm) throws IOException {
+		return this.decode(strm, ZoneId.systemDefault());
+	}
+
+	/**
+	 * 指定されたストリームをこの書式でデコードして、交信記録を読み込みます。
+	 * 
+	 * @param strm 交信記録を読み込むストリーム
+	 * @param zone 交信記録のタイムゾーン
+	 * @return 交信記録
+	 *
+	 * @throws IOException 読み込み時の例外
+	 */
+	public List<Item> decode(InputStream strm, ZoneId zone) throws IOException;
+
+	/**
+	 * この書式でエンコードした交信記録を指定されたストリームに出力します。
 	 * QXML以外の書式では交信記録の一部の属性が出力されない場合があります。
 	 * 
-	 * @param out 交信記録を書き込むストリーム
+	 * @param strm 交信記録を書き込むストリーム
 	 * @param items 出力する交信記録
-	 * @throws IOException 入出力時の例外
+	 *
+	 * @throws IOException 書き込み時の例外
 	 */
-	public void encode(OutputStream out, List<Item> items) throws IOException;
+	public void encode(OutputStream strm, List<Item> items) throws IOException;
 }

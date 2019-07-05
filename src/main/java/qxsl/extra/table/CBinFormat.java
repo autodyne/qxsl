@@ -43,26 +43,14 @@ public final class CBinFormat extends BaseFormat {
 		super("cbin");
 	}
 
-	/**
-	 * 指定したストリームをこの書式でデコードして交信記録を読み込みます。
-	 * 
-	 * @param in 交信記録を読み込むストリーム
-	 * @return 交信記録
-	 * @throws IOException 入出力時の例外
-	 */
-	public List<Item> decode(InputStream in) throws IOException {
-		return new CBinDecoder(in).read();
+	@Override
+	public List<Item> decode(InputStream strm, ZoneId zone) throws IOException {
+		return new CBinDecoder(strm).read();
 	}
 
-	/**
-	 * この書式でエンコードした交信記録を指定したストリームに書き込みます。
-	 * 
-	 * @param out 交信記録を書き込むストリーム
-	 * @param items 出力する交信記録
-	 * @throws IOException 入出力時の例外
-	 */
-	public void encode(OutputStream out, List<Item> items) throws IOException {
-		new CBinEncoder(out).write(items);
+	@Override
+	public void encode(OutputStream strm, List<Item> items) throws IOException {
+		new CBinEncoder(strm).write(items);
 	}
 
 	/**
@@ -312,7 +300,7 @@ public final class CBinFormat extends BaseFormat {
 		 * @throws Exception 読み込みに失敗した場合
 		 */
 		private List<Item> logSheet() throws Exception {
-			List<Item> items = new ArrayList<>();
+			final List<Item> items = new ArrayList<>();
 			final short hdr = stream.readShort();
 			final short rdh = Short.reverseBytes(hdr);
 			final long num = Short.toUnsignedInt(rdh);

@@ -71,7 +71,8 @@ public final class RuleKitTest extends test.RandTest {
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void test(URL path) throws Exception {
-		List<Item> list = (new TableFormats()).decode(path);
+		final InputStream strm = path.openStream();
+		List<Item> list = (new TableFormats()).decode(strm);
 		final Map<String, int[]> scores = this.loadScores();
 		final Contest test = Contest.defined("allja1.lisp");
 		for(String sect: scores.keySet()) {

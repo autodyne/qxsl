@@ -11,9 +11,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.OutputStream;
 import java.net.URL;
+import java.time.ZoneId;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
@@ -91,100 +91,51 @@ public final class TableFormats implements Iterable<TableFormat> {
 	}
 
 	/**
-	 * 指定された入力について交信記録の書式を自動判別します。
+	 * 指定されたストリームから書式を自動判別して交信記録を読み込みます。
+	 * これは{@link #decode decode(strm, ZoneId#systemDefault())}と同等です。
 	 * 
 	 * 
-	 * @param in 交信記録を読み込むストリーム
-	 * @return 交信記録の書式 対応する書式がない場合はnull
-	 * 
-	 * @throws IOException 入出力時の例外
-	 */
-	public TableFormat detect(InputStream in) throws IOException {
-		InputStream bin = this.fetch(in);
-		for(TableFormat format: this) try {
-			format.decode(bin);
-			return format;
-		} catch (IOException ex) {
-			bin.reset();
-		}
-		return null;
-	}
-
-	/**
-	 * 指定された入力について提出書類の書式を自動判別します。
-	 * 
-	 * 
-	 * @param url 提出書類を読み込むURL
-	 * @return 提出書類の書式 対応する書式がない場合はnull
-	 * 
-	 * @throws IOException 入出力時の例外
-	 */
-	public TableFormat detect(URL url) throws IOException {
-		try (InputStream is = url.openStream()) {
-			return detect(is);
-		}
-	}
-
-	/**
-	 * 指定された入力について提出書類の書式を自動判別します。
-	 * 
-	 * 
-	 * @param bytes 提出書類を読み込むバイト列
-	 * @return 提出書類の書式 対応する書式がない場合はnull
-	 * 
-	 * @throws IOException 入出力時の例外
-	 */
-	public TableFormat detect(byte[] bytes) throws IOException {
-		return detect(new ByteArrayInputStream(bytes));
-	}
-
-	/**
-	 * 指定された入力から書式を自動判別して交信記録を読み込みます。
-	 * 
-	 * 
-	 * @param in 交信記録を読み込むストリーム
+	 * @param strm 交信記録を読み込むストリーム
+	 * @param zone 交信記録のタイムゾーン
 	 * @return 交信記録
 	 * 
 	 * @throws IOException 入出力例外もしくは対応する書式がない場合
 	 */
-	public List<Item> decode(InputStream in) throws IOException {
-		InputStream bin = this.fetch(in);
-		StringWriter sw = new StringWriter();
-		PrintWriter pw = new PrintWriter(sw);
-		for(TableFormat format: this) try {
-			return format.decode(bin);
-		} catch (IOException ex) {
-			pw.printf("%s: %s%n", format, ex.getMessage());
-			bin.reset();
-		}
-		throw new IOException("unsupported format:\n" + sw);
+	public List<Item> decode(InputStream strm) throws IOException {
+		return this.decode(strm, ZoneId.systemDefault());
 	}
 
 	/**
-	 * 指定された入力から書式を自動判別して交信記録を読み込みます。
+	 * 指定されたストリームから書式を自動判別して交信記録を読み込みます。
 	 * 
 	 * 
-	 * @param url 交信記録を読み込むURL
+	 * @param strm 交信記録を読み込むストリーム
+	 * @param zone 交信記録のタイムゾーン
 	 * @return 交信記録
 	 * 
-	 * @throws IOException 入出力例外もしくは対応する書式がない場合
+	 * @throws IOException 読み込み時の例外もしくは対応する書式がない場合
 	 */
-	public List<Item> decode(java.net.URL url) throws IOException {
-		try (InputStream is = url.openStream()) {
-			return decode(is);
+	public List<Item> decode(InputStream strm, ZoneId zone) throws IOException {
+		InputStream bin = this.fetch(strm);
+		for(TableFormat format: this) {
+			if(format.validate(bin)) {
+				bin.reset();
+				return format.decode(bin, zone);
+			} else bin.reset();
 		}
+		throw new IOException("unsupported format");
 	}
 
 	/**
-	 * 指定された入力から書式を自動判別して交信記録を読み込みます。
+	 * 指定されたストリームに書式をQXMLに設定して交信記録を書き込みます。
 	 * 
 	 * 
-	 * @param bytes 交信記録を読み込むバイト列
-	 * @return 交信記録
+	 * @param strm 交信記録を書き込むストリーム
+	 * @param items 交信記録
 	 * 
-	 * @throws IOException 入出力例外もしくは対応する書式がない場合
+	 * @throws IOException 書き込み時の例外
 	 */
-	public List<Item> decode(byte[] bytes) throws IOException {
-		return decode(new ByteArrayInputStream(bytes));
+	public void encode(OutputStream strm, List<Item> items) throws IOException {
+		this.getFormat("qxml").encode(strm, items);
 	}
 }

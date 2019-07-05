@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,26 +38,14 @@ public final class JarlFormat extends TextFormat {
 		super("jarl");
 	}
 
-	/**
-	 * 指定したストリームをこの書式でデコードして交信記録を読み込みます。
-	 * 
-	 * @param in 交信記録を読み込むストリーム
-	 * @return 交信記録
-	 * @throws IOException 入出力時の例外
-	 */
-	public List<Item> decode(InputStream in) throws IOException {
-		return new JarlDecoder(in).read();
+	@Override
+	public List<Item> decode(InputStream strm, ZoneId zone) throws IOException {
+		return new JarlDecoder(strm).read();
 	}
 
-	/**
-	 * この書式でエンコードした交信記録を指定したストリームに書き込みます。
-	 * 
-	 * @param out 交信記録を書き込むストリーム
-	 * @param items 出力する交信記録
-	 * @throws IOException 入出力時の例外
-	 */
-	public void encode(OutputStream out, List<Item> items) throws IOException {
-		new JarlEncoder(out).write(items);
+	@Override
+	public void encode(OutputStream strm, List<Item> items) throws IOException {
+		new JarlEncoder(strm).write(items);
 	}
 
 	/**
@@ -104,7 +93,7 @@ public final class JarlFormat extends TextFormat {
 		}
 
 		private List<Item> logSheet() throws Exception {
-			List<Item> items = new ArrayList<>();
+			final List<Item> items = new ArrayList<>();
 			String line;
 			while((line = super.readLine()) != null) {
 				if(line.isEmpty()) continue;
@@ -125,15 +114,15 @@ public final class JarlFormat extends TextFormat {
 		 */
 		private Item item(String line) throws Exception {
 			final Item item = new Item();
-			final String[] vals = getLine(9);
-			final String time = vals[0] + " " + vals[1];
-			final String band = vals[2];
-			final String mode = vals[3];
-			final String call = vals[4];
-			final String srst = vals[5];
-			final String snum = vals[6];
-			final String rrst = vals[7];
-			final String rnum = vals[8];
+			final String[] vs = line.split(" +", 11);
+			final String time = vs[0].concat(" ").concat(vs[1]);
+			final String band = vs[2];
+			final String mode = vs[3];
+			final String call = vs[4];
+			final String srst = vs[5];
+			final String snum = vs[6];
+			final String rrst = vs[7];
+			final String rnum = vs[8];
 
 			if(!time.isEmpty()) time(item, time);
 			if(!band.isEmpty()) band(item, band);

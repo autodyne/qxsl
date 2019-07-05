@@ -46,26 +46,14 @@ public final class ZBinFormat extends BaseFormat {
 		super("zbin");
 	}
 
-	/**
-	 * 指定したストリームをこの書式でデコードして交信記録を読み込みます。
-	 * 
-	 * @param in 交信記録を読み込むストリーム
-	 * @return 交信記録
-	 * @throws IOException 入出力時の例外
-	 */
-	public List<Item> decode(InputStream in) throws IOException {
-		return new ZBinDecoder(in).read();
+	@Override
+	public List<Item> decode(InputStream strm, ZoneId zone) throws IOException {
+		return new ZBinDecoder(strm).read();
 	}
 
-	/**
-	 * この書式でエンコードした交信記録を指定したストリームに書き込みます。
-	 * 
-	 * @param out 交信記録を書き込むストリーム
-	 * @param items 出力する交信記録
-	 * @throws IOException 入出力時の例外
-	 */
-	public void encode(OutputStream out, List<Item> items) throws IOException {
-		new ZBinEncoder(out).write(items);
+	@Override
+	public void encode(OutputStream strm, List<Item> items) throws IOException {
+		new ZBinEncoder(strm).write(items);
 	}
 
 	/**
@@ -367,7 +355,7 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		private List<Item> logSheet() throws Exception {
 			this.tDateTime = new TDateTime(head());
-			List<Item> items = new ArrayList<>();
+			final List<Item> items = new ArrayList<>();
 			while(stream.available() > 0) items.add(item());
 			return Collections.unmodifiableList(items);
 		}

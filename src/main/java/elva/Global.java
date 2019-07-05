@@ -8,6 +8,7 @@
 package elva;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -572,7 +573,7 @@ final class Global extends SimpleBindings {
 	@Native("/")
 	@Params(min = 2, max = -1)
 	private static final class $Div extends Function {
-		private final int MODE = BigDecimal.ROUND_FLOOR;
+		private final RoundingMode MODE = RoundingMode.FLOOR;
 		public Object apply(Struct args, Kernel eval) {
 			BigDecimal val = eval.real(args.car());
 			for(Object v: args.cdr()) val = val.divide(eval.real(v), MODE);
