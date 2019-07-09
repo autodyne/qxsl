@@ -10,9 +10,9 @@ package qxsl.extra.table;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.time.Year;
-import java.time.ZoneId;
 import java.time.format.*;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
@@ -32,22 +32,19 @@ import qxsl.model.Item;
  * @since 2013/02/27
  *
  */
-public final class ZDosFormat extends TextFormat {
-	/**
-	 * 書式を構築します。
-	 */
+public final class ZDosFormat extends BaseFormat {
 	public ZDosFormat() {
-		super("zdos", "SJIS");
+		super("zdos");
 	}
 
 	@Override
-	public List<Item> decode(InputStream strm, ZoneId zone) throws IOException {
-		return new ZDosDecoder(strm).read();
+	public TableDecoder decoder(InputStream is) {
+		return new ZDosDecoder(is);
 	}
 
 	@Override
-	public void encode(OutputStream strm, List<Item> items) throws IOException {
-		new ZDosEncoder(strm).write(items);
+	public TableEncoder encoder(OutputStream os) {
+		return new ZDosEncoder(os);
 	}
 
 	/**
@@ -60,44 +57,50 @@ public final class ZDosFormat extends TextFormat {
 	 * @deprecated この実装は概ね互換性がありますが、無保証です。
 	 */
 	@Deprecated
-	private final class ZDosDecoder extends TextDecoder {
+	private final class ZDosDecoder extends PlainTextDecoder {
 		private final DateTimeFormatter format;
 		private final FieldFormats fields;
 
 		/**
 		 * 指定されたストリームを読み込むデコーダを構築します。
 		 * 
-		 * @param in 読み込むストリーム
+		 * @param is 読み込むストリーム
 		 */
-		public ZDosDecoder(InputStream in) {
-			super(in);
-			fields = new FieldFormats();
+		public ZDosDecoder(InputStream is) {
+			super(is, Charset.forName("SJIS"));
+			this.fields = new FieldFormats();
 			DateTimeFormatterBuilder fb = new DateTimeFormatterBuilder();
 			fb.parseDefaulting(ChronoField.YEAR, Year.now().getValue());
 			this.format = fb.appendPattern("M  ppd HHmm").toFormatter();
 		}
 
 		/**
-		 * 交信記録を読み込みます。ストリームは閉じられます。
+		 * 交信記録を読み込みます。
 		 * 
-		 * @return 交信記録 交信記録がなければnull
-		 * @throws IOException 入出力の例外
+		 * @return 交信記録
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		public List<Item> read() throws IOException {
+		@Override
+		public List<Item> decode() throws IOException {
 			try {
-				return logSheet();
-			} catch(RuntimeException ex) {
+				return items();
+			} catch (RuntimeException ex) {
 				throw new IOException(ex);
-			} finally {
-				super.close();
 			}
 		}
 
-		private List<Item> logSheet() throws IOException {
+		/**
+		 * 冒頭をスキップして交信記録を1件読み込みます。
+		 * 
+		 * @return 読み込んだ交信記録
+		 * @throws IOException 読み込みに失敗した場合
+		 */
+		private final List<Item> items() throws IOException {
 			final List<Item> items = new ArrayList<>();
 			String line;
 			while((line = super.readLine()) != null) {
 				if(!line.isEmpty() && !line.startsWith("mon")) {
+					super.reset();
 					items.add(item(line));
 				}
 			}
@@ -108,13 +111,13 @@ public final class ZDosFormat extends TextFormat {
 		 * 1行の文字列から{@link Item}を1件読み込みます。
 		 * 
 		 * @param line 1行
-		 * @return 読み込んだ{@link Item}
+		 * @return 読み込んだ1件の交信
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private Item item(String line) throws IOException {
 			final Item item = new Item();
-			final String[] vals = split(line,
-				0, 13, 24, 37, 50, 57, 63, 68, 72, -1
+			final String[] vals = splitLine(
+				0, 13, 24, 37, 50, 57, 63, 68, 72, 139
 			);
 
 			String time = vals[0];
@@ -239,30 +242,30 @@ public final class ZDosFormat extends TextFormat {
 	 * @deprecated この実装は概ね互換性がありますが、無保証です。
 	 */
 	@Deprecated
-	private final class ZDosEncoder extends TextEncoder {
+	private final class ZDosEncoder extends PlainTextEncoder {
 		private final DateTimeFormatter format;
 
 		/**
 		 * 指定されたストリームに出力するエンコーダを構築します。
 		 * 
-		 * @param out 交信記録を出力するストリーム
+		 * @param os 交信記録を出力するストリーム
 		 */
-		public ZDosEncoder(OutputStream out) {
-			super(out);
+		public ZDosEncoder(OutputStream os) {
+			super(os, Charset.forName("SJIS"));
 			format = DateTimeFormatter.ofPattern(" MM  dd HHmm");
 		}
 
 		/**
-		 * 交信記録を出力します。ストリームは閉じられます。
+		 * 交信記録を出力します。
 		 * 
 		 * @param items 交信記録
-		 * @throws IOException 入出力の例外
+		 * @throws IOException 出力に失敗した場合
 		 */
-		public void write(List<Item> items) throws IOException {
-			printHead();
+		@Override
+		public void encode(List<Item> items) throws IOException {
+			printHead(getName().concat(".fmt"));
 			println();
 			for(Item r : items) item(r);
-			super.close();
 		}
 
 		/**
@@ -273,15 +276,15 @@ public final class ZDosFormat extends TextFormat {
 		 */
 		private void item(Item item) throws IOException {
 			time((Time) item.get(Qxsl.TIME));
-			printSpace(1);
+			print(" ");
 			printR(10, (Call) item.get(Qxsl.CALL));
-			printSpace(1);
+			print(" ");
 			printR(12, (Code) item.getSent().get(Qxsl.CODE));
-			printSpace(1);
+			print(" ");
 			printR(12, (Code) item.getRcvd().get(Qxsl.CODE));
 			print("        ");
 			band((Band) item.get(Qxsl.BAND));
-			printSpace(1);
+			print(" ");
 			printR(4, (Mode) item.get(Qxsl.MODE));
 			print(" 1   ");
 			oprt((Name) item.get(Qxsl.NAME));
@@ -296,7 +299,7 @@ public final class ZDosFormat extends TextFormat {
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void time(Time date) throws IOException {
-			if(date == null) printSpace(12);
+			if(date == null) print(" ".repeat(12));
 			else print(format.format(date.value()));
 		}
 

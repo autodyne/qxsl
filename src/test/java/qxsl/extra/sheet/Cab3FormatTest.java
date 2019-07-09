@@ -60,7 +60,7 @@ public final class Cab3FormatTest extends test.RandTest {
 		}
 		ByteArrayOutputStream os1 = new ByteArrayOutputStream();
 		ByteArrayOutputStream os2 = new ByteArrayOutputStream();
-		tables.getFormat("cqww").encode(os1, items);
+		tables.forName("cqww").encoder(os1).encode(items);
 		String table = os1.toString("UTF-8").trim();
 		Map<String, String> kvals = new HashMap<>();
 		kvals.put("CONTEST", "JIDX-CW");

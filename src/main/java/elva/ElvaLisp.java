@@ -132,72 +132,72 @@ public final class ElvaLisp extends AbstractScriptEngine {
 			throw new ScriptException(ex.getMessage());
 		}
 	}
-}
-
-/**
- * LISP処理系で発生する構文エラーを表現します。
- * この例外はLISP処理系内部でのみ使用されます。
- *
- *
- * @author Journal of Hamradio Informatics
- *
- * @since 2019/07/01
- */
-final class ElvaLexicalException extends RuntimeException {
-	private static final String TEMP = "lexical error: %s\n%s";
 
 	/**
-	 * 字句番号と内容を示す文字列を指定して例外を構築します。
+	 * LISP処理系で発生する構文エラーを表現します。
+	 * この例外はLISP処理系内部でのみ使用されます。
 	 *
-	 * @param message 例外の内容
-	 * @param parser 構文解析器
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2019/07/01
 	 */
-	public ElvaLexicalException(String message, Parser parser) {
-		super(String.format(TEMP, message, parser.getLocal()));
+	public static final class ElvaLexicalException extends RuntimeException {
+		private static final String TEMP = "lexical error: %s\n%s";
+	
+		/**
+		 * 字句番号と内容を示す文字列を指定して例外を構築します。
+		 *
+		 * @param message 例外の内容
+		 * @param parser 構文解析器
+		 */
+		public ElvaLexicalException(String message, Parser parser) {
+			super(String.format(TEMP, message, parser.getLocal()));
+		}
 	}
-}
-
-/**
- * LISP処理系で発生する実行エラーを表現します。
- * この例外はLISP処理系内部でのみ使用されます。
- *
- *
- * @author Journal of Hamradio Informatics
- *
- * @since 2019/07/01
- */
-final class ElvaRuntimeException extends RuntimeException {
-	private static final String TEMP = "runtime error: %s\n%%s";
-	private final StringJoiner trace;
-
+	
 	/**
-	 * 問題を示す書式文字列とその引数を指定して例外を構築します。
+	 * LISP処理系で発生する実行エラーを表現します。
+	 * この例外はLISP処理系内部でのみ使用されます。
 	 *
-	 * @param message 例外の内容
-	 * @param args 書式文字列の引数
-	 */
-	public ElvaRuntimeException(String message, Object...args) {
-		super(String.format(TEMP, String.format(message, args)));
-		this.trace = new StringJoiner("\n");
-	}
-
-	/**
-	 * 指定された式をこの例外まで辿れる式の追跡履歴に追加します。
 	 *
-	 * @param sexp 追加する式
-	 * @return この例外
-	 */
-	public final ElvaRuntimeException add(Object sexp) {
-		this.trace.add(String.format(" at: '%s'", sexp));
-		return this;
-	}
-
-	/**
-	 * この例外を処理系の外部に公開するための変換処理を行います。
+	 * @author Journal of Hamradio Informatics
 	 *
-	 * @return 変換された例外
+	 * @since 2019/07/01
 	 */
-	public final ScriptException toScriptException() {
-		return new ScriptException(String.format(getMessage(), trace));
+	public static final class ElvaRuntimeException extends RuntimeException {
+		private static final String TEMP = "runtime error: %s\n%%s";
+		private final StringJoiner trace;
+	
+		/**
+		 * 問題を示す書式文字列とその引数を指定して例外を構築します。
+		 *
+		 * @param message 例外の内容
+		 * @param args 書式文字列の引数
+		 */
+		public ElvaRuntimeException(String message, Object...args) {
+			super(String.format(TEMP, String.format(message, args)));
+			this.trace = new StringJoiner("\n");
+		}
+	
+		/**
+		 * 指定された式をこの例外まで辿れる式の追跡履歴に追加します。
+		 *
+		 * @param sexp 追加する式
+		 * @return この例外
+		 */
+		public final ElvaRuntimeException add(Object sexp) {
+			this.trace.add(String.format(" at: '%s'", sexp));
+			return this;
+		}
+	
+		/**
+		 * この例外を処理系の外部に公開するための変換処理を行います。
+		 *
+		 * @return 変換された例外
+		 */
+		public final ScriptException toScriptException() {
+			return new ScriptException(String.format(getMessage(), trace));
+		}
 	}
 }

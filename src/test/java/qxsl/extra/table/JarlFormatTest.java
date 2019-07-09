@@ -7,7 +7,6 @@
 *****************************************************************************/
 package qxsl.extra.table;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,9 +61,7 @@ public final class JarlFormatTest extends test.RandTest {
 			items.add(item);
 		}
 		final ByteArrayOutputStream os = new ByteArrayOutputStream();
-		format.encode(os, items);
-		final byte[] b = os.toByteArray();
-		assertThat(format.decode(new ByteArrayInputStream(b))).isEqualTo(items);
-		assertThat(tables.decode(new ByteArrayInputStream(b))).isEqualTo(items);
+		format.encoder(os).encode(items);
+		assertThat(tables.decode(os.toByteArray())).isEqualTo(items);
 	}
 }

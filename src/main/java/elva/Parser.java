@@ -20,6 +20,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import elva.ElvaLisp.ElvaLexicalException;
+
 /**
  * LISP処理系の構文解析器の実装です。
  * 

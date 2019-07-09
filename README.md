@@ -9,7 +9,7 @@ qxsl is a vital component of [Automatic Acceptance & Tabulation System (ATS)-4](
 
 ## Features
 
-- qxsl provides log encoders/decoders for QXML, [ADIF(ADX)](http://adif.org), [Cabrillo](https://wwrof.org/cabrillo/), etc.
+- qxsl provides log encoders/decoders for QXML, [ADIF(ADI/ADX)](http://adif.org), [Cabrillo](https://wwrof.org/cabrillo/), etc.
 - qxsl provides tabulation & scoring framework for contests and awards.
 - qxsl provides a LISP engine named **elva**, and contest rules can be described in modern S-expression styles.
 

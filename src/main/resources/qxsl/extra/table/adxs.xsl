@@ -25,7 +25,7 @@
 	<!-- conversion from ADX to QXML -->
 	<xsl:template match="RECORD">
 		<item>
-			<xsl:for-each select="*">
+			<xsl:for-each select="*[not(self::APP|self::USERDEF)]">
 				<xsl:attribute name="adif:{name()}" namespace="adif.org">
 					<xsl:value-of select="."/>
 				</xsl:attribute>

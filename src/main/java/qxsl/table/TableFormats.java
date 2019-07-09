@@ -8,19 +8,17 @@
 package qxsl.table;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URL;
-import java.time.ZoneId;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
+import java.util.StringJoiner;
 import qxsl.model.Item;
 
 /**
- * {@link TableFormat}クラスの自動検出及びインスタンス化機構を実装します。
+ * {@link TableFormat}実装クラスを自動的に検出して管理します。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -32,14 +30,16 @@ public final class TableFormats implements Iterable<TableFormat> {
 	private final ServiceLoader<TableFormat> loader;
 
 	/**
-	 * 現在のクラスローダからインスタンス化機構を構築します。
+	 * インスタンスを構築します。
+	 *
+	 * @see ServiceLoader#load(Class)
 	 */
 	public TableFormats() {
-		this(Thread.currentThread().getContextClassLoader());
+		loader = ServiceLoader.load(TableFormat.class);
 	}
 
 	/**
-	 * 指定のクラスローダからインスタンス化機構を構築します。
+	 * 指定されたローダを参照するインスタンスを構築します。
 	 * 
 	 * @param cl 書式の実装を検出するクラスローダ
 	 */
@@ -48,7 +48,7 @@ public final class TableFormats implements Iterable<TableFormat> {
 	}
 
 	/**
-	 * クラスパスから検出された{@link TableFormat}を返します。
+	 * このインスタンスが検出した書式を返します。
 	 *
 	 * @return 書式のイテレータ
 	 */
@@ -58,13 +58,12 @@ public final class TableFormats implements Iterable<TableFormat> {
 	}
 
 	/**
-	 * 指定された名前を持つ{@link TableFormat}を検索して返します。
-	 * 
+	 * 指定された名前を持つ書式の実装を検索します。
 	 * 
 	 * @param name 属性の名前
 	 * @return 対応する書式 存在しない場合null
 	 */
-	public TableFormat getFormat(String name) {
+	public TableFormat forName(String name) {
 		for(TableFormat fmt: loader) {
 			if(fmt.getName().equals(name)) return fmt;
 		}
@@ -72,70 +71,34 @@ public final class TableFormats implements Iterable<TableFormat> {
 	}
 
 	/**
-	 * 指定されたストリームを主記憶に読み込みます。
+	 * 指定されたストリームから適切な書式で交信記録を読み込みます。
 	 * 
-	 * 
-	 * @param in 内容を読み込むストリーム
-	 * @return 内容をコピーしたストリーム
-	 *
-	 * @throws IOException 入力時の例外
-	 */
-	private InputStream fetch(InputStream in) throws IOException {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		final byte[] buffer = new byte[1024];
-		int len = 0;
-		try (InputStream inputStream = in) {
-			while((len = in.read(buffer)) > 0) out.write(buffer, 0, len);
-		}
-		return new ByteArrayInputStream(out.toByteArray());
-	}
-
-	/**
-	 * 指定されたストリームから書式を自動判別して交信記録を読み込みます。
-	 * これは{@link #decode decode(strm, ZoneId#systemDefault())}と同等です。
-	 * 
-	 * 
-	 * @param strm 交信記録を読み込むストリーム
-	 * @param zone 交信記録のタイムゾーン
+	 * @param is 交信記録を読み込むストリーム
 	 * @return 交信記録
 	 * 
-	 * @throws IOException 入出力例外もしくは対応する書式がない場合
+	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
 	 */
-	public List<Item> decode(InputStream strm) throws IOException {
-		return this.decode(strm, ZoneId.systemDefault());
+	public List<Item> decode(InputStream is) throws IOException {
+		InputStream bis = new ByteArrayInputStream(is.readAllBytes());
+		final StringJoiner err = new StringJoiner(", ");
+		for(TableFormat format: this) try {
+			return format.decoder(bis).decode();
+		} catch (IOException ex) {
+			bis.reset();
+			err.add(format.toString());
+		}
+		throw new IOException("none of ".concat(err.toString()));
 	}
 
 	/**
-	 * 指定されたストリームから書式を自動判別して交信記録を読み込みます。
+	 * 指定されたバイト配列から適切な書式で交信記録を読み込みます。
 	 * 
-	 * 
-	 * @param strm 交信記録を読み込むストリーム
-	 * @param zone 交信記録のタイムゾーン
+	 * @param b 交信記録を読み込むバイト配列
 	 * @return 交信記録
 	 * 
-	 * @throws IOException 読み込み時の例外もしくは対応する書式がない場合
+	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
 	 */
-	public List<Item> decode(InputStream strm, ZoneId zone) throws IOException {
-		InputStream bin = this.fetch(strm);
-		for(TableFormat format: this) {
-			if(format.validate(bin)) {
-				bin.reset();
-				return format.decode(bin, zone);
-			} else bin.reset();
-		}
-		throw new IOException("unsupported format");
-	}
-
-	/**
-	 * 指定されたストリームに書式をQXMLに設定して交信記録を書き込みます。
-	 * 
-	 * 
-	 * @param strm 交信記録を書き込むストリーム
-	 * @param items 交信記録
-	 * 
-	 * @throws IOException 書き込み時の例外
-	 */
-	public void encode(OutputStream strm, List<Item> items) throws IOException {
-		this.getFormat("qxml").encode(strm, items);
+	public List<Item> decode(final byte[] b) throws IOException {
+		return decode(new ByteArrayInputStream(b));
 	}
 }

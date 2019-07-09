@@ -10,7 +10,6 @@ package qxsl.table;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.time.ZoneId;
 import java.util.List;
 import qxsl.model.Item;
 
@@ -46,21 +45,21 @@ public interface TableFormat {
 	public String getDescription();
 
 	/**
-	 * この書式を適用するファイル名拡張子の不変のリストを返します。
+	 * この書式のファイル名拡張子の不変のリストを返します。
 	 * 
 	 * @return ファイル名拡張子のリスト
 	 */
 	public List<String> getExtensions();
 
 	/**
-	 * 指定されたストリームの内容がこの書式に従う交信記録であるか検証します。
+	 * 指定されたストリームの内容を検証します。
 	 *
-	 * @param strm 交信記録を読み込むストリーム
-	 * @return 交信記録が読み込める場合に限り真
+	 * @param is 内容を検証するストリーム
+	 * @return この書式に従う場合に限り真
 	 */
-	public default boolean validate(InputStream strm) {
+	public default boolean verify(InputStream is) {
 		try {
-			decode(strm);
+			decoder(is).decode();
 			return true;
 		} catch (IOException ex) {
 			return false;
@@ -68,37 +67,56 @@ public interface TableFormat {
 	}
 
 	/**
-	 * 指定されたストリームをこの書式でデコードして、交信記録を読み込みます。
-	 * これは{@link #decode decode(strm, ZoneId#systemDefault())}と同等です。
-	 * 
-	 * @param strm 交信記録を読み込むストリーム
-	 * @return 交信記録
+	 * 指定されたストリームを入力とするデコーダを返します。
 	 *
-	 * @throws IOException 読み込み時の例外
+	 * @param is 交信記録を読み込むストリーム
+	 * @return デコーダ
 	 */
-	public default List<Item> decode(InputStream strm) throws IOException {
-		return this.decode(strm, ZoneId.systemDefault());
+	public abstract TableDecoder decoder(InputStream is);
+
+	/**
+	 * 指定されたストリームに出力するエンコーダを返します。
+	 *
+	 * @param os 交信記録を書き出すストリーム
+	 * @return エンコーダ
+	 */
+	public abstract TableEncoder encoder(OutputStream os);
+
+	/**
+	 * 永続化された交信記録を読み込むためのデコーダです。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2019/07/08
+	 *
+	 */
+	public interface TableDecoder extends AutoCloseable {
+		/**
+		 * ストリームから交信記録を読み出します。
+		 *
+		 * @return 読み出した交信記録
+		 * @throws IOException 構文上または読取り時の例外
+		 */
+		public List<Item> decode() throws IOException;
 	}
 
 	/**
-	 * 指定されたストリームをこの書式でデコードして、交信記録を読み込みます。
-	 * 
-	 * @param strm 交信記録を読み込むストリーム
-	 * @param zone 交信記録のタイムゾーン
-	 * @return 交信記録
+	 * 交信記録を書き出して永続化するためのエンコーダです。
 	 *
-	 * @throws IOException 読み込み時の例外
-	 */
-	public List<Item> decode(InputStream strm, ZoneId zone) throws IOException;
-
-	/**
-	 * この書式でエンコードした交信記録を指定されたストリームに出力します。
-	 * QXML以外の書式では交信記録の一部の属性が出力されない場合があります。
-	 * 
-	 * @param strm 交信記録を書き込むストリーム
-	 * @param items 出力する交信記録
 	 *
-	 * @throws IOException 書き込み時の例外
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2019/07/08
+	 *
 	 */
-	public void encode(OutputStream strm, List<Item> items) throws IOException;
+	public interface TableEncoder extends AutoCloseable {
+		/**
+		 * ストリームに交信記録を書き出します。
+		 *
+		 * @param items 交信記録
+		 * @throws IOException 書き出し時の例外
+		 */
+		public void encode(List<Item> items) throws IOException;
+	}
 }

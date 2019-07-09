@@ -7,6 +7,8 @@
 *****************************************************************************/
 package elva;
 
+import elva.ElvaLisp.ElvaRuntimeException;
+
 /**
  * LISP処理系のマクロ式の実装です。
  * 

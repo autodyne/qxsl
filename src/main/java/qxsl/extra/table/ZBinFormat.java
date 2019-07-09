@@ -39,21 +39,18 @@ import static java.time.temporal.ChronoUnit.MILLIS;
 public final class ZBinFormat extends BaseFormat {
 	private static final short USEUTC = 0x7FFF;
 
-	/**
-	 * 書式を構築します。
-	 */
 	public ZBinFormat() {
 		super("zbin");
 	}
 
 	@Override
-	public List<Item> decode(InputStream strm, ZoneId zone) throws IOException {
-		return new ZBinDecoder(strm).read();
+	public TableDecoder decoder(InputStream is) {
+		return new ZBinDecoder(is);
 	}
 
 	@Override
-	public void encode(OutputStream strm, List<Item> items) throws IOException {
-		new ZBinEncoder(strm).write(items);
+	public TableEncoder encoder(OutputStream os) {
+		return new ZBinEncoder(os);
 	}
 
 	/**
@@ -172,7 +169,7 @@ public final class ZBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * 指定した序数に対応する列挙子を返します。
+		 * 指定された序数に対応する列挙子を返します。
 		 * 
 		 * @param i 序数
 		 * @return 対応する列挙子があれば返す
@@ -234,7 +231,7 @@ public final class ZBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * 指定した序数に対応する列挙子を返します。
+		 * 指定された序数に対応する列挙子を返します。
 		 * 
 		 * @param i 序数
 		 * @return 対応する列挙子があれば返す
@@ -291,7 +288,7 @@ public final class ZBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * 指定した序数に対応する列挙子を返します。
+		 * 指定された序数に対応する列挙子を返します。
 		 * 
 		 * @param i 序数
 		 * @return 対応する列挙子があれば返す
@@ -314,7 +311,7 @@ public final class ZBinFormat extends BaseFormat {
 	 * @since 2013/02/23
 	 *
 	 */
-	private final class ZBinDecoder {
+	private final class ZBinDecoder implements TableDecoder {
 		private final DataInputStream stream;
 		private final FieldFormats fields;
 		private TDateTime tDateTime;
@@ -322,28 +319,35 @@ public final class ZBinFormat extends BaseFormat {
 		/**
 		 * 指定されたストリームを読み込むデコーダを構築します。
 		 * 
-		 * @param in 読み込むストリーム
+		 * @param is 読み込むストリーム
 		 */
-		public ZBinDecoder(InputStream in) {
+		public ZBinDecoder(InputStream is) {
 			this.fields = new FieldFormats();
-			this.stream = new DataInputStream(in);
+			this.stream = new DataInputStream(is);
 		}
 
 		/**
-		 * 交信記録を読み込みます。ストリームは閉じられます。
+		 * ストリームを閉じてリソースを解放します。
 		 * 
-		 * @return 交信記録 交信記録がなければnull
-		 * @throws IOException 入出力の例外
+		 * @throws IOException リソース解放に失敗した場合
 		 */
-		public List<Item> read() throws IOException {
+		@Override
+		public final void close() throws IOException {
+			stream.close();
+		}
+
+		/**
+		 * 冒頭をスキップして交信記録を1件読み込みます。
+		 * 
+		 * @return 読み込んだ交信記録
+		 * @throws IOException 読み込みに失敗した場合
+		 */
+		@Override
+		public List<Item> decode() throws IOException {
 			try {
-				return logSheet();
-			} catch (IOException ex) {
-				throw ex;
-			} catch (Exception ex) {
+				return items();
+			} catch (RuntimeException ex) {
 				throw new IOException(ex);
-			} finally {
-				stream.close();
 			}
 		}
 
@@ -353,7 +357,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @return 読み込んだ交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private List<Item> logSheet() throws IOException {
+		private final List<Item> items() throws IOException {
 			this.tDateTime = new TDateTime(head());
 			final List<Item> items = new ArrayList<>();
 			while(stream.available() > 0) items.add(item());
@@ -379,10 +383,10 @@ public final class ZBinFormat extends BaseFormat {
 		/**
 		 * ストリームから{@link Item}を1件読み込みます。
 		 * 
-		 * @return 読み込んだ{@link Item}
+		 * @return 読み込んだ1件の交信
 		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private Item item() throws IOException {
+		private final Item item() throws IOException {
 			final Item item = new Item();
 			time(item);
 			call(item);
@@ -408,7 +412,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param item 設定する{@link Item}
 		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void time(Item item) throws IOException {
+		private final void time(Item item) throws IOException {
 			item.add(tDateTime.decode(stream.readLong()));
 		}
 
@@ -418,7 +422,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param item 設定する{@link Item}
 		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void call(Item item) throws IOException {
+		private final void call(Item item) throws IOException {
 			final String s = readString(12);
 			item.add(fields.cache(Qxsl.CALL).field(s));
 		}
@@ -429,7 +433,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param item 設定する{@link Item}
 		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void sent(Item item) throws IOException {
+		private final void sent(Item item) throws IOException {
 			final String s = readString(30);
 			item.getSent().add(fields.cache(Qxsl.CODE).field(s));
 		}
@@ -440,7 +444,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param item 設定する{@link Item}
 		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void rcvd(Item item) throws IOException {
+		private final void rcvd(Item item) throws IOException {
 			final String s = readString(30);
 			item.getRcvd().add(fields.cache(Qxsl.CODE).field(s));
 		}
@@ -451,7 +455,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param item 設定する{@link Item}
 		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void sRSTQ(Item item) throws IOException {
+		private final void sRSTQ(Item item) throws IOException {
 			String rst = String.valueOf(Short.reverseBytes(stream.readShort()));
 			item.getSent().add(fields.cache(Qxsl.RSTQ).field(rst));
 		}
@@ -462,7 +466,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param item 設定する{@link Item}
 		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void rRSTQ(Item item) throws IOException {
+		private final void rRSTQ(Item item) throws IOException {
 			String rst = String.valueOf(Short.reverseBytes(stream.readShort()));
 			item.getRcvd().add(fields.cache(Qxsl.RSTQ).field(rst));
 		}
@@ -473,7 +477,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param item 設定する{@link Item}
 		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void mode(Item item) throws IOException {
+		private final void mode(Item item) throws IOException {
 			item.add(ModeEnum.forIndex(stream.read()).toMode());
 		}
 
@@ -483,7 +487,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param item 設定する{@link Item}
 		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void band(Item item) throws IOException {
+		private final void band(Item item) throws IOException {
 			item.add(BandEnum.forIndex(stream.read()).toBand());
 		}
 
@@ -493,7 +497,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param item 設定する{@link Item}
 		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void watt(Item item) throws IOException {
+		private final void watt(Item item) throws IOException {
 			item.getSent().add(WattEnum.forIndex(stream.read()).toWatt());
 		}
 
@@ -503,7 +507,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param item 設定する{@link Item}
 		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void oprt(Item item) throws IOException {
+		private final void oprt(Item item) throws IOException {
 			final String s = readString(14);
 			item.add(fields.cache(Qxsl.NAME).field(s));
 		}
@@ -514,7 +518,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param item 設定する{@link Item}
 		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void note(Item item) throws IOException {
+		private final void note(Item item) throws IOException {
 			final String s = readString(66);
 			item.add(fields.cache(Qxsl.NOTE).field(s));
 		}
@@ -543,27 +547,38 @@ public final class ZBinFormat extends BaseFormat {
 	 * @since 2013/02/23
 	 *
 	 */
-	private final class ZBinEncoder {
+	private final class ZBinEncoder implements TableEncoder {
 		private final TDateTime tDateTime;
 		private final DataOutputStream stream;
 
 		/**
 		 * 指定されたストリームに出力するエンコーダを構築します。
 		 * 
-		 * @param out 交信記録を書き込むストリーム
+		 * @param os 交信記録を書き込むストリーム
 		 */
-		public ZBinEncoder(OutputStream out) {
+		public ZBinEncoder(OutputStream os) {
 			this.tDateTime = new TDateTime(ZoneOffset.systemDefault());
-			this.stream = new DataOutputStream(out);
+			this.stream = new DataOutputStream(os);
 		}
 
 		/**
-		 * 交信記録を出力します。ストリームは閉じられます。
+		 * ストリームを閉じてリソースを解放します。
+		 * 
+		 * @throws IOException リソース解放に失敗した場合
+		 */
+		@Override
+		public final void close() throws IOException {
+			stream.close();
+		}
+
+		/**
+		 * 交信記録を出力します。
 		 * 
 		 * @param items 交信記録
-		 * @throws IOException 入出力の例外
+		 * @throws IOException 出力に失敗した場合
 		 */
-		public void write(List<Item> items) throws IOException {
+		@Override
+		public void encode(List<Item> items) throws IOException {
 			final ZoneOffset zone = tDateTime.epoch.getOffset();
 			final int secs = zone.getTotalSeconds();
 			final int bits = secs == 0? USEUTC: secs / -60;
@@ -571,7 +586,6 @@ public final class ZBinFormat extends BaseFormat {
 			stream.writeShort(Short.reverseBytes((short) bits));
 			stream.write(new byte[0xAA]);
 			for(Item r : items) item(r);
-			stream.close();
 		}
 
 		/**
@@ -580,7 +594,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param item 出力する{@link Item}
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private void item(Item item) throws IOException {
+		private final void item(Item item) throws IOException {
 			int i = 0;
 			time((Time) item.get(Qxsl.TIME));
 			string(12, (Call) item.get(Qxsl.CALL));
@@ -606,7 +620,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param time 交信日時
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private void time(Time time) throws IOException {
+		private final void time(Time time) throws IOException {
 			if(time == null) stream.writeLong(0);
 			else stream.writeLong(tDateTime.encode(time));
 		}
@@ -617,7 +631,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param rst RSTQシグナルレポート
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private void rst(RSTQ rst) throws IOException {
+		private final void rst(RSTQ rst) throws IOException {
 			int s = rst == null? 599 : rst.value();
 			stream.writeShort(Short.reverseBytes((short) s));
 		}
@@ -628,7 +642,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param mode 通信方式
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private void mode(Mode mode) throws IOException {
+		private final void mode(Mode mode) throws IOException {
 			ModeEnum modes = ModeEnum.valueOf(mode);
 			if(mode == null) stream.writeByte(0);
 			else stream.writeByte(modes.ordinal());
@@ -640,7 +654,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param band 周波数帯
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private void band(Band band) throws IOException {
+		private final void band(Band band) throws IOException {
 			BandEnum bands = BandEnum.valueOf(band);
 			if(bands == null) stream.writeByte(0);
 			else stream.writeByte(bands.ordinal());
@@ -652,7 +666,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param watt 空中線出力
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private void watt(Watt watt) throws IOException {
+		private final void watt(Watt watt) throws IOException {
 			WattEnum watts = WattEnum.valueOf(watt);
 			if(watts == null) stream.writeByte(0);
 			else stream.writeByte(watts.ordinal());
@@ -666,7 +680,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param f 直列化する属性
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private void string(int limit, Field f) throws IOException {
+		private final void string(int limit, Field f) throws IOException {
 			final String value = f != null? f.value().toString() : "";
 			final byte[] bytes = value.getBytes("SJIS");
 			stream.writeByte(bytes.length);

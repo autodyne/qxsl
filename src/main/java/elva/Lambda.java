@@ -7,6 +7,8 @@
 *****************************************************************************/
 package elva;
 
+import elva.ElvaLisp.ElvaRuntimeException;
+
 /**
  * LISP処理系のラムダ式の実装です。
  * 

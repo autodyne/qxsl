@@ -9,6 +9,7 @@ package qxsl.model;
 
 import java.util.Objects;
 import javax.xml.namespace.QName;
+import qxsl.field.FieldFormats.Any;
 
 /**
  * {@link Tuple}に付随する各種の属性は{@link Field}クラスを実装します。
@@ -49,7 +50,16 @@ public abstract class Field<V> {
 	public abstract V value();
 
 	/**
-	 * {@link #value()}の返り値を文字列で返します。
+	 * この属性が{@link Any}か確認します。
+	 *
+	 * @return Anyの場合は真
+	 */
+	public final boolean isAny() {
+		return this instanceof Any;
+	}
+
+	/**
+	 * 属性値を文字列で返します。
 	 * 
 	 * @return 文字列
 	 */
@@ -59,7 +69,7 @@ public abstract class Field<V> {
 	}
 
 	/**
-	 * {@link #value()}の返り値をハッシュ値にして返します。
+	 * 属性値のハッシュ値を計算します。
 	 * 
 	 * @return ハッシュ値
 	 */

@@ -10,6 +10,8 @@ package elva;
 import javax.script.Bindings;
 import javax.script.SimpleBindings;
 
+import elva.ElvaLisp.ElvaRuntimeException;
+
 /**
  * LISP処理系の識別子を捕捉する静的スコープの実装です。
  * 

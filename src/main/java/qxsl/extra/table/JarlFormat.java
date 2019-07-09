@@ -10,8 +10,8 @@ package qxsl.extra.table;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,22 +30,19 @@ import qxsl.model.Item;
  * @since 2014/06/03
  *
  */
-public final class JarlFormat extends TextFormat {
-	/**
-	 * 書式を構築します。
-	 */
+public final class JarlFormat extends BaseFormat {
 	public JarlFormat() {
-		super("jarl", "SJIS");
+		super("jarl");
 	}
 
 	@Override
-	public List<Item> decode(InputStream strm, ZoneId zone) throws IOException {
-		return new JarlDecoder(strm).read();
+	public TableDecoder decoder(InputStream is) {
+		return new JarlDecoder(is);
 	}
 
 	@Override
-	public void encode(OutputStream strm, List<Item> items) throws IOException {
-		new JarlEncoder(strm).write(items);
+	public TableEncoder encoder(OutputStream os) {
+		return new JarlEncoder(os);
 	}
 
 	/**
@@ -58,38 +55,43 @@ public final class JarlFormat extends TextFormat {
 	 * @deprecated JARL書式の仕様はデコーダの挙動を厳密に定義しません。
 	 */
 	@Deprecated
-	private final class JarlDecoder extends TextDecoder {
+	private final class JarlDecoder extends PlainTextDecoder {
 		private final DateTimeFormatter format;
 		private final FieldFormats fields;
 
 		/**
 		 * 指定されたストリームを読み込むデコーダを構築します。
 		 * 
-		 * @param in 読み込むストリーム
+		 * @param is 読み込むストリーム
 		 */
-		public JarlDecoder(InputStream in) {
-			super(in);
+		public JarlDecoder(InputStream is) {
+			super(is, Charset.forName("SJIS"));
 			fields = new FieldFormats();
 			format = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm");
 		}
 
 		/**
-		 * 交信記録を読み込みます。ストリームは閉じられます。
+		 * 交信記録を読み込みます。
 		 * 
-		 * @return 交信記録 交信記録がなければnull
-		 * @throws IOException 入出力の例外
+		 * @return 交信記録
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		public List<Item> read() throws IOException {
+		@Override
+		public List<Item> decode() throws IOException {
 			try {
-				return logSheet();
-			} catch(RuntimeException ex) {
+				return items();
+			} catch (RuntimeException ex) {
 				throw new IOException(ex);
-			} finally {
-				super.close();
 			}
 		}
 
-		private List<Item> logSheet() throws IOException {
+		/**
+		 * 交信記録を読み込みます。
+		 * 
+		 * @return 交信記録
+		 * @throws IOException 読み込みに失敗した場合
+		 */
+		private final List<Item> items() throws IOException {
 			final List<Item> items = new ArrayList<>();
 			String line;
 			while((line = super.readLine()) != null) {
@@ -106,7 +108,7 @@ public final class JarlFormat extends TextFormat {
 		 * 1行の文字列から{@link Item}を1件読み込みます。
 		 * 
 		 * @param line 1行
-		 * @return 読み込んだ{@link Item}
+		 * @return 読み込んだ1件の交信
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private Item item(String line) throws IOException {
@@ -226,30 +228,30 @@ public final class JarlFormat extends TextFormat {
 	 * @deprecated JARL書式の仕様はエンコーダの挙動を厳密に定義しません。
 	 */
 	@Deprecated
-	private final class JarlEncoder extends TextEncoder {
+	private final class JarlEncoder extends PlainTextEncoder {
 		private final DateTimeFormatter format;
 		
 		/**
 		 * 指定されたストリームに出力するエンコーダを構築します。
 		 * 
-		 * @param out 交信記録を出力するストリーム
+		 * @param os 交信記録を出力するストリーム
 		 */
-		public JarlEncoder(OutputStream out) {
-			super(out);
+		public JarlEncoder(OutputStream os) {
+			super(os, Charset.forName("SJIS"));
 			format = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm");
 		}
 
 		/**
-		 * 交信記録を出力します。ストリームは閉じられます。
+		 * 交信記録を出力します。
 		 * 
 		 * @param items 交信記録
-		 * @throws IOException 入出力の例外
+		 * @throws IOException 出力に失敗した場合
 		 */
-		public void write(List<Item> items) throws IOException {
-			printHead();
+		@Override
+		public void encode(List<Item> items) throws IOException {
+			printHead(getName().concat(".fmt"));
 			println();
 			for(Item r: items) item(r);
-			super.close();
 		}
 
 		/**
@@ -260,21 +262,23 @@ public final class JarlFormat extends TextFormat {
 		 */
 		private void item(Item item) throws IOException {
 			time((Time) item.get(Qxsl.TIME));
-			printSpace(1);
+			print(" ");
 			band((Band) item.get(Qxsl.BAND));
-			printSpace(1);
+			print(" ");
 			printR(5,  (Mode) item.get(Qxsl.MODE));
-			printSpace(1);
+			print(" ");
 			printR(13, (Call) item.get(Qxsl.CALL));
-			printSpace(1);
+			print(" ");
 			printR(3,  (RSTQ) item.getSent().get(Qxsl.RSTQ));
-			printSpace(1);
+			print(" ");
 			printR(7,  (Code) item.getSent().get(Qxsl.CODE));
-			printSpace(1);
+			print(" ");
 			printR(3,  (RSTQ) item.getRcvd().get(Qxsl.RSTQ));
-			printSpace(1);
+			print(" ");
 			printR(7,  (Code) item.getRcvd().get(Qxsl.CODE));
-			println("          1");
+			print(" ".repeat(10));
+			print("1");
+			println();
 		}
 
 		/**
@@ -284,7 +288,7 @@ public final class JarlFormat extends TextFormat {
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void time(Time date) throws IOException {
-			if(date == null) printSpace(16);
+			if(date == null) print(" ".repeat(16));
 			else print(format.format(date.value()));
 		}
 

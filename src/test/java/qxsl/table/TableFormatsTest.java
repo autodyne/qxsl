@@ -30,15 +30,16 @@ public final class TableFormatsTest extends test.RandTest {
 	@Test
 	public void testGetFormat() {
 		// XML
-		assertThat(tables.getFormat("qxml")).isInstanceOf(QxmlFormat.class);
-		assertThat(tables.getFormat("adxs")).isInstanceOf(AdxsFormat.class);
+		assertThat(tables.forName("qxml")).isInstanceOf(QxmlFormat.class);
+		assertThat(tables.forName("adxs")).isInstanceOf(AdxsFormat.class);
 		// text
-		assertThat(tables.getFormat("cqww")).isInstanceOf(CqwwFormat.class);
-		assertThat(tables.getFormat("jarl")).isInstanceOf(JarlFormat.class);
-		assertThat(tables.getFormat("zall")).isInstanceOf(ZAllFormat.class);
-		assertThat(tables.getFormat("zdos")).isInstanceOf(ZDosFormat.class);
+		assertThat(tables.forName("adis")).isInstanceOf(AdisFormat.class);
+		assertThat(tables.forName("cqww")).isInstanceOf(CqwwFormat.class);
+		assertThat(tables.forName("jarl")).isInstanceOf(JarlFormat.class);
+		assertThat(tables.forName("zall")).isInstanceOf(ZAllFormat.class);
+		assertThat(tables.forName("zdos")).isInstanceOf(ZDosFormat.class);
 		// binary
-		assertThat(tables.getFormat("cbin")).isInstanceOf(CBinFormat.class);
-		assertThat(tables.getFormat("zbin")).isInstanceOf(ZBinFormat.class);
+		assertThat(tables.forName("cbin")).isInstanceOf(CBinFormat.class);
+		assertThat(tables.forName("zbin")).isInstanceOf(ZBinFormat.class);
 	}
 }

@@ -36,21 +36,18 @@ import static java.time.temporal.ChronoUnit.SECONDS;
  *
  */
 public final class CBinFormat extends BaseFormat {
-	/**
-	 * 書式を構築します。
-	 */
 	public CBinFormat() {
 		super("cbin");
 	}
 
 	@Override
-	public List<Item> decode(InputStream strm, ZoneId zone) throws IOException {
-		return new CBinDecoder(strm).read();
+	public TableDecoder decoder(InputStream is) {
+		return new CBinDecoder(is);
 	}
 
 	@Override
-	public void encode(OutputStream strm, List<Item> items) throws IOException {
-		new CBinEncoder(strm).write(items);
+	public TableEncoder encoder(OutputStream os) {
+		return new CBinEncoder(os);
 	}
 
 	/**
@@ -166,7 +163,7 @@ public final class CBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * 指定した序数に対応する列挙子を返します。
+		 * 指定された序数に対応する列挙子を返します。
 		 * 
 		 * @param i 序数
 		 * @return 対応する列挙子があれば返す
@@ -236,7 +233,7 @@ public final class CBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * 指定した序数に対応する列挙子を返します。
+		 * 指定された序数に対応する列挙子を返します。
 		 * 
 		 * @param i 序数
 		 * @return 対応する列挙子があれば返す
@@ -259,7 +256,7 @@ public final class CBinFormat extends BaseFormat {
 	 * @since 2017/06/12
 	 *
 	 */
-	private final class CBinDecoder {
+	private final class CBinDecoder implements TableDecoder {
 		private final FieldFormats fields;
 		private final CDateTime cDTime;
 		private final DataInputStream stream;
@@ -267,30 +264,22 @@ public final class CBinFormat extends BaseFormat {
 		/**
 		 * 指定されたストリームを読み込むデコーダを構築します。
 		 * 
-		 * @param in 読み込むストリーム
+		 * @param is 読み込むストリーム
 		 */
-		public CBinDecoder(InputStream in) {
+		public CBinDecoder(InputStream is) {
 			this.fields = new FieldFormats();
 			this.cDTime = new CDateTime();
-			this.stream = new DataInputStream(in);
+			this.stream = new DataInputStream(is);
 		}
 
 		/**
-		 * 交信記録を読み込みます。ストリームは閉じられます。
+		 * ストリームを閉じてリソースを解放します。
 		 * 
-		 * @return 交信記録 交信記録がなければnull
-		 * @throws IOException 入出力の例外
+		 * @throws IOException リソース解放に失敗した場合
 		 */
-		public List<Item> read() throws IOException {
-			try {
-				return logSheet();
-			} catch (IOException ex) {
-				throw ex;
-			} catch (Exception ex) {
-				throw new IOException(ex);
-			} finally {
-				stream.close();
-			}
+		@Override
+		public final void close() throws IOException {
+			stream.close();
 		}
 
 		/**
@@ -299,7 +288,22 @@ public final class CBinFormat extends BaseFormat {
 		 * @return 読み込んだ交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private List<Item> logSheet() throws IOException {
+		@Override
+		public List<Item> decode() throws IOException {
+			try {
+				return items();
+			} catch (RuntimeException ex) {
+				throw new IOException(ex);
+			}
+		}
+
+		/**
+		 * 冒頭をスキップして交信記録を1件読み込みます。
+		 * 
+		 * @return 交信記録
+		 * @throws IOException 読み込みに失敗した場合
+		 */
+		private final List<Item> items() throws IOException {
 			final List<Item> items = new ArrayList<>();
 			final short hdr = stream.readShort();
 			final short rdh = Short.reverseBytes(hdr);
@@ -317,10 +321,10 @@ public final class CBinFormat extends BaseFormat {
 		/**
 		 * ストリームから{@link Item}を1件読み込みます。
 		 * 
-		 * @return 読み込んだ{@link Item}
+		 * @return 読み込んだ1件の交信
 		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private Item item() throws IOException {
+		private final Item item() throws IOException {
 			final Item item = new Item();
 			call(item);
 			sent(item);
@@ -343,7 +347,7 @@ public final class CBinFormat extends BaseFormat {
 		 * @param item 設定する{@link Item}
 		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void time(Item item) throws IOException {
+		private final void time(Item item) throws IOException {
 			item.add(cDTime.decode(stream.readLong()));
 		}
 
@@ -353,7 +357,7 @@ public final class CBinFormat extends BaseFormat {
 		 * @param item 設定する{@link Item}
 		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void call(Item item) throws IOException {
+		private final void call(Item item) throws IOException {
 			final String s = readString(20);
 			item.add(fields.cache(Qxsl.CALL).field(s));
 		}
@@ -364,7 +368,7 @@ public final class CBinFormat extends BaseFormat {
 		 * @param item 設定する{@link Item}
 		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void sent(Item item) throws IOException {
+		private final void sent(Item item) throws IOException {
 			final String s = readString(30);
 			item.getSent().add(fields.cache(Qxsl.CODE).field(s));
 		}
@@ -375,7 +379,7 @@ public final class CBinFormat extends BaseFormat {
 		 * @param item 設定する{@link Item}
 		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void rcvd(Item item) throws IOException {
+		private final void rcvd(Item item) throws IOException {
 			final String s = readString(30);
 			item.getRcvd().add(fields.cache(Qxsl.CODE).field(s));
 		}
@@ -386,7 +390,7 @@ public final class CBinFormat extends BaseFormat {
 		 * @param item 設定する{@link Item}
 		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void mode(Item item) throws IOException {
+		private final void mode(Item item) throws IOException {
 			item.add(ModeEnum.forIndex(stream.read()).toMode());
 		}
 
@@ -396,7 +400,7 @@ public final class CBinFormat extends BaseFormat {
 		 * @param item 設定する{@link Item}
 		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void band(Item item) throws IOException {
+		private final void band(Item item) throws IOException {
 			item.add(BandEnum.forIndex(stream.read()).toBand());
 		}
 
@@ -406,7 +410,7 @@ public final class CBinFormat extends BaseFormat {
 		 * @param item 設定する{@link Item}
 		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void oprt(Item item) throws IOException {
+		private final void oprt(Item item) throws IOException {
 			final String s = readString(20);
 			item.add(fields.cache(Qxsl.NAME).field(s));
 		}
@@ -417,7 +421,7 @@ public final class CBinFormat extends BaseFormat {
 		 * @param item 設定する{@link Item}
 		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void note(Item item) throws IOException {
+		private final void note(Item item) throws IOException {
 			final String s = readString(50);
 			item.add(fields.cache(Qxsl.NOTE).field(s));
 		}
@@ -447,27 +451,38 @@ public final class CBinFormat extends BaseFormat {
 	 * @since 2019/05/04
 	 *
 	 */
-	private final class CBinEncoder {
+	private final class CBinEncoder implements TableEncoder {
 		private final CDateTime cDTime;
 		private final DataOutputStream stream;
 
 		/**
 		 * 指定されたストリームに出力するエンコーダを構築します。
 		 * 
-		 * @param out 交信記録を書き込むストリーム
+		 * @param os 交信記録を書き込むストリーム
 		 */
-		public CBinEncoder(OutputStream out) {
+		public CBinEncoder(OutputStream os) {
 			this.cDTime = new CDateTime();
-			this.stream = new DataOutputStream(out);
+			this.stream = new DataOutputStream(os);
 		}
 
 		/**
-		 * 交信記録を出力します。ストリームは閉じられます。
+		 * ストリームを閉じてリソースを解放します。
+		 * 
+		 * @throws IOException リソース解放に失敗した場合
+		 */
+		@Override
+		public final void close() throws IOException {
+			stream.close();
+		}
+
+		/**
+		 * 交信記録を出力します。
 		 * 
 		 * @param items 交信記録
-		 * @throws IOException 入出力の例外
+		 * @throws IOException 出力に失敗した場合
 		 */
-		public void write(List<Item> items) throws IOException {
+		@Override
+		public void encode(List<Item> items) throws IOException {
 			final short size = (short) items.size();
 			stream.writeShort(Short.reverseBytes(size));
 			stream.writeShort(0xFFFF);
@@ -485,7 +500,6 @@ public final class CBinFormat extends BaseFormat {
 			// (5)   2 bytes: global score multiplier
 			// (6)  92 bytes: 23band score multiplier
 			// (7) 600 bytes: operator names (max 30)
-			stream.close();
 		}
 
 		/**
@@ -496,7 +510,7 @@ public final class CBinFormat extends BaseFormat {
 		 * 
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private void item(Item item, boolean last) throws IOException {
+		private final void item(Item item, boolean last) throws IOException {
 			string(20, (Call) item.get(Qxsl.CALL));
 			string(30, (Code) item.getSent().get(Qxsl.CODE));
 			string(30, (Code) item.getRcvd().get(Qxsl.CODE));
@@ -519,7 +533,7 @@ public final class CBinFormat extends BaseFormat {
 		 * @param time 交信日時
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private void time(Time time) throws IOException {
+		private final void time(Time time) throws IOException {
 			if(time == null) stream.writeLong(0);
 			else stream.writeLong(cDTime.encode(time));
 		}
@@ -530,7 +544,7 @@ public final class CBinFormat extends BaseFormat {
 		 * @param mode 通信方式
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private void mode(Mode mode) throws IOException {
+		private final void mode(Mode mode) throws IOException {
 			ModeEnum modes = ModeEnum.valueOf(mode);
 			if(mode == null) stream.writeByte(0);
 			else stream.writeByte(modes.ordinal());
@@ -542,7 +556,7 @@ public final class CBinFormat extends BaseFormat {
 		 * @param band 周波数帯
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private void band(Band band) throws IOException {
+		private final void band(Band band) throws IOException {
 			BandEnum bands = BandEnum.valueOf(band);
 			if(bands == null) stream.writeByte(0);
 			else stream.writeByte(bands.ordinal());
@@ -556,7 +570,7 @@ public final class CBinFormat extends BaseFormat {
 		 * @param f 直列化する属性
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private void string(int limit, Field f) throws IOException {
+		private final void string(int limit, Field f) throws IOException {
 			final String value = f != null? f.value().toString() : "";
 			final byte[] bytes = value.getBytes("SJIS");
 			stream.write(Arrays.copyOf(bytes, limit-1));

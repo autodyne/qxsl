@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.math.BigDecimal;
 
+import elva.ElvaLisp.ElvaRuntimeException;
+
 /**
  * LISP処理系のスコープ付きの評価器の実装です。
  * 

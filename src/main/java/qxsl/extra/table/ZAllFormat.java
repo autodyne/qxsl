@@ -10,8 +10,8 @@ package qxsl.extra.table;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,22 +30,19 @@ import qxsl.model.Item;
  * @since 2013/06/23
  *
  */
-public final class ZAllFormat extends TextFormat {
-	/**
-	 * 書式を構築します。
-	 */
+public final class ZAllFormat extends BaseFormat {
 	public ZAllFormat() {
-		super("zall", "SJIS");
+		super("zall");
 	}
 
 	@Override
-	public List<Item> decode(InputStream strm, ZoneId zone) throws IOException {
-		return new ZAllDecoder(strm).read();
+	public TableDecoder decoder(InputStream is) {
+		return new ZAllDecoder(is);
 	}
 
 	@Override
-	public void encode(OutputStream strm, List<Item> items) throws IOException {
-		new ZAllEncoder(strm).write(items);
+	public TableEncoder encoder(OutputStream os) {
+		return new ZAllEncoder(os);
 	}
 
 	/**
@@ -58,44 +55,50 @@ public final class ZAllFormat extends TextFormat {
 	 * @deprecated この実装は概ね互換性がありますが、無保証です。
 	 */
 	@Deprecated
-	private final class ZAllDecoder extends TextDecoder {
+	private final class ZAllDecoder extends PlainTextDecoder {
 		private final DateTimeFormatter format;
 		private final FieldFormats fields;
 
 		/**
 		 * 指定されたストリームを読み込むデコーダを構築します。
 		 * 
-		 * @param in 読み込むストリーム
+		 * @param is 読み込むストリーム
 		 */
-		public ZAllDecoder(InputStream in) {
-			super(in);
+		public ZAllDecoder(InputStream is) {
+			super(is, Charset.forName("SJIS"));
 			fields = new FieldFormats();
 			format = DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm");
 		}
 
 		/**
-		 * 交信記録を読み込みます。ストリームは閉じられます。
+		 * 交信記録を読み込みます。
 		 * 
-		 * @return 交信記録 交信記録がなければnull
-		 * @throws IOException 入出力の例外
+		 * @return 交信記録
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		public List<Item> read() throws IOException {
+		@Override
+		public List<Item> decode() throws IOException {
 			try {
-				return logSheet();
-			} catch(RuntimeException ex) {
+				return items();
+			} catch (RuntimeException ex) {
 				throw new IOException(ex);
-			} finally {
-				super.close();
 			}
 		}
 
-		private List<Item> logSheet() throws IOException {
+		/**
+		 * 交信記録を読み込みます。
+		 * 
+		 * @return 交信記録
+		 * @throws IOException 読み込みに失敗した場合
+		 */
+		private final List<Item> items() throws IOException {
 			final List<Item> items = new ArrayList<>();
 			String line;
 			while((line = super.readLine()) != null) {
 				if(line.isEmpty()) continue;
 				if(line.startsWith("zLog")) continue;
 				if(line.startsWith("Date")) continue;
+				super.reset();
 				items.add(item(line));
 			}
 			return Collections.unmodifiableList(items);
@@ -105,13 +108,13 @@ public final class ZAllFormat extends TextFormat {
 		 * 1行の文字列から{@link Item}を1件読み込みます。
 		 * 
 		 * @param line 1行
-		 * @return 読み込んだ{@link Item}
+		 * @return 読み込んだ1件の交信
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private Item item(String line) throws IOException {
 			final Item item = new Item();
-			final String[] vals = split(line,
-				0, 17, 30, 34, 42, 46, 54, 66, 71, 76, 79, -1
+			final String[] vals = splitLine(
+				0, 17, 30, 34, 42, 46, 54, 66, 71, 76, 79, 146
 			);
 
 			String time = vals[0];
@@ -260,30 +263,30 @@ public final class ZAllFormat extends TextFormat {
 	 * @deprecated この実装は概ね互換性がありますが、無保証です。
 	 */
 	@Deprecated
-	private final class ZAllEncoder extends TextEncoder {
+	private final class ZAllEncoder extends PlainTextEncoder {
 		private final DateTimeFormatter format;
 
 		/**
 		 * 指定されたストリームに出力するエンコーダを構築します。
 		 * 
-		 * @param out 交信記録を出力するストリーム
+		 * @param os 交信記録を出力するストリーム
 		 */
-		public ZAllEncoder(OutputStream out) {
-			super(out);
+		public ZAllEncoder(OutputStream os) {
+			super(os, Charset.forName("SJIS"));
 			format = DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm");
 		}
 
 		/**
-		 * 交信記録を出力します。ストリームは閉じられます。
+		 * 交信記録を出力します。
 		 * 
 		 * @param items 交信記録
-		 * @throws IOException 入出力の例外
+		 * @throws IOException 出力に失敗した場合
 		 */
-		public void write(List<Item> items) throws IOException {
-			printHead();
+		@Override
+		public void encode(List<Item> items) throws IOException {
+			printHead(getName().concat(".fmt"));
 			println();
 			for(Item r : items) item(r);
-			super.close();
 		}
 
 		/**
@@ -294,19 +297,19 @@ public final class ZAllFormat extends TextFormat {
 		 */
 		private void item(Item item) throws IOException {
 			time((Time) item.get(Qxsl.TIME));
-			printSpace(1);
+			print(" ");
 			printL(12, (Call) item.get(Qxsl.CALL));
-			printSpace(1);
+			print(" ");
 			printL(3,  (RSTQ) item.getSent().get(Qxsl.RSTQ));
-			printSpace(1);
+			print(" ");
 			printL(7,  (Code) item.getSent().get(Qxsl.CODE));
-			printSpace(1);
+			print(" ");
 			printL(3,  (RSTQ) item.getRcvd().get(Qxsl.RSTQ));
-			printSpace(1);
+			print(" ");
 			printL(7,  (Code) item.getRcvd().get(Qxsl.CODE));
 			print(" -     -     ");
 			band((Band) item.get(Qxsl.BAND));
-			printSpace(1);
+			print(" ");
 			printL(4, (Mode) item.get(Qxsl.MODE));
 			print(" 1  ");
 			oprt((Name) item.get(Qxsl.NAME));
@@ -321,7 +324,7 @@ public final class ZAllFormat extends TextFormat {
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void time(Time date) throws IOException {
-			if(date == null) printSpace(16);
+			if(date == null) print(" ".repeat(16));
 			else print(format.format(date.value()));
 		}
 

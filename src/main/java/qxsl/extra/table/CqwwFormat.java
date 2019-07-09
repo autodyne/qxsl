@@ -10,7 +10,7 @@ package qxsl.extra.table;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.time.ZoneId;
+import java.nio.charset.Charset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -32,22 +32,19 @@ import static java.time.ZoneOffset.UTC;
  * @since 2019/05/04
  *
  */
-public final class CqwwFormat extends TextFormat {
-	/**
-	 * 書式を構築します。
-	 */
+public final class CqwwFormat extends BaseFormat {
 	public CqwwFormat() {
-		super("cqww", "ASCII");
+		super("cqww");
 	}
 
 	@Override
-	public List<Item> decode(InputStream strm, ZoneId zone) throws IOException {
-		return new CqwwDecoder(strm).read();
+	public TableDecoder decoder(InputStream is) {
+		return new CqwwDecoder(is);
 	}
 
 	@Override
-	public void encode(OutputStream strm, List<Item> items) throws IOException {
-		new CqwwEncoder(strm).write(items);
+	public TableEncoder encoder(OutputStream os) {
+		return new CqwwEncoder(os);
 	}
 
 	/**
@@ -59,42 +56,48 @@ public final class CqwwFormat extends TextFormat {
 	 * @since 2019/05/04
 	 *
 	 */
-	private final class CqwwDecoder extends TextDecoder {
+	private final class CqwwDecoder extends PlainTextDecoder {
 		private final DateTimeFormatter format;
 		private final FieldFormats fields;
 
 		/**
 		 * 指定されたストリームを読み込むデコーダを構築します。
 		 * 
-		 * @param in 読み込むストリーム
+		 * @param is 読み込むストリーム
 		 */
-		public CqwwDecoder(InputStream in) {
-			super(in);
+		public CqwwDecoder(InputStream is) {
+			super(is, Charset.forName("ASCII"));
 			fields = new FieldFormats();
-			format = DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm").withZone(UTC);
+			format = DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm");
 		}
 
 		/**
-		 * 交信記録を読み込みます。ストリームは閉じられます。
+		 * 交信記録を読み込みます。
 		 * 
-		 * @return 交信記録 交信記録がなければnull
-		 * @throws IOException 入出力の例外
+		 * @return 交信記録
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		public List<Item> read() throws IOException {
+		@Override
+		public List<Item> decode() throws IOException {
 			try {
-				return logSheet();
-			} catch(RuntimeException ex) {
+				return items();
+			} catch (RuntimeException ex) {
 				throw new IOException(ex);
-			} finally {
-				super.close();
 			}
 		}
 
-		private List<Item> logSheet() throws IOException {
+		/**
+		 * 交信記録を読み込みます。
+		 * 
+		 * @return 交信記録
+		 * @throws IOException 読み込みに失敗した場合
+		 */
+		private final List<Item> items() throws IOException {
 			final List<Item> items = new ArrayList<>();
 			String line;
 			while((line = super.readLine()) != null) {
 				if(!line.isEmpty() && !line.startsWith("mon")) {
+					super.reset();
 					items.add(item(line));
 				}
 			}
@@ -105,13 +108,13 @@ public final class CqwwFormat extends TextFormat {
 		 * 1行の文字列から{@link Item}を1件読み込みます。
 		 * 
 		 * @param line 1行
-		 * @return 読み込んだ{@link Item}
+		 * @return 読み込んだ1件の交信
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private Item item(String line) throws IOException {
 			final Item item = new Item();
-			final String[] vals = split(line,
-				0, 6, 9, 25, 39, 43, 50, 64, 68, -1
+			final String[] vals = splitLine(
+				0, 6, 9, 25, 39, 43, 50, 64, 68, 75
 			);
 
 			final String band = vals[0];
@@ -142,6 +145,7 @@ public final class CqwwFormat extends TextFormat {
 		 * @param time 交信日時の文字列
 		 */
 		private void time(Item item, String time) {
+			DateTimeFormatter format = this.format.withZone(UTC);
 			item.add(new Time(ZonedDateTime.parse(time, format)));
 		}
 
@@ -225,28 +229,28 @@ public final class CqwwFormat extends TextFormat {
 	 * @since 2019/05/04
 	 *
 	 */
-	private final class CqwwEncoder extends TextEncoder {
+	private final class CqwwEncoder extends PlainTextEncoder {
 		private final DateTimeFormatter format;
 
 		/**
 		 * 指定されたストリームに出力するエンコーダを構築します。
 		 * 
-		 * @param out 交信記録を出力するストリーム
+		 * @param os 交信記録を出力するストリーム
 		 */
-		public CqwwEncoder(OutputStream out) {
-			super(out);
-			format = DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm").withZone(UTC);
+		public CqwwEncoder(OutputStream os) {
+			super(os, Charset.forName("ASCII"));
+			format = DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm");
 		}
 
 		/**
-		 * 交信記録を出力します。ストリームは閉じられます。
+		 * 交信記録を出力します。
 		 * 
 		 * @param items 交信記録
-		 * @throws IOException 入出力の例外
+		 * @throws IOException 出力に失敗した場合
 		 */
-		public void write(List<Item> items) throws IOException {
+		@Override
+		public void encode(List<Item> items) throws IOException {
 			for(Item r : items) item(r);
-			super.close();
 		}
 
 		/**
@@ -257,21 +261,21 @@ public final class CqwwFormat extends TextFormat {
 		 */
 		private void item(Item item) throws IOException {
 			printR(5, (Band) item.get(Qxsl.BAND));
-			printSpace(1);
+			print(" ");
 			printR(2, (Mode) item.get(Qxsl.MODE));
-			printSpace(1);
+			print(" ");
 			time((Time) item.get(Qxsl.TIME));
-			printSpace(1);
+			print(" ");
 			print("*************");
-			printSpace(1);
+			print(" ");
 			printR(3,  (RSTQ) item.getSent().get(Qxsl.RSTQ));
-			printSpace(1);
+			print(" ");
 			printR(6,  (Code) item.getSent().get(Qxsl.CODE));
-			printSpace(1);
+			print(" ");
 			printR(13, (Call) item.get(Qxsl.CALL));
-			printSpace(1);
+			print(" ");
 			printR(3,  (RSTQ) item.getRcvd().get(Qxsl.RSTQ));
-			printSpace(1);
+			print(" ");
 			printR(6,  (Code) item.getRcvd().get(Qxsl.CODE));
 			println();
 		}
@@ -283,7 +287,8 @@ public final class CqwwFormat extends TextFormat {
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void time(Time date) throws IOException {
-			if(date == null) printSpace(15);
+			DateTimeFormatter format = this.format.withZone(UTC);
+			if(date == null) print(" ".repeat(15));
 			else print(format.format(date.value()));
 		}
 

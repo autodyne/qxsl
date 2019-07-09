@@ -1,6 +1,7 @@
 qxsl.extra.table.QxmlFormat
 qxsl.extra.table.AdxsFormat
 
+qxsl.extra.table.AdisFormat
 qxsl.extra.table.CqwwFormat
 qxsl.extra.table.JarlFormat
 qxsl.extra.table.ZAllFormat

@@ -8,11 +8,11 @@
 package qxsl.extra.table;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
+import javax.xml.namespace.QName;
 
-import qxsl.extra.field.*;
+import qxsl.field.FieldFormats.Any;
 import qxsl.model.Item;
 import qxsl.table.TableFormats;
 
@@ -21,42 +21,30 @@ import org.junit.jupiter.params.provider.MethodSource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * {@link ZDosFormat}クラスのテスト用クラスです。
+ * {@link AdisFormat}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics
  * 
- * @since 2017/02/26
+ * @since 2019/07/09
  *
  */
-public final class ZDosFormatTest extends test.RandTest {
-	private final ZDosFormat format = new ZDosFormat();
+public final class AdisFormatTest extends test.RandTest {
 	private final TableFormats tables = new TableFormats();
-	private final ArrayList<Band> bands = new ArrayList<>();
-	public ZDosFormatTest() {
-		bands.add(new Band(    3_500));
-		bands.add(new Band(    7_000));
-		bands.add(new Band(   14_000));
-		bands.add(new Band(  144_000));
-		bands.add(new Band(1_200_000));
-		bands.add(new Band(5_600_000));
-	}
 	public static IntStream testMethodSource() {
 		return IntStream.range(0, 100);
 	}
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
-	public void testDecode(int numItems) throws IOException {
+	public void testDecode(int numItems) throws Exception {
+		final String ADIF = "adif.org";
+		final AdisFormat format = new AdisFormat();
 		final ArrayList<Item> items = new ArrayList<>();
 		for(int row = 0; row < numItems; row++) {
 			final Item item = new Item();
-			item.add(new Time());
-			item.add(bands.get(randInt(bands.size())));
-			item.add(new Call(alnum(10)));
-			item.add(new Mode(alnum(4)));
-			item.add(new Note(alnum(50)));
-			item.getRcvd().add(new Code(alnum(12)));
-			item.getSent().add(new Code(alnum(12)));
+			item.add(new Any(new QName(ADIF, "CALL"), alnum(10)));
+			item.add(new Any(new QName(ADIF, "BAND"), alnum(10)));
+			item.add(new Any(new QName(ADIF, "MODE"), alnum(10)));
 			items.add(item);
 		}
 		final ByteArrayOutputStream os = new ByteArrayOutputStream();

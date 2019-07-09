@@ -60,6 +60,7 @@ public final class RuleKitTest extends test.RandTest {
 	public static List<URL> testMethodSource() {
 		return Arrays.asList(
 			RuleKit.class.getResource("allja1.adxs"),
+			RuleKit.class.getResource("allja1.adis"),
 			RuleKit.class.getResource("allja1.cqww"),
 			RuleKit.class.getResource("allja1.jarl"),
 			RuleKit.class.getResource("allja1.zall"),

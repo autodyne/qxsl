@@ -144,11 +144,15 @@ public final class RuleKit {
 
 		@Override
 		public Message validate(Item item) throws ScriptException {
-			final Object sexp = eval.eval(Struct.of(rule, item));
-			if(sexp instanceof Success) return (Success) sexp;
-			if(sexp instanceof Failure) return (Failure) sexp;
-			String temp = "%s must return  a success or failure";
-			throw new ScriptException(String.format(temp, rule));
+			try {
+				final Object sexp = eval.eval(Struct.of(rule, item));
+				if(sexp instanceof Success) return (Success) sexp;
+				if(sexp instanceof Failure) return (Failure) sexp;
+				String temp = "%s must return a success or failure";
+				throw new ScriptException(String.format(temp, rule));
+			} catch(ElvaLisp.ElvaRuntimeException ex) {
+				throw ex.toScriptException();
+			}
 		}
 	}
 

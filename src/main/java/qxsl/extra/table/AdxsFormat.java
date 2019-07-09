@@ -13,17 +13,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
-import java.time.ZoneId;
 import java.util.List;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
+import javax.xml.transform.*;
+import javax.xml.transform.stream.*;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import org.xml.sax.SAXException;
 import qxsl.model.Item;
+import qxsl.table.TableFormat;
+import qxsl.table.TableFormats;
 
 /**
  * ADXサブセット書式で交信記録を直列化するフォーマットです。
@@ -35,54 +33,179 @@ import qxsl.model.Item;
  *
  */
 public final class AdxsFormat extends BaseFormat {
-	private final SchemaFactory schema;
-	private final URL xsdURL;
+	private final String XSDPATH = "adxs.xsd";
+	private final String XSLPATH = "adxs.xsl";
+	private final Schema schema;
+	private final TableFormats tables;
 
-	public AdxsFormat() {
+	/**
+	 * ライブラリからスキーマ定義を読み込んで書式を構築します。
+	 *
+	 * @throws SAXException スキーマ定義のエラー
+	 */
+	public AdxsFormat() throws SAXException {
 		super("adxs");
-		this.schema = SchemaFactory.newDefaultInstance();
-		this.xsdURL = getClass().getResource("adxs.xsd");
+		SchemaFactory sf = SchemaFactory.newDefaultInstance();
+		final URL url = AdxsFormat.class.getResource(XSDPATH);
+		this.schema = sf.newSchema(url);
+		this.tables = new TableFormats();
 	}
 
 	@Override
-	public boolean validate(InputStream strm) {
+	public TableDecoder decoder(InputStream is) {
 		try {
-			Schema schema = this.schema.newSchema(this.xsdURL);
-			schema.newValidator().validate(new StreamSource(strm));
-			return true;
-		} catch(SAXException | IOException ex) {
-			return false;
+			return new AdxsDecoder(is);
+		} catch (TransformerException ex) {
+			throw new UnsupportedOperationException(ex);
 		}
 	}
 
 	@Override
-	public List<Item> decode(InputStream strm, ZoneId zone) throws IOException {
-		final InputStream xslt = AdxsFormat.class.getResourceAsStream("adxs.xsl");
-		final QxmlFormat qxml = new QxmlFormat();
+	public TableEncoder encoder(OutputStream os) {
 		try {
-			final TransformerFactory tf = TransformerFactory.newInstance();
-			Transformer trans = tf.newTransformer(new StreamSource(xslt));
-			final ByteArrayOutputStream buf = new ByteArrayOutputStream();
-			trans.transform(new StreamSource(strm), new StreamResult(buf));
-			return qxml.decode(new ByteArrayInputStream(buf.toByteArray()), zone);
-		} catch(TransformerException ex) {
-			throw new IOException(ex);
+			return new AdxsEncoder(os);
+		} catch (TransformerException ex) {
+			throw new UnsupportedOperationException(ex);
 		}
 	}
 
-	@Override
-	public void encode(OutputStream strm, List<Item> items) throws IOException {
-		final InputStream xslt = AdxsFormat.class.getResourceAsStream("adxs.xsl");
-		final QxmlFormat qxml = new QxmlFormat();
-		try {
-			final TransformerFactory tf = TransformerFactory.newInstance();
-			Transformer trans = tf.newTransformer(new StreamSource(xslt));
-			final ByteArrayOutputStream buf = new ByteArrayOutputStream();
-			qxml.encode(buf, items);
-			InputStream in = new ByteArrayInputStream(buf.toByteArray());
-			trans.transform(new StreamSource(in), new StreamResult(strm));
-		} catch(TransformerException ex) {
-			throw new IOException(ex.getMessage(), ex);
+	/**
+	 * ADXサブセット書式で直列化された交信記録をデコードします。
+	 * 
+	 * 
+	 * @author Journal of Hamradio Informatics
+	 * 
+	 * @since 2019/07/08
+	 *
+	 */
+	private final class AdxsDecoder implements TableDecoder {
+		private final InputStream stream;
+		private final Transformer format;
+
+		/**
+		 * 指定されたストリームから交信記録を読み込むデコーダを構築します。
+		 * 
+		 * @param is 読み込むストリーム
+		 * @throws TransformerException 通常は発生しない例外
+		 */
+		public AdxsDecoder(InputStream is) throws TransformerException {
+			this.stream = is;
+			TransformerFactory tf = TransformerFactory.newInstance();
+			String xslt = getClass().getResource(XSLPATH).toString();
+			this.format = tf.newTransformer(new StreamSource(xslt));
+		}
+
+		/**
+		 * ストリームを閉じてリソースを解放します。
+		 * 
+		 * @throws IOException リソース解放に失敗した場合
+		 */
+		@Override
+		public final void close() throws IOException {
+			stream.close();
+		}
+
+		/**
+		 * ストリームの内容を検証してから交信記録を読み込みます。
+		 * 
+		 * @return 読み込んだ交信記録
+		 * @throws IOException 構文の問題もしくは読み込みに失敗した場合
+		 */
+		@Override
+		public final List<Item> decode() throws IOException {
+			try {
+				return valid(stream.readAllBytes());
+			} catch (IOException ex) {
+				throw ex;
+			} catch (Exception ex) {
+				throw new IOException(ex);
+			}
+		}
+
+		/**
+		 * ストリームの内容を検証してから交信記録を読み込みます。
+		 * 
+		 * @param data ストリームの内容
+		 * @return 読み込んだ交信記録
+		 * @throws Exception 構文の問題もしくは読み込みに失敗した場合
+		 */
+		private final List<Item> valid(byte[] data) throws Exception {
+			final var stream = new ByteArrayInputStream(data);
+			final var buffer = new ByteArrayOutputStream();
+			final var source = new StreamSource(stream);
+			final var result = new StreamResult(buffer);
+			schema.newValidator().validate(source);
+			stream.reset();
+			this.format.transform(source, result);
+			return tables.decode(buffer.toByteArray());
+		}
+	}
+
+	/**
+	 * ADXサブセット書式で直列化された交信記録をエンコードします。
+	 * 
+	 * 
+	 * @author Journal of Hamradio Informatics
+	 * 
+	 * @since 2019/07/08
+	 *
+	 */
+	private final class AdxsEncoder implements TableEncoder {
+		private final StreamResult result;
+		private final Transformer format;
+
+		/**
+		 * 指定されたストリームに交信記録を書き出すデコーダを構築します。
+		 * 
+		 * @param os 出力先のストリーム
+		 * @throws TransformerException 通常は発生しない例外
+		 */
+		public AdxsEncoder(OutputStream os) throws TransformerException {
+			TransformerFactory tf = TransformerFactory.newInstance();
+			String xslt = getClass().getResource(XSLPATH).toString();
+			this.format = tf.newTransformer(new StreamSource(xslt));
+			this.result = new StreamResult(os);
+		}
+
+		/**
+		 * ストリームを閉じてリソースを解放します。
+		 * 
+		 * @throws IOException リソース解放時のエラー
+		 */
+		@Override
+		public final void close() throws IOException {
+			result.getOutputStream().close();
+		}
+
+		/**
+		 * 交信記録を出力します。
+		 * 
+		 * @param items 交信記録
+		 * @throws IOException 出力に失敗した場合
+		 */
+		@Override
+		public void encode(List<Item> items) throws IOException {
+			try {
+				this.trans(items);
+			} catch (IOException ex) {
+				throw ex;
+			} catch (Exception ex) {
+				throw new IOException(ex);
+			}
+		}
+
+		/**
+		 * 交信記録を出力します。
+		 * 
+		 * @param items 交信記録
+		 * @throws Exception 出力に失敗した場合
+		 */
+		private void trans(List<Item> items) throws Exception {
+			final var buff = new ByteArrayOutputStream();
+			tables.forName("qxml").encoder(buff).encode(items);
+			final var data = buff.toByteArray();
+			final var strm = new ByteArrayInputStream(data);
+			format.transform(new StreamSource(strm), result);
 		}
 	}
 }

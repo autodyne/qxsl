@@ -65,6 +65,23 @@ public final class FieldFormats implements Iterable<FieldFormat> {
 	}
 
 	/**
+	 * 指定された属性を適切な書式で文字列に変換します。
+	 *
+	 * @param field 文字列に変換する属性
+	 * @return 文字列による属性値の表現
+	 *
+	 * @throws UnsupportedOperationException 書式が未定義の場合
+	 */
+	public final String encode(Field field) {
+		if(field.isAny()) return field.toString();
+		try {
+			return getFormat(field.name()).encode(field);
+		} catch (NullPointerException ex) {
+			throw new UnsupportedOperationException();
+		}
+	}
+
+	/**
 	 * 指定された属性名に対する{@link Cache}を返します。
 	 * 
 	 * @param qname {@link Field}の名前
