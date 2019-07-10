@@ -7,12 +7,10 @@
 *****************************************************************************/
 package qxsl.extra.table;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
-import java.time.format.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,18 +29,30 @@ import qxsl.model.Item;
  *
  */
 public final class ZAllFormat extends BaseFormat {
+	private final Charset SJIS = Charset.forName("SJIS");
+
 	public ZAllFormat() {
 		super("zall");
 	}
 
 	@Override
+	public TableDecoder decoder(Reader reader) {
+		return new ZAllDecoder(reader);
+	}
+
+	@Override
+	public TableEncoder encoder(Writer writer) {
+		return new ZAllEncoder(writer);
+	}
+
+	@Override
 	public TableDecoder decoder(InputStream is) {
-		return new ZAllDecoder(is);
+		return decoder(new InputStreamReader(is, SJIS));
 	}
 
 	@Override
 	public TableEncoder encoder(OutputStream os) {
-		return new ZAllEncoder(os);
+		return encoder(new OutputStreamWriter(os, SJIS));
 	}
 
 	/**
@@ -60,12 +70,12 @@ public final class ZAllFormat extends BaseFormat {
 		private final FieldFormats fields;
 
 		/**
-		 * 指定されたストリームを読み込むデコーダを構築します。
+		 * 指定されたリーダを読み込むデコーダを構築します。
 		 * 
-		 * @param is 読み込むストリーム
+		 * @param reader 交信記録を読み込むリーダ
 		 */
-		public ZAllDecoder(InputStream is) {
-			super(is, Charset.forName("SJIS"));
+		public ZAllDecoder(Reader reader) {
+			super(reader);
 			fields = new FieldFormats();
 			format = DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm");
 		}
@@ -95,7 +105,7 @@ public final class ZAllFormat extends BaseFormat {
 			final List<Item> items = new ArrayList<>();
 			String line;
 			while((line = super.readLine()) != null) {
-				if(line.isEmpty()) continue;
+				if(line.isBlank()) continue;
 				if(line.startsWith("zLog")) continue;
 				if(line.startsWith("Date")) continue;
 				super.reset();
@@ -267,12 +277,12 @@ public final class ZAllFormat extends BaseFormat {
 		private final DateTimeFormatter format;
 
 		/**
-		 * 指定されたストリームに出力するエンコーダを構築します。
+		 * 指定されたライタに出力するエンコーダを構築します。
 		 * 
-		 * @param os 交信記録を出力するストリーム
+		 * @param writer 交信記録を出力するライタ
 		 */
-		public ZAllEncoder(OutputStream os) {
-			super(os, Charset.forName("SJIS"));
+		public ZAllEncoder(Writer writer) {
+			super(writer);
 			format = DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm");
 		}
 

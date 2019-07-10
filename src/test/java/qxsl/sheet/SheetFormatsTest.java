@@ -29,7 +29,7 @@ public final class SheetFormatsTest extends test.RandTest {
 	}
 	@Test
 	public void testGetFormat() {
-		assertThat(sheets.getFormat("cab3")).isInstanceOf(Cab3Format.class);
-		assertThat(sheets.getFormat("jarl")).isInstanceOf(JarlFormat.class);
+		assertThat(sheets.forName("cab3")).isInstanceOf(Cab3Format.class);
+		assertThat(sheets.forName("jarl")).isInstanceOf(JarlFormat.class);
 	}
 }

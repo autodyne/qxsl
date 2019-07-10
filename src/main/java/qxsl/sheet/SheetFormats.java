@@ -7,19 +7,22 @@
 *****************************************************************************/
 package qxsl.sheet;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.Reader;
+import java.io.StringReader;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
+import java.util.StringJoiner;
+import java.util.stream.Collectors;
+import qxsl.model.Item;
+import qxsl.table.TableFormats;
 
 /**
- * {@link SheetFormat}クラスの自動検出及びインスタンス化機構を実装します。
+ * {@link SheetFormat}実装クラスを自動的に検出して管理します。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -31,14 +34,16 @@ public final class SheetFormats implements Iterable<SheetFormat> {
 	private final ServiceLoader<SheetFormat> loader;
 
 	/**
-	 * 現在のクラスローダからインスタンス化機構を構築します。
+	 * インスタンスを構築します。
+	 *
+	 * @see ServiceLoader#load(Class)
 	 */
 	public SheetFormats() {
-		this(Thread.currentThread().getContextClassLoader());
+		loader = ServiceLoader.load(SheetFormat.class);
 	}
 
 	/**
-	 * 指定のクラスローダからインスタンス化機構を構築します。
+	 * 指定されたローダを参照するインスタンスを構築します。
 	 * 
 	 * @param cl 書式の実装を検出するクラスローダ
 	 */
@@ -47,7 +52,7 @@ public final class SheetFormats implements Iterable<SheetFormat> {
 	}
 
 	/**
-	 * クラスパスから検出された{@link SheetFormat}を返します。
+	 * このインスタンスが検出した書式を返します。
 	 *
 	 * @return 書式のイテレータ
 	 */
@@ -57,13 +62,12 @@ public final class SheetFormats implements Iterable<SheetFormat> {
 	}
 
 	/**
-	 * 指定された名前を持つ{@link SheetFormat}を検索して返します。
-	 * 
+	 * 指定された名前を持つ書式の実装を検索します。
 	 * 
 	 * @param name 属性の名前
 	 * @return 対応する書式 存在しない場合null
 	 */
-	public SheetFormat getFormat(String name) {
+	public SheetFormat forName(String name) {
 		for(SheetFormat fmt: loader) {
 			if(fmt.getName().equals(name)) return fmt;
 		}
@@ -71,71 +75,37 @@ public final class SheetFormats implements Iterable<SheetFormat> {
 	}
 
 	/**
-	 * 指定されたストリームを主記憶に読み込みます。
-	 * 
-	 * 
-	 * @param in 内容を読み込むストリーム
-	 * @return 内容をコピーしたストリーム
+	 * 指定されたリーダから適切な書式で交信記録を読み込みます。
 	 *
-	 * @throws IOException 入力時の例外
+	 * @param reader 要約記録を読み込むリーダ
+	 * @return 交信記録
+	 * 
+	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
 	 */
-	private InputStream fetch(InputStream in) throws IOException {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		final byte[] buffer = new byte[1024];
-		int len = 0;
-		try (InputStream inputStream = in) {
-			while((len = in.read(buffer)) > 0) out.write(buffer, 0, len);
-		}
-		return new ByteArrayInputStream(out.toByteArray());
+	public List<Item> unpack(Reader reader) throws IOException {
+		final var lines = new BufferedReader(reader).lines();
+		return unpack(lines.collect(Collectors.joining("\n")));
 	}
 
 	/**
-	 * 指定された入力から提出書類を読み取って交信記録を抽出します。
+	 * 指定された文字列から適切な書式で交信記録を読み込みます。
+	 *
+	 * @param string 要約書類を読み込む文字列
+	 * @return 交信記録
 	 * 
-	 * 
-	 * @param in 提出書類を読み込むストリーム
-	 * @return 交信記録の文字列
-	 * 
-	 * @throws IOException 入出力例外もしくは対応する書式がない場合
+	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
 	 */
-	public String unseal(InputStream in) throws IOException {
-		InputStream bin = this.fetch(in);
-		StringWriter sw = new StringWriter();
-		PrintWriter pw = new PrintWriter(sw);
-		for(SheetFormat format: this) try {
-			return format.decode(bin).get(format.getTableKey());
-		} catch (IOException ex) {
-			pw.printf("%s: %s%n", format, ex.getMessage());
-			bin.reset();
+	public List<Item> unpack(String string) throws IOException {
+		final var err = new StringJoiner(",");
+		final var tables = new TableFormats();
+		for(SheetFormat fmt: this) {
+			try(var decoder = fmt.decoder(new StringReader(string))) {
+				final Map<String, String> map = decoder.decode();
+				return tables.decode(map.get(fmt.getTableKey()));
+			} catch (IOException ex) {
+				err.add(fmt.toString());
+			}
 		}
-		throw new IOException("unsupported format:\n" + sw);
-	}
-
-	/**
-	 * 指定された入力から提出書類を読み取って交信記録を抽出します。
-	 * 
-	 * 
-	 * @param url 提出書類を読み込むURL
-	 * @return 交信記録の文字列
-	 * 
-	 * @throws IOException 入出力例外もしくは対応する書式がない場合
-	 */
-	public String unseal(URL url) throws IOException {
-		try (InputStream is = url.openStream()) {
-			return unseal(is);
-		}
-	}
-
-	/**
-	 * 指定された入力から提出書類を読み取って交信記録を抽出します。
-	 * 
-	 * 
-	 * @param bytes 提出書類を読み込むバイト列
-	 * @return 交信記録の文字列
-	 * 
-	 * @throws IOException 入出力例外もしくは対応する書式がない場合
-	 */
-	public String unseal(byte[] bytes) throws IOException {
-		return unseal(new ByteArrayInputStream(bytes));
+		throw new IOException("none of ".concat(err.toString()));
 	}
 }

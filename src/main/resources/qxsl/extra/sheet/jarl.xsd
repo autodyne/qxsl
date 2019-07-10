@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:element name="DOCUMENT">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="SUMMARYSHEET">
+					<xsd:complexType>
+						<xsd:all>
+							<xsd:element type="xsd:string" minOccurs="0" name="CONTESTNAME"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="CATEGORYCODE"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="CALLSIGN"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="OPCALLSIGN"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="TOTALSCORE"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="ADDRESS"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="NAME"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="TEL"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="EMAIL"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="POWER"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="FDCOEFF"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="OPPLACE"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="POWERSUPPLY"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="COMMENTS"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="MULTIOPLIST"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="REGCLUBNUMBER"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="OATH"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="DATE"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="SIGNATURE"/>
+						</xsd:all>
+						<xsd:attribute name="VERSION" fixed="R2.0"/>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="LOGSHEET">
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base="xsd:string">
+								<xsd:attribute name="TYPE"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

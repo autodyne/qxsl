@@ -7,9 +7,7 @@
 *****************************************************************************/
 package qxsl.extra.table;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,6 +19,7 @@ import qxsl.extra.field.*;
 import qxsl.field.FieldFormats;
 import qxsl.model.Item;
 
+import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.time.ZoneOffset.UTC;
 
 /**
@@ -38,13 +37,23 @@ public final class CqwwFormat extends BaseFormat {
 	}
 
 	@Override
+	public TableDecoder decoder(Reader reader) {
+		return new CqwwDecoder(reader);
+	}
+
+	@Override
+	public TableEncoder encoder(Writer writer) {
+		return new CqwwEncoder(writer);
+	}
+
+	@Override
 	public TableDecoder decoder(InputStream is) {
-		return new CqwwDecoder(is);
+		return decoder(new InputStreamReader(is, US_ASCII));
 	}
 
 	@Override
 	public TableEncoder encoder(OutputStream os) {
-		return new CqwwEncoder(os);
+		return encoder(new OutputStreamWriter(os, US_ASCII));
 	}
 
 	/**
@@ -61,12 +70,12 @@ public final class CqwwFormat extends BaseFormat {
 		private final FieldFormats fields;
 
 		/**
-		 * 指定されたストリームを読み込むデコーダを構築します。
+		 * 指定されたリーダを読み込むデコーダを構築します。
 		 * 
-		 * @param is 読み込むストリーム
+		 * @param reader 更新小緑を読み込むリーダ
 		 */
-		public CqwwDecoder(InputStream is) {
-			super(is, Charset.forName("ASCII"));
+		public CqwwDecoder(Reader reader) {
+			super(reader);
 			fields = new FieldFormats();
 			format = DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm");
 		}
@@ -96,7 +105,7 @@ public final class CqwwFormat extends BaseFormat {
 			final List<Item> items = new ArrayList<>();
 			String line;
 			while((line = super.readLine()) != null) {
-				if(!line.isEmpty() && !line.startsWith("mon")) {
+				if(!line.isBlank()) {
 					super.reset();
 					items.add(item(line));
 				}
@@ -114,7 +123,7 @@ public final class CqwwFormat extends BaseFormat {
 		private Item item(String line) throws IOException {
 			final Item item = new Item();
 			final String[] vals = splitLine(
-				0, 6, 9, 25, 39, 43, 50, 64, 68, 75
+				5, 11, 14, 30, 44, 48, 55, 69, 73, 80
 			);
 
 			final String band = vals[0];
@@ -233,12 +242,12 @@ public final class CqwwFormat extends BaseFormat {
 		private final DateTimeFormatter format;
 
 		/**
-		 * 指定されたストリームに出力するエンコーダを構築します。
+		 * 指定されたライタに出力するエンコーダを構築します。
 		 * 
-		 * @param os 交信記録を出力するストリーム
+		 * @param writer 交信記録を出力するライタ
 		 */
-		public CqwwEncoder(OutputStream os) {
-			super(os, Charset.forName("ASCII"));
+		public CqwwEncoder(Writer writer) {
+			super(writer);
 			format = DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm");
 		}
 
@@ -260,6 +269,7 @@ public final class CqwwFormat extends BaseFormat {
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void item(Item item) throws IOException {
+			print("QSO: ");
 			printR(5, (Band) item.get(Qxsl.BAND));
 			print(" ");
 			printR(2, (Mode) item.get(Qxsl.MODE));

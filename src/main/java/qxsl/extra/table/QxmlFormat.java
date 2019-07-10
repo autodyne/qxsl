@@ -7,14 +7,10 @@
 *****************************************************************************/
 package qxsl.extra.table;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import javax.xml.namespace.QName;
 import javax.xml.stream.*;
@@ -164,45 +160,78 @@ public final class QxmlFormat extends BaseFormat {
 		 */
 		private final List<Item> items() throws XMLStreamException {
 			final List<Item> items = new ArrayList<>();
-			reader.nextTag().asStartElement();
+			start(LIST);
 			while(reader.peek().isStartElement()) items.add(item());
-			reader.nextTag().asEndElement();
+			close(LIST);
 			return Collections.unmodifiableList(items);
 		}
 
 		/**
 		 * 要素の開始イベントから1件の交信記録を読み込みます。
 		 * 
-		 * @param e 交信記録の開始を表すイベント
 		 * @return 読み込んだ交信記録
-		 *
 		 * @throws XMLStreamException 構文の問題もしくは読み込みに失敗した場合
 		 */
 		private final Item item() throws XMLStreamException {
 			final Item item = new Item();
-			fields(item, reader.nextTag().asStartElement());
-			while(reader.peek().isStartElement()) {
-				StartElement ex = reader.nextTag().asStartElement();
-				if(RCVD.equals(ex.getName())) fields(item.getRcvd(), ex);
-				if(SENT.equals(ex.getName())) fields(item.getSent(), ex);
-				reader.nextTag().asEndElement();
-			}
-			reader.nextTag().asEndElement();
+			fields(item, start(ITEM));
+			if(ahead(RCVD)) close(fields(item.getRcvd(), start(RCVD)));
+			if(ahead(SENT)) close(fields(item.getSent(), start(SENT)));
+			close(ITEM);
 			return item;
 		}	
 
 		/**
 		 * 要素の開始イベントから属性を読み込んで交信記録に設定します。
 		 * 
-		 * @param node タプル
-		 * @param elem タプルの開始タグ
+		 * @param tuple 属性を設定するタプル
+		 * @param start 開始する要素
+		 * @return 直後に終了すべき要素の名前
 		 */
-		private final void fields(Tuple node, StartElement elem) {
-			final Iterator<Attribute> iterator = elem.getAttributes();
-			while(iterator.hasNext()) {
-				Attribute att = iterator.next();
-				node.add(fields.cache(att.getName()).field(att.getValue()));
+		private final QName fields(Tuple tuple, StartElement start) {
+			final var attrs = start.getAttributes();
+			while(attrs.hasNext()) {
+				Attribute att = attrs.next();
+				final var qname = att.getName();
+				final var value = att.getValue();
+				tuple.add(fields.cache(qname).field(value));
 			}
+			return start.getName();
+		}
+
+		/**
+		 * 次のタグが指定された名前の要素の開始であるかを実稼働時に確認します。
+		 *
+		 * @param name 開始する要素の名前
+		 * @return 指定された要素が見つかった場合に真
+		 */
+		private boolean ahead(QName name) throws XMLStreamException {
+			if(!reader.peek().isStartElement()) return false;
+			return reader.peek().asStartElement().getName().equals(name);
+		}
+
+		/**
+		 * 次のタグが指定された名前の要素の開始であるかをテスト時に確認します。
+		 *
+		 * @param name 開始する要素の名前
+		 * @return 見つかった要素
+		 */
+		private StartElement start(QName name) throws XMLStreamException {
+			final StartElement start = reader.nextTag().asStartElement();
+			assert start.getName().equals(name);
+			return start;
+		}
+
+		/**
+		 * 次のタグが指定された名前の要素の終了であるかをテスト時に確認します。
+		 *
+		 * @param name 終了する要素の名前
+		 * @return 見つかった要素
+		 */
+		private EndElement close(QName name) throws XMLStreamException {
+			final EndElement close = reader.nextTag().asEndElement();
+			assert close.getName().equals(name);
+			return close;
 		}
 
 		/**

@@ -7,12 +7,10 @@
 *****************************************************************************/
 package qxsl.extra.table;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.time.*;
+import java.io.*;
+import java.time.LocalDate;
+import java.time.Year;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -309,10 +307,10 @@ public final class CBinFormat extends BaseFormat {
 			final short rdh = Short.reverseBytes(hdr);
 			final long num = Short.toUnsignedInt(rdh);
 			stream.skipBytes(6);
-			byte[] tested = new byte[8];
-			byte[] answer = "CQsoData".getBytes("ASCII");
-			stream.readFully(tested);
-			if(Arrays.equals(tested, answer)) {
+			byte[] quest = new byte[8];
+			byte[] truth = "CQsoData".getBytes("ASCII");
+			stream.readFully(quest);
+			if(Arrays.equals(quest, truth)) {
 				for(int i=0; i<num; i++) items.add(item());
 				return Collections.unmodifiableList(items);
 			} else throw new IOException("malformed data");

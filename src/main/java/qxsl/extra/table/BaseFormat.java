@@ -114,17 +114,16 @@ public abstract class BaseFormat implements TableFormat {
 		private final BufferedReader reader;
 
 		/**
-		 * 指定されたストリームを読み込むデコーダを構築します。
+		 * 指定されたリーダを読み込むデコーダを構築します。
 		 * 
-		 * @param is 交信記録を読み込むストリーム
-		 * @param cs 文字セット
+		 * @param reader 交信記録を読み込むリーダ
 		 */
-		public PlainTextDecoder(InputStream is, Charset cs) {
-			this.reader = new BufferedReader(new InputStreamReader(is, cs));
+		public PlainTextDecoder(Reader reader) {
+			this.reader = new BufferedReader(reader);
 		}
 
 		/**
-		 * ストリームを閉じてリソースを解放します。
+		 * リーダを閉じてリソースを解放します。
 		 * 
 		 * @throws IOException リソース解放に失敗した場合
 		 */
@@ -134,7 +133,7 @@ public abstract class BaseFormat implements TableFormat {
 		}
 
 		/**
-		 * ストリームの位置を直前のマーク位置まで戻します。
+		 * リーダの位置を直前のマーク位置まで戻します。
 		 *
 		 * @throws IOException マークが存在しない場合
 		 */
@@ -212,26 +211,25 @@ public abstract class BaseFormat implements TableFormat {
 	 *
 	 */
 	protected abstract class PlainTextEncoder implements TableEncoder {
-		private final PrintStream stream;
+		private final PrintWriter writer;
 
 		/**
-		 * 指定されたストリームを読み込むデコーダを構築します。
+		 * 指定されたライタを読み込むデコーダを構築します。
 		 * 
-		 * @param os 交信記録を出力するストリーム
-		 * @param cs 文字セット
+		 * @param writer 交信記録を出力するライタ
 		 */
-		public PlainTextEncoder(OutputStream os, Charset cs) {
-			this.stream = new PrintStream(os, true, cs);
+		public PlainTextEncoder(Writer writer) {
+			this.writer = new PrintWriter(writer, true);
 		}
 
 		/**
-		 * ストリームを閉じてリソースを解放します。
+		 * ライタを閉じてリソースを解放します。
 		 * 
 		 * @throws IOException リソース解放に失敗した場合
 		 */
 		@Override
 		public final void close() throws IOException {
-			stream.close();
+			writer.close();
 		}
 
 		/**
@@ -245,7 +243,7 @@ public abstract class BaseFormat implements TableFormat {
 			try(InputStream is = url.openStream()) {
 				final Reader isr = new InputStreamReader(is, "UTF-8");
 				Stream<String> strm = new BufferedReader(isr).lines();
-				stream.print(strm.collect(Collectors.joining("\n")));
+				writer.print(strm.collect(Collectors.joining("\n")));
 			}
 		}
 
@@ -256,7 +254,7 @@ public abstract class BaseFormat implements TableFormat {
 		 * @throws IOException 出力例外発生時
 		 */
 		public final void print(String s) throws IOException {
-			stream.print(s);
+			writer.print(s);
 		}
 
 		/**
@@ -265,7 +263,7 @@ public abstract class BaseFormat implements TableFormat {
 		 * @throws IOException 出力例外発生時
 		 */
 		public final void println() throws IOException {
-			stream.println();
+			writer.println();
 		}
 
 		/**
@@ -276,7 +274,7 @@ public abstract class BaseFormat implements TableFormat {
 		 * @throws IOException 出力例外発生時
 		 */
 		public final void printf(String f, Object...args) throws IOException {
-			stream.printf(f, args);
+			writer.printf(f, args);
 		}
 
 		/**
@@ -289,7 +287,7 @@ public abstract class BaseFormat implements TableFormat {
 		public final void printR(int len, String s) throws IOException {
 			final String filled = String.format(String.format("%%%ds", len), s);
 			final String msg = "'%s' is too long (consider shortening to '%s').";
-			if(filled.length() == len) stream.print(filled);
+			if(filled.length() == len) writer.print(filled);
 			else throw new IOException(String.format(msg, s, s.substring(0, len)));
 		}
 
@@ -303,7 +301,7 @@ public abstract class BaseFormat implements TableFormat {
 		public final void printL(int len, String s) throws IOException {
 			final String filled = String.format(String.format("%%-%ds", len), s);
 			final String msg = "'%s' is too long (consider shortening to '%s').";
-			if(filled.length() == len) stream.print(filled);
+			if(filled.length() == len) writer.print(filled);
 			else throw new IOException(String.format(msg, s, s.substring(0, len)));
 		}
 

@@ -8,16 +8,21 @@
 package qxsl.extra.sheet;
 
 import java.io.*;
+import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.StringJoiner;
-import javax.xml.parsers.*;
-import org.xml.sax.*;
-import org.xml.sax.helpers.DefaultHandler;
+import java.util.stream.Collectors;
+import javax.xml.namespace.QName;
+import javax.xml.stream.*;
+import javax.xml.stream.events.*;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import org.xml.sax.SAXException;
 
 /**
- * 日本アマチュア無線連盟が推奨するサマリーシートの書式です。
+ * JARLサマリーシートR2.0(R1.0非対応)の書式です。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -26,33 +31,36 @@ import org.xml.sax.helpers.DefaultHandler;
  *
  */
 public final class JarlFormat extends BaseFormat {
+	public static final QName DOC = new QName("DOCUMENT");
+	public static final QName SUM = new QName("SUMMARYSHEET");
+	public static final QName LOG = new QName("LOGSHEET");
+	private final String XSDPATH = "jarl.xsd";
+	private final Schema schema;
+
 	/**
-	 * 書式を構築します。
+	 * ライブラリからスキーマ定義を読み込んで書式を構築します。
+	 *
+	 * @throws SAXException スキーマ定義の問題
 	 */
-	public JarlFormat() {
+	public JarlFormat() throws SAXException {
 		super("jarl");
+		SchemaFactory sf = SchemaFactory.newDefaultInstance();
+		final URL url = JarlFormat.class.getResource(XSDPATH);
+		this.schema = sf.newSchema(url);
 	}
 
-	/**
-	 * 指定したストリームをこの書式でデコードして提出書類を読み込みます。
-	 * 
-	 * @param in 提出書類を読み込むストリーム
-	 * @return 提出書類
-	 * @throws IOException 入出力時の例外
-	 */
-	public Map<String, String> decode(InputStream in) throws IOException {
-		return new JarlFormatDecoder(in).read();
+	@Override
+	public SheetDecoder decoder(Reader reader) {
+		try {
+			return new JarlDecoder(reader);
+		} catch (XMLStreamException ex) {
+			throw new UnsupportedOperationException(ex);
+		}
 	}
 
-	/**
-	 * この書式でエンコードした提出書類を指定したストリームに書き込みます。
-	 * 
-	 * @param out 提出書類を書き込むストリーム
-	 * @param map 出力する提出書類
-	 * @throws IOException 入出力時の例外
-	 */
-	public void encode(OutputStream out, Map<String, String> map) throws IOException {
-		new JarlFormatEncoder(out).write(new HashMap<>(map));
+	@Override
+	public SheetEncoder encoder(Writer writer) {
+		return new JarlEncoder(writer);
 	}
 
 	/**
@@ -64,165 +72,124 @@ public final class JarlFormat extends BaseFormat {
 	 * @since 2014/11/04
 	 *
 	 */
-	private static final class JarlFormatDecoder {
-		private SAXParserFactory parserFactory;
-		private final InputStreamReader reader;
+	private final class JarlDecoder implements SheetDecoder {
+		private static final String BF = "<(\\S+?) (\\S+?)=(\\S+?)>";
+		private static final String FB = "<$1 $2=\"$3\">";
+		private final Reader source;
+		private final XMLInputFactory factor;
+		private XMLEventReader reader = null;
 
 		/**
-		 * 指定された{@link InputStream}を読み込むデコーダを構築します。
+		 * 指定されたリーダから要約書類を読み込むデコーダを構築します。
 		 * 
-		 * @param in 提出書類を読み込むストリーム
-		 * @throws IOException SJISに対応していない場合
+		 * @param reader 読み込むリーダ
+		 * @throws XMLStreamException 通常は発生しない例外
 		 */
-		public JarlFormatDecoder(InputStream in) throws IOException {
-			parserFactory = SAXParserFactory.newInstance();
-			this.reader = new InputStreamReader(in, "SJIS");
+		public JarlDecoder(Reader reader) throws XMLStreamException {
+			this.source = reader;
+			this.factor = XMLInputFactory.newInstance();
 		}
 
 		/**
-		 * 読み込んだサマリーシートを開封します。
+		 * リーダを閉じてリソースを解放します。
 		 *
-		 * @return 提出書類
-		 * @throws IOException 読み込みに失敗した場合
+		 * @throws IOException リソースの解放に失敗した場合
 		 */
-		public Map<String, String> read() throws IOException	{
-			SummaryHandler handler = new SummaryHandler();
+		@Override
+		public void close() throws IOException {
 			try {
-				SAXParser parser = parserFactory.newSAXParser();
-				parser.parse(cleanse(), handler);
-				return Collections.unmodifiableMap(handler.binds);
-			} catch(ParserConfigurationException ex) {
-				throw new IOException(ex);
-			} catch(SAXException ex) {
+				reader.close();
+			} catch (XMLStreamException ex) {
 				throw new IOException(ex);
 			} finally {
-				reader.close();
+				source.close();
 			}
 		}
 
 		/**
-		 * サマリーシートをXMLパーサーで扱うために整形します。
+		 * リーダの内容を検証してから要約書類を読み込みます。
 		 * 
-		 * @return XMLを提供するInputSource
-		 * @throws IOException 読み込みに失敗した場合
+		 * @return 読み込んだ要約書類
+		 * @throws IOException 構文の問題もしくは読み込みに失敗した場合
 		 */
-		private InputSource cleanse() throws IOException {
-			String text = preprocess();
-			StringBuilder sb = new StringBuilder("<sheet>");
-			boolean isTag = false;
-			boolean isAttr = false;
-			boolean isQuoted = false;
-			StringBuilder attrVal = new StringBuilder();
-			for(int i = 0; i < text.length(); i++) {
-				char ch = text.charAt(i);
-				if(isTag && !isAttr && ch == '=') {
-					isAttr = true;
-					sb.append(ch);
-				} else if(isAttr) {
-					if(!isQuoted) {
-						if(ch == '"') isQuoted = true;
-						else if(ch == '>' || ch == ' ') {
-							isAttr = false;
-							sb.append('"');
-							sb.append(attrVal);
-							sb.append('"');
-							sb.append(ch);
-							attrVal.setLength(0);
-							if(ch == '>') isTag = false;
-						} else attrVal.append(ch);
-					} else if(ch == '"') {
-						isQuoted = false;
-					} else attrVal.append(ch);
-				} else if(!isTag && ch == '<') {
-					isTag = true;
-					sb.append(ch);
-				} else if(isTag && ch == '>') {
-					isTag = false;
-					sb.append(ch);
-				} else if(ch == '<') {
-					sb.append("&lt;");
-				} else if(ch == '>') {
-					sb.append("&gt;");
-				} else if(ch == '&') {
-					sb.append("&amp;");
-				} else if(ch == '"') {
-					sb.append("&quot;");
-				} else if(ch == '\'') {
-					sb.append("&apos;");
-				} else if(isTag) {
-					sb.append(Character.toUpperCase(ch));
-				} else sb.append(ch);
+		@Override
+		public final Map<String, String> decode() throws IOException {
+			try {
+				return sheet();
+			} catch (IOException ex) {
+				throw ex;
+			} catch (Exception ex) {
+				throw new IOException(ex);
 			}
-			String xml = sb.append("</sheet>").toString();
-			return new InputSource(new StringReader(xml));
 		}
 
 		/**
-		 * サマリーシートを整形する直前に前処理します。
+		 * リーダの内容をXML文書に変換してから要約書類を読み込みます。
 		 * 
-		 * @return 前処理済の文字列
-		 * @throws IOException 読み込みに失敗した場合
+		 * @return 読み込んだ要約書類
+		 * @throws Exception 構文の問題もしくは読み込みに失敗した場合
 		 */
-		private String preprocess() throws IOException {
-			BufferedReader br = new BufferedReader(reader);
-			StringBuilder buffer = new StringBuilder();
-			StringBuilder escape = new StringBuilder();
-			String line = null;
-			while((line = br.readLine()) != null) {
-				for(int i = 0; i < line.length(); i++) {
-					char ch = line.charAt(i);
-					if(escape.length() == 0) {
-						if(ch == '&') escape.append(ch);
-						else buffer.append(ch);
-					} else if(ch == ';') {
-						switch(escape.toString()) {
-							case "&gt": buffer.append('>'); break;
-							case "&lt": buffer.append('<'); break;
-							default: buffer.append(escape); break;
-						}
-						escape.setLength(0);
-					} else escape.append(ch);
-				}
-				buffer.append("\n");
-			}
-			return buffer.append(escape).toString();
+		private final Map<String, String> sheet() throws Exception {
+			final var lines = new BufferedReader(source).lines();
+			final var text = lines.collect(Collectors.joining("\n"));
+			final var form = text.replaceAll(BF, FB);
+			return valid(String.format("<%1$s>%2$s</%1$s>", DOC, form));
 		}
 
 		/**
-		 * 提出書類の各項目を抽出するためのハンドラです。
-		 * 
-		 * 
-		 * @author Journal of Hamradio Informatics
-		 * 
-		 * @since 2014/11/04
+		 * 指定された文字列の内容を検証してから要約書類を読み込みます。
 		 *
+		 * @param sum 要約書類の文字列
+		 * @return 読み込んだ要約書類
+		 * @throws Exception 構文の問題もしくは読み込みに失敗した場合
 		 */
-		private static class SummaryHandler extends DefaultHandler {
-			private final StringBuilder buffer = new StringBuilder();
-			public final Map<String, String> binds = new HashMap<>();
-			private String tag = null;
-			@Override
-			public void startElement(String uri, String ln, String qn, Attributes attrs) {
-				StringJoiner joiner = new StringJoiner(" ");
-				joiner.add(qn);
-				for(int i=0; i < attrs.getLength(); i++) {
-					final String qname = attrs.getQName(i);
-					final String value = attrs.getValue(i);
-					if(qn.equals("SUMMARYSHEET")) binds.put(qname, value);
-					else joiner.add(String.format("%s=%s", qname, value));
-				}
-				if(qn.matches("(sheet|SUMMARYSHEET)")) tag = null;
-				else tag = qn.equals("LOGSHEET")? qn: joiner.toString();
+		private final Map<String, String> valid(String sum) throws Exception {
+			try(var stream = new StringReader(sum)) {
+				schema.newValidator().validate(new StreamSource(stream));
 			}
-			@Override
-			public void characters(char[] ch, int off, int len) {
-				if(tag != null) buffer.append(new String(ch, off, len));
+			try(var stream = new StringReader(sum)) {
+				XMLEventReader raw = factor.createXMLEventReader(stream);
+				reader = factor.createFilteredReader(raw, new Skipper());
+				return parse();
 			}
+		}
+
+		/**
+		 * 文書の構造を解析して要約書類を読み込みます。
+		 * 
+		 * @return 読み込んだ要約書類
+		 * @throws XMLStreamException 構文の問題もしくは読み込みに失敗した場合
+		 */
+		private final Map<String, String> parse() throws XMLStreamException {
+			final Map<String, String> binds = new HashMap<>();
+			assert reader.nextTag().asStartElement().getName().equals(DOC);
+			assert reader.nextTag().asStartElement().getName().equals(SUM);
+			while(reader.peek().isStartElement()) {
+				final var start = reader.nextTag().asStartElement();
+				final var value = reader.nextEvent().asCharacters();
+				final var close = reader.nextEvent().asEndElement();
+				assert close.getName().equals(start.getName());
+				binds.put(start.getName().getLocalPart(), value.getData());
+			}
+			assert reader.nextTag().asEndElement().getName().equals(SUM);
+			assert reader.nextTag().asStartElement().getName().equals(LOG);
+			final String log = reader.getElementText();
+			binds.put(LOG.getLocalPart(), log.replaceAll("^\\R+|\\R+$", ""));
+			assert reader.nextTag().asEndElement().getName().equals(DOC);
+			return Collections.unmodifiableMap(binds);
+		}
+
+		/**
+		 * 空の文字列を読み飛ばすフィルタです。
+		 *
+		 * @author Journal of Hamradio Informatics
+		 *
+		 * @since 2017/02/26
+		 */
+		private final class Skipper implements EventFilter {
 			@Override
-			public void endElement(String uri, String ln, String qn) {
-				if(tag != null) binds.put(tag, buffer.toString().trim());
-				buffer.setLength(0);
-				tag = null;
+			public boolean accept(XMLEvent e) {
+				return !e.isCharacters() || !e.asCharacters().isWhiteSpace();
 			}
 		}
 	}
@@ -236,39 +203,45 @@ public final class JarlFormat extends BaseFormat {
 	 * @since 2017/03/11
 	 *
 	 */
-	private static final class JarlFormatEncoder {
-		private final PrintStream out;
+	private final class JarlEncoder implements SheetEncoder {
+		private final PrintWriter writer;
 
 		/**
-		 * 指定された{@link OutputStream}に書き込むエンコーダを構築します。
+		 * 指定されたライタに書き込むエンコーダを構築します。
 		 * 
-		 * @param out 提出書類を書き込むストリーム
-		 * @throws IOException SJISに対応していない場合
+		 * @param writer 要約書類を出力するライタ
 		 */
-		public JarlFormatEncoder(OutputStream out) throws IOException {
-			this.out = new PrintStream(out, true, "SJIS");
+		public JarlEncoder(Writer writer) {
+			this.writer = new PrintWriter(writer, true);
 		}
 
 		/**
-		 * サマリーシートを出力します。{@link Writer}は閉じられます。
+		 * ライタを閉じてリソースを解放します。
+		 *
+		 * @throws IOException リソースの解放に失敗した場合
+		 */
+		@Override
+		public void close() throws IOException {
+			writer.close();
+		}
+
+		/**
+		 * サマリーシートを出力します。
 		 *
 		 * @param map 属性名と属性値の集合
 		 * @throws IOException 入出力の例外
 		 */
-		public void write(Map<String, String> map) throws IOException {
-			final String round = map.getOrDefault("VERSION", "R2.0");
-			final String table = map.getOrDefault("LOGSHEET", "");
-			out.printf("<SUMMARYSHEET VERSION=%s>%n", round);
+		@Override
+		public void encode(Map<String, String> map) throws IOException {
+			final String table = map.getOrDefault(LOG.getLocalPart(), "");
+			writer.printf("<%s VERSION=R2.0>%n", SUM);
 			for(String key: map.keySet()) {
-				final String val = map.get(key).trim();
-				final String close = key.split(" ")[0];
-				if(val.matches("(VERSION|LOGSHEET)")) continue;
-				out.printf("<%s>%s</%s>%n", key, val, close);
+				if(key.equals(LOG.getLocalPart())) continue;
+				writer.printf("<%1$s>%2$s</%1$s>%n", key, map.get(key));
 			}
-			out.println("</SUMMARYSHEET>");
-			out.printf("<LOGSHEET>%n%s%n</LOGSHEET>", table);
-			out.flush();
-			out.close();
+			writer.printf("</%s>%n", SUM);
+			writer.printf("<%1$s>%n%2$s%n</%1$s>", LOG, table);
+			writer.flush();
 		}
 	}
 }

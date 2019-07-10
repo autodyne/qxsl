@@ -7,18 +7,20 @@
 *****************************************************************************/
 package qxsl.extra.sheet;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import org.junit.jupiter.api.Test;
+import java.util.stream.IntStream;
 
 import qxsl.extra.field.*;
 import qxsl.model.Item;
 import qxsl.sheet.SheetFormats;
 import qxsl.table.TableFormats;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -31,7 +33,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  */
 public final class JarlFormatTest extends test.RandTest {
-	private final JarlFormat format = new JarlFormat();
 	private final SheetFormats sheets = new SheetFormats();
 	private final TableFormats tables = new TableFormats();
 	private final ArrayList<Band> bands = new ArrayList<>();
@@ -43,10 +44,15 @@ public final class JarlFormatTest extends test.RandTest {
 		bands.add(new Band(1_200_000));
 		bands.add(new Band(5_600_000));
 	}
-	@Test
-	public void testDecode() throws java.io.IOException {
+	public static IntStream testMethodSource() {
+		return IntStream.range(0, 100);
+	}
+	@ParameterizedTest
+	@MethodSource("testMethodSource")
+	public void testDecode(int numItems) throws Exception {
+		final JarlFormat format = new JarlFormat();
 		final ArrayList<Item> items = new ArrayList<>();
-		for(int row = 0; row < randInt(50); row++) {
+		for(int row = 0; row < numItems; row++) {
 			final Item item = new Item();
 			item.add(new Time());
 			item.add(bands.get(randInt(bands.size())));
@@ -58,18 +64,16 @@ public final class JarlFormatTest extends test.RandTest {
 			item.getSent().add(new Code(alnum(7)));
 			items.add(item);
 		}
-		ByteArrayOutputStream os1 = new ByteArrayOutputStream();
-		ByteArrayOutputStream os2 = new ByteArrayOutputStream();
-		tables.forName("jarl").encoder(os1).encode(items);
-		String table = os1.toString("UTF-8").trim();
-		Map<String, String> kvals = new HashMap<>();
-		kvals.put("VERSION", "R2.0");
-		kvals.put("SCORE BAND=144MHz", "10,10,10");
-		kvals.put("SCORE BAND=430MHz", "20,20,20");
-		kvals.put("LOGSHEET", os1.toString("SJIS").trim());
-		format.encode(os2, kvals);
-		final byte[] b = os2.toByteArray();
-		assertThat(format.decode(new ByteArrayInputStream(b))).isEqualTo(kvals);
-		assertThat(sheets.unseal(new ByteArrayInputStream(b))).isEqualTo(table);
+		StringWriter sw1 = new StringWriter();
+		StringWriter sw2 = new StringWriter();
+		tables.forName("jarl").encoder(sw1).encode(items);
+		final Map<String, String> kvals = new HashMap<>();
+		kvals.put("CALLSIGN", "JA1ZLO");
+		kvals.put("COMMENTS", "Groovy");
+		kvals.put("LOGSHEET", sw1.toString().trim());
+		format.encoder(sw2).encode(kvals);
+		final StringReader strm = new StringReader(sw2.toString());
+		assertThat(format.decoder(strm).decode()).isEqualTo(kvals);
+		assertThat(sheets.unpack(sw2.toString())).isEqualTo(items);
 	}
 }

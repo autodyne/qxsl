@@ -7,9 +7,7 @@
 *****************************************************************************/
 package qxsl.extra.table;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,6 +21,8 @@ import javax.xml.namespace.QName;
 import qxsl.field.FieldFormats;
 import qxsl.model.Field;
 import qxsl.model.Item;
+
+import static java.nio.charset.StandardCharsets.US_ASCII;
 
 /**
  * ADIサブセット書式で交信記録を直列化するフォーマットです。
@@ -41,13 +41,23 @@ public final class AdisFormat extends BaseFormat {
 	}
 
 	@Override
+	public TableDecoder decoder(Reader reader) {
+		return new AdisDecoder(reader);
+	}
+
+	@Override
+	public TableEncoder encoder(Writer writer) {
+		return new AdisEncoder(writer);
+	}
+
+	@Override
 	public TableDecoder decoder(InputStream is) {
-		return new AdisDecoder(is);
+		return decoder(new InputStreamReader(is, US_ASCII));
 	}
 
 	@Override
 	public TableEncoder encoder(OutputStream os) {
-		return new AdisEncoder(os);
+		return encoder(new OutputStreamWriter(os, US_ASCII));
 	}
 
 	/**
@@ -65,12 +75,12 @@ public final class AdisFormat extends BaseFormat {
 		private final FieldFormats fields;
 
 		/**
-		 * 指定されたストリームから交信記録を読み込むデコーダを構築します。
+		 * 指定されたリーダから交信記録を読み込むデコーダを構築します。
 		 * 
-		 * @param stream 読み込むストリーム
+		 * @param reader 交信記録を読み込むリーダ
 		 */
-		public AdisDecoder(InputStream stream) {
-			super(stream, Charset.forName("ASCII"));
+		public AdisDecoder(Reader reader) {
+			super(reader);
 			this.pattern = Pattern.compile(PATTERN);
 			this.fields = new FieldFormats();
 		}
@@ -145,12 +155,12 @@ public final class AdisFormat extends BaseFormat {
 		private final FieldFormats fields;
 
 		/**
-		 * 指定されたストリームに交信記録を書き出すデコーダを構築します。
+		 * 指定されたライタに交信記録を書き出すデコーダを構築します。
 		 * 
-		 * @param stream 出力先のストリーム
+		 * @param writer 交信記録を出力するライタ
 		 */
-		public AdisEncoder(OutputStream stream) {
-			super(stream, Charset.forName("ASCII"));
+		public AdisEncoder(Writer writer) {
+			super(writer);
 			this.fields = new FieldFormats();
 		}
 

@@ -10,11 +10,13 @@ package qxsl.table;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.util.List;
 import qxsl.model.Item;
 
 /**
- * 交信記録を永続化する書式はこのクラスを継承します。
+ * 交信記録を永続化する書式はこのインターフェースを継承します。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -52,21 +54,6 @@ public interface TableFormat {
 	public List<String> getExtensions();
 
 	/**
-	 * 指定されたストリームの内容を検証します。
-	 *
-	 * @param is 内容を検証するストリーム
-	 * @return この書式に従う場合に限り真
-	 */
-	public default boolean verify(InputStream is) {
-		try {
-			decoder(is).decode();
-			return true;
-		} catch (IOException ex) {
-			return false;
-		}
-	}
-
-	/**
 	 * 指定されたストリームを入力とするデコーダを返します。
 	 *
 	 * @param is 交信記録を読み込むストリーム
@@ -81,6 +68,32 @@ public interface TableFormat {
 	 * @return エンコーダ
 	 */
 	public abstract TableEncoder encoder(OutputStream os);
+
+	/**
+	 * 指定されたリーダを入力とするデコーダを返します。
+	 * この操作の実装は任意です。
+	 *
+	 * @param reader 交信記録を読み込むリーダ
+	 * @return デコーダ
+	 *
+	 * @throws UnsupportedOperationException 未実装の場合
+	 */
+	public default TableDecoder decoder(Reader reader) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * 指定されたライタに出力するデコーダを返します。
+	 * この操作の実装は任意です。
+	 *
+	 * @param writer 交信記録を書き出すライタ
+	 * @return エンコーダ
+	 *
+	 * @throws UnsupportedOperationException 未実装の場合
+	 */
+	public default TableEncoder encoder(Writer writer) {
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * 永続化された交信記録を読み込むためのデコーダです。
@@ -99,6 +112,12 @@ public interface TableFormat {
 		 * @throws IOException 構文上または読取り時の例外
 		 */
 		public List<Item> decode() throws IOException;
+		/**
+		 * ストリームを閉じてリソースを解放します。
+		 *
+		 * @throws IOException リソースの解放に失敗した場合
+		 */
+		public void close() throws IOException;
 	}
 
 	/**
@@ -118,5 +137,11 @@ public interface TableFormat {
 		 * @throws IOException 書き出し時の例外
 		 */
 		public void encode(List<Item> items) throws IOException;
+		/**
+		 * ストリームを閉じてリソースを解放します。
+		 *
+		 * @throws IOException リソースの解放に失敗した場合
+		 */
+		public void close() throws IOException;
 	}
 }

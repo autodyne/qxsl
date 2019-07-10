@@ -7,9 +7,7 @@
 *****************************************************************************/
 package qxsl.extra.table;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -31,18 +29,30 @@ import qxsl.model.Item;
  *
  */
 public final class JarlFormat extends BaseFormat {
+	private final Charset SJIS = Charset.forName("SJIS");
+
 	public JarlFormat() {
 		super("jarl");
 	}
 
 	@Override
+	public TableDecoder decoder(Reader reader) {
+		return new JarlDecoder(reader);
+	}
+
+	@Override
+	public TableEncoder encoder(Writer writer) {
+		return new JarlEncoder(writer);
+	}
+
+	@Override
 	public TableDecoder decoder(InputStream is) {
-		return new JarlDecoder(is);
+		return decoder(new InputStreamReader(is, SJIS));
 	}
 
 	@Override
 	public TableEncoder encoder(OutputStream os) {
-		return new JarlEncoder(os);
+		return encoder(new OutputStreamWriter(os, SJIS));
 	}
 
 	/**
@@ -60,12 +70,12 @@ public final class JarlFormat extends BaseFormat {
 		private final FieldFormats fields;
 
 		/**
-		 * 指定されたストリームを読み込むデコーダを構築します。
+		 * 指定されたリーダを読み込むデコーダを構築します。
 		 * 
-		 * @param is 読み込むストリーム
+		 * @param reader 交信記録を読み込むリーダ
 		 */
-		public JarlDecoder(InputStream is) {
-			super(is, Charset.forName("SJIS"));
+		public JarlDecoder(Reader reader) {
+			super(reader);
 			fields = new FieldFormats();
 			format = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm");
 		}
@@ -95,7 +105,7 @@ public final class JarlFormat extends BaseFormat {
 			final List<Item> items = new ArrayList<>();
 			String line;
 			while((line = super.readLine()) != null) {
-				if(line.isEmpty()) continue;
+				if(line.isBlank()) continue;
 				if(line.startsWith("DATE")) continue;
 				if(line.startsWith("DATA")) continue;
 				if(line.startsWith("----")) continue;
@@ -232,12 +242,12 @@ public final class JarlFormat extends BaseFormat {
 		private final DateTimeFormatter format;
 		
 		/**
-		 * 指定されたストリームに出力するエンコーダを構築します。
+		 * 指定されたライタに出力するエンコーダを構築します。
 		 * 
-		 * @param os 交信記録を出力するストリーム
+		 * @param writer 交信記録を出力するライタ
 		 */
-		public JarlEncoder(OutputStream os) {
-			super(os, Charset.forName("SJIS"));
+		public JarlEncoder(Writer writer) {
+			super(writer);
 			format = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm");
 		}
 

@@ -7,13 +7,12 @@
 *****************************************************************************/
 package qxsl.extra.table;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.time.Year;
-import java.time.format.*;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,18 +32,30 @@ import qxsl.model.Item;
  *
  */
 public final class ZDosFormat extends BaseFormat {
+	private final Charset SJIS = Charset.forName("SJIS");
+
 	public ZDosFormat() {
 		super("zdos");
 	}
 
 	@Override
+	public TableDecoder decoder(Reader reader) {
+		return new ZDosDecoder(reader);
+	}
+
+	@Override
+	public TableEncoder encoder(Writer writer) {
+		return new ZDosEncoder(writer);
+	}
+
+	@Override
 	public TableDecoder decoder(InputStream is) {
-		return new ZDosDecoder(is);
+		return decoder(new InputStreamReader(is, SJIS));
 	}
 
 	@Override
 	public TableEncoder encoder(OutputStream os) {
-		return new ZDosEncoder(os);
+		return encoder(new OutputStreamWriter(os, SJIS));
 	}
 
 	/**
@@ -62,12 +73,12 @@ public final class ZDosFormat extends BaseFormat {
 		private final FieldFormats fields;
 
 		/**
-		 * 指定されたストリームを読み込むデコーダを構築します。
+		 * 指定されたリーダを読み込むデコーダを構築します。
 		 * 
-		 * @param is 読み込むストリーム
+		 * @param reader 交信記録を読み込むリーダ
 		 */
-		public ZDosDecoder(InputStream is) {
-			super(is, Charset.forName("SJIS"));
+		public ZDosDecoder(Reader reader) {
+			super(reader);
 			this.fields = new FieldFormats();
 			DateTimeFormatterBuilder fb = new DateTimeFormatterBuilder();
 			fb.parseDefaulting(ChronoField.YEAR, Year.now().getValue());
@@ -99,7 +110,7 @@ public final class ZDosFormat extends BaseFormat {
 			final List<Item> items = new ArrayList<>();
 			String line;
 			while((line = super.readLine()) != null) {
-				if(!line.isEmpty() && !line.startsWith("mon")) {
+				if(!line.isBlank() && !line.startsWith("mon")) {
 					super.reset();
 					items.add(item(line));
 				}
@@ -246,12 +257,12 @@ public final class ZDosFormat extends BaseFormat {
 		private final DateTimeFormatter format;
 
 		/**
-		 * 指定されたストリームに出力するエンコーダを構築します。
+		 * 指定されたライタに出力するエンコーダを構築します。
 		 * 
-		 * @param os 交信記録を出力するストリーム
+		 * @param writer 交信記録を出力するライタ
 		 */
-		public ZDosEncoder(OutputStream os) {
-			super(os, Charset.forName("SJIS"));
+		public ZDosEncoder(Writer writer) {
+			super(writer);
 			format = DateTimeFormatter.ofPattern(" MM  dd HHmm");
 		}
 

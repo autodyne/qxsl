@@ -7,14 +7,18 @@
 *****************************************************************************/
 package qxsl.table;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 import qxsl.model.Item;
 
 /**
@@ -79,15 +83,7 @@ public final class TableFormats implements Iterable<TableFormat> {
 	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
 	 */
 	public List<Item> decode(InputStream is) throws IOException {
-		InputStream bis = new ByteArrayInputStream(is.readAllBytes());
-		final StringJoiner err = new StringJoiner(", ");
-		for(TableFormat format: this) try {
-			return format.decoder(bis).decode();
-		} catch (IOException ex) {
-			bis.reset();
-			err.add(format.toString());
-		}
-		throw new IOException("none of ".concat(err.toString()));
+		return decode(is.readAllBytes());
 	}
 
 	/**
@@ -99,6 +95,49 @@ public final class TableFormats implements Iterable<TableFormat> {
 	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
 	 */
 	public List<Item> decode(final byte[] b) throws IOException {
-		return decode(new ByteArrayInputStream(b));
+		final var bis = new ByteArrayInputStream(b);
+		final var err = new StringJoiner(",");
+		for(TableFormat fmt: this) {
+			try(var decoder = fmt.decoder(bis)) {
+				return decoder.decode();
+			} catch (IOException ex) {
+				bis.reset();
+				err.add(fmt.toString());
+			}
+		}
+		throw new IOException("none of ".concat(err.toString()));
+	}
+
+	/**
+	 * 指定されたリーダから適切な書式で交信記録を読み込みます。
+	 * 
+	 * @param reader 交信記録を読み込むリーダ
+	 * @return 交信記録
+	 * 
+	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
+	 */
+	public List<Item> decode(Reader reader) throws IOException {
+		final var lines = new BufferedReader(reader).lines();
+		return decode(lines.collect(Collectors.joining("\n")));
+	}
+
+	/**
+	 * 指定された文字列から適切な書式で交信記録を読み込みます。
+	 * 
+	 * @param string 交信記録を読み込む文字列
+	 * @return 交信記録
+	 * 
+	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
+	 */
+	public List<Item> decode(String string) throws IOException {
+		final var err = new StringJoiner(",");
+		for(TableFormat fmt: this) {
+			try(var decoder = fmt.decoder(new StringReader(string))) {
+				return decoder.decode();
+			} catch (IOException ex) {
+				err.add(fmt.toString());
+			} catch (UnsupportedOperationException ex) {}
+		}
+		throw new IOException("none of ".concat(err.toString()));
 	}
 }
