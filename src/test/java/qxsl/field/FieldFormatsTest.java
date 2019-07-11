@@ -28,16 +28,16 @@ public final class FieldFormatsTest extends test.RandTest {
 	}
 	@Test
 	public void testGetFormat() {
-		assertThat(fields.getFormat(Qxsl.BAND)).isInstanceOf(Band.Format.class);
-		assertThat(fields.getFormat(Qxsl.CALL)).isInstanceOf(Call.Format.class);
-		assertThat(fields.getFormat(Qxsl.CITY)).isInstanceOf(City.Format.class);
-		assertThat(fields.getFormat(Qxsl.CODE)).isInstanceOf(Code.Format.class);
-		assertThat(fields.getFormat(Qxsl.BAND)).isInstanceOf(Band.Format.class);
-		assertThat(fields.getFormat(Qxsl.MODE)).isInstanceOf(Mode.Format.class);
-		assertThat(fields.getFormat(Qxsl.NAME)).isInstanceOf(Name.Format.class);
-		assertThat(fields.getFormat(Qxsl.NOTE)).isInstanceOf(Note.Format.class);
-		assertThat(fields.getFormat(Qxsl.RSTQ)).isInstanceOf(RSTQ.Format.class);
-		assertThat(fields.getFormat(Qxsl.TIME)).isInstanceOf(Time.Format.class);
-		assertThat(fields.getFormat(Qxsl.WATT)).isInstanceOf(Watt.Format.class);
+		assertThat(fields.forName(Qxsl.BAND)).isInstanceOf(Band.Format.class);
+		assertThat(fields.forName(Qxsl.CALL)).isInstanceOf(Call.Format.class);
+		assertThat(fields.forName(Qxsl.CITY)).isInstanceOf(City.Format.class);
+		assertThat(fields.forName(Qxsl.CODE)).isInstanceOf(Code.Format.class);
+		assertThat(fields.forName(Qxsl.BAND)).isInstanceOf(Band.Format.class);
+		assertThat(fields.forName(Qxsl.MODE)).isInstanceOf(Mode.Format.class);
+		assertThat(fields.forName(Qxsl.NAME)).isInstanceOf(Name.Format.class);
+		assertThat(fields.forName(Qxsl.NOTE)).isInstanceOf(Note.Format.class);
+		assertThat(fields.forName(Qxsl.RSTQ)).isInstanceOf(RSTQ.Format.class);
+		assertThat(fields.forName(Qxsl.TIME)).isInstanceOf(Time.Format.class);
+		assertThat(fields.forName(Qxsl.WATT)).isInstanceOf(Watt.Format.class);
 	}
 }

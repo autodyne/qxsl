@@ -25,12 +25,25 @@ The package `qxsl.model` defines the structure of log files, where each communic
 Each `Item` contains some `Field` objects, which indicate properties such as `Time`, `Mode` and `Band`.
 In addition, each `Item` holds two `Exch` objects, namely `Rcvd` and `Sent`, which involve some messages (`Field`s) exchanged by the operator and the contacted station.
 
+```Scala
+import qxsl.model.Item
+val item = new Item
+println(item.getRcvd)
+println(item.getSent)
+```
+
 ### Field Management
 
 The package `qxsl.field` provides a management framework for `Field` implementations.
 The class `FieldFormats` detects `FieldFormat` implementations from the class path automatically, and each `FieldFormat` provides en/decoders for individual `Field` implementation.
 This mechanism is utilized for en/decoding the *QXML* format, which is an alternative log format proposed by the qxsl development team.
 *QXML* is extensible, and supports namespaces which have been prohibited in the traditional ADIF.
+
+```Scala
+val formats = new qxsl.field.FieldFormats
+item.add(formats.cache(new QName("qxsl.org", "mode")).field("CW"))
+item.add(formats.cache(new QName("adif.org", "MODE")).field("CW"))
+```
 
 ### Decoding & Encoding
 

@@ -141,7 +141,7 @@ public abstract class Tuple implements Iterable<Field> {
 	public final Tuple set(QName qname, String value) {
 		if(value == null) return remove(qname);
 		final FieldFormats formats = new FieldFormats();
-		final FieldFormat fmt = formats.getFormat(qname);
+		final FieldFormat fmt = formats.forName(qname);
 		if(fmt != null) return set(qname, fmt.decode(value));
 		throw new IllegalArgumentException(qname.toString());
 	}

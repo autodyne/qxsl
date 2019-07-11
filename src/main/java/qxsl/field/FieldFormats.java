@@ -55,7 +55,7 @@ public final class FieldFormats implements Iterable<FieldFormat> {
 	 * @param name 属性の名前
 	 * @return 対応する書式 存在しない場合null
 	 */
-	public FieldFormat getFormat(QName name) {
+	public FieldFormat forName(QName name) {
 		for(FieldFormat fmt: loader) {
 			if(fmt.target().equals(name)) return fmt;
 		}
@@ -73,7 +73,7 @@ public final class FieldFormats implements Iterable<FieldFormat> {
 	public final String encode(Field field) {
 		if(field.isAny()) return field.toString();
 		try {
-			return getFormat(field.name()).encode(field);
+			return forName(field.name()).encode(field);
 		} catch (NullPointerException ex) {
 			throw new UnsupportedOperationException();
 		}
@@ -137,7 +137,7 @@ public final class FieldFormats implements Iterable<FieldFormat> {
 		 * @param qname 属性名
 		 */
 		private Cache(QName qname) {
-			this.format = getFormat(this.qname = qname);
+			this.format = forName(this.qname = qname);
 		}
 
 		/**
