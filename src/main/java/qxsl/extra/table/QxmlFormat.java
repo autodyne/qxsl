@@ -310,7 +310,7 @@ public final class QxmlFormat extends BaseFormat {
 		@Override
 		public final void encode(List<Item> items) throws IOException {
 			try {
-				writer.writeStartDocument();
+				writer.writeStartDocument("UTF-8", "1.0");
 				writer.writeCharacters("\n");
 				writer.writeStartElement(LIST.getLocalPart());
 				for(Item item: items) space(item);

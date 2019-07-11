@@ -46,7 +46,7 @@ This mechanism is utilized for en/decoding the *QXML* format, which is an altern
 *QXML* is extensible, and supports namespaces which have been prohibited in the traditional ADIF:
 
 ```XML
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <list xmlns:qxsl="qxsl.org">
   <item qxsl:time="2017-06-03T16:17:00Z" qxsl:call="QV1DOK" qxsl:band="14000" qxsl:mode="CW">
     <rcvd qxsl:rstq="599" qxsl:code="120103"/>
