@@ -49,12 +49,12 @@ This mechanism is utilized for en/decoding the *QXML* format, which is an altern
 <?xml version="1.0" ?>
 <list xmlns:qxsl="qxsl.org">
   <item qxsl:time="2017-06-03T16:17:00Z" qxsl:call="QV1DOK" qxsl:band="14000" qxsl:mode="CW">
-    <rcvd qxsl:code="120103" qxsl:rstq="599"/>
-    <sent qxsl:code="100110" qxsl:rstq="599"/>
+    <rcvd qxsl:rstq="599" qxsl:code="120103"/>
+    <sent qxsl:rstq="599" qxsl:code="100110"/>
   </item>
-  <item qxsl:time="2017-06-03T16:51:00Z" qxsl:call="QC2SOA" qxsl:band="50000" qxsl:mode="CW">
-    <rcvd qxsl:code="1308" qxsl:rstq="599"/>
-    <sent qxsl:code="100110" qxsl:rstq="599"/>
+  <item qxsl:time="2017-06-04T00:01:00Z" qxsl:call="QD1QXB" qxsl:band="21000" qxsl:mode="CW">
+    <rcvd qxsl:rstq="599" qxsl:code="110117"/>
+    <sent qxsl:rstq="599" qxsl:code="100110"/>
   </item>
 </list>
 ```
