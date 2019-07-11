@@ -1,9 +1,7 @@
 /*****************************************************************************
  * Amateur Radio Operational Logging Library 'qxsl' since 2013 February 16th
- * Language: Java Standard Edition 8
- *****************************************************************************
  * License : GNU Lesser General Public License v3 (see LICENSE)
- * Author: Journal of Hamradio Informatics http://pafelog.net
+ * Author: Journal of Hamradio Informatics (http://pafelog.net)
 *****************************************************************************/
 package qxsl.model;
 
@@ -28,7 +26,7 @@ public final class Item extends Tuple {
 	private Sent sent;
 
 	/**
-	 * 空のタプルを構築します。
+	 * 空の交信記録を構築します。
 	 */
 	public Item() {
 		super(ITEM);
@@ -38,7 +36,7 @@ public final class Item extends Tuple {
 	 * 指定されたオブジェクトと等値であるか確認します。
 	 * 
 	 * @param obj 比較するオブジェクト
-	 * @return このタプルと等しい場合true
+	 * @return この交信記録と等しい場合true
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -50,7 +48,7 @@ public final class Item extends Tuple {
 	}
 
 	/**
-	 * このタプルの文字列による表現を返します。
+	 * この交信記録の文字列による表現を返します。
 	 * 
 	 * @return 文字列
 	 */
@@ -65,9 +63,9 @@ public final class Item extends Tuple {
 	}
 
 	/**
-	 * タプル直下にある{@link Rcvd}を返します。
+	 * この交信記録の直下にある{@link Rcvd}を返します。
 	 * 
-	 * @return {@link Rcvd}
+	 * @return 相手局から受信した情報
 	 */
 	public Rcvd getRcvd() {
 		if(rcvd == null) rcvd = new Rcvd(this);
@@ -75,9 +73,9 @@ public final class Item extends Tuple {
 	}
 
 	/**
-	 * タプル直下にある{@link Sent}を返します。
+	 * この交信記録の直下にある{@link Sent}を返します。
 	 * 
-	 * @return {@link Sent}
+	 * @return 相手局まで送信した情報
 	 */
 	public Sent getSent() {
 		if(sent == null) sent = new Sent(this);

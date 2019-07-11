@@ -1,9 +1,7 @@
 /*****************************************************************************
  * Amateur Radio Operational Logging Library 'qxsl' since 2013 February 16th
- * Language: Java Standard Edition 8
- *****************************************************************************
  * License : GNU Lesser General Public License v3 (see LICENSE)
- * Author: Journal of Hamradio Informatics http://pafelog.net
+ * Author: Journal of Hamradio Informatics (http://pafelog.net)
 *****************************************************************************/
 package qxsl.extra.table;
 
@@ -30,7 +28,7 @@ import qxsl.model.Tuple;
 import static javax.xml.stream.XMLOutputFactory.IS_REPAIRING_NAMESPACES;
 
 /**
- * qxml書式で交信記録を直列化するフォーマットです。
+ * qxslライブラリに標準的に付属するQXMLの書式です。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -94,7 +92,7 @@ public final class QxmlFormat extends BaseFormat {
 		/**
 		 * 指定されたストリームから交信記録を読み込むデコーダを構築します。
 		 * 
-		 * @param is 読み込むストリーム
+		 * @param is 交信記録を読み込むストリーム
 		 * @throws XMLStreamException 通常は発生しない例外
 		 */
 		public QxmlDecoder(InputStream is) throws XMLStreamException {
@@ -204,6 +202,8 @@ public final class QxmlFormat extends BaseFormat {
 		 *
 		 * @param name 開始する要素の名前
 		 * @return 指定された要素が見つかった場合に真
+		 *
+		 * @throws XMLStreamException 要素の読取り時の例外
 		 */
 		private boolean ahead(QName name) throws XMLStreamException {
 			if(!reader.peek().isStartElement()) return false;
@@ -215,6 +215,8 @@ public final class QxmlFormat extends BaseFormat {
 		 *
 		 * @param name 開始する要素の名前
 		 * @return 見つかった要素
+		 *
+		 * @throws XMLStreamException 要素の読取り時の例外
 		 */
 		private StartElement start(QName name) throws XMLStreamException {
 			final StartElement start = reader.nextTag().asStartElement();
@@ -227,6 +229,8 @@ public final class QxmlFormat extends BaseFormat {
 		 *
 		 * @param name 終了する要素の名前
 		 * @return 見つかった要素
+		 *
+		 * @throws XMLStreamException 要素の読取り時の例外
 		 */
 		private EndElement close(QName name) throws XMLStreamException {
 			final EndElement close = reader.nextTag().asEndElement();
@@ -266,7 +270,7 @@ public final class QxmlFormat extends BaseFormat {
 		/**
 		 * 指定されたストリームに出力するエンコーダを構築します。
 		 * 
-		 * @param os 出力先のストリーム
+		 * @param os 交信記録を出力するストリーム
 		 * @throws XMLStreamException 通常は発生しない例外
 		 */
 		public QxmlEncoder(OutputStream os) throws XMLStreamException {
@@ -347,9 +351,9 @@ public final class QxmlFormat extends BaseFormat {
 		}
 
 		/**
-		 * ストリームに1件の相手局に送信した情報を出力します。
+		 * ストリームに1件の相手局まで送信した情報を出力します。
 		 *
-		 * @param sent 出力する相手局に送信した情報
+		 * @param sent 出力する相手局まで送信した情報
 		 * @throws XMLStreamException XMLの出力に伴う例外
 		 */
 		private final void sent(Sent sent) throws XMLStreamException {

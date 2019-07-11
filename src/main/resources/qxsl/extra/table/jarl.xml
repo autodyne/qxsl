@@ -7,4 +7,7 @@
 Template:
 yyyy-MM-dd HH:mm B+ E+ C+ s+ S+ r+ R+
 </entry>
+<entry key="head-text">
+DATE (JST) TIME   BAND MODE  CALLSIGN      SENTNo      RCVDNo      Mlt    Pts
+</entry>
 </properties>

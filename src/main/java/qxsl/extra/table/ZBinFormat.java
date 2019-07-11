@@ -1,9 +1,7 @@
 /*****************************************************************************
  * Amateur Radio Operational Logging Library 'qxsl' since 2013 February 16th
- * Language: Java Standard Edition 8
- *****************************************************************************
  * License : GNU Lesser General Public License v3 (see LICENSE)
- * Author: Journal of Hamradio Informatics http://pafelog.net
+ * Author: Journal of Hamradio Informatics (http://pafelog.net)
 *****************************************************************************/
 package qxsl.extra.table;
 
@@ -27,7 +25,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 import static java.time.temporal.ChronoUnit.MILLIS;
 
 /**
- * zLogバイナリデータで交信記録を直列化するフォーマットです。
+ * zLogバイナリファイルの書式です。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -68,7 +66,7 @@ public final class ZBinFormat extends BaseFormat {
 		/**
 		 * 1899年12月30日を起点にTDateTime型を構築します。
 		 *
-		 * @param zoneId タイムゾーン
+		 * @param zoneId 交信記録に適用する時間帯
 		 * @since 2019/05/15
 		 */
 		public TDateTime(ZoneId zoneId) {
@@ -318,7 +316,7 @@ public final class ZBinFormat extends BaseFormat {
 		/**
 		 * 指定されたストリームを読み込むデコーダを構築します。
 		 * 
-		 * @param is 読み込むストリーム
+		 * @param is 交信記録を読み込むストリーム
 		 */
 		public ZBinDecoder(InputStream is) {
 			this.fields = new FieldFormats();
@@ -364,9 +362,9 @@ public final class ZBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * ストリームからヘッダを読み込んでタイムゾーンを返します。
+		 * ストリームからヘッダを読み込んで時間帯を返します。
 		 * 
-		 * @return 読み込んだ{@link ZoneId}
+		 * @return 読み込んだ時間帯
 		 * @throws IOException 読み込みに失敗した場合
 		 * 
 		 * @since 2019/05/14
@@ -380,7 +378,7 @@ public final class ZBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * ストリームから{@link Item}を1件読み込みます。
+		 * ストリームから交信記録を1件読み込みます。
 		 * 
 		 * @return 読み込んだ1件の交信
 		 * @throws IOException 読み込みに失敗した場合
@@ -406,9 +404,9 @@ public final class ZBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に交信日時を読み込みます。
+		 * 交信記録に交信日時を読み込みます。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void time(Item item) throws IOException {
@@ -416,9 +414,9 @@ public final class ZBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に相手局のコールサインを読み込みます。
+		 * 交信記録に相手局のコールサインを読み込みます。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void call(Item item) throws IOException {
@@ -427,9 +425,9 @@ public final class ZBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に相手局に送信したナンバーを読み込みます。
+		 * 交信記録に相手局まで送信したナンバーを読み込みます。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void sent(Item item) throws IOException {
@@ -438,9 +436,9 @@ public final class ZBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に相手局から受信したナンバーを読み込みます。
+		 * 交信記録に相手局から受信したナンバーを読み込みます。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void rcvd(Item item) throws IOException {
@@ -449,9 +447,9 @@ public final class ZBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に相手局に送信したRSTQを読み込みます。
+		 * 交信記録に相手局まで送信したRSTQを読み込みます。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void sRSTQ(Item item) throws IOException {
@@ -460,9 +458,9 @@ public final class ZBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に相手局から受信したRSTQを読み込みます。
+		 * 交信記録に相手局から受信したRSTQを読み込みます。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void rRSTQ(Item item) throws IOException {
@@ -471,9 +469,9 @@ public final class ZBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に通信方式を読み込みます。
+		 * 交信記録に通信方式を読み込みます。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void mode(Item item) throws IOException {
@@ -481,9 +479,9 @@ public final class ZBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に周波数帯を読み込みます。
+		 * 交信記録に周波数帯を読み込みます。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void band(Item item) throws IOException {
@@ -491,9 +489,9 @@ public final class ZBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に空中線出力を読み込みます。
+		 * 交信記録に空中線出力を読み込みます。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void watt(Item item) throws IOException {
@@ -501,9 +499,9 @@ public final class ZBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に運用者名を読み込みます。
+		 * 交信記録に運用者名を読み込みます。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void oprt(Item item) throws IOException {
@@ -512,9 +510,9 @@ public final class ZBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に交信の備考を読み込みます。
+		 * 交信記録に交信の備考を読み込みます。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void note(Item item) throws IOException {
@@ -553,7 +551,7 @@ public final class ZBinFormat extends BaseFormat {
 		/**
 		 * 指定されたストリームに出力するエンコーダを構築します。
 		 * 
-		 * @param os 交信記録を書き込むストリーム
+		 * @param os 交信記録を出力するストリーム
 		 */
 		public ZBinEncoder(OutputStream os) {
 			this.tDateTime = new TDateTime(ZoneOffset.systemDefault());
@@ -588,9 +586,9 @@ public final class ZBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}をバイナリにシリアライズして出力します。
+		 * 交信記録をバイナリにシリアライズして出力します。
 		 * 
-		 * @param item 出力する{@link Item}
+		 * @param item 出力する交信記録
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private final void item(Item item) throws IOException {

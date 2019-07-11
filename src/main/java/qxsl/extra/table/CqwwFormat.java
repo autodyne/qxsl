@@ -1,9 +1,7 @@
 /*****************************************************************************
  * Amateur Radio Operational Logging Library 'qxsl' since 2013 February 16th
- * Language: Java Standard Edition 8
- *****************************************************************************
  * License : GNU Lesser General Public License v3 (see LICENSE)
- * Author: Journal of Hamradio Informatics http://pafelog.net
+ * Author: Journal of Hamradio Informatics (http://pafelog.net)
 *****************************************************************************/
 package qxsl.extra.table;
 
@@ -23,7 +21,7 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.time.ZoneOffset.UTC;
 
 /**
- * CQWWコンテスト用のCabrillo書式で交信記録を直列化するフォーマットです。
+ * CabrilloのQSOテンプレートでCQWWコンテストの交信記録を表す書式です。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -114,7 +112,7 @@ public final class CqwwFormat extends BaseFormat {
 		}
 
 		/**
-		 * 1行の文字列から{@link Item}を1件読み込みます。
+		 * 1行の文字列から交信記録を1件読み込みます。
 		 * 
 		 * @param line 1行
 		 * @return 読み込んだ1件の交信
@@ -148,9 +146,9 @@ public final class CqwwFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に交信日時を設定します。
+		 * 交信記録に交信日時を設定します。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @param time 交信日時の文字列
 		 */
 		private void time(Item item, String time) {
@@ -159,9 +157,9 @@ public final class CqwwFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に相手局のコールサインを設定します。
+		 * 交信記録に相手局のコールサインを設定します。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @param call コールサインの文字列
 		 */
 		private void call(Item item, String call) {
@@ -169,9 +167,9 @@ public final class CqwwFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に相手局に送信したRSTQを設定します。
+		 * 交信記録に相手局まで送信したRSTQを設定します。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @param srst RSTQの文字列
 		 */
 		private void srst(Item item, String srst) {
@@ -179,9 +177,9 @@ public final class CqwwFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に相手局に送信したナンバーを設定します。
+		 * 交信記録に相手局まで送信したナンバーを設定します。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @param snum ナンバーの文字列
 		 */
 		private void snum(Item item, String snum) {
@@ -189,9 +187,9 @@ public final class CqwwFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に相手局から受信したRSTQを設定します。
+		 * 交信記録に相手局から受信したRSTQを設定します。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @param rrst RSTQの文字列
 		 */
 		private void rrst(Item item, String rrst) {
@@ -199,9 +197,9 @@ public final class CqwwFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に相手局から受信したナンバーを設定します。
+		 * 交信記録に相手局から受信したナンバーを設定します。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @param rnum ナンバーの文字列
 		 */
 		private void rnum(Item item, String rnum) {
@@ -209,9 +207,9 @@ public final class CqwwFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に周波数帯を設定します。
+		 * 交信記録に周波数帯を設定します。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @param band 周波数帯の文字列
 		 */
 		private void band(Item item, String band) {
@@ -219,9 +217,9 @@ public final class CqwwFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に通信方式を設定します。
+		 * 交信記録に通信方式を設定します。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @param mode 通信方式の文字列
 		 */
 		private void mode(Item item, String mode) {
@@ -263,9 +261,9 @@ public final class CqwwFormat extends BaseFormat {
 		}
 
 		/**
-		 * 指定された{@link Item}をテキスト書式で出力します。
+		 * 指定された交信記録をテキスト書式で出力します。
 		 * 
-		 * @param item 出力する{@link Item}
+		 * @param item 出力する交信記録
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void item(Item item) throws IOException {

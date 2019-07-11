@@ -1,9 +1,7 @@
 /*****************************************************************************
  * Amateur Radio Operational Logging Library 'qxsl' since 2013 February 16th
- * Language: Java Standard Edition 8
- *****************************************************************************
  * License : GNU Lesser General Public License v3 (see LICENSE)
- * Author: Journal of Hamradio Informatics http://pafelog.net
+ * Author: Journal of Hamradio Informatics (http://pafelog.net)
 *****************************************************************************/
 package elva;
 
@@ -134,7 +132,7 @@ public final class ElvaLisp extends AbstractScriptEngine {
 	}
 
 	/**
-	 * LISP処理系で発生する構文エラーを表現します。
+	 * LISP処理系で発生する構文の例外を表現します。
 	 * この例外はLISP処理系内部でのみ使用されます。
 	 *
 	 *
@@ -157,7 +155,7 @@ public final class ElvaLisp extends AbstractScriptEngine {
 	}
 	
 	/**
-	 * LISP処理系で発生する実行エラーを表現します。
+	 * LISP処理系で発生する実行時例外を表現します。
 	 * この例外はLISP処理系内部でのみ使用されます。
 	 *
 	 *

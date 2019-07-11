@@ -1,9 +1,7 @@
 /*****************************************************************************
  * Amateur Radio Operational Logging Library 'qxsl' since 2013 February 16th
- * Language: Java Standard Edition 8
- *****************************************************************************
  * License : GNU Lesser General Public License v3 (see LICENSE)
- * Author: Journal of Hamradio Informatics http://pafelog.net
+ * Author: Journal of Hamradio Informatics (http://pafelog.net)
 *****************************************************************************/
 package qxsl.extra.field;
 
@@ -135,9 +133,9 @@ public final class City extends Qxsl<String> {
 		}
 
 		/**
-		 * 指定された入力からデータを読み込みます。
+		 * 指定された入力からデータベースを読み込みます。
 		 *
-		 * @param is 入力となるストリーム
+		 * @param is データベースを読み込むストリーム
 		 * @throws IOException 特にファイルが存在しない場合
 		 */
 		private void load(InputStream is) throws IOException {

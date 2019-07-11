@@ -1,16 +1,12 @@
 /*****************************************************************************
  * Amateur Radio Operational Logging Library 'qxsl' since 2013 February 16th
- * Language: Java Standard Edition 8
- *****************************************************************************
  * License : GNU Lesser General Public License v3 (see LICENSE)
- * Author: Journal of Hamradio Informatics http://pafelog.net
+ * Author: Journal of Hamradio Informatics (http://pafelog.net)
 *****************************************************************************/
 package qxsl.extra.table;
 
 import java.io.*;
 import java.net.URL;
-import java.nio.charset.Charset;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,7 +15,6 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import qxsl.model.Field;
-import qxsl.model.Item;
 import qxsl.table.TableFormat;
 
 /**
@@ -46,7 +41,7 @@ public abstract class BaseFormat implements TableFormat {
 		this.conf = new Properties();
 		String file = String.format("%s.xml", name);
 		URL url = this.getClass().getResource(file);
-		try(InputStream is = url.openStream()) {
+		try(var is = url.openStream()) {
 			conf.loadFromXML(is);
 		} catch(IOException ex) {}
 	}
@@ -81,10 +76,10 @@ public abstract class BaseFormat implements TableFormat {
 		final String text = conf.getProperty("desc-text");
 		final String file = conf.getProperty("desc-file");
 		if(text != null) return text;
-		try(InputStream is = getClass().getResourceAsStream(file)) {
-			final Reader isr = new InputStreamReader(is, "UTF-8");
-			Stream<String> strm = new BufferedReader(isr).lines();
-			return strm.collect(Collectors.joining("\n"));
+		try(var is = getClass().getResourceAsStream(file)) {
+			var isr = new InputStreamReader(is, "UTF-8");
+			var stream = new BufferedReader(isr).lines();
+			return stream.collect(Collectors.joining("\n"));
 		} catch (IOException ex) {
 			return text;
 		}
@@ -99,6 +94,16 @@ public abstract class BaseFormat implements TableFormat {
 	public final List<String> getExtensions() {
 		String[] exts = conf.getProperty("extensions").split(",");
 		return Collections.unmodifiableList(Arrays.asList(exts));
+	}
+
+	/**
+	 * この書式をファイルに出力する際のヘッダとなる文字列を返します。
+	 * 
+	 * @return ヘッダの文字列
+	 * @since 2019/07/11
+	 */
+	public final String getHeaderText() {
+		return conf.getProperty("head-text").replaceAll("^\\R+|\\R+$", "");
 	}
 
 	/**
@@ -233,21 +238,6 @@ public abstract class BaseFormat implements TableFormat {
 		}
 
 		/**
-		 * リソースファイルで設定されたこの書式のヘッダ部を出力します。
-		 * 
-		 * @param file リソースファイルへのパス
-		 * @throws IOException 出力例外発生時
-		 */
-		public final void printHead(String file) throws IOException {
-			final URL url = getClass().getResource(file);
-			try(InputStream is = url.openStream()) {
-				final Reader isr = new InputStreamReader(is, "UTF-8");
-				Stream<String> strm = new BufferedReader(isr).lines();
-				writer.print(strm.collect(Collectors.joining("\n")));
-			}
-		}
-
-		/**
 		 * 指定された文字列を出力します。
 		 * 
 		 * @param s 出力する文字列
@@ -309,7 +299,7 @@ public abstract class BaseFormat implements TableFormat {
 		 * 指定された文字数まで右詰で穴埋めした{@link Field}を出力します。
 		 * 
 		 * @param len 文字列の長さ
-		 * @param f 出力する{@link Field}
+		 * @param f 出力する属性
 		 * @throws IOException 出力例外発生時
 		 */
 		public final void printR(int len, Field f) throws IOException {
@@ -320,7 +310,7 @@ public abstract class BaseFormat implements TableFormat {
 		 * 指定された文字数まで左詰で穴埋めした{@link Field}を出力します。
 		 * 
 		 * @param len 文字列の長さ
-		 * @param f 出力する{@link Field}
+		 * @param f 出力する属性
 		 * @throws IOException 出力例外発生時
 		 */
 		public final void printL(int len, Field f) throws IOException {

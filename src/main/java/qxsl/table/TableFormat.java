@@ -1,9 +1,7 @@
 /*****************************************************************************
  * Amateur Radio Operational Logging Library 'qxsl' since 2013 February 16th
- * Language: Java Standard Edition 8
- *****************************************************************************
  * License : GNU Lesser General Public License v3 (see LICENSE)
- * Author: Journal of Hamradio Informatics http://pafelog.net
+ * Author: Journal of Hamradio Informatics (http://pafelog.net)
 *****************************************************************************/
 package qxsl.table;
 
@@ -64,7 +62,7 @@ public interface TableFormat {
 	/**
 	 * 指定されたストリームに出力するエンコーダを返します。
 	 *
-	 * @param os 交信記録を書き出すストリーム
+	 * @param os 交信記録を出力するストリーム
 	 * @return エンコーダ
 	 */
 	public abstract TableEncoder encoder(OutputStream os);

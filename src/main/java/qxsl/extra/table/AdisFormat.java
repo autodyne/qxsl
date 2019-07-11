@@ -1,9 +1,7 @@
 /*****************************************************************************
  * Amateur Radio Operational Logging Library 'qxsl' since 2013 February 16th
- * Language: Java Standard Edition 8
- *****************************************************************************
  * License : GNU Lesser General Public License v3 (see LICENSE)
- * Author: Journal of Hamradio Informatics http://pafelog.net
+ * Author: Journal of Hamradio Informatics (http://pafelog.net)
 *****************************************************************************/
 package qxsl.extra.table;
 
@@ -25,7 +23,7 @@ import qxsl.model.Item;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
 /**
- * ADIサブセット書式で交信記録を直列化するフォーマットです。
+ * ADIFのうちADIと呼ばれる旧方式の書式の部分的な実装です。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -123,7 +121,7 @@ public final class AdisFormat extends BaseFormat {
 		}
 
 		/**
-		 * 文字列から{@link Item}を1件読み込みます。
+		 * 文字列から交信記録を1件読み込みます。
 		 * 
 		 * @param text 1件の交信記録の文字列
 		 * @return 読み込んだ1件の交信

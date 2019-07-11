@@ -1,9 +1,7 @@
 /*****************************************************************************
  * Amateur Radio Operational Logging Library 'qxsl' since 2013 February 16th
- * Language: Java Standard Edition 8
- *****************************************************************************
  * License : GNU Lesser General Public License v3 (see LICENSE)
- * Author: Journal of Hamradio Informatics http://pafelog.net
+ * Author: Journal of Hamradio Informatics (http://pafelog.net)
 *****************************************************************************/
 package qxsl.extra.table;
 
@@ -20,7 +18,7 @@ import qxsl.table.TableFormat;
 import qxsl.table.TableFormats;
 
 /**
- * ADXサブセット書式で交信記録を直列化するフォーマットです。
+ * ADIFのうちADXと呼ばれる新方式の書式の部分的な実装です。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -37,7 +35,7 @@ public final class AdxsFormat extends BaseFormat {
 	/**
 	 * ライブラリからスキーマ定義を読み込んで書式を構築します。
 	 *
-	 * @throws SAXException スキーマ定義のエラー
+	 * @throws SAXException スキーマ定義の例外
 	 */
 	public AdxsFormat() throws SAXException {
 		super("adxs");
@@ -81,7 +79,7 @@ public final class AdxsFormat extends BaseFormat {
 		/**
 		 * 指定されたストリームから交信記録を読み込むデコーダを構築します。
 		 * 
-		 * @param is 読み込むストリーム
+		 * @param is 交信記録を読み込むストリーム
 		 * @throws TransformerException 通常は発生しない例外
 		 */
 		public AdxsDecoder(InputStream is) throws TransformerException {
@@ -94,7 +92,7 @@ public final class AdxsFormat extends BaseFormat {
 		/**
 		 * ストリームを閉じてリソースを解放します。
 		 * 
-		 * @throws IOException リソース解放に失敗した場合
+		 * @throws IOException リソースの解放に失敗した場合
 		 */
 		@Override
 		public final void close() throws IOException {
@@ -153,7 +151,7 @@ public final class AdxsFormat extends BaseFormat {
 		/**
 		 * 指定されたストリームに交信記録を書き出すデコーダを構築します。
 		 * 
-		 * @param os 出力先のストリーム
+		 * @param os 交信記録を出力するストリーム
 		 * @throws TransformerException 通常は発生しない例外
 		 */
 		public AdxsEncoder(OutputStream os) throws TransformerException {
@@ -166,7 +164,7 @@ public final class AdxsFormat extends BaseFormat {
 		/**
 		 * ストリームを閉じてリソースを解放します。
 		 * 
-		 * @throws IOException リソース解放時のエラー
+		 * @throws IOException リソース解放に失敗した場合
 		 */
 		@Override
 		public final void close() throws IOException {

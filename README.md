@@ -1,95 +1,91 @@
 qxsl: Hamradio Logging Library
 ====
 
-![image](https://img.shields.io/badge/Java-SE11-green.svg)
-![image](https://img.shields.io/badge/license-LGPL3-green.svg)
+![image](https://img.shields.io/badge/Java-SE11-red.svg)
+![image](https://img.shields.io/badge/Gradle-5-orange.svg)
+![image](https://img.shields.io/badge/license-LGPL3-blue.svg)
 
-qxsl is a Java Library for Logging & Scoring & Regulation for Amateur-Radio Contests.
+qxsl is a Java Library for Logging & Scoring & Tabulation for Amateur-Radio Contests.
 qxsl is a vital component of [Automatic Acceptance & Tabulation System (ATS)-4](https://github.com/nextzlog/ats4) for [ALLJA1 contest](http://ja1zlo.u-tokyo.org/allja1).
 
 ## Features
 
-- qxsl provides log encoders/decoders for QXML, [ADIF(ADI/ADX)](http://adif.org), [Cabrillo](https://wwrof.org/cabrillo/), etc.
+- qxsl provides log en/decoders for QXML, [ADIF(ADI/ADX)](http://adif.org), [Cabrillo](https://wwrof.org/cabrillo/), etc.
 - qxsl provides tabulation & scoring framework for contests and awards.
-- qxsl provides a LISP engine named **elva**, and contest rules can be described in modern S-expression styles.
+- qxsl provides a LISP engine named *Elva*, and contest rules can be described in modern S-expression styles.
 
 ## Sample Codes
 
 Because we are [Scalalians](https://www.scala-lang.org/), 
 please be patient to read Scala codes!
 
+### Document Model
+
+The package `qxsl.model` defines the structure of log files, where each communication is handled as an `Item` object and the entire log is `List[Item]`.
+Each `Item` contains some `Field` objects, which indicate properties such as `Time`, `Mode` and `Band`.
+In addition, each `Item` holds two `Exch` objects, namely `Rcvd` and `Sent`, which involve some messages (`Field`s) exchanged by the operator and the contacted station.
+
+### Field Management
+
+The package `qxsl.field` provides a management framework for `Field` implementations.
+The class `FieldFormats` detects `FieldFormat` implementations from the class path automatically, and each `FieldFormat` provides en/decoders for individual `Field` implementation.
+This mechanism is utilized for en/decoding the *QXML* format, which is an alternative log format proposed by the qxsl development team.
+*QXML* is extensible, and supports namespaces which have been prohibited in the traditional ADIF.
+
 ### Decoding & Encoding
 
-qxsl provides an automatic format detector:
+The package `qxsl.table` provides a basic framework for en/decoding log files including QXML and ADIF.
+Each individual format is provided as `TableFormat` implementation, which is supplied via Java [ServiceLoader](https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html) mechanism.
+The `TableFormat`s are managed by the `TableFormats` class, which provides an automatic format detector for convenience.
 
 ```Scala
-import java.nio.file.Files
-import java.nio.file.Paths
-import java.util.List
 import qxsl.model.Item
-import qxsl.table.TableFormats
-
-val path = Paths.get("Users", "foo", "allja1.ZLO")
-val table: List[Item] = new TableFormats().decode(Files.newInputStream(path))
-
-import scala.collection.JavaConverters._
-table.asScala.foreach(System.out.println)
+val formats = new qxsl.table.TableFormats()
+val table: List[Item] = formats.decode(Files.newInputStream(path))
+formats.forName("adxs").encode(Files.newOutputStream(path), table)
 ```
 
-To output the data into a file in some format, specify [`TableFormat`](https://pafelog.net/qxsl/qxsl/table/TableFormat.html) explicitly:
+### Unpacking Summary Sheets
+
+The package `qxsl.sheet` provides a en/decoding framework similar to the `qxsl.table` package, except that `qxsl.sheet` handles contest summary sheets such as Cabrillo and [JARL summary sheet](https://www.jarl.org/Japanese/1_Tanoshimo/1-1_Contest/e-log.htm) R2.0.
+The class `SheetFormats` manages individual `SheetFormat` implementations, and also provides the `unpack` method useful for extracting `List[Item]` from a summary sheet.
 
 ```Scala
-new TableFormats().getFormat("qxml").encode(Files.newOutputStream(path), table)
-```
-
-You can obtain a list of format implementations as follows, using Java [ServiceLoader](https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html) mechanism:
-
-```Scala
-new TableFormats().asScala.toList.foreach(System.out.println)
+import qxsl.model.Item
+val formats = new qxsl.sheet.SheetFormats()
+val table: List[Item] = formats.unpack(Files.newBufferedReader(path))
 ```
 
 ### Scoring for Awards & Contests
 
-qxsl provides [the script engine **elva**](https://pafelog.net/qxsl/elva/ElvaScriptEngine.html) and a [rulemaking framework](https://pafelog.net/qxsl/qxsl/ruler/package-summary.html).
+The package `qxsl.ruler` provides a rulemaking framework for amateur radio awards and contests.
+Each contest is represented as a `Contest` object, which involves multiple `Section` objects.
+The `Section` object accepts `List[Item]` and validates the communications one by one, by invoking the `summarize` method.
+The class `RuleKit` provides a LISP engine optimized for this process.
 
 ```Scala
-import qxsl.ruler.RuleKit
+import qxsl.ruler.{Contest,RuleKit,Section,Summary}
 
 val contest: Contest = new RuleKit().eval("""
 (contest "CQ AWESOME CONTEST"
-  (section "CW 14MHz"  (lambda it (verify it (list CW? 14MHz?))))
-  (section "CW 21MHz"  (lambda it (verify it (list CW? 21MHz?))))
-  (section "CW 28MHz"  (lambda it (verify it (list CW? 28MHz?))))
-  (section "PH 14MHz"  (lambda it (verify it (list PH? 14MHz?))))
-  (section "PH 21MHz"  (lambda it (verify it (list PH? 21MHz?))))
-  (section "PH 28MHz"  (lambda it (verify it (list PH? 28MHz?)))))
-"""
-```
+  (section "CW 14MHz" (lambda it (verify it (list CW? 14MHz?))))
+  (section "CW 21MHz" (lambda it (verify it (list CW? 21MHz?))))
+  (section "CW 28MHz" (lambda it (verify it (list CW? 28MHz?))))
+  (section "PH 14MHz" (lambda it (verify it (list PH? 14MHz?))))
+  (section "PH 21MHz" (lambda it (verify it (list PH? 21MHz?))))
+  (section "PH 28MHz" (lambda it (verify it (list PH? 28MHz?)))))""")
 
-qxsl contains [the definition of ALLJA1 contest](src/main/resources/qxsl/ruler/allja1.lisp) as a sample inside the JAR file.
-You can try the predefined definition as follows:
-
-```Scala
-import qxsl.ruler.Contest // contest
-import qxsl.ruler.Section // section provided by contest
-
-val contest: Contest = Contest.defined("allja1.lisp") // src/main/resources/qxsl/ruler/allja1.lisp
-val section: Section = contest.getSection("1エリア内 社団 電信電話 オールバンド部門")
-```
-
-Then, you may summarize an operation list into a Summary object, which involves scores, accepted and rejected items:
-
-``` Scala
-import qxsl.ruler.Summary
-
-val summary: Summary = section.summarize(table) // List[Item]
-println(summary.score) // sum of scores for accepted items
-println(summary.mults) // multiplication of multipliers
-println(summary.total) // is score * mults
-
+val section: Section = contest.getSection("CW 14MHz")
+val summary: Summary = section.summarize(table)
 summary.accepted.asScala.foreach(println)
 summary.rejected.asScala.foreach(println)
+println(summary.score)
+println(summary.mults)
+println(summary.total)
 ```
+
+The original LISP engine is provided by the package `elva`.
+qxsl contains [the definition of ALLJA1 contest](src/main/resources/qxsl/ruler/allja1.lisp) as a sample definition inside the JAR file.
 
 ## Documents
 
@@ -97,6 +93,8 @@ summary.rejected.asScala.foreach(println)
 - [History and Usage of ATS-4](https://pafelog.net/ats4.pdf)
 
 ## Build
+
+[Gradle](https://gradle.org/) retrieves dependent libraries, runs test cases, and build a JAR file automatically.
 
 `$ gradle build`
 

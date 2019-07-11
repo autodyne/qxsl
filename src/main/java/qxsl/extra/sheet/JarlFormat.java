@@ -1,9 +1,7 @@
 /*****************************************************************************
  * Amateur Radio Operational Logging Library 'qxsl' since 2013 February 16th
- * Language: Java Standard Edition 8
- *****************************************************************************
  * License : GNU Lesser General Public License v3 (see LICENSE)
- * Author: Journal of Hamradio Informatics http://pafelog.net
+ * Author: Journal of Hamradio Informatics (http://pafelog.net)
 *****************************************************************************/
 package qxsl.extra.sheet;
 
@@ -75,9 +73,9 @@ public final class JarlFormat extends BaseFormat {
 	private final class JarlDecoder implements SheetDecoder {
 		private static final String BF = "<(\\S+?) (\\S+?)=(\\S+?)>";
 		private static final String FB = "<$1 $2=\"$3\">";
-		private final Reader source;
+		private final BufferedReader reader;
 		private final XMLInputFactory factor;
-		private XMLEventReader reader = null;
+		private XMLEventReader events = null;
 
 		/**
 		 * 指定されたリーダから要約書類を読み込むデコーダを構築します。
@@ -86,7 +84,7 @@ public final class JarlFormat extends BaseFormat {
 		 * @throws XMLStreamException 通常は発生しない例外
 		 */
 		public JarlDecoder(Reader reader) throws XMLStreamException {
-			this.source = reader;
+			this.reader = new BufferedReader(reader);
 			this.factor = XMLInputFactory.newInstance();
 		}
 
@@ -98,11 +96,11 @@ public final class JarlFormat extends BaseFormat {
 		@Override
 		public void close() throws IOException {
 			try {
-				reader.close();
+				events.close();
 			} catch (XMLStreamException ex) {
 				throw new IOException(ex);
 			} finally {
-				source.close();
+				reader.close();
 			}
 		}
 
@@ -130,9 +128,8 @@ public final class JarlFormat extends BaseFormat {
 		 * @throws Exception 構文の問題もしくは読み込みに失敗した場合
 		 */
 		private final Map<String, String> sheet() throws Exception {
-			final var lines = new BufferedReader(source).lines();
-			final var text = lines.collect(Collectors.joining("\n"));
-			final var form = text.replaceAll(BF, FB);
+			var text = reader.lines().collect(Collectors.joining("\n"));
+			var form = text.replaceAll(BF, FB);
 			return valid(String.format("<%1$s>%2$s</%1$s>", DOC, form));
 		}
 
@@ -149,7 +146,7 @@ public final class JarlFormat extends BaseFormat {
 			}
 			try(var stream = new StringReader(sum)) {
 				XMLEventReader raw = factor.createXMLEventReader(stream);
-				reader = factor.createFilteredReader(raw, new Skipper());
+				events = factor.createFilteredReader(raw, new Skipper());
 				return parse();
 			}
 		}
@@ -162,20 +159,20 @@ public final class JarlFormat extends BaseFormat {
 		 */
 		private final Map<String, String> parse() throws XMLStreamException {
 			final Map<String, String> binds = new HashMap<>();
-			assert reader.nextTag().asStartElement().getName().equals(DOC);
-			assert reader.nextTag().asStartElement().getName().equals(SUM);
-			while(reader.peek().isStartElement()) {
-				final var start = reader.nextTag().asStartElement();
-				final var value = reader.nextEvent().asCharacters();
-				final var close = reader.nextEvent().asEndElement();
+			assert events.nextTag().asStartElement().getName().equals(DOC);
+			assert events.nextTag().asStartElement().getName().equals(SUM);
+			while(events.peek().isStartElement()) {
+				final var start = events.nextTag().asStartElement();
+				final var value = events.nextEvent().asCharacters();
+				final var close = events.nextEvent().asEndElement();
 				assert close.getName().equals(start.getName());
 				binds.put(start.getName().getLocalPart(), value.getData());
 			}
-			assert reader.nextTag().asEndElement().getName().equals(SUM);
-			assert reader.nextTag().asStartElement().getName().equals(LOG);
-			final String log = reader.getElementText();
+			assert events.nextTag().asEndElement().getName().equals(SUM);
+			assert events.nextTag().asStartElement().getName().equals(LOG);
+			final String log = events.getElementText();
 			binds.put(LOG.getLocalPart(), log.replaceAll("^\\R+|\\R+$", ""));
-			assert reader.nextTag().asEndElement().getName().equals(DOC);
+			assert events.nextTag().asEndElement().getName().equals(DOC);
 			return Collections.unmodifiableMap(binds);
 		}
 

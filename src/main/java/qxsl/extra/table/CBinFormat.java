@@ -1,9 +1,7 @@
 /*****************************************************************************
  * Amateur Radio Operational Logging Library 'qxsl' since 2013 February 16th
- * Language: Java Standard Edition 8
- *****************************************************************************
  * License : GNU Lesser General Public License v3 (see LICENSE)
- * Author: Journal of Hamradio Informatics http://pafelog.net
+ * Author: Journal of Hamradio Informatics (http://pafelog.net)
 *****************************************************************************/
 package qxsl.extra.table;
 
@@ -25,7 +23,7 @@ import static java.time.ZoneOffset.UTC;
 import static java.time.temporal.ChronoUnit.SECONDS;
 
 /**
- * CTESTWINのLG8書式で交信記録を直列化するフォーマットです。
+ * CTESTWINバイナリファイルのうちLG8と呼ばれる書式です。
  * 
  * 
  * @author Journal of Hamradio Informatics
@@ -262,7 +260,7 @@ public final class CBinFormat extends BaseFormat {
 		/**
 		 * 指定されたストリームを読み込むデコーダを構築します。
 		 * 
-		 * @param is 読み込むストリーム
+		 * @param is 交信記録を読み込むストリーム
 		 */
 		public CBinDecoder(InputStream is) {
 			this.fields = new FieldFormats();
@@ -307,17 +305,17 @@ public final class CBinFormat extends BaseFormat {
 			final short rdh = Short.reverseBytes(hdr);
 			final long num = Short.toUnsignedInt(rdh);
 			stream.skipBytes(6);
-			byte[] quest = new byte[8];
+			byte[] trial = new byte[8];
 			byte[] truth = "CQsoData".getBytes("ASCII");
-			stream.readFully(quest);
-			if(Arrays.equals(quest, truth)) {
+			stream.readFully(trial);
+			if(Arrays.equals(trial, truth)) {
 				for(int i=0; i<num; i++) items.add(item());
 				return Collections.unmodifiableList(items);
 			} else throw new IOException("malformed data");
 		}
 
 		/**
-		 * ストリームから{@link Item}を1件読み込みます。
+		 * ストリームから交信記録を1件読み込みます。
 		 * 
 		 * @return 読み込んだ1件の交信
 		 * @throws IOException 読み込みに失敗した場合
@@ -340,9 +338,9 @@ public final class CBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に交信日時を読み込みます。
+		 * 交信記録に交信日時を読み込みます。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void time(Item item) throws IOException {
@@ -350,9 +348,9 @@ public final class CBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に相手局のコールサインを読み込みます。
+		 * 交信記録に相手局のコールサインを読み込みます。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void call(Item item) throws IOException {
@@ -361,9 +359,9 @@ public final class CBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に相手局に送信したナンバーを読み込みます。
+		 * 交信記録に相手局まで送信したナンバーを読み込みます。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void sent(Item item) throws IOException {
@@ -372,9 +370,9 @@ public final class CBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に相手局から受信したナンバーを読み込みます。
+		 * 交信記録に相手局から受信したナンバーを読み込みます。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void rcvd(Item item) throws IOException {
@@ -383,9 +381,9 @@ public final class CBinFormat extends BaseFormat {
 		}
 		
 		/**
-		 * {@link Item}に通信方式を読み込みます。
+		 * 交信記録に通信方式を読み込みます。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void mode(Item item) throws IOException {
@@ -393,9 +391,9 @@ public final class CBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に周波数帯を読み込みます。
+		 * 交信記録に周波数帯を読み込みます。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void band(Item item) throws IOException {
@@ -403,9 +401,9 @@ public final class CBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に運用者名を読み込みます。
+		 * 交信記録に運用者名を読み込みます。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void oprt(Item item) throws IOException {
@@ -414,9 +412,9 @@ public final class CBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}に交信の備考を読み込みます。
+		 * 交信記録に交信の備考を読み込みます。
 		 * 
-		 * @param item 設定する{@link Item}
+		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void note(Item item) throws IOException {
@@ -456,7 +454,7 @@ public final class CBinFormat extends BaseFormat {
 		/**
 		 * 指定されたストリームに出力するエンコーダを構築します。
 		 * 
-		 * @param os 交信記録を書き込むストリーム
+		 * @param os 交信記録を出力するストリーム
 		 */
 		public CBinEncoder(OutputStream os) {
 			this.cDTime = new CDateTime();
@@ -501,9 +499,9 @@ public final class CBinFormat extends BaseFormat {
 		}
 
 		/**
-		 * {@link Item}をバイナリにシリアライズして出力します。
+		 * 交信記録をバイナリにシリアライズして出力します。
 		 * 
-		 * @param item 出力する{@link Item}
+		 * @param item 出力する交信記録
 		 * @param last 以降に交信記録がない場合true
 		 * 
 		 * @throws IOException 出力に失敗した場合

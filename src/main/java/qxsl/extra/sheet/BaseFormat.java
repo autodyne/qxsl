@@ -1,14 +1,11 @@
 /*****************************************************************************
  * Amateur Radio Operational Logging Library 'qxsl' since 2013 February 16th
- * Language: Java Standard Edition 8
- *****************************************************************************
  * License : GNU Lesser General Public License v3 (see LICENSE)
- * Author: Journal of Hamradio Informatics http://pafelog.net
+ * Author: Journal of Hamradio Informatics (http://pafelog.net)
 *****************************************************************************/
 package qxsl.extra.sheet;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
@@ -39,7 +36,7 @@ public abstract class BaseFormat implements SheetFormat {
 		this.conf = new Properties();
 		String file = String.format("%s.xml", name);
 		URL url = this.getClass().getResource(file);
-		try(InputStream is = url.openStream()) {
+		try(var is = url.openStream()) {
 			conf.loadFromXML(is);
 		} catch(IOException ex) {}
 	}

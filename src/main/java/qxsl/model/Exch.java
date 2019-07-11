@@ -1,9 +1,7 @@
 /*****************************************************************************
  * Amateur Radio Operational Logging Library 'qxsl' since 2013 February 16th
- * Language: Java Standard Edition 8
- *****************************************************************************
  * License : GNU Lesser General Public License v3 (see LICENSE)
- * Author: Journal of Hamradio Informatics http://pafelog.net
+ * Author: Journal of Hamradio Informatics (http://pafelog.net)
 *****************************************************************************/
 package qxsl.model;
 
@@ -36,9 +34,9 @@ public abstract class Exch extends Tuple {
 	}
 
 	/**
-	 * この要素の親である要素を返します。
+	 * このタプルの親である交信記録を返します。
 	 *
-	 * @return 親
+	 * @return 交信記録
 	 */
 	public final Item getItem() {
 		return item;

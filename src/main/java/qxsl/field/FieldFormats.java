@@ -1,9 +1,7 @@
 /*****************************************************************************
- * Amateur Radio Operational Logging Library 'xsum' since 2013 February 16th
- * Language: Java Standard Edition 8
- *****************************************************************************
+ * Amateur Radio Operational Logging Library 'qxsl' since 2013 February 16th
  * License : GNU Lesser General Public License v3 (see LICENSE)
- * Author: Journal of Hamradio Informatics http://pafelog.net
+ * Author: Journal of Hamradio Informatics (http://pafelog.net)
 *****************************************************************************/
 package qxsl.field;
 
@@ -84,7 +82,7 @@ public final class FieldFormats implements Iterable<FieldFormat> {
 	/**
 	 * 指定された属性名に対する{@link Cache}を返します。
 	 * 
-	 * @param qname {@link Field}の名前
+	 * @param qname 属性の名前
 	 * @return キャッシュ
 	 */
 	public final Cache cache(QName qname) {

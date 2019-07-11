@@ -1,14 +1,11 @@
 /*****************************************************************************
  * Amateur Radio Operational Logging Library 'qxsl' since 2013 February 16th
- * Language: Java Standard Edition 8
- *****************************************************************************
  * License : GNU Lesser General Public License v3 (see LICENSE)
- * Author: Journal of Hamradio Informatics http://pafelog.net
+ * Author: Journal of Hamradio Informatics (http://pafelog.net)
 *****************************************************************************/
 package qxsl.extra.sheet;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -94,9 +91,7 @@ public final class Cab3Format extends BaseFormat {
 		 */
 		private Map<String, String> head() throws Exception {
 			String line;
-			while((line = reader.readLine()) != null) {
-				if(!line.trim().isEmpty()) break;
-			}
+			while((line = reader.readLine()) != null && line.isBlank());
 			if(line.trim().equals("START-OF-LOG: 2.0")) return body();
 			if(line.trim().equals("START-OF-LOG: 3.0")) return body();
 			throw new IOException("Tag 'START-OF-LOG:' is not found");

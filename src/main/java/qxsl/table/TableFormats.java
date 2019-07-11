@@ -1,9 +1,7 @@
 /*****************************************************************************
  * Amateur Radio Operational Logging Library 'qxsl' since 2013 February 16th
- * Language: Java Standard Edition 8
- *****************************************************************************
  * License : GNU Lesser General Public License v3 (see LICENSE)
- * Author: Journal of Hamradio Informatics http://pafelog.net
+ * Author: Journal of Hamradio Informatics (http://pafelog.net)
 *****************************************************************************/
 package qxsl.table;
 
@@ -117,8 +115,9 @@ public final class TableFormats implements Iterable<TableFormat> {
 	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
 	 */
 	public List<Item> decode(Reader reader) throws IOException {
-		final var lines = new BufferedReader(reader).lines();
-		return decode(lines.collect(Collectors.joining("\n")));
+		try(BufferedReader br = new BufferedReader(reader)) {
+			return decode(br.lines().collect(Collectors.joining("\n")));
+		}
 	}
 
 	/**
