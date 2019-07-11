@@ -28,8 +28,8 @@ In addition, each `Item` holds two `Exch` objects, namely `Rcvd` and `Sent`, whi
 ```Scala
 import qxsl.model.Item
 val item = new Item
-println(item.getRcvd)
-println(item.getSent)
+val rcvd = item.getRcvd
+val sent = item.getSent
 ```
 
 ### Field Management
@@ -52,7 +52,6 @@ Each individual format is provided as `TableFormat` implementation, which is sup
 The `TableFormat`s are managed by the `TableFormats` class, which provides an automatic format detector for convenience.
 
 ```Scala
-import qxsl.model.Item
 val formats = new qxsl.table.TableFormats()
 val table: List[Item] = formats.decode(Files.newInputStream(path))
 formats.forName("adxs").encode(Files.newOutputStream(path), table)
@@ -64,7 +63,6 @@ The package `qxsl.sheet` provides a en/decoding framework similar to the `qxsl.t
 The class `SheetFormats` manages individual `SheetFormat` implementations, and also provides the `unpack` method useful for extracting `List[Item]` from a summary sheet.
 
 ```Scala
-import qxsl.model.Item
 val formats = new qxsl.sheet.SheetFormats()
 val table: List[Item] = formats.unpack(Files.newBufferedReader(path))
 ```
