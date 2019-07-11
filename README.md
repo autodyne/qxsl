@@ -1,4 +1,4 @@
-qxsl: Hamradio Logging Library
+qxsl: Hamradio Logging Library & LISP
 ====
 
 ![image](https://img.shields.io/badge/Java-SE11-red.svg)
@@ -11,17 +11,16 @@ qxsl is a vital component of [Automatic Acceptance & Tabulation System (ATS)-4](
 ## Features
 
 - qxsl provides log en/decoders for QXML, [ADIF(ADI/ADX)](http://adif.org), [Cabrillo](https://wwrof.org/cabrillo/), etc.
-- qxsl provides tabulation & scoring framework for contests and awards.
+- qxsl provides tabulation & scoring frameworks for contests and awards.
 - qxsl provides a LISP engine named *Elva*, and contest rules can be described in modern S-expression styles.
 
 ## Sample Codes
 
-Because we are [Scalalians](https://www.scala-lang.org/), 
-please be patient to read Scala codes!
+Because we are [Scalalians](https://www.scala-lang.org/), please be patient to read Scala codes!
 
 ### Document Model
 
-The package `qxsl.model` defines the structure of log files, where each communication is handled as an `Item` object and the entire log is `List[Item]`.
+The package `qxsl.model` defines the structure of log files, where each communication is handled as an `Item` object, while the entire log is represented as `List[Item]`.
 Each `Item` contains some `Field` objects, which indicate properties such as `Time`, `Mode` and `Band`.
 In addition, each `Item` holds two `Exch` objects, namely `Rcvd` and `Sent`, which involve some messages (`Field`s) exchanged by the operator and the contacted station.
 
@@ -35,9 +34,7 @@ val sent = item.getSent
 ### Field Management
 
 The package `qxsl.field` provides a management framework for `Field` implementations.
-The class `FieldFormats` detects `FieldFormat` implementations from the class path automatically, and each `FieldFormat` provides en/decoders for individual `Field` implementation.
-This mechanism is utilized for en/decoding the *QXML* format, which is an alternative log format proposed by the qxsl development team.
-*QXML* is extensible, and supports namespaces which have been prohibited in the traditional ADIF.
+The class `FieldFormats` detects `FieldFormat` implementations [from the class path automatically](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/ServiceLoader.html), and each `FieldFormat` provides en/decoders for individual `Field` implementation.
 
 ```Scala
 val formats = new qxsl.field.FieldFormats
@@ -45,21 +42,37 @@ item.add(formats.cache(new QName("qxsl.org", "mode")).field("CW"))
 item.add(formats.cache(new QName("adif.org", "MODE")).field("CW"))
 ```
 
+This mechanism is utilized for en/decoding the *QXML* format, which is an alternative log format proposed by the qxsl development team.
+*QXML* is extensible, and supports namespaces which have been prohibited in the traditional ADIF:
+
+```XML
+<?xml version="1.0" ?>
+<list xmlns:qxsl="qxsl.org">
+	<item qxsl:time="2017-06-03T16:17:00Z" qxsl:call="QV1DOK" qxsl:band="14000" qxsl:mode="CW">
+		<rcvd qxsl:code="120103" qxsl:rstq="599"/>
+		<sent qxsl:code="100110" qxsl:rstq="599"/>
+	</item>
+	<item qxsl:time="2017-06-03T16:51:00Z" qxsl:call="QC2SOA" qxsl:band="50000" qxsl:mode="CW">
+		<rcvd qxsl:code="1308" qxsl:rstq="599"/>
+		<sent qxsl:code="100110" qxsl:rstq="599"/>
+	</item>
+</list>
+```
+
 ### Decoding & Encoding
 
 The package `qxsl.table` provides a basic framework for en/decoding log files including QXML and ADIF.
-Each individual format is provided as `TableFormat` implementation, which is supplied via Java [ServiceLoader](https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html) mechanism.
-The `TableFormat`s are managed by the `TableFormats` class, which provides an automatic format detector for convenience.
+The class `TableFormats` detects individual formats (`TableFormat`s) from the class path automatically, and also provides the `detect` method for automatic format detection.
 
 ```Scala
 val formats = new qxsl.table.TableFormats()
 val table: List[Item] = formats.decode(Files.newInputStream(path))
-formats.forName("adxs").encode(Files.newOutputStream(path), table)
+formats.forName("qxml").encoder(Files.newOutputStream(path)).encode(table)
 ```
 
 ### Unpacking Summary Sheets
 
-The package `qxsl.sheet` provides a en/decoding framework similar to the `qxsl.table` package, except that `qxsl.sheet` handles contest summary sheets such as Cabrillo and [JARL summary sheet](https://www.jarl.org/Japanese/1_Tanoshimo/1-1_Contest/e-log.htm) R2.0.
+The package `qxsl.sheet` provides an en/decoding framework similar to the `qxsl.table` package, except that `qxsl.sheet` handles contest summary sheets such as Cabrillo and [JARL summary sheet](https://www.jarl.org/Japanese/1_Tanoshimo/1-1_Contest/e-log.htm) R2.0.
 The class `SheetFormats` manages individual `SheetFormat` implementations, and also provides the `unpack` method useful for extracting `List[Item]` from a summary sheet.
 
 ```Scala
@@ -105,7 +118,7 @@ qxsl contains [the definition of ALLJA1 contest](src/main/resources/qxsl/ruler/a
 
 ## Build
 
-[Gradle](https://gradle.org/) retrieves dependent libraries, runs test cases, and build a JAR file automatically.
+[Gradle](https://gradle.org/) retrieves dependent libraries, runs test cases, and builds a JAR file automatically.
 
 `$ gradle build`
 

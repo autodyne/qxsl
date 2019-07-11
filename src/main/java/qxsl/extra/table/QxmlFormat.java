@@ -9,7 +9,9 @@ import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.xml.namespace.QName;
 import javax.xml.stream.*;
 import javax.xml.stream.events.*;
@@ -266,6 +268,7 @@ public final class QxmlFormat extends BaseFormat {
 		private final XMLStreamWriter writer;
 		private final OutputStream stream;
 		private final FieldFormats fields;
+		private final Set<String> spaces;
 
 		/**
 		 * 指定されたストリームに出力するエンコーダを構築します。
@@ -274,6 +277,7 @@ public final class QxmlFormat extends BaseFormat {
 		 * @throws XMLStreamException 通常は発生しない例外
 		 */
 		public QxmlEncoder(OutputStream os) throws XMLStreamException {
+			this.spaces = new HashSet<>();
 			this.stream = os;
 			this.fields = new FieldFormats();
 			XMLOutputFactory f = XMLOutputFactory.newInstance();
@@ -309,6 +313,7 @@ public final class QxmlFormat extends BaseFormat {
 				writer.writeStartDocument();
 				writer.writeCharacters("\n");
 				writer.writeStartElement(LIST.getLocalPart());
+				for(Item item: items) space(item);
 				writer.writeCharacters("\n");
 				for(Item item: items) item(item);
 				writer.writeEndElement();
@@ -317,6 +322,32 @@ public final class QxmlFormat extends BaseFormat {
 			} catch (XMLStreamException ex) {
 				throw new IOException(ex);
 			}
+		}
+
+		/**
+		 * ストリームに名前空間の宣言を出力します。
+		 *
+		 * @param item 名前空間を使用する交信記録
+		 * @throws XMLStreamException XMLの出力に伴う例外
+		 */
+		private final void space(Item item) throws XMLStreamException {
+			final Rcvd rcvd = item.getRcvd();
+			final Sent sent = item.getSent();
+			for(Field field: item) space(field.name());
+			for(Field field: sent) space(field.name());
+			for(Field field: sent) space(field.name());
+		}
+
+		/**
+		 * ストリームに名前空間の宣言を出力します。
+		 *
+		 * @param name 名前空間を使用する属性名
+		 * @throws XMLStreamException XMLの出力に伴う例外
+		 */
+		private final void space(QName name) throws XMLStreamException {
+			final String p = name.getPrefix();
+			final String s = name.getNamespaceURI();
+			if(!p.isEmpty() && spaces.add(p)) writer.writeNamespace(p, s);
 		}
 
 		/**
