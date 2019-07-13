@@ -100,7 +100,8 @@
 
 ; JCC/JCG validation
 (defun 都道府県? it (equal (jarl-city it) (jarl-pref it)))
-(defun 市郡区? it (not (都道府県? it)))
+(defun 小笠原? it (equal (jarl-city it) "東京都小笠原"))
+(defun 市郡区? it (not (or (都道府県? it) (小笠原? it))))
 (defun 支庁? it (match "1\\d{2}" (jccg it)))
 
 (defun 関東甲? it
