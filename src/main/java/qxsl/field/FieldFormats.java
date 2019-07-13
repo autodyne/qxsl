@@ -28,14 +28,14 @@ public final class FieldFormats implements Iterable<FieldFormat> {
 	private final Map<QName, Cache> caches;
 
 	/**
-	 * 現在のクラスローダからインスタンス化機構を構築します。
+	 * インスタンスを構築します。
 	 */
 	public FieldFormats() {
 		this(Thread.currentThread().getContextClassLoader());
 	}
 
 	/**
-	 * 指定のクラスローダからインスタンス化機構を構築します。
+	 * 指定されたローダを参照するインスタンスを構築します。
 	 * 
 	 * @param cl 書式を検出するクラスローダ
 	 */
@@ -50,7 +50,7 @@ public final class FieldFormats implements Iterable<FieldFormat> {
 	}
 
 	/**
-	 * 指定された属性の入出力を行う{@link FieldFormat}を返します。
+	 * 指定された属性の入出力を行う書式を返します。
 	 * 
 	 * @param name 属性の名前
 	 * @return 対応する書式 存在しない場合null

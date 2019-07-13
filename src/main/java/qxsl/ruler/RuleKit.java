@@ -386,13 +386,15 @@ public final class RuleKit {
 	 * @since 2019/05/18
 	 */
 	@Native("city")
-	@Params(min = 3, max = 3)
+	@Params(min = 2, max = 3)
 	private static final class $City extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final String base = eval.text(args.car());
 			final String code = eval.text(args.get(1));
-			final int level = eval.real(args.get(2)).intValueExact();
-			return new City(base, code).getName(level);
+			final City city = City.forCode(base, code);
+			if(args.size() == 2) return city.getFullName();
+			final BigDecimal lv = eval.real(args.get(2));
+			return city.getFullPath().get(lv.intValueExact());
 		}
 	}
 }

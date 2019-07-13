@@ -5,7 +5,7 @@
 *****************************************************************************/
 package qxsl.extra.field;
 
-import java.util.Iterator;
+import java.util.List;
 import qxsl.field.FieldFormats;
 import qxsl.field.FieldFormats.Cache;
 
@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public final class CityTest extends test.RandTest {
 	private final Cache cache = new FieldFormats().cache(Qxsl.CITY);
 	private City jarl(String code) {
-		return new City("jarl", code);
+		return City.forCode("jarl", code);
 	}
 	@Test
 	public void testValue() {
@@ -36,40 +36,44 @@ public final class CityTest extends test.RandTest {
 	}
 	@Test
 	public void testToString() {
-		final String text = alnum(100);
-		assertThat(jarl(text)).hasToString("jarl:".concat(text));
+		assertThat(jarl("100110")).hasToString("jarl:100110");
+		assertThat(jarl("400105")).hasToString("jarl:400105");
 	}
 	/**
-	 * JARLのJCC/JCGコードをイテレータで返します。
+	 * JARLのJCC/JCGに含まれる全ての地域をリストで返します。
 	 *
 	 * 
-	 * @return 地域番号のイテレータ
+	 * @return 地域のリスト
 	 */
-	public static Iterator<String> testMethodSource() {
-		return City.getCodes("jarl").iterator();
+	public static List<City> testMethodSource() {
+		return City.all("jarl");
 	}
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
-	public void testGetName(String code) {
-		assertThat(jarl(code).getName(0)).isNotEmpty();
-		assertThat(jarl(code).getName(1)).isNotEmpty();
+	public void testGetFullPath(City city) {
+		assertThat(city.getFullPath()).hasSizeBetween(1,2);
+		assertThat(city.getFullPath()).doesNotContain("");
+		assertThat(city.getFullPath()).doesNotContainNull();
 	}
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
-	public void testIsTerminal(String code) {
-		final String pref = jarl(code).getName(0);
-		final String city = jarl(code).getName(1);
-		final boolean tgt = jarl(code).isTerminal();
-		assertThat(tgt).isEqualTo(!pref.equals(city));
+	public void testGetFullName(City city) {
+		var name = String.join("", city.getFullPath());
+		assertThat(city.getFullName()).isEqualTo(name);
+	}
+	@ParameterizedTest
+	@MethodSource("testMethodSource")
+	public void testForCode(City city) {
+		assertThat(jarl(city.value().split(":")[1])).isEqualTo(city);
 	}
 	@Test
-	public void testGetCodes() {
-		assertThat(City.getCodes("jarl").size()).isNotZero();
+	public void testAll() {
+		assertThat(City.all("jarl")).isNotEmpty();
 	}
-	@Test
-	public void testCity$Format() throws Exception {
+	@ParameterizedTest
+	@MethodSource("testMethodSource")
+	public void testCity$Format(City city) throws Exception {
 		final City.Format form = new City.Format();
-		final City city = jarl(alnum(100));
 		assertThat(form.decode(form.encode(city))).isEqualTo(city);
 		assertThat(cache.field(form.encode(city))).isEqualTo(city);
 	}

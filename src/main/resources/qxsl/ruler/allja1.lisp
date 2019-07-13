@@ -88,7 +88,7 @@
 		(code it)))
 
 ; conversion of JCC/JCG to city/prefecture name
-(defun jarl-city it (city "jarl" (jccg it) 1))
+(defun jarl-city it (city "jarl" (jccg it)))
 (defun jarl-pref it (city "jarl" (jccg it) 0))
 
 ; time validation
