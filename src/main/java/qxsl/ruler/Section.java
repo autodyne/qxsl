@@ -11,8 +11,7 @@ import javax.script.ScriptException;
 import qxsl.model.Item;
 
 /**
- * コンテストの部門を表現します。
- * 交信の有効と無効を判別します。
+ * コンテストの部門の実装は{@link Section}クラスを実装します。
  * 
  * 
  * @author Journal of Hamradio Informatics

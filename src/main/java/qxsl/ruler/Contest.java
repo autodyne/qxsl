@@ -14,7 +14,7 @@ import java.util.List;
 import javax.script.ScriptException;
 
 /**
- * コンテストの規約を表現し、{@link Section}を提供します。
+ * コンテストの規約の実装は{@link Contest}クラスを実装します。
  * 
  * 
  * @author Journal of Hamradio Informatics

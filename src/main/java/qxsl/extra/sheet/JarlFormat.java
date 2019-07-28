@@ -159,20 +159,19 @@ public final class JarlFormat extends BaseFormat {
 		 */
 		private final Map<String, String> parse() throws XMLStreamException {
 			final Map<String, String> binds = new HashMap<>();
-			assert events.nextTag().asStartElement().getName().equals(DOC);
-			assert events.nextTag().asStartElement().getName().equals(SUM);
+			events.nextTag().asStartElement(); // DOC
+			events.nextTag().asStartElement(); // SUM
 			while(events.peek().isStartElement()) {
 				final var start = events.nextTag().asStartElement();
 				final var value = events.nextEvent().asCharacters();
 				final var close = events.nextEvent().asEndElement();
-				assert close.getName().equals(start.getName());
 				binds.put(start.getName().getLocalPart(), value.getData());
 			}
-			assert events.nextTag().asEndElement().getName().equals(SUM);
-			assert events.nextTag().asStartElement().getName().equals(LOG);
-			final String log = events.getElementText();
+			events.nextTag().asEndElement();   // SUM
+			events.nextTag().asStartElement(); // LOG
+			final String log = events.getElementText(); // </LOG>
 			binds.put(LOG.getLocalPart(), log.replaceAll("^\\R+|\\R+$", ""));
-			assert events.nextTag().asEndElement().getName().equals(DOC);
+			events.nextTag().asEndElement();   // DOC
 			return Collections.unmodifiableMap(binds);
 		}
 

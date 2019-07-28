@@ -10,8 +10,8 @@ qxsl is a vital component of [Automatic Acceptance & Tabulation System (ATS)-4](
 
 ## Features
 
-- qxsl provides log en/decoders for QXML, [ADIF(ADI/ADX)](http://adif.org), [Cabrillo](https://wwrof.org/cabrillo/), etc.
-- qxsl provides tabulation & scoring frameworks for contests and awards.
+- qxsl provides log en/decoders for QXML, [ADIF(ADI/ADX)](http://adif.org), [Cabrillo](https://wwrof.org/cabrillo/), [zLog](http://zlog.org), [CTESTWIN](http://e.gmobb.jp/ctestwin/Download.html), etc.
+- qxsl provides tabulation & scoring frameworks for amateur-radio contests and awards.
 - qxsl provides a LISP engine named *Elva*, and contest rules can be described in modern S-expression styles.
 
 ## Sample Codes
@@ -103,9 +103,6 @@ val section: Section = contest.getSection("CW 14MHz")
 val summary: Summary = section.summarize(table)
 summary.accepted.asScala.foreach(println)
 summary.rejected.asScala.foreach(println)
-println(summary.score)
-println(summary.mults)
-println(summary.total)
 ```
 
 The original LISP engine is provided by the package `elva`.

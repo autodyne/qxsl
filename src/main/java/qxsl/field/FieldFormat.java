@@ -9,7 +9,7 @@ import javax.xml.namespace.QName;
 import qxsl.model.Field;
 
 /**
- * {@link Field}と文字列による表現を相互に変換する仕組みを提供します。
+ * 交信記録の属性をQXMLで永続化するための仕組みを提供します。
  * 
  * 
  * @author Journal of Hamradio Informatics

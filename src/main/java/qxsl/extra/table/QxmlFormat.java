@@ -222,8 +222,9 @@ public final class QxmlFormat extends BaseFormat {
 		 */
 		private StartElement start(QName name) throws XMLStreamException {
 			final StartElement start = reader.nextTag().asStartElement();
-			assert start.getName().equals(name);
-			return start;
+			if(start.getName().equals(name)) return start;
+			final String msg = "expected <%s> but <%s> found";
+			throw new XMLStreamException(String.format(msg, name, start));
 		}
 
 		/**
@@ -236,8 +237,9 @@ public final class QxmlFormat extends BaseFormat {
 		 */
 		private EndElement close(QName name) throws XMLStreamException {
 			final EndElement close = reader.nextTag().asEndElement();
-			assert close.getName().equals(name);
-			return close;
+			if(close.getName().equals(name)) return close;
+			final String msg = "expected </%s> but </%s> found";
+			throw new XMLStreamException(String.format(msg, name, close));
 		}
 
 		/**
