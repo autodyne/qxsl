@@ -167,6 +167,7 @@ public final class JarlFormat extends BaseFormat {
 				final var close = events.nextEvent().asEndElement();
 				binds.put(start.getName().getLocalPart(), value.getData());
 			}
+			binds.remove("SCORE"); // <SCORE BAND=*MHz>12</SCORE>
 			events.nextTag().asEndElement();   // SUM
 			events.nextTag().asStartElement(); // LOG
 			final String log = events.getElementText(); // </LOG>
