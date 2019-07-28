@@ -34,6 +34,7 @@ public final class TableFormatsTest extends test.RandTest {
 		assertThat(tables.forName("adis")).isInstanceOf(AdisFormat.class);
 		assertThat(tables.forName("cqww")).isInstanceOf(CqwwFormat.class);
 		assertThat(tables.forName("jarl")).isInstanceOf(JarlFormat.class);
+		assertThat(tables.forName("ctxt")).isInstanceOf(CTxtFormat.class);
 		assertThat(tables.forName("zall")).isInstanceOf(ZAllFormat.class);
 		assertThat(tables.forName("zdos")).isInstanceOf(ZDosFormat.class);
 		// binary

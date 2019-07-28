@@ -60,7 +60,6 @@ public final class JarlFormat extends BaseFormat {
 	 * @author Journal of Hamradio Informatics
 	 * 
 	 * @since 2014/06/03
-	 * @deprecated JARL書式の仕様はデコーダの挙動を厳密に定義しません。
 	 */
 	@Deprecated
 	private final class JarlDecoder extends PlainTextDecoder {
@@ -233,7 +232,6 @@ public final class JarlFormat extends BaseFormat {
 	 * @author Journal of Hamradio Informatics
 	 *
 	 * @since 2014/06/03
-	 * @deprecated JARL書式の仕様はエンコーダの挙動を厳密に定義しません。
 	 */
 	@Deprecated
 	private final class JarlEncoder extends PlainTextEncoder {

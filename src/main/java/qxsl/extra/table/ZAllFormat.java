@@ -60,7 +60,6 @@ public final class ZAllFormat extends BaseFormat {
 	 * @author Journal of Hamradio Informatics
 	 * 
 	 * @since 2013/06/23
-	 * @deprecated この実装は概ね互換性がありますが、無保証です。
 	 */
 	@Deprecated
 	private final class ZAllDecoder extends PlainTextDecoder {
@@ -268,7 +267,6 @@ public final class ZAllFormat extends BaseFormat {
 	 * @author Journal of Hamradio Informatics
 	 *
 	 * @since 2013/06/23
-	 * @deprecated この実装は概ね互換性がありますが、無保証です。
 	 */
 	@Deprecated
 	private final class ZAllEncoder extends PlainTextEncoder {

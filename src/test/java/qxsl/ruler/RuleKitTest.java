@@ -61,6 +61,7 @@ public final class RuleKitTest extends test.RandTest {
 			RuleKit.class.getResource("allja1.adis"),
 			RuleKit.class.getResource("allja1.cqww"),
 			RuleKit.class.getResource("allja1.jarl"),
+			RuleKit.class.getResource("allja1.ctxt"),
 			RuleKit.class.getResource("allja1.zall"),
 			RuleKit.class.getResource("allja1.zdos"),
 			RuleKit.class.getResource("allja1.cbin"),

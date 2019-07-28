@@ -9,8 +9,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.time.Year;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.*;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,29 +20,29 @@ import qxsl.field.FieldFormats;
 import qxsl.model.Item;
 
 /**
- * zLogテキストファイルのうちDOS版と互換の書式です。
+ * 2016年4月以前のCTESTWINのテキストファイルの書式です。
  * 
  * 
  * @author Journal of Hamradio Informatics
  * 
- * @since 2013/02/27
+ * @since 2013/07/02
  *
  */
-public final class ZDosFormat extends BaseFormat {
+public final class CTxtFormat extends BaseFormat {
 	private final Charset SJIS = Charset.forName("SJIS");
 
-	public ZDosFormat() {
-		super("zdos");
+	public CTxtFormat() {
+		super("ctxt");
 	}
 
 	@Override
 	public TableDecoder decoder(Reader reader) {
-		return new ZDosDecoder(reader);
+		return new CTxtDecoder(reader);
 	}
 
 	@Override
 	public TableEncoder encoder(Writer writer) {
-		return new ZDosEncoder(writer);
+		return new CTxtEncoder(writer);
 	}
 
 	@Override
@@ -57,15 +56,15 @@ public final class ZDosFormat extends BaseFormat {
 	}
 
 	/**
-	 * zLogテキスト書式で直列化された交信記録をデコードします。
+	 * CTESTWIN書式で直列化された交信記録をデコードします。
 	 * 
 	 * 
 	 * @author Journal of Hamradio Informatics
 	 * 
-	 * @since 2013/02/25
+	 * @since 2013/07/02
 	 */
 	@Deprecated
-	private final class ZDosDecoder extends PlainTextDecoder {
+	private final class CTxtDecoder extends PlainTextDecoder {
 		private final DateTimeFormatter format;
 		private final FieldFormats fields;
 
@@ -74,13 +73,13 @@ public final class ZDosFormat extends BaseFormat {
 		 * 
 		 * @param reader 交信記録を読み込むリーダ
 		 */
-		public ZDosDecoder(Reader reader) {
+		public CTxtDecoder(Reader reader) {
 			super(reader);
-			this.fields = new FieldFormats();
+			fields = new FieldFormats();
 			final var dtfb = new DateTimeFormatterBuilder();
 			final var year = Year.now().getValue();
 			dtfb.parseDefaulting(ChronoField.YEAR, year);
-			dtfb.appendPattern("M  ppd HHmm");
+			dtfb.appendPattern("M/ppd HHmm");
 			this.format = dtfb.toFormatter();
 		}
 
@@ -109,7 +108,7 @@ public final class ZDosFormat extends BaseFormat {
 			final List<Item> items = new ArrayList<>();
 			String line;
 			while((line = super.readLine()) != null) {
-				if(!line.isBlank() && !line.startsWith("mon")) {
+				if(!line.isBlank() && !line.startsWith("Worked")) {
 					super.reset();
 					items.add(item(line));
 				}
@@ -126,132 +125,114 @@ public final class ZDosFormat extends BaseFormat {
 		 */
 		private Item item(String line) throws IOException {
 			final Item item = new Item();
-			final String[] vals = splitLine(
-				0, 13, 24, 37, 50, 57, 63, 68, 72, 139
-			);
+			final String[] vals = splitLine(0, 5, 16, 28, 36, 41, 54, 67);
 
-			String time = vals[0];
-			String call = vals[1];
-			String sent = vals[2];
-			String rcvd = vals[3];
-			String band = vals[5];
-			String mode = vals[6];
-			String note = vals[8];
+			Integer.parseInt(vals[0]);
 
-			final int i = note.indexOf("%%", 2);
-			String oprt = i>0 ? note.substring(2, i) : "";
-			if(i > 0) note = note.substring(i + 2).trim();
+			final String time = vals[1];
+			final String call = vals[2];
+			final String band = vals[3];
+			final String mode = vals[4];
+			final String sent = vals[5];
+			final String rcvd = vals[6];
 
 			if(!time.isEmpty()) time(item, time);
 			if(!call.isEmpty()) call(item, call);
-			if(!sent.isEmpty()) sent(item, sent);
-			if(!rcvd.isEmpty()) rcvd(item, rcvd);
 			if(!band.isEmpty()) band(item, band);
 			if(!mode.isEmpty()) mode(item, mode);
-			if(!oprt.isEmpty()) oprt(item, oprt);
-			if(!note.isEmpty()) note(item, note);
+			if(!sent.isEmpty()) sent(item, sent);
+			if(!rcvd.isEmpty()) rcvd(item, rcvd);
 
 			return item;
 		}
 
 		/**
-		 * 交信記録に交信日時を設定します。
+		 * {@link Item}に交信日時を設定します。
 		 * 
-		 * @param item 設定する交信記録
+		 * @param item 設定する{@link Item}
 		 * @param time 交信日時の文字列
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void time(Item item, String time) {
+		private void time(Item item, String time) throws IOException {
 			item.add(new Time(LocalDateTime.parse(time, format)));
 		}
 
 		/**
-		 * 交信記録に相手局のコールサインを設定します。
+		 * {@link Item}に相手局のコールサインを設定します。
 		 * 
-		 * @param item 設定する交信記録
+		 * @param item 設定する{@link Item}
 		 * @param call コールサインの文字列
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void call(Item item, String call) {
+		private void call(Item item, String call) throws IOException {
 			item.add(fields.cache(Qxsl.CALL).field(call));
 		}
 
 		/**
-		 * 交信記録に相手局まで送信したナンバーを設定します。
+		 * {@link Item}に周波数帯を設定します。
 		 * 
-		 * @param item 設定する交信記録
-		 * @param sent ナンバーの文字列
-		 */
-		private void sent(Item item, String sent) {
-			item.getSent().add(fields.cache(Qxsl.CODE).field(sent));
-		}
-
-		/**
-		 * 交信記録に相手局から受信したナンバーを設定します。
-		 * 
-		 * @param item 設定する交信記録
-		 * @param rcvd ナンバーの文字列
-		 */
-		private void rcvd(Item item, String rcvd) {
-			item.getRcvd().add(fields.cache(Qxsl.CODE).field(rcvd));
-		}
-
-		/**
-		 * 交信記録に周波数帯を設定します。
-		 * 
-		 * @param item 設定する交信記録
+		 * @param item 設定する{@link Item}
 		 * @param band 周波数帯の文字列
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void band(Item item, String band) {
+		private void band(Item item, String band) throws IOException {
 			Integer kHz;
-			if(band.matches("^[0-9]+[gG]$")) {
-				band = band.replaceAll("[gG]", "");
+			if(band.contains("GHz")){
+				band = band.replace("GHz", "");
 				kHz = (int) (Double.parseDouble(band) * 1000_000);
-			} else {
+			} else if(band.contains("MHz")) {
+				band = band.replace("MHz", "");
 				kHz = (int) (Double.parseDouble(band) * 1000);
+			} else {
+				band = band.replace("kHz", "");
+				kHz = Integer.parseInt(band);
 			}
 			item.add(fields.cache(Qxsl.BAND).field(kHz.toString()));
 		}
 
 		/**
-		 * 交信記録に通信方式を設定します。
+		 * {@link Item}に通信方式を設定します。
 		 * 
-		 * @param item 設定する交信記録
+		 * @param item 設定する{@link Item}
 		 * @param mode 通信方式の文字列
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void mode(Item item, String mode) {
+		private void mode(Item item, String mode) throws IOException {
 			item.add(fields.cache(Qxsl.MODE).field(mode));
 		}
 
 		/**
-		 * 交信記録に運用者名を設定します。
+		 * {@link Item}に相手局に送信したナンバーを設定します。
 		 * 
-		 * @param item 設定する交信記録
-		 * @param op 運用者名の文字列
+		 * @param item 設定する{@link Item}
+		 * @param sent ナンバーの文字列
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void oprt(Item item, String op) {
-			item.add(fields.cache(Qxsl.NAME).field(op));
+		private void sent(Item item, String sent) throws IOException {
+			item.getSent().add(fields.cache(Qxsl.CODE).field(sent));
 		}
 
 		/**
-		 * 交信記録に交信の備考を設定します。
+		 * {@link Item}に相手局から受信したナンバーを設定します。
 		 * 
-		 * @param item 設定する交信記録
-		 * @param note 備考の文字列
+		 * @param item 設定する{@link Item}
+		 * @param rcvd ナンバーの文字列
+		 * @throws IOException 読み込みに失敗した場合
 		 */
-		private void note(Item item, String note) {
-			item.add(fields.cache(Qxsl.NOTE).field(note));
+		private void rcvd(Item item, String rcvd) throws IOException {
+			item.getRcvd().add(fields.cache(Qxsl.CODE).field(rcvd));
 		}
 	}
 
 	/**
-	 * 交信記録をzLogテキスト書式に直列化するエンコーダです。
+	 * 交信記録をCTESTWIN書式に直列化するエンコーダーです。
 	 *
 	 *
 	 * @author Journal of Hamradio Informatics
 	 *
-	 * @since 2013/02/25
+	 * @since 2013/07/02
 	 */
-	@Deprecated
-	private final class ZDosEncoder extends PlainTextEncoder {
+	private final class CTxtEncoder extends PlainTextEncoder {
 		private final DateTimeFormatter format;
 
 		/**
@@ -259,9 +240,9 @@ public final class ZDosFormat extends BaseFormat {
 		 * 
 		 * @param writer 交信記録を出力するライタ
 		 */
-		public ZDosEncoder(Writer writer) {
+		public CTxtEncoder(Writer writer) {
 			super(writer);
-			format = DateTimeFormatter.ofPattern(" MM  dd HHmm");
+			format = DateTimeFormatter.ofPattern("MM/dd HHmm");
 		}
 
 		/**
@@ -272,32 +253,35 @@ public final class ZDosFormat extends BaseFormat {
 		 */
 		@Override
 		public void encode(List<Item> items) throws IOException {
-			print(getHeaderText());
+			printf("Worked %4s stations", items.size());
 			println();
-			for(Item r : items) item(r);
+			println();
+			int counter = 1;
+			for(Item r : items) item(r, counter++);
 		}
 
 		/**
 		 * 指定された交信記録をテキスト書式で出力します。
 		 * 
 		 * @param item 出力する交信記録
+		 * @param num 出力する交信記録の番号
+		 *
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private void item(Item item) throws IOException {
+		private void item(Item item, int num) throws IOException {
+			printR(4, String.valueOf(num));
+			print(" ");
 			time((Time) item.get(Qxsl.TIME));
 			print(" ");
-			printR(10, (Call) item.get(Qxsl.CALL));
+			printR(11, (Call) item.get(Qxsl.CALL));
+			print(" ");
+			band((Band) item.get(Qxsl.BAND));
+			print(" ");
+			printR(4,  (Mode) item.get(Qxsl.MODE));
 			print(" ");
 			printR(12, (Code) item.getSent().get(Qxsl.CODE));
 			print(" ");
 			printR(12, (Code) item.getRcvd().get(Qxsl.CODE));
-			print("        ");
-			band((Band) item.get(Qxsl.BAND));
-			print(" ");
-			printR(4, (Mode) item.get(Qxsl.MODE));
-			print(" 1   ");
-			oprt((Name) item.get(Qxsl.NAME));
-			note((Note) item.get(Qxsl.NOTE));
 			println();
 		}
 
@@ -308,7 +292,7 @@ public final class ZDosFormat extends BaseFormat {
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void time(Time date) throws IOException {
-			if(date == null) print(" ".repeat(12));
+			if(date == null) print(" ".repeat(10));
 			else print(format.format(date.value()));
 		}
 
@@ -319,30 +303,7 @@ public final class ZDosFormat extends BaseFormat {
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void band(Band band) throws IOException {
-			if(band.value().intValueExact() < 10_000_000) {
-				final String MHz = band.toMHzString();
-				printf("%5.5s", MHz.substring(0, MHz.length() - 3));
-			} else print("  10G");
-		}
-
-		/**
-		 * 指定された運用者名を文字列として出力します。
-		 * 
-		 * @param op 出力する運用者名
-		 * @throws IOException 出力に失敗した場合
-		 */
-		private void oprt(Name op) throws IOException {
-			if(op != null) printf("%%%%%s%%%% ", op.value());
-		}
-
-		/**
-		 * 指定された備考を文字列として出力します。
-		 * 
-		 * @param note 出力する備考
-		 * @throws IOException 出力に失敗した場合
-		 */
-		private void note(Note note) throws IOException {
-			if(note != null) print(note.value());
+			printf("%-7.7s", band != null? band.toString() : "");
 		}
 	}
 }

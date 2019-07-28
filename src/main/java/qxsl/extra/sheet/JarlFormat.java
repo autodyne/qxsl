@@ -20,7 +20,7 @@ import javax.xml.validation.SchemaFactory;
 import org.xml.sax.SAXException;
 
 /**
- * JARLサマリーシートR2.0(R1.0非対応)の書式です。
+ * JARLサマリーシートR2.0(R1.0)の書式です。
  * 
  * 
  * @author Journal of Hamradio Informatics
