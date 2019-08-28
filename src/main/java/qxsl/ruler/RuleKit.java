@@ -392,6 +392,7 @@ public final class RuleKit {
 			final String base = eval.text(args.car());
 			final String code = eval.text(args.get(1));
 			final City city = City.forCode(base, code);
+			if(city == null) return null;
 			if(args.size() == 2) return city.getFullName();
 			final BigDecimal lv = eval.real(args.get(2));
 			return city.getFullPath().get(lv.intValueExact());
