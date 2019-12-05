@@ -66,19 +66,28 @@
 
 ; conversion of qxsl's band (kHz) to ADIF band
 (defun band it
-	(if
-		(qxsl? it)
-		(progn
-			(setq freq (qxsl-band it))
-			(cond (
-				((<=  1810 freq 1913) "160m")
-				((<=  3500 freq 3687)  "80m")
-				((<=  7000 freq 7200)  "40m")
-				((<= 14000 freq 14350) "20m")
-				((<= 21000 freq 21450) "15m")
-				((<= 28000 freq 29700) "10m")
-				((<= 50000 freq 54000)  "6m"))))
-		(adif-band it)))
+	(progn
+		(setq freq (qxsl-band it))
+		(setq band (adif-band it))
+		(cond (
+			((or (and (qxsl? it) (<=  1810 freq  1913)) (equal band "160m")) 1.9)
+			((or (and (qxsl? it) (<=  3500 freq  3687)) (equal band  "80m")) 3.5)
+			((or (and (qxsl? it) (<=  7000 freq  7200)) (equal band  "40m"))   7)
+			((or (and (qxsl? it) (<= 14000 freq 14350)) (equal band  "20m"))  14)
+			((or (and (qxsl? it) (<= 21000 freq 21450)) (equal band  "15m"))  21)
+			((or (and (qxsl? it) (<= 28000 freq 29700)) (equal band  "10m"))  28)
+			((or (and (qxsl? it) (<= 50000 freq 54000)) (equal band   "6m"))  50)))))
+
+; single lower-band sections
+(defun 1.9MHz? it (equal (band it) 1.9))
+(defun 3.5MHz? it (equal (band it) 3.5))
+(defun   7MHz? it (equal (band it)   7))
+
+; single UPPER-BAND sections
+(defun  14MHz? it (equal (band it)  14))
+(defun  21MHz? it (equal (band it)  21))
+(defun  28MHz? it (equal (band it)  28))
+(defun  50MHz? it (equal (band it)  50))
 
 ; JCC/JCG
 (defun jccg it
@@ -92,17 +101,19 @@
 (defun jarl-pref it (city "jarl" (jccg it) 0))
 
 ; time validation
-(defun AM? it (member (time it) '(09 10 11)))
-(defun PM? it (member (time it) '(16 17 18 19)))
+(defun AM? it (and (<= 09 (time it) 11) (<=  14 (band it) 50)))
+(defun PM? it (and (<= 16 (time it) 19) (<= 1.9 (band it)  7)))
+(defun Dg? it (and (<= 13 (time it) 14) (<= 3.5 (band it) 28)))
+(defun An? it (or (AM? it) (PM? it)))
 
 ; mode validation
-(defun CW? it (member (mode it) '("cw" "CW")))
+(defun CW? it (member (mode it) '("CW")))
+(defun FT? it (match "FT[48]" (mode it)))
 
 ; JCC/JCG validation
-(defun 都道府県? it (equal (jarl-city it) (jarl-pref it)))
-(defun 小笠原? it (equal (jarl-city it) "東京都小笠原"))
-(defun 市郡区? it (not (or (都道府県? it) (小笠原? it))))
 (defun 支庁? it (match "1\\d{2}" (jccg it)))
+(defun 府県? it (equal (jarl-city it) (jarl-pref it)))
+(defun 市郡? it (not (or (府県? it) (equal (jarl-city it) "東京都小笠原"))))
 
 (defun 関東甲? it
 	(member (jarl-pref it)
@@ -120,28 +131,15 @@
 
 ;; 1エリア内/1エリア外部門
 (defun 内? it
-	(cond(
-		((北海道? it) (支庁? it))
-		((関東甲? it) (市郡区? it))
-		((他地方? it) (都道府県? it)))))
+	(if
+		(Dg? it)
+		(市郡? it)
+		(cond(
+			((北海道? it) (支庁? it))
+			((関東甲? it) (市郡? it))
+			((他地方? it) (府県? it))))))
 
-(defun 外? it (and (関東甲? it) (市郡区? it)))
-
-; single lower-band sections
-(defun 1.9MHz? it (and (PM? it) (equal (band it) "160m")))
-(defun 3.5MHz? it (and (PM? it) (equal (band it)  "80m")))
-(defun   7MHz? it (and (PM? it) (equal (band it)  "40m")))
-
-; single UPPER-BAND sections
-(defun  14MHz? it (and (AM? it) (equal (band it)  "20m")))
-(defun  21MHz? it (and (AM? it) (equal (band it)  "15m")))
-(defun  28MHz? it (and (AM? it) (equal (band it)  "10m")))
-(defun  50MHz? it (and (AM? it) (equal (band it)   "6m")))
-
-; multi-band sections
-(defun 低周波? it (or (1.9MHz? it) (3.5MHz? it) ( 7MHz? it)))
-(defun 高周波? it (or ( 14MHz? it) ( 21MHz? it) (28MHz? it) (50MHz? it)))
-(defun 全周波? it (or (低周波? it) (高周波? it)))
+(defun 外? it (and (関東甲? it) (市郡? it)))
 
 ; key for scoring
 (defun CALL-KEY it (list (call it) (band it) (mode it)))
@@ -155,50 +153,50 @@
 		(failure it "無効な交信")))
 
 (contest "ALLJA1 TEST"
-	(section "1エリア内 個人 電信限定 1.9MHz部門"         (lambda it (verify it (list 内? CW? 1.9MHz?))))
-	(section "1エリア内 個人 電信限定 3.5MHz部門"         (lambda it (verify it (list 内? CW? 3.5MHz?))))
-	(section "1エリア内 個人 電信限定 7MHz部門"           (lambda it (verify it (list 内? CW?   7MHz?))))
-	(section "1エリア内 個人 電信電話 3.5MHz部門"         (lambda it (verify it (list 内?     3.5MHz?))))
-	(section "1エリア内 個人 電信電話 7MHz部門"           (lambda it (verify it (list 内?       7MHz?))))
-	(section "1エリア内 個人 電信限定 1.9/3.5/7MHz部門"   (lambda it (verify it (list 内? CW? 低周波?))))
-	(section "1エリア内 個人 電信電話 1.9/3.5/7MHz部門"   (lambda it (verify it (list 内?     低周波?))))
+	(section "1エリア内 個人 電信限定 1.9MHz部門"         (lambda it (verify it (list 内? CW? 1.9MHz? PM?))))
+	(section "1エリア内 個人 電信限定 3.5MHz部門"         (lambda it (verify it (list 内? CW? 3.5MHz? PM?))))
+	(section "1エリア内 個人 電信電話 3.5MHz部門"         (lambda it (verify it (list 内?     3.5MHz? PM?))))
+	(section "1エリア内 個人 電信限定 7MHz部門"           (lambda it (verify it (list 内? CW?   7MHz? PM?))))
+	(section "1エリア内 個人 電信電話 7MHz部門"           (lambda it (verify it (list 内?       7MHz? PM?))))
+	(section "1エリア内 個人 電信限定 1.9/3.5/7MHz部門"   (lambda it (verify it (list 内? CW?         PM?))))
+	(section "1エリア内 個人 電信電話 1.9/3.5/7MHz部門"   (lambda it (verify it (list 内?             PM?))))
 
-	(section "1エリア外 個人 電信限定 1.9MHz部門"         (lambda it (verify it (list 外? CW? 1.9MHz?))))
-	(section "1エリア外 個人 電信限定 3.5MHz部門"         (lambda it (verify it (list 外? CW? 3.5MHz?))))
-	(section "1エリア外 個人 電信限定 7MHz部門"           (lambda it (verify it (list 外? CW?   7MHz?))))
-	(section "1エリア外 個人 電信電話 3.5MHz部門"         (lambda it (verify it (list 外?     3.5MHz?))))
-	(section "1エリア外 個人 電信電話 7MHz部門"           (lambda it (verify it (list 外?       7MHz?))))
-	(section "1エリア外 個人 電信限定 1.9/3.5/7MHz部門"   (lambda it (verify it (list 外? CW? 低周波?))))
-	(section "1エリア外 個人 電信電話 1.9/3.5/7MHz部門"   (lambda it (verify it (list 外?     低周波?))))
+	(section "1エリア外 個人 電信限定 1.9MHz部門"         (lambda it (verify it (list 外? CW? 1.9MHz? PM?))))
+	(section "1エリア外 個人 電信限定 3.5MHz部門"         (lambda it (verify it (list 外? CW? 3.5MHz? PM?))))
+	(section "1エリア外 個人 電信電話 3.5MHz部門"         (lambda it (verify it (list 外?     3.5MHz? PM?))))
+	(section "1エリア外 個人 電信限定 7MHz部門"           (lambda it (verify it (list 外? CW?   7MHz? PM?))))
+	(section "1エリア外 個人 電信電話 7MHz部門"           (lambda it (verify it (list 外?       7MHz? PM?))))
+	(section "1エリア外 個人 電信限定 1.9/3.5/7MHz部門"   (lambda it (verify it (list 外? CW?         PM?))))
+	(section "1エリア外 個人 電信電話 1.9/3.5/7MHz部門"   (lambda it (verify it (list 外?             PM?))))
 
-	(section "1エリア内 個人 電信限定 14MHz部門"          (lambda it (verify it (list 内? CW?  14MHz?))))
-	(section "1エリア内 個人 電信限定 21MHz部門"          (lambda it (verify it (list 内? CW?  21MHz?))))
-	(section "1エリア内 個人 電信限定 28MHz部門"          (lambda it (verify it (list 内? CW?  28MHz?))))
-	(section "1エリア内 個人 電信限定 50MHz部門"          (lambda it (verify it (list 内? CW?  50MHz?))))
-	(section "1エリア内 個人 電信電話 14MHz部門"          (lambda it (verify it (list 内?      14MHz?))))
-	(section "1エリア内 個人 電信電話 21MHz部門"          (lambda it (verify it (list 内?      21MHz?))))
-	(section "1エリア内 個人 電信電話 28MHz部門"          (lambda it (verify it (list 内?      28MHz?))))
-	(section "1エリア内 個人 電信電話 50MHz部門"          (lambda it (verify it (list 内?      50MHz?))))
-	(section "1エリア内 個人 電信限定 14/21/28/50MHz部門" (lambda it (verify it (list 内? CW? 高周波?))))
-	(section "1エリア内 個人 電信電話 14/21/28/50MHz部門" (lambda it (verify it (list 内?     高周波?))))
+	(section "1エリア内 個人 電信限定 14MHz部門"          (lambda it (verify it (list 内? CW?  14MHz? AM?))))
+	(section "1エリア内 個人 電信電話 14MHz部門"          (lambda it (verify it (list 内?      14MHz? AM?))))
+	(section "1エリア内 個人 電信限定 21MHz部門"          (lambda it (verify it (list 内? CW?  21MHz? AM?))))
+	(section "1エリア内 個人 電信電話 21MHz部門"          (lambda it (verify it (list 内?      21MHz? AM?))))
+	(section "1エリア内 個人 電信限定 28MHz部門"          (lambda it (verify it (list 内? CW?  28MHz? AM?))))
+	(section "1エリア内 個人 電信電話 28MHz部門"          (lambda it (verify it (list 内?      28MHz? AM?))))
+	(section "1エリア内 個人 電信限定 50MHz部門"          (lambda it (verify it (list 内? CW?  50MHz? AM?))))
+	(section "1エリア内 個人 電信電話 50MHz部門"          (lambda it (verify it (list 内?      50MHz? AM?))))
+	(section "1エリア内 個人 電信限定 14/21/28/50MHz部門" (lambda it (verify it (list 内? CW?         AM?))))
+	(section "1エリア内 個人 電信電話 14/21/28/50MHz部門" (lambda it (verify it (list 内?             AM?))))
 
-	(section "1エリア外 個人 電信限定 14MHz部門"          (lambda it (verify it (list 外? CW?  14MHz?))))
-	(section "1エリア外 個人 電信限定 21MHz部門"          (lambda it (verify it (list 外? CW?  21MHz?))))
-	(section "1エリア外 個人 電信限定 28MHz部門"          (lambda it (verify it (list 外? CW?  28MHz?))))
-	(section "1エリア外 個人 電信限定 50MHz部門"          (lambda it (verify it (list 外? CW?  50MHz?))))
-	(section "1エリア外 個人 電信電話 14MHz部門"          (lambda it (verify it (list 外?      14MHz?))))
-	(section "1エリア外 個人 電信電話 21MHz部門"          (lambda it (verify it (list 外?      21MHz?))))
-	(section "1エリア外 個人 電信電話 28MHz部門"          (lambda it (verify it (list 外?      28MHz?))))
-	(section "1エリア外 個人 電信電話 50MHz部門"          (lambda it (verify it (list 外?      50MHz?))))
-	(section "1エリア外 個人 電信限定 14/21/28/50MHz部門" (lambda it (verify it (list 外? CW? 高周波?))))
-	(section "1エリア外 個人 電信電話 14/21/28/50MHz部門" (lambda it (verify it (list 外?     高周波?))))
+	(section "1エリア外 個人 電信限定 14MHz部門"          (lambda it (verify it (list 外? CW?  14MHz? AM?))))
+	(section "1エリア外 個人 電信電話 14MHz部門"          (lambda it (verify it (list 外?      14MHz? AM?))))
+	(section "1エリア外 個人 電信限定 21MHz部門"          (lambda it (verify it (list 外? CW?  21MHz? AM?))))
+	(section "1エリア外 個人 電信電話 21MHz部門"          (lambda it (verify it (list 外?      21MHz? AM?))))
+	(section "1エリア外 個人 電信限定 28MHz部門"          (lambda it (verify it (list 外? CW?  28MHz? AM?))))
+	(section "1エリア外 個人 電信電話 28MHz部門"          (lambda it (verify it (list 外?      28MHz? AM?))))
+	(section "1エリア外 個人 電信限定 50MHz部門"          (lambda it (verify it (list 外? CW?  50MHz? AM?))))
+	(section "1エリア外 個人 電信電話 50MHz部門"          (lambda it (verify it (list 外?      50MHz? AM?))))
+	(section "1エリア外 個人 電信限定 14/21/28/50MHz部門" (lambda it (verify it (list 外? CW?         AM?))))
+	(section "1エリア外 個人 電信電話 14/21/28/50MHz部門" (lambda it (verify it (list 外?             AM?))))
 
-	(section "1エリア内 個人 電信限定 総合部門"           (lambda it (verify it (list 内? CW? 全周波?))))
-	(section "1エリア内 個人 電信電話 総合部門"           (lambda it (verify it (list 内?     全周波?))))
-	(section "1エリア外 個人 電信限定 総合部門"           (lambda it (verify it (list 外? CW? 全周波?))))
-	(section "1エリア外 個人 電信電話 総合部門"           (lambda it (verify it (list 外?     全周波?))))
+	(section "1エリア内 団体 電信限定 オールバンド部門"   (lambda it (verify it (list 内? CW?         An?))))
+	(section "1エリア内 団体 電信電話 オールバンド部門"   (lambda it (verify it (list 内?             An?))))
+	(section "1エリア外 団体 電信限定 オールバンド部門"   (lambda it (verify it (list 外? CW?         An?))))
+	(section "1エリア外 団体 電信電話 オールバンド部門"   (lambda it (verify it (list 外?             An?))))
 
-	(section "1エリア内 社団 電信限定 オールバンド部門"   (lambda it (verify it (list 内? CW? 全周波?))))
-	(section "1エリア内 社団 電信電話 オールバンド部門"   (lambda it (verify it (list 内?     全周波?))))
-	(section "1エリア外 社団 電信限定 オールバンド部門"   (lambda it (verify it (list 外? CW? 全周波?))))
-	(section "1エリア外 社団 電信電話 オールバンド部門"   (lambda it (verify it (list 外?     全周波?)))))
+	(section "1エリア内 個人 デジタル オールバンド部門"   (lambda it (verify it (list 内? FT?         Dg?))))
+	(section "1エリア外 個人 デジタル オールバンド部門"   (lambda it (verify it (list 外? FT?         Dg?))))
+	(section "1エリア外 団体 デジタル オールバンド部門"   (lambda it (verify it (list 外? FT?         Dg?))))
+	(section "1エリア外 団体 デジタル オールバンド部門"   (lambda it (verify it (list 外? FT?         Dg?)))))

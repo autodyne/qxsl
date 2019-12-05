@@ -70,8 +70,6 @@ val table: List[Item] = formats.decode(Files.newInputStream(path))
 formats.forName("qxml").encoder(Files.newOutputStream(path)).encode(table)
 ```
 
-### Unpacking Summary Sheets
-
 The package `qxsl.sheet` provides an en/decoding framework similar to the `qxsl.table` package, except that `qxsl.sheet` handles contest summary sheets such as Cabrillo and [JARL summary sheet](https://www.jarl.org/Japanese/1_Tanoshimo/1-1_Contest/e-log.htm) R2.0.
 The class `SheetFormats` manages individual `SheetFormat` implementations, and also provides the `unpack` method useful for extracting `List[Item]` from a summary sheet.
 
@@ -115,7 +113,7 @@ qxsl contains [the definition of ALLJA1 contest](src/main/resources/qxsl/ruler/a
 
 ## Build
 
-[Gradle](https://gradle.org/) retrieves dependent libraries, runs test cases, and builds a JAR file automatically.
+[Gradle](https://gradle.org/) retrieves dependent libraries, runs tests, and generates a JAR file automatically.
 
 `$ gradle build`
 
