@@ -62,6 +62,17 @@ public final class Struct extends AbstractList<Object> {
 	}
 
 	/**
+	 * 指定された値をリストに変換します。
+	 *
+	 * @param list 値
+	 * @return リスト
+	 */
+	public static final Struct as(Object list) {
+		if(list instanceof Struct) return (Struct) list;
+		return Struct.of(list);
+	}
+
+	/**
 	 * 指定された要素を持つリストを構築します。
 	 *
 	 * @param vals 要素
@@ -75,9 +86,10 @@ public final class Struct extends AbstractList<Object> {
 	 * 指定された要素を持つリストを構築します。
 	 *
 	 * @param vals 要素
+	 * @param <E> 要素の総称型
 	 * @return リスト 空の場合は{@link #NIL}
 	 */
-	public static final Struct of(List<Object> vals) {
+	public static final <E> Struct of(List<E> vals) {
 		final int size = vals.size();
 		if(size == 0) return Struct.NIL;
 		final Object head = vals.get(0);

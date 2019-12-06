@@ -63,9 +63,6 @@
 (member 'TAIL (list 'HEAD 'TAIL)) true
 (member 'TAIL (list 'HEAD 'NEXT 'TAIL)) true
 
-; mapcar
-(mapcar (lambda (x) (* x x)) '(1 2 3 4 5)) '(1 4 9 16 25)
-
 ; equal
 (equal 1 1) true
 (equal 1 2) false
@@ -73,6 +70,12 @@
 (equal "HEAD" "TAIL") false
 (equal (+ 1 2) (+ 3 0)) true
 (equal (+ 4 5) (+ 6 7)) false
+
+; null?
+(null? 810) false
+(null? null) true
+(null? (car (list null null))) true
+(null? (cdr (list null null))) false
 
 ; if
 (if true 'HEAD 'TAIL) 'HEAD
@@ -150,17 +153,11 @@
 (>= 5 4 3 2 1) true
 (>= 5 4 2 3 1) false
 
-; str-head
-(str-head "HELLO" 1) "H"
-(str-head "WORLD" 1) "W"
-(str-head "HELLO" 2) "HE"
-(str-head "WORLD" 2) "WO"
-
-; str-tail
-(str-tail "HELLO" 1) "ELLO"
-(str-tail "WORLD" 1) "ORLD"
-(str-tail "HELLO" 2) "LLO"
-(str-tail "WORLD" 2) "RLD"
+; substring
+(substring "HELLO" 0 2) "HE"
+(substring "WORLD" 2 4) "RL"
+(substring "HELLO" 1 (- 5 1)) "ELL"
+(substring "WORLD" 1 (* 2 2)) "ORL"
 
 ; number
 (number "114.514") 114.514
@@ -177,6 +174,10 @@
 ; match
 (match "\\d{6}" (if (equal 114 514) "114514" "364364")) true
 (match "\\D{6}" (if (equal 114 514) "114514" "364364")) false
+
+; tokenize
+(tokenize "" "ABC") '("A" "B" "C")
+(tokenize ":+" "11:45::14") '("11" "45" "14")
 
 ; lambda
 ((lambda x (+ x x)) 114) 228

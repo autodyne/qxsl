@@ -54,7 +54,7 @@ final class Global extends SimpleBindings {
 		/*
 		 * basic functions for variable assignment
 		 *
-		 * (set symbol-expression expression)
+		 * (set symbol expression)
 		 */
 		this.put(new $Set());
 
@@ -65,6 +65,7 @@ final class Global extends SimpleBindings {
 		 * (list elements)
 		 * (car list)
 		 * (cdr list)
+		 * (empty? list)
 		 * (length list)
 		 * (member value list)
 		 */
@@ -77,24 +78,18 @@ final class Global extends SimpleBindings {
 		this.put(new $Member());
 
 		/*
-		 * basic functions for mapping operation
-		 * 
-		 * (mapcar sequence)
-		 */
-		this.put(new $MapCar());
-
-		/*
 		 * basic functions for checking equality
 		 *
 		 * (equal expression expression)
+		 * (null? expression)
 		 */
 		this.put(new $Equal());
+		this.put(new $Null$());
 
 		/*
 		 * conditional operators
 		 *
 		 * (if condition then else)
-		 * (cond (condition statements)*)
 		 */
 		this.put(new $If());
 
@@ -138,19 +133,17 @@ final class Global extends SimpleBindings {
 		this.put(new $Ge());
 
 		/*
-		 * basic functions for string triming
+		 * basic functions for string operation
 		 *
-		 * (str-head string-expression)
-		 * (str-tail string-expression)
+		 * (substring string)
 		 */
-		this.put(new $StrHead());
-		this.put(new $StrTail());
+		this.put(new $SubString());
 
 		/*
 		 * basic functions for type conversion
 		 *
-		 * (number string-expression)
-		 * (string number-expression)
+		 * (number string)
+		 * (string number)
 		 */
 		this.put(new $Number());
 		this.put(new $String());
@@ -159,8 +152,10 @@ final class Global extends SimpleBindings {
 		 * basic functions for regex matching
 		 *
 		 * (match pattern string)
+		 * (tokenize pattern string)
 		 */
 		this.put(new $Match());
+		this.put(new $Tokenize());
 
 		/*
 		 * basic functions for lambda & syntax(macro) generation
@@ -273,9 +268,10 @@ final class Global extends SimpleBindings {
 	@Params(min = 2, max = 2)
 	private static final class $Set extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			final Object value = eval.eval(args.get(1));
-			eval.scope.put(eval.name(args.get(0)), value);
-			return value;
+			final var name = eval.name(args.car());
+			final var val = eval.eval(args.get(1));
+			eval.scope.put(name, val);
+			return val;
 		}
 	}
 
@@ -309,9 +305,9 @@ final class Global extends SimpleBindings {
 	@Params(min = 0, max = -1)
 	private static final class $List extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			final List<Object> list = new LinkedList<>();
-			for(Object el: args) list.add(eval.eval(el));
-			return Struct.of(list);
+			final List<Object> seq = new LinkedList<>();
+			for(Object el: args) seq.add(eval.eval(el));
+			return Struct.of(seq);
 		}
 	}
 
@@ -392,28 +388,8 @@ final class Global extends SimpleBindings {
 	private static final class $Member extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final Object val = eval.eval(args.car());
-			final Struct list = eval.list(args.get(1));
-			return list.contains(val);
-		}
-	}
-
-	/**
-	 * LISP処理系で事前に定義されるmapcar関数です。
-	 *
-	 *
-	 * @author Journal of Hamradio Informatics
-	 *
-	 * @since 2019/05/14
-	 */
-	@Native("mapcar")
-	@Params(min = 2, max = 2)
-	private static final class $MapCar extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			final List<Object> target = new LinkedList<>();
-			for(Object e: eval.list(args.cdr().car())) {
-				target.add(eval.call(Struct.of(args.car(), e)));
-			}
-			return Struct.of(target);
+			final Struct seq = eval.list(args.get(1));
+			return seq.contains(val);
 		}
 	}
 
@@ -439,6 +415,22 @@ final class Global extends SimpleBindings {
 			} catch (ClassCastException ex) {
 				return l.equals(r);
 			}
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるnull?関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2019/12/06
+	 */
+	@Native("null?")
+	@Params(min = 1, max = 1)
+	private static final class $Null$ extends Function {
+		public Object apply(Struct args, Kernel eval) {
+			return eval.eval(args.car()) == null;
 		}
 	}
 
@@ -688,38 +680,21 @@ final class Global extends SimpleBindings {
 	}
 
 	/**
-	 * LISP処理系で事前に定義されるstr-head関数です。
+	 * LISP処理系で事前に定義されるsubstring関数です。
 	 *
 	 *
 	 * @author Journal of Hamradio Informatics
 	 *
-	 * @since 2019/05/14
+	 * @since 2019/12/06
 	 */
-	@Native("str-head")
-	@Params(min = 2, max = 2)
-	private static final class $StrHead extends Function {
+	@Native("substring")
+	@Params(min = 3, max = 3)
+	private static final class $SubString extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final String str = eval.text(args.car());
-			BigDecimal trim = eval.real(args.get(1));
-			return str.substring(0, trim.intValueExact());
-		}
-	}
-
-	/**
-	 * LISP処理系で事前に定義されるstr-tail関数です。
-	 *
-	 *
-	 * @author Journal of Hamradio Informatics
-	 *
-	 * @since 2019/05/14
-	 */
-	@Native("str-tail")
-	@Params(min = 2, max = 2)
-	private static final class $StrTail extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			final String str = eval.text(args.car());
-			BigDecimal trim = eval.real(args.get(1));
-			return str.substring(trim.intValueExact());
+			final int head = eval.real(args.get(1)).intValueExact();
+			final int tail = eval.real(args.get(2)).intValueExact();
+			return str.substring(head, tail);
 		}
 	}
 
@@ -767,7 +742,27 @@ final class Global extends SimpleBindings {
 	@Params(min = 2, max = 2)
 	private static final class $Match extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			return eval.text(args.get(1)).matches(eval.text(args.car()));
+			final String regex = eval.text(args.car());
+			final String text = eval.text(args.get(1));
+			return text.matches(regex);
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるtokenize関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2019/12/06
+	 */
+	@Native("tokenize")
+	@Params(min = 2, max = 2)
+	private static final class $Tokenize extends Function {
+		public Object apply(Struct args, Kernel eval) {
+			final String regex = eval.text(args.car());
+			final String text = eval.text(args.get(1));
+			return Struct.of((Object[]) text.split(regex));
 		}
 	}
 
@@ -783,8 +778,8 @@ final class Global extends SimpleBindings {
 	@Params(min = 2, max = 2)
 	private static final class $Lambda extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			final Object p = args.get(0), body = args.get(1);
-			Struct pars = p instanceof Struct? (Struct) p: Struct.of(p);
+			final var pars = Struct.as(args.get(0));
+			final var body = args.get(1);
 			if(!pars.stream().allMatch(Symbol.class::isInstance)) {
 				final String msg = "%s contains non-name";
 				throw new ElvaRuntimeException(msg, pars);
@@ -804,8 +799,8 @@ final class Global extends SimpleBindings {
 	@Params(min = 2, max = 2)
 	private static final class $Syntax extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			final Object p = args.get(0), body = args.get(1);
-			Struct pars = p instanceof Struct? (Struct) p: Struct.of(p);
+			final var pars = Struct.as(args.get(0));
+			final var body = args.get(1);
 			if(!pars.stream().allMatch(Symbol.class::isInstance)) {
 				final String msg = "%s contains non-name";
 				throw new ElvaRuntimeException(msg, pars);
