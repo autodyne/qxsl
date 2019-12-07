@@ -78,17 +78,6 @@
 			((or (and (qxsl? it) (<= 28000 freq 29700)) (equal band  "10m"))  28)
 			((or (and (qxsl? it) (<= 50000 freq 54000)) (equal band   "6m"))  50)))))
 
-; single lower-band sections
-(defun 1.9MHz? it (equal (band it) 1.9))
-(defun 3.5MHz? it (equal (band it) 3.5))
-(defun   7MHz? it (equal (band it)   7))
-
-; single UPPER-BAND sections
-(defun  14MHz? it (equal (band it)  14))
-(defun  21MHz? it (equal (band it)  21))
-(defun  28MHz? it (equal (band it)  28))
-(defun  50MHz? it (equal (band it)  50))
-
 ; JCC/JCG
 (defun jccg it
 	(if
@@ -105,6 +94,17 @@
 (defun PM? it (and (<= 16 (time it) 19) (<= 1.9 (band it)  7)))
 (defun Dg? it (and (<= 13 (time it) 14) (<= 3.5 (band it) 28)))
 (defun An? it (or (AM? it) (PM? it)))
+
+; single lower-band validation
+(defun 1.9MHz? it (equal (band it) 1.9))
+(defun 3.5MHz? it (equal (band it) 3.5))
+(defun   7MHz? it (equal (band it)   7))
+
+; single UPPER-BAND validation
+(defun  14MHz? it (equal (band it)  14))
+(defun  21MHz? it (equal (band it)  21))
+(defun  28MHz? it (equal (band it)  28))
+(defun  50MHz? it (equal (band it)  50))
 
 ; mode validation
 (defun CW? it (match "(CW|cw)" (mode it)))
@@ -134,7 +134,7 @@
 (defun 内? it
 	(and
 		(現存? it)
-		(cond(
+		(cond (
 			((Dg? it) (市郡? it))
 			((道? it) (支庁? it))
 			((関? it) (市郡? it))
