@@ -8,9 +8,7 @@ package qxsl.ruler;
 import java.io.*;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import qxsl.model.Item;
 import qxsl.table.TableFormats;
 
@@ -28,57 +26,59 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  */
 public final class RuleKitTest extends test.RandTest {
+	private final TableFormats formats = new TableFormats();
+
+	/**
+	 * ALLJA1コンテストの部門の名前と正しい得点を格納します。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2020/02/23
+	 *
+	 */
+	private static final class Score {
+		public final String label;
+		public final int score;
+		public final int mults;
+		public final List<String> forms;
+		public Score(String line) {
+			final var vals = line.split(", *", 4);
+			this.score = Integer.parseInt(vals[1]);
+			this.mults = Integer.parseInt(vals[2]);
+			this.label = vals[0];
+			this.forms = Arrays.asList(vals[3].split(", *"));
+		}
+	}
+
 	/**
 	 * ALLJA1コンテストの各部門の名前と得点の正解を返します。
 	 *
 	 * 
-	 * @return 部門名と得点と乗数のコンテナ
+	 * @return 部門名と得点と乗数の配列
 	 * @throws IOException 通常は発生しない
 	 */
-	private Map<String, int[]> loadScores() throws IOException {
-		final HashMap<String, int[]> scores = new HashMap<>();
+	private static Score[] testMethodSource() throws IOException {
 		final URL path = RuleKit.class.getResource("allja1.test");
 		final Reader r = new InputStreamReader(path.openStream());
 		try (BufferedReader br = new BufferedReader(r)) {
-			br.lines().forEach(line -> {
-				final String[] vals = line.split(",", 3);
-				final int calls = Integer.parseInt(vals[1]);
-				final int mults = Integer.parseInt(vals[2]);
-				scores.put(vals[0].trim(), new int[]{calls, mults});
-			});
+			return br.lines().map(Score::new).toArray(Score[]::new);
 		}
-		return scores;
 	}
-	/**
-	 * ALLJA1コンテストの各書式による交信記録のURLを返します。
-	 *
-	 * 
-	 * @return URLのリスト
-	 */
-	public static List<URL> testMethodSource() {
-		return Arrays.asList(
-			RuleKit.class.getResource("allja1.adxs"),
-			RuleKit.class.getResource("allja1.adis"),
-			RuleKit.class.getResource("allja1.cqww"),
-			RuleKit.class.getResource("allja1.jarl"),
-			RuleKit.class.getResource("allja1.ctxt"),
-			RuleKit.class.getResource("allja1.zall"),
-			RuleKit.class.getResource("allja1.zdos"),
-			RuleKit.class.getResource("allja1.cbin"),
-			RuleKit.class.getResource("allja1.zbin")
-		);
-	}
+
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
-	public void test(URL path) throws Exception {
-		final InputStream strm = path.openStream();
-		List<Item> list = (new TableFormats()).decode(strm);
-		final Map<String, int[]> scores = this.loadScores();
+	public void test(Score score) throws Exception {
 		final Contest test = Contest.defined("allja1.lisp");
-		for(String sect: scores.keySet()) {
-			Summary sum = test.getSection(sect).summarize(list);
-			assertThat(sum.score()).isEqualTo(scores.get(sect)[0]);
-			assertThat(sum.mults()).isEqualTo(scores.get(sect)[1]);
+		final Section sect = test.getSection(score.label);
+		for (String format: score.forms) {
+			final String path = "allja1.".concat(format);
+			final URL url = getClass().getResource(path);
+			try (InputStream strm = url.openStream()) {
+				var sum = sect.summarize(formats.decode(strm));
+				assertThat(sum.score()).isEqualTo(score.score);
+				assertThat(sum.mults()).isEqualTo(score.mults);
+			}
 		}
 	}
 }
