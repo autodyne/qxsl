@@ -86,8 +86,9 @@
 		(code it)))
 
 ; conversion of JCC/JCG to city/prefecture name
-(defun 市 it (city "jarl" (jccg it)))
 (defun 県 it (city "jarl" (jccg it) 0))
+(defun 市 it (city "jarl" (jccg it)))
+(defun 総 it (city "area" (県 it) 2))
 
 ; mode validation
 (defun CW? it (match "(?i)CW" (mode it)))
@@ -118,17 +119,7 @@
 (defun 府県? it (match "\\d{2}"  (jccg it)))
 (defun 市郡? it (match "\\d{4,}" (jccg it)))
 
-(defun 関? it
-	(member (県 it)
-		(list
-			"東京都"
-			"神奈川県"
-			"埼玉県"
-			"千葉県"
-			"群馬県"
-			"茨城県"
-			"栃木県"
-			"山梨県")))
+(defun 関? it (equal (総 it) "関東"))
 (defun 道? it (equal (県 it) "北海道"))
 (defun 他? it (not (or (関? it) (道? it))))
 
