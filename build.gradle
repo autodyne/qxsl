@@ -15,6 +15,8 @@ dependencies {
 
 compileJava {
 	options.encoding = utf8
+	sourceCompatibility = '11'
+	targetCompatibility = '11'
 }
 
 test {

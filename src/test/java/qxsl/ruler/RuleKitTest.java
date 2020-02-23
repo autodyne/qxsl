@@ -49,12 +49,16 @@ public final class RuleKitTest extends test.RandTest {
 			this.label = vals[0];
 			this.forms = Arrays.asList(vals[3].split(", *"));
 		}
+		@Override
+		public String toString() {
+			return String.format("{SECTION=%S}", this.label);
+		}
 	}
 
 	/**
 	 * ALLJA1コンテストの各部門の名前と得点の正解を返します。
 	 *
-	 * 
+	 *
 	 * @return 部門名と得点と乗数の配列
 	 * @throws IOException 通常は発生しない
 	 */

@@ -36,3 +36,7 @@
 1エリア内 団体 電信電話 部門,               1131,552, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
 1エリア外 団体 電信限定 部門,                427,327, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
 1エリア外 団体 電信電話 部門,                570,380, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア内 個人 デジタル 部門,                210,197, adis,adxs
+1エリア外 個人 デジタル 部門,                 56, 50, adis,adxs
+1エリア内 団体 デジタル 部門,                210,197, adis,adxs
+1エリア外 団体 デジタル 部門,                 56, 50, adis,adxs
