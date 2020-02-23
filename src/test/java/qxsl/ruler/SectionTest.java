@@ -41,6 +41,11 @@ public final class SectionTest extends test.RandTest {
 	}
 	@ParameterizedTest
 	@MethodSource("sections")
+	public void testGetCode(Section sect) throws ScriptException {
+		assertThat(sect.getCode()).isNotBlank();
+	}
+	@ParameterizedTest
+	@MethodSource("sections")
 	public void testToString(Section sect) throws ScriptException {
 		assertThat(sect).hasToString(sect.getName());
 	}

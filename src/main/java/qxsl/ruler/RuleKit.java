@@ -89,24 +89,27 @@ public final class RuleKit {
 	 */
 	private static final class ContestImpl extends Contest {
 		private final String name;
-		private final List<Section> sections;
+		private final List<Section> list;
+
 		/**
-		 * 指定された識別名と部門集合で部門を構築します。
+		 * 指定された規約定義と評価器で規約を構築します。
 		 *
-		 * @param ident このコンテストの識別名
-		 * @param sects このコンテストの部門
+		 * @param rule 規約
+		 * @param eval 評価器
 		 */
-		public ContestImpl(String ident, List<Section> sects) {
-			this.name = ident;
-			this.sections = Collections.unmodifiableList(sects);
+		public ContestImpl(Struct rule, Kernel eval) {
+			this.name = eval.text(rule.car());
+			this.list = SectionImpl.map(rule.cdr(), eval);
 		}
+
 		@Override
 		public String getName() {
 			return name;
 		}
+
 		@Override
 		public java.util.Iterator<Section> iterator() {
-			return sections.iterator();
+			return list.iterator();
 		}
 	}
 
@@ -120,24 +123,31 @@ public final class RuleKit {
 	 */
 	private static final class SectionImpl extends Section {
 		private final String name;
+		private final String code;
 		private final Kernel eval;
 		private final Function rule;
+
 		/**
-		 * 指定された名前と規約で部門を構築します。
+		 * 指定された規約定義と評価器で部門を構築します。
 		 *
-		 * @param name 部門名
 		 * @param rule 規約
 		 * @param eval 評価器
 		 */
-		public SectionImpl(String name, Function rule, Kernel eval) {
-			this.name = name;
-			this.rule = rule;
+		public SectionImpl(Struct rule, Kernel eval) {
+			this.name = eval.text(rule.get(0));
+			this.code = eval.text(rule.get(1));
+			this.rule = eval.eval(rule.get(2), Function.class);
 			this.eval = eval;
 		}
 
 		@Override
 		public String getName() {
 			return name;
+		}
+
+		@Override
+		public String getCode() {
+			return code;
 		}
 
 		@Override
@@ -152,6 +162,19 @@ public final class RuleKit {
 				throw ex.toScriptException();
 			}
 		}
+
+		/**
+		 * 指定されたリストを部門の列挙として評価します。
+		 *
+		 * @param rule 規約
+		 * @param eval 評価器
+		 * @return 部門のリスト
+		 */
+		private static List<Section> map(Struct rule, Kernel eval) {
+			final ArrayList<Section> list = new ArrayList<Section>();
+			for(var sc: rule) list.add(eval.eval(sc, Section.class));
+			return Collections.unmodifiableList(list);
+		}
 	}
 
 	/**
@@ -164,8 +187,8 @@ public final class RuleKit {
 		/*
 		 * preinstalled functions for contest & section definition
 		 * 
-		 * (contest symbol-expression sections...)
-		 * (special symbol-expression lambda)
+		 * (contest contest-name sections...)
+		 * (special section-name section-code lambda)
 		 */
 		lude.put(new $Contest());
 		lude.put(new $Section());
@@ -225,11 +248,7 @@ public final class RuleKit {
 	@Params(min = 1, max = -1)
 	private static final class $Contest extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			final String contest = eval.text(args.car());
-			ArrayList<Section> sects = new ArrayList<>();
-			ArrayList<String> errors = new ArrayList<>();
-			for(Object a: args.cdr()) sects.add(eval.eval(a, Section.class));
-			return new ContestImpl(contest, sects);
+			return new ContestImpl(args, eval);
 		}
 	}
 
@@ -242,12 +261,10 @@ public final class RuleKit {
 	 * @since 2019/05/15
 	 */
 	@Native("section")
-	@Params(min = 2, max = 2)
+	@Params(min = 3, max = 3)
 	private static final class $Section extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			final String section = eval.text(args.car());
-			final Function body = eval.eval(args.get(1), Function.class);
-			return new SectionImpl(section, body, eval);
+			return new SectionImpl(args, eval);
 		}
 	}
 

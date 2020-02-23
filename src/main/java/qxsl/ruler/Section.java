@@ -20,11 +20,18 @@ import qxsl.model.Item;
  */
 public abstract class Section {
 	/**
-	 * 部門名を返します。
+	 * 部門の名前を返します。
 	 *
-	 * @return 部門名
+	 * @return 部門の名前
 	 */
 	public abstract String getName();
+
+	/**
+	 * 部門の符牒を返します。
+	 *
+	 * @return 部門の符牒
+	 */
+	public abstract String getCode();
 
 	/**
 	 * UIで表示するために部門名を返します。
