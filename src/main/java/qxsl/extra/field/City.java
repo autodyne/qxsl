@@ -52,6 +52,15 @@ public final class City extends Qxsl<String> {
 	}
 
 	/**
+	 * この地域を識別する地域番号を返します。
+	 *
+	 * @return 地域番号
+	 */
+	public String getCode() {
+		return code;
+	}
+
+	/**
 	 * この地域を識別する名称を行政区画のリストで返します。
 	 * 例えば東京都目黒区の場合、東京都と目黒区を返します。
 	 *

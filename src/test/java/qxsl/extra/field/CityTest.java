@@ -35,6 +35,11 @@ public final class CityTest extends test.RandTest {
 		assertThat(jarl("400105").value()).isEqualTo("jarl:400105");
 	}
 	@Test
+	public void testGetCode() {
+		assertThat(jarl("100105").getCode()).isEqualTo("100105");
+		assertThat(jarl("200106").getCode()).isEqualTo("200106");
+	}
+	@Test
 	public void testToString() {
 		assertThat(jarl("100110")).hasToString("jarl:100110");
 		assertThat(jarl("400105")).hasToString("jarl:400105");
