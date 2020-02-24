@@ -149,10 +149,10 @@
 			(failure it "無効な交信"))))
 
 ; section codes
-(setq HB "HB")
-(setq LB "LB")
-(setq DB "DB")
-(setq AB "AB")
+(setq HB "アナログ ハイバンド部門")
+(setq LB "アナログ ローバンド部門")
+(setq DB "デジタル 全周波数帯部門")
+(setq AB "アナログ 全周波数帯部門")
 
 (contest "ALLJA1 TEST"
 	(section "1エリア内 個人 電信限定 1.9MHz部門"         LB (verify (内? CW? 1.9MHz? LB?)))
