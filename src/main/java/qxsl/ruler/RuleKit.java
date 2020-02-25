@@ -218,7 +218,7 @@ public final class RuleKit {
 		 * (set-field item namespace name value-string)
 		 */
 		lude.put(new $GetField());
-		lude.put(new $SefField());
+		lude.put(new $SetField());
 
 		/*
 		 * preinstalled functions for time access
@@ -366,7 +366,7 @@ public final class RuleKit {
 	 */
 	@Native("set-field")
 	@Params(min = 4, max = 4)
-	private static final class $SefField extends Function {
+	private static final class $SetField extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final Tuple tuple = eval.eval(args.car(), Tuple.class);
 			final String space = eval.text(args.get(1));
