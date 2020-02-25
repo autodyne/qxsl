@@ -1,42 +1,42 @@
-1エリア内 個人 電信限定 1.9MHz部門,           51, 37, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア内 個人 電信限定 3.5MHz部門,          100, 61, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア内 個人 電信電話 3.5MHz部門,          104, 65, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア内 個人 電信限定 7MHz部門,            202, 99, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア内 個人 電信電話 7MHz部門,            278,111, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア内 個人 電信限定 1.9/3.5/7MHz部門,    353,197, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア内 個人 電信電話 1.9/3.5/7MHz部門,    433,213, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア外 個人 電信限定 1.9MHz部門,           33, 28, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア外 個人 電信限定 3.5MHz部門,           46, 38, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア外 個人 電信電話 3.5MHz部門,           50, 42, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア外 個人 電信限定 7MHz部門,             84, 64, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア外 個人 電信電話 7MHz部門,            100, 70, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア外 個人 電信限定 1.9/3.5/7MHz部門,    163,130, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア外 個人 電信電話 1.9/3.5/7MHz部門,    183,140, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア内 個人 電信限定 14MHz部門,           138, 72, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア内 個人 電信電話 14MHz部門,           159, 76, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア内 個人 電信限定 21MHz部門,           159, 79, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア内 個人 電信電話 21MHz部門,           211, 93, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア内 個人 電信限定 28MHz部門,            88, 54, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア内 個人 電信電話 28MHz部門,           107, 57, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア内 個人 電信限定 50MHz部門,           114, 81, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア内 個人 電信電話 50MHz部門,           221,113, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア内 個人 電信限定 14/21/28/50MHz部門,  499,286, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア内 個人 電信電話 14/21/28/50MHz部門,  698,339, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア外 個人 電信限定 14MHz部門,            62, 46, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア外 個人 電信電話 14MHz部門,            72, 50, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア外 個人 電信限定 21MHz部門,            75, 53, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア外 個人 電信電話 21MHz部門,            95, 62, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア外 個人 電信限定 28MHz部門,            39, 33, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア外 個人 電信電話 28MHz部門,            46, 36, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア外 個人 電信限定 50MHz部門,            88, 65, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア外 個人 電信電話 50MHz部門,           174, 92, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア外 個人 電信限定 14/21/28/50MHz部門,  264,197, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア外 個人 電信電話 14/21/28/50MHz部門,  387,240, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア内 団体 電信限定 部門,                852,483, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア内 団体 電信電話 部門,               1131,552, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア外 団体 電信限定 部門,                427,327, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア外 団体 電信電話 部門,                570,380, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア内 個人 デジタル 部門,                210,197, adis,adxs
-1エリア外 個人 デジタル 部門,                 56, 50, adis,adxs
-1エリア内 団体 デジタル 部門,                210,197, adis,adxs
-1エリア外 団体 デジタル 部門,                 56, 50, adis,adxs
+1エリア内 個人 電信限定 1.9MHz部門,           51,   1887, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア内 個人 電信限定 3.5MHz部門,          100,   6100, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア内 個人 電信電話 3.5MHz部門,          104,   6760, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア内 個人 電信限定 7MHz部門,            202,  19998, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア内 個人 電信電話 7MHz部門,            278,  30858, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア内 個人 電信限定 1.9/3.5/7MHz部門,    353,  69541, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア内 個人 電信電話 1.9/3.5/7MHz部門,    433,  92229, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア外 個人 電信限定 1.9MHz部門,           33,    924, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア外 個人 電信限定 3.5MHz部門,           46,   1748, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア外 個人 電信電話 3.5MHz部門,           50,   2100, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア外 個人 電信限定 7MHz部門,             84,   5376, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア外 個人 電信電話 7MHz部門,            100,   7000, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア外 個人 電信限定 1.9/3.5/7MHz部門,    163,  21190, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア外 個人 電信電話 1.9/3.5/7MHz部門,    183,  25620, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア内 個人 電信限定 14MHz部門,           138,   9936, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア内 個人 電信電話 14MHz部門,           159,  12084, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア内 個人 電信限定 21MHz部門,           159,  12561, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア内 個人 電信電話 21MHz部門,           211,  19623, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア内 個人 電信限定 28MHz部門,            88,   4752, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア内 個人 電信電話 28MHz部門,           107,   6099, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア内 個人 電信限定 50MHz部門,           114,   9234, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア内 個人 電信電話 50MHz部門,           221,  24973, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア内 個人 電信限定 14/21/28/50MHz部門,  499, 142714, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア内 個人 電信電話 14/21/28/50MHz部門,  698, 236622, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア外 個人 電信限定 14MHz部門,            62,   2852, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア外 個人 電信電話 14MHz部門,            72,   3600, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア外 個人 電信限定 21MHz部門,            75,   3975, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア外 個人 電信電話 21MHz部門,            95,   5890, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア外 個人 電信限定 28MHz部門,            39,   1287, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア外 個人 電信電話 28MHz部門,            46,   1656, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア外 個人 電信限定 50MHz部門,            88,   5720, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア外 個人 電信電話 50MHz部門,           174,  16008, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア外 個人 電信限定 14/21/28/50MHz部門,  264,  52008, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア外 個人 電信電話 14/21/28/50MHz部門,  387,  92880, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア内 団体 電信限定 部門,                852, 411516, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア内 団体 電信電話 部門,               1131, 624312, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア外 団体 電信限定 部門,                427, 139629, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア外 団体 電信電話 部門,                570, 216600, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア内 個人 デジタル 部門,                210,  41370, adis,adxs
+1エリア外 個人 デジタル 部門,                 56,   2800, adis,adxs
+1エリア内 団体 デジタル 部門,                210,  41370, adis,adxs
+1エリア外 団体 デジタル 部門,                 56,   2800, adis,adxs

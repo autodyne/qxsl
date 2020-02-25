@@ -9,6 +9,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import javax.script.ScriptException;
 import qxsl.model.Item;
 import qxsl.table.TableFormats;
 
@@ -27,6 +28,11 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public final class RuleKitTest extends test.RandTest {
 	private final TableFormats formats = new TableFormats();
+	private final Contest test;
+
+	public RuleKitTest() throws ScriptException {
+		test = new RuleKit().defined("allja1.lisp");
+	}
 
 	/**
 	 * ALLJA1コンテストの部門の名前と正しい得点を格納します。
@@ -40,12 +46,12 @@ public final class RuleKitTest extends test.RandTest {
 	private static final class Score {
 		public final String label;
 		public final int score;
-		public final int mults;
+		public final int total;
 		public final List<String> forms;
 		public Score(String line) {
 			final var vals = line.split(", *", 4);
 			this.score = Integer.parseInt(vals[1]);
-			this.mults = Integer.parseInt(vals[2]);
+			this.total = Integer.parseInt(vals[2]);
 			this.label = vals[0];
 			this.forms = Arrays.asList(vals[3].split(", *"));
 		}
@@ -73,7 +79,6 @@ public final class RuleKitTest extends test.RandTest {
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void test(Score score) throws Exception {
-		final Contest test = Contest.defined("allja1.lisp");
 		final Section sect = test.getSection(score.label);
 		for (String format: score.forms) {
 			final String path = "allja1.".concat(format);
@@ -81,7 +86,7 @@ public final class RuleKitTest extends test.RandTest {
 			try (InputStream strm = url.openStream()) {
 				var sum = sect.summarize(formats.decode(strm));
 				assertThat(sum.score()).isEqualTo(score.score);
-				assertThat(sum.mults()).isEqualTo(score.mults);
+				assertThat(test.score(sum)).isEqualTo(score.total);
 			}
 		}
 	}

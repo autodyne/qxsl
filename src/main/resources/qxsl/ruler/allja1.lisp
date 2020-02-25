@@ -143,8 +143,16 @@
 
 (defun 外? it (and (現存? it) (関? it) (市郡? it)))
 
+; scoring
+(defmacro scoring (score calls mults)
+	`(* ,score (length (quote ,mults))))
+
 ; key for scoring
-(defun MODE-KEY it (cond (((信? it) 1) ((話? it) 2) ((離? it) 3))))
+(defun MODE-KEY it
+	(cond (
+		((信? it) 1)
+		((話? it) 2)
+		((離? it) 3))))
 (defun CALL-KEY it (list (call it) (band it) (MODE-KEY it)))
 (defun MULT-KEY it (list (band it) (jccg it)))
 
@@ -164,7 +172,7 @@
 (setq DB "デジタル 全周波数帯部門")
 (setq AB "アナログ 全周波数帯部門")
 
-(contest "ALLJA1 TEST"
+(contest "ALLJA1 TEST" scoring
 	(section "1エリア内 個人 電信限定 1.9MHz部門"         LB (verify (内? 信? 1.9MHz? LB?)))
 	(section "1エリア内 個人 電信限定 3.5MHz部門"         LB (verify (内? 信? 3.5MHz? LB?)))
 	(section "1エリア内 個人 電信電話 3.5MHz部門"         LB (verify (内?     3.5MHz? LB?)))

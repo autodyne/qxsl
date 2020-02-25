@@ -30,11 +30,11 @@ public final class Success implements Message, Serializable {
 	/**
 	 * 交信の実体と得点の計算に使用する識別子と得点を設定します。
 	 *
-	 * @param score 得点
 	 * @param item 交信の実体
+	 * @param score 得点
 	 * @param keys 総得点や乗数の計算に使用する識別子
 	 */
-	public Success(int score, Item item, Object...keys) {
+	public Success(Item item, int score, Object...keys) {
 		this.score = score;
 		this.item = item;
 		this.keys = keys;
@@ -81,11 +81,11 @@ public final class Success implements Message, Serializable {
 	 * @return 文字列
 	 */
 	public final String toString() {
-		StringJoiner outer = new StringJoiner(" ", "{", "}");
-		StringJoiner inner = new StringJoiner(",", "[", "]");
+		final var outer = new StringJoiner(" ", "{", "}");
+		final var inner = new StringJoiner(",", "[", "]");
 		outer.add(Success.class.getCanonicalName());
 		outer.add(String.format("score:%d", score));
-		for(Object k: keys) inner.add(String.valueOf(k));
+		for(var k: keys) inner.add(String.valueOf(k));
 		return outer.add(String.format("keys:%s", inner)).toString();
 	}
 }

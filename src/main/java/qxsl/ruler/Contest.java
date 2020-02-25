@@ -5,12 +5,7 @@
 *****************************************************************************/
 package qxsl.ruler;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.Iterator;
-import java.util.List;
 import javax.script.ScriptException;
 
 /**
@@ -60,21 +55,14 @@ public abstract class Contest implements Iterable<Section> {
 	}
 
 	/**
-	 * 指定された{@link Contest}をライブラリから読み出します。
+	 * 指定された交信記録の総得点を計算します。
 	 *
-	 * @param name コンテストを定義したファイルの名前
-	 * @return ライブラリに内蔵されたコンテストの定義
-	 * 
-	 * @throws ScriptException コンテスト定義読み取り時の例外
+	 * @param sum 交信記録
+	 * @return 総得点
+	 *
+	 * @throws ScriptException スクリプトの実行で発生した何らかの例外
+	 *
+	 * @since 2020/02/26
 	 */
-	public static final Contest defined(String name) throws ScriptException {
-		final URL url = Contest.class.getResource(name);
-		InputStreamReader reader = null;
-		try(InputStream is = url.openStream()) {
-			reader = new InputStreamReader(is, "UTF-8");
-			return (Contest) new RuleKit().eval(reader);
-		} catch(IOException ex) {
-			throw new ScriptException(ex);
-		}
-	}
+	public abstract int score(Summary sum) throws ScriptException;
 }

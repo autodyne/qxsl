@@ -5,8 +5,7 @@
 *****************************************************************************/
 package qxsl.ruler;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
 import javax.script.ScriptException;
 
 import org.junit.jupiter.api.Test;
@@ -24,15 +23,12 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  */
 public final class SectionTest extends test.RandTest {
-	public static List<Section> sections() throws ScriptException {
-		final Contest ja1 = Contest.defined("allja1.lisp");
-		final List<Section> sects = new ArrayList<>();
-		for (Section section: ja1) sects.add(section);
-		return sects;
+	public static Iterator<Section> sections() throws ScriptException {
+		return new RuleKit().defined("allja1.lisp").iterator();
 	}
 	@Test
 	public void testContest() throws ScriptException {
-		assertThat(sections()).isNotEmpty();
+		assertThat(sections()).hasNext();
 	}
 	@ParameterizedTest
 	@MethodSource("sections")

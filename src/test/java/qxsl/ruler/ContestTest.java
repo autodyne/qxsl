@@ -19,25 +19,24 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  */
 public final class ContestTest extends test.RandTest {
-	private Contest ja1 = null;
-	private Contest ja1() throws ScriptException {
-		if(ja1 == null) ja1 = Contest.defined("allja1.lisp");
-		return ja1;
+	private final Contest ja1;
+	private ContestTest() throws ScriptException {
+		ja1 = new RuleKit().defined("allja1.lisp");
 	}
 	@Test
 	public void testForName() throws ScriptException {
-		assertThat(ja1()).isNotNull();
+		assertThat(ja1).isNotNull();
 	}
 	@Test
 	public void testGetName() throws ScriptException {
-		assertThat(ja1().getName()).isNotBlank();
+		assertThat(ja1.getName()).isNotBlank();
 	}
 	@Test
 	public void testIterator() throws ScriptException {
-		assertThat(ja1().iterator()).hasNext();
+		assertThat(ja1.iterator()).hasNext();
 	}
 	@Test
 	public void testToString() throws ScriptException {
-		assertThat(ja1()).hasToString(ja1().getName());
+		assertThat(ja1).hasToString(ja1.getName());
 	}
 }

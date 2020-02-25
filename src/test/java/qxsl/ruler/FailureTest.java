@@ -23,12 +23,12 @@ public final class FailureTest extends test.RandTest {
 	public void testGetMessage() {
 		final Item item = new Item();
 		final String text = alnum(100);
-		assertThat(new Failure(text, item).text()).isSameAs(text);
+		assertThat(new Failure(item, text).text()).isSameAs(text);
 	}
 	@Test
 	public void testGetItem() {
 		final Item item = new Item();
 		final String text = alnum(100);
-		assertThat(new Failure(text, item).item()).isSameAs(item);
+		assertThat(new Failure(item, text).item()).isSameAs(item);
 	}
 }

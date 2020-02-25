@@ -6,9 +6,11 @@
 package elva;
 
 import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -89,6 +91,17 @@ public final class Struct extends AbstractList<Object> {
 	 * @param <E> 要素の総称型
 	 * @return リスト 空の場合は{@link #NIL}
 	 */
+	public static final <E> Struct of(Set<E> vals) {
+		return Struct.of(new ArrayList<E>(vals));
+	}
+
+	/**
+	 * 指定された要素を持つリストを構築します。
+	 *
+	 * @param vals 要素
+	 * @param <E> 要素の総称型
+	 * @return リスト 空の場合は{@link #NIL}
+	 */
 	public static final <E> Struct of(List<E> vals) {
 		final int size = vals.size();
 		if(size == 0) return Struct.NIL;
@@ -112,6 +125,18 @@ public final class Struct extends AbstractList<Object> {
 	 */
 	public final Struct cdr() {
 		return this == NIL? NIL: tail;
+	}
+
+	/**
+	 * このリストに対して指定された回数CDRを辿ります。
+	 *
+	 * @param num CDRを辿る回数
+	 * @return CDR部
+	 */
+	public final Struct cdr(int num) {
+		Struct cdr = this;
+		for(int n = 0; n < num; n++) cdr = cdr.cdr();
+		return cdr;
 	}
 
 	/**

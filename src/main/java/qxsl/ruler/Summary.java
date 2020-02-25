@@ -7,9 +7,10 @@ package qxsl.ruler;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import qxsl.model.Item;
 
 import static java.util.stream.IntStream.range;
@@ -34,22 +35,29 @@ public final class Summary implements java.io.Serializable {
 	 * @param fail 拒否された交信
 	 */
 	protected Summary(List<Success> succ, List<Failure> fail) {
-		final HashMap<Object, Success> map = new LinkedHashMap<>();
+		final var map = new LinkedHashMap<Object, Success>();
 		for(Success s: succ) map.putIfAbsent(s.key(0), s);
-		succ = new ArrayList<>(map.values());
-		this.accepted = Collections.unmodifiableList(succ);
+		final var acc = new ArrayList<>(map.values());
+		this.accepted = Collections.unmodifiableList(acc);
 		this.rejected = Collections.unmodifiableList(fail);
 	}
 
 	/**
-	 * 交信の得点の合計に乗数を乗算して総得点を計算します。
+	 * 指定された部門で有効かつ重複を排除した交信を列挙します。
 	 *
-	 * @return 総得点
-	 * 
-	 * @since 2019/05/16
+	 * @return 有効な交信
 	 */
-	public int total() {
-		return score() * mults();
+	public final List<Success> accepted() {
+		return accepted;
+	}
+
+	/**
+	 * 指定された部門で無効な交信を重複を排除せずに列挙します。
+	 *
+	 * @return 無効な交信
+	 */
+	public final List<Failure> rejected() {
+		return rejected;
 	}
 
 	/**
@@ -59,48 +67,33 @@ public final class Summary implements java.io.Serializable {
 	 * 
 	 * @since 2019/05/16
 	 */
-	public int score() {
+	public final int score() {
 		return accepted.stream().mapToInt(Success::score).sum();
 	}
 
 	/**
-	 * このサマリに含まれる全ての乗数の積を計算します。
-	 * 先頭の識別子の異なり数は乗数には考慮されません。
+	 * 指定された位置の識別子の重複を排除した集合を返します。
 	 *
-	 * @return 乗数
+	 * @param nkey 識別子の位置
+	 * @return 指定された位置の識別子の集合
+	 *
+	 * @since 2020/02/26
 	 */
-	public int mults() {
-		int cnt = accepted.stream().mapToInt(Success::countKeys).min().orElse(1);
-		return range(1, cnt).map(this::count).reduce(1, Math::multiplyExact);
+	public final Set<Object> mults(int nkey) {
+		var keys = accepted.stream().map(s -> s.key(nkey));
+		return keys.distinct().collect(Collectors.toSet());
 	}
 
 	/**
-	 * 指定された位置の識別子の異なり数を返します。
+	 * 識別子の重複を排除した集合のリストを返します。
 	 *
-	 * @param keyNum 識別子の番号
-	 * @return 指定された乗数の値
+	 * @return 識別子の集合のリスト
 	 *
-	 * @since 2019/05/16
+	 * @since 2020/02/26
 	 */
-	public int count(int keyNum) {
-		return (int) accepted.stream().map(s -> s.key(keyNum)).distinct().count();
-	}
-
-	/**
-	 * 指定された部門で有効かつ重複を排除した交信を列挙します。
-	 *
-	 * @return 有効な交信
-	 */
-	public List<Success> accepted() {
-		return accepted;
-	}
-
-	/**
-	 * 指定された部門で無効な交信を重複を排除せずに列挙します。
-	 *
-	 * @return 無効な交信
-	 */
-	public List<Failure> rejected() {
-		return rejected;
+	public final List<Set<Object>> mults() {
+		var cnt = accepted.stream().mapToInt(Success::countKeys).min();
+		final var sets = range(0, cnt.orElse(1)).mapToObj(this::mults);
+		return sets.collect(Collectors.toList());
 	}
 }

@@ -21,22 +21,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 public final class SuccessTest extends test.RandTest {
 	@Test
 	public void testScore() {
-		assertThat(new Success(1, new Item()).score()).isEqualTo(1);
-		assertThat(new Success(2, new Item()).score()).isEqualTo(2);
-		assertThat(new Success(3, new Item()).score()).isEqualTo(3);
+		assertThat(new Success(new Item(), 1).score()).isEqualTo(1);
+		assertThat(new Success(new Item(), 2).score()).isEqualTo(2);
+		assertThat(new Success(new Item(), 3).score()).isEqualTo(3);
 	}
 	@Test
 	public void testItem() {
 		final Item item = new Item();
-		assertThat(new Success(1, item).item()).isSameAs(item);
+		assertThat(new Success(item, 1).item()).isSameAs(item);
 	}
 	@Test
 	public void testKey() {
-		assertThat(new Success(1, null, "A", "B").key(0)).isEqualTo("A");
-		assertThat(new Success(1, null, "A", "B").key(1)).isEqualTo("B");
+		assertThat(new Success(null, 1, "A", "B").key(0)).isEqualTo("A");
+		assertThat(new Success(null, 1, "A", "B").key(1)).isEqualTo("B");
 	}
 	@Test
 	public void testCountKeys() {
-		assertThat(new Success(2, null, 1, 23).countKeys()).isEqualTo(2);
+		assertThat(new Success(null, 2, 1, 23).countKeys()).isEqualTo(2);
 	}
 }

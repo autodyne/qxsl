@@ -64,8 +64,8 @@ public abstract class Section {
 	 * @throws ScriptException スクリプトの実行で発生した何らかの例外
 	 */
 	public Summary summarize(List<Item> items) throws ScriptException {
-		final List<Success> accepted = new ArrayList<>();
-		final List<Failure> rejected = new ArrayList<>();
+		final var accepted = new ArrayList<Success>();
+		final var rejected = new ArrayList<Failure>();
 		for(Item item: items) {
 			final Message msg = this.validate(item);
 			if(msg instanceof Success) accepted.add((Success) msg);

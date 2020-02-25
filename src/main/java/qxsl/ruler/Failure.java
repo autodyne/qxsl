@@ -26,12 +26,12 @@ public final class Failure implements Message, Serializable {
 	/**
 	 * 指定した内容の{@link Failure}を構築します。
 	 *
-	 * @param text 失敗の内容を説明する文字列
 	 * @param item 関連づけられる交信
+	 * @param text 失敗の内容を説明する文字列
 	 */
-	public Failure(String text, Item item) {
-		this.text = text;
+	public Failure(Item item, String text) {
 		this.item = item;
+		this.text = text;
 	}
 
 	/**

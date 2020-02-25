@@ -5,6 +5,8 @@
 *****************************************************************************/
 package qxsl.ruler;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.time.ZoneId;
@@ -12,7 +14,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.StringJoiner;
+import java.util.stream.Collectors;
 import javax.script.*;
 import javax.xml.namespace.QName;
 
@@ -47,6 +49,22 @@ public final class RuleKit {
 		this.elva = new ElvaLisp();
 		context = new SimpleScriptContext();
 		context.setBindings(createBindings(), ENGINE_SCOPE);
+	}
+
+	/**
+	 * 指定された{@link Contest}をライブラリから読み出します。
+	 *
+	 * @param name コンテストを定義したファイルの名前
+	 * @return ライブラリに内蔵されたコンテストの定義
+	 * 
+	 * @throws ScriptException コンテスト定義読み取り時の例外
+	 */
+	public Contest defined(String name) throws ScriptException {
+		try(var is = getClass().getResourceAsStream(name)) {
+			return eval(new InputStreamReader(is, "UTF8"));
+		} catch(IOException ex) {
+			throw new ScriptException(ex);
+		}
 	}
 
 	/**
@@ -89,6 +107,8 @@ public final class RuleKit {
 	 */
 	private static final class ContestImpl extends Contest {
 		private final String name;
+		private final Kernel eval;
+		private final Function rule;
 		private final List<Section> list;
 
 		/**
@@ -98,8 +118,10 @@ public final class RuleKit {
 		 * @param eval 評価器
 		 */
 		public ContestImpl(Struct rule, Kernel eval) {
-			this.name = eval.text(rule.car());
-			this.list = SectionImpl.map(rule.cdr(), eval);
+			this.name = eval.text(rule.get(0));
+			this.rule = eval.eval(rule.get(1), Function.class);
+			this.list = SectionImpl.map(rule.cdr(2), eval);
+			this.eval = eval;
 		}
 
 		@Override
@@ -110,6 +132,19 @@ public final class RuleKit {
 		@Override
 		public java.util.Iterator<Section> iterator() {
 			return list.iterator();
+		}
+
+		@Override
+		public int score(Summary sum) throws ScriptException {
+			final var args = new ArrayList<Object>();
+			try {
+				args.add(rule);
+				args.add(BigDecimal.valueOf(sum.score()));
+				for(var set: sum.mults()) args.add(Struct.of(set));
+				return eval.real(Struct.of(args)).intValueExact();
+			} catch(ElvaLisp.ElvaRuntimeException ex) {
+				throw ex.toScriptException();
+			}
 		}
 	}
 
@@ -187,7 +222,7 @@ public final class RuleKit {
 		/*
 		 * preinstalled functions for contest & section definition
 		 * 
-		 * (contest contest-name sections...)
+		 * (contest contest-name scoring sections...)
 		 * (special section-name section-code lambda)
 		 */
 		lude.put(new $Contest());
@@ -245,7 +280,7 @@ public final class RuleKit {
 	 * @since 2019/05/15
 	 */
 	@Native("contest")
-	@Params(min = 1, max = -1)
+	@Params(min = 2, max = -1)
 	private static final class $Contest extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			return new ContestImpl(args, eval);
@@ -280,11 +315,10 @@ public final class RuleKit {
 	@Params(min = 3, max = -1)
 	private static final class $Success extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			final List<Object> ks = new ArrayList<>();
-			final Item item = eval.eval(args.car(), Item.class);
-			final int score = eval.real(args.get(1)).intValueExact();
-			for(Object key: args.cdr().cdr()) ks.add(eval.eval(key));
-			return new Success(score, item, ks.toArray());
+			final var it = eval.eval(args.get(0), Item.class);
+			final var sc = eval.real(args.get(1));
+			final var ks = args.cdr().cdr().stream().map(eval::eval);
+			return new Success(it, sc.intValueExact(), ks.toArray());
 		}
 	}
 
@@ -301,7 +335,7 @@ public final class RuleKit {
 	private static final class $Failure extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final Item item = eval.eval(args.car(), Item.class);
-			return new Failure(eval.text(args.get(1)), item);
+			return new Failure(item, eval.text(args.get(1)));
 		}
 	}
 
@@ -411,8 +445,8 @@ public final class RuleKit {
 			final City city = City.forCode(base, code);
 			if(city == null) return null;
 			if(args.size() == 2) return city.getFullName();
-			final BigDecimal lv = eval.real(args.get(2));
-			return city.getFullPath().get(lv.intValueExact());
+			int v = eval.real(args.get(2)).intValueExact();
+			return city.getFullPath().get(v);
 		}
 	}
 }

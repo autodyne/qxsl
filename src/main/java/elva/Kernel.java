@@ -5,9 +5,9 @@
 *****************************************************************************/
 package elva;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.math.BigDecimal;
 
 import elva.ElvaLisp.ElvaRuntimeException;
 
@@ -47,6 +47,18 @@ public final class Kernel {
 	}
 
 	/**
+	 * 指定された式の値を求めて{@link String}として返します。
+	 *
+	 * @param sexp 式
+	 * @return 返り値
+	 *
+	 * @throws ElvaRuntimeException 評価により発生した例外
+	 */
+	public String text(Object sexp) {
+		return eval(sexp, String.class);
+	}
+
+	/**
 	 * 指定された式の値を求めて{@link Struct}として返します。
 	 *
 	 * @param sexp 式
@@ -80,18 +92,6 @@ public final class Kernel {
 	 */
 	public BigDecimal real(Object sexp) {
 		return eval(sexp, BigDecimal.class);
-	}
-
-	/**
-	 * 指定された式の値を求めて文字列として返します。
-	 *
-	 * @param sexp 式
-	 * @return 返り値
-	 *
-	 * @throws ElvaRuntimeException 評価により発生した例外
-	 */
-	public String text(Object sexp) {
-		return eval(sexp, String.class);
 	}
 
 	/**
