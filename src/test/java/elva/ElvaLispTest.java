@@ -55,9 +55,13 @@ public final class ElvaLispTest extends test.RandTest {
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void test(String source) throws ScriptException {
+		final String str = String.format("(list %s)", source);
 		if(!elva.scan(source).isEmpty()) {
-			final String test = String.format("(equal %s)", source);
-			assertThat(elva.eval(test)).isEqualTo(true);
+			final var sexps = (Struct) elva.eval(str);
+			assertThat(sexps).hasSize(2);
+			final Object val1 = sexps.get(0);
+			final Object val2 = sexps.get(1);
+			assertThat(val1).isEqualTo(val2);
 		}
 	}
 	public static Stream<String> testMethodSource() throws IOException {

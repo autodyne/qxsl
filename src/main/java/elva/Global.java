@@ -38,11 +38,13 @@ final class Global extends SimpleBindings {
 		 *
 		 * (quote expression)
 		 * (quasi expression)
-		 * (uquot expression)
+		 * (unquote expression)
+		 * (unquote-splicing expression)
 		 */
-		this.put(Quotes.QUOTE.toString(), new $Quote());
-		this.put(Quotes.QUASI.toString(), new $Quasi());
-		this.put(Quotes.UQUOT.toString(), new $Uquot());
+		this.put(new $Quote());
+		this.put(new $Quasi());
+		this.put(new $Uquot());
+		this.put(new $Uqspl());
 
 		/*
 		 * basic functions for sequential processing
@@ -59,13 +61,19 @@ final class Global extends SimpleBindings {
 		this.put(new $Set());
 
 		/*
+		 * basic functions for evaluation
+		 *
+		 * (eval expression)
+		 */
+		this.put(new $Eval());
+
+		/*
 		 * basic functions for list operation
 		 *
 		 * (cons car cdr)
 		 * (list elements)
 		 * (car list)
 		 * (cdr list)
-		 * (empty? list)
 		 * (length list)
 		 * (member value list)
 		 */
@@ -73,9 +81,17 @@ final class Global extends SimpleBindings {
 		this.put(new $List());
 		this.put(new $Car());
 		this.put(new $Cdr());
-		this.put(new $Empty$());
 		this.put(new $Length());
 		this.put(new $Member());
+
+		/*
+		 * basic functions for list reduction
+		 *
+		 * (every list)
+		 * (some  list)
+		 */
+		this.put(new $Every());
+		this.put(new $Some());
 
 		/*
 		 * basic functions for checking equality
@@ -135,8 +151,10 @@ final class Global extends SimpleBindings {
 		/*
 		 * basic functions for string operation
 		 *
+		 * (format string)
 		 * (substring string)
 		 */
+		this.put(new $Format());
 		this.put(new $SubString());
 
 		/*
@@ -191,7 +209,7 @@ final class Global extends SimpleBindings {
 	}
 
 	/**
-	 * LISP処理系で事前に定義されるクォート関数です。
+	 * LISP処理系で事前に定義される引用関数です。
 	 *
 	 *
 	 * @author Journal of Hamradio Informatics
@@ -207,7 +225,7 @@ final class Global extends SimpleBindings {
 	}
 
 	/**
-	 * LISP処理系で事前に定義される準クォート関数です。
+	 * LISP処理系で事前に定義される準引用関数です。
 	 *
 	 *
 	 * @author Journal of Hamradio Informatics
@@ -218,12 +236,12 @@ final class Global extends SimpleBindings {
 	@Params(min = 1, max = 1)
 	private static final class $Quasi extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			return eval.quasi(args.car());
+			return eval.uquote(args.car()).sexp();
 		}
 	}
 
 	/**
-	 * LISP処理系で事前に定義されるアンクォート関数です。
+	 * LISP処理系で事前に定義される引用解除の関数です。
 	 *
 	 *
 	 * @author Journal of Hamradio Informatics
@@ -233,6 +251,22 @@ final class Global extends SimpleBindings {
 	@Native("unquote")
 	@Params(min = 1, max = 1)
 	private static final class $Uquot extends Function {
+		public Object apply(Struct args, Kernel eval) {
+			return eval.eval(args.car());
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義される引用解除の関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2020/02/26
+	 */
+	@Native("unquote-splicing")
+	@Params(min = 1, max = 1)
+	private static final class $Uqspl extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			return eval.eval(args.car());
 		}
@@ -272,6 +306,22 @@ final class Global extends SimpleBindings {
 			final var val = eval.eval(args.get(1));
 			eval.scope.put(name, val);
 			return val;
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるeval関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2020/02/26
+	 */
+	@Native("eval")
+	@Params(min = 1, max = 1)
+	private static final class $Eval extends Function {
+		public Object apply(Struct args, Kernel eval) {
+			return eval.eval(eval.eval(args.car()));
 		}
 	}
 
@@ -344,22 +394,6 @@ final class Global extends SimpleBindings {
 	}
 
 	/**
-	 * LISP処理系で事前に定義されるempty?関数です。
-	 *
-	 *
-	 * @author Journal of Hamradio Informatics
-	 *
-	 * @since 2019/05/17
-	 */
-	@Native("empty?")
-	@Params(min = 1, max = 1)
-	private static final class $Empty$ extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			return eval.list(args.car()).isEmpty();
-		}
-	}
-
-	/**
 	 * LISP処理系で事前に定義されるlength関数です。
 	 *
 	 *
@@ -390,6 +424,40 @@ final class Global extends SimpleBindings {
 			final Object val = eval.eval(args.car());
 			final Struct seq = eval.list(args.get(1));
 			return seq.contains(val);
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されevery関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2020/02/26
+	 */
+	@Native("every")
+	@Params(min = 1, max = 1)
+	private static final class $Every extends Function {
+		public Object apply(Struct args, Kernel eval) {
+			final Struct seq = eval.list(args.car());
+			return seq.stream().allMatch(Boolean.TRUE::equals);
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されsome関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2020/02/26
+	 */
+	@Native("some")
+	@Params(min = 1, max = 1)
+	private static final class $Some extends Function {
+		public Object apply(Struct args, Kernel eval) {
+			final Struct seq = eval.list(args.car());
+			return seq.stream().anyMatch(Boolean.TRUE::equals);
 		}
 	}
 
@@ -676,6 +744,24 @@ final class Global extends SimpleBindings {
 				left = next;
 			}
 			return true;
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるformat関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2020/02/26
+	 */
+	@Native("format")
+	@Params(min = 1, max = -1)
+	private static final class $Format extends Function {
+		public Object apply(Struct args, Kernel eval) {
+			final var temp = eval.text(args.car());
+			final var vals = args.cdr().stream().map(eval::eval);
+			return String.format(temp, vals.toArray());
 		}
 	}
 

@@ -1,137 +1,65 @@
-;; ALLJA1 CONTEST DEFINITION by 無線部開発班
+;; ALLJA1 CONTEST DEFINED by 無線部開発班
 
-; utility macros
-(set 'setq
-	(syntax (name value)
-		`(set ',name ,value)))
+(load "format.lisp")
 
-(setq defun
-	(syntax (name pars body)
-		`(setq ,name (lambda ,pars ,body))))
-
-(setq defmacro
-	(syntax (name pars body)
-		`(setq ,name (syntax ,pars ,body))))
-
-(defmacro cond conds
-	(if
-		(empty? conds)
-		null
-		`(if
-			,(car (car conds))
-			,(car (cdr (car conds)))
-			(cond ,(cdr conds)))))
-
-(defmacro forall (it conds)
-	(if
-		(empty? conds)
-		true
-		`(and
-			(,(car conds) ,it)
-			(forall ,it ,(cdr conds)))))
-
-; XML namespaces
-(setq qxsl "qxsl.org")
-(setq adif "adif.org")
-
-; field access for qxsl.org
-(defun qxsl-time it (get-field it qxsl "time"))
-(defun qxsl-call it (get-field it qxsl "call"))
-(defun qxsl-band it (get-field it qxsl "band"))
-(defun qxsl-mode it (get-field it qxsl "mode"))
-(defun qxsl-rstq it (get-field (rcvd it) qxsl "rstq"))
-(defun qxsl-code it (get-field (rcvd it) qxsl "code"))
-
-; field access for adif.org
-(defun adif-time it (get-field it adif "TIME_ON"))
-(defun adif-call it (get-field it adif "CALL"))
-(defun adif-band it (get-field it adif "BAND"))
-(defun adif-mode it (get-field it adif "MODE"))
-(defun adif-rstq it (get-field it adif "RST_RCVD"))
-(defun adif-code it (get-field it adif "SRX"))
-(defun adif-name it (get-field it adif "OPERATOR"))
-
-; copy operator name from ADIF to QXML
-(defun copy-name it
-	(if
-		(null? (adif-name it))
-		null
-		(set-field it qxsl "name" (adif-name it))))
-
-; conversion of time to hour (involving UTC-JST conversion for ADIF)
-(defun qxsl-hour it (hour (qxsl-time it) "JST"))
-(defun adif-hour it (mod (+ 9 (number (substring (adif-time it) 0 2))) 24))
-
-; ADIF/QXSL checker
-(defun qxsl? it (null? (adif-time it)))
-
-; field access for both ADIF/QXSL
-(defun time it ((if (qxsl? it) qxsl-hour adif-hour) it))
-(defun call it ((if (qxsl? it) qxsl-call adif-call) it))
-(defun mode it ((if (qxsl? it) qxsl-mode adif-mode) it))
-(defun rstq it ((if (qxsl? it) qxsl-rstq adif-rstq) it))
-(defun code it ((if (qxsl? it) qxsl-code adif-code) it))
-
-; conversion of qxsl's band (kHz) to ADIF band
-(defun band it
-	(progn
-		(setq freq (qxsl-band it))
-		(setq band (adif-band it))
-		(cond (
-			((if (qxsl? it) (<=  1810 freq  1913) (equal band "160m")) 1.9)
-			((if (qxsl? it) (<=  3500 freq  3687) (equal band  "80m")) 3.5)
-			((if (qxsl? it) (<=  7000 freq  7200) (equal band  "40m"))   7)
-			((if (qxsl? it) (<= 14000 freq 14350) (equal band  "20m"))  14)
-			((if (qxsl? it) (<= 21000 freq 21450) (equal band  "15m"))  21)
-			((if (qxsl? it) (<= 28000 freq 29700) (equal band  "10m"))  28)
-			((if (qxsl? it) (<= 50000 freq 54000) (equal band   "6m"))  50)))))
+; UTC-JST conversion for ADIF
+(defun HOUR it (hour (qxsl-time it) "JST"))
 
 ; JCC/JCG
-(defun jccg it
+(defun peel-JCCG it
+	(car
+		(cdr
+			(tokenize
+				(if
+					(信? it)
+					"^..."
+					"^..")
+				(qxsl-code it)))))
+(defun qxsl-JCCG it
 	(if
-		(null? (rstq it))
-		(car (cdr (tokenize (if (信? it) "^..." "^..") (code it))))
-		(code it)))
+		(null? (qxsl-rstq it))
+		(peel-JCCG it)
+		(qxsl-code it)))
 
 ; conversion of JCC/JCG to city/prefecture name
-(defun 県 it (city "jarl" (jccg it) 0))
-(defun 市 it (city "jarl" (jccg it)))
+(defun 県 it (city "jarl" (qxsl-JCCG it) 0))
+(defun 市 it (city "jarl" (qxsl-JCCG it)))
 (defun 総 it (city "area" (県 it) 2))
 
 ; mode validation
-(defun 信? it (match "(?i)CW" (mode it)))
-(defun 離? it (match "(?i)(DG|FT4|FT8)" (mode it)))
-(defun 話? it (match "(?i)(PH|AM|FM|SSB|DSB|LSB|USB)" (mode it)))
+(defun 信? it (match "(?i)CW" (qxsl-mode it)))
+(defun 離? it (match "(?i)(DG|FT4|FT8)" (qxsl-mode it)))
+(defun 話? it (match "(?i)(PH|AM|FM|SSB|DSB|LSB|USB)" (qxsl-mode it)))
 (defun 連? it (or (信? it) (話? it)))
 
 ; time validation
-(defun HB? it (and (<= 09 (time it) 11) (連? it) (<=  14 (band it) 50)))
-(defun LB? it (and (<= 16 (time it) 19) (連? it) (<= 1.9 (band it)  7)))
-(defun DB? it (and (<= 13 (time it) 14) (離? it)))
+(defun HB? it (and (<= 09 (HOUR it) 11) (連? it) (<= 14000 (qxsl-band it) 50000)))
+(defun LB? it (and (<= 16 (HOUR it) 19) (連? it) (<=  1900 (qxsl-band it)  7000)))
+(defun DB? it (and (<= 13 (HOUR it) 14) (離? it)))
 (defun AB? it (or (HB? it) (LB? it)))
 
 ; single lower-band validation
-(defun 1.9MHz? it (equal (band it) 1.9))
-(defun 3.5MHz? it (equal (band it) 3.5))
-(defun   7MHz? it (equal (band it)   7))
+(defun 1.9MHz? it (equal (qxsl-band it)  1900))
+(defun 3.5MHz? it (equal (qxsl-band it)  3500))
+(defun   7MHz? it (equal (qxsl-band it)  7000))
 
 ; single UPPER-BAND validation
-(defun  14MHz? it (equal (band it)  14))
-(defun  21MHz? it (equal (band it)  21))
-(defun  28MHz? it (equal (band it)  28))
-(defun  50MHz? it (equal (band it)  50))
+(defun  14MHz? it (equal (qxsl-band it) 14000))
+(defun  21MHz? it (equal (qxsl-band it) 21000))
+(defun  28MHz? it (equal (qxsl-band it) 28000))
+(defun  50MHz? it (equal (qxsl-band it) 50000))
 
 ; JCC/JCG validation
 (defun 現存? it (not (null? (市 it))))
-(defun 支庁? it (match "\\d{3}"  (jccg it)))
-(defun 府県? it (match "\\d{2}"  (jccg it)))
-(defun 市郡? it (match "\\d{4,}" (jccg it)))
+(defun 支庁? it (match "\\d{3}"  (qxsl-JCCG it)))
+(defun 府県? it (match "\\d{2}"  (qxsl-JCCG it)))
+(defun 市郡? it (match "\\d{4,}" (qxsl-JCCG it)))
 
 (defun 関? it (equal (総 it) "関東"))
 (defun 道? it (equal (県 it) "北海道"))
 (defun 他? it (not (or (関? it) (道? it))))
 
-;; 1エリア内/1エリア外部門
+;; validation of 1エリア内/1エリア外部門
 (defun 内? it
 	(and
 		(現存? it)
@@ -143,27 +71,44 @@
 
 (defun 外? it (and (現存? it) (関? it) (市郡? it)))
 
-; scoring
-(defmacro scoring (score calls mults)
-	`(* ,score (length (quote ,mults))))
+;; validation of 個人部門/団体部門
+(defun 個? it true)
+(defun 団? it (not (null? (qxsl-mode it))))
 
-; key for scoring
-(defun MODE-KEY it
+; keys for scoring
+(defun qxsl-MODE it
 	(cond (
 		((信? it) 1)
 		((話? it) 2)
 		((離? it) 3))))
-(defun CALL-KEY it (list (call it) (band it) (MODE-KEY it)))
-(defun MULT-KEY it (list (band it) (jccg it)))
+(defun qxsl-CALL it
+	(list
+		(qxsl-call it)
+		(qxsl-band it)
+		(qxsl-MODE it)))
+(defun qxsl-MULT it
+	(list
+		(qxsl-band it)
+		(qxsl-JCCG it)))
 
-; validation
+; scoring
+(defmacro scoring (score calls mults names)
+	`(progn
+		(setq mults (length (quote ,mults)))
+		(setq names (length (quote ,names)))
+		(/ (* ,score mults) names)))
+
+; validation routine
 (defmacro verify conds
 	`(lambda it
 		(progn
-			(copy-name it)
+			(toQXSL it)
 			(if
 				(forall it ,conds)
-				(success it 1 (CALL-KEY it) (MULT-KEY it))
+				(success it 1
+					(qxsl-CALL it)
+					(qxsl-MULT it)
+					(qxsl-name it))
 				(failure it "無効な交信")))))
 
 ; section codes

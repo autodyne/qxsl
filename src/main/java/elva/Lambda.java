@@ -16,7 +16,7 @@ import elva.ElvaLisp.ElvaRuntimeException;
  * @since 2017/02/18
  */
 @Params(min = 0, max = -1)
-final class Lambda extends Function {
+public final class Lambda extends Function {
 	private final Struct pars;
 	private final Object body;
 	private final Kernel lisp;
@@ -64,7 +64,7 @@ final class Lambda extends Function {
 			}
 			return new Kernel(env).eval(body);
 		}
-		final String msg = "%s required (but %s found)";
+		final String msg = "%s required, but %s found";
 		throw new ElvaRuntimeException(msg, pars, args);
 	}
 }

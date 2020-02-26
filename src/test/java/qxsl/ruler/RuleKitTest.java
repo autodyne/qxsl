@@ -31,7 +31,7 @@ public final class RuleKitTest extends test.RandTest {
 	private final Contest test;
 
 	public RuleKitTest() throws ScriptException {
-		test = new RuleKit().defined("allja1.lisp");
+		test = new RuleKit().contest("allja1.lisp");
 	}
 
 	/**

@@ -32,10 +32,10 @@
 1エリア外 個人 電信電話 50MHz部門,           174,  16008, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
 1エリア外 個人 電信限定 14/21/28/50MHz部門,  264,  52008, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
 1エリア外 個人 電信電話 14/21/28/50MHz部門,  387,  92880, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア内 団体 電信限定 部門,                852, 411516, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア内 団体 電信電話 部門,               1131, 624312, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア外 団体 電信限定 部門,                427, 139629, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア外 団体 電信電話 部門,                570, 216600, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
+1エリア内 団体 電信限定 部門,                852, 411516, adis,adxs,cbin,zall,zbin,zdos
+1エリア内 団体 電信電話 部門,               1131, 624312, adis,adxs,cbin,zall,zbin,zdos
+1エリア外 団体 電信限定 部門,                427, 139629, adis,adxs,cbin,zall,zbin,zdos
+1エリア外 団体 電信電話 部門,                570, 216600, adis,adxs,cbin,zall,zbin,zdos
 1エリア内 個人 デジタル 部門,                210,  41370, adis,adxs
 1エリア外 個人 デジタル 部門,                 56,   2800, adis,adxs
 1エリア内 団体 デジタル 部門,                210,  41370, adis,adxs

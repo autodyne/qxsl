@@ -7,7 +7,7 @@ package qxsl.ruler;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.script.ScriptException;
+import java.util.function.Function;
 import qxsl.model.Item;
 
 /**
@@ -18,7 +18,7 @@ import qxsl.model.Item;
  *
  * @since 2016/11/25
  */
-public abstract class Section {
+public abstract class Section implements Function<Item, Message> {
 	/**
 	 * 部門の名前を返します。
 	 *
@@ -44,14 +44,14 @@ public abstract class Section {
 	}
 
 	/**
-	 * 指定された{@link Item}が通過するか確認します。
+	 * 指定された{@link Item}の可否を検査します。
 	 *
 	 * @param item 検査対象の交信記録
 	 * @return 承認された場合はtrue
 	 * 
-	 * @throws ScriptException スクリプトの実行で発生した何らかの例外
+	 * @throws RuntimeException 検査の過程で発生した何らかの例外
 	 */
-	public abstract Message validate(Item item) throws ScriptException;
+	public abstract Message apply(Item item) throws RuntimeException;
 
 	/**
 	 * 指定された交信記録に対して有効な交信を数え上げて得点を計算します。
@@ -61,13 +61,13 @@ public abstract class Section {
 	 * 
 	 * @since 2019/05/16
 	 * 
-	 * @throws ScriptException スクリプトの実行で発生した何らかの例外
+	 * @throws RuntimeException 検査の過程で発生した何らかの例外
 	 */
-	public Summary summarize(List<Item> items) throws ScriptException {
+	public Summary summarize(List<Item> items) throws RuntimeException {
 		final var accepted = new ArrayList<Success>();
 		final var rejected = new ArrayList<Failure>();
 		for(Item item: items) {
-			final Message msg = this.validate(item);
+			final Message msg = this.apply(item);
 			if(msg instanceof Success) accepted.add((Success) msg);
 			if(msg instanceof Failure) rejected.add((Failure) msg);
 		}

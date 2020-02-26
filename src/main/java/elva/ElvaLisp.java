@@ -142,7 +142,7 @@ public final class ElvaLisp extends AbstractScriptEngine {
 	 */
 	public static final class ElvaLexicalException extends RuntimeException {
 		private static final String TEMP = "lexical error: %s\n%s";
-	
+
 		/**
 		 * 字句番号と内容を示す文字列を指定して例外を構築します。
 		 *
@@ -153,7 +153,7 @@ public final class ElvaLisp extends AbstractScriptEngine {
 			super(String.format(TEMP, message, parser.getLocal()));
 		}
 	}
-	
+
 	/**
 	 * LISP処理系で発生する実行時例外を表現します。
 	 * この例外はLISP処理系内部でのみ使用されます。
@@ -166,7 +166,8 @@ public final class ElvaLisp extends AbstractScriptEngine {
 	public static final class ElvaRuntimeException extends RuntimeException {
 		private static final String TEMP = "runtime error: %s\n%%s";
 		private final StringJoiner trace;
-	
+		private final String error;
+
 		/**
 		 * 問題を示す書式文字列とその引数を指定して例外を構築します。
 		 *
@@ -174,10 +175,10 @@ public final class ElvaLisp extends AbstractScriptEngine {
 		 * @param args 書式文字列の引数
 		 */
 		public ElvaRuntimeException(String message, Object...args) {
-			super(String.format(TEMP, String.format(message, args)));
+			this.error = String.format(TEMP, String.format(message, args));
 			this.trace = new StringJoiner("\n");
 		}
-	
+
 		/**
 		 * 指定された式をこの例外まで辿れる式の追跡履歴に追加します。
 		 *
@@ -188,14 +189,24 @@ public final class ElvaLisp extends AbstractScriptEngine {
 			this.trace.add(String.format(" at: '%s'", sexp));
 			return this;
 		}
-	
+
+		/**
+		 * この例外を処理系の外部に公開するための文字列を生成します。
+		 *
+		 * @return 例外の内容を示す文字列
+		 */
+		@Override
+		public final String getMessage() {
+			return String.format(error, trace);
+		}
+
 		/**
 		 * この例外を処理系の外部に公開するための変換処理を行います。
 		 *
 		 * @return 変換された例外
 		 */
 		public final ScriptException toScriptException() {
-			return new ScriptException(String.format(getMessage(), trace));
+			return new ScriptException(this.getMessage());
 		}
 	}
 }

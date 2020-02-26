@@ -125,7 +125,7 @@ public final class Kernel {
 		final V valid = type.isInstance(value)? (V) value: null;
 		final String temp = "%s instance required but %s found";
 		if (valid != null) return valid;
-		throw new ElvaRuntimeException(temp, type, sexp);
+		throw new ElvaRuntimeException(temp, type, value).add(sexp);
 	}
 
 	/**
@@ -146,9 +146,73 @@ public final class Kernel {
 	}
 
 	/**
-	 * 準引用を表現する識別子です。
+	 * 準引用の部分解除を表現する識別子です。
 	 */
 	private final Symbol UQUOT = Quotes.UQUOT.toSymbol();
+
+	/**
+	 * 準引用の部分展開を表現する識別子です。
+	 */
+	private final Symbol UQSPL = Quotes.UQSPL.toSymbol();
+
+	/**
+	 * 準引用の被引用式にて引用の部分解除を示す内部オブジェクトです。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @sicne 2020/02/26
+	 */
+	static interface Unquote {
+		public void addAll(List<Object> seq);
+		public Object sexp();
+	}
+
+	/**
+	 * 準引用の被引用式にて通常の引用解除を示す内部オブジェクトです。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @sicne 2020/02/26
+	 */
+	private static final class Normal implements Unquote {
+		public final Object sexp;
+		public Normal(Object sexp) {
+			this.sexp = sexp;
+		}
+		@Override
+		public void addAll(List<Object> seq) {
+			seq.add(this.sexp);
+		}
+		@Override
+		public Object sexp() {
+			return sexp;
+		}
+	}
+
+	/**
+	 * 準引用の被引用式にてリストの継足しを示す内部オブジェクトです。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @sicne 2020/02/26
+	 */
+	private static final class Splice implements Unquote {
+		public final List<Object> sexp;
+		public Splice(List<Object> sexp) {
+			this.sexp = sexp;
+		}
+		@Override
+		public void addAll(List<Object> seq) {
+			seq.addAll(this.sexp);
+		}
+		@Override
+		public Object sexp() {
+			return sexp;
+		}
+	}
 
 	/**
 	 * 指定された式を準引用の被引用式として評価した値を返します。
@@ -158,15 +222,16 @@ public final class Kernel {
 	 *
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
-	public final Object quasi(Object quoted) {
+	final Unquote uquote(Object quoted) {
 		if (quoted instanceof Struct) {
-			final Struct list = (Struct) quoted;
-			if (Struct.NIL.equals(list)) return Struct.NIL;
-			if (UQUOT.equals(list.car())) return eval(list);
-			final List<Object> target = new ArrayList<>();
-			for (Object sexp: list) target.add(quasi(sexp));
-			return Struct.of(target);
-		} else return quoted;
+			final Struct seq = (Struct) quoted;
+			if (Struct.NIL.equals(seq)) return new Normal(Struct.NIL);
+			if (UQUOT.equals(seq.car())) return new Normal(eval(seq));
+			if (UQSPL.equals(seq.car())) return new Splice(list(seq));
+			final ArrayList<Object> list = new ArrayList<>();
+			for (Object sexp: seq) uquote(sexp).addAll(list);
+			return new Normal(Struct.of(list));
+		} else return new Normal(quoted);
 	}
 
 	/**

@@ -26,6 +26,8 @@ import qxsl.model.Exch;
 import qxsl.model.Item;
 import qxsl.model.Tuple;
 
+import static elva.ElvaLisp.ElvaRuntimeException;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static javax.script.ScriptContext.ENGINE_SCOPE;
 
 /**
@@ -52,19 +54,20 @@ public final class RuleKit {
 	}
 
 	/**
-	 * 指定された{@link Contest}をライブラリから読み出します。
-	 *
-	 * @param name コンテストを定義したファイルの名前
-	 * @return ライブラリに内蔵されたコンテストの定義
+	 * 指定された入力から文字列を読み取り評価します。
+	 * 返り値は交信記録の手続きである必要があります。
 	 * 
-	 * @throws ScriptException コンテスト定義読み取り時の例外
+	 * 
+	 * @param reader 式を読み取るリーダ
+	 * @return 手続きの定義
+	 *
+	 * @throws ClassCastException 返り値が不正な型の場合
+	 * @throws ScriptException 式の評価時に発生する例外
+	 *
+	 * @since 2020/02/26
 	 */
-	public Contest defined(String name) throws ScriptException {
-		try(var is = getClass().getResourceAsStream(name)) {
-			return eval(new InputStreamReader(is, "UTF8"));
-		} catch(IOException ex) {
-			throw new ScriptException(ex);
-		}
+	public Handler handler(Reader reader) throws ScriptException {
+		return (Handler) this.elva.eval(reader, this.context);
 	}
 
 	/**
@@ -78,23 +81,76 @@ public final class RuleKit {
 	 * @throws ClassCastException 返り値が不正な型の場合
 	 * @throws ScriptException 式の評価時に発生する例外
 	 */
-	public Contest eval(Reader reader) throws ScriptException {
+	public Contest contest(Reader reader) throws ScriptException {
 		return (Contest) this.elva.eval(reader, this.context);
 	}
 
 	/**
-	 * 指定された入力から文字列を読み取り評価します。
-	 * 返り値はコンテストの定義である必要があります。
-	 * 
-	 * 
-	 * @param string 式を読み取る文字列
-	 * @return コンテストの定義
+	 * 指定された{@link Handler}をライブラリから読み出します。
 	 *
-	 * @throws ClassCastException 返り値が不正な型の場合
-	 * @throws ScriptException 式の評価時に発生する例外
+	 * @param name ハンドラを定義したファイルの名前
+	 * @return ライブラリに内蔵されたハンドラの定義
+	 * 
+	 * @throws ScriptException ハンドラ定義読み取り時の例外
 	 */
-	public Contest eval(String string) throws ScriptException {
-		return (Contest) this.elva.eval(string, this.context);
+	public Handler handler(String name) throws ScriptException {
+		try(var is = getClass().getResourceAsStream(name)) {
+			return handler(new InputStreamReader(is, UTF_8));
+		} catch(IOException ex) {
+			throw new ScriptException(ex);
+		}
+	}
+
+	/**
+	 * 指定された{@link Contest}をライブラリから読み出します。
+	 *
+	 * @param name コンテストを定義したファイルの名前
+	 * @return ライブラリに内蔵されたコンテストの定義
+	 * 
+	 * @throws ScriptException コンテスト定義読み取り時の例外
+	 */
+	public Contest contest(String name) throws ScriptException {
+		try(var is = getClass().getResourceAsStream(name)) {
+			return contest(new InputStreamReader(is, UTF_8));
+		} catch(IOException ex) {
+			throw new ScriptException(ex);
+		}
+	}
+
+	/**
+	 * LISP処理系内部における{@link Handler}の実装です。
+	 * 
+	 * 
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2020/02/26
+	 */
+	private static final class HandlerImpl extends Handler {
+		private final String name;
+		private final Kernel eval;
+		private final Lambda rule;
+
+		/**
+		 * 指定された規約定義と評価器で部門を構築します。
+		 *
+		 * @param rule 規約
+		 * @param eval 評価器
+		 */
+		public HandlerImpl(Struct rule, Kernel eval) {
+			this.name = eval.text(rule.get(0));
+			this.rule = eval.eval(rule.get(1), Lambda.class);
+			this.eval = eval;
+		}
+
+		@Override
+		public String getName() {
+			return name;
+		}
+
+		@Override
+		public Item apply(Item item) throws RuntimeException {
+			return eval.eval(Struct.of(rule, item), Item.class);
+		}
 	}
 
 	/**
@@ -108,7 +164,7 @@ public final class RuleKit {
 	private static final class ContestImpl extends Contest {
 		private final String name;
 		private final Kernel eval;
-		private final Function rule;
+		private final Syntax rule;
 		private final List<Section> list;
 
 		/**
@@ -119,8 +175,8 @@ public final class RuleKit {
 		 */
 		public ContestImpl(Struct rule, Kernel eval) {
 			this.name = eval.text(rule.get(0));
-			this.rule = eval.eval(rule.get(1), Function.class);
-			this.list = SectionImpl.map(rule.cdr(2), eval);
+			this.rule = eval.eval(rule.get(1), Syntax.class);
+			this.list = SectionImpl.sects(rule.cdr(2), eval);
 			this.eval = eval;
 		}
 
@@ -135,16 +191,12 @@ public final class RuleKit {
 		}
 
 		@Override
-		public int score(Summary sum) throws ScriptException {
+		public int score(Summary sum) throws RuntimeException {
 			final var args = new ArrayList<Object>();
-			try {
-				args.add(rule);
-				args.add(BigDecimal.valueOf(sum.score()));
-				for(var set: sum.mults()) args.add(Struct.of(set));
-				return eval.real(Struct.of(args)).intValueExact();
-			} catch(ElvaLisp.ElvaRuntimeException ex) {
-				throw ex.toScriptException();
-			}
+			args.add(rule);
+			args.add(BigDecimal.valueOf(sum.score()));
+			for (var ms: sum.mults()) args.add(Struct.of(ms));
+			return eval.real(Struct.of(args)).intValueExact();
 		}
 	}
 
@@ -160,7 +212,7 @@ public final class RuleKit {
 		private final String name;
 		private final String code;
 		private final Kernel eval;
-		private final Function rule;
+		private final Lambda rule;
 
 		/**
 		 * 指定された規約定義と評価器で部門を構築します。
@@ -171,7 +223,7 @@ public final class RuleKit {
 		public SectionImpl(Struct rule, Kernel eval) {
 			this.name = eval.text(rule.get(0));
 			this.code = eval.text(rule.get(1));
-			this.rule = eval.eval(rule.get(2), Function.class);
+			this.rule = eval.eval(rule.get(2), Lambda.class);
 			this.eval = eval;
 		}
 
@@ -186,16 +238,8 @@ public final class RuleKit {
 		}
 
 		@Override
-		public Message validate(Item item) throws ScriptException {
-			try {
-				final Object sexp = eval.eval(Struct.of(rule, item));
-				if(sexp instanceof Success) return (Success) sexp;
-				if(sexp instanceof Failure) return (Failure) sexp;
-				String temp = "%s must return a success or failure";
-				throw new ScriptException(String.format(temp, rule));
-			} catch(ElvaLisp.ElvaRuntimeException ex) {
-				throw ex.toScriptException();
-			}
+		public Message apply(Item item) throws RuntimeException {
+			return eval.eval(Struct.of(rule, item), Message.class);
 		}
 
 		/**
@@ -205,7 +249,7 @@ public final class RuleKit {
 		 * @param eval 評価器
 		 * @return 部門のリスト
 		 */
-		private static List<Section> map(Struct rule, Kernel eval) {
+		private static List<Section> sects(Struct rule, Kernel eval) {
 			final ArrayList<Section> list = new ArrayList<Section>();
 			for(var sc: rule) list.add(eval.eval(sc, Section.class));
 			return Collections.unmodifiableList(list);
@@ -220,11 +264,20 @@ public final class RuleKit {
 	public Bindings createBindings() {
 		final Nested lude = new Nested(null, null);
 		/*
-		 * preinstalled functions for contest & section definition
+		 * preinstalled functions to load script
 		 * 
-		 * (contest contest-name scoring sections...)
-		 * (special section-name section-code lambda)
+		 * (load file)
 		 */
+		lude.put(new $Load());
+
+		/*
+		 * preinstalled functions for contest & handler definition
+		 * 
+		 * (handler handler-name lambda)
+		 * (contest contest-name syntax sections ...)
+		 * (section section-name section-code lambda)
+		 */
+		lude.put(new $Handler());
 		lude.put(new $Contest());
 		lude.put(new $Section());
 
@@ -236,6 +289,13 @@ public final class RuleKit {
 		 */
 		lude.put(new $Success());
 		lude.put(new $Failure());
+
+		/*
+		 * preinstalled functions for item creation
+		 *
+		 * (item)
+		 */
+		lude.put(new $Item());
 
 		/*
 		 * preinstalled functions for rcvd & sent access
@@ -272,6 +332,47 @@ public final class RuleKit {
 	}
 
 	/**
+	 * LISP処理系で事前に定義されるload関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2020/02/26
+	 */
+	@Native("load")
+	@Params(min = 1, max = 1)
+	private static final class $Load extends Function {
+		public Object apply(Struct args, Kernel eval) {
+			final var elva = new ElvaLisp();
+			final var name = eval.text(args.car());
+			try (var is = getClass().getResourceAsStream(name)) {
+				final var isr = new InputStreamReader(is, UTF_8);
+				for(Object sexp: elva.scan(isr)) eval.eval(sexp);
+				return null;
+			} catch (IOException | ScriptException ex) {
+				final String msg = "failed in loading %s: %s";
+				throw new ElvaRuntimeException(msg, name, ex);
+			}
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるhandler関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2020/02/26
+	 */
+	@Native("handler")
+	@Params(min = 2, max = -1)
+	private static final class $Handler extends Function {
+		public Object apply(Struct args, Kernel eval) {
+			return new HandlerImpl(args, eval);
+		}
+	}
+
+	/**
 	 * LISP処理系で事前に定義されるcontest関数です。
 	 *
 	 *
@@ -280,7 +381,7 @@ public final class RuleKit {
 	 * @since 2019/05/15
 	 */
 	@Native("contest")
-	@Params(min = 2, max = -1)
+	@Params(min = 3, max = -1)
 	private static final class $Contest extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			return new ContestImpl(args, eval);
@@ -336,6 +437,22 @@ public final class RuleKit {
 		public Object apply(Struct args, Kernel eval) {
 			final Item item = eval.eval(args.car(), Item.class);
 			return new Failure(item, eval.text(args.get(1)));
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるitem関数です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2020/02/26
+	 */
+	@Native("item")
+	@Params(min = 0, max = 0)
+	private static final class $Item extends Function {
+		public Object apply(Struct args, Kernel eval) {
+			return new Item();
 		}
 	}
 
@@ -405,8 +522,8 @@ public final class RuleKit {
 			final Tuple tuple = eval.eval(args.car(), Tuple.class);
 			final String space = eval.text(args.get(1));
 			final String local = eval.text(args.get(2));
-			final Object value = eval.eval(args.get(3));
-			return tuple.set(new QName(space, local), value.toString());
+			final String value = eval.text(args.get(3));
+			return tuple.set(new QName(space, local), value);
 		}
 	}
 

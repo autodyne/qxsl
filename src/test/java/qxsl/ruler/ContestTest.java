@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public final class ContestTest extends test.RandTest {
 	private final Contest ja1;
 	private ContestTest() throws ScriptException {
-		ja1 = new RuleKit().defined("allja1.lisp");
+		ja1 = new RuleKit().contest("allja1.lisp");
 	}
 	@Test
 	public void testForName() throws ScriptException {

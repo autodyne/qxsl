@@ -7,6 +7,7 @@
 ; unquote
 `(3 ,(+ 3 3) 4) '(3 6 4)
 `(1 (2 ,(* 3 4)) 5) '(1 (2 12) 5)
+`(1 (1 4 ,@(cdr '(1 5 1 4)))) '(1 (1 4 5 1 4))
 
 ; progn
 (progn 11) 11
@@ -17,6 +18,11 @@
 (set 'foo 13) 13
 (progn (set 'foo 29) (set 'bar 97) foo) 29
 (progn (set 'foo 29) (set 'bar 97) bar) 97
+
+; eval
+(eval 10) 10
+(eval '(+ 10 20)) 30
+(progn (set 'x 100) (eval x)) 100
 
 ; cons
 (cons 1 ()) (list 1)
@@ -39,12 +45,6 @@
 (cdr (list 'HEAD 'TAIL)) (list 'TAIL)
 (cdr (list 'HEAD 'NEXT 'TAIL)) (list 'NEXT 'TAIL)
 
-; empty?
-(empty? ()) true
-(empty? (list 'HEAD)) false
-(empty? (list 'HEAD 'TAIL)) false
-(empty? (list 'HEAD 'NEXT 'TAIL)) false
-
 ; length
 (length ()) 0
 (length (list 'HEAD)) 1
@@ -62,6 +62,18 @@
 (member 'TAIL (list 'HEAD)) false
 (member 'TAIL (list 'HEAD 'TAIL)) true
 (member 'TAIL (list 'HEAD 'NEXT 'TAIL)) true
+
+; every
+(every (list true true)) true
+(every (list true false)) false
+(every (list false true)) false
+(every (list false false)) false
+
+; some
+(some (list true true)) true
+(some (list true false)) true
+(some (list false true)) true
+(some (list false false)) false
 
 ; equal
 (equal 1 1) true
@@ -152,6 +164,10 @@
 (>= 115 114) true
 (>= 5 4 3 2 1) true
 (>= 5 4 2 3 1) false
+
+; format
+(format "%s %s" "MUR" "KMR") "MUR KMR"
+(format "%s %s" 114 (+ 200 314)) "114 514"
 
 ; substring
 (substring "HELLO" 0 2) "HE"

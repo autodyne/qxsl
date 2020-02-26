@@ -16,7 +16,8 @@ package elva;
 enum Quotes {
 	QUOTE ("quote"),
 	UQUOT ("unquote"),
-	QUASI ("quasiquote");
+	QUASI ("quasiquote"),
+	UQSPL ("unquote-splicing");
 
 	private final Symbol name;
 	private Quotes(String name) {

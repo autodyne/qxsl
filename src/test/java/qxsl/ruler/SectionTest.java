@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public final class SectionTest extends test.RandTest {
 	public static Iterator<Section> sections() throws ScriptException {
-		return new RuleKit().defined("allja1.lisp").iterator();
+		return new RuleKit().contest("allja1.lisp").iterator();
 	}
 	@Test
 	public void testContest() throws ScriptException {

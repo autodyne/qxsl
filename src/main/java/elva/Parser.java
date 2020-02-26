@@ -93,9 +93,10 @@ final class Parser implements Iterator<Object> {
 		final String atom = allTokens.get(cursor++);
 		if(atom.equals("(")) return nextList();
 		if(atom.matches("\".*\"")) return escape(atom);
-		if(atom.equals("'")) return new Struct(Quotes.QUOTE, next());
-		if(atom.equals("`")) return new Struct(Quotes.QUASI, next());
-		if(atom.equals(",")) return new Struct(Quotes.UQUOT, next());
+		if(atom.equals("'"))  return new Struct(Quotes.QUOTE, next());
+		if(atom.equals("`"))  return new Struct(Quotes.QUASI, next());
+		if(atom.equals(","))  return new Struct(Quotes.UQUOT, next());
+		if(atom.equals(",@")) return new Struct(Quotes.UQSPL, next());
 		if(!atom.equals(")")) return asSymbolOrReal(atom);
 		throw new ElvaLexicalException("isolated ')'", this);
 	}

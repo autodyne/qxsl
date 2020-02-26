@@ -6,7 +6,6 @@
 package qxsl.ruler;
 
 import java.util.Iterator;
-import javax.script.ScriptException;
 
 /**
  * コンテストの規約の実装は{@link Contest}クラスを実装します。
@@ -60,9 +59,9 @@ public abstract class Contest implements Iterable<Section> {
 	 * @param sum 交信記録
 	 * @return 総得点
 	 *
-	 * @throws ScriptException スクリプトの実行で発生した何らかの例外
+	 * @throws RuntimeException 得点計算で発生した何らかの例外
 	 *
 	 * @since 2020/02/26
 	 */
-	public abstract int score(Summary sum) throws ScriptException;
+	public abstract int score(Summary sum) throws RuntimeException;
 }
