@@ -32,12 +32,10 @@ public final class CqwwFormatTest extends test.RandTest {
 	private final TableFormats tables = new TableFormats();
 	private final ArrayList<Band> bands = new ArrayList<>();
 	public CqwwFormatTest() {
-		bands.add(new Band( 1_900));
+		bands.add(new Band( 1_800));
 		bands.add(new Band( 3_500));
 		bands.add(new Band( 7_000));
-		bands.add(new Band(10_000));
 		bands.add(new Band(14_000));
-		bands.add(new Band(18_000));
 		bands.add(new Band(21_000));
 		bands.add(new Band(28_000));
 		bands.add(new Band(50_000));

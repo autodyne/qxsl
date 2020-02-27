@@ -10,10 +10,7 @@
 	(car
 		(cdr
 			(tokenize
-				(if
-					(信? it)
-					"^..."
-					"^..")
+				(if (話? it) "^.." "^...")
 				(qxsl-code it)))))
 (defun qxsl-JCCG it
 	(if
@@ -28,15 +25,18 @@
 
 ; mode validation
 (defun 信? it (match "(?i)CW" (qxsl-mode it)))
-(defun 離? it (match "(?i)(DG|FT4|FT8)" (qxsl-mode it)))
-(defun 話? it (match "(?i)(PH|AM|FM|SSB|DSB|LSB|USB)" (qxsl-mode it)))
+(defun 話? it (match "(?i)PH|FM|SSB" (qxsl-mode it)))
+(defun 離? it (match "(?i)DG|FT[48]" (qxsl-mode it)))
 (defun 連? it (or (信? it) (話? it)))
 
 ; time validation
-(defun HB? it (and (<= 09 (HOUR it) 11) (連? it) (<= 14000 (qxsl-band it) 50000)))
-(defun LB? it (and (<= 16 (HOUR it) 19) (連? it) (<=  1900 (qxsl-band it)  7000)))
-(defun DB? it (and (<= 13 (HOUR it) 14) (離? it)))
-(defun AB? it (or (HB? it) (LB? it)))
+(defun 朝? it (<= 09 (HOUR it) 11))
+(defun 昼? it (<= 13 (HOUR it) 14))
+(defun 夜? it (<= 16 (HOUR it) 19))
+
+; multiple-band validation
+(defun 高? it (<= 14000 (qxsl-band it) 50000))
+(defun 低? it (<=  1900 (qxsl-band it)  7000))
 
 ; single lower-band validation
 (defun 1.9MHz? it (equal (qxsl-band it)  1900))
@@ -48,6 +48,12 @@
 (defun  21MHz? it (equal (qxsl-band it) 21000))
 (defun  28MHz? it (equal (qxsl-band it) 28000))
 (defun  50MHz? it (equal (qxsl-band it) 50000))
+
+; validation of analog/digital sections
+(defun HB? it (forall it (朝? 連? 高?)))
+(defun LB? it (forall it (夜? 連? 低?)))
+(defun DB? it (forall it (昼? 離?)))
+(defun AB? it (or (HB? it) (LB? it)))
 
 ; JCC/JCG validation
 (defun 現存? it (not (null? (市 it))))
@@ -73,23 +79,28 @@
 
 ;; validation of 個人部門/団体部門
 (defun 個? it true)
-(defun 団? it (not (null? (qxsl-mode it))))
+(defun 団? it (not (null? (qxsl-name it))))
 
 ; keys for scoring
-(defun qxsl-MODE it
+(defun MODES-key it
 	(cond (
 		((信? it) 1)
 		((話? it) 2)
 		((離? it) 3))))
-(defun qxsl-CALL it
+(defun CALLS-key it
 	(list
 		(qxsl-call it)
 		(qxsl-band it)
-		(qxsl-MODE it)))
-(defun qxsl-MULT it
+		(MODES-key it)))
+(defun MULTS-key it
 	(list
 		(qxsl-band it)
 		(qxsl-JCCG it)))
+(defun DUMMY-key it null)
+(defun PARTY-key it (qxsl-name it))
+
+(setq 個 (list CALLS-key MULTS-key DUMMY-key))
+(setq 団 (list CALLS-key MULTS-key PARTY-key))
 
 ; scoring
 (defmacro scoring (score calls mults names)
@@ -99,16 +110,13 @@
 		(/ (* ,score mults) names)))
 
 ; validation routine
-(defmacro verify conds
+(defmacro verify (conds keys)
 	`(lambda it
 		(progn
 			(toQXSL it)
 			(if
 				(forall it ,conds)
-				(success it 1
-					(qxsl-CALL it)
-					(qxsl-MULT it)
-					(qxsl-name it))
+				(success it 1 ,@(dolist (k (eval keys)) (list k 'it)))
 				(failure it "無効な交信")))))
 
 ; section codes
@@ -118,50 +126,50 @@
 (setq AB "アナログ 全周波数帯部門")
 
 (contest "ALLJA1 TEST" scoring
-	(section "1エリア内 個人 電信限定 1.9MHz部門"         LB (verify (内? 信? 1.9MHz? LB?)))
-	(section "1エリア内 個人 電信限定 3.5MHz部門"         LB (verify (内? 信? 3.5MHz? LB?)))
-	(section "1エリア内 個人 電信電話 3.5MHz部門"         LB (verify (内?     3.5MHz? LB?)))
-	(section "1エリア内 個人 電信限定 7MHz部門"           LB (verify (内? 信?   7MHz? LB?)))
-	(section "1エリア内 個人 電信電話 7MHz部門"           LB (verify (内?       7MHz? LB?)))
-	(section "1エリア内 個人 電信限定 1.9/3.5/7MHz部門"   LB (verify (内? 信?         LB?)))
-	(section "1エリア内 個人 電信電話 1.9/3.5/7MHz部門"   LB (verify (内?             LB?)))
+	(section "1エリア内 個人 電信限定 1.9MHz部門"         LB (verify (個? 内? 信? 1.9MHz? LB?) 個))
+	(section "1エリア内 個人 電信限定 3.5MHz部門"         LB (verify (個? 内? 信? 3.5MHz? LB?) 個))
+	(section "1エリア内 個人 電信電話 3.5MHz部門"         LB (verify (個? 内?     3.5MHz? LB?) 個))
+	(section "1エリア内 個人 電信限定 7MHz部門"           LB (verify (個? 内? 信?   7MHz? LB?) 個))
+	(section "1エリア内 個人 電信電話 7MHz部門"           LB (verify (個? 内?       7MHz? LB?) 個))
+	(section "1エリア内 個人 電信限定 1.9/3.5/7MHz部門"   LB (verify (個? 内? 信?         LB?) 個))
+	(section "1エリア内 個人 電信電話 1.9/3.5/7MHz部門"   LB (verify (個? 内?             LB?) 個))
 
-	(section "1エリア外 個人 電信限定 1.9MHz部門"         LB (verify (外? 信? 1.9MHz? LB?)))
-	(section "1エリア外 個人 電信限定 3.5MHz部門"         LB (verify (外? 信? 3.5MHz? LB?)))
-	(section "1エリア外 個人 電信電話 3.5MHz部門"         LB (verify (外?     3.5MHz? LB?)))
-	(section "1エリア外 個人 電信限定 7MHz部門"           LB (verify (外? 信?   7MHz? LB?)))
-	(section "1エリア外 個人 電信電話 7MHz部門"           LB (verify (外?       7MHz? LB?)))
-	(section "1エリア外 個人 電信限定 1.9/3.5/7MHz部門"   LB (verify (外? 信?         LB?)))
-	(section "1エリア外 個人 電信電話 1.9/3.5/7MHz部門"   LB (verify (外?             LB?)))
+	(section "1エリア外 個人 電信限定 1.9MHz部門"         LB (verify (個? 外? 信? 1.9MHz? LB?) 個))
+	(section "1エリア外 個人 電信限定 3.5MHz部門"         LB (verify (個? 外? 信? 3.5MHz? LB?) 個))
+	(section "1エリア外 個人 電信電話 3.5MHz部門"         LB (verify (個? 外?     3.5MHz? LB?) 個))
+	(section "1エリア外 個人 電信限定 7MHz部門"           LB (verify (個? 外? 信?   7MHz? LB?) 個))
+	(section "1エリア外 個人 電信電話 7MHz部門"           LB (verify (個? 外?       7MHz? LB?) 個))
+	(section "1エリア外 個人 電信限定 1.9/3.5/7MHz部門"   LB (verify (個? 外? 信?         LB?) 個))
+	(section "1エリア外 個人 電信電話 1.9/3.5/7MHz部門"   LB (verify (個? 外?             LB?) 個))
 
-	(section "1エリア内 個人 電信限定 14MHz部門"          HB (verify (内? 信?  14MHz? HB?)))
-	(section "1エリア内 個人 電信電話 14MHz部門"          HB (verify (内?      14MHz? HB?)))
-	(section "1エリア内 個人 電信限定 21MHz部門"          HB (verify (内? 信?  21MHz? HB?)))
-	(section "1エリア内 個人 電信電話 21MHz部門"          HB (verify (内?      21MHz? HB?)))
-	(section "1エリア内 個人 電信限定 28MHz部門"          HB (verify (内? 信?  28MHz? HB?)))
-	(section "1エリア内 個人 電信電話 28MHz部門"          HB (verify (内?      28MHz? HB?)))
-	(section "1エリア内 個人 電信限定 50MHz部門"          HB (verify (内? 信?  50MHz? HB?)))
-	(section "1エリア内 個人 電信電話 50MHz部門"          HB (verify (内?      50MHz? HB?)))
-	(section "1エリア内 個人 電信限定 14/21/28/50MHz部門" HB (verify (内? 信?         HB?)))
-	(section "1エリア内 個人 電信電話 14/21/28/50MHz部門" HB (verify (内?             HB?)))
+	(section "1エリア内 個人 電信限定 14MHz部門"          HB (verify (個? 内? 信?  14MHz? HB?) 個))
+	(section "1エリア内 個人 電信電話 14MHz部門"          HB (verify (個? 内?      14MHz? HB?) 個))
+	(section "1エリア内 個人 電信限定 21MHz部門"          HB (verify (個? 内? 信?  21MHz? HB?) 個))
+	(section "1エリア内 個人 電信電話 21MHz部門"          HB (verify (個? 内?      21MHz? HB?) 個))
+	(section "1エリア内 個人 電信限定 28MHz部門"          HB (verify (個? 内? 信?  28MHz? HB?) 個))
+	(section "1エリア内 個人 電信電話 28MHz部門"          HB (verify (個? 内?      28MHz? HB?) 個))
+	(section "1エリア内 個人 電信限定 50MHz部門"          HB (verify (個? 内? 信?  50MHz? HB?) 個))
+	(section "1エリア内 個人 電信電話 50MHz部門"          HB (verify (個? 内?      50MHz? HB?) 個))
+	(section "1エリア内 個人 電信限定 14/21/28/50MHz部門" HB (verify (個? 内? 信?         HB?) 個))
+	(section "1エリア内 個人 電信電話 14/21/28/50MHz部門" HB (verify (個? 内?             HB?) 個))
 
-	(section "1エリア外 個人 電信限定 14MHz部門"          HB (verify (外? 信?  14MHz? HB?)))
-	(section "1エリア外 個人 電信電話 14MHz部門"          HB (verify (外?      14MHz? HB?)))
-	(section "1エリア外 個人 電信限定 21MHz部門"          HB (verify (外? 信?  21MHz? HB?)))
-	(section "1エリア外 個人 電信電話 21MHz部門"          HB (verify (外?      21MHz? HB?)))
-	(section "1エリア外 個人 電信限定 28MHz部門"          HB (verify (外? 信?  28MHz? HB?)))
-	(section "1エリア外 個人 電信電話 28MHz部門"          HB (verify (外?      28MHz? HB?)))
-	(section "1エリア外 個人 電信限定 50MHz部門"          HB (verify (外? 信?  50MHz? HB?)))
-	(section "1エリア外 個人 電信電話 50MHz部門"          HB (verify (外?      50MHz? HB?)))
-	(section "1エリア外 個人 電信限定 14/21/28/50MHz部門" HB (verify (外? 信?         HB?)))
-	(section "1エリア外 個人 電信電話 14/21/28/50MHz部門" HB (verify (外?             HB?)))
+	(section "1エリア外 個人 電信限定 14MHz部門"          HB (verify (個? 外? 信?  14MHz? HB?) 個))
+	(section "1エリア外 個人 電信電話 14MHz部門"          HB (verify (個? 外?      14MHz? HB?) 個))
+	(section "1エリア外 個人 電信限定 21MHz部門"          HB (verify (個? 外? 信?  21MHz? HB?) 個))
+	(section "1エリア外 個人 電信電話 21MHz部門"          HB (verify (個? 外?      21MHz? HB?) 個))
+	(section "1エリア外 個人 電信限定 28MHz部門"          HB (verify (個? 外? 信?  28MHz? HB?) 個))
+	(section "1エリア外 個人 電信電話 28MHz部門"          HB (verify (個? 外?      28MHz? HB?) 個))
+	(section "1エリア外 個人 電信限定 50MHz部門"          HB (verify (個? 外? 信?  50MHz? HB?) 個))
+	(section "1エリア外 個人 電信電話 50MHz部門"          HB (verify (個? 外?      50MHz? HB?) 個))
+	(section "1エリア外 個人 電信限定 14/21/28/50MHz部門" HB (verify (個? 外? 信?         HB?) 個))
+	(section "1エリア外 個人 電信電話 14/21/28/50MHz部門" HB (verify (個? 外?             HB?) 個))
 
-	(section "1エリア内 団体 電信限定 部門"               AB (verify (内? 信?         AB?)))
-	(section "1エリア内 団体 電信電話 部門"               AB (verify (内?             AB?)))
-	(section "1エリア外 団体 電信限定 部門"               AB (verify (外? 信?         AB?)))
-	(section "1エリア外 団体 電信電話 部門"               AB (verify (外?             AB?)))
+	(section "1エリア内 団体 電信限定 部門"               AB (verify (団? 内? 信?         AB?) 団))
+	(section "1エリア内 団体 電信電話 部門"               AB (verify (団? 内?             AB?) 団))
+	(section "1エリア外 団体 電信限定 部門"               AB (verify (団? 外? 信?         AB?) 団))
+	(section "1エリア外 団体 電信電話 部門"               AB (verify (団? 外?             AB?) 団))
 
-	(section "1エリア内 個人 デジタル 部門"               DB (verify (内?       7MHz? DB?)))
-	(section "1エリア外 個人 デジタル 部門"               DB (verify (外?       7MHz? DB?)))
-	(section "1エリア内 団体 デジタル 部門"               DB (verify (内?       7MHz? DB?)))
-	(section "1エリア外 団体 デジタル 部門"               DB (verify (外?       7MHz? DB?))))
+	(section "1エリア内 個人 デジタル 部門"               DB (verify (個? 内?       7MHz? DB?) 個))
+	(section "1エリア外 個人 デジタル 部門"               DB (verify (個? 外?       7MHz? DB?) 個))
+	(section "1エリア内 団体 デジタル 部門"               DB (verify (団? 内?       7MHz? DB?) 団))
+	(section "1エリア外 団体 デジタル 部門"               DB (verify (団? 外?       7MHz? DB?) 団)))

@@ -166,8 +166,8 @@ public final class CBinFormat extends BaseFormat {
 		 */
 		public static BandEnum forIndex(int i) {
 			if(values == null) values = values();
-			for(BandEnum m : values) {
-				if(m.ordinal() == i) return m;
+			for(BandEnum b : values) {
+				if(b.ordinal() == i) return b;
 			}
 			return null;
 		}
@@ -183,20 +183,30 @@ public final class CBinFormat extends BaseFormat {
 	 *
 	 */
 	public enum ModeEnum {
-		CW  ("CW"),
-		RTTY("RTTY"),
-		SSB ("SSB"),
-		FM  ("FM"),
-		AM  ("AM"),
-		ATV ("ATV"),
-		SSTV("SSTV"),
-		PSK ("PSK"),
-		GMSK("GMSK"),
-		MFSK("MFSK"),
-		QPSK("QPSK"),
-		FSK ("FSK"),
-		DSTAR("D-STAR"),
-		C4FM("C4FM");
+		CW     ("CW"),
+		RTTY   ("RTTY"),
+		SSB    ("SSB"),
+		FM     ("FM"),
+		AM     ("AM"),
+		ATV    ("ATV"),
+		SSTV   ("SSTV"),
+		PSK    ("PSK"),
+		GMSK   ("GMSK"),
+		MFSK   ("MFSK"),
+		QPSK   ("QPSK"),
+		FSK    ("FSK"),
+		DSTAR  ("D-STAR"),
+		C4FM   ("C4FM"),
+		JT65   ("JT65"),
+		JT9    ("JT9"),
+		ISCAT  ("ISCAT"),
+		FT8    ("FT8"),
+		JT4    ("JT4"),
+		QRA64  ("QRA64"),
+		MSK144 ("MSK144"),
+		WSPR   ("WSPR"),
+		JTMS   ("JTMS"),
+		FT4    ("FT4");
 
 		private final Mode mode;
 		private static ModeEnum[] values;

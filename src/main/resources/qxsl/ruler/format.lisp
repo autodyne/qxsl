@@ -25,7 +25,7 @@
 (defun adif-rstq it (get-field it adif "RST_RCVD"))
 (defun adif-code it (get-field it adif "SRX"))
 (defun adif-RSTQ it (get-field it adif "RST_SENT"))
-(defun adif-CODE it (get-field it adif "TRX"))
+(defun adif-CODE it (get-field it adif "STX"))
 
 ; time access for adif.org
 (defun adif-Y it (substring (adif-DATE it) 0 4))
@@ -59,7 +59,7 @@
 	(progn
 		(setq freq (get-field it qxsl "band"))
 		(cond (
-			((<=  1810 freq  1913)  1900)
+			((<=  1800 freq  1913)  1900)
 			((<=  3500 freq  3687)  3500)
 			((<=  7000 freq  7200)  7000)
 			((<= 14000 freq 14350) 14000)
@@ -92,4 +92,4 @@
 		(if (null? (adif-code it)) null (set-qxsl-code it (adif-code it)))
 		(if (null? (adif-RSTQ it)) null (set-qxsl-RSTQ it (adif-RSTQ it)))
 		(if (null? (adif-CODE it)) null (set-qxsl-CODE it (adif-CODE it)))))
-(handler "toQXSL" toQXSL)
+(handler "toQXSL" (lambda it (progn (toQXSL it) it)))

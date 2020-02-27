@@ -173,8 +173,8 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		public static BandEnum forIndex(int i) {
 			if(values == null) values = values();
-			for(BandEnum m : values) {
-				if(m.ordinal() == i) return m;
+			for(BandEnum b : values) {
+				if(b.ordinal() == i) return b;
 			}
 			return null;
 		}
@@ -195,7 +195,7 @@ public final class ZBinFormat extends BaseFormat {
 		FM    ("FM"),
 		AM    ("AM"),
 		RTTY  ("RTTY"),
-		OTHERS("Others");
+		OTHER ("Other");
 
 		private final Mode mode;
 		private static ModeEnum[] values;
@@ -224,7 +224,7 @@ public final class ZBinFormat extends BaseFormat {
 			for(ModeEnum m : values) {
 				if(m.mode.equals(mode)) return m;
 			}
-			return null;
+			return ModeEnum.OTHER;
 		}
 
 		/**
@@ -640,9 +640,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private final void mode(Mode mode) throws IOException {
-			ModeEnum modes = ModeEnum.valueOf(mode);
-			if(mode == null) stream.writeByte(0);
-			else stream.writeByte(modes.ordinal());
+			stream.writeByte(ModeEnum.valueOf(mode).ordinal());
 		}
 
 		/**

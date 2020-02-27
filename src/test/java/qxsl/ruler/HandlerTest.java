@@ -10,33 +10,25 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * {@link Contest}クラスのテスト用クラスです。
+ * {@link Handler}クラスのテスト用クラスです。
  * 
  * 
  * @author Journal of Hamradio Informatics
  * 
- * @since 2017/02/26
+ * @since 2020/02/27
  *
  */
-public final class ContestTest extends test.RandTest {
-	private final Contest ja1;
-	private ContestTest() throws ScriptException {
-		ja1 = new RuleKit().contest("allja1.lisp");
-	}
-	@Test
-	public void testForName() {
-		assertThat(ja1).isNotNull();
+public final class HandlerTest extends test.RandTest {
+	private final Handler format;
+	private HandlerTest() throws ScriptException {
+		format = new RuleKit().handler("format.lisp");
 	}
 	@Test
 	public void testGetName() {
-		assertThat(ja1.getName()).isNotBlank();
-	}
-	@Test
-	public void testIterator() {
-		assertThat(ja1.iterator()).hasNext();
+		assertThat(format.getName()).isNotBlank();
 	}
 	@Test
 	public void testToString() {
-		assertThat(ja1).hasToString(ja1.getName());
+		assertThat(format).hasToString(format.getName());
 	}
 }

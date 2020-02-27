@@ -192,11 +192,13 @@ public final class RuleKit {
 
 		@Override
 		public int score(Summary sum) throws RuntimeException {
-			final var args = new ArrayList<Object>();
-			args.add(rule);
-			args.add(BigDecimal.valueOf(sum.score()));
-			for (var ms: sum.mults()) args.add(Struct.of(ms));
-			return eval.real(Struct.of(args)).intValueExact();
+			if (sum.score() > 0) {
+				final var args = new ArrayList<Object>();
+				args.add(rule);
+				args.add(BigDecimal.valueOf(sum.score()));
+				for (var ms: sum.mults()) args.add(Struct.of(ms));
+				return eval.real(Struct.of(args)).intValueExact();
+			} else return 0;
 		}
 	}
 

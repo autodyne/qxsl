@@ -44,6 +44,9 @@ public final class CBinFormatTest extends test.RandTest {
 		modes.add(new Mode(  "FM"));
 		modes.add(new Mode( "SSB"));
 		modes.add(new Mode("RTTY"));
+		modes.add(new Mode("JT65"));
+		modes.add(new Mode( "FT8"));
+		modes.add(new Mode( "FT4"));
 	}
 	public static IntStream testMethodSource() {
 		return IntStream.range(0, 100);

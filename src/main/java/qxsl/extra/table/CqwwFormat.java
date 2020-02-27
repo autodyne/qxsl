@@ -55,6 +55,92 @@ public final class CqwwFormat extends BaseFormat {
 	}
 
 	/**
+	 * Cabrillo書式の周波数帯の列挙型です。
+	 * 
+	 * 
+	 * @author Journal of Hamradio Informatics
+	 * 
+	 * @since 2020/02/26
+	 *
+	 */
+	public enum BandEnum {
+		M1_8 ( "1800",       1_800),
+		M3_5 ( "3500",       3_500),
+		M7   ( "7000",       7_000),
+		M14  ("14000",      14_000),
+		M21  ("21000",      21_000),
+		M28  ("28000",      28_000),
+		M50  (   "50",      50_000),
+		M70  (   "70",      70_000),
+		M144 (  "144",     144_000),
+		M222 (  "222",     222_000),
+		M432 (  "432",     432_000),
+		M902 (  "902",     902_000),
+		G1_2 ( "1.2G",    1200_000),
+		G2_3 ( "2.3G",    2300_000),
+		G3_4 ( "3.4G",    3400_000),
+		G5_7 ( "5.7G",    5700_000),
+		G10  (  "10G",  10_000_000),
+		G24  (  "24G",  24_000_000),
+		G47  (  "47G",  47_000_000),
+		G75  (  "75G",  75_000_000),
+		G123 ( "123G", 123_000_000),
+		G134 ( "134G", 134_000_000),
+		G241 ( "241G", 241_000_000);
+
+		private final Band band;
+		private final String text;
+		private static BandEnum[] values;
+
+		private BandEnum(String text, int kHz) {
+			this.text = text;
+			this.band = new Band(kHz);
+		}
+
+		@Override
+		public String toString() {
+			return text;
+		}
+
+		/**
+		 * この列挙子に対応するバンドを返します。
+		 * 
+		 * @return バンド
+		 */
+		public Band toBand() {
+			return band;
+		}
+
+		/**
+		 * 指定された周波数に対応する列挙子を返します。
+		 * 
+		 * @param band 周波数
+		 * @return 対応する列挙子があれば返す
+		 */
+		public static BandEnum valueOf(Band band) {
+			if(values == null) values = values();
+			for(BandEnum b : values) {
+				if(b.band.equals(band)) return b;
+			}
+			return null;
+		}
+
+		/**
+		 * 指定された文字列に対応する列挙子を返します。
+		 * 
+		 * @param text 文字列
+		 * @return 対応する列挙子があれば返す
+		 */
+		public static BandEnum value(String text) {
+			if(values == null) values = values();
+			for(BandEnum b : values) {
+				if(b.text.equals(text)) return b;
+			}
+			return null;
+		}
+	}
+
+	/**
 	 * Cabrillo書式で直列化された交信記録をデコードします。
 	 * 
 	 * 
@@ -213,7 +299,7 @@ public final class CqwwFormat extends BaseFormat {
 		 * @param band 周波数帯の文字列
 		 */
 		private void band(Item item, String band) {
-			item.add(fields.cache(Qxsl.BAND).field(band));
+			item.add(BandEnum.value(band.trim()).toBand());
 		}
 
 		/**
@@ -268,7 +354,7 @@ public final class CqwwFormat extends BaseFormat {
 		 */
 		private void item(Item item) throws IOException {
 			print("QSO: ");
-			printR(5, (Band) item.get(Qxsl.BAND));
+			band((Band) item.get(Qxsl.BAND));
 			print(" ");
 			printR(2, (Mode) item.get(Qxsl.MODE));
 			print(" ");
@@ -307,18 +393,9 @@ public final class CqwwFormat extends BaseFormat {
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void band(Band band) throws IOException {
-			if(band != null) printf("%-5.5s", band.value());
-			else print("     ");
-		}
-
-		/**
-		 * 指定された備考を文字列として出力します。
-		 * 
-		 * @param note 出力する備考
-		 * @throws IOException 出力に失敗した場合
-		 */
-		private void note(Note note) throws IOException {
-			if(note != null) print(note.value());
+			BandEnum bands = BandEnum.valueOf(band);
+			if(bands == null) print("     ");
+			else printR(5, bands.toString());
 		}
 	}
 }

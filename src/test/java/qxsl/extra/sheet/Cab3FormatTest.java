@@ -35,6 +35,7 @@ public final class Cab3FormatTest extends test.RandTest {
 	private final TableFormats tables = new TableFormats();
 	private final ArrayList<Band> bands = new ArrayList<>();
 	public Cab3FormatTest() {
+		bands.add(new Band( 1_800));
 		bands.add(new Band( 3_500));
 		bands.add(new Band( 7_000));
 		bands.add(new Band(14_000));

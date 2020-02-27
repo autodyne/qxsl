@@ -8,7 +8,6 @@ package qxsl.ruler;
 import java.util.Iterator;
 import javax.script.ScriptException;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,26 +22,22 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  */
 public final class SectionTest extends test.RandTest {
-	public static Iterator<Section> sections() throws ScriptException {
+	static Iterator<Section> sections() throws ScriptException {
 		return new RuleKit().contest("allja1.lisp").iterator();
-	}
-	@Test
-	public void testContest() throws ScriptException {
-		assertThat(sections()).hasNext();
 	}
 	@ParameterizedTest
 	@MethodSource("sections")
-	public void testGetName(Section sect) throws ScriptException {
+	public void testGetName(Section sect) {
 		assertThat(sect.getName()).isNotBlank();
 	}
 	@ParameterizedTest
 	@MethodSource("sections")
-	public void testGetCode(Section sect) throws ScriptException {
+	public void testGetCode(Section sect) {
 		assertThat(sect.getCode()).isNotBlank();
 	}
 	@ParameterizedTest
 	@MethodSource("sections")
-	public void testToString(Section sect) throws ScriptException {
+	public void testToString(Section sect) {
 		assertThat(sect).hasToString(sect.getName());
 	}
 }
