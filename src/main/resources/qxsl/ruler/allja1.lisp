@@ -5,24 +5,6 @@
 ; UTC-JST conversion for ADIF
 (defun HOUR it (hour (qxsl-time it) "JST"))
 
-; JCC/JCG
-(defun peel-JCCG it
-	(car
-		(cdr
-			(tokenize
-				(if (話? it) "^.." "^...")
-				(qxsl-code it)))))
-(defun qxsl-JCCG it
-	(if
-		(null? (qxsl-rstq it))
-		(peel-JCCG it)
-		(qxsl-code it)))
-
-; conversion of JCC/JCG to city/prefecture name
-(defun 県 it (city "jarl" (qxsl-JCCG it) 0))
-(defun 市 it (city "jarl" (qxsl-JCCG it)))
-(defun 総 it (city "area" (県 it) 2))
-
 ; mode validation
 (defun 信? it (match "(?i)CW" (qxsl-mode it)))
 (defun 話? it (match "(?i)PH|FM|SSB" (qxsl-mode it)))
@@ -52,8 +34,27 @@
 ; validation of analog/digital sections
 (defun HB? it (forall it (朝? 連? 高?)))
 (defun LB? it (forall it (夜? 連? 低?)))
-(defun DB? it (forall it (昼? 離?)))
+(defun DS? it (forall it (昼? 離? 7MHz?)))
 (defun AB? it (or (HB? it) (LB? it)))
+(defun JS? it (or (HB? it) (LB? it) (DS? it)))
+
+; JCC/JCG
+(defun peel-JCCG it
+	(car
+		(cdr
+			(tokenize
+				(if (話? it) "^.." "^...")
+				(qxsl-code it)))))
+(defun qxsl-JCCG it
+	(if
+		(null? (qxsl-rstq it))
+		(peel-JCCG it)
+		(qxsl-code it)))
+
+; conversion of JCC/JCG to city/prefecture name
+(defun 県 it (city "jarl" (qxsl-JCCG it) 0))
+(defun 市 it (city "jarl" (qxsl-JCCG it)))
+(defun 総 it (city "area" (県 it) 2))
 
 ; JCC/JCG validation
 (defun 現存? it (not (null? (市 it))))
@@ -122,8 +123,9 @@
 ; section codes
 (setq HB "アナログ ハイバンド部門")
 (setq LB "アナログ ローバンド部門")
-(setq DB "デジタル 全周波数帯部門")
 (setq AB "アナログ 全周波数帯部門")
+(setq DS "デジタル 全周波数帯部門")
+(setq JS "総合部門")
 
 (contest "ALLJA1 TEST" scoring
 	(section "1エリア内 個人 電信限定 1.9MHz部門"         LB (verify (個? 内? 信? 1.9MHz? LB?) 個))
@@ -169,7 +171,12 @@
 	(section "1エリア外 団体 電信限定 部門"               AB (verify (団? 外? 信?         AB?) 団))
 	(section "1エリア外 団体 電信電話 部門"               AB (verify (団? 外?             AB?) 団))
 
-	(section "1エリア内 個人 デジタル 部門"               DB (verify (個? 内?       7MHz? DB?) 個))
-	(section "1エリア外 個人 デジタル 部門"               DB (verify (個? 外?       7MHz? DB?) 個))
-	(section "1エリア内 団体 デジタル 部門"               DB (verify (団? 内?       7MHz? DB?) 団))
-	(section "1エリア外 団体 デジタル 部門"               DB (verify (団? 外?       7MHz? DB?) 団)))
+	(section "1エリア内 個人 デジタル 部門"               DS (verify (個? 内?             DS?) 個))
+	(section "1エリア外 個人 デジタル 部門"               DS (verify (個? 外?             DS?) 個))
+	(section "1エリア内 団体 デジタル 部門"               DS (verify (団? 内?             DS?) 団))
+	(section "1エリア外 団体 デジタル 部門"               DS (verify (団? 外?             DS?) 団))
+
+	(section "1エリア内 個人 総合 部門"                   JS (verify (個? 内?             JS?) 個))
+	(section "1エリア外 個人 総合 部門"                   JS (verify (個? 外?             JS?) 個))
+	(section "1エリア内 団体 総合 部門"                   JS (verify (団? 内?             JS?) 団))
+	(section "1エリア外 団体 総合 部門"                   JS (verify (団? 外?             JS?) 団)))
