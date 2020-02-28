@@ -32,10 +32,10 @@
 1エリア外 個人 電信電話 50MHz部門,              53,   2226, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
 1エリア外 個人 電信限定 14/21/28/50MHz部門,    118,  12508, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
 1エリア外 個人 電信電話 14/21/28/50MHz部門,    145,  17690, adis,adxs,cbin,cqww,ctxt,jarl,zall,zbin,zdos
-1エリア内 団体 電信限定 部門,                  362,  14635, adis,adxs,cbin,zall,zbin,zdos
-1エリア内 団体 電信電話 部門,                  410,  18157, adis,adxs,cbin,zall,zbin,zdos
+1エリア内 団体 電信限定 部門,                  362,  14636, adis,adxs,cbin,zall,zbin,zdos
+1エリア内 団体 電信電話 部門,                  410,  18158, adis,adxs,cbin,zall,zbin,zdos
 1エリア外 団体 電信限定 部門,                  199,   5174, adis,adxs,cbin,zall,zbin,zdos
-1エリア外 団体 電信電話 部門,                  232,   6694, adis,adxs,cbin,zall,zbin,zdos
+1エリア外 団体 電信電話 部門,                  232,   6695, adis,adxs,cbin,zall,zbin,zdos
 1エリア内 団体 電信限定 部門,                    0,      0, cqww,ctxt,jarl
 1エリア内 団体 電信電話 部門,                    0,      0, cqww,ctxt,jarl
 1エリア外 団体 電信限定 部門,                    0,      0, cqww,ctxt,jarl
@@ -44,8 +44,8 @@
 1エリア外 個人 デジタル 部門,                   16,    240, adis,adxs,cbin,cqww,ctxt,jarl
 1エリア内 個人 デジタル 部門,                    0,      0, zall,zbin,zdos
 1エリア外 個人 デジタル 部門,                    0,      0, zall,zbin,zdos
-1エリア内 団体 デジタル 部門,                   66,    612, adis,adxs,cbin
-1エリア外 団体 デジタル 部門,                   16,     34, adis,adxs,cbin
+1エリア内 団体 デジタル 部門,                   66,    613, adis,adxs,cbin
+1エリア外 団体 デジタル 部門,                   16,     35, adis,adxs,cbin
 1エリア内 団体 デジタル 部門,                    0,      0, cqww,ctxt,jarl,zall,zbin,zdos
 1エリア外 団体 デジタル 部門,                    0,      0, cqww,ctxt,jarl,zall,zbin,zdos
 1エリア内 個人 総合 部門,                      476, 178024, adis,adxs,cbin,cqww,ctxt,jarl
@@ -53,8 +53,8 @@
 1エリア内 個人 総合 部門,                      410, 127100, zall,zbin,zdos
 1エリア外 個人 総合 部門,                      232,  46864, zall,zbin,zdos
 1エリア内 団体 総合 部門,                      476,  25432, adis,adxs,cbin
-1エリア外 団体 総合 部門,                      248,   7652, adis,adxs,cbin
-1エリア内 団体 総合 部門,                      410,  18157, zall,zbin,zdos
-1エリア外 団体 総合 部門,                      232,   6694, zall,zbin,zdos
+1エリア外 団体 総合 部門,                      248,   7653, adis,adxs,cbin
+1エリア内 団体 総合 部門,                      410,  18158, zall,zbin,zdos
+1エリア外 団体 総合 部門,                      232,   6695, zall,zbin,zdos
 1エリア内 団体 総合 部門,                        0,      0, cqww,ctxt,jarl
 1エリア外 団体 総合 部門,                        0,      0, cqww,ctxt,jarl

@@ -52,65 +52,67 @@
 (length (list 'HEAD 'NEXT 'TAIL)) 3
 
 ; member
-(member 'HEAD ()) false
-(member 'HEAD (list 'HEAD)) true
-(member 'HEAD (list 'HEAD 'TAIL)) true
-(member 'HEAD (list 'HEAD 'NEXT 'TAIL)) true
-(member 'NEXT (list 'HEAD)) false
-(member 'NEXT (list 'HEAD 'TAIL)) false
-(member 'NEXT (list 'HEAD 'NEXT 'TAIL)) true
-(member 'TAIL (list 'HEAD)) false
-(member 'TAIL (list 'HEAD 'TAIL)) true
-(member 'TAIL (list 'HEAD 'NEXT 'TAIL)) true
+(member 'HEAD ()) #f
+(member 'HEAD (list 'HEAD)) #t
+(member 'HEAD (list 'HEAD 'TAIL)) #t
+(member 'HEAD (list 'HEAD 'NEXT 'TAIL)) #t
+(member 'NEXT (list 'HEAD)) #f
+(member 'NEXT (list 'HEAD 'TAIL)) #f
+(member 'NEXT (list 'HEAD 'NEXT 'TAIL)) #t
+(member 'TAIL (list 'HEAD)) #f
+(member 'TAIL (list 'HEAD 'TAIL)) #t
+(member 'TAIL (list 'HEAD 'NEXT 'TAIL)) #t
 
 ; every
-(every (list true true)) true
-(every (list true false)) false
-(every (list false true)) false
-(every (list false false)) false
+(every (list #t #t)) #t
+(every (list #t #f)) #f
+(every (list #f #t)) #f
+(every (list #f #f)) #f
 
 ; some
-(some (list true true)) true
-(some (list true false)) true
-(some (list false true)) true
-(some (list false false)) false
+(some (list #t #t)) #t
+(some (list #t #f)) #t
+(some (list #f #t)) #t
+(some (list #f #f)) #f
 
 ; equal
-(equal 1 1) true
-(equal 1 2) false
-(equal "HEAD" "HEAD") true
-(equal "HEAD" "TAIL") false
-(equal (+ 1 2) (+ 3 0)) true
-(equal (+ 4 5) (+ 6 7)) false
+(equal 1 1) #t
+(equal 1 2) #f
+(equal "HEAD" "HEAD") #t
+(equal "HEAD" "TAIL") #f
+(equal (+ 1 2) (+ 3 0)) #t
+(equal (+ 4 5) (+ 6 7)) #f
 
 ; null?
-(null? 810) false
-(null? null) true
-(null? (car (list null null))) true
-(null? (cdr (list null null))) false
+(null? 810) #f
+(null? null) #t
+(null? (car (list null null))) #t
+(null? (cdr (list null null))) #f
 
 ; if
-(if true 'HEAD 'TAIL) 'HEAD
-(if false 'HEAD 'TAIL) 'TAIL
+(if #t 'HEAD 'TAIL) 'HEAD
+(if #f 'HEAD 'TAIL) 'TAIL
+(if #t (+ 114 514)) 628
+(if #f (* 114 514)) null
 (if (equal 28 28) (+ 114 514) (+ 364 364)) 628
 (if (equal 28 29) (+ 114 514) (+ 364 364)) 728
 
 ; and
-(and (equal 364 364) (equal 364 364)) true
-(and (equal 364 364) (equal 114 514)) false
-(and (equal 114 514) (equal 114 514)) false
-(and (equal 114 514) (equal 364 364)) false
+(and (equal 364 364) (equal 364 364)) #t
+(and (equal 364 364) (equal 114 514)) #f
+(and (equal 114 514) (equal 114 514)) #f
+(and (equal 114 514) (equal 364 364)) #f
 
 ; or
-(or (equal 364 364) (equal 364 364)) true
-(or (equal 364 364) (equal 114 514)) true
-(or (equal 114 514) (equal 114 514)) false
-(or (equal 114 514) (equal 364 364)) true
+(or (equal 364 364) (equal 364 364)) #t
+(or (equal 364 364) (equal 114 514)) #t
+(or (equal 114 514) (equal 114 514)) #f
+(or (equal 114 514) (equal 364 364)) #t
 
 ; not
-(not (equal 114 514)) true
-(not (not (equal 114 514))) false
-(not (not (not (equal 114 514)))) true
+(not (equal 114 514)) #t
+(not (not (equal 114 514))) #f
+(not (not (not (equal 114 514)))) #t
 
 ; +
 (+ 28 28) 56
@@ -129,41 +131,77 @@
 
 ; /
 (/ 28 28) 1
-(/ 364364 1919) 189
-(/ 889464 1919) 463
+(/ 364364 1919) 189.8718082334549
+(/ 889464 1919) 463.5039082855654
 
 ; mod
 (mod 28 28) 0
 (mod 364364 1919) 1673
 (mod 889464 1919)  967
 
+; ceiling
+(ceiling (+  5 0.5))  6
+(ceiling (+  2 0.5))  3
+(ceiling (+  1 0.6))  2
+(ceiling (+  1 0.1))  2
+(ceiling (+  1 0.0))  1
+(ceiling (- -1 0.0)) -1
+(ceiling (- -1 0.1)) -1
+(ceiling (- -1 0.6)) -1
+(ceiling (- -2 0.5)) -2
+(ceiling (- -5 0.5)) -5
+
+; floor
+(floor (+  5 0.5))  5
+(floor (+  2 0.5))  2
+(floor (+  1 0.6))  1
+(floor (+  1 0.1))  1
+(floor (+  1 0.0))  1
+(floor (- -1 0.0)) -1
+(floor (- -1 0.1)) -2
+(floor (- -1 0.6)) -2
+(floor (- -2 0.5)) -3
+(floor (- -5 0.5)) -6
+
+; round
+(round (+  5 0.5))  6
+(round (+  2 0.5))  3
+(round (+  1 0.6))  2
+(round (+  1 0.1))  1
+(round (+  1 0.0))  1
+(round (- -1 0.0)) -1
+(round (- -1 0.1)) -1
+(round (- -1 0.6)) -2
+(round (- -2 0.5)) -3
+(round (- -5 0.5)) -6
+
 ; <
-(< 114 115) true
-(< 115 115) false
-(< 115 114) false
-(< 1 2 3 4 5) true
-(< 1 2 3 2 5) false
+(< 114 115) #t
+(< 115 115) #f
+(< 115 114) #f
+(< 1 2 3 4 5) #t
+(< 1 2 3 2 5) #f
 
 ; >
-(> 114 115) false
-(> 115 115) false
-(> 115 114) true
-(> 5 4 3 2 1) true
-(> 5 4 2 3 1) false
+(> 114 115) #f
+(> 115 115) #f
+(> 115 114) #t
+(> 5 4 3 2 1) #t
+(> 5 4 2 3 1) #f
 
 ; <=
-(<= 114 115) true
-(<= 115 115) true
-(<= 115 114) false
-(<= 1 2 3 4 5) true
-(<= 1 2 3 2 5) false
+(<= 114 115) #t
+(<= 115 115) #t
+(<= 115 114) #f
+(<= 1 2 3 4 5) #t
+(<= 1 2 3 2 5) #f
 
 ; >=
-(>= 114 115) false
-(>= 115 115) true
-(>= 115 114) true
-(>= 5 4 3 2 1) true
-(>= 5 4 2 3 1) false
+(>= 114 115) #f
+(>= 115 115) #t
+(>= 115 114) #t
+(>= 5 4 3 2 1) #t
+(>= 5 4 2 3 1) #f
 
 ; format
 (format "%s %s" "MUR" "KMR") "MUR KMR"
@@ -188,8 +226,8 @@
 (string (syntax x (+ x x))) "(syntax (x) (+ x x))"
 
 ; match
-(match "\\d{6}" (if (equal 114 514) "114514" "364364")) true
-(match "\\D{6}" (if (equal 114 514) "114514" "364364")) false
+(match "\\d{6}" (if (equal 114 514) "114514" "364364")) #t
+(match "\\D{6}" (if (equal 114 514) "114514" "364364")) #f
 
 ; tokenize
 (tokenize "" "ABC") '("A" "B" "C")

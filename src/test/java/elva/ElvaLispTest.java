@@ -44,8 +44,8 @@ public final class ElvaLispTest extends test.RandTest {
 	}
 	@Test
 	public void testBool() throws ScriptException {
-		assertThat(elva.eval("true")).isEqualTo(!false);
-		assertThat(elva.eval("false")).isEqualTo(!true);
+		assertThat(elva.eval("#t")).isEqualTo(!false);
+		assertThat(elva.eval("#f")).isEqualTo(!true);
 	}
 	@Test
 	public void testString() throws ScriptException {

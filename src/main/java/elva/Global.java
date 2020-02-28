@@ -14,6 +14,7 @@ import javax.script.Bindings;
 import javax.script.SimpleBindings;
 
 import elva.ElvaLisp.ElvaRuntimeException;
+import static java.math.MathContext.DECIMAL64;
 
 /**
  * LISP処理系の大域変数のスコープを実装します。
@@ -28,10 +29,10 @@ final class Global extends SimpleBindings {
 	 * システム関数を定義するスコープを構築します。
 	 */
 	public Global() {
+		this.put("#t", true);
+		this.put("#f", false);
 		this.put("nil", Struct.NIL);
 		this.put("null", null);
-		this.put("true", true);
-		this.put("false", false);
 
 		/*
 		 * basic functions for syntax operation
@@ -105,7 +106,7 @@ final class Global extends SimpleBindings {
 		/*
 		 * conditional operators
 		 *
-		 * (if condition then else)
+		 * (if condition then [else])
 		 */
 		this.put(new $If());
 
@@ -134,6 +135,17 @@ final class Global extends SimpleBindings {
 		this.put(new $Mul());
 		this.put(new $Div());
 		this.put(new $Mod());
+
+		/*
+		 * basic functions for round operation
+		 *
+		 * (ceiling expressions)
+		 * (floor expressions)
+		 * (round expressions)
+		 */
+		this.put(new $Ceiling());
+		this.put(new $Floor());
+		this.put(new $Round());
 
 		/*
 		 * basic functions for numerical comparison
@@ -511,10 +523,13 @@ final class Global extends SimpleBindings {
 	 * @since 2017/02/27
 	 */
 	@Native("if")
-	@Params(min = 3, max = 3)
+	@Params(min = 2, max = 3)
 	private static final class $If extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			return eval.eval(args.get(eval.bool(args.car())? 1:2));
+			final var bool = eval.bool(args.car());
+			if(bool) return eval.eval(args.get(1));
+			if(args.size() == 2) return null;
+			else return eval.eval(args.get(2));
 		}
 	}
 
@@ -580,9 +595,9 @@ final class Global extends SimpleBindings {
 	@Params(min = 2, max = -1)
 	private static final class $Add extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			BigDecimal val = eval.real(args.car());
-			for(Object v: args.cdr()) val = val.add(eval.real(v));
-			return val;
+			final BigDecimal car = eval.real(args.get(0));
+			var cdr = args.cdr().stream().map(eval::real);
+			return cdr.reduce(car, BigDecimal::add);
 		}
 	}
 
@@ -598,9 +613,9 @@ final class Global extends SimpleBindings {
 	@Params(min = 2, max = -1)
 	private static final class $Sub extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			BigDecimal val = eval.real(args.car());
-			for(Object v: args.cdr()) val = val.subtract(eval.real(v));
-			return val;
+			final BigDecimal car = eval.real(args.get(0));
+			var cdr = args.cdr().stream().map(eval::real);
+			return cdr.reduce(car, BigDecimal::subtract);
 		}
 	}
 
@@ -616,9 +631,9 @@ final class Global extends SimpleBindings {
 	@Params(min = 2, max = -1)
 	private static final class $Mul extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			BigDecimal val = eval.real(args.car());
-			for(Object v: args.cdr()) val = val.multiply(eval.real(v));
-			return val;
+			final BigDecimal car = eval.real(args.get(0));
+			var cdr = args.cdr().stream().map(eval::real);
+			return cdr.reduce(car, BigDecimal::multiply);
 		}
 	}
 
@@ -633,11 +648,10 @@ final class Global extends SimpleBindings {
 	@Native("/")
 	@Params(min = 2, max = -1)
 	private static final class $Div extends Function {
-		private final RoundingMode MODE = RoundingMode.FLOOR;
 		public Object apply(Struct args, Kernel eval) {
-			BigDecimal val = eval.real(args.car());
-			for(Object v: args.cdr()) val = val.divide(eval.real(v), MODE);
-			return val;
+			final BigDecimal car = eval.real(args.get(0));
+			var cdr = args.cdr().stream().map(eval::real);
+			return cdr.reduce(car, (l, r) -> l.divide(r, DECIMAL64));
 		}
 	}
 
@@ -653,9 +667,60 @@ final class Global extends SimpleBindings {
 	@Params(min = 2, max = -1)
 	private static final class $Mod extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			BigDecimal val = eval.real(args.car());
-			for(Object v: args.cdr()) val = val.remainder(eval.real(v));
-			return val;
+			final BigDecimal car = eval.real(args.get(0));
+			var cdr = args.cdr().stream().map(eval::real);
+			return cdr.reduce(car, BigDecimal::remainder);
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義される切り上げ演算子です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2020/02/28
+	 */
+	@Native("ceiling")
+	@Params(min = 1, max = 1)
+	private static final class $Ceiling extends Function {
+		public Object apply(Struct args, Kernel eval) {
+			final BigDecimal val = eval.real(args.car());
+			return val.setScale(0, RoundingMode.CEILING);
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義される切り捨て演算子です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2020/02/28
+	 */
+	@Native("floor")
+	@Params(min = 1, max = 1)
+	private static final class $Floor extends Function {
+		public Object apply(Struct args, Kernel eval) {
+			final BigDecimal val = eval.real(args.car());
+			return val.setScale(0, RoundingMode.FLOOR);
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義される四捨五入演算子です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2020/02/28
+	 */
+	@Native("round")
+	@Params(min = 1, max = 1)
+	private static final class $Round extends Function {
+		public Object apply(Struct args, Kernel eval) {
+			final BigDecimal val = eval.real(args.car());
+			return val.setScale(0, RoundingMode.HALF_UP);
 		}
 	}
 

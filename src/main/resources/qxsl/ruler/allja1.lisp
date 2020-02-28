@@ -79,7 +79,7 @@
 (defun 外? it (and (現存? it) (関? it) (市郡? it)))
 
 ;; validation of 個人部門/団体部門
-(defun 個? it true)
+(defun 個? it #t)
 (defun 団? it (not (null? (qxsl-name it))))
 
 ; keys for scoring
@@ -108,7 +108,7 @@
 	`(progn
 		(setq mults (length (quote ,mults)))
 		(setq names (length (quote ,names)))
-		(/ (* ,score mults) names)))
+		(ceiling (/ (* ,score mults) names))))
 
 ; validation routine
 (defmacro verify (conds keys)
