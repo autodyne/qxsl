@@ -162,13 +162,24 @@ public final class Struct extends AbstractList<Object> {
 	}
 
 	/**
-	 * このリストの文字列による表現を返します。
+	 * このリストの要素を文字列による表現に変換します。
+	 *
+	 * @param el 要素
+	 * @return 文字列表現
+	 */
+	private final String printElement(Object el) {
+		if(!(el instanceof String)) return String.valueOf(el);
+		return "\"".concat((String) el).concat("\"");
+	}
+
+	/**
+	 * このリストの内容を文字列による表現に変換します。
 	 *
 	 * @return 文字列表現
 	 */
 	@Override
 	public final String toString() {
-		Stream<String> strm = stream().map(Objects::toString);
+		Stream<String> strm = stream().map(this::printElement);
 		return strm.collect(Collectors.joining(" ", "(", ")"));
 	}
 }

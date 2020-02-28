@@ -433,7 +433,7 @@ final class Global extends SimpleBindings {
 	@Params(min = 2, max = 2)
 	private static final class $Member extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			final Object val = eval.eval(args.car());
+			final Object val = eval.eval(args.get(0));
 			final Struct seq = eval.list(args.get(1));
 			return seq.contains(val);
 		}
@@ -742,13 +742,13 @@ final class Global extends SimpleBindings {
 	@Params(min = 2, max = -1)
 	private static final class $Lt extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			BigDecimal left = eval.real(args.car());
-			for(Object sexp: args.cdr()) {
+			var prev = eval.real(args.car());
+			var flag = true;
+			for(var sexp: args.cdr()) {
 				final BigDecimal next = eval.real(sexp);
-				if(left.compareTo(next) >= 0) return false;
-				left = next;
+				flag &= prev.compareTo(prev = next) < 0;
 			}
-			return true;
+			return flag;
 		}
 	}
 
@@ -764,13 +764,13 @@ final class Global extends SimpleBindings {
 	@Params(min = 2, max = -1)
 	private static final class $Gt extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			BigDecimal left = eval.real(args.car());
-			for(Object sexp: args.cdr()) {
+			var prev = eval.real(args.car());
+			var flag = true;
+			for(var sexp: args.cdr()) {
 				final BigDecimal next = eval.real(sexp);
-				if(left.compareTo(next) <= 0) return false;
-				left = next;
+				flag &= prev.compareTo(prev = next) > 0;
 			}
-			return true;
+			return flag;
 		}
 	}
 
@@ -786,13 +786,13 @@ final class Global extends SimpleBindings {
 	@Params(min = 2, max = -1)
 	private static final class $Le extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			BigDecimal left = eval.real(args.car());
-			for(Object sexp: args.cdr()) {
+			var prev = eval.real(args.car());
+			var flag = true;
+			for(var sexp: args.cdr()) {
 				final BigDecimal next = eval.real(sexp);
-				if(left.compareTo(next) > 0) return false;
-				left = next;
+				flag &= prev.compareTo(prev = next) <= 0;
 			}
-			return true;
+			return flag;
 		}
 	}
 
@@ -808,13 +808,13 @@ final class Global extends SimpleBindings {
 	@Params(min = 2, max = -1)
 	private static final class $Ge extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			BigDecimal left = eval.real(args.car());
-			for(Object sexp: args.cdr()) {
+			var prev = eval.real(args.car());
+			var flag = true;
+			for(var sexp: args.cdr()) {
 				final BigDecimal next = eval.real(sexp);
-				if(left.compareTo(next) < 0) return false;
-				left = next;
+				flag &= prev.compareTo(prev = next) >= 0;
 			}
-			return true;
+			return flag;
 		}
 	}
 
@@ -831,7 +831,8 @@ final class Global extends SimpleBindings {
 	private static final class $Format extends Function {
 		public Object apply(Struct args, Kernel eval) {
 			final var temp = eval.text(args.car());
-			final var vals = args.cdr().stream().map(eval::eval);
+			final var strm = args.cdr(1).stream();
+			final var vals = strm.map(eval::eval);
 			return String.format(temp, vals.toArray());
 		}
 	}
@@ -899,8 +900,8 @@ final class Global extends SimpleBindings {
 	@Params(min = 2, max = 2)
 	private static final class $Match extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			final String regex = eval.text(args.car());
-			final String text = eval.text(args.get(1));
+			final var regex = eval.text(args.car());
+			final var text = eval.text(args.get(1));
 			return text.matches(regex);
 		}
 	}
@@ -919,7 +920,7 @@ final class Global extends SimpleBindings {
 		public Object apply(Struct args, Kernel eval) {
 			final String regex = eval.text(args.car());
 			final String text = eval.text(args.get(1));
-			return Struct.of((Object[]) text.split(regex));
+			return Struct.of(List.of(text.split(regex)));
 		}
 	}
 
