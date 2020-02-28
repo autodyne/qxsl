@@ -194,8 +194,7 @@ public final class RuleKit {
 		public int score(Summary sum) throws RuntimeException {
 			if (sum.score() > 0) {
 				final var args = new ArrayList<Object>();
-				args.add(rule);
-				args.add(BigDecimal.valueOf(sum.score()));
+				args.addAll(Struct.of(rule, sum.score()));
 				for (var ms: sum.mults()) args.add(Struct.of(ms));
 				return eval.real(Struct.of(args)).intValueExact();
 			} else return 0;
@@ -543,7 +542,7 @@ public final class RuleKit {
 		public Object apply(Struct args, Kernel eval) {
 			ZonedDateTime time = eval.eval(args.car(), ZonedDateTime.class);
 			ZoneId id = ZoneId.of(eval.text(args.get(1)), ZoneId.SHORT_IDS);
-			return BigDecimal.valueOf(time.withZoneSameInstant(id).getHour());
+			return time.withZoneSameInstant(id).getHour();
 		}
 	}
 

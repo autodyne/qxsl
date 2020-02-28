@@ -35,6 +35,18 @@ public final class Kernel {
 	}
 
 	/**
+	 * 指定された式の値を求めて{@link Object}として返します。
+	 *
+	 * @param sexp 式
+	 * @return 返り値 nullの場合は例外を発生させる
+	 *
+	 * @throws ElvaRuntimeException 評価により発生した例外
+	 */
+	public Object some(Object sexp) {
+		return eval(sexp, Object.class);
+	}
+
+	/**
 	 * 指定された式の値を求めて{@link Symbol}として返します。
 	 *
 	 * @param sexp 式
@@ -91,7 +103,11 @@ public final class Kernel {
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
 	public BigDecimal real(Object sexp) {
-		return eval(sexp, BigDecimal.class);
+		final var val = eval(sexp, Number.class);
+		final var lg = val instanceof Long;
+		if(val instanceof BigDecimal) return (BigDecimal) val;
+		if(lg) return BigDecimal.valueOf(val.longValue());
+		else return BigDecimal.valueOf(val.doubleValue());
 	}
 
 	/**

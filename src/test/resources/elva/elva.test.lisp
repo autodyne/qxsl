@@ -46,10 +46,10 @@
 (cdr (list 'HEAD 'NEXT 'TAIL)) (list 'NEXT 'TAIL)
 
 ; length
-(length ()) 0
-(length (list 'HEAD)) 1
-(length (list 'HEAD 'TAIL)) 2
-(length (list 'HEAD 'NEXT 'TAIL)) 3
+(number (length ())) 0
+(number (length (list 'HEAD))) 1
+(number (length (list 'HEAD 'TAIL))) 2
+(number (length (list 'HEAD 'NEXT 'TAIL))) 3
 
 ; member
 (member 'HEAD ()) #f

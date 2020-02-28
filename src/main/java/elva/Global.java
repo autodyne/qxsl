@@ -417,7 +417,7 @@ final class Global extends SimpleBindings {
 	@Params(min = 1, max = 1)
 	private static final class $Length extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			return BigDecimal.valueOf(eval.list(args.car()).size());
+			return eval.list(args.car()).size();
 		}
 	}
 
@@ -485,15 +485,21 @@ final class Global extends SimpleBindings {
 	@Params(min = 2, max = 2)
 	private static final class $Equal extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			final Object l = eval.eval(args.get(0));
-			final Object r = eval.eval(args.get(1));
+			final var l = eval.eval(args.get(0));
+			final var r = eval.eval(args.get(1));
 			if(l == null) return r == null;
+			if(!(l instanceof Number)) return l.equals(r);
+			if(!(r instanceof Number)) return l.equals(r);
 			try {
-				final BigDecimal lbd = (BigDecimal) l;
-				final BigDecimal rbd = (BigDecimal) r;
-				return lbd.compareTo(rbd) == 0;
-			} catch (ClassCastException ex) {
-				return l.equals(r);
+				final var lBD = (BigDecimal) l;
+				final var rBD = (BigDecimal) r;
+				return lBD.compareTo(rBD) == 0;
+			} catch(ClassCastException ex) {
+				final var lD = ((Number) l).doubleValue();
+				final var rD = ((Number) r).doubleValue();
+				final var lL = ((Number) l).longValue();
+				final var rL = ((Number) r).longValue();
+				return (lD == rD)? lL == rL: false;
 			}
 		}
 	}
@@ -861,7 +867,7 @@ final class Global extends SimpleBindings {
 	@Params(min = 1, max = 1)
 	private static final class $Number extends Function {
 		public Object apply(Struct args, Kernel eval) {
-			return new BigDecimal(eval.text(args.car()));
+			return new BigDecimal(eval.some(args.car()).toString());
 		}
 	}
 

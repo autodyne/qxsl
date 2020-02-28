@@ -20,6 +20,13 @@ import qxsl.model.Item;
  */
 public abstract class Section implements Function<Item, Message> {
 	/**
+	 * 秘匿されたコンストラクタです。
+	 *
+	 * @since 2020/02/28
+	 */
+	Section() {}
+
+	/**
 	 * 部門の名前を返します。
 	 *
 	 * @return 部門の名前

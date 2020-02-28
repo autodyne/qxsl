@@ -19,6 +19,13 @@ import qxsl.model.Item;
  */
 public abstract class Handler implements Function<Item, Item> {
 	/**
+	 * 秘匿されたコンストラクタです。
+	 *
+	 * @since 2020/02/28
+	 */
+	Handler() {}
+
+	/**
 	 * 手続きの名前を返します。
 	 *
 	 * @return 手続きの名前

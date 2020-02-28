@@ -17,6 +17,13 @@ import java.util.Iterator;
  */
 public abstract class Contest implements Iterable<Section> {
 	/**
+	 * 秘匿されたコンストラクタです。
+	 *
+	 * @since 2020/02/28
+	 */
+	Contest() {}
+
+	/**
 	 * コンテスト名を返します。
 	 *
 	 * @return コンテスト名
