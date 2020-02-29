@@ -87,11 +87,11 @@ The class `RuleKit` provides a LISP engine optimized for this process.
 
 ```Scala
 import java.io.StringReader
-import qxsl.ruler.{RuleKit,Section,Summary}
+import qxsl.ruler.{Contest,RuleKit,Section,Summary}
 
-val contest = new RuleKit().contest(new StringReader("""
+val contest: Contest = new RuleKit().contest(new StringReader("""
 (contest "CQ AWESOME CONTEST"
-	(syntax (score calls mults) `(* scores (length quote ,mults)))
+  (syntax (score calls mults) `(* scores (length quote ,mults)))
   (section "CW 14MHz SINGLE-OP" "CW14SIN" (verify (CW? 14MHz?)))
   (section "CW 21MHz SINGLE-OP" "CW21SIN" (verify (CW? 21MHz?)))
   (section "CW 28MHz SINGLE-OP" "CW28SIN" (verify (CW? 28MHz?)))
@@ -99,7 +99,7 @@ val contest = new RuleKit().contest(new StringReader("""
   (section "PH 21MHz SINGLE-OP" "PH21SIN" (verify (PH? 21MHz?)))
   (section "PH 28MHz SINGLE-OP" "PH28SIN" (verify (PH? 28MHz?))))"""))
 
-val section: Section = contest.getSection("CW 14MHz")
+val section: Section = contest.getSection("CW 14MHz SINGLE-OP")
 val summary: Summary = section.summarize(table)
 summary.accepted.asScala.foreach(println)
 summary.rejected.asScala.foreach(println)
