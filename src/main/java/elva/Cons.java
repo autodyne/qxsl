@@ -6,10 +6,8 @@
 package elva;
 
 import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -22,10 +20,15 @@ import java.util.stream.Stream;
  *
  * @since 2017/02/18
  */
-public final class Struct extends AbstractList<Object> {
-	private final Object head;
-	private final Struct tail;
+public final class Cons extends AbstractList<Sexp> implements Sexp {
+	private final Sexp head;
+	private final Cons tail;
 	private final int size;
+
+	/**
+	 * 内容が空のリストを示す特別なインスタンスです。
+	 */
+	public static final Cons NIL = new Cons();
 
 	/**
 	 * 先頭と末尾の構成要素を指定してリストを構築します。
@@ -33,7 +36,7 @@ public final class Struct extends AbstractList<Object> {
 	 * @param head 先頭の要素
 	 * @param tail 末尾の要素
 	 */
-	public Struct(Object head, Struct tail) {
+	protected Cons(Sexp head, Cons tail) {
 		this.head = head;
 		this.tail = tail == null? NIL: tail;
 		this.size = this.tail.size + 1;
@@ -42,25 +45,30 @@ public final class Struct extends AbstractList<Object> {
 	/**
 	 * {@link #NIL}のための専用のコンストラクタです。
 	 */
-	private Struct() {
+	private Cons() {
 		this.head = null;
 		this.tail = null;
 		this.size = 0;
 	}
 
 	/**
-	 * 内容が空のリストを示す特別なインスタンスです。
-	 */
-	public static final Struct NIL = new Struct();
-
-	/**
 	 * 指定された要素を持つ引用式を構築します。
 	 *
-	 * @param quote 引用演算子
-	 * @param value 要素
+	 * @param head 引用演算子
+	 * @param tail 演算子の引数
 	 */
-	public Struct(Quotes quote, Object value) {
-		this(quote.toSymbol(), Struct.of(value));
+	protected Cons(Quotes head, Sexp tail) {
+		this(new Atom(head.toSymbol()), cons(tail));
+	}
+
+	/**
+	 * リスト自体を返します。
+	 *
+	 * @return リスト
+	 */
+	@Override
+	public final Cons value() {
+		return this;
 	}
 
 	/**
@@ -69,9 +77,9 @@ public final class Struct extends AbstractList<Object> {
 	 * @param list 値
 	 * @return リスト
 	 */
-	public static final Struct as(Object list) {
-		if(list instanceof Struct) return (Struct) list;
-		return Struct.of(list);
+	public static final Cons cast(Sexp list) {
+		if(list instanceof Cons) return (Cons) list;
+		return Cons.cons(list);
 	}
 
 	/**
@@ -80,33 +88,43 @@ public final class Struct extends AbstractList<Object> {
 	 * @param vals 要素
 	 * @return リスト 空の場合は{@link #NIL}
 	 */
-	public static final Struct of(Object...vals) {
-		return Struct.of(Arrays.asList(vals));
+	public static final Cons cons(Sexp...vals) {
+		return Cons.cons(List.of(vals));
 	}
 
 	/**
 	 * 指定された要素を持つリストを構築します。
 	 *
 	 * @param vals 要素
-	 * @param <E> 要素の総称型
 	 * @return リスト 空の場合は{@link #NIL}
 	 */
-	public static final <E> Struct of(Set<E> vals) {
-		return Struct.of(new ArrayList<E>(vals));
-	}
-
-	/**
-	 * 指定された要素を持つリストを構築します。
-	 *
-	 * @param vals 要素
-	 * @param <E> 要素の総称型
-	 * @return リスト 空の場合は{@link #NIL}
-	 */
-	public static final <E> Struct of(List<E> vals) {
+	public static final Cons cons(List<Sexp> vals) {
 		final int size = vals.size();
-		if(size == 0) return Struct.NIL;
-		final Object head = vals.get(0);
-		return new Struct(head, of(vals.subList(1, size)));
+		if(size == 0) return Cons.NIL;
+		final Sexp head = vals.get(0);
+		return new Cons(head, cons(vals.subList(1, size)));
+	}
+
+	/**
+	 * 指定された要素を{@link Sexp}に包んでリストを構築します。
+	 *
+	 * @param vals 要素
+	 * @return リスト 空の場合は{@link #NIL}
+	 */
+	public static final Cons wrap(Object...vals) {
+		var strm = Stream.of(vals).map(Sexp::wrap);
+		return Cons.cons(strm.toArray(Sexp[]::new));
+	}
+
+	/**
+	 * 指定された要素を{@link Sexp}に包んでリストを構築します。
+	 *
+	 * @param vals 要素
+	 * @return リスト 空の場合は{@link #NIL}
+	 */
+	public static final <E> Cons wrap(Collection<E> vals) {
+		var strm = vals.stream().map(Sexp::wrap);
+		return Cons.cons(strm.toArray(Sexp[]::new));
 	}
 
 	/**
@@ -114,7 +132,7 @@ public final class Struct extends AbstractList<Object> {
 	 *
 	 * @return CAR部
 	 */
-	public final Object car() {
+	public final Sexp car() {
 		return this == NIL? NIL: head;
 	}
 
@@ -123,7 +141,7 @@ public final class Struct extends AbstractList<Object> {
 	 *
 	 * @return CDR部
 	 */
-	public final Struct cdr() {
+	public final Cons cdr() {
 		return this == NIL? NIL: tail;
 	}
 
@@ -133,8 +151,8 @@ public final class Struct extends AbstractList<Object> {
 	 * @param num CDRを辿る回数
 	 * @return CDR部
 	 */
-	public final Struct cdr(int num) {
-		Struct cdr = this;
+	public final Cons cdr(int num) {
+		Cons cdr = this;
 		for(int n = 0; n < num; n++) cdr = cdr.cdr();
 		return cdr;
 	}
@@ -145,7 +163,7 @@ public final class Struct extends AbstractList<Object> {
 	 * @param index 要素の位置
 	 * @return 要素
 	 */
-	public final Object get(int index) {
+	public final Sexp get(int index) {
 		if(index == 0) return car();
 		if(index >= 0) return tail.get(index -1);
 		final String msg = String.valueOf(index);
@@ -162,24 +180,23 @@ public final class Struct extends AbstractList<Object> {
 	}
 
 	/**
-	 * このリストの要素を文字列による表現に変換します。
-	 *
-	 * @param el 要素
-	 * @return 文字列表現
-	 */
-	private final String printElement(Object el) {
-		if(!(el instanceof String)) return String.valueOf(el);
-		return "\"".concat((String) el).concat("\"");
-	}
-
-	/**
 	 * このリストの内容を文字列による表現に変換します。
 	 *
 	 * @return 文字列表現
 	 */
 	@Override
 	public final String toString() {
-		Stream<String> strm = stream().map(this::printElement);
+		Stream<String> strm = stream().map(Sexp::toString);
 		return strm.collect(Collectors.joining(" ", "(", ")"));
+	}
+
+	/**
+	 * このリストが識別子のみで構成されるか確認します。
+	 *
+	 * @return 識別子以外の要素を含む場合にtrue
+	 */
+	public final boolean containsOnlySymbols() {
+		for(Sexp sexp: this) if(!sexp.isSymbol()) return false;
+		return true;
 	}
 }

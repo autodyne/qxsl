@@ -25,11 +25,11 @@ enum Quotes {
 	}
 
 	@Override
-	public String toString() {
+	public final String toString() {
 		return name.toString();
 	}
 
-	public Symbol toSymbol() {
+	public final Symbol toSymbol() {
 		return name;
 	}
 }

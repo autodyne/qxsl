@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.script.*;
 
 import static javax.script.ScriptContext.ENGINE_SCOPE;
@@ -25,13 +26,13 @@ import static javax.script.ScriptContext.GLOBAL_SCOPE;
  *
  * @since 2019/05/17
  */
-public final class ElvaLisp extends AbstractScriptEngine {
+public final class Elva extends AbstractScriptEngine {
 	private final Bindings root;
 
 	/**
 	 * LISP処理系を構築します。
 	 */
-	public ElvaLisp() {
+	public Elva() {
 		this.root = new Global();
 	}
 
@@ -82,13 +83,13 @@ public final class ElvaLisp extends AbstractScriptEngine {
 	 */
 	@Override
 	public Object eval(String s, ScriptContext c) throws ScriptException {
-		final Nested glob = new Nested(c.getBindings(GLOBAL_SCOPE), root);
-		final Nested self = new Nested(c.getBindings(ENGINE_SCOPE), glob);
-		final Kernel eval = new Kernel(self);
+		final var glob = new Nested(c.getBindings(GLOBAL_SCOPE), root);
+		final var self = new Nested(c.getBindings(ENGINE_SCOPE), glob);
+		final var eval = new Eval(self);
 		try {
-			Object last = null;
-			for(Object sexp: scan(s)) last = eval.eval(sexp);
-			return last;
+			final var vals = scan(s).stream().map(eval::eval);
+			final var val = vals.reduce((prev, next) -> next);
+			return val.map(Sexp::value).orElse(null);
 		} catch (ElvaRuntimeException ex) {
 			throw ex.toScriptException();
 		}
@@ -102,7 +103,7 @@ public final class ElvaLisp extends AbstractScriptEngine {
 	 * 
 	 * @throws ScriptException 式の構文上の例外
 	 */
-	public final List<Object> scan(Reader r) throws ScriptException {
+	public final List<Sexp> scan(Reader r) throws ScriptException {
 		try(BufferedReader br = new BufferedReader(r)) {
 			return scan(br.lines().collect(Collectors.joining("\n")));
 		} catch (IOException ex) {
@@ -118,10 +119,10 @@ public final class ElvaLisp extends AbstractScriptEngine {
 	 * 
 	 * @throws ScriptException 式の構文上の例外
 	 */
-	public final List<Object> scan(String s) throws ScriptException {
-		final List<Object> exps = new ArrayList<>();
+	public final List<Sexp> scan(String s) throws ScriptException {
+		final List<Sexp> exps = new ArrayList<>();
 		try {
-			final Parser scan = new Parser(s);
+			final var scan = new Tokens(s);
 			while(scan.hasNext()) exps.add(scan.next());
 			return exps;
 		} catch (IOException ex) {
@@ -149,7 +150,7 @@ public final class ElvaLisp extends AbstractScriptEngine {
 		 * @param message 例外の内容
 		 * @param parser 構文解析器
 		 */
-		public ElvaLexicalException(String message, Parser parser) {
+		public ElvaLexicalException(String message, Tokens parser) {
 			super(String.format(TEMP, message, parser.getLocal()));
 		}
 	}
@@ -185,7 +186,7 @@ public final class ElvaLisp extends AbstractScriptEngine {
 		 * @param sexp 追加する式
 		 * @return この例外
 		 */
-		public final ElvaRuntimeException add(Object sexp) {
+		public final ElvaRuntimeException add(Sexp sexp) {
 			this.trace.add(String.format(" at: '%s'", sexp));
 			return this;
 		}

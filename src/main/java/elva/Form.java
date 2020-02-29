@@ -15,7 +15,7 @@ import java.util.function.BiFunction;
  *
  * @since 2019/05/15
  */
-public abstract class Function implements BiFunction<Struct, Kernel, Object> {
+public abstract class Form implements BiFunction<Cons, Eval, Object> {
 	/**
 	 * 指定された実引数と評価器に対し、返り値を求めます。
 	 *
@@ -23,7 +23,7 @@ public abstract class Function implements BiFunction<Struct, Kernel, Object> {
 	 * @param eval 評価器
 	 * @return 返り値
 	 */
-	public abstract Object apply(Struct args, Kernel eval);
+	public abstract Object apply(Cons args, Eval eval);
 
 	/**
 	 * この関数の名前を注釈{@link Native}経由で返します。

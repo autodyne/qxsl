@@ -32,6 +32,7 @@ public final class Symbol implements Serializable {
 	 *
 	 * @return 名前
 	 */
+	@Override
 	public final String toString() {
 		return id;
 	}
@@ -41,6 +42,7 @@ public final class Symbol implements Serializable {
 	 *
 	 * @return ハッシュ値
 	 */
+	@Override
 	public final int hashCode() {
 		return id.hashCode();
 	}
@@ -52,6 +54,7 @@ public final class Symbol implements Serializable {
 	 * @param obj 比較対象のオブジェクト
 	 * @return 同じ名前の識別子のみtrue
 	 */
+	@Override
 	public final boolean equals(Object obj) {
 		if (!(obj instanceof Symbol)) return false;
 		return obj.toString().equals(toString());

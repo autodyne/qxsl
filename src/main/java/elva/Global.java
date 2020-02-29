@@ -13,7 +13,7 @@ import java.util.List;
 import javax.script.Bindings;
 import javax.script.SimpleBindings;
 
-import elva.ElvaLisp.ElvaRuntimeException;
+import elva.Elva.ElvaRuntimeException;
 import static java.math.MathContext.DECIMAL64;
 
 /**
@@ -31,7 +31,7 @@ final class Global extends SimpleBindings {
 	public Global() {
 		this.put("#t", true);
 		this.put("#f", false);
-		this.put("nil", Struct.NIL);
+		this.put("nil", Cons.NIL);
 		this.put("null", null);
 
 		/*
@@ -202,7 +202,7 @@ final class Global extends SimpleBindings {
 	 *
 	 * @param func 登録する関数
 	 */
-	private final void put(Function func) {
+	private final void put(Form func) {
 		this.put(func.toString(), func);
 	}
 
@@ -230,8 +230,8 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("quote")
 	@Params(min = 1, max = 1)
-	private static final class $Quote extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Quote extends Form {
+		public Object apply(Cons args, Eval eval) {
 			return args.car();
 		}
 	}
@@ -246,9 +246,9 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("quasiquote")
 	@Params(min = 1, max = 1)
-	private static final class $Quasi extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			return eval.uquote(args.car()).sexp();
+	private static final class $Quasi extends Form {
+		public Object apply(Cons args, Eval eval) {
+			return eval.qquote(args.car()).sexp();
 		}
 	}
 
@@ -262,8 +262,8 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("unquote")
 	@Params(min = 1, max = 1)
-	private static final class $Uquot extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Uquot extends Form {
+		public Object apply(Cons args, Eval eval) {
 			return eval.eval(args.car());
 		}
 	}
@@ -278,8 +278,8 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("unquote-splicing")
 	@Params(min = 1, max = 1)
-	private static final class $Uqspl extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Uqspl extends Form {
+		public Object apply(Cons args, Eval eval) {
 			return eval.eval(args.car());
 		}
 	}
@@ -294,11 +294,10 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("progn")
 	@Params(min = 1, max = -1)
-	private static final class $Progn extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			Object last = null;
-			for(Object v: args) last = eval.eval(v);
-			return last;
+	private static final class $Progn extends Form {
+		public Object apply(Cons args, Eval eval) {
+			final var vals = args.stream().map(eval::eval);
+			return vals.reduce((car, s) -> s).orElse(null);
 		}
 	}
 
@@ -312,8 +311,8 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("set")
 	@Params(min = 2, max = 2)
-	private static final class $Set extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Set extends Form {
+		public Object apply(Cons args, Eval eval) {
 			final var name = eval.name(args.car());
 			final var val = eval.eval(args.get(1));
 			eval.scope.put(name, val);
@@ -331,8 +330,8 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("eval")
 	@Params(min = 1, max = 1)
-	private static final class $Eval extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Eval extends Form {
+		public Object apply(Cons args, Eval eval) {
 			return eval.eval(eval.eval(args.car()));
 		}
 	}
@@ -347,11 +346,11 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("cons")
 	@Params(min = 2, max = 2)
-	private static final class $Cons extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			final Object head = eval.eval(args.car());
-			final Struct tail = eval.list(args.get(1));
-			return new Struct(head, tail);
+	private static final class $Cons extends Form {
+		public Object apply(Cons args, Eval eval) {
+			final var head = eval.eval(args.get(0));
+			final var tail = eval.eval(args.get(1));
+			return new Cons(head, tail.cons());
 		}
 	}
 
@@ -365,11 +364,11 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("list")
 	@Params(min = 0, max = -1)
-	private static final class $List extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			final List<Object> seq = new LinkedList<>();
-			for(Object el: args) seq.add(eval.eval(el));
-			return Struct.of(seq);
+	private static final class $List extends Form {
+		public Object apply(Cons args, Eval eval) {
+			final List<Sexp> seq = new LinkedList<>();
+			for(Sexp el: args) seq.add(eval.eval(el));
+			return Cons.cons(seq);
 		}
 	}
 
@@ -383,9 +382,9 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("car")
 	@Params(min = 1, max = 1)
-	private static final class $Car extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			return eval.list(args.car()).car();
+	private static final class $Car extends Form {
+		public Object apply(Cons args, Eval eval) {
+			return eval.eval(args.car()).cons().car();
 		}
 	}
 
@@ -399,9 +398,9 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("cdr")
 	@Params(min = 1, max = 1)
-	private static final class $Cdr extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			return eval.list(args.car()).cdr();
+	private static final class $Cdr extends Form {
+		public Object apply(Cons args, Eval eval) {
+			return eval.eval(args.car()).cons().cdr();
 		}
 	}
 
@@ -415,9 +414,9 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("length")
 	@Params(min = 1, max = 1)
-	private static final class $Length extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			return eval.list(args.car()).size();
+	private static final class $Length extends Form {
+		public Object apply(Cons args, Eval eval) {
+			return eval.eval(args.car()).cons().size();
 		}
 	}
 
@@ -431,11 +430,11 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("member")
 	@Params(min = 2, max = 2)
-	private static final class $Member extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			final Object val = eval.eval(args.get(0));
-			final Struct seq = eval.list(args.get(1));
-			return seq.contains(val);
+	private static final class $Member extends Form {
+		public Object apply(Cons args, Eval eval) {
+			final Sexp val = eval.eval(args.get(0));
+			final Sexp seq = eval.eval(args.get(1));
+			return seq.cons().contains(val);
 		}
 	}
 
@@ -449,10 +448,10 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("every")
 	@Params(min = 1, max = 1)
-	private static final class $Every extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			final Struct seq = eval.list(args.car());
-			return seq.stream().allMatch(Boolean.TRUE::equals);
+	private static final class $Every extends Form {
+		public Object apply(Cons args, Eval eval) {
+			final Cons seq = eval.eval(args.car()).cons();
+			return seq.stream().allMatch(Atom.TRUE::equals);
 		}
 	}
 
@@ -466,10 +465,10 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("some")
 	@Params(min = 1, max = 1)
-	private static final class $Some extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			final Struct seq = eval.list(args.car());
-			return seq.stream().anyMatch(Boolean.TRUE::equals);
+	private static final class $Some extends Form {
+		public Object apply(Cons args, Eval eval) {
+			final Cons seq = eval.eval(args.car()).cons();
+			return seq.stream().anyMatch(Atom.TRUE::equals);
 		}
 	}
 
@@ -483,8 +482,8 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("equal")
 	@Params(min = 2, max = 2)
-	private static final class $Equal extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Equal extends Form {
+		public Object apply(Cons args, Eval eval) {
 			final var l = eval.eval(args.get(0));
 			final var r = eval.eval(args.get(1));
 			if(l == null) return r == null;
@@ -514,9 +513,9 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("null?")
 	@Params(min = 1, max = 1)
-	private static final class $Null$ extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			return eval.eval(args.car()) == null;
+	private static final class $Null$ extends Form {
+		public Object apply(Cons args, Eval eval) {
+			return eval.eval(args.car()).value() == null;
 		}
 	}
 
@@ -530,12 +529,10 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("if")
 	@Params(min = 2, max = 3)
-	private static final class $If extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			final var bool = eval.bool(args.car());
-			if(bool) return eval.eval(args.get(1));
-			if(args.size() == 2) return null;
-			else return eval.eval(args.get(2));
+	private static final class $If extends Form {
+		public Object apply(Cons args, Eval eval) {
+			int cond = eval.bool(args.car())? 1: 2;
+			return eval.eval(args.cdr(cond).car());
 		}
 	}
 
@@ -549,9 +546,9 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("and")
 	@Params(min = 2, max = -1)
-	private static final class $And extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			for(Object v: args) if(!eval.bool(v)) return false;
+	private static final class $And extends Form {
+		public Object apply(Cons args, Eval eval) {
+			for(var v: args) if(!eval.bool(v)) return false;
 			return true;
 		}
 	}
@@ -566,9 +563,9 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("or")
 	@Params(min = 2, max = -1)
-	private static final class $Or extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			for(Object v: args) if(eval.bool(v)) return true;
+	private static final class $Or extends Form {
+		public Object apply(Cons args, Eval eval) {
+			for(var v: args) if(eval.bool(v)) return true;
 			return false;
 		}
 	}
@@ -583,8 +580,8 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("not")
 	@Params(min = 1, max = 1)
-	private static final class $Not extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Not extends Form {
+		public Object apply(Cons args, Eval eval) {
 			return !eval.bool(args.car());
 		}
 	}
@@ -599,8 +596,8 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("+")
 	@Params(min = 2, max = -1)
-	private static final class $Add extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Add extends Form {
+		public Object apply(Cons args, Eval eval) {
 			final BigDecimal car = eval.real(args.get(0));
 			var cdr = args.cdr().stream().map(eval::real);
 			return cdr.reduce(car, BigDecimal::add);
@@ -617,8 +614,8 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("-")
 	@Params(min = 2, max = -1)
-	private static final class $Sub extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Sub extends Form {
+		public Object apply(Cons args, Eval eval) {
 			final BigDecimal car = eval.real(args.get(0));
 			var cdr = args.cdr().stream().map(eval::real);
 			return cdr.reduce(car, BigDecimal::subtract);
@@ -635,8 +632,8 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("*")
 	@Params(min = 2, max = -1)
-	private static final class $Mul extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Mul extends Form {
+		public Object apply(Cons args, Eval eval) {
 			final BigDecimal car = eval.real(args.get(0));
 			var cdr = args.cdr().stream().map(eval::real);
 			return cdr.reduce(car, BigDecimal::multiply);
@@ -653,8 +650,8 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("/")
 	@Params(min = 2, max = -1)
-	private static final class $Div extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Div extends Form {
+		public Object apply(Cons args, Eval eval) {
 			final BigDecimal car = eval.real(args.get(0));
 			var cdr = args.cdr().stream().map(eval::real);
 			return cdr.reduce(car, (l, r) -> l.divide(r, DECIMAL64));
@@ -671,8 +668,8 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("mod")
 	@Params(min = 2, max = -1)
-	private static final class $Mod extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Mod extends Form {
+		public Object apply(Cons args, Eval eval) {
 			final BigDecimal car = eval.real(args.get(0));
 			var cdr = args.cdr().stream().map(eval::real);
 			return cdr.reduce(car, BigDecimal::remainder);
@@ -689,8 +686,8 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("ceiling")
 	@Params(min = 1, max = 1)
-	private static final class $Ceiling extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Ceiling extends Form {
+		public Object apply(Cons args, Eval eval) {
 			final BigDecimal val = eval.real(args.car());
 			return val.setScale(0, RoundingMode.CEILING);
 		}
@@ -706,8 +703,8 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("floor")
 	@Params(min = 1, max = 1)
-	private static final class $Floor extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Floor extends Form {
+		public Object apply(Cons args, Eval eval) {
 			final BigDecimal val = eval.real(args.car());
 			return val.setScale(0, RoundingMode.FLOOR);
 		}
@@ -723,8 +720,8 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("round")
 	@Params(min = 1, max = 1)
-	private static final class $Round extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Round extends Form {
+		public Object apply(Cons args, Eval eval) {
 			final BigDecimal val = eval.real(args.car());
 			return val.setScale(0, RoundingMode.HALF_UP);
 		}
@@ -740,8 +737,8 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("<")
 	@Params(min = 2, max = -1)
-	private static final class $Lt extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Lt extends Form {
+		public Object apply(Cons args, Eval eval) {
 			var prev = eval.real(args.car());
 			var flag = true;
 			for(var sexp: args.cdr()) {
@@ -762,8 +759,8 @@ final class Global extends SimpleBindings {
 	 */
 	@Native(">")
 	@Params(min = 2, max = -1)
-	private static final class $Gt extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Gt extends Form {
+		public Object apply(Cons args, Eval eval) {
 			var prev = eval.real(args.car());
 			var flag = true;
 			for(var sexp: args.cdr()) {
@@ -784,8 +781,8 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("<=")
 	@Params(min = 2, max = -1)
-	private static final class $Le extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Le extends Form {
+		public Object apply(Cons args, Eval eval) {
 			var prev = eval.real(args.car());
 			var flag = true;
 			for(var sexp: args.cdr()) {
@@ -806,8 +803,8 @@ final class Global extends SimpleBindings {
 	 */
 	@Native(">=")
 	@Params(min = 2, max = -1)
-	private static final class $Ge extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Ge extends Form {
+		public Object apply(Cons args, Eval eval) {
 			var prev = eval.real(args.car());
 			var flag = true;
 			for(var sexp: args.cdr()) {
@@ -828,11 +825,11 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("format")
 	@Params(min = 1, max = -1)
-	private static final class $Format extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Format extends Form {
+		public Object apply(Cons args, Eval eval) {
 			final var temp = eval.text(args.car());
 			final var strm = args.cdr(1).stream();
-			final var vals = strm.map(eval::eval);
+			final var vals = strm.map(eval::peel);
 			return String.format(temp, vals.toArray());
 		}
 	}
@@ -847,8 +844,8 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("substring")
 	@Params(min = 3, max = 3)
-	private static final class $SubString extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $SubString extends Form {
+		public Object apply(Cons args, Eval eval) {
 			final String str = eval.text(args.car());
 			final int head = eval.real(args.get(1)).intValueExact();
 			final int tail = eval.real(args.get(2)).intValueExact();
@@ -866,9 +863,10 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("number")
 	@Params(min = 1, max = 1)
-	private static final class $Number extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			return new BigDecimal(eval.some(args.car()).toString());
+	private static final class $Number extends Form {
+		public Object apply(Cons args, Eval eval) {
+			final var val = eval.eval(args.car()).atom();
+			return new BigDecimal(val.some().toString());
 		}
 	}
 
@@ -882,8 +880,8 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("string")
 	@Params(min = 1, max = 1)
-	private static final class $String extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $String extends Form {
+		public Object apply(Cons args, Eval eval) {
 			return String.valueOf(eval.eval(args.car()));
 		}
 	}
@@ -898,8 +896,8 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("match")
 	@Params(min = 2, max = 2)
-	private static final class $Match extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Match extends Form {
+		public Object apply(Cons args, Eval eval) {
 			final var regex = eval.text(args.car());
 			final var text = eval.text(args.get(1));
 			return text.matches(regex);
@@ -916,11 +914,11 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("tokenize")
 	@Params(min = 2, max = 2)
-	private static final class $Tokenize extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Tokenize extends Form {
+		public Object apply(Cons args, Eval eval) {
 			final String regex = eval.text(args.car());
 			final String text = eval.text(args.get(1));
-			return Struct.of(List.of(text.split(regex)));
+			return Cons.wrap((Object[]) text.split(regex));
 		}
 	}
 
@@ -934,11 +932,11 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("lambda")
 	@Params(min = 2, max = 2)
-	private static final class $Lambda extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			final var pars = Struct.as(args.get(0));
+	private static final class $Lambda extends Form {
+		public Object apply(Cons args, Eval eval) {
+			final var pars = Cons.cast(args.get(0));
 			final var body = args.get(1);
-			if(!pars.stream().allMatch(Symbol.class::isInstance)) {
+			if(!pars.containsOnlySymbols()) {
 				final String msg = "%s contains non-name";
 				throw new ElvaRuntimeException(msg, pars);
 			} else return new Lambda(pars, body, eval);
@@ -955,11 +953,11 @@ final class Global extends SimpleBindings {
 	 */
 	@Native("syntax")
 	@Params(min = 2, max = 2)
-	private static final class $Syntax extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			final var pars = Struct.as(args.get(0));
+	private static final class $Syntax extends Form {
+		public Object apply(Cons args, Eval eval) {
+			final var pars = Cons.cast(args.get(0));
 			final var body = args.get(1);
-			if(!pars.stream().allMatch(Symbol.class::isInstance)) {
+			if(!pars.containsOnlySymbols()) {
 				final String msg = "%s contains non-name";
 				throw new ElvaRuntimeException(msg, pars);
 			} else return new Syntax(pars, body, eval);

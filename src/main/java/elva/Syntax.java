@@ -5,7 +5,7 @@
 *****************************************************************************/
 package elva;
 
-import elva.ElvaLisp.ElvaRuntimeException;
+import elva.Elva.ElvaRuntimeException;
 
 /**
  * LISP処理系のマクロ式の実装です。
@@ -16,10 +16,10 @@ import elva.ElvaLisp.ElvaRuntimeException;
  * @since 2017/02/18
  */
 @Params(min = 0, max = -1)
-public final class Syntax extends Function {
-	private final Struct pars;
-	private final Object body;
-	private final Kernel lisp;
+public final class Syntax extends Form {
+	private final Cons pars;
+	private final Sexp body;
+	private final Eval lisp;
 
 	/**
 	 * 指定された仮引数と式と評価器でマクロ式を生成します。
@@ -29,7 +29,7 @@ public final class Syntax extends Function {
 	 * @param body 値の式
 	 * @param lisp 評価器
 	 */
-	public Syntax(Struct pars, Object body, Kernel lisp) {
+	public Syntax(Cons pars, Sexp body, Eval lisp) {
 		this.pars = pars;
 		this.body = body;
 		this.lisp = lisp;
@@ -53,15 +53,15 @@ public final class Syntax extends Function {
 	 * @return 返り値
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
-	public final Object apply(Struct args, Kernel eval) {
+	public final Sexp apply(Cons args, Eval eval) {
 		final Nested env = new Nested(null, lisp.scope);
 		if(args.size() == pars.size()) {
 			for(int i = 0; i < args.size(); i++) {
-				final Object par = pars.get(i);
-				final Object arg = args.get(i);
-				env.put((Symbol) par, arg);
+				final Sexp par = pars.get(i);
+				final Sexp arg = args.get(i);
+				env.put(par.atom().name(), arg);
 			}
-			return eval.eval(new Kernel(env).eval(body));
+			return eval.eval(new Eval(env).eval(body));
 		}
 		final String msg = "%s required, but %s found";
 		throw new ElvaRuntimeException(msg, pars, args);

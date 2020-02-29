@@ -8,9 +8,7 @@ package elva;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.math.BigDecimal;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -18,7 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import elva.ElvaLisp.ElvaLexicalException;
+import elva.Elva.ElvaLexicalException;
 
 /**
  * LISP処理系の構文解析器の実装です。
@@ -28,7 +26,7 @@ import elva.ElvaLisp.ElvaLexicalException;
  *
  * @since 2017/02/18
  */
-final class Parser implements Iterator<Object> {
+final class Tokens implements Iterator<Sexp> {
 	private final List<String> allTokens;
 	private int cursor = 0;
 
@@ -39,7 +37,7 @@ final class Parser implements Iterator<Object> {
 	 * 
 	 * @throws IOException 正規表現の読み込みに失敗した場合
 	 */
-	public Parser(String exp) throws IOException {
+	public Tokens(String exp) throws IOException {
 		this.allTokens = new ArrayList<>();
 		final String regex = getRegexPattern();
 		Matcher matcher = Pattern.compile(regex).matcher(exp);
@@ -54,8 +52,8 @@ final class Parser implements Iterator<Object> {
 	 * @throws IOException 正規表現の読み込みに失敗した場合
 	 */
 	public String getRegexPattern() throws IOException {
-		final URL path = getClass().getResource("elva.lex");
-		Reader r = new InputStreamReader(path.openStream());
+		final var path = getClass().getResource("elva.lex");
+		final var r = new InputStreamReader(path.openStream());
 		try (BufferedReader reader = new BufferedReader(r)) {
 			return reader.lines().collect(Collectors.joining());
 		}
@@ -89,15 +87,15 @@ final class Parser implements Iterator<Object> {
 	 * @throws ElvaLexicalException 構文に問題がある場合
 	 */
 	@Override
-	public final Object next() throws ElvaLexicalException {
+	public final Sexp next() throws ElvaLexicalException {
 		final String atom = allTokens.get(cursor++);
 		if(atom.equals("(")) return nextList();
-		if(atom.matches("\".*\"")) return escape(atom);
-		if(atom.equals("'"))  return new Struct(Quotes.QUOTE, next());
-		if(atom.equals("`"))  return new Struct(Quotes.QUASI, next());
-		if(atom.equals(","))  return new Struct(Quotes.UQUOT, next());
-		if(atom.equals(",@")) return new Struct(Quotes.UQSPL, next());
-		if(!atom.equals(")")) return asSymbolOrReal(atom);
+		if(atom.matches("\".*\"")) return new Atom(escape(atom));
+		if(atom.equals("'"))  return new Cons(Quotes.QUOTE, next());
+		if(atom.equals("`"))  return new Cons(Quotes.QUASI, next());
+		if(atom.equals(","))  return new Cons(Quotes.UQUOT, next());
+		if(atom.equals(",@")) return new Cons(Quotes.UQSPL, next());
+		if(!atom.equals(")")) return Sexp.wrap(asSymbolOrReal(atom));
 		throw new ElvaLexicalException("isolated ')'", this);
 	}
 
@@ -140,8 +138,8 @@ final class Parser implements Iterator<Object> {
 	 * @return 次のリスト式
 	 * @throws ElvaLexicalException 構文に問題がある場合
 	 */
-	private final Struct nextList() throws ElvaLexicalException {
-		final ArrayList<Object> list = new ArrayList<>();
+	private final Cons nextList() throws ElvaLexicalException {
+		final var list = new ArrayList<Sexp>();
 		boolean closed = false;
 		loop: while(cursor < allTokens.size()) {
 			switch(allTokens.get(cursor++)) {
@@ -149,7 +147,7 @@ final class Parser implements Iterator<Object> {
 				default: --cursor; list.add(next());
 			}
 		}
-		if(closed) return Struct.of(list);
+		if(closed) return Cons.cons(list);
 		throw new ElvaLexicalException("isolated '('", this);
 	}
 }

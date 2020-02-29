@@ -26,7 +26,7 @@ import qxsl.model.Exch;
 import qxsl.model.Item;
 import qxsl.model.Tuple;
 
-import static elva.ElvaLisp.ElvaRuntimeException;
+import static elva.Elva.ElvaRuntimeException;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static javax.script.ScriptContext.ENGINE_SCOPE;
 
@@ -38,17 +38,17 @@ import static javax.script.ScriptContext.ENGINE_SCOPE;
  *
  * @since 2017/02/27
  *
- * @see ElvaLisp 内部で使用されるLISP処理系
+ * @see Elva 内部で使用されるLISP処理系
  */
 public final class RuleKit {
-	private final ElvaLisp elva;
+	private final Elva elva;
 	private final ScriptContext context;
 
 	/**
 	 * LISP処理系を構築します。
 	 */
 	public RuleKit() {
-		this.elva = new ElvaLisp();
+		this.elva = new Elva();
 		context = new SimpleScriptContext();
 		context.setBindings(createBindings(), ENGINE_SCOPE);
 	}
@@ -127,8 +127,8 @@ public final class RuleKit {
 	 */
 	private static final class HandlerImpl extends Handler {
 		private final String name;
-		private final Kernel eval;
 		private final Lambda rule;
+		private final Eval eval;
 
 		/**
 		 * 指定された規約定義と評価器で部門を構築します。
@@ -136,9 +136,9 @@ public final class RuleKit {
 		 * @param rule 規約
 		 * @param eval 評価器
 		 */
-		public HandlerImpl(Struct rule, Kernel eval) {
+		public HandlerImpl(Cons rule, Eval eval) {
 			this.name = eval.text(rule.get(0));
-			this.rule = eval.eval(rule.get(1), Lambda.class);
+			this.rule = eval.eval(rule.get(1)).as(Lambda.class);
 			this.eval = eval;
 		}
 
@@ -149,7 +149,7 @@ public final class RuleKit {
 
 		@Override
 		public Item apply(Item item) throws RuntimeException {
-			return eval.eval(Struct.of(rule, item), Item.class);
+			return eval.eval(Cons.wrap(rule, item)).as(Item.class);
 		}
 	}
 
@@ -163,8 +163,8 @@ public final class RuleKit {
 	 */
 	private static final class ContestImpl extends Contest {
 		private final String name;
-		private final Kernel eval;
 		private final Syntax rule;
+		private final Eval eval;
 		private final List<Section> list;
 
 		/**
@@ -173,9 +173,9 @@ public final class RuleKit {
 		 * @param rule 規約
 		 * @param eval 評価器
 		 */
-		public ContestImpl(Struct rule, Kernel eval) {
+		public ContestImpl(Cons rule, Eval eval) {
 			this.name = eval.text(rule.get(0));
-			this.rule = eval.eval(rule.get(1), Syntax.class);
+			this.rule = eval.eval(rule.get(1)).as(Syntax.class);
 			this.list = SectionImpl.sects(rule.cdr(2), eval);
 			this.eval = eval;
 		}
@@ -194,9 +194,9 @@ public final class RuleKit {
 		public int score(Summary sum) throws RuntimeException {
 			if (sum.score() > 0) {
 				final var args = new ArrayList<Object>();
-				args.addAll(Struct.of(rule, sum.score()));
-				for (var ms: sum.mults()) args.add(Struct.of(ms));
-				return eval.real(Struct.of(args)).intValueExact();
+				args.addAll(Cons.wrap(rule, sum.score()));
+				for (var ms: sum.mults()) args.add(Cons.wrap(ms));
+				return eval.real(Cons.wrap(args)).intValueExact();
 			} else return 0;
 		}
 	}
@@ -212,7 +212,7 @@ public final class RuleKit {
 	private static final class SectionImpl extends Section {
 		private final String name;
 		private final String code;
-		private final Kernel eval;
+		private final Eval eval;
 		private final Lambda rule;
 
 		/**
@@ -221,10 +221,10 @@ public final class RuleKit {
 		 * @param rule 規約
 		 * @param eval 評価器
 		 */
-		public SectionImpl(Struct rule, Kernel eval) {
+		public SectionImpl(Cons rule, Eval eval) {
 			this.name = eval.text(rule.get(0));
 			this.code = eval.text(rule.get(1));
-			this.rule = eval.eval(rule.get(2), Lambda.class);
+			this.rule = eval.eval(rule.get(2)).as(Lambda.class);
 			this.eval = eval;
 		}
 
@@ -240,7 +240,7 @@ public final class RuleKit {
 
 		@Override
 		public Message apply(Item item) throws RuntimeException {
-			return eval.eval(Struct.of(rule, item), Message.class);
+			return eval.eval(Cons.wrap(rule, item)).as(Message.class);
 		}
 
 		/**
@@ -250,9 +250,9 @@ public final class RuleKit {
 		 * @param eval 評価器
 		 * @return 部門のリスト
 		 */
-		private static List<Section> sects(Struct rule, Kernel eval) {
+		private static List<Section> sects(Cons rule, Eval eval) {
 			final ArrayList<Section> list = new ArrayList<Section>();
-			for(var sc: rule) list.add(eval.eval(sc, Section.class));
+			for(var sc: rule) list.add(eval.eval(sc).as(Section.class));
 			return Collections.unmodifiableList(list);
 		}
 	}
@@ -342,14 +342,15 @@ public final class RuleKit {
 	 */
 	@Native("load")
 	@Params(min = 1, max = 1)
-	private static final class $Load extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			final var elva = new ElvaLisp();
+	private static final class $Load extends Form {
+		public Object apply(Cons args, Eval eval) {
+			Sexp value = null;
+			final var elva = new Elva();
 			final var name = eval.text(args.car());
 			try (var is = getClass().getResourceAsStream(name)) {
 				final var isr = new InputStreamReader(is, UTF_8);
-				for(Object sexp: elva.scan(isr)) eval.eval(sexp);
-				return null;
+				for(Sexp s: elva.scan(isr)) value = eval.eval(s);
+				return value;
 			} catch (IOException | ScriptException ex) {
 				final String msg = "failed in loading %s: %s";
 				throw new ElvaRuntimeException(msg, name, ex);
@@ -367,8 +368,8 @@ public final class RuleKit {
 	 */
 	@Native("handler")
 	@Params(min = 2, max = -1)
-	private static final class $Handler extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Handler extends Form {
+		public Object apply(Cons args, Eval eval) {
 			return new HandlerImpl(args, eval);
 		}
 	}
@@ -383,8 +384,8 @@ public final class RuleKit {
 	 */
 	@Native("contest")
 	@Params(min = 3, max = -1)
-	private static final class $Contest extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Contest extends Form {
+		public Object apply(Cons args, Eval eval) {
 			return new ContestImpl(args, eval);
 		}
 	}
@@ -399,8 +400,8 @@ public final class RuleKit {
 	 */
 	@Native("section")
 	@Params(min = 3, max = 3)
-	private static final class $Section extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Section extends Form {
+		public Object apply(Cons args, Eval eval) {
 			return new SectionImpl(args, eval);
 		}
 	}
@@ -415,9 +416,9 @@ public final class RuleKit {
 	 */
 	@Native("success")
 	@Params(min = 3, max = -1)
-	private static final class $Success extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			final var it = eval.eval(args.get(0), Item.class);
+	private static final class $Success extends Form {
+		public Object apply(Cons args, Eval eval) {
+			final var it = eval.eval(args.get(0)).as(Item.class);
 			final var sc = eval.real(args.get(1));
 			final var ks = args.cdr().cdr().stream().map(eval::eval);
 			return new Success(it, sc.intValueExact(), ks.toArray());
@@ -434,9 +435,9 @@ public final class RuleKit {
 	 */
 	@Native("failure")
 	@Params(min = 2, max = 2)
-	private static final class $Failure extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			final Item item = eval.eval(args.car(), Item.class);
+	private static final class $Failure extends Form {
+		public Object apply(Cons args, Eval eval) {
+			final Item item = eval.eval(args.car()).as(Item.class);
 			return new Failure(item, eval.text(args.get(1)));
 		}
 	}
@@ -451,8 +452,8 @@ public final class RuleKit {
 	 */
 	@Native("item")
 	@Params(min = 0, max = 0)
-	private static final class $Item extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $Item extends Form {
+		public Object apply(Cons args, Eval eval) {
 			return new Item();
 		}
 	}
@@ -467,9 +468,9 @@ public final class RuleKit {
 	 */
 	@Native("rcvd")
 	@Params(min = 1, max = 1)
-	private static final class $Rcvd extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			return eval.eval(args.car(), Item.class).getRcvd();
+	private static final class $Rcvd extends Form {
+		public Object apply(Cons args, Eval eval) {
+			return eval.eval(args.car()).as(Item.class).getRcvd();
 		}
 	}
 
@@ -483,9 +484,9 @@ public final class RuleKit {
 	 */
 	@Native("sent")
 	@Params(min = 1, max = 1)
-	private static final class $Sent extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			return eval.eval(args.car(), Item.class).getSent();
+	private static final class $Sent extends Form {
+		public Object apply(Cons args, Eval eval) {
+			return eval.eval(args.car()).as(Item.class).getSent();
 		}
 	}
 
@@ -499,9 +500,9 @@ public final class RuleKit {
 	 */
 	@Native("get-field")
 	@Params(min = 3, max = 3)
-	private static final class $GetField extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			final Tuple tuple = eval.eval(args.car(), Tuple.class);
+	private static final class $GetField extends Form {
+		public Object apply(Cons args, Eval eval) {
+			final Tuple tuple = eval.eval(args.car()).as(Tuple.class);
 			final String space = eval.text(args.get(1));
 			final String local = eval.text(args.get(2));
 			return tuple.value(new QName(space, local));
@@ -518,9 +519,9 @@ public final class RuleKit {
 	 */
 	@Native("set-field")
 	@Params(min = 4, max = 4)
-	private static final class $SetField extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			final Tuple tuple = eval.eval(args.car(), Tuple.class);
+	private static final class $SetField extends Form {
+		public Object apply(Cons args, Eval eval) {
+			final Tuple tuple = eval.eval(args.car()).as(Tuple.class);
 			final String space = eval.text(args.get(1));
 			final String local = eval.text(args.get(2));
 			final String value = eval.text(args.get(3));
@@ -538,11 +539,13 @@ public final class RuleKit {
 	 */
 	@Native("hour")
 	@Params(min = 2, max = 2)
-	private static final class $Hour extends Function {
-		public Object apply(Struct args, Kernel eval) {
-			ZonedDateTime time = eval.eval(args.car(), ZonedDateTime.class);
-			ZoneId id = ZoneId.of(eval.text(args.get(1)), ZoneId.SHORT_IDS);
-			return time.withZoneSameInstant(id).getHour();
+	private static final class $Hour extends Form {
+		public Object apply(Cons args, Eval eval) {
+			final var time = eval.eval(args.get(0));
+			final var text = eval.text(args.get(1));
+			final var date = time.as(ZonedDateTime.class);
+			ZoneId zone = ZoneId.of(text, ZoneId.SHORT_IDS);
+			return date.withZoneSameInstant(zone).getHour();
 		}
 	}
 
@@ -556,8 +559,8 @@ public final class RuleKit {
 	 */
 	@Native("city")
 	@Params(min = 2, max = 3)
-	private static final class $City extends Function {
-		public Object apply(Struct args, Kernel eval) {
+	private static final class $City extends Form {
+		public Object apply(Cons args, Eval eval) {
 			final String base = eval.text(args.car());
 			final String code = eval.text(args.get(1));
 			final City city = City.forCode(base, code);

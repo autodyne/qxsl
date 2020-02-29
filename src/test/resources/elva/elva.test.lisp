@@ -93,7 +93,7 @@
 (if #t 'HEAD 'TAIL) 'HEAD
 (if #f 'HEAD 'TAIL) 'TAIL
 (if #t (+ 114 514)) 628
-(if #f (* 114 514)) null
+(if #f (* 114 514)) nil
 (if (equal 28 28) (+ 114 514) (+ 364 364)) 628
 (if (equal 28 29) (+ 114 514) (+ 364 364)) 728
 

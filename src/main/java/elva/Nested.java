@@ -8,7 +8,7 @@ package elva;
 import javax.script.Bindings;
 import javax.script.SimpleBindings;
 
-import elva.ElvaLisp.ElvaRuntimeException;
+import elva.Elva.ElvaRuntimeException;
 
 /**
  * LISP処理系の識別子を捕捉する静的スコープの実装です。
@@ -39,12 +39,12 @@ public final class Nested extends SimpleBindings {
 	 * @return 束縛された値
 	 */
 	@Override
-	public final Object get(Object name) {
+	public final Sexp get(Object name) {
 		final String key = name.toString();
-		if(containsKey(key)) {
-			return super.get(key);
+		if (containsKey(key)) {
+			return Sexp.wrap(super.get(key));
 		} else if(outer != null) {
-			return outer.get(key);
+			return Sexp.wrap(outer.get(key));
 		}
 		final String msg = "unknown symbol '%s'";
 		throw new ElvaRuntimeException(msg, name);
@@ -55,7 +55,7 @@ public final class Nested extends SimpleBindings {
 	 *
 	 * @param func 登録する関数
 	 */
-	public final void put(Function func) {
+	public final void put(Form func) {
 		this.put(func.toString(), func);
 	}
 
@@ -63,9 +63,9 @@ public final class Nested extends SimpleBindings {
 	 * 指定された値を名前で束縛します。
 	 *
 	 * @param name 名前
-	 * @param target 値
+	 * @param sexp 値
 	 */
-	public final void put(Symbol name, Object target) {
-		this.put(name.toString(), target);
+	public final void put(Symbol name, Sexp sexp) {
+		this.put(name.toString(), sexp);
 	}
 }
