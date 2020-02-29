@@ -86,16 +86,18 @@ The `Section` object accepts `List[Item]` and validates the communications one b
 The class `RuleKit` provides a LISP engine optimized for this process.
 
 ```Scala
-import qxsl.ruler.{Contest,RuleKit,Section,Summary}
+import java.io.StringReader
+import qxsl.ruler.{RuleKit,Section,Summary}
 
-val contest: Contest = new RuleKit().eval("""
+val contest = new RuleKit().contest(new StringReader("""
 (contest "CQ AWESOME CONTEST"
-  (section "CW 14MHz" (lambda it (verify it (list CW? 14MHz?))))
-  (section "CW 21MHz" (lambda it (verify it (list CW? 21MHz?))))
-  (section "CW 28MHz" (lambda it (verify it (list CW? 28MHz?))))
-  (section "PH 14MHz" (lambda it (verify it (list PH? 14MHz?))))
-  (section "PH 21MHz" (lambda it (verify it (list PH? 21MHz?))))
-  (section "PH 28MHz" (lambda it (verify it (list PH? 28MHz?)))))""")
+	(syntax (score calls mults) `(* scores (length quote ,mults)))
+  (section "CW 14MHz SINGLE-OP" "CW14SIN" (verify (CW? 14MHz?)))
+  (section "CW 21MHz SINGLE-OP" "CW21SIN" (verify (CW? 21MHz?)))
+  (section "CW 28MHz SINGLE-OP" "CW28SIN" (verify (CW? 28MHz?)))
+  (section "PH 14MHz SINGLE-OP" "PH14SIN" (verify (PH? 14MHz?)))
+  (section "PH 21MHz SINGLE-OP" "PH21SIN" (verify (PH? 21MHz?)))
+  (section "PH 28MHz SINGLE-OP" "PH28SIN" (verify (PH? 28MHz?))))"""))
 
 val section: Section = contest.getSection("CW 14MHz")
 val summary: Summary = section.summarize(table)
@@ -104,12 +106,19 @@ summary.rejected.asScala.foreach(println)
 ```
 
 The original LISP engine is provided by the package `elva`.
-qxsl contains [the definition of ALLJA1 contest](src/main/resources/qxsl/ruler/allja1.lisp) as a sample definition inside the JAR file.
 
 ## Documents
 
 - [Javadoc](https://pafelog.net/qxsl/index.html)
 - [History and Usage of ATS-4](https://pafelog.net/ats4.pdf)
+
+## Bundled Lisp Programs
+
+The following LISP programs are bundled inside the JAR file, as sample codes in Elva Lisp.
+
+- [allja1.lisp (ALLJA1 contest definition)](src/main/resources/qxsl/ruler/allja1.lisp)
+- [format.lisp (ADIF-QXSL field converter)](src/main/resources/qxsl/ruler/format.lisp)
+- [macros.lisp (utility-macro definitions)](src/main/resources/qxsl/ruler/macros.lisp)
 
 ## Build
 
