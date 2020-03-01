@@ -122,13 +122,20 @@ public final class Atom implements Sexp, Serializable {
 	 * このアトムとオブジェクトを比較します。
 	 * 同じ内容のアトムであれば真を返します。
 	 *
-	 * @param obj 比較対象のオブジェクト
+	 * @param atom 比較対象のオブジェクト
 	 * @return 同じ内容のアトムのみtrue
 	 */
 	@Override
-	public final boolean equals(Object obj) {
-		if (!(obj instanceof Atom)) return false;
-		return Objects.equals(((Atom) obj).value, value);
+	public final boolean equals(Object atom) {
+		if (atom instanceof Atom) {
+			final var v1 = ((Atom) atom).value;
+			final var v2 = ((Atom) this).value;
+			final var d1 = BigDecimalRules.apply(v1);
+			final var d2 = BigDecimalRules.apply(v2);
+			if(d1 == null) return Objects.equals(v1, v2);
+			if(d2 == null) return Objects.equals(v1, v2);
+			return d1.compareTo(d2) == 0;
+		} else return false;
 	}
 
 	/**
@@ -140,6 +147,20 @@ public final class Atom implements Sexp, Serializable {
 	 * @since 2020/02/29
 	 */
 	private static final class BigDecimalRules {
+		/**
+		 * 指定された値を実数に変換します。
+		 *
+		 * @param value 値
+		 * @return 実数 数値でない場合はnull
+		 */
+		private static final BigDecimal apply(Object value) {
+			try {
+				return nToBD((Number) value);
+			} catch (ClassCastException ex) {
+				return null;
+			}
+		}
+
 		/**
 		 * 指定された数値を実数に変換します。
 		 *

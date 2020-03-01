@@ -484,22 +484,9 @@ final class Global extends SimpleBindings {
 	@Params(min = 2, max = 2)
 	private static final class $Equal extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final var l = eval.eval(args.get(0));
-			final var r = eval.eval(args.get(1));
-			if(l == null) return r == null;
-			if(!(l instanceof Number)) return l.equals(r);
-			if(!(r instanceof Number)) return l.equals(r);
-			try {
-				final var lBD = (BigDecimal) l;
-				final var rBD = (BigDecimal) r;
-				return lBD.compareTo(rBD) == 0;
-			} catch(ClassCastException ex) {
-				final var lD = ((Number) l).doubleValue();
-				final var rD = ((Number) r).doubleValue();
-				final var lL = ((Number) l).longValue();
-				final var rL = ((Number) r).longValue();
-				return (lD == rD)? lL == rL: false;
-			}
+			final Sexp l = eval.eval(args.get(0));
+			final Sexp r = eval.eval(args.get(1));
+			return l == null? r == null: l.equals(r);
 		}
 	}
 
