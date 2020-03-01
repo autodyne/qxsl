@@ -124,12 +124,12 @@ public final class Eval {
 	/**
 	 * 準引用の部分解除を表現する識別子です。
 	 */
-	private final Atom UQUOT = new Atom(Quotes.UQUOT.toSymbol());
+	private final Atom UQUOT = Quotes.UQUOT.toAtom();
 
 	/**
 	 * 準引用の部分展開を表現する識別子です。
 	 */
-	private final Atom UQSPL = new Atom(Quotes.UQSPL.toSymbol());
+	private final Atom UQSPL = Quotes.UQSPL.toAtom();
 
 	/**
 	 * 準引用の被引用式にて引用の部分解除を示す内部オブジェクトです。

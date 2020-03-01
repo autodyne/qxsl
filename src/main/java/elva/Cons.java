@@ -36,7 +36,7 @@ public final class Cons extends AbstractList<Sexp> implements Sexp {
 	 * @param head 先頭の要素
 	 * @param tail 末尾の要素
 	 */
-	protected Cons(Sexp head, Cons tail) {
+	public Cons(Sexp head, Cons tail) {
 		this.head = head;
 		this.tail = tail == null? NIL: tail;
 		this.size = this.tail.size + 1;
@@ -49,16 +49,6 @@ public final class Cons extends AbstractList<Sexp> implements Sexp {
 		this.head = null;
 		this.tail = null;
 		this.size = 0;
-	}
-
-	/**
-	 * 指定された要素を持つ引用式を構築します。
-	 *
-	 * @param head 引用演算子
-	 * @param tail 演算子の引数
-	 */
-	protected Cons(Quotes head, Sexp tail) {
-		this(new Atom(head.toSymbol()), cons(tail));
 	}
 
 	/**
@@ -120,6 +110,7 @@ public final class Cons extends AbstractList<Sexp> implements Sexp {
 	 * 指定された要素を{@link Sexp}に包んでリストを構築します。
 	 *
 	 * @param vals 要素
+	 * @param <E> 要素の総称型
 	 * @return リスト 空の場合は{@link #NIL}
 	 */
 	public static final <E> Cons wrap(Collection<E> vals) {

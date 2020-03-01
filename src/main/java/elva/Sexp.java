@@ -29,9 +29,9 @@ public interface Sexp extends java.io.Serializable {
 	 * @param sexp 値
 	 * @return 値
 	 */
-	static Sexp wrap(Object sexp) {
-		if (sexp instanceof Sexp) return (Sexp) sexp;
-		return new Atom(sexp);
+	public static Sexp wrap(Object sexp) {
+		if(sexp instanceof Quotes) return ((Quotes) sexp).toAtom();
+		return (sexp instanceof Sexp)? (Sexp) sexp: new Atom(sexp);
 	}
 
 	/**
@@ -39,7 +39,7 @@ public interface Sexp extends java.io.Serializable {
 	 *
 	 * @return 識別子の場合にtrue
 	 */
-	default boolean isSymbol() {
+	public default boolean isSymbol() {
 		return value() instanceof Symbol;
 	}
 
@@ -48,7 +48,7 @@ public interface Sexp extends java.io.Serializable {
 	 *
 	 * @return 文字列の場合にtrue
 	 */
-	default boolean isString() {
+	public default boolean isString() {
 		return value() instanceof String;
 	}
 

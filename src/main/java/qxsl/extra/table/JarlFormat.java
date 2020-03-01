@@ -236,7 +236,7 @@ public final class JarlFormat extends BaseFormat {
 	@Deprecated
 	private final class JarlEncoder extends PlainTextEncoder {
 		private final DateTimeFormatter format;
-		
+
 		/**
 		 * 指定されたライタに出力するエンコーダを構築します。
 		 * 

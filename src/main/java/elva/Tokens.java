@@ -91,10 +91,10 @@ final class Tokens implements Iterator<Sexp> {
 		final String atom = allTokens.get(cursor++);
 		if(atom.equals("(")) return nextList();
 		if(atom.matches("\".*\"")) return new Atom(escape(atom));
-		if(atom.equals("'"))  return new Cons(Quotes.QUOTE, next());
-		if(atom.equals("`"))  return new Cons(Quotes.QUASI, next());
-		if(atom.equals(","))  return new Cons(Quotes.UQUOT, next());
-		if(atom.equals(",@")) return new Cons(Quotes.UQSPL, next());
+		if(atom.equals("'"))  return Cons.wrap(Quotes.QUOTE, next());
+		if(atom.equals("`"))  return Cons.wrap(Quotes.QUASI, next());
+		if(atom.equals(","))  return Cons.wrap(Quotes.UQUOT, next());
+		if(atom.equals(",@")) return Cons.wrap(Quotes.UQSPL, next());
 		if(!atom.equals(")")) return Sexp.wrap(asSymbolOrReal(atom));
 		throw new ElvaLexicalException("isolated ')'", this);
 	}

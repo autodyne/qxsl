@@ -12,6 +12,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import qxsl.extra.field.*;
@@ -389,7 +390,7 @@ public final class CBinFormat extends BaseFormat {
 			final String s = readString(30);
 			item.getRcvd().add(fields.cache(Qxsl.CODE).field(s));
 		}
-		
+
 		/**
 		 * 交信記録に通信方式を読み込みます。
 		 * 
@@ -497,15 +498,55 @@ public final class CBinFormat extends BaseFormat {
 			stream.writeBytes("CQsoData");
 			short count = 0;
 			for(Item r: items) item(r, ++count == size);
-			stream.write(new byte[704]);
-			// footer 704 bytes:
-			// (1)   2 bytes: console ModeEnum
-			// (2)   4 bytes: unknown
-			// (3)   2 bytes: console BandEnum
-			// (4)   2 bytes: contest ID
-			// (5)   2 bytes: global score multiplier
-			// (6)  92 bytes: 23band score multiplier
-			// (7) 600 bytes: operator names (max 30)
+			confs(items.isEmpty()? List.of(new Item()): items);
+			names(items.isEmpty()? List.of(new Item()): items);
+		}
+
+		/**
+		 * CTESTWINの入力画面のデフォルト値を出力します。
+		 * 
+		 * @param items 交信記録
+		 * 
+		 * @throws IOException 出力に失敗した場合
+		 */
+		private void confs(List<Item> items) throws IOException {
+			final var last = items.get(items.size()-1);
+			mode((Mode) last.get(Qxsl.MODE));
+			stream.writeByte(0);
+			stream.writeInt(0);
+			band((Band) last.get(Qxsl.BAND));
+			stream.writeByte(0);
+			stream.writeByte(0); // contest ID
+			stream.writeByte(0);
+			scoresForAADX();
+		}
+
+		/**
+		 * CTESTWINのAADXコンテスト用の点数設定を出力します。
+		 * 
+		 * @throws IOException 出力に失敗した場合
+		 */
+		private void scoresForAADX() throws IOException {
+			final int BANDS = 46; // 23 * (Asia & Non-Asia)
+			stream.writeShort(0x0000);   // Global Settings
+			for(int i=0; i<BANDS; i++) stream.writeShort(0x0100);
+		}
+
+		/**
+		 * CTESTWINの運用者名のリストの設定を出力します。
+		 * 
+		 * @param items 交信記録
+		 * 
+		 * @throws IOException 出力に失敗した場合
+		 */
+		private void names(List<Item> items) throws IOException {
+			final var names = new LinkedHashSet<Name>();
+			for(Item item: items) {
+				var name = (Name) item.get(Qxsl.NAME);
+				if(names.size() < 30) names.add(name);
+			}
+			for(Field name: names) string(20, name);
+			stream.write(new byte[600 - 20 * names.size()]);
 		}
 
 		/**
@@ -516,14 +557,18 @@ public final class CBinFormat extends BaseFormat {
 		 * 
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private final void item(Item item, boolean last) throws IOException {
+		private void item(Item item, boolean last) throws IOException {
 			string(20, (Call) item.get(Qxsl.CALL));
 			string(30, (Code) item.getSent().get(Qxsl.CODE));
 			string(30, (Code) item.getRcvd().get(Qxsl.CODE));
 			mode((Mode) item.get(Qxsl.MODE));
 			stream.writeByte(0);
 			band((Band) item.get(Qxsl.BAND));
-			stream.write(new byte[5]);
+			stream.writeByte(0);
+			stream.writeByte(0x0a);
+			stream.writeByte(0);
+			stream.writeByte(0);
+			stream.writeByte(0x80);
 			time((Time) item.get(Qxsl.TIME));
 			string(20, (Name) item.get(Qxsl.NAME));
 			stream.writeByte(0);
@@ -576,7 +621,7 @@ public final class CBinFormat extends BaseFormat {
 		 * @param f 直列化する属性
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private final void string(int limit, Field f) throws IOException {
+		private void string(int limit, Field f) throws IOException {
 			final String value = f != null? f.value().toString() : "";
 			final byte[] bytes = value.getBytes("SJIS");
 			stream.write(Arrays.copyOf(bytes, limit-1));

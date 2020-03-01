@@ -9,6 +9,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+import elva.Elva.ElvaRuntimeException;
+
 /**
  * LISP処理系で使用される空リストを除く不可分な値を格納します。
  * 
@@ -32,7 +34,7 @@ public final class Atom implements Sexp, Serializable {
 	 *
 	 * @param value 値
 	 */
-	protected Atom(Object value) {
+	public Atom(Object value) {
 		this.value = value;
 	}
 
@@ -52,7 +54,7 @@ public final class Atom implements Sexp, Serializable {
 	 * @return nullの場合は例外を発生させる
 	 * @throws ElvaRuntimeException 型検査の例外
 	 */
-	public final Object some() {
+	public final Object some() throws ElvaRuntimeException {
 		return as(Object.class);
 	}
 
@@ -62,7 +64,7 @@ public final class Atom implements Sexp, Serializable {
 	 * @return 識別子
 	 * @throws ElvaRuntimeException 型検査の例外
 	 */
-	public final Symbol name() {
+	public final Symbol name() throws ElvaRuntimeException {
 		return as(Symbol.class);
 	}
 
@@ -72,7 +74,7 @@ public final class Atom implements Sexp, Serializable {
 	 * @return 文字列
 	 * @throws ElvaRuntimeException 型検査の例外
 	 */
-	public final String text() {
+	public final String text() throws ElvaRuntimeException {
 		return as(String.class);
 	}
 
@@ -82,7 +84,7 @@ public final class Atom implements Sexp, Serializable {
 	 * @return 真偽値
 	 * @throws ElvaRuntimeException 型検査の例外
 	 */
-	public final boolean bool() {
+	public final boolean bool() throws ElvaRuntimeException {
 		return as(Boolean.class);
 	}
 
@@ -93,7 +95,7 @@ public final class Atom implements Sexp, Serializable {
 	 * @return 実数値
 	 * @throws ElvaRuntimeException 型検査の例外
 	 */
-	public final BigDecimal real() {
+	public final BigDecimal real() throws ElvaRuntimeException {
 		return BigDecimalRules.nToBD(as(Number.class));
 	}
 

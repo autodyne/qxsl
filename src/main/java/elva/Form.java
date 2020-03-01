@@ -17,6 +17,11 @@ import java.util.function.BiFunction;
  */
 public abstract class Form implements BiFunction<Cons, Eval, Object> {
 	/**
+	 * 関数もしくはマクロを構築します。
+	 */
+	public Form() {}
+
+	/**
 	 * 指定された実引数と評価器に対し、返り値を求めます。
 	 *
 	 * @param args 実引数

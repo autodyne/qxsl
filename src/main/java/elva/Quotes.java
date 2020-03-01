@@ -24,12 +24,7 @@ enum Quotes {
 		this.name = new Symbol(name);
 	}
 
-	@Override
-	public final String toString() {
-		return name.toString();
-	}
-
-	public final Symbol toSymbol() {
-		return name;
+	public final Atom toAtom() {
+		return new Atom(name);
 	}
 }

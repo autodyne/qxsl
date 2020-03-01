@@ -311,7 +311,7 @@ public final class ZBinFormat extends BaseFormat {
 	private final class ZBinDecoder implements TableDecoder {
 		private final DataInputStream stream;
 		private final FieldFormats fields;
-		private TDateTime tDateTime;
+		private TDateTime tDTime;
 
 		/**
 		 * 指定されたストリームを読み込むデコーダを構築します。
@@ -355,7 +355,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final List<Item> items() throws IOException {
-			this.tDateTime = new TDateTime(head());
+			this.tDTime = new TDateTime(head());
 			final List<Item> items = new ArrayList<>();
 			while(stream.available() > 0) items.add(item());
 			return Collections.unmodifiableList(items);
@@ -410,7 +410,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void time(Item item) throws IOException {
-			item.add(tDateTime.decode(stream.readLong()));
+			item.add(tDTime.decode(stream.readLong()));
 		}
 
 		/**
@@ -453,7 +453,8 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void sRSTQ(Item item) throws IOException {
-			String rst = String.valueOf(Short.reverseBytes(stream.readShort()));
+			final var val = Short.reverseBytes(stream.readShort());
+			final var rst = String.valueOf(val);
 			item.getSent().add(fields.cache(Qxsl.RSTQ).field(rst));
 		}
 
@@ -464,7 +465,8 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void rRSTQ(Item item) throws IOException {
-			String rst = String.valueOf(Short.reverseBytes(stream.readShort()));
+			final var val = Short.reverseBytes(stream.readShort());
+			final var rst = String.valueOf(val);
 			item.getRcvd().add(fields.cache(Qxsl.RSTQ).field(rst));
 		}
 
@@ -545,7 +547,7 @@ public final class ZBinFormat extends BaseFormat {
 	 *
 	 */
 	private final class ZBinEncoder implements TableEncoder {
-		private final TDateTime tDateTime;
+		private final TDateTime tDTime;
 		private final DataOutputStream stream;
 
 		/**
@@ -554,7 +556,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param os 交信記録を出力するストリーム
 		 */
 		public ZBinEncoder(OutputStream os) {
-			this.tDateTime = new TDateTime(ZoneOffset.systemDefault());
+			this.tDTime = new TDateTime(ZoneOffset.systemDefault());
 			this.stream = new DataOutputStream(os);
 		}
 
@@ -576,7 +578,7 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		@Override
 		public void encode(List<Item> items) throws IOException {
-			final ZoneOffset zone = tDateTime.epoch.getOffset();
+			final ZoneOffset zone = tDTime.epoch.getOffset();
 			final int secs = zone.getTotalSeconds();
 			final int bits = secs == 0? USEUTC: secs / -60;
 			stream.write(new byte[0x54]);
@@ -619,7 +621,7 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		private final void time(Time time) throws IOException {
 			if(time == null) stream.writeLong(0);
-			else stream.writeLong(tDateTime.encode(time));
+			else stream.writeLong(tDTime.encode(time));
 		}
 
 		/**
@@ -675,7 +677,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param f 直列化する属性
 		 * @throws IOException 出力に失敗した場合
 		 */
-		private final void string(int limit, Field f) throws IOException {
+		private void string(int limit, Field f) throws IOException {
 			final String value = f != null? f.value().toString() : "";
 			final byte[] bytes = value.getBytes("SJIS");
 			stream.writeByte(bytes.length);

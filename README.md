@@ -1,12 +1,11 @@
-qxsl: Hamradio Logging Library & LISP
+qxsl: Amateur-Radio Logging Library & LISP
 ====
 
 ![image](https://img.shields.io/badge/Java-SE11-red.svg)
 ![image](https://img.shields.io/badge/Gradle-5-orange.svg)
 ![image](https://img.shields.io/badge/license-LGPL3-blue.svg)
 
-qxsl is a Java Library for Logging & Scoring & Tabulation for Amateur-Radio Contests.
-qxsl is a vital component of [Automatic Acceptance & Tabulation System (ATS)-4](https://github.com/nextzlog/ats4) for [ALLJA1 contest](http://ja1zlo.u-tokyo.org/allja1).
+qxsl is a Java library for processing amateur-radio log files, including scoring and tabulation frameworks for ham radio contests, which are important components of [Automatic Acceptance & Tabulation System (ATS)](https://github.com/nextzlog/ats4) for [the ALLJA1 contest](http://ja1zlo.u-tokyo.org/allja1).
 
 ## Features
 
@@ -107,18 +106,18 @@ summary.rejected.asScala.foreach(println)
 
 The original LISP engine is provided by the package `elva`.
 
-## Documents
-
-- [Javadoc](https://pafelog.net/qxsl/index.html)
-- [History and Usage of ATS-4](https://pafelog.net/ats4.pdf)
-
-## Bundled Lisp Programs
+### Bundled Contest Definitions
 
 The following LISP programs are bundled inside the JAR file, as sample codes in Elva Lisp.
 
 - [allja1.lisp (ALLJA1 contest definition)](src/main/resources/qxsl/ruler/allja1.lisp)
 - [format.lisp (ADIF-QXSL field converter)](src/main/resources/qxsl/ruler/format.lisp)
 - [macros.lisp (utility-macro definitions)](src/main/resources/qxsl/ruler/macros.lisp)
+
+## Documents
+
+- [Javadoc](https://pafelog.net/qxsl/index.html)
+- [History and Usage of ATS-4](https://pafelog.net/ats4.pdf)
 
 ## Build
 

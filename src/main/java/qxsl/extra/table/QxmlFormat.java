@@ -179,7 +179,7 @@ public final class QxmlFormat extends BaseFormat {
 			if(ahead(SENT)) close(fields(item.getSent(), start(SENT)));
 			close(ITEM);
 			return item;
-		}	
+		}
 
 		/**
 		 * 要素の開始イベントから属性を読み込んで交信記録に設定します。
