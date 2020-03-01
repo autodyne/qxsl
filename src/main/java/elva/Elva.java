@@ -87,9 +87,8 @@ public final class Elva extends AbstractScriptEngine {
 		final var self = new Nested(c.getBindings(ENGINE_SCOPE), glob);
 		final var eval = new Eval(self);
 		try {
-			final var vals = scan(s).stream().map(eval::eval);
-			final var val = vals.reduce((prev, next) -> next);
-			return val.map(Sexp::value).orElse(null);
+			final Stream<Sexp> vals = scan(s).stream().map(eval::eval);
+			return vals.reduce((h, tl) -> tl).orElse(Cons.NIL).value();
 		} catch (ElvaRuntimeException ex) {
 			throw ex.toScriptException();
 		}

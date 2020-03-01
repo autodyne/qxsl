@@ -56,8 +56,7 @@
 
 ; band access for qxsl.org
 (defun qxsl-band it
-	(progn
-		(setq freq (get-field it qxsl "band"))
+	(let ((freq (get-field it qxsl "band")))
 		(cond (
 			((<=  1800 freq  1913)  1900)
 			((<=  3500 freq  3687)  3500)
@@ -69,8 +68,7 @@
 
 ; band access for adif.org
 (defun adif-band it
-	(progn
-		(setq band (get-field it adif "BAND"))
+	(let ((band (get-field it adif "BAND")))
 		(cond (
 			((equal band "160m")  "1900")
 			((equal band  "80m")  "3500")
@@ -82,14 +80,16 @@
 
 ; field copy from ADIF to QXSL
 (defun toQXSL it
-	(progn
-		(if (null? (adif-TIME it)) null (set-qxsl-time it (adif-time it)))
-		(if (null? (adif-call it)) null (set-qxsl-call it (adif-call it)))
-		(if (null? (adif-band it)) null (set-qxsl-band it (adif-band it)))
-		(if (null? (adif-mode it)) null (set-qxsl-mode it (adif-mode it)))
-		(if (null? (adif-name it)) null (set-qxsl-name it (adif-name it)))
-		(if (null? (adif-rstq it)) null (set-qxsl-rstq it (adif-rstq it)))
-		(if (null? (adif-code it)) null (set-qxsl-code it (adif-code it)))
-		(if (null? (adif-RSTQ it)) null (set-qxsl-RSTQ it (adif-RSTQ it)))
-		(if (null? (adif-CODE it)) null (set-qxsl-CODE it (adif-CODE it)))))
+	(if
+		(not (qxsl? it))
+		(progn
+			(set-qxsl-time it (adif-time it))
+			(set-qxsl-call it (adif-call it))
+			(set-qxsl-band it (adif-band it))
+			(set-qxsl-mode it (adif-mode it))
+			(set-qxsl-name it (adif-name it))
+			(set-qxsl-rstq it (adif-rstq it))
+			(set-qxsl-code it (adif-code it))
+			(set-qxsl-RSTQ it (adif-RSTQ it))
+			(set-qxsl-CODE it (adif-CODE it)))))
 (handler "toQXSL" (lambda it (progn (toQXSL it) it)))

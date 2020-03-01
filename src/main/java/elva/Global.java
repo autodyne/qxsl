@@ -296,8 +296,9 @@ final class Global extends SimpleBindings {
 	@Params(min = 1, max = -1)
 	private static final class $Progn extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final var vals = args.stream().map(eval::eval);
-			return vals.reduce((car, s) -> s).orElse(null);
+			final var list = args.stream().map(eval::eval);
+			final var last = list.reduce((head, tl) -> tl);
+			return last.orElse(Cons.NIL);
 		}
 	}
 

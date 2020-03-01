@@ -43,8 +43,8 @@ public final class ElvaTest extends test.RandTest {
 	}
 	@Test
 	public void testBool() throws ScriptException {
-		assertThat(elva.eval("#t")).isEqualTo(!false);
-		assertThat(elva.eval("#f")).isEqualTo(!true);
+		assertThat(elva.eval("#t")).isEqualTo(true);
+		assertThat(elva.eval("#f")).isEqualTo(false);
 	}
 	@Test
 	public void testString() throws ScriptException {
