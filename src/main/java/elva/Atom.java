@@ -19,15 +19,9 @@ import elva.Elva.ElvaRuntimeException;
  *
  * @since 2020/02/29
  */
-public final class Atom implements Sexp, Serializable {
+public final class Atom extends Sexp implements Serializable {
+	private static final RealRules rules = new RealRules();
 	private final Object value;
-
-	/**
-	 * 真を表す特殊なアトムです。
-	 *
-	 * @since 2020/02/29
-	 */
-	public static final Atom TRUE = new Atom(true);
 
 	/**
 	 * 指定された値でアトムを構築します。
@@ -55,18 +49,7 @@ public final class Atom implements Sexp, Serializable {
 	 * @return 実数値
 	 */
 	public final BigDecimal real() {
-		return BigDecimalRules.nToBD(as(Number.class));
-	}
-
-	/**
-	 * このアトムの文字列による表現を返します。
-	 *
-	 * @return 文字列
-	 */
-	@Override
-	public final String toString() {
-		if (!isString()) return Objects.toString(value);
-		else return String.format("\"%s\"", this.value);
+		return rules.nToBD(as(Number.class));
 	}
 
 	/**
@@ -88,14 +71,37 @@ public final class Atom implements Sexp, Serializable {
 	 */
 	@Override
 	public final boolean equals(Object atom) {
-		if(!(atom instanceof Atom)) return false;
-		final var v1 = ((Atom) atom).value;
-		final var v2 = ((Atom) this).value;
-		final var d1 = BigDecimalRules.apply(v1);
-		final var d2 = BigDecimalRules.apply(v2);
-		if(d1 == null) return Objects.equals(v1, v2);
-		if(d2 == null) return Objects.equals(v1, v2);
+		if(atom instanceof Atom) {
+			final var val = ((Atom) atom).value;
+			return this.equals(val, this.value);
+		} else return false;
+	}
+
+	/**
+	 * 指定されたアトムの内容を比較します。
+	 *
+	 * @param v1 左側のアトムの内容
+	 * @param v2 右側のアトムの内容
+	 * @return 同じ内容の場合にtrue
+	 */
+	private final boolean equals(Object v1, Object v2) {
+		if(v1 == null) return v2 == null;
+		final BigDecimal d1 = rules.apply(v1);
+		final BigDecimal d2 = rules.apply(v2);
+		if(d1 == null) return v1.equals(v2);
+		if(d2 == null) return v1.equals(v2);
 		return d1.compareTo(d2) == 0;
+	}
+
+	/**
+	 * このアトムの文字列による表現を返します。
+	 *
+	 * @return 文字列
+	 */
+	@Override
+	public final String toString() {
+		if (!isString()) return Objects.toString(value);
+		else return String.format("\"%s\"", this.value);
 	}
 
 	/**
@@ -106,14 +112,14 @@ public final class Atom implements Sexp, Serializable {
 	 *
 	 * @since 2020/02/29
 	 */
-	private static final class BigDecimalRules {
+	private static final class RealRules {
 		/**
 		 * 指定された値を実数に変換します。
 		 *
 		 * @param value 値
 		 * @return 実数 数値でない場合はnull
 		 */
-		private static final BigDecimal apply(Object value) {
+		private final BigDecimal apply(Object value) {
 			try {
 				return nToBD((Number) value);
 			} catch (ClassCastException ex) {
@@ -127,16 +133,16 @@ public final class Atom implements Sexp, Serializable {
 		 * @param value 数値
 		 * @return 実数
 		 */
-		private static final BigDecimal nToBD(Number value) {
+		private final BigDecimal nToBD(Number value) {
 			try {
 				return (BigDecimal) value;
 			} catch (ClassCastException ex) {
 				// int32
-				final var i2bd = iToBD(value);
-				if (i2bd != null) return i2bd;
+				final var bd32 = iToBD(value);
+				if (bd32 != null) return bd32;
 				// int64
-				final var l2bd = lToBD(value);
-				if (l2bd != null) return l2bd;
+				final var bd64 = lToBD(value);
+				if (bd64 != null) return bd64;
 				return dToBD(value);
 			}
 		}
@@ -147,7 +153,7 @@ public final class Atom implements Sexp, Serializable {
 		 * @param value 整数型の値
 		 * @return 実数
 		 */
-		private static final BigDecimal lToBD(Number value) {
+		private final BigDecimal lToBD(Number value) {
 			try {
 				return BigDecimal.valueOf((long) value);
 			} catch (ClassCastException ex) {
@@ -161,7 +167,7 @@ public final class Atom implements Sexp, Serializable {
 		 * @param value 整数型の値
 		 * @return 実数
 		 */
-		private static final BigDecimal iToBD(Number value) {
+		private final BigDecimal iToBD(Number value) {
 			try {
 				return BigDecimal.valueOf((int) value);
 			} catch (ClassCastException ex) {
@@ -175,12 +181,8 @@ public final class Atom implements Sexp, Serializable {
 		 * @param value 浮動小数点型の値
 		 * @return 実数
 		 */
-		private static final BigDecimal dToBD(Number value) {
-			try {
-				return BigDecimal.valueOf(value.doubleValue());
-			} catch (ClassCastException ex) {
-				return null;
-			}
+		private final BigDecimal dToBD(Number value) {
+			return BigDecimal.valueOf(value.doubleValue());
 		}
 	}
 }

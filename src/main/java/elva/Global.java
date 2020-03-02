@@ -350,8 +350,8 @@ final class Global extends SimpleBindings {
 	private static final class $Cons extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final var head = eval.eval(args.get(0));
-			final var tail = eval.eval(args.get(1));
-			return new Cons(head, tail.cons());
+			final var tail = eval.cons(args.get(1));
+			return new Cons(head, tail);
 		}
 	}
 
@@ -385,7 +385,7 @@ final class Global extends SimpleBindings {
 	@Params(min = 1, max = 1)
 	private static final class $Car extends Form {
 		public Object apply(Cons args, Eval eval) {
-			return eval.eval(args.car()).cons().car();
+			return eval.cons(args.car()).car();
 		}
 	}
 
@@ -401,7 +401,7 @@ final class Global extends SimpleBindings {
 	@Params(min = 1, max = 1)
 	private static final class $Cdr extends Form {
 		public Object apply(Cons args, Eval eval) {
-			return eval.eval(args.car()).cons().cdr();
+			return eval.cons(args.car()).cdr();
 		}
 	}
 
@@ -417,7 +417,7 @@ final class Global extends SimpleBindings {
 	@Params(min = 1, max = 1)
 	private static final class $Length extends Form {
 		public Object apply(Cons args, Eval eval) {
-			return eval.eval(args.car()).cons().size();
+			return eval.cons(args.car()).size();
 		}
 	}
 
@@ -434,8 +434,8 @@ final class Global extends SimpleBindings {
 	private static final class $Member extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final Sexp val = eval.eval(args.get(0));
-			final Sexp seq = eval.eval(args.get(1));
-			return seq.cons().contains(val);
+			final Cons seq = eval.cons(args.get(1));
+			return seq.contains(val);
 		}
 	}
 
@@ -451,8 +451,10 @@ final class Global extends SimpleBindings {
 	@Params(min = 1, max = 1)
 	private static final class $Every extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final Cons seq = eval.eval(args.car()).cons();
-			return seq.stream().allMatch(Atom.TRUE::equals);
+			for(Sexp val: eval.cons(args.car())) {
+				if(!val.as(Boolean.class)) return false;
+			}
+			return true;
 		}
 	}
 
@@ -468,8 +470,10 @@ final class Global extends SimpleBindings {
 	@Params(min = 1, max = 1)
 	private static final class $Some extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final Cons seq = eval.eval(args.car()).cons();
-			return seq.stream().anyMatch(Atom.TRUE::equals);
+			for(Sexp val: eval.cons(args.car())) {
+				if(val.as(Boolean.class)) return true;
+			}
+			return false;
 		}
 	}
 

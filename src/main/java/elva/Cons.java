@@ -5,12 +5,14 @@
 *****************************************************************************/
 package elva;
 
-import java.util.AbstractList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * LISP処理系内部で利用される不変リストの実装です。
@@ -20,7 +22,7 @@ import java.util.stream.Stream;
  *
  * @since 2017/02/18
  */
-public final class Cons extends AbstractList<Sexp> implements Sexp {
+public final class Cons extends Sexp implements Iterable<Sexp> {
 	private final Sexp head;
 	private final Cons tail;
 	private final int size;
@@ -154,7 +156,6 @@ public final class Cons extends AbstractList<Sexp> implements Sexp {
 	 * @param index 要素の位置
 	 * @return 要素
 	 */
-	@Override
 	public final Sexp get(int index) {
 		if(index == 0) return car();
 		if(index >= 0) return tail.get(index -1);
@@ -167,9 +168,98 @@ public final class Cons extends AbstractList<Sexp> implements Sexp {
 	 *
 	 * @return 要素数
 	 */
-	@Override
 	public final int size() {
 		return this.size;
+	}
+
+	/**
+	 * このリストの内容をイテレータで返します。
+	 *
+	 * @return イテレータ
+	 */
+	@Override
+	public final Iterator<Sexp> iterator() {
+		return new Iterator$();
+	}
+
+	/**
+	 * このリストの内容をストリームで返します。
+	 *
+	 * @return ストリーム
+	 */
+	public final Stream<Sexp> stream() {
+		return StreamSupport.stream(spliterator(), false);
+	}
+
+	/**
+	 * リストの内容を返すイテレータの実装です。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2020/03/02
+	 */
+	private final class Iterator$ implements Iterator<Sexp> {
+		private Cons head = Cons.this;
+		@Override
+		public boolean hasNext() {
+			return head != Cons.NIL;
+		}
+		@Override
+		public Sexp next() {
+			Sexp sexp = head.car();
+			this.head = head.cdr();
+			return sexp;
+		}
+	}
+
+	/**
+	 * このリストのハッシュ値を返します。
+	 *
+	 * @return ハッシュ値
+	 */
+	@Override
+	public final int hashCode() {
+		return Objects.hash(stream().toArray());
+	}
+
+	/**
+	 * このリストとオブジェクトを比較します。
+	 * 同じ内容のリストであれば真を返します。
+	 *
+	 * @param list 比較対象のオブジェクト
+	 * @return 同じ内容のリストのみtrue
+	 */
+	@Override
+	public final boolean equals(Object list) {
+		if(list instanceof Cons) {
+			final var s1 = ((Cons) list).stream().toArray();
+			final var s2 = ((Cons) this).stream().toArray();
+			return Arrays.equals(s1, s2);
+		} else return false;
+	}
+
+	/**
+	 * このリストに指定された値が含まれるか確認します。
+	 *
+	 * @param sexp 確認する値
+	 * @return 含まれる場合にtrue
+	 *
+	 * @throws NullPointerException sexpがnulである場合
+	 */
+	public final boolean contains(Sexp sexp) {
+		for(Sexp elem: this) if(sexp.equals(elem)) return true;
+		return false;
+	}
+
+	/**
+	 * このリストが識別子のみで構成されるか確認します。
+	 *
+	 * @return 識別子以外の要素を含む場合にtrue
+	 */
+	public final boolean containsOnlySymbols() {
+		for(Sexp elem: this) if(!elem.isSymbol()) return false;
+		return true;
 	}
 
 	/**
@@ -181,15 +271,5 @@ public final class Cons extends AbstractList<Sexp> implements Sexp {
 	public final String toString() {
 		Stream<String> strm = stream().map(Sexp::toString);
 		return strm.collect(Collectors.joining(" ", "(", ")"));
-	}
-
-	/**
-	 * このリストが識別子のみで構成されるか確認します。
-	 *
-	 * @return 識別子以外の要素を含む場合にtrue
-	 */
-	public final boolean containsOnlySymbols() {
-		for(Sexp sexp: this) if(!sexp.isSymbol()) return false;
-		return true;
 	}
 }

@@ -7,8 +7,8 @@
 
 ; mode validation
 (defun 電信? it (match "(?i)CW" (qxsl-mode it)))
-(defun 電話? it (match "(?i)PH|FM|SSB" (qxsl-mode it)))
-(defun 離散? it (match "(?i)DG|FT[48]" (qxsl-mode it)))
+(defun 電話? it (match "(?i)PH|AM|FM|[DS]SB" (qxsl-mode it)))
+(defun 離散? it (match "(?i)DG|FT4|FT8|RTTY" (qxsl-mode it)))
 (defun 電電? it (or (電信? it) (電話? it)))
 
 ; time validation

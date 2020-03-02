@@ -5,6 +5,7 @@
 *****************************************************************************/
 package elva;
 
+import java.io.Serializable;
 import elva.Elva.ElvaRuntimeException;
 
 /**
@@ -15,30 +16,20 @@ import elva.Elva.ElvaRuntimeException;
  *
  * @since 2020/02/29
  */
-public interface Sexp extends java.io.Serializable {
+public abstract class Sexp implements Serializable {
 	/**
 	 * リスト自体またはアトムの内容を返します。
 	 *
 	 * @return 値
 	 */
-	public Object value();
-
-	/**
-	 * 指定された値を{@link Sexp}で包みます。
-	 *
-	 * @param sexp 値
-	 * @return 値
-	 */
-	public static Sexp wrap(Object sexp) {
-		return sexp instanceof Sexp? (Sexp) sexp: new Atom(sexp);
-	}
+	public abstract Object value();
 
 	/**
 	 * この値が識別子であるか確認します。
 	 *
 	 * @return 識別子の場合にtrue
 	 */
-	public default boolean isSymbol() {
+	public final boolean isSymbol() {
 		return value() instanceof Symbol;
 	}
 
@@ -47,38 +38,19 @@ public interface Sexp extends java.io.Serializable {
 	 *
 	 * @return 文字列の場合にtrue
 	 */
-	public default boolean isString() {
+	public final boolean isString() {
 		return value() instanceof String;
 	}
 
 	/**
-	 * この値を指定された型のアトムとして返します。
+	 * 指定された値を{@link Sexp}で包みます。
 	 *
-	 * @return アトム
-	 * @throws ElvaRuntimeException 型検査の例外
+	 * @param sexp 値
+	 * @return 値
 	 */
-	public default Atom atom() throws ElvaRuntimeException {
-		try {
-			return (Atom) this;
-		} catch(ClassCastException ex) {
-			final String msg = "lisp expression %s is non-atom";
-			throw new ElvaRuntimeException(msg, this).add(this);
-		}
-	}
-
-	/**
-	 * この値をリストとして返します。
-	 *
-	 * @return リスト
-	 * @throws ElvaRuntimeException 型検査の例外
-	 */
-	public default Cons cons() throws ElvaRuntimeException {
-		try {
-			return (Cons) this;
-		} catch(ClassCastException ex) {
-			final String msg = "lisp expression %s is non-cons";
-			throw new ElvaRuntimeException(msg, this).add(this);
-		}
+	public static final Sexp wrap(Object sexp) {
+		if(sexp instanceof Sexp) return (Sexp) sexp;
+		return new Atom(sexp);
 	}
 
 	/**
@@ -88,10 +60,8 @@ public interface Sexp extends java.io.Serializable {
 	 * @return 式の値
 	 *
 	 * @param <V> 返り値の総称型
-	 *
-	 * @throws ElvaRuntimeException 型検査の例外
 	 */
-	public default <V> V as(Class<V> type) throws ElvaRuntimeException {
+	public final <V> V as(Class<V> type) {
 		final var value = this.value();
 		@SuppressWarnings("unchecked")
 		final V valid = type.isInstance(value)? (V) value: null;

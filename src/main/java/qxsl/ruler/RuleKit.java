@@ -193,10 +193,11 @@ public final class RuleKit {
 		@Override
 		public int score(Summary sum) throws RuntimeException {
 			if (sum.score() > 0) {
-				final var args = new ArrayList<Object>();
-				args.addAll(Cons.wrap(rule, sum.score()));
+				final var args = new ArrayList<Sexp>();
+				args.add(Sexp.wrap(rule));
+				args.add(Sexp.wrap(sum.score()));
 				for (var ms: sum.mults()) args.add(Cons.wrap(ms));
-				return eval.real(Cons.wrap(args)).intValueExact();
+				return eval.real(Cons.cons(args)).intValueExact();
 			} else return 0;
 		}
 	}

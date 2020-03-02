@@ -98,7 +98,18 @@ public final class Eval {
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
 	public final BigDecimal real(Sexp sexp) {
-		return eval(sexp).atom().real();
+		return new Atom(eval(sexp).as(Number.class)).real();
+	}
+
+	/**
+	 * 式を評価してリストを返します。
+	 *
+	 * @param sexp 式
+	 * @return リスト
+	 * @throws ElvaRuntimeException 評価により発生した例外
+	 */
+	public final Cons cons(Sexp sexp) {
+		return Cons.cast(eval(sexp));
 	}
 
 	/**
@@ -188,17 +199,17 @@ public final class Eval {
 	 * @sicne 2020/02/26
 	 */
 	private static final class Splice implements Unquote {
-		public final Cons sexp;
-		public Splice(Sexp sexp) {
-			this.sexp = sexp.cons();
+		public final Cons cons;
+		public Splice(Cons cons) {
+			this.cons = cons;
 		}
 		@Override
 		public void addAll(List<Sexp> seq) {
-			seq.addAll(this.sexp);
+			cons.stream().forEach(seq::add);
 		}
 		@Override
 		public Sexp sexp() {
-			return sexp;
+			return cons;
 		}
 	}
 
@@ -215,7 +226,7 @@ public final class Eval {
 			final Cons seq = (Cons) quoted;
 			if (Cons.NIL.equals(seq)) return new Normal(Cons.NIL);
 			if (UQUOT.equals(seq.car())) return new Normal(eval(seq));
-			if (UQSPL.equals(seq.car())) return new Splice(eval(seq));
+			if (UQSPL.equals(seq.car())) return new Splice(cons(seq));
 			final ArrayList<Sexp> list = new ArrayList<>();
 			for (Sexp sexp: seq) qquote(sexp).addAll(list);
 			return new Normal(Cons.cons(list));
