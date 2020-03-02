@@ -59,7 +59,7 @@ public final class Syntax extends Form {
 			for(int i = 0; i < args.size(); i++) {
 				final Sexp par = pars.get(i);
 				final Sexp arg = args.get(i);
-				env.put(par.atom().name(), arg);
+				env.put(par.as(Symbol.class), arg);
 			}
 			return eval.eval(new Eval(env).eval(body));
 		}

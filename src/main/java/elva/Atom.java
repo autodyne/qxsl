@@ -49,53 +49,12 @@ public final class Atom implements Sexp, Serializable {
 	}
 
 	/**
-	 * このアトムに格納された値を返します。
-	 *
-	 * @return nullの場合は例外を発生させる
-	 * @throws ElvaRuntimeException 型検査の例外
-	 */
-	public final Object some() throws ElvaRuntimeException {
-		return as(Object.class);
-	}
-
-	/**
-	 * このアトムに格納された識別子を返します。
-	 *
-	 * @return 識別子
-	 * @throws ElvaRuntimeException 型検査の例外
-	 */
-	public final Symbol name() throws ElvaRuntimeException {
-		return as(Symbol.class);
-	}
-
-	/**
-	 * このアトムに格納された文字列を返します。
-	 *
-	 * @return 文字列
-	 * @throws ElvaRuntimeException 型検査の例外
-	 */
-	public final String text() throws ElvaRuntimeException {
-		return as(String.class);
-	}
-
-	/**
-	 * このアトムに格納された真偽値を返します。
-	 *
-	 * @return 真偽値
-	 * @throws ElvaRuntimeException 型検査の例外
-	 */
-	public final boolean bool() throws ElvaRuntimeException {
-		return as(Boolean.class);
-	}
-
-	/**
 	 * このアトムに格納された実数値を返します。
 	 * 任意の数値が実数に強制的に変換されます。
 	 *
 	 * @return 実数値
-	 * @throws ElvaRuntimeException 型検査の例外
 	 */
-	public final BigDecimal real() throws ElvaRuntimeException {
+	public final BigDecimal real() {
 		return BigDecimalRules.nToBD(as(Number.class));
 	}
 
@@ -129,15 +88,14 @@ public final class Atom implements Sexp, Serializable {
 	 */
 	@Override
 	public final boolean equals(Object atom) {
-		if (atom instanceof Atom) {
-			final var v1 = ((Atom) atom).value;
-			final var v2 = ((Atom) this).value;
-			final var d1 = BigDecimalRules.apply(v1);
-			final var d2 = BigDecimalRules.apply(v2);
-			if(d1 == null) return Objects.equals(v1, v2);
-			if(d2 == null) return Objects.equals(v1, v2);
-			return d1.compareTo(d2) == 0;
-		} else return false;
+		if(!(atom instanceof Atom)) return false;
+		final var v1 = ((Atom) atom).value;
+		final var v2 = ((Atom) this).value;
+		final var d1 = BigDecimalRules.apply(v1);
+		final var d2 = BigDecimalRules.apply(v2);
+		if(d1 == null) return Objects.equals(v1, v2);
+		if(d2 == null) return Objects.equals(v1, v2);
+		return d1.compareTo(d2) == 0;
 	}
 
 	/**

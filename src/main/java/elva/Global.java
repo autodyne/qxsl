@@ -853,8 +853,8 @@ final class Global extends SimpleBindings {
 	@Params(min = 1, max = 1)
 	private static final class $Number extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final var val = eval.eval(args.car()).atom();
-			return new BigDecimal(val.some().toString());
+			final var val = eval.some(args.car());
+			return new BigDecimal(val.toString());
 		}
 	}
 

@@ -59,4 +59,43 @@ public final class Symbol implements Serializable {
 		if (!(obj instanceof Symbol)) return false;
 		return obj.toString().equals(toString());
 	}
+
+	/**
+	 * 構文解析時に参照される特殊な引用演算子を列挙します。
+	 *
+	 *
+	 * @author Journal of Hamradio Informatics
+	 *
+	 * @since 2019/07/01
+	 */
+	enum Quote {
+		QUOTE ("quote"),
+		UQUOT ("unquote"),
+		QUASI ("quasiquote"),
+		UQSPL ("unquote-splicing");
+
+		private final Symbol name;
+		private Quote(String name) {
+			this.name = new Symbol(name);
+		}
+
+		/**
+		 * この演算子の名前をアトムとして返します。
+		 *
+		 * @return 演算子の識別子を包むアトム
+		 */
+		public final Atom toAtom() {
+			return new Atom(name);
+		}
+
+		/**
+		 * この演算子を使用して引用式を構築します。
+		 *
+		 * @param sexp 被引用式
+		 * @return 引用式
+		 */
+		public final Cons quote(Sexp sexp) {
+			return Cons.cons(toAtom(), sexp);
+		}
+	}
 }

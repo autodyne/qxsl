@@ -46,6 +46,18 @@ public final class Eval {
 	}
 
 	/**
+	 * 式を評価してアトムの内容を返します。
+	 * 内容がnullの場合は例外を発生します。
+	 *
+	 * @param sexp 式
+	 * @return 式の内容
+	 * @throws ElvaRuntimeException 評価により発生した例外
+	 */
+	public final Object some(Sexp sexp) {
+		return eval(sexp).as(Object.class);
+	}
+
+	/**
 	 * 式を評価して識別子を返します。
 	 *
 	 * @param sexp 式
@@ -53,7 +65,7 @@ public final class Eval {
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
 	public final Symbol name(Sexp sexp) {
-		return eval(sexp).atom().name();
+		return eval(sexp).as(Symbol.class);
 	}
 
 	/**
@@ -64,7 +76,7 @@ public final class Eval {
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
 	public final String text(Sexp sexp) {
-		return eval(sexp).atom().text();
+		return eval(sexp).as(String.class);
 	}
 
 	/**
@@ -75,7 +87,7 @@ public final class Eval {
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
 	public final boolean bool(Sexp sexp) {
-		return eval(sexp).atom().bool();
+		return eval(sexp).as(Boolean.class);
 	}
 
 	/**
@@ -124,12 +136,12 @@ public final class Eval {
 	/**
 	 * 準引用の部分解除を表現する識別子です。
 	 */
-	private final Atom UQUOT = Quotes.UQUOT.toAtom();
+	private final Atom UQUOT = Symbol.Quote.UQUOT.toAtom();
 
 	/**
 	 * 準引用の部分展開を表現する識別子です。
 	 */
-	private final Atom UQSPL = Quotes.UQSPL.toAtom();
+	private final Atom UQSPL = Symbol.Quote.UQSPL.toAtom();
 
 	/**
 	 * 準引用の被引用式にて引用の部分解除を示す内部オブジェクトです。

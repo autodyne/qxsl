@@ -60,7 +60,7 @@ public final class Lambda extends Form {
 			for(int i = 0; i < args.size(); i++) {
 				final Sexp par = pars.get(i);
 				final Sexp arg = args.get(i);
-				env.put(par.atom().name(), eval.eval(arg));
+				env.put(par.as(Symbol.class), eval.eval(arg));
 			}
 			return new Eval(env).eval(body);
 		}

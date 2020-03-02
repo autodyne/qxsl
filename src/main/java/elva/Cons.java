@@ -154,6 +154,7 @@ public final class Cons extends AbstractList<Sexp> implements Sexp {
 	 * @param index 要素の位置
 	 * @return 要素
 	 */
+	@Override
 	public final Sexp get(int index) {
 		if(index == 0) return car();
 		if(index >= 0) return tail.get(index -1);
@@ -166,6 +167,7 @@ public final class Cons extends AbstractList<Sexp> implements Sexp {
 	 *
 	 * @return 要素数
 	 */
+	@Override
 	public final int size() {
 		return this.size;
 	}

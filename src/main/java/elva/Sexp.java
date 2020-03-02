@@ -30,8 +30,7 @@ public interface Sexp extends java.io.Serializable {
 	 * @return 値
 	 */
 	public static Sexp wrap(Object sexp) {
-		if(sexp instanceof Quotes) return ((Quotes) sexp).toAtom();
-		return (sexp instanceof Sexp)? (Sexp) sexp: new Atom(sexp);
+		return sexp instanceof Sexp? (Sexp) sexp: new Atom(sexp);
 	}
 
 	/**
