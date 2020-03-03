@@ -1,4 +1,3 @@
 .*
-mvn/*
-build/*
+/build
 !.gitignore
