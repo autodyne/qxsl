@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * {@link RuleKit}クラスをALLJA1コンテストの規約でテストするクラスです。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2017/02/26
  *
@@ -41,7 +41,7 @@ public final class RuleKitTest extends test.RandTest {
 	 * ALLJA1コンテストの部門の名前と正しい得点を格納します。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2020/02/23
 	 *
@@ -71,7 +71,7 @@ public final class RuleKitTest extends test.RandTest {
 	 * ALLJA1コンテストの部門の正解と書式のペアを格納します。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2020/02/27
 	 *

@@ -14,7 +14,7 @@ import javax.xml.namespace.QName;
  * 交信時に相手局と交換した情報を表現する{@link Tuple}実装クラスです。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2013/06/15
  *

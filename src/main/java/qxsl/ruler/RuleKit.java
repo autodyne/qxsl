@@ -34,7 +34,7 @@ import static javax.script.ScriptContext.ENGINE_SCOPE;
  * {@link Contest}をLISPベースのドメイン特化言語で表現する仕組みです。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  *
  * @since 2017/02/27
  *
@@ -121,7 +121,7 @@ public final class RuleKit {
 	 * LISP処理系内部における{@link Handler}の実装です。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2020/02/26
 	 */
@@ -157,7 +157,7 @@ public final class RuleKit {
 	 * LISP処理系内部における{@link Contest}の実装です。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2017/02/20
 	 */
@@ -206,7 +206,7 @@ public final class RuleKit {
 	 * LISP処理系内部における{@link Section}の実装です。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2017/02/20
 	 */
@@ -337,7 +337,7 @@ public final class RuleKit {
 	 * LISP処理系で事前に定義されるload関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2020/02/26
 	 */
@@ -363,7 +363,7 @@ public final class RuleKit {
 	 * LISP処理系で事前に定義されるhandler関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2020/02/26
 	 */
@@ -379,7 +379,7 @@ public final class RuleKit {
 	 * LISP処理系で事前に定義されるcontest関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/15
 	 */
@@ -395,7 +395,7 @@ public final class RuleKit {
 	 * LISP処理系で事前に定義されるsection関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/15
 	 */
@@ -411,7 +411,7 @@ public final class RuleKit {
 	 * LISP処理系で事前に定義されるsuccess関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/18
 	 */
@@ -430,7 +430,7 @@ public final class RuleKit {
 	 * LISP処理系で事前に定義されるfailure関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/18
 	 */
@@ -447,7 +447,7 @@ public final class RuleKit {
 	 * LISP処理系で事前に定義されるitem関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2020/02/26
 	 */
@@ -463,7 +463,7 @@ public final class RuleKit {
 	 * LISP処理系で事前に定義されるrcvd関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/18
 	 */
@@ -479,7 +479,7 @@ public final class RuleKit {
 	 * LISP処理系で事前に定義されるsent関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/18
 	 */
@@ -495,7 +495,7 @@ public final class RuleKit {
 	 * LISP処理系で事前に定義されるget-field関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/06/29
 	 */
@@ -514,7 +514,7 @@ public final class RuleKit {
 	 * LISP処理系で事前に定義されるset-field関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/06/29
 	 */
@@ -534,7 +534,7 @@ public final class RuleKit {
 	 * LISP処理系で事前に定義されるhour関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/18
 	 */
@@ -554,7 +554,7 @@ public final class RuleKit {
 	 * LISP処理系で事前に定義されるcity関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/18
 	 */

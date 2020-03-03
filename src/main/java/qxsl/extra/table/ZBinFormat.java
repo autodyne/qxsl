@@ -28,7 +28,7 @@ import static java.time.temporal.ChronoUnit.MILLIS;
  * zLogバイナリファイルの書式です。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2013/02/26
  *
@@ -54,7 +54,7 @@ public final class ZBinFormat extends BaseFormat {
 	 * Delphi言語のTDateTime型を閏秒を無視して再現します。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2013/02/23
 	 *
@@ -107,7 +107,7 @@ public final class ZBinFormat extends BaseFormat {
 	 * zLogバイナリデータの周波数帯の列挙型です。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2013/02/23
 	 *
@@ -184,7 +184,7 @@ public final class ZBinFormat extends BaseFormat {
 	 * zLogバイナリデータの通信方式の列挙型です。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2013/02/23
 	 *
@@ -246,7 +246,7 @@ public final class ZBinFormat extends BaseFormat {
 	 * zLogバイナリデータの空中線出力の列挙型です。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2013/02/23
 	 *
@@ -303,7 +303,7 @@ public final class ZBinFormat extends BaseFormat {
 	 * zLogバイナリデータで直列化された交信記録をデコードします。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2013/02/23
 	 *
@@ -541,7 +541,7 @@ public final class ZBinFormat extends BaseFormat {
 	 * 交信記録をzLogバイナリデータに直列化するエンコーダです。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2013/02/23
 	 *

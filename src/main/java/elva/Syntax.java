@@ -11,7 +11,7 @@ import elva.Elva.ElvaRuntimeException;
  * LISP処理系のマクロ式の実装です。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  *
  * @since 2017/02/18
  */

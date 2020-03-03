@@ -17,7 +17,7 @@ import qxsl.model.Item;
  * 交信記録を永続化する書式はこのインターフェースを継承します。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2013/02/25
  *
@@ -97,7 +97,7 @@ public interface TableFormat {
 	 * 永続化された交信記録を読み込むためのデコーダです。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/07/08
 	 *
@@ -122,7 +122,7 @@ public interface TableFormat {
 	 * 交信記録を書き出して永続化するためのエンコーダです。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/07/08
 	 *

@@ -20,7 +20,7 @@ import static java.math.MathContext.DECIMAL64;
  * LISP処理系の大域変数のスコープを実装します。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  *
  * @since 2019/07/01
  */
@@ -224,7 +224,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義される引用関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/14
 	 */
@@ -240,7 +240,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義される準引用関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/14
 	 */
@@ -256,7 +256,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義される引用解除の関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/14
 	 */
@@ -272,7 +272,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義される引用解除の関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2020/02/26
 	 */
@@ -288,7 +288,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義されるprogn関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2017/02/27
 	 */
@@ -306,7 +306,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義されるset関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2017/02/27
 	 */
@@ -325,7 +325,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義されるeval関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2020/02/26
 	 */
@@ -341,7 +341,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義されるcons関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/07/03
 	 */
@@ -359,7 +359,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義されるlist関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/14
 	 */
@@ -377,7 +377,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義されるcar関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/14
 	 */
@@ -393,7 +393,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義されるcdr関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/14
 	 */
@@ -409,7 +409,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義されるlength関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/14
 	 */
@@ -425,7 +425,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義されるmember関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2017/02/27
 	 */
@@ -443,7 +443,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義されevery関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2020/02/26
 	 */
@@ -462,7 +462,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義されsome関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2020/02/26
 	 */
@@ -481,7 +481,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義されるequal関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2017/02/27
 	 */
@@ -499,7 +499,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義されるnull?関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/12/06
 	 */
@@ -515,7 +515,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義されるif関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2017/02/27
 	 */
@@ -532,7 +532,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義されるand関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2017/02/27
 	 */
@@ -549,7 +549,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義されるor関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2017/02/27
 	 */
@@ -566,7 +566,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義されるand関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/18
 	 */
@@ -582,7 +582,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義される加算演算子です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2017/03/19
 	 */
@@ -600,7 +600,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義される減算演算子です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2017/03/19
 	 */
@@ -618,7 +618,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義される乗算演算子です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2017/03/19
 	 */
@@ -636,7 +636,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義される除算演算子です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2017/03/19
 	 */
@@ -654,7 +654,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義される剰余演算子です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/18
 	 */
@@ -672,7 +672,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義される切り上げ演算子です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2020/02/28
 	 */
@@ -689,7 +689,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義される切り捨て演算子です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2020/02/28
 	 */
@@ -706,7 +706,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義される四捨五入演算子です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2020/02/28
 	 */
@@ -723,7 +723,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義される不等号&lt;の関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2017/03/17
 	 */
@@ -745,7 +745,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義される不等号&gt;の関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2017/03/17
 	 */
@@ -767,7 +767,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義される不等号&lt;=の関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2017/03/17
 	 */
@@ -789,7 +789,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義される不等号&gt;=の関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2017/03/17
 	 */
@@ -811,7 +811,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義されるformat関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2020/02/26
 	 */
@@ -830,7 +830,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義されるsubstring関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/12/06
 	 */
@@ -849,7 +849,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義されるnumber関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/06/30
 	 */
@@ -866,7 +866,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義されるstring関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/06/30
 	 */
@@ -882,7 +882,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義されるmatch関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/16
 	 */
@@ -900,7 +900,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義されるtokenize関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/12/06
 	 */
@@ -918,7 +918,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義されるlambda関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/14
 	 */
@@ -939,7 +939,7 @@ final class Global extends SimpleBindings {
 	 * LISP処理系で事前に定義されるsyntax関数です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/14
 	 */

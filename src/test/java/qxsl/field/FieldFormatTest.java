@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * {@link FieldFormat}クラスのテスト用クラスです。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2019/07/02
  *

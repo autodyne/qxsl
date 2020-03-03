@@ -18,7 +18,7 @@ import java.util.stream.StreamSupport;
  * LISP処理系内部で利用される不変リストの実装です。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  *
  * @since 2017/02/18
  */
@@ -195,7 +195,7 @@ public final class Cons extends Sexp implements Iterable<Sexp> {
 	 * リストの内容を返すイテレータの実装です。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2020/03/02
 	 */

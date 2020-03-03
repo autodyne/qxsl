@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * {@link Time}クラスのテスト用クラスです。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2017/02/24
  *

@@ -12,7 +12,7 @@ import qxsl.model.Field;
  * 交信記録の属性をQXMLで永続化するための仕組みを提供します。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2015/08/05
  * 

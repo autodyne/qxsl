@@ -33,7 +33,7 @@ import static javax.xml.stream.XMLOutputFactory.IS_REPAIRING_NAMESPACES;
  * qxslライブラリに標準的に付属するQXMLの書式です。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2013/02/26
  *
@@ -80,7 +80,7 @@ public final class QxmlFormat extends BaseFormat {
 	 *  qxml書式で直列化された交信記録をデコードします。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2013/02/22
 	 *
@@ -245,7 +245,7 @@ public final class QxmlFormat extends BaseFormat {
 		/**
 		 * 文字列を読み飛ばすフィルタです。
 		 *
-		 * @author Journal of Hamradio Informatics
+		 * @author 無線部開発班
 		 *
 		 * @since 2017/02/26
 		 */
@@ -261,7 +261,7 @@ public final class QxmlFormat extends BaseFormat {
 	 * 交信記録をqxml書式で直列化するエンコーダです。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2013/02/22
 	 *

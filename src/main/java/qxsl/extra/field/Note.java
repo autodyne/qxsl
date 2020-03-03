@@ -13,7 +13,7 @@ import qxsl.model.Field;
  * 交信の備考を表現する{@link Field}実装クラスです。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2013/06/08
  *
@@ -40,7 +40,7 @@ public final class Note extends Qxsl<String> {
 	 * {@link Note}を生成する書式です。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2013/06/08
 	 *

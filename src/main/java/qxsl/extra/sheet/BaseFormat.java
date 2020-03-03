@@ -17,7 +17,7 @@ import qxsl.sheet.SheetFormat;
  * 書式の説明を設定ファイルから取得する仕組みを提供します。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2019/06/16
  *

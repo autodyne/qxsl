@@ -17,7 +17,7 @@ import qxsl.model.Item;
  * 以降の識別子は乗数の計算に使用されます。乗数の個数は規約に依ります。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  *
  * @since 2016/11/26
  */

@@ -13,7 +13,7 @@ import qxsl.model.Field;
  * 交信のRST(RSQ)レポートを表現する{@link Field}実装クラスです。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2013/06/08
  *
@@ -95,7 +95,7 @@ public final class RSTQ extends Qxsl<Integer> {
 	 * {@link RSTQ}を生成する書式です。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2013/06/08
 	 *

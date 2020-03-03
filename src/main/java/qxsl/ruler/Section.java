@@ -14,7 +14,7 @@ import qxsl.model.Item;
  * コンテストの部門の実装は{@link Section}クラスを実装します。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  *
  * @since 2016/11/25
  */

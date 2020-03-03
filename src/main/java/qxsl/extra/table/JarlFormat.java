@@ -21,7 +21,7 @@ import qxsl.model.Item;
  * JARLサマリーシートR2.0の交信記録を表現する書式です。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2014/06/03
  *
@@ -57,7 +57,7 @@ public final class JarlFormat extends BaseFormat {
 	 * JARL書式で直列化された交信記録をデコードします。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2014/06/03
 	 */
@@ -229,7 +229,7 @@ public final class JarlFormat extends BaseFormat {
 	 * 交信記録をJARL書式に直列化するエンコーダです。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2014/06/03
 	 */

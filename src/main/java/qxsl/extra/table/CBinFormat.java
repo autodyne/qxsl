@@ -27,7 +27,7 @@ import static java.time.temporal.ChronoUnit.SECONDS;
  * CTESTWINバイナリファイルのうちLG8と呼ばれる書式です。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2017/06/12
  *
@@ -51,7 +51,7 @@ public final class CBinFormat extends BaseFormat {
 	 * CTESTWINのCDateTime型を再現します。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2017/06/12
 	 *
@@ -94,7 +94,7 @@ public final class CBinFormat extends BaseFormat {
 	 * LG8書式の周波数帯の列挙型です。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2017/06/12
 	 *
@@ -178,7 +178,7 @@ public final class CBinFormat extends BaseFormat {
 	 * LG8書式の通信方式の列挙型です。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2017/06/12
 	 *
@@ -258,7 +258,7 @@ public final class CBinFormat extends BaseFormat {
 	 * LG8書式で直列化された交信記録をデコードします。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2017/06/12
 	 *
@@ -453,7 +453,7 @@ public final class CBinFormat extends BaseFormat {
 	 * 交信記録をLG8書式に直列化するエンコーダです。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2019/05/04
 	 *

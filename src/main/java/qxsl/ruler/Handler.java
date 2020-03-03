@@ -13,7 +13,7 @@ import qxsl.model.Item;
  * 交信記録に対する手続きは{@link Handler}クラスを実装します。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  *
  * @since 2020/02/26
  */

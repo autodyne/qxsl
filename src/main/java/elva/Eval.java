@@ -15,7 +15,7 @@ import elva.Elva.ElvaRuntimeException;
  * LISP処理系のスコープ付きの評価器の実装です。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  *
  * @since 2017/02/18
  */
@@ -158,7 +158,7 @@ public final class Eval {
 	 * 準引用の被引用式にて引用の部分解除を示す内部オブジェクトです。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @sicne 2020/02/26
 	 */
@@ -171,7 +171,7 @@ public final class Eval {
 	 * 準引用の被引用式にて通常の引用解除を示す内部オブジェクトです。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @sicne 2020/02/26
 	 */
@@ -194,7 +194,7 @@ public final class Eval {
 	 * 準引用の被引用式にてリストの継足しを示す内部オブジェクトです。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @sicne 2020/02/26
 	 */

@@ -22,7 +22,7 @@ import static java.util.stream.Collectors.toList;
  * 交信の相手局の地域を表現する{@link Field}実装クラスです。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2014/04/20
  * 
@@ -115,7 +115,7 @@ public final class City extends Qxsl<String> {
 	 * ライブラリが内蔵する地域ベースを表現します。
 	 * 
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2017/02/28
 	 */
@@ -164,7 +164,7 @@ public final class City extends Qxsl<String> {
 	 * {@link City}を生成する書式です。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2014/04/20
 	 *

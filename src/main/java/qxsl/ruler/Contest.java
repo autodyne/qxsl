@@ -11,7 +11,7 @@ import java.util.Iterator;
  * コンテストの規約の実装は{@link Contest}クラスを実装します。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  *
  * @since 2016/11/25
  */

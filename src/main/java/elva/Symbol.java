@@ -11,7 +11,7 @@ import java.io.Serializable;
  * LISP処理系で使用される識別子の実装です。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  *
  * @since 2017/02/18
  */
@@ -64,7 +64,7 @@ public final class Symbol implements Serializable {
 	 * 構文解析時に参照される特殊な引用演算子を列挙します。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/07/01
 	 */

@@ -13,7 +13,7 @@ import qxsl.model.Field;
  * コンテストで相手局と交換するシリアル番号です。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2013/06/09
  *
@@ -40,7 +40,7 @@ public final class Code extends Qxsl<String> {
 	 * {@link Code}を生成する書式です。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2013/06/08
 	 *

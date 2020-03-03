@@ -23,7 +23,7 @@ import qxsl.table.TableFormats;
  * {@link SheetFormat}実装クラスを自動的に検出して管理します。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2017/03/11
  *

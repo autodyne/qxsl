@@ -23,7 +23,7 @@ import qxsl.model.Item;
  * 2016年4月以前のCTESTWINのテキストファイルの書式です。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2013/07/02
  *
@@ -59,7 +59,7 @@ public final class CTxtFormat extends BaseFormat {
 	 * CTESTWIN書式で直列化された交信記録をデコードします。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2013/07/02
 	 */
@@ -228,7 +228,7 @@ public final class CTxtFormat extends BaseFormat {
 	 * 交信記録をCTESTWIN書式に直列化するエンコーダーです。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2013/07/02
 	 */

@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
  * LISP処理系のシステム関数であることを示す注釈型です。
  *
  *
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  *
  * @since 2019/07/02
  */

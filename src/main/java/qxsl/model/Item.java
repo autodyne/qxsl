@@ -16,7 +16,7 @@ import static qxsl.extra.table.QxmlFormat.ITEM;
  * 交信記録で1件の不可分な交信を表現する{@link Tuple}実装クラスです。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2013/06/04
  *

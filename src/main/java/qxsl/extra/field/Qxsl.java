@@ -12,7 +12,7 @@ import qxsl.model.Field;
  * QXMLが標準仕様でサポートする属性の名前を定義します。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2019/06/27
  *

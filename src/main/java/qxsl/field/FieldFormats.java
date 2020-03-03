@@ -18,7 +18,7 @@ import qxsl.model.Field;
  * {@link FieldFormat}クラスの自動検出及びインスタンス化機構を実装します。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2013/06/08
  *
@@ -94,7 +94,7 @@ public final class FieldFormats implements Iterable<FieldFormat> {
 	 * クラスパスに{@link FieldFormat}がない場合に使用されます。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2019/06/28
 	 *
@@ -123,7 +123,7 @@ public final class FieldFormats implements Iterable<FieldFormat> {
 	 * 特定の属性名を持つ属性に特化したキャッシュ機構です。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/06/26
 	 */

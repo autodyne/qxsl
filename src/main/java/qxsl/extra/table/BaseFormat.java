@@ -22,7 +22,7 @@ import qxsl.table.TableFormat;
  * 書式の説明を設定ファイルから取得する仕組みを提供します。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2019/06/16
  *
@@ -110,7 +110,7 @@ public abstract class BaseFormat implements TableFormat {
 	 * プレインテキストの交信記録を読み込むためのデコーダの共通実装です。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2013/06/24
 	 *
@@ -210,7 +210,7 @@ public abstract class BaseFormat implements TableFormat {
 	 * プレインテキストの交信記録を書き出すためのエンコーダの共通実装です。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2013/06/24
 	 *

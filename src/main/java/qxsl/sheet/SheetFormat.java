@@ -15,7 +15,7 @@ import java.util.Map;
  * 交信記録を要約する書式はこのインターフェースを継承します。
  *
  *
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2017/03/11
  *
@@ -76,7 +76,7 @@ public interface SheetFormat {
 	 * 永続化された要約書類を読み込むためのデコーダです。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/07/08
 	 *
@@ -101,7 +101,7 @@ public interface SheetFormat {
 	 * 要約書類を書き出して永続化するためのエンコーダです。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/07/08
 	 *

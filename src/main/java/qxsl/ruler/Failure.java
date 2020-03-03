@@ -14,7 +14,7 @@ import qxsl.model.Item;
  * 総得点や乗数の計算には反映されません。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  *
  * @since 2016/11/26
  */

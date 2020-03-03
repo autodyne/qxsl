@@ -18,7 +18,7 @@ import qxsl.field.FieldFormats;
  * {@link Item}クラスや{@link Exch}クラスはこのクラスを実装します。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2015/08/05
  *

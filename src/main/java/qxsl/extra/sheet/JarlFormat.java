@@ -23,7 +23,7 @@ import org.xml.sax.SAXException;
  * JARLサマリーシートR2.0(R1.0)の書式です。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2017/03/11
  *
@@ -65,7 +65,7 @@ public final class JarlFormat extends BaseFormat {
 	 * JARLサマリーシートを開封するデコーダの実装です。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2014/11/04
 	 *
@@ -179,7 +179,7 @@ public final class JarlFormat extends BaseFormat {
 		/**
 		 * 空の文字列を読み飛ばすフィルタです。
 		 *
-		 * @author Journal of Hamradio Informatics
+		 * @author 無線部開発班
 		 *
 		 * @since 2017/02/26
 		 */
@@ -195,7 +195,7 @@ public final class JarlFormat extends BaseFormat {
 	 * JARLサマリーシートを作成するエンコーダの実装です。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2017/03/11
 	 *

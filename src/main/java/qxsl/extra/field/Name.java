@@ -13,7 +13,7 @@ import qxsl.model.Field;
  * 交信を行なった運用者の個人の名前を表現します。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2013/06/08
  *
@@ -40,7 +40,7 @@ public final class Name extends Qxsl<String> {
 	 * {@link Name}を生成する書式です。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2013/06/08
 	 *

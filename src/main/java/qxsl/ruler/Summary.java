@@ -19,7 +19,7 @@ import static java.util.stream.IntStream.range;
  * 有効な交信と無効な交信を保持するとともに識別子から得点を計算します。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  *
  * @since 2016/11/26
  */

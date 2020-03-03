@@ -21,7 +21,7 @@ import qxsl.table.TableFormats;
  * ADIFのうちADXと呼ばれる新方式の書式の部分的な実装です。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2019/06/27
  *
@@ -67,7 +67,7 @@ public final class AdxsFormat extends BaseFormat {
 	 * ADXサブセット書式で直列化された交信記録をデコードします。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2019/07/08
 	 *
@@ -139,7 +139,7 @@ public final class AdxsFormat extends BaseFormat {
 	 * ADXサブセット書式で直列化された交信記録をエンコードします。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2019/07/08
 	 *

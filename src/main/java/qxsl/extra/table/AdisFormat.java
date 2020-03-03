@@ -26,7 +26,7 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
  * ADIFのうちADIと呼ばれる旧方式の書式の部分的な実装です。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2019/07/04
  *
@@ -62,7 +62,7 @@ public final class AdisFormat extends BaseFormat {
 	 * ADIサブセット書式で直列化された交信記録をデコードします。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2019/07/08
 	 *
@@ -144,7 +144,7 @@ public final class AdisFormat extends BaseFormat {
 	 * ADIサブセット書式で直列化された交信記録をエンコードします。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2019/07/08
 	 *

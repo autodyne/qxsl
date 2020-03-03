@@ -15,7 +15,7 @@ import java.util.StringJoiner;
  * Cabrilloサマリーシートv3(v2)の書式です。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2019/05/03
  *
@@ -39,7 +39,7 @@ public final class Cab3Format extends BaseFormat {
 	 * Cabrilloサマリーシートを開封するデコーダの実装です。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2019/05/03
 	 *
@@ -125,7 +125,7 @@ public final class Cab3Format extends BaseFormat {
 	 * Cabrilloサマリーシートを作成するエンコーダの実装です。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2019/05/03
 	 *

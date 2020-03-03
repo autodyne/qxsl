@@ -24,7 +24,7 @@ import qxsl.model.Item;
  * zLogテキストファイルのうちDOS版と互換の書式です。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2013/02/27
  *
@@ -60,7 +60,7 @@ public final class ZDosFormat extends BaseFormat {
 	 * zLogテキスト書式で直列化された交信記録をデコードします。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2013/02/25
 	 */
@@ -246,7 +246,7 @@ public final class ZDosFormat extends BaseFormat {
 	 * 交信記録をzLogテキスト書式に直列化するエンコーダです。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2013/02/25
 	 */

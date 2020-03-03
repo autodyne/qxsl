@@ -11,7 +11,7 @@ import java.util.function.BiFunction;
  * LISP処理系でシンボルが参照する関数やマクロの実体を表現します。
  *
  *
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  *
  * @since 2019/05/15
  */

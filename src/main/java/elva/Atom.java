@@ -15,7 +15,7 @@ import elva.Elva.ElvaRuntimeException;
  * LISP処理系で使用される空リストを除く不可分な値を格納します。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  *
  * @since 2020/02/29
  */
@@ -108,7 +108,7 @@ public final class Atom extends Sexp implements Serializable {
 	 * 数値型の実数への変換規則を実装します。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2020/02/29
 	 */

@@ -24,7 +24,7 @@ import static java.time.ZoneOffset.UTC;
  * CabrilloのQSOテンプレートでCQWWコンテストの交信記録を表す書式です。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2019/05/04
  *
@@ -58,7 +58,7 @@ public final class CqwwFormat extends BaseFormat {
 	 * Cabrillo書式の周波数帯の列挙型です。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2020/02/26
 	 *
@@ -144,7 +144,7 @@ public final class CqwwFormat extends BaseFormat {
 	 * Cabrillo書式で直列化された交信記録をデコードします。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2019/05/04
 	 *
@@ -317,7 +317,7 @@ public final class CqwwFormat extends BaseFormat {
 	 * 交信記録をCabrillo書式に直列化するエンコーダです。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/04
 	 *

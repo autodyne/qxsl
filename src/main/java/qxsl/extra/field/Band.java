@@ -14,7 +14,7 @@ import qxsl.model.Field;
  * 交信の周波数を表現する{@link Field}実装クラスです。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2013/06/08
  *
@@ -141,7 +141,7 @@ public final class Band extends Qxsl<BigDecimal> {
 	 * {@link Band}を生成する書式です。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2013/06/08
 	 *

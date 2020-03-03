@@ -21,7 +21,7 @@ import qxsl.model.Item;
  * zLogテキストファイルのうちALLと呼ばれる書式です。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2013/06/23
  *
@@ -57,7 +57,7 @@ public final class ZAllFormat extends BaseFormat {
 	 * zLog ALL書式で直列化された交信記録をデコードします。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 * 
 	 * @since 2013/06/23
 	 */
@@ -264,7 +264,7 @@ public final class ZAllFormat extends BaseFormat {
 	 * 交信記録をzLog ALL書式に直列化するエンコーダです。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2013/06/23
 	 */

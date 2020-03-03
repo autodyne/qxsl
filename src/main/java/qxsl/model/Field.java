@@ -13,7 +13,7 @@ import qxsl.field.FieldFormats.Any;
  * {@link Tuple}に付随する各種の属性は{@link Field}クラスを実装します。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  * 
  * @since 2015/08/05
  * 

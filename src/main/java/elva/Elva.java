@@ -27,7 +27,7 @@ import static javax.script.ScriptContext.GLOBAL_SCOPE;
  * 無線部開発班が実装するLISP方言「Elva」の{@link ScriptEngine}の実装です。
  * 
  * 
- * @author Journal of Hamradio Informatics
+ * @author 無線部開発班
  *
  * @since 2019/05/17
  */
@@ -140,7 +140,7 @@ public final class Elva extends AbstractScriptEngine {
 	 * LISP処理系で使用される構文解析器の実装です。
 	 * 
 	 * 
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2017/02/18
 	 */
@@ -275,7 +275,7 @@ public final class Elva extends AbstractScriptEngine {
 	 * この例外はLISP処理系内部でのみ使用されます。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/07/01
 	 */
@@ -298,7 +298,7 @@ public final class Elva extends AbstractScriptEngine {
 	 * この例外はLISP処理系内部でのみ使用されます。
 	 *
 	 *
-	 * @author Journal of Hamradio Informatics
+	 * @author 無線部開発班
 	 *
 	 * @since 2019/07/01
 	 */
