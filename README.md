@@ -116,8 +116,28 @@ The following LISP programs are bundled inside the JAR file, as sample codes in 
 
 ## Documents
 
-- [Javadoc](https://pafelog.net/qxsl/index.html)
+- [Javadoc](https://nextzlog.github.io/qmvn/doc/index.html)
 - [History and Usage of ATS-4](https://pafelog.net/ats4.pdf)
+
+## Maven
+
+```XML
+<project>
+	<repositories>
+		<repository>
+			<id>qxsl</id>
+			<url>https://nextzlog.github.io/qmvn/mvn/</url>
+		</repository>
+	</repositories>
+	<dependencies>
+		<dependency>
+			<groupId>qxsl</groupId>
+			<artifactId>qxsl</artifactId>
+			<version>latest</version>
+		</dependency>
+	</dependencies>
+</project>
+```
 
 ## Build
 
