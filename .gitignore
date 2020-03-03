@@ -1,4 +1,4 @@
 .*
+mvn/*
 build/*
 !.gitignore
-!build/libs

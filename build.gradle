@@ -1,6 +1,8 @@
 apply plugin: 'java'
+apply plugin: 'maven-publish'
 
 def utf8 = 'UTF-8'
+def java = '11'
 
 repositories {
 	mavenCentral()
@@ -15,8 +17,8 @@ dependencies {
 
 compileJava {
 	options.encoding = utf8
-	sourceCompatibility = '11'
-	targetCompatibility = '11'
+	sourceCompatibility = java
+	targetCompatibility = java
 }
 
 test {
@@ -25,7 +27,17 @@ test {
 
 javadoc {
 	exclude 'qxsl/extra/**'
-	options.links('https://docs.oracle.com/en/java/javase/11/docs/api/')
+	options.links("https://docs.oracle.com/en/java/javase/$java/docs/api/")
 	options.charSet = utf8
 	options.encoding = utf8
 }
+
+publishing.publications {
+	qxsl(MavenPublication) {
+		from components.java
+		groupId = 'qxsl'
+		version = 'latest'
+	}
+}
+
+publishing.repositories.maven{url = "$buildDir/mvn"}
