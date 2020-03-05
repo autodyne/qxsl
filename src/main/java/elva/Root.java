@@ -37,11 +37,6 @@ final class Root extends SimpleBindings {
 
 		/*
 		 * syntax operation
-		 *
-		 * (quote expression)
-		 * (quasi expression)
-		 * (unquote expression)
-		 * (unquote-splicing expression)
 		 */
 		this.put(new $Quote());
 		this.put(new $Quasi());
@@ -50,36 +45,21 @@ final class Root extends SimpleBindings {
 
 		/*
 		 * sequential processing
-		 *
-		 * (progn statements)
 		 */
 		this.put(new $Progn());
 
 		/*
 		 * variable assignment
-		 *
-		 * (set symbol expression)
 		 */
 		this.put(new $Set());
 
 		/*
 		 * evaluation
-		 *
-		 * (eval expression)
 		 */
 		this.put(new $Eval());
 
 		/*
 		 * list operation
-		 *
-		 * (cons car cdr)
-		 * (list elements)
-		 * (car list)
-		 * (cdr list)
-		 * (nth list)
-		 * (subseq list)
-		 * (length list)
-		 * (member value list)
 		 */
 		this.put(new $Cons());
 		this.put(new $List());
@@ -92,35 +72,23 @@ final class Root extends SimpleBindings {
 
 		/*
 		 * list reduction
-		 *
-		 * (every list)
-		 * (some  list)
 		 */
 		this.put(new $Every());
 		this.put(new $Some());
 
 		/*
 		 * checking equality
-		 *
-		 * (equal expression expression)
-		 * (null? expression)
 		 */
 		this.put(new $Equal());
 		this.put(new $Null$());
 
 		/*
 		 * conditional operators
-		 *
-		 * (if condition then [else])
 		 */
 		this.put(new $If());
 
 		/*
 		 * logical operation
-		 *
-		 * (and expressions)
-		 * (or  expressions)
-		 * (not expression)
 		 */
 		this.put(new $And());
 		this.put(new $Or());
@@ -128,12 +96,6 @@ final class Root extends SimpleBindings {
 
 		/*
 		 * arithmetical operation
-		 *
-		 * (+ expressions)
-		 * (- expressions)
-		 * (* expressions)
-		 * (/ expressions)
-		 * (% expressions)
 		 */
 		this.put(new $Add());
 		this.put(new $Sub());
@@ -143,10 +105,6 @@ final class Root extends SimpleBindings {
 
 		/*
 		 * round operation
-		 *
-		 * (ceiling expressions)
-		 * (floor expressions)
-		 * (round expressions)
 		 */
 		this.put(new $Ceiling());
 		this.put(new $Floor());
@@ -154,11 +112,6 @@ final class Root extends SimpleBindings {
 
 		/*
 		 * numerical comparison
-		 *
-		 * (<  expressions)
-		 * (>  expressions)
-		 * (<= expressions)
-		 * (>= expressions)
 		 */
 		this.put(new $Lt());
 		this.put(new $Gt());
@@ -167,36 +120,24 @@ final class Root extends SimpleBindings {
 
 		/*
 		 * string operation
-		 *
-		 * (concat strings)
-		 * (format template args)
 		 */
 		this.put(new $Concat());
 		this.put(new $Format());
 
 		/*
 		 * type conversion
-		 *
-		 * (number string)
-		 * (string number)
 		 */
 		this.put(new $Number());
 		this.put(new $String());
 
 		/*
 		 * regex matching
-		 *
-		 * (match pattern string)
-		 * (split pattern string)
 		 */
 		this.put(new $Match());
 		this.put(new $Split());
 
 		/*
-		 * lambda & syntax(macro) generation
-		 *
-		 * (lambda (parameters) value)
-		 * (syntax (parameters) macro)
+		 * lambda & syntax generation
 		 */
 		this.put(new $Lambda());
 		this.put(new $Syntax());
@@ -422,8 +363,8 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 2, max = 2)
 	private static final class $Nth extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final var seq = eval.cons(args.get(0));
-			final var idx = eval.real(args.get(1));
+			final var idx = eval.real(args.get(0));
+			final var seq = eval.cons(args.get(1));
 			return seq.get(idx.intValueExact());
 		}
 	}

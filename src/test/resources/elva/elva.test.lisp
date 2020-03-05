@@ -46,8 +46,8 @@
 (cdr (list 'HEAD 'NEXT 'TAIL)) (list 'NEXT 'TAIL)
 
 ; nth
-(nth (list 11 4 5 14) 0) 11
-(nth (list 11 4 5 14) 3) 14
+(nth 0 (list 11 4 5 14)) 11
+(nth 3 (list 11 4 5 14)) 14
 
 ; subseq
 (subseq (list 11 4 5 14) 1 3) '(4 5)

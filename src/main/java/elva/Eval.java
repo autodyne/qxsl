@@ -140,6 +140,8 @@ public final class Eval {
 			return Sexp.wrap(this.inspect(form, sexp.cdr()));
 		} catch (ElvaRuntimeException ex) {
 			throw ex.add(sexp);
+		} catch (RuntimeException ex) {
+			throw new ElvaRuntimeException(ex.getMessage()).add(sexp);
 		}
 	}
 
