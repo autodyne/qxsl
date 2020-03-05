@@ -28,8 +28,13 @@ public final class CallTest extends test.RandTest {
 		assertThat(new Call("JA1YWX").value()).isEqualTo("JA1YWX");
 	}
 	@Test
+	public void testStrip() {
+		assertThat(new Call("JA1ZLO/1").strip()).isEqualTo("JA1ZLO");
+		assertThat(new Call("JA1YWX/2").strip()).isEqualTo("JA1YWX");
+	}
+	@Test
 	public void testToString() {
-		final String text = alnum(100);
+		final String text = alnum(100).toUpperCase();
 		assertThat(new Call(text)).hasToString(text);
 	}
 	@Test

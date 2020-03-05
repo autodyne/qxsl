@@ -146,10 +146,10 @@ final class Root extends SimpleBindings {
 	/**
 	 * 指定された関数をこの環境に登録します。
 	 *
-	 * @param func 登録する関数
+	 * @param form 登録する関数
 	 */
-	private final void put(Form func) {
-		this.put(func.toString(), func);
+	private final void put(Form form) {
+		this.put(form.toString(), form);
 	}
 
 	/**

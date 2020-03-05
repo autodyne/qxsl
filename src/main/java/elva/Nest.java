@@ -53,10 +53,10 @@ public final class Nest extends SimpleBindings {
 	/**
 	 * 指定された関数をこの環境に登録します。
 	 *
-	 * @param func 登録する関数
+	 * @param form 登録する関数
 	 */
-	public final void put(Form func) {
-		this.put(func.toString(), func);
+	public final void put(Form form) {
+		this.put(form.toString(), form);
 	}
 
 	/**

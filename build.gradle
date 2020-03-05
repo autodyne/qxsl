@@ -28,6 +28,7 @@ test {
 javadoc {
 	exclude 'qxsl/extra/**'
 	options.links("https://docs.oracle.com/en/java/javase/$java/docs/api/")
+	options.header("<a href='http://nextzlog.github.io/qxsl'>QxSL API</a>")
 	options.charSet = utf8
 	options.encoding = utf8
 }

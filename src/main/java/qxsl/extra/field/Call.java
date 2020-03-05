@@ -9,6 +9,9 @@ import javax.xml.namespace.QName;
 import qxsl.field.FieldFormat;
 import qxsl.model.Field;
 
+import static java.text.Normalizer.Form.NFKC;
+import static java.text.Normalizer.normalize;
+
 /**
  * 交信の相手局の呼出符号を表現する{@link Field}実装クラスです。
  * 
@@ -22,18 +25,28 @@ public final class Call extends Qxsl<String> {
 	private final String call;
 
 	/**
-	 * コールサインを指定して{@link Call}を構築します。
+	 * 呼出符号を指定して{@link Call}を構築します。
 	 * 
-	 * @param call コールサイン
+	 * @param call 呼出符号
 	 */
 	public Call(String call) {
 		super(CALL);
-		this.call = call;
+		call = normalize(call.toUpperCase(), NFKC);
+		this.call = call.replaceAll("[^A-Z0-9/]", "");
 	}
 
 	@Override
 	public String value() {
 		return call;
+	}
+
+	/**
+	 * 斜線より後の文字列を除く呼出符号を返します。
+	 *
+	 * @return 呼出符号
+	 */
+	public final String strip() {
+		return call.split("/", 2)[0];
 	}
 
 	/**

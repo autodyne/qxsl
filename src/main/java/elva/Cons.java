@@ -82,7 +82,11 @@ public final class Cons extends Sexp implements Iterable<Sexp> {
 	 * @return リスト 空の場合は{@link #NIL}
 	 */
 	public static final Cons cons(Sexp...vals) {
-		return Cons.cons(List.of(vals));
+		Cons cons = Cons.NIL;
+		for(int i = vals.length; i > 0; i--) {
+			cons = new Cons(vals[i - 1], cons);
+		}
+		return cons;
 	}
 
 	/**
@@ -91,12 +95,8 @@ public final class Cons extends Sexp implements Iterable<Sexp> {
 	 * @param vals 要素
 	 * @return リスト 空の場合は{@link #NIL}
 	 */
-	public static final Cons cons(List<Sexp> vals) {
-		Cons cons = Cons.NIL;
-		for(int i = vals.size(); i > 0; i--) {
-			cons = new Cons(vals.get(i - 1), cons);
-		}
-		return cons;
+	public static final Cons cons(Collection<Sexp> vals) {
+		return cons(vals.toArray(new Sexp[vals.size()]));
 	}
 
 	/**
@@ -106,7 +106,9 @@ public final class Cons extends Sexp implements Iterable<Sexp> {
 	 * @return リスト 空の場合は{@link #NIL}
 	 */
 	public static final Cons wrap(Object...vals) {
-		return wrap(List.of(vals));
+		final var list = new LinkedList<Sexp>();
+		for(var v: vals) list.add(Sexp.wrap(v));
+		return cons(list);
 	}
 
 	/**
@@ -117,9 +119,7 @@ public final class Cons extends Sexp implements Iterable<Sexp> {
 	 * @return リスト 空の場合は{@link #NIL}
 	 */
 	public static final <E> Cons wrap(Collection<E> vals) {
-		final var list = new LinkedList<Sexp>();
-		for(var v: vals) list.add(Sexp.wrap(v));
-		return cons(list);
+		return wrap(vals.toArray());
 	}
 
 	/**
