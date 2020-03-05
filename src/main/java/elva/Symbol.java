@@ -16,15 +16,15 @@ import java.io.Serializable;
  * @since 2017/02/18
  */
 public final class Symbol implements Serializable {
-	private final String id;
+	private final String name;
 
 	/**
 	 * 名前を指定して識別子を生成します。
 	 *
-	 * @param id 名前
+	 * @param name 名前
 	 */
-	public Symbol(String id) {
-		this.id = id;
+	public Symbol(String name) {
+		this.name = name;
 	}
 
 	/**
@@ -34,7 +34,7 @@ public final class Symbol implements Serializable {
 	 */
 	@Override
 	public final String toString() {
-		return id;
+		return name;
 	}
 
 	/**
@@ -44,7 +44,7 @@ public final class Symbol implements Serializable {
 	 */
 	@Override
 	public final int hashCode() {
-		return id.hashCode();
+		return name.hashCode();
 	}
 
 	/**
@@ -56,8 +56,8 @@ public final class Symbol implements Serializable {
 	 */
 	@Override
 	public final boolean equals(Object obj) {
-		if (!(obj instanceof Symbol)) return false;
-		return obj.toString().equals(toString());
+		if(!Symbol.class.isInstance(obj)) return false;
+		return ((Symbol) obj).name.equals(this.name);
 	}
 
 	/**

@@ -71,10 +71,9 @@ public final class Atom extends Sexp implements Serializable {
 	 */
 	@Override
 	public final boolean equals(Object atom) {
-		if(atom instanceof Atom) {
-			final var val = ((Atom) atom).value;
-			return this.equals(val, this.value);
-		} else return false;
+		if(!Atom.class.isInstance(atom)) return false;
+		final var val = ((Atom) atom).value;
+		return this.equals(val, this.value);
 	}
 
 	/**

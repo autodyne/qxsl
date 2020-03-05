@@ -8,6 +8,7 @@ package elva;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -91,10 +92,11 @@ public final class Cons extends Sexp implements Iterable<Sexp> {
 	 * @return リスト 空の場合は{@link #NIL}
 	 */
 	public static final Cons cons(List<Sexp> vals) {
-		final int size = vals.size();
-		if(size == 0) return Cons.NIL;
-		final Sexp head = vals.get(0);
-		return new Cons(head, cons(vals.subList(1, size)));
+		Cons cons = Cons.NIL;
+		for(int i = vals.size(); i > 0; i--) {
+			cons = new Cons(vals.get(i - 1), cons);
+		}
+		return cons;
 	}
 
 	/**
@@ -104,8 +106,7 @@ public final class Cons extends Sexp implements Iterable<Sexp> {
 	 * @return リスト 空の場合は{@link #NIL}
 	 */
 	public static final Cons wrap(Object...vals) {
-		var strm = Stream.of(vals).map(Sexp::wrap);
-		return Cons.cons(strm.toArray(Sexp[]::new));
+		return wrap(List.of(vals));
 	}
 
 	/**
@@ -116,8 +117,9 @@ public final class Cons extends Sexp implements Iterable<Sexp> {
 	 * @return リスト 空の場合は{@link #NIL}
 	 */
 	public static final <E> Cons wrap(Collection<E> vals) {
-		var strm = vals.stream().map(Sexp::wrap);
-		return Cons.cons(strm.toArray(Sexp[]::new));
+		final var list = new LinkedList<Sexp>();
+		for(var v: vals) list.add(Sexp.wrap(v));
+		return cons(list);
 	}
 
 	/**
@@ -146,7 +148,7 @@ public final class Cons extends Sexp implements Iterable<Sexp> {
 	 */
 	public final Cons cdr(int num) {
 		Cons cdr = this;
-		for(int n = 0; n < num; n++) cdr = cdr.cdr();
+		while(num-- > 0) cdr = cdr.cdr();
 		return cdr;
 	}
 
@@ -161,6 +163,19 @@ public final class Cons extends Sexp implements Iterable<Sexp> {
 		if(index >= 0) return tail.get(index -1);
 		final String msg = String.valueOf(index);
 		throw new IndexOutOfBoundsException(msg);
+	}
+
+	/**
+	 * このリストの部分リストを返します。
+	 *
+	 * @param head 部分リストが始まる位置
+	 * @param tail 部分リストが終わる位置
+	 * @return 部分リスト
+	 */
+	public final Cons subList(int head, int tail) {
+		final var vals = new LinkedList<Sexp>();
+		while(head < tail) vals.add(get(head++));
+		return cons(vals);
 	}
 
 	/**
@@ -232,11 +247,10 @@ public final class Cons extends Sexp implements Iterable<Sexp> {
 	 */
 	@Override
 	public final boolean equals(Object list) {
-		if(list instanceof Cons) {
-			final var s1 = ((Cons) list).stream().toArray();
-			final var s2 = ((Cons) this).stream().toArray();
-			return Arrays.equals(s1, s2);
-		} else return false;
+		if(!Cons.class.isInstance(list)) return false;
+		final var s1 = ((Cons) list).stream().toArray();
+		final var s2 = ((Cons) this).stream().toArray();
+		return Arrays.equals(s1, s2);
 	}
 
 	/**

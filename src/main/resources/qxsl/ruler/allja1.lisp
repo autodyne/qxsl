@@ -40,11 +40,10 @@
 
 ; JCC/JCG
 (defun peel-JCCG it
-	(car
-		(cdr
-			(tokenize
-				(if (電話? it) "^.." "^...")
-				(qxsl-code it)))))
+	(cadr
+		(split
+			(if (電話? it) "^.." "^...")
+			(qxsl-code it))))
 (defun qxsl-JCCG it
 	(if
 		(null? (qxsl-rstq it))

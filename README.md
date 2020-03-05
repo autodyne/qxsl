@@ -123,19 +123,19 @@ The following LISP programs are bundled inside the JAR file, as sample codes in 
 
 ```XML
 <project>
-	<repositories>
-		<repository>
-			<id>qxsl</id>
-			<url>https://nextzlog.github.io/qmvn/mvn/</url>
-		</repository>
-	</repositories>
-	<dependencies>
-		<dependency>
-			<groupId>qxsl</groupId>
-			<artifactId>qxsl</artifactId>
-			<version>latest</version>
-		</dependency>
-	</dependencies>
+  <repositories>
+    <repository>
+      <id>qxsl</id>
+      <url>https://nextzlog.github.io/qmvn/mvn/</url>
+    </repository>
+  </repositories>
+  <dependencies>
+    <dependency>
+      <groupId>qxsl</groupId>
+      <artifactId>qxsl</artifactId>
+      <version>latest</version>
+    </dependency>
+  </dependencies>
 </project>
 ```
 

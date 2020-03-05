@@ -18,7 +18,7 @@ import elva.Elva.ElvaRuntimeException;
  *
  * @since 2017/02/18
  */
-public final class Nested extends SimpleBindings {
+public final class Nest extends SimpleBindings {
 	private final Bindings outer;
 
 	/**
@@ -27,7 +27,7 @@ public final class Nested extends SimpleBindings {
 	 * @param outer 外側のスコープ
 	 * @param binds スコープの内容
 	 */
-	public Nested(Bindings binds, Bindings outer)  {
+	public Nest(Bindings binds, Bindings outer)  {
 		if(binds != null) putAll(binds);
 		this.outer = outer;
 	}

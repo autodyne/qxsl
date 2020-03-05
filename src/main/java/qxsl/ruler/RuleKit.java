@@ -8,7 +8,6 @@ package qxsl.ruler;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.math.BigDecimal;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -19,6 +18,8 @@ import javax.script.*;
 import javax.xml.namespace.QName;
 
 import elva.*;
+import elva.Form.Lambda;
+import elva.Form.Syntax;
 
 import qxsl.extra.field.City;
 import qxsl.extra.field.Time;
@@ -252,7 +253,7 @@ public final class RuleKit {
 		 * @return 部門のリスト
 		 */
 		private static List<Section> sects(Cons rule, Eval eval) {
-			final ArrayList<Section> list = new ArrayList<Section>();
+			final var list = new ArrayList<Section>();
 			for(var sc: rule) list.add(eval.eval(sc).as(Section.class));
 			return Collections.unmodifiableList(list);
 		}
@@ -263,14 +264,14 @@ public final class RuleKit {
 	 *
 	 * @return 事前に定義された環境
 	 */
-	public Bindings createBindings() {
-		final Nested lude = new Nested(null, null);
+	public final Bindings createBindings() {
+		final Nest env = new Nest(null, null);
 		/*
 		 * preinstalled functions to load script
 		 * 
 		 * (load file)
 		 */
-		lude.put(new $Load());
+		env.put(new $Load());
 
 		/*
 		 * preinstalled functions for contest & handler definition
@@ -279,9 +280,9 @@ public final class RuleKit {
 		 * (contest contest-name syntax sections ...)
 		 * (section section-name section-code lambda)
 		 */
-		lude.put(new $Handler());
-		lude.put(new $Contest());
-		lude.put(new $Section());
+		env.put(new $Handler());
+		env.put(new $Contest());
+		env.put(new $Section());
 
 		/*
 		 * preinstalled functions for success & failure construction
@@ -289,15 +290,15 @@ public final class RuleKit {
 		 * (success ITEM score keys...)
 		 * (failure ITEM message)
 		 */
-		lude.put(new $Success());
-		lude.put(new $Failure());
+		env.put(new $Success());
+		env.put(new $Failure());
 
 		/*
 		 * preinstalled functions for item creation
 		 *
 		 * (item)
 		 */
-		lude.put(new $Item());
+		env.put(new $Item());
 
 		/*
 		 * preinstalled functions for rcvd & sent access
@@ -305,8 +306,8 @@ public final class RuleKit {
 		 * (rcvd item)
 		 * (sent item)
 		 */
-		lude.put(new $Rcvd());
-		lude.put(new $Sent());
+		env.put(new $Rcvd());
+		env.put(new $Sent());
 
 		/*
 		 * preinstalled functions for field access
@@ -314,23 +315,23 @@ public final class RuleKit {
 		 * (get-field item namespace name)
 		 * (set-field item namespace name value-string)
 		 */
-		lude.put(new $GetField());
-		lude.put(new $SetField());
+		env.put(new $GetField());
+		env.put(new $SetField());
 
 		/*
 		 * preinstalled functions for time access
 		 *
 		 * (hour item)
 		 */
-		lude.put(new $Hour());
+		env.put(new $Hour());
 
 		/*
 		 * preinstalled functions for city access
 		 *
 		 * (city database-name code region-level)
 		 */
-		lude.put(new $City());
-		return lude;
+		env.put(new $City());
+		return env;
 	}
 
 	/**
@@ -341,8 +342,8 @@ public final class RuleKit {
 	 *
 	 * @since 2020/02/26
 	 */
-	@Native("load")
-	@Params(min = 1, max = 1)
+	@Form.Native("load")
+	@Form.Parameters(min = 1, max = 1)
 	private static final class $Load extends Form {
 		public Object apply(Cons args, Eval eval) {
 			Sexp value = null;
@@ -367,8 +368,8 @@ public final class RuleKit {
 	 *
 	 * @since 2020/02/26
 	 */
-	@Native("handler")
-	@Params(min = 2, max = -1)
+	@Form.Native("handler")
+	@Form.Parameters(min = 2, max = -1)
 	private static final class $Handler extends Form {
 		public Object apply(Cons args, Eval eval) {
 			return new HandlerImpl(args, eval);
@@ -383,8 +384,8 @@ public final class RuleKit {
 	 *
 	 * @since 2019/05/15
 	 */
-	@Native("contest")
-	@Params(min = 3, max = -1)
+	@Form.Native("contest")
+	@Form.Parameters(min = 3, max = -1)
 	private static final class $Contest extends Form {
 		public Object apply(Cons args, Eval eval) {
 			return new ContestImpl(args, eval);
@@ -399,8 +400,8 @@ public final class RuleKit {
 	 *
 	 * @since 2019/05/15
 	 */
-	@Native("section")
-	@Params(min = 3, max = 3)
+	@Form.Native("section")
+	@Form.Parameters(min = 3, max = 3)
 	private static final class $Section extends Form {
 		public Object apply(Cons args, Eval eval) {
 			return new SectionImpl(args, eval);
@@ -415,8 +416,8 @@ public final class RuleKit {
 	 *
 	 * @since 2019/05/18
 	 */
-	@Native("success")
-	@Params(min = 3, max = -1)
+	@Form.Native("success")
+	@Form.Parameters(min = 3, max = -1)
 	private static final class $Success extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final var it = eval.eval(args.get(0)).as(Item.class);
@@ -434,8 +435,8 @@ public final class RuleKit {
 	 *
 	 * @since 2019/05/18
 	 */
-	@Native("failure")
-	@Params(min = 2, max = 2)
+	@Form.Native("failure")
+	@Form.Parameters(min = 2, max = 2)
 	private static final class $Failure extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final Item item = eval.eval(args.car()).as(Item.class);
@@ -451,8 +452,8 @@ public final class RuleKit {
 	 *
 	 * @since 2020/02/26
 	 */
-	@Native("item")
-	@Params(min = 0, max = 0)
+	@Form.Native("item")
+	@Form.Parameters(min = 0, max = 0)
 	private static final class $Item extends Form {
 		public Object apply(Cons args, Eval eval) {
 			return new Item();
@@ -467,8 +468,8 @@ public final class RuleKit {
 	 *
 	 * @since 2019/05/18
 	 */
-	@Native("rcvd")
-	@Params(min = 1, max = 1)
+	@Form.Native("rcvd")
+	@Form.Parameters(min = 1, max = 1)
 	private static final class $Rcvd extends Form {
 		public Object apply(Cons args, Eval eval) {
 			return eval.eval(args.car()).as(Item.class).getRcvd();
@@ -483,8 +484,8 @@ public final class RuleKit {
 	 *
 	 * @since 2019/05/18
 	 */
-	@Native("sent")
-	@Params(min = 1, max = 1)
+	@Form.Native("sent")
+	@Form.Parameters(min = 1, max = 1)
 	private static final class $Sent extends Form {
 		public Object apply(Cons args, Eval eval) {
 			return eval.eval(args.car()).as(Item.class).getSent();
@@ -499,14 +500,15 @@ public final class RuleKit {
 	 *
 	 * @since 2019/06/29
 	 */
-	@Native("get-field")
-	@Params(min = 3, max = 3)
+	@Form.Native("get-field")
+	@Form.Parameters(min = 3, max = 3)
 	private static final class $GetField extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final Tuple tuple = eval.eval(args.car()).as(Tuple.class);
-			final String space = eval.text(args.get(1));
-			final String local = eval.text(args.get(2));
-			return tuple.value(new QName(space, local));
+			final var tuple = eval.eval(args.get(0));
+			final var space = eval.text(args.get(1));
+			final var local = eval.text(args.get(2));
+			final var qname = new QName(space, local);
+			return tuple.as(Tuple.class).value(qname);
 		}
 	}
 
@@ -518,15 +520,16 @@ public final class RuleKit {
 	 *
 	 * @since 2019/06/29
 	 */
-	@Native("set-field")
-	@Params(min = 4, max = 4)
+	@Form.Native("set-field")
+	@Form.Parameters(min = 4, max = 4)
 	private static final class $SetField extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final Tuple tuple = eval.eval(args.car()).as(Tuple.class);
-			final String space = eval.text(args.get(1));
-			final String local = eval.text(args.get(2));
-			final String value = eval.text(args.get(3));
-			return tuple.set(new QName(space, local), value);
+			final var tuple = eval.eval(args.get(0));
+			final var space = eval.text(args.get(1));
+			final var local = eval.text(args.get(2));
+			final var value = eval.text(args.get(3));
+			final var qname = new QName(space, local);
+			return tuple.as(Tuple.class).set(qname, value);
 		}
 	}
 
@@ -538,8 +541,8 @@ public final class RuleKit {
 	 *
 	 * @since 2019/05/18
 	 */
-	@Native("hour")
-	@Params(min = 2, max = 2)
+	@Form.Native("hour")
+	@Form.Parameters(min = 2, max = 2)
 	private static final class $Hour extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final var time = eval.eval(args.get(0));
@@ -558,8 +561,8 @@ public final class RuleKit {
 	 *
 	 * @since 2019/05/18
 	 */
-	@Native("city")
-	@Params(min = 2, max = 3)
+	@Form.Native("city")
+	@Form.Parameters(min = 2, max = 3)
 	private static final class $City extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final String base = eval.text(args.car());

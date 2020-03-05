@@ -23,14 +23,14 @@ public final class Eval {
 	/**
 	 * この評価器に関連づけられたスコープです。
 	 */
-	public final Nested scope;
+	public final Nest scope;
 
 	/**
 	 * 指定されたスコープに対する評価器を構築します。
 	 *
 	 * @param scope 評価器のスコープ
 	 */
-	public Eval(Nested scope) {
+	public Eval(Nest scope) {
 		this.scope = scope;
 	}
 
@@ -121,10 +121,9 @@ public final class Eval {
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
 	public Sexp eval(Sexp sexp) {
-		if (Cons.NIL.equals(sexp)) return Cons.NIL;
-		if (sexp instanceof Cons) return apply((Cons) sexp);
-		if (sexp.isSymbol()) return scope.get(sexp.value());
-		return sexp;
+		if(Cons.NIL.equals(sexp)) return sexp;
+		if(sexp instanceof Cons) return apply((Cons) sexp);
+		return sexp.isSymbol()? this.scope.get(sexp): sexp;
 	}
 
 	/**
@@ -244,7 +243,7 @@ public final class Eval {
 	 */
 	private final Object inspect(Form form, Cons args) {
 		String temp = "%s requires at-least %d and at-most %d arguments";
-		final Params annon = form.getClass().getAnnotation(Params.class);
+		var annon = form.getClass().getAnnotation(Form.Parameters.class);
 		final int len = args.size();
 		final int min = annon.min() >= 0? annon.min(): Integer.MAX_VALUE;
 		final int max = annon.max() >= 0? annon.max(): Integer.MAX_VALUE;

@@ -45,6 +45,14 @@
 (cdr (list 'HEAD 'TAIL)) (list 'TAIL)
 (cdr (list 'HEAD 'NEXT 'TAIL)) (list 'NEXT 'TAIL)
 
+; nth
+(nth (list 11 4 5 14) 0) 11
+(nth (list 11 4 5 14) 3) 14
+
+; subseq
+(subseq (list 11 4 5 14) 1 3) '(4 5)
+(subseq (list 11 4 5 14) 0 4) '(11 4 5 14)
+
 ; length
 (number (length ())) 0
 (number (length (list 'HEAD))) 1
@@ -203,15 +211,13 @@
 (>= 5 4 3 2 1) #t
 (>= 5 4 2 3 1) #f
 
+; concat
+(concat (list "MUR" "KMR")) "MURKMR"
+(concat (list 8 8 9 4 6 4)) "889464"
+
 ; format
 (format "%s %s" "MUR" "KMR") "MUR KMR"
 (format "%s %s" 114 (+ 200 314)) "114 514"
-
-; substring
-(substring "HELLO" 0 2) "HE"
-(substring "WORLD" 2 4) "RL"
-(substring "HELLO" 1 (- 5 1)) "ELL"
-(substring "WORLD" 1 (* 2 2)) "ORL"
 
 ; number
 (number "114.514") 114.514
@@ -229,9 +235,9 @@
 (match "\\d{6}" (if (equal 114 514) "114514" "364364")) #t
 (match "\\D{6}" (if (equal 114 514) "114514" "364364")) #f
 
-; tokenize
-(tokenize "" "ABC") '("A" "B" "C")
-(tokenize ":+" "11:45::14") '("11" "45" "14")
+; split
+(split "" "ABC") '("A" "B" "C")
+(split ":+" "11:45::14") '("11" "45" "14")
 
 ; lambda
 ((lambda x (+ x x)) 114) 228

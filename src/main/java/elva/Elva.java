@@ -38,7 +38,7 @@ public final class Elva extends AbstractScriptEngine {
 	 * LISP処理系を構築します。
 	 */
 	public Elva() {
-		this.root = new Global();
+		this.root = new Root();
 	}
 
 	/**
@@ -55,8 +55,8 @@ public final class Elva extends AbstractScriptEngine {
 	 *
 	 * @return 環境
 	 */
-	public Bindings createBindings() {
-		return new Nested(null, null);
+	public final Bindings createBindings() {
+		return new Nest(null, null);
 	}
 
 	/**
@@ -88,8 +88,8 @@ public final class Elva extends AbstractScriptEngine {
 	 */
 	@Override
 	public Object eval(String s, ScriptContext c) throws ScriptException {
-		final var glob = new Nested(c.getBindings(GLOBAL_SCOPE), root);
-		final var self = new Nested(c.getBindings(ENGINE_SCOPE), glob);
+		final var glob = new Nest(c.getBindings(GLOBAL_SCOPE), root);
+		final var self = new Nest(c.getBindings(ENGINE_SCOPE), glob);
 		final var eval = new Eval(self);
 		try {
 			final Stream<Sexp> vals = scan(s).stream().map(eval::eval);
@@ -239,7 +239,7 @@ public final class Elva extends AbstractScriptEngine {
 		 * 指定されたアトムを実数またはシンボルとして返します。
 		 *
 		 * @param atom アトム式
-		 * @return 実数値 もしくはシンボル
+		 * @return 実数値または名前
 		 */
 		private final Object asSymbolOrReal(String atom) {
 			try {

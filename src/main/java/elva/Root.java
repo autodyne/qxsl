@@ -10,6 +10,7 @@ import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.StringJoiner;
 import javax.script.Bindings;
 import javax.script.SimpleBindings;
 
@@ -24,18 +25,18 @@ import static java.math.MathContext.DECIMAL64;
  *
  * @since 2019/07/01
  */
-final class Global extends SimpleBindings {
+final class Root extends SimpleBindings {
 	/**
 	 * システム関数を定義するスコープを構築します。
 	 */
-	public Global() {
+	public Root() {
 		this.put("#t", true);
 		this.put("#f", false);
 		this.put("nil", Cons.NIL);
 		this.put("null", null);
 
 		/*
-		 * basic functions for syntax operation
+		 * syntax operation
 		 *
 		 * (quote expression)
 		 * (quasi expression)
@@ -48,33 +49,35 @@ final class Global extends SimpleBindings {
 		this.put(new $Uqspl());
 
 		/*
-		 * basic functions for sequential processing
+		 * sequential processing
 		 *
 		 * (progn statements)
 		 */
 		this.put(new $Progn());
 
 		/*
-		 * basic functions for variable assignment
+		 * variable assignment
 		 *
 		 * (set symbol expression)
 		 */
 		this.put(new $Set());
 
 		/*
-		 * basic functions for evaluation
+		 * evaluation
 		 *
 		 * (eval expression)
 		 */
 		this.put(new $Eval());
 
 		/*
-		 * basic functions for list operation
+		 * list operation
 		 *
 		 * (cons car cdr)
 		 * (list elements)
 		 * (car list)
 		 * (cdr list)
+		 * (nth list)
+		 * (subseq list)
 		 * (length list)
 		 * (member value list)
 		 */
@@ -82,11 +85,13 @@ final class Global extends SimpleBindings {
 		this.put(new $List());
 		this.put(new $Car());
 		this.put(new $Cdr());
+		this.put(new $Nth());
+		this.put(new $SubSeq());
 		this.put(new $Length());
 		this.put(new $Member());
 
 		/*
-		 * basic functions for list reduction
+		 * list reduction
 		 *
 		 * (every list)
 		 * (some  list)
@@ -95,7 +100,7 @@ final class Global extends SimpleBindings {
 		this.put(new $Some());
 
 		/*
-		 * basic functions for checking equality
+		 * checking equality
 		 *
 		 * (equal expression expression)
 		 * (null? expression)
@@ -111,7 +116,7 @@ final class Global extends SimpleBindings {
 		this.put(new $If());
 
 		/*
-		 * basic functions for logical operation
+		 * logical operation
 		 *
 		 * (and expressions)
 		 * (or  expressions)
@@ -122,7 +127,7 @@ final class Global extends SimpleBindings {
 		this.put(new $Not());
 
 		/*
-		 * basic functions for arithmetical operation
+		 * arithmetical operation
 		 *
 		 * (+ expressions)
 		 * (- expressions)
@@ -137,7 +142,7 @@ final class Global extends SimpleBindings {
 		this.put(new $Mod());
 
 		/*
-		 * basic functions for round operation
+		 * round operation
 		 *
 		 * (ceiling expressions)
 		 * (floor expressions)
@@ -148,7 +153,7 @@ final class Global extends SimpleBindings {
 		this.put(new $Round());
 
 		/*
-		 * basic functions for numerical comparison
+		 * numerical comparison
 		 *
 		 * (<  expressions)
 		 * (>  expressions)
@@ -161,16 +166,16 @@ final class Global extends SimpleBindings {
 		this.put(new $Ge());
 
 		/*
-		 * basic functions for string operation
+		 * string operation
 		 *
-		 * (format string)
-		 * (substring string)
+		 * (concat strings)
+		 * (format template args)
 		 */
+		this.put(new $Concat());
 		this.put(new $Format());
-		this.put(new $SubString());
 
 		/*
-		 * basic functions for type conversion
+		 * type conversion
 		 *
 		 * (number string)
 		 * (string number)
@@ -179,16 +184,16 @@ final class Global extends SimpleBindings {
 		this.put(new $String());
 
 		/*
-		 * basic functions for regex matching
+		 * regex matching
 		 *
 		 * (match pattern string)
-		 * (tokenize pattern string)
+		 * (split pattern string)
 		 */
 		this.put(new $Match());
-		this.put(new $Tokenize());
+		this.put(new $Split());
 
 		/*
-		 * basic functions for lambda & syntax(macro) generation
+		 * lambda & syntax(macro) generation
 		 *
 		 * (lambda (parameters) value)
 		 * (syntax (parameters) macro)
@@ -228,8 +233,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/14
 	 */
-	@Native("quote")
-	@Params(min = 1, max = 1)
+	@Form.Native("quote")
+	@Form.Parameters(min = 1, max = 1)
 	private static final class $Quote extends Form {
 		public Object apply(Cons args, Eval eval) {
 			return args.car();
@@ -244,8 +249,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/14
 	 */
-	@Native("quasiquote")
-	@Params(min = 1, max = 1)
+	@Form.Native("quasiquote")
+	@Form.Parameters(min = 1, max = 1)
 	private static final class $Quasi extends Form {
 		public Object apply(Cons args, Eval eval) {
 			return eval.qquote(args.car()).sexp();
@@ -260,8 +265,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/14
 	 */
-	@Native("unquote")
-	@Params(min = 1, max = 1)
+	@Form.Native("unquote")
+	@Form.Parameters(min = 1, max = 1)
 	private static final class $Uquot extends Form {
 		public Object apply(Cons args, Eval eval) {
 			return eval.eval(args.car());
@@ -276,8 +281,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2020/02/26
 	 */
-	@Native("unquote-splicing")
-	@Params(min = 1, max = 1)
+	@Form.Native("unquote-splicing")
+	@Form.Parameters(min = 1, max = 1)
 	private static final class $Uqspl extends Form {
 		public Object apply(Cons args, Eval eval) {
 			return eval.eval(args.car());
@@ -292,8 +297,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/02/27
 	 */
-	@Native("progn")
-	@Params(min = 1, max = -1)
+	@Form.Native("progn")
+	@Form.Parameters(min = 1, max = -1)
 	private static final class $Progn extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final var list = args.stream().map(eval::eval);
@@ -310,8 +315,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/02/27
 	 */
-	@Native("set")
-	@Params(min = 2, max = 2)
+	@Form.Native("set")
+	@Form.Parameters(min = 2, max = 2)
 	private static final class $Set extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final var name = eval.name(args.car());
@@ -329,8 +334,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2020/02/26
 	 */
-	@Native("eval")
-	@Params(min = 1, max = 1)
+	@Form.Native("eval")
+	@Form.Parameters(min = 1, max = 1)
 	private static final class $Eval extends Form {
 		public Object apply(Cons args, Eval eval) {
 			return eval.eval(eval.eval(args.car()));
@@ -345,8 +350,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/07/03
 	 */
-	@Native("cons")
-	@Params(min = 2, max = 2)
+	@Form.Native("cons")
+	@Form.Parameters(min = 2, max = 2)
 	private static final class $Cons extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final var head = eval.eval(args.get(0));
@@ -363,8 +368,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/14
 	 */
-	@Native("list")
-	@Params(min = 0, max = -1)
+	@Form.Native("list")
+	@Form.Parameters(min = 0, max = -1)
 	private static final class $List extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final List<Sexp> seq = new LinkedList<>();
@@ -381,8 +386,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/14
 	 */
-	@Native("car")
-	@Params(min = 1, max = 1)
+	@Form.Native("car")
+	@Form.Parameters(min = 1, max = 1)
 	private static final class $Car extends Form {
 		public Object apply(Cons args, Eval eval) {
 			return eval.cons(args.car()).car();
@@ -397,11 +402,50 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/14
 	 */
-	@Native("cdr")
-	@Params(min = 1, max = 1)
+	@Form.Native("cdr")
+	@Form.Parameters(min = 1, max = 1)
 	private static final class $Cdr extends Form {
 		public Object apply(Cons args, Eval eval) {
 			return eval.cons(args.car()).cdr();
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるnth関数です。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2020/03/05
+	 */
+	@Form.Native("nth")
+	@Form.Parameters(min = 2, max = 2)
+	private static final class $Nth extends Form {
+		public Object apply(Cons args, Eval eval) {
+			final var seq = eval.cons(args.get(0));
+			final var idx = eval.real(args.get(1));
+			return seq.get(idx.intValueExact());
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるsubseq関数です。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2020/03/05
+	 */
+	@Form.Native("subseq")
+	@Form.Parameters(min = 3, max = 3)
+	private static final class $SubSeq extends Form {
+		public Object apply(Cons args, Eval eval) {
+			final var list = eval.cons(args.get(0));
+			final var arg1 = eval.real(args.get(1));
+			final var arg2 = eval.real(args.get(2));
+			final int head = arg1.intValueExact();
+			final int tail = arg2.intValueExact();
+			return list.subList(head, tail);
 		}
 	}
 
@@ -413,8 +457,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/14
 	 */
-	@Native("length")
-	@Params(min = 1, max = 1)
+	@Form.Native("length")
+	@Form.Parameters(min = 1, max = 1)
 	private static final class $Length extends Form {
 		public Object apply(Cons args, Eval eval) {
 			return eval.cons(args.car()).size();
@@ -429,8 +473,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/02/27
 	 */
-	@Native("member")
-	@Params(min = 2, max = 2)
+	@Form.Native("member")
+	@Form.Parameters(min = 2, max = 2)
 	private static final class $Member extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final Sexp val = eval.eval(args.get(0));
@@ -447,8 +491,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2020/02/26
 	 */
-	@Native("every")
-	@Params(min = 1, max = 1)
+	@Form.Native("every")
+	@Form.Parameters(min = 1, max = 1)
 	private static final class $Every extends Form {
 		public Object apply(Cons args, Eval eval) {
 			for(Sexp val: eval.cons(args.car())) {
@@ -466,8 +510,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2020/02/26
 	 */
-	@Native("some")
-	@Params(min = 1, max = 1)
+	@Form.Native("some")
+	@Form.Parameters(min = 1, max = 1)
 	private static final class $Some extends Form {
 		public Object apply(Cons args, Eval eval) {
 			for(Sexp val: eval.cons(args.car())) {
@@ -485,8 +529,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/02/27
 	 */
-	@Native("equal")
-	@Params(min = 2, max = 2)
+	@Form.Native("equal")
+	@Form.Parameters(min = 2, max = 2)
 	private static final class $Equal extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final Sexp l = eval.eval(args.get(0));
@@ -503,8 +547,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/12/06
 	 */
-	@Native("null?")
-	@Params(min = 1, max = 1)
+	@Form.Native("null?")
+	@Form.Parameters(min = 1, max = 1)
 	private static final class $Null$ extends Form {
 		public Object apply(Cons args, Eval eval) {
 			return eval.eval(args.car()).value() == null;
@@ -519,8 +563,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/02/27
 	 */
-	@Native("if")
-	@Params(min = 2, max = 3)
+	@Form.Native("if")
+	@Form.Parameters(min = 2, max = 3)
 	private static final class $If extends Form {
 		public Object apply(Cons args, Eval eval) {
 			int cond = eval.bool(args.car())? 1: 2;
@@ -536,8 +580,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/02/27
 	 */
-	@Native("and")
-	@Params(min = 2, max = -1)
+	@Form.Native("and")
+	@Form.Parameters(min = 2, max = -1)
 	private static final class $And extends Form {
 		public Object apply(Cons args, Eval eval) {
 			for(var v: args) if(!eval.bool(v)) return false;
@@ -553,8 +597,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/02/27
 	 */
-	@Native("or")
-	@Params(min = 2, max = -1)
+	@Form.Native("or")
+	@Form.Parameters(min = 2, max = -1)
 	private static final class $Or extends Form {
 		public Object apply(Cons args, Eval eval) {
 			for(var v: args) if(eval.bool(v)) return true;
@@ -570,8 +614,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/18
 	 */
-	@Native("not")
-	@Params(min = 1, max = 1)
+	@Form.Native("not")
+	@Form.Parameters(min = 1, max = 1)
 	private static final class $Not extends Form {
 		public Object apply(Cons args, Eval eval) {
 			return !eval.bool(args.car());
@@ -586,8 +630,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/03/19
 	 */
-	@Native("+")
-	@Params(min = 2, max = -1)
+	@Form.Native("+")
+	@Form.Parameters(min = 2, max = -1)
 	private static final class $Add extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final BigDecimal car = eval.real(args.get(0));
@@ -604,8 +648,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/03/19
 	 */
-	@Native("-")
-	@Params(min = 2, max = -1)
+	@Form.Native("-")
+	@Form.Parameters(min = 2, max = -1)
 	private static final class $Sub extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final BigDecimal car = eval.real(args.get(0));
@@ -622,8 +666,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/03/19
 	 */
-	@Native("*")
-	@Params(min = 2, max = -1)
+	@Form.Native("*")
+	@Form.Parameters(min = 2, max = -1)
 	private static final class $Mul extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final BigDecimal car = eval.real(args.get(0));
@@ -640,8 +684,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/03/19
 	 */
-	@Native("/")
-	@Params(min = 2, max = -1)
+	@Form.Native("/")
+	@Form.Parameters(min = 2, max = -1)
 	private static final class $Div extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final BigDecimal car = eval.real(args.get(0));
@@ -658,8 +702,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/18
 	 */
-	@Native("mod")
-	@Params(min = 2, max = -1)
+	@Form.Native("mod")
+	@Form.Parameters(min = 2, max = -1)
 	private static final class $Mod extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final BigDecimal car = eval.real(args.get(0));
@@ -676,8 +720,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2020/02/28
 	 */
-	@Native("ceiling")
-	@Params(min = 1, max = 1)
+	@Form.Native("ceiling")
+	@Form.Parameters(min = 1, max = 1)
 	private static final class $Ceiling extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final BigDecimal val = eval.real(args.car());
@@ -693,8 +737,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2020/02/28
 	 */
-	@Native("floor")
-	@Params(min = 1, max = 1)
+	@Form.Native("floor")
+	@Form.Parameters(min = 1, max = 1)
 	private static final class $Floor extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final BigDecimal val = eval.real(args.car());
@@ -710,8 +754,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2020/02/28
 	 */
-	@Native("round")
-	@Params(min = 1, max = 1)
+	@Form.Native("round")
+	@Form.Parameters(min = 1, max = 1)
 	private static final class $Round extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final BigDecimal val = eval.real(args.car());
@@ -727,8 +771,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/03/17
 	 */
-	@Native("<")
-	@Params(min = 2, max = -1)
+	@Form.Native("<")
+	@Form.Parameters(min = 2, max = -1)
 	private static final class $Lt extends Form {
 		public Object apply(Cons args, Eval eval) {
 			var prev = eval.real(args.car());
@@ -749,8 +793,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/03/17
 	 */
-	@Native(">")
-	@Params(min = 2, max = -1)
+	@Form.Native(">")
+	@Form.Parameters(min = 2, max = -1)
 	private static final class $Gt extends Form {
 		public Object apply(Cons args, Eval eval) {
 			var prev = eval.real(args.car());
@@ -771,8 +815,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/03/17
 	 */
-	@Native("<=")
-	@Params(min = 2, max = -1)
+	@Form.Native("<=")
+	@Form.Parameters(min = 2, max = -1)
 	private static final class $Le extends Form {
 		public Object apply(Cons args, Eval eval) {
 			var prev = eval.real(args.car());
@@ -793,8 +837,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2017/03/17
 	 */
-	@Native(">=")
-	@Params(min = 2, max = -1)
+	@Form.Native(">=")
+	@Form.Parameters(min = 2, max = -1)
 	private static final class $Ge extends Form {
 		public Object apply(Cons args, Eval eval) {
 			var prev = eval.real(args.car());
@@ -808,6 +852,26 @@ final class Global extends SimpleBindings {
 	}
 
 	/**
+	 * LISP処理系で事前に定義されるconcat関数です。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2020/03/05
+	 */
+	@Form.Native("concat")
+	@Form.Parameters(min = 1, max = 1)
+	private static final class $Concat extends Form {
+		public Object apply(Cons args, Eval eval) {
+			final var join = new StringJoiner("");
+			for(Sexp sexp: eval.cons(args.car())) {
+				join.add(String.valueOf(sexp.value()));
+			}
+			return join.toString();
+		}
+	}
+
+	/**
 	 * LISP処理系で事前に定義されるformat関数です。
 	 *
 	 *
@@ -815,33 +879,14 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2020/02/26
 	 */
-	@Native("format")
-	@Params(min = 1, max = -1)
+	@Form.Native("format")
+	@Form.Parameters(min = 1, max = -1)
 	private static final class $Format extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final var temp = eval.text(args.car());
 			final var strm = args.cdr(1).stream();
 			final var vals = strm.map(eval::peel);
 			return String.format(temp, vals.toArray());
-		}
-	}
-
-	/**
-	 * LISP処理系で事前に定義されるsubstring関数です。
-	 *
-	 *
-	 * @author 無線部開発班
-	 *
-	 * @since 2019/12/06
-	 */
-	@Native("substring")
-	@Params(min = 3, max = 3)
-	private static final class $SubString extends Form {
-		public Object apply(Cons args, Eval eval) {
-			final String str = eval.text(args.car());
-			final int head = eval.real(args.get(1)).intValueExact();
-			final int tail = eval.real(args.get(2)).intValueExact();
-			return str.substring(head, tail);
 		}
 	}
 
@@ -853,8 +898,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/06/30
 	 */
-	@Native("number")
-	@Params(min = 1, max = 1)
+	@Form.Native("number")
+	@Form.Parameters(min = 1, max = 1)
 	private static final class $Number extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final var val = eval.some(args.car());
@@ -870,8 +915,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/06/30
 	 */
-	@Native("string")
-	@Params(min = 1, max = 1)
+	@Form.Native("string")
+	@Form.Parameters(min = 1, max = 1)
 	private static final class $String extends Form {
 		public Object apply(Cons args, Eval eval) {
 			return String.valueOf(eval.eval(args.car()));
@@ -886,8 +931,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/16
 	 */
-	@Native("match")
-	@Params(min = 2, max = 2)
+	@Form.Native("match")
+	@Form.Parameters(min = 2, max = 2)
 	private static final class $Match extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final var regex = eval.text(args.car());
@@ -897,16 +942,16 @@ final class Global extends SimpleBindings {
 	}
 
 	/**
-	 * LISP処理系で事前に定義されるtokenize関数です。
+	 * LISP処理系で事前に定義されるsplit関数です。
 	 *
 	 *
 	 * @author 無線部開発班
 	 *
 	 * @since 2019/12/06
 	 */
-	@Native("tokenize")
-	@Params(min = 2, max = 2)
-	private static final class $Tokenize extends Form {
+	@Form.Native("split")
+	@Form.Parameters(min = 2, max = 2)
+	private static final class $Split extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final String regex = eval.text(args.car());
 			final String text = eval.text(args.get(1));
@@ -922,8 +967,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/14
 	 */
-	@Native("lambda")
-	@Params(min = 2, max = 2)
+	@Form.Native("lambda")
+	@Form.Parameters(min = 2, max = 2)
 	private static final class $Lambda extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final var pars = Cons.cast(args.get(0));
@@ -943,8 +988,8 @@ final class Global extends SimpleBindings {
 	 *
 	 * @since 2019/05/14
 	 */
-	@Native("syntax")
-	@Params(min = 2, max = 2)
+	@Form.Native("syntax")
+	@Form.Parameters(min = 2, max = 2)
 	private static final class $Syntax extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final var pars = Cons.cast(args.get(0));
