@@ -44,7 +44,7 @@ item.add(formats.cache(new QName("adif.org", "MODE")).field("CW"))
 This mechanism is utilized for en/decoding the *QXML* format, which is an alternative log format proposed by the qxsl development team.
 *QXML* is extensible, and supports namespaces which have been prohibited in the traditional ADIF:
 
-```XML
+```XML:sample.qxml
 <?xml version="1.0" encoding="UTF-8"?>
 <list xmlns:qxsl="qxsl.org">
   <item qxsl:time="2017-06-03T16:17:00Z" qxsl:call="QV1DOK" qxsl:band="14000" qxsl:mode="CW">
@@ -121,22 +121,16 @@ The following LISP programs are bundled inside the JAR file, as sample codes in 
 
 ## Maven
 
-```XML
-<project>
-  <repositories>
-    <repository>
-      <id>qxsl</id>
-      <url>https://nextzlog.github.io/qmvn/mvn/</url>
-    </repository>
-  </repositories>
-  <dependencies>
-    <dependency>
-      <groupId>qxsl</groupId>
-      <artifactId>qxsl</artifactId>
-      <version>latest</version>
-    </dependency>
-  </dependencies>
-</project>
+If you want to use the latest build, configure the `build.gradle` as follows:
+
+```Groovy:build.gradle
+repositories.maven {
+	url('https://nextzlog.github.io/qmvn/mvn/')
+}
+
+dependencies {
+	compile('qxsl:qxsl:+')
+}
 ```
 
 ## Build

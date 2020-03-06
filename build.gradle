@@ -37,7 +37,8 @@ publishing.publications {
 	qxsl(MavenPublication) {
 		from components.java
 		groupId = 'qxsl'
-		version = 'latest'
+		def ver = 'git describe'.execute().text.trim()
+		version = ver?.split("-", 3).take(2).join(".")
 	}
 }
 

@@ -38,7 +38,7 @@ public final class City extends Qxsl<String> {
 	 * @param base 地域ベースの名前
 	 * @param data 地域名と地域番号の配列
 	 */
-	private City(String base, String[] data) {
+	private City(String base, String...data) {
 		super(CITY);
 		final int last = data.length - 1;
 		this.base = base;
