@@ -3,6 +3,7 @@ apply plugin: 'maven-publish'
 
 def utf8 = 'UTF-8'
 def java = '11'
+def dist = 'dist'
 
 repositories {
 	mavenCentral()
@@ -25,12 +26,21 @@ test {
 	useJUnitPlatform()
 }
 
+task checkout(type: Exec) {
+	commandLine 'git', 'worktree', 'add', dist, 'gh-pages'
+	enabled = !file(dist).exists()
+}
+
 javadoc {
 	exclude 'qxsl/extra/**'
+	destinationDir = file("$dist/doc")
 	options.links("https://docs.oracle.com/en/java/javase/$java/docs/api/")
 	options.header("<a href='http://nextzlog.github.io/qxsl'>QxSL API</a>")
-	options.charSet = utf8
-	options.encoding = utf8
+	options.charSet = options.encoding = utf8
+}
+
+publishing.repositories.maven{
+	url = "$dist/mvn"
 }
 
 publishing.publications {
@@ -42,4 +52,6 @@ publishing.publications {
 	}
 }
 
-publishing.repositories.maven{url = "$buildDir/mvn"}
+javadoc.dependsOn(checkout)
+publish.dependsOn(checkout)
+publish.mustRunAfter(checkout)

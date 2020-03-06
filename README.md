@@ -24,10 +24,10 @@ Each `Item` contains some `Field` objects, which indicate properties such as `Ti
 In addition, each `Item` holds two `Exch` objects, namely `Rcvd` and `Sent`, which involve some messages (`Field`s) exchanged by the operator and the contacted station.
 
 ```Scala
-import qxsl.model.Item
-val item = new Item
-val rcvd = item.getRcvd
-val sent = item.getSent
+import qxsl.model.{Item,Rcvd,Sent}
+val item: Item = new Item
+val rcvd: Rcvd = item.getRcvd
+val sent: Sent = item.getSent
 ```
 
 ### Field Management
@@ -36,9 +36,10 @@ The package `qxsl.field` provides a management framework for `Field` implementat
 The class `FieldFormats` detects `FieldFormat` implementations [from the class path automatically](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/ServiceLoader.html), and each `FieldFormat` provides en/decoders for individual `Field` implementation.
 
 ```Scala
-val formats = new qxsl.field.FieldFormats
-item.add(formats.cache(new QName("qxsl.org", "mode")).field("CW"))
-item.add(formats.cache(new QName("adif.org", "MODE")).field("CW"))
+val fmts = new qxsl.field.FieldFormats
+item.add(fmts.cache(new QName("qxsl.org", "mode")).field("CW"))
+item.add(fmts.cache(new QName("adif.org", "MODE")).field("CW"))
+val mode = item.get(new QName("qxsl.org", "mode")).value()
 ```
 
 This mechanism is utilized for en/decoding the *QXML* format, which is an alternative log format proposed by the qxsl development team.
@@ -64,17 +65,17 @@ The package `qxsl.table` provides a basic framework for en/decoding log files in
 The class `TableFormats` detects individual formats (`TableFormat`s) from the class path automatically, and also provides the `detect` method for automatic format detection.
 
 ```Scala
-val formats = new qxsl.table.TableFormats()
-val table: List[Item] = formats.decode(Files.newInputStream(path))
-formats.forName("qxml").encoder(Files.newOutputStream(path)).encode(table)
+val fmts = new qxsl.table.TableFormats()
+val table: List[Item] = fmts.decode(Files.newInputStream(path))
+fmts.forName("qxml").encoder(Files.newOutputStream(path)).encode(table)
 ```
 
 The package `qxsl.sheet` provides an en/decoding framework similar to the `qxsl.table` package, except that `qxsl.sheet` handles contest summary sheets such as Cabrillo and [JARL summary sheet](https://www.jarl.org/Japanese/1_Tanoshimo/1-1_Contest/e-log.htm) R2.0.
 The class `SheetFormats` manages individual `SheetFormat` implementations, and also provides the `unpack` method useful for extracting `List[Item]` from a summary sheet.
 
 ```Scala
-val formats = new qxsl.sheet.SheetFormats()
-val table: List[Item] = formats.unpack(Files.newBufferedReader(path))
+val fmts = new qxsl.sheet.SheetFormats()
+val table: List[Item] = fmts.unpack(Files.newBufferedReader(path))
 ```
 
 ### Scoring for Awards & Contests
@@ -110,13 +111,13 @@ The original LISP engine is provided by the package `elva`.
 
 The following LISP programs are bundled inside the JAR file, as sample codes in Elva Lisp.
 
-- [allja1.lisp (ALLJA1 contest definition)](src/main/resources/qxsl/ruler/allja1.lisp)
-- [format.lisp (ADIF-QXSL field converter)](src/main/resources/qxsl/ruler/format.lisp)
-- [macros.lisp (utility-macro definitions)](src/main/resources/qxsl/ruler/macros.lisp)
+- [allja1.lisp (ALLJA1 contest definition)](https://github.com/nextzlog/qxsl/tree/master/src/main/resources/qxsl/ruler/allja1.lisp)
+- [format.lisp (ADIF-QXSL field converter)](https://github.com/nextzlog/qxsl/tree/master/src/main/resources/qxsl/ruler/format.lisp)
+- [macros.lisp (utility-macro definitions)](https://github.com/nextzlog/qxsl/tree/master/src/main/resources/qxsl/ruler/macros.lisp)
 
 ## Documents
 
-- [Javadoc](https://nextzlog.github.io/qmvn/doc/index.html)
+- [Javadoc](https://nextzlog.github.io/qxsl/doc/index.html)
 - [History and Usage of ATS-4](https://pafelog.net/ats4.pdf)
 
 ## Maven
@@ -125,11 +126,11 @@ If you want to use the latest build, configure the `build.gradle` as follows:
 
 ```Groovy:build.gradle
 repositories.maven {
-	url('https://nextzlog.github.io/qmvn/mvn/')
+  url('https://nextzlog.github.io/qxsl/mvn/')
 }
 
 dependencies {
-	compile('qxsl:qxsl:+')
+  compile('qxsl:qxsl:+')
 }
 ```
 
@@ -137,7 +138,9 @@ dependencies {
 
 [Gradle](https://gradle.org/) retrieves dependent libraries, runs tests, and generates a JAR file automatically.
 
-`$ gradle build`
+```shell
+$ gradle build javadoc publish
+```
 
 ## Contribution
 
