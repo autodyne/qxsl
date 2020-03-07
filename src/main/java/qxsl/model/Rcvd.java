@@ -9,10 +9,10 @@ import static qxsl.extra.table.QxmlFormat.RCVD;
 
 /**
  * 交信記録で相手局から受信した情報を格納する{@link Tuple}実装クラスです。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2013/06/08
  *
  */

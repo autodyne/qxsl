@@ -10,8 +10,8 @@ import qxsl.model.Item;
 
 /**
  * ライブラリに内蔵されるLISPの処理結果を表現します。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
  *
  * @since 2016/12/05

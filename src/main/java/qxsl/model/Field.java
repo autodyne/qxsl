@@ -11,12 +11,12 @@ import qxsl.field.FieldFormats.Any;
 
 /**
  * {@link Tuple}に付随する各種の属性は{@link Field}クラスを実装します。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2015/08/05
- * 
+ *
  * @param <V> 属性の属性値の総称型
  */
 public abstract class Field<V> {
@@ -24,7 +24,7 @@ public abstract class Field<V> {
 
 	/**
 	 * 指定された属性名を持つ属性を構築します。
-	 * 
+	 *
 	 * @param qname 属性名
 	 */
 	public Field(QName qname) {
@@ -42,7 +42,7 @@ public abstract class Field<V> {
 
 	/**
 	 * この属性の値を返します。
-	 * 
+	 *
 	 * @return 属性の値
 	 */
 	public abstract V value();
@@ -58,7 +58,7 @@ public abstract class Field<V> {
 
 	/**
 	 * 属性値を文字列で返します。
-	 * 
+	 *
 	 * @return 文字列
 	 */
 	@Override
@@ -68,7 +68,7 @@ public abstract class Field<V> {
 
 	/**
 	 * 属性値のハッシュ値を計算します。
-	 * 
+	 *
 	 * @return ハッシュ値
 	 */
 	@Override
@@ -79,7 +79,7 @@ public abstract class Field<V> {
 	/**
 	 * 指定されたオブジェクトと等値であるかを確認します。
 	 * 同じ値を持つ同じクラスの属性の場合に真を返します。
-	 * 
+	 *
 	 * @param obj 比較するオブジェクト
 	 * @return この属性と等しい場合true
 	 */

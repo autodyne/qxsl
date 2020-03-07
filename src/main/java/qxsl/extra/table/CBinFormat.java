@@ -25,10 +25,10 @@ import static java.time.temporal.ChronoUnit.SECONDS;
 
 /**
  * CTESTWINバイナリファイルのうちLG8と呼ばれる書式です。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2017/06/12
  *
  */
@@ -49,10 +49,10 @@ public final class CBinFormat extends BaseFormat {
 
 	/**
 	 * CTESTWINのCDateTime型を再現します。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2017/06/12
 	 *
 	 */
@@ -69,7 +69,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * 指定されたCDateTimeを日時にデコードします。
-		 * 
+		 *
 		 * @param led CDateTime型のビット列
 		 * @return 日時
 		 */
@@ -80,7 +80,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * 指定された日時をCDateTimeにエンコードします。
-		 * 
+		 *
 		 * @param field 日時
 		 * @return CDateTime型のビット列
 		 */
@@ -92,10 +92,10 @@ public final class CBinFormat extends BaseFormat {
 
 	/**
 	 * LG8書式の周波数帯の列挙型です。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2017/06/12
 	 *
 	 */
@@ -138,7 +138,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * この列挙子に対応するバンドを返します。
-		 * 
+		 *
 		 * @return バンド
 		 */
 		public Band toBand() {
@@ -147,7 +147,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * 指定された周波数に対応する列挙子を返します。
-		 * 
+		 *
 		 * @param band 周波数
 		 * @return 対応する列挙子があれば返す
 		 */
@@ -161,7 +161,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * 指定された序数に対応する列挙子を返します。
-		 * 
+		 *
 		 * @param i 序数
 		 * @return 対応する列挙子があれば返す
 		 */
@@ -176,10 +176,10 @@ public final class CBinFormat extends BaseFormat {
 
 	/**
 	 * LG8書式の通信方式の列挙型です。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2017/06/12
 	 *
 	 */
@@ -218,7 +218,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * この列挙子に対応するモードを返します。
-		 * 
+		 *
 		 * @return モード
 		 */
 		public Mode toMode() {
@@ -227,7 +227,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * 指定されたモードに対応する列挙子を返します。
-		 * 
+		 *
 		 * @param mode モード
 		 * @return 対応する列挙子があれば返す
 		 */
@@ -241,7 +241,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * 指定された序数に対応する列挙子を返します。
-		 * 
+		 *
 		 * @param i 序数
 		 * @return 対応する列挙子があれば返す
 		 */
@@ -256,10 +256,10 @@ public final class CBinFormat extends BaseFormat {
 
 	/**
 	 * LG8書式で直列化された交信記録をデコードします。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2017/06/12
 	 *
 	 */
@@ -270,7 +270,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * 指定されたストリームを読み込むデコーダを構築します。
-		 * 
+		 *
 		 * @param is 交信記録を読み込むストリーム
 		 */
 		public CBinDecoder(InputStream is) {
@@ -281,7 +281,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * ストリームを閉じてリソースを解放します。
-		 * 
+		 *
 		 * @throws IOException リソース解放に失敗した場合
 		 */
 		@Override
@@ -291,7 +291,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * 冒頭をスキップして交信記録を1件読み込みます。
-		 * 
+		 *
 		 * @return 読み込んだ交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
@@ -306,7 +306,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * 冒頭をスキップして交信記録を1件読み込みます。
-		 * 
+		 *
 		 * @return 交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
@@ -327,7 +327,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * ストリームから交信記録を1件読み込みます。
-		 * 
+		 *
 		 * @return 読み込んだ1件の交信
 		 * @throws IOException 読み込みに失敗した場合
 		 */
@@ -350,7 +350,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * 交信記録に交信日時を読み込みます。
-		 * 
+		 *
 		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
@@ -360,7 +360,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * 交信記録に相手局のコールサインを読み込みます。
-		 * 
+		 *
 		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
@@ -371,7 +371,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * 交信記録に相手局まで送信したナンバーを読み込みます。
-		 * 
+		 *
 		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
@@ -382,7 +382,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * 交信記録に相手局から受信したナンバーを読み込みます。
-		 * 
+		 *
 		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
@@ -393,7 +393,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * 交信記録に通信方式を読み込みます。
-		 * 
+		 *
 		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
@@ -403,7 +403,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * 交信記録に周波数帯を読み込みます。
-		 * 
+		 *
 		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
@@ -413,7 +413,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * 交信記録に運用者名を読み込みます。
-		 * 
+		 *
 		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
@@ -424,7 +424,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * 交信記録に交信の備考を読み込みます。
-		 * 
+		 *
 		 * @param item 設定する交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
@@ -435,7 +435,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * ストリームから指定された最大文字数の文字列を読み込みます。
-		 * 
+		 *
 		 * @param limit 最大文字数
 		 * @return 読み込んだ文字列
 		 * @throws IOException 読み込みに失敗した場合
@@ -451,10 +451,10 @@ public final class CBinFormat extends BaseFormat {
 
 	/**
 	 * 交信記録をLG8書式に直列化するエンコーダです。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2019/05/04
 	 *
 	 */
@@ -464,7 +464,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * 指定されたストリームに出力するエンコーダを構築します。
-		 * 
+		 *
 		 * @param os 交信記録を出力するストリーム
 		 */
 		public CBinEncoder(OutputStream os) {
@@ -474,7 +474,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * ストリームを閉じてリソースを解放します。
-		 * 
+		 *
 		 * @throws IOException リソース解放に失敗した場合
 		 */
 		@Override
@@ -484,7 +484,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * 交信記録を出力します。
-		 * 
+		 *
 		 * @param items 交信記録
 		 * @throws IOException 出力に失敗した場合
 		 */
@@ -504,9 +504,9 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * CTESTWINの入力画面のデフォルト値を出力します。
-		 * 
+		 *
 		 * @param items 交信記録
-		 * 
+		 *
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void confs(List<Item> items) throws IOException {
@@ -523,7 +523,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * CTESTWINのAADXコンテスト用の点数設定を出力します。
-		 * 
+		 *
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void scoresForAADX() throws IOException {
@@ -534,9 +534,9 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * CTESTWINの運用者名のリストの設定を出力します。
-		 * 
+		 *
 		 * @param items 交信記録
-		 * 
+		 *
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void names(List<Item> items) throws IOException {
@@ -551,10 +551,10 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * 交信記録をバイナリにシリアライズして出力します。
-		 * 
+		 *
 		 * @param item 出力する交信記録
 		 * @param last 以降に交信記録がない場合true
-		 * 
+		 *
 		 * @throws IOException 出力に失敗した場合
 		 */
 		private void item(Item item, boolean last) throws IOException {
@@ -580,7 +580,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * 交信日時をCDateTime型で読めるバイト列に変換して出力します。
-		 * 
+		 *
 		 * @param time 交信日時
 		 * @throws IOException 出力に失敗した場合
 		 */
@@ -591,7 +591,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * 交信した通信方式を1バイトで出力します。
-		 * 
+		 *
 		 * @param mode 通信方式
 		 * @throws IOException 出力に失敗した場合
 		 */
@@ -603,7 +603,7 @@ public final class CBinFormat extends BaseFormat {
 
 		/**
 		 * 交信した周波数帯を1バイトで出力します。
-		 * 
+		 *
 		 * @param band 周波数帯
 		 * @throws IOException 出力に失敗した場合
 		 */

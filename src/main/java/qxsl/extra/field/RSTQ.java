@@ -11,10 +11,10 @@ import qxsl.model.Field;
 
 /**
  * 交信のRST(RSQ)レポートを表現する{@link Field}実装クラスです。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2013/06/08
  *
  */
@@ -25,7 +25,7 @@ public final class RSTQ extends Qxsl<Integer> {
 	 * 指定された整数で{@link RSTQ}を構築します。
 	 * 3桁の整数の場合、音調レポートまで読み取ります。
 	 * 2桁の整数の場合、音調レポートを読み取りません。
-	 * 
+	 *
 	 * @param rst RSTQをそのまま整数値にした値
 	 */
 	public RSTQ(int rst) {
@@ -46,7 +46,7 @@ public final class RSTQ extends Qxsl<Integer> {
 
 	/**
 	 * RSTQを整数で指定して{@link RSTQ}を構築します。
-	 * 
+	 *
 	 * @param r 了解度
 	 * @param s 信号強度
 	 * @param t 音調 または品質
@@ -58,7 +58,7 @@ public final class RSTQ extends Qxsl<Integer> {
 	/**
 	 * 了解度レポートを返します。
 	 * この値は常に1以上5以下です。
-	 * 
+	 *
 	 * @return 了解度
 	 */
 	public int getR() {
@@ -68,7 +68,7 @@ public final class RSTQ extends Qxsl<Integer> {
 	/**
 	 * 信号強度レポートを返します。
 	 * この値は常に1以上9以下です。
-	 * 
+	 *
 	 * @return 信号強度
 	 */
 	public int getS() {
@@ -78,7 +78,7 @@ public final class RSTQ extends Qxsl<Integer> {
 	/**
 	 * 音調レポートを返します。
 	 * この値は常に0以上9以下です。
-	 * 
+	 *
 	 * @return 音調 もしくは品質
 	 */
 	public int getT() {
@@ -93,10 +93,10 @@ public final class RSTQ extends Qxsl<Integer> {
 
 	/**
 	 * {@link RSTQ}を生成する書式です。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2013/06/08
 	 *
 	 */

@@ -11,10 +11,10 @@ import qxsl.model.Field;
 
 /**
  * 交信を行なった運用者の個人の名前を表現します。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2013/06/08
  *
  */
@@ -23,7 +23,7 @@ public final class Name extends Qxsl<String> {
 
 	/**
 	 * 運用者名を指定して{@link Name}を構築します。
-	 * 
+	 *
 	 * @param name 運用者名
 	 */
 	public Name(String name) {
@@ -38,10 +38,10 @@ public final class Name extends Qxsl<String> {
 
 	/**
 	 * {@link Name}を生成する書式です。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2013/06/08
 	 *
 	 */

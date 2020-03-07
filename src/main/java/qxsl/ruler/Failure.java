@@ -12,8 +12,8 @@ import qxsl.model.Item;
 /**
  * 規約により拒否された交信に付与されます。
  * 総得点や乗数の計算には反映されません。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
  *
  * @since 2016/11/26
@@ -36,7 +36,7 @@ public final class Failure implements Message, Serializable {
 
 	/**
 	 * 失敗の内容を説明する文字列を返します。
-	 * 
+	 *
 	 * @return 文字列
 	 */
 	public final String text() {

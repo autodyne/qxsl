@@ -9,8 +9,8 @@ import java.io.Serializable;
 
 /**
  * LISP処理系で使用される識別子の実装です。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
  *
  * @since 2017/02/18
@@ -80,22 +80,23 @@ public final class Symbol implements Serializable {
 		}
 
 		/**
-		 * この演算子の名前をアトムとして返します。
-		 *
-		 * @return 演算子の識別子を包むアトム
-		 */
-		public final Atom toAtom() {
-			return new Atom(name);
-		}
-
-		/**
 		 * この演算子を使用して引用式を構築します。
 		 *
 		 * @param sexp 被引用式
 		 * @return 引用式
 		 */
 		public final Cons quote(Sexp sexp) {
-			return Cons.cons(toAtom(), sexp);
+			return Cons.cons(new Atom(name), sexp);
+		}
+
+		/**
+		 * 指定された式が引用式であるか確認します。
+		 *
+		 * @param sexp 式
+		 * @return この演算子による引用の場合true
+		 */
+		public final boolean is(Sexp sexp) {
+			return Cons.cast(sexp).car().value().equals(name);
 		}
 	}
 }

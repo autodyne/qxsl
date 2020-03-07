@@ -11,10 +11,10 @@ import qxsl.model.Field;
 
 /**
  * 交信の備考を表現する{@link Field}実装クラスです。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2013/06/08
  *
  */
@@ -23,7 +23,7 @@ public final class Note extends Qxsl<String> {
 
 	/**
 	 * 備考を指定して{@link Note}を構築します。
-	 * 
+	 *
 	 * @param note 備考
 	 */
 	public Note(String note) {
@@ -38,10 +38,10 @@ public final class Note extends Qxsl<String> {
 
 	/**
 	 * {@link Note}を生成する書式です。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2013/06/08
 	 *
 	 */

@@ -12,8 +12,8 @@ import elva.Elva.ElvaRuntimeException;
 
 /**
  * LISP処理系の識別子を捕捉する静的スコープの実装です。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
  *
  * @since 2017/02/18

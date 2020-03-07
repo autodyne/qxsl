@@ -12,10 +12,10 @@ import qxsl.model.Field;
 
 /**
  * 交信の周波数を表現する{@link Field}実装クラスです。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2013/06/08
  *
  */
@@ -24,7 +24,7 @@ public final class Band extends Qxsl<BigDecimal> {
 
 	/**
 	 * 周波数を指定して{@link Band}を構築します。
-	 * 
+	 *
 	 * @param band キロヘルツ単位の周波数
 	 */
 	public Band(int band) {
@@ -33,7 +33,7 @@ public final class Band extends Qxsl<BigDecimal> {
 
 	/**
 	 * 周波数を指定して{@link Band}を構築します。
-	 * 
+	 *
 	 * @param band キロヘルツ単位の周波数
 	 */
 	public Band(BigDecimal band) {
@@ -57,7 +57,7 @@ public final class Band extends Qxsl<BigDecimal> {
 
 	/**
 	 * 周波数を表す適切な単位の文字列を返します。
-	 * 
+	 *
 	 * @return UI表示に適した文字列
 	 */
 	@Override
@@ -69,7 +69,7 @@ public final class Band extends Qxsl<BigDecimal> {
 
 	/**
 	 * 周波数をキロヘルツ単位の文字列で返します。
-	 * 
+	 *
 	 * @return キロヘルツ単位のUI表示に適した文字列
 	 */
 	public String toKHzString() {
@@ -78,7 +78,7 @@ public final class Band extends Qxsl<BigDecimal> {
 
 	/**
 	 * 周波数をメガヘルツ単位の文字列で返します。
-	 * 
+	 *
 	 * @return メガヘルツ単位のUI表示に適した文字列
 	 */
 	public String toMHzString() {
@@ -87,7 +87,7 @@ public final class Band extends Qxsl<BigDecimal> {
 
 	/**
 	 * 周波数をギガヘルツ単位の文字列で返します。
-	 * 
+	 *
 	 * @return ギガヘルツ単位のUI表示に適した文字列
 	 */
 	public String toGHzString() {
@@ -96,7 +96,7 @@ public final class Band extends Qxsl<BigDecimal> {
 
 	/**
 	 * この周波数を実数で表現する文字列を返します。
-	 * 
+	 *
 	 * @param scale 小数点の位置
 	 * @return 実数により表される周波数
 	 */
@@ -127,7 +127,7 @@ public final class Band extends Qxsl<BigDecimal> {
 	/**
 	 * 指定されたオブジェクトと等値であるか確認します。
 	 * 同じ周波数の{@link Band}に対してtrueを返します。
-	 * 
+	 *
 	 * @param obj 比較するオブジェクト
 	 * @return この属性と等しい場合true
 	 */
@@ -139,10 +139,10 @@ public final class Band extends Qxsl<BigDecimal> {
 
 	/**
 	 * {@link Band}を生成する書式です。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2013/06/08
 	 *
 	 */

@@ -10,10 +10,10 @@ import qxsl.model.Field;
 
 /**
  * QXMLが標準仕様でサポートする属性の名前を定義します。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2019/06/27
  *
  * @param <V> 属性の属性値の総称型
@@ -34,7 +34,7 @@ public abstract class Qxsl<V> extends Field<V> {
 
 	/**
 	 * 指定した属性名を持つ属性を構築します。
-	 * 
+	 *
 	 * @param name 属性名
 	 */
 	public Qxsl(QName name) {

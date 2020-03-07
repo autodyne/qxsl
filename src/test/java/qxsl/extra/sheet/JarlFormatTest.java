@@ -23,10 +23,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * {@link JarlFormat}クラスのテスト用クラスです。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2017/03/12
  *
  */

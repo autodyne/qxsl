@@ -17,10 +17,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * {@link City}クラスのテスト用クラスです。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2017/02/24
  *
  */
@@ -47,7 +47,7 @@ public final class CityTest extends test.RandTest {
 	/**
 	 * JARLのJCC/JCGに含まれる全ての地域をリストで返します。
 	 *
-	 * 
+	 *
 	 * @return 地域のリスト
 	 */
 	public static List<City> testMethodSource() {

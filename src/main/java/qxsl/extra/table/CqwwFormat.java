@@ -22,10 +22,10 @@ import static java.time.ZoneOffset.UTC;
 
 /**
  * CabrilloのQSOテンプレートでCQWWコンテストの交信記録を表す書式です。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2019/05/04
  *
  */
@@ -56,10 +56,10 @@ public final class CqwwFormat extends BaseFormat {
 
 	/**
 	 * Cabrillo書式の周波数帯の列挙型です。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2020/02/26
 	 *
 	 */
@@ -104,7 +104,7 @@ public final class CqwwFormat extends BaseFormat {
 
 		/**
 		 * この列挙子に対応するバンドを返します。
-		 * 
+		 *
 		 * @return バンド
 		 */
 		public Band toBand() {
@@ -113,7 +113,7 @@ public final class CqwwFormat extends BaseFormat {
 
 		/**
 		 * 指定された周波数に対応する列挙子を返します。
-		 * 
+		 *
 		 * @param band 周波数
 		 * @return 対応する列挙子があれば返す
 		 */
@@ -127,7 +127,7 @@ public final class CqwwFormat extends BaseFormat {
 
 		/**
 		 * 指定された文字列に対応する列挙子を返します。
-		 * 
+		 *
 		 * @param text 文字列
 		 * @return 対応する列挙子があれば返す
 		 */
@@ -142,10 +142,10 @@ public final class CqwwFormat extends BaseFormat {
 
 	/**
 	 * Cabrillo書式で直列化された交信記録をデコードします。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2019/05/04
 	 *
 	 */
@@ -155,7 +155,7 @@ public final class CqwwFormat extends BaseFormat {
 
 		/**
 		 * 指定されたリーダを読み込むデコーダを構築します。
-		 * 
+		 *
 		 * @param reader 更新小緑を読み込むリーダ
 		 */
 		public CqwwDecoder(Reader reader) {
@@ -166,7 +166,7 @@ public final class CqwwFormat extends BaseFormat {
 
 		/**
 		 * 交信記録を読み込みます。
-		 * 
+		 *
 		 * @return 交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
@@ -181,7 +181,7 @@ public final class CqwwFormat extends BaseFormat {
 
 		/**
 		 * 交信記録を読み込みます。
-		 * 
+		 *
 		 * @return 交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
@@ -199,7 +199,7 @@ public final class CqwwFormat extends BaseFormat {
 
 		/**
 		 * 1行の文字列から交信記録を1件読み込みます。
-		 * 
+		 *
 		 * @param line 1行
 		 * @return 読み込んだ1件の交信
 		 * @throws IOException 読み込みに失敗した場合
@@ -233,7 +233,7 @@ public final class CqwwFormat extends BaseFormat {
 
 		/**
 		 * 交信記録に交信日時を設定します。
-		 * 
+		 *
 		 * @param item 設定する交信記録
 		 * @param time 交信日時の文字列
 		 */
@@ -244,7 +244,7 @@ public final class CqwwFormat extends BaseFormat {
 
 		/**
 		 * 交信記録に相手局のコールサインを設定します。
-		 * 
+		 *
 		 * @param item 設定する交信記録
 		 * @param call コールサインの文字列
 		 */
@@ -254,7 +254,7 @@ public final class CqwwFormat extends BaseFormat {
 
 		/**
 		 * 交信記録に相手局まで送信したRSTQを設定します。
-		 * 
+		 *
 		 * @param item 設定する交信記録
 		 * @param srst RSTQの文字列
 		 */
@@ -264,7 +264,7 @@ public final class CqwwFormat extends BaseFormat {
 
 		/**
 		 * 交信記録に相手局まで送信したナンバーを設定します。
-		 * 
+		 *
 		 * @param item 設定する交信記録
 		 * @param snum ナンバーの文字列
 		 */
@@ -274,7 +274,7 @@ public final class CqwwFormat extends BaseFormat {
 
 		/**
 		 * 交信記録に相手局から受信したRSTQを設定します。
-		 * 
+		 *
 		 * @param item 設定する交信記録
 		 * @param rrst RSTQの文字列
 		 */
@@ -284,7 +284,7 @@ public final class CqwwFormat extends BaseFormat {
 
 		/**
 		 * 交信記録に相手局から受信したナンバーを設定します。
-		 * 
+		 *
 		 * @param item 設定する交信記録
 		 * @param rnum ナンバーの文字列
 		 */
@@ -294,7 +294,7 @@ public final class CqwwFormat extends BaseFormat {
 
 		/**
 		 * 交信記録に周波数帯を設定します。
-		 * 
+		 *
 		 * @param item 設定する交信記録
 		 * @param band 周波数帯の文字列
 		 */
@@ -304,7 +304,7 @@ public final class CqwwFormat extends BaseFormat {
 
 		/**
 		 * 交信記録に通信方式を設定します。
-		 * 
+		 *
 		 * @param item 設定する交信記録
 		 * @param mode 通信方式の文字列
 		 */
@@ -327,7 +327,7 @@ public final class CqwwFormat extends BaseFormat {
 
 		/**
 		 * 指定されたライタに出力するエンコーダを構築します。
-		 * 
+		 *
 		 * @param writer 交信記録を出力するライタ
 		 */
 		public CqwwEncoder(Writer writer) {
@@ -337,7 +337,7 @@ public final class CqwwFormat extends BaseFormat {
 
 		/**
 		 * 交信記録を出力します。
-		 * 
+		 *
 		 * @param items 交信記録
 		 * @throws IOException 出力に失敗した場合
 		 */
@@ -348,7 +348,7 @@ public final class CqwwFormat extends BaseFormat {
 
 		/**
 		 * 指定された交信記録をテキスト書式で出力します。
-		 * 
+		 *
 		 * @param item 出力する交信記録
 		 * @throws IOException 出力に失敗した場合
 		 */
@@ -376,7 +376,7 @@ public final class CqwwFormat extends BaseFormat {
 
 		/**
 		 * 指定された日時を文字列として出力します。
-		 * 
+		 *
 		 * @param date 出力する日時
 		 * @throws IOException 出力に失敗した場合
 		 */
@@ -388,7 +388,7 @@ public final class CqwwFormat extends BaseFormat {
 
 		/**
 		 * 指定された周波数帯を文字列として出力します。
-		 * 
+		 *
 		 * @param band 出力する周波数帯
 		 * @throws IOException 出力に失敗した場合
 		 */

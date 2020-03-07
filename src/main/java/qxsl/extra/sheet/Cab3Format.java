@@ -13,10 +13,10 @@ import java.util.StringJoiner;
 
 /**
  * Cabrilloサマリーシートv3(v2)の書式です。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2019/05/03
  *
  */
@@ -37,10 +37,10 @@ public final class Cab3Format extends BaseFormat {
 
 	/**
 	 * Cabrilloサマリーシートを開封するデコーダの実装です。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2019/05/03
 	 *
 	 */
@@ -49,7 +49,7 @@ public final class Cab3Format extends BaseFormat {
 
 		/**
 		 * 指定されたリーダを読み込むデコーダを構築します。
-		 * 
+		 *
 		 * @param reader 要約書類を読み込むリーダ
 		 */
 		public Cab3Decoder(Reader reader) {
@@ -123,10 +123,10 @@ public final class Cab3Format extends BaseFormat {
 
 	/**
 	 * Cabrilloサマリーシートを作成するエンコーダの実装です。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2019/05/03
 	 *
 	 */
@@ -135,7 +135,7 @@ public final class Cab3Format extends BaseFormat {
 
 		/**
 		 * 指定されたライタに書き込むエンコーダを構築します。
-		 * 
+		 *
 		 * @param writer 要約書類を出力するライタ
 		 */
 		public Cab3Encoder(Writer writer) {

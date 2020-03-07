@@ -14,10 +14,10 @@ import static qxsl.extra.table.QxmlFormat.ITEM;
 
 /**
  * 交信記録で1件の不可分な交信を表現する{@link Tuple}実装クラスです。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2013/06/04
  *
  */
@@ -34,7 +34,7 @@ public final class Item extends Tuple {
 
 	/**
 	 * 指定されたオブジェクトと等値であるか確認します。
-	 * 
+	 *
 	 * @param obj 比較するオブジェクト
 	 * @return この交信記録と等しい場合true
 	 */
@@ -49,7 +49,7 @@ public final class Item extends Tuple {
 
 	/**
 	 * この交信記録の文字列による表現を返します。
-	 * 
+	 *
 	 * @return 文字列
 	 */
 	@Override
@@ -64,7 +64,7 @@ public final class Item extends Tuple {
 
 	/**
 	 * この交信記録の直下にある{@link Rcvd}を返します。
-	 * 
+	 *
 	 * @return 相手局から受信した情報
 	 */
 	public Rcvd getRcvd() {
@@ -74,7 +74,7 @@ public final class Item extends Tuple {
 
 	/**
 	 * この交信記録の直下にある{@link Sent}を返します。
-	 * 
+	 *
 	 * @return 相手局まで送信した情報
 	 */
 	public Sent getSent() {

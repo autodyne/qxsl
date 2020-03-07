@@ -15,10 +15,10 @@ import qxsl.sheet.SheetFormat;
 
 /**
  * 書式の説明を設定ファイルから取得する仕組みを提供します。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2019/06/16
  *
  */
@@ -43,7 +43,7 @@ public abstract class BaseFormat implements SheetFormat {
 
 	/**
 	 * この書式を識別する完全な名前を返します。
-	 * 
+	 *
 	 * @return 書式の名前
 	 */
 	@Override
@@ -53,7 +53,7 @@ public abstract class BaseFormat implements SheetFormat {
 
 	/**
 	 * この書式のUIへの表示に適した文字列を返します。
-	 * 
+	 *
 	 * @return 書式のUI文字列
 	 */
 	@Override
@@ -63,7 +63,7 @@ public abstract class BaseFormat implements SheetFormat {
 
 	/**
 	 * この書式の詳細を説明する複数行の文字列を返します。
-	 * 
+	 *
 	 * @return 書式の説明
 	 */
 	@Override
@@ -73,7 +73,7 @@ public abstract class BaseFormat implements SheetFormat {
 
 	/**
 	 * この書式を適用するファイル名拡張子の不変のリストを返します。
-	 * 
+	 *
 	 * @return ファイル名拡張子のリスト
 	 */
 	@Override

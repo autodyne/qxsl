@@ -21,10 +21,10 @@ import org.xml.sax.SAXException;
 
 /**
  * JARLサマリーシートR2.0(R1.0)の書式です。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2017/03/11
  *
  */
@@ -63,10 +63,10 @@ public final class JarlFormat extends BaseFormat {
 
 	/**
 	 * JARLサマリーシートを開封するデコーダの実装です。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2014/11/04
 	 *
 	 */
@@ -79,7 +79,7 @@ public final class JarlFormat extends BaseFormat {
 
 		/**
 		 * 指定されたリーダから要約書類を読み込むデコーダを構築します。
-		 * 
+		 *
 		 * @param reader 読み込むリーダ
 		 * @throws XMLStreamException 通常は発生しない例外
 		 */
@@ -106,7 +106,7 @@ public final class JarlFormat extends BaseFormat {
 
 		/**
 		 * リーダの内容を検証してから要約書類を読み込みます。
-		 * 
+		 *
 		 * @return 読み込んだ要約書類
 		 * @throws IOException 構文の問題もしくは読み込みに失敗した場合
 		 */
@@ -123,7 +123,7 @@ public final class JarlFormat extends BaseFormat {
 
 		/**
 		 * リーダの内容をXML文書に変換してから要約書類を読み込みます。
-		 * 
+		 *
 		 * @return 読み込んだ要約書類
 		 * @throws Exception 構文の問題もしくは読み込みに失敗した場合
 		 */
@@ -153,7 +153,7 @@ public final class JarlFormat extends BaseFormat {
 
 		/**
 		 * 文書の構造を解析して要約書類を読み込みます。
-		 * 
+		 *
 		 * @return 読み込んだ要約書類
 		 * @throws XMLStreamException 構文の問題もしくは読み込みに失敗した場合
 		 */
@@ -193,10 +193,10 @@ public final class JarlFormat extends BaseFormat {
 
 	/**
 	 * JARLサマリーシートを作成するエンコーダの実装です。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2017/03/11
 	 *
 	 */
@@ -205,7 +205,7 @@ public final class JarlFormat extends BaseFormat {
 
 		/**
 		 * 指定されたライタに書き込むエンコーダを構築します。
-		 * 
+		 *
 		 * @param writer 要約書類を出力するライタ
 		 */
 		public JarlEncoder(Writer writer) {

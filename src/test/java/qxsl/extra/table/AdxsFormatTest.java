@@ -20,10 +20,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * {@link AdxsFormat}クラスのテスト用クラスです。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2019/07/02
  *
  */

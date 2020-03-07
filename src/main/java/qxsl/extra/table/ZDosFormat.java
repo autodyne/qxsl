@@ -22,10 +22,10 @@ import qxsl.model.Item;
 
 /**
  * zLogテキストファイルのうちDOS版と互換の書式です。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2013/02/27
  *
  */
@@ -58,10 +58,10 @@ public final class ZDosFormat extends BaseFormat {
 
 	/**
 	 * zLogテキスト書式で直列化された交信記録をデコードします。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2013/02/25
 	 */
 	@Deprecated
@@ -71,7 +71,7 @@ public final class ZDosFormat extends BaseFormat {
 
 		/**
 		 * 指定されたリーダを読み込むデコーダを構築します。
-		 * 
+		 *
 		 * @param reader 交信記録を読み込むリーダ
 		 */
 		public ZDosDecoder(Reader reader) {
@@ -86,7 +86,7 @@ public final class ZDosFormat extends BaseFormat {
 
 		/**
 		 * 交信記録を読み込みます。
-		 * 
+		 *
 		 * @return 交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
@@ -101,7 +101,7 @@ public final class ZDosFormat extends BaseFormat {
 
 		/**
 		 * 冒頭をスキップして交信記録を1件読み込みます。
-		 * 
+		 *
 		 * @return 読み込んだ交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
@@ -119,7 +119,7 @@ public final class ZDosFormat extends BaseFormat {
 
 		/**
 		 * 1行の文字列から交信記録を1件読み込みます。
-		 * 
+		 *
 		 * @param line 1行
 		 * @return 読み込んだ1件の交信
 		 * @throws IOException 読み込みに失敗した場合
@@ -156,7 +156,7 @@ public final class ZDosFormat extends BaseFormat {
 
 		/**
 		 * 交信記録に交信日時を設定します。
-		 * 
+		 *
 		 * @param item 設定する交信記録
 		 * @param time 交信日時の文字列
 		 */
@@ -166,7 +166,7 @@ public final class ZDosFormat extends BaseFormat {
 
 		/**
 		 * 交信記録に相手局のコールサインを設定します。
-		 * 
+		 *
 		 * @param item 設定する交信記録
 		 * @param call コールサインの文字列
 		 */
@@ -176,7 +176,7 @@ public final class ZDosFormat extends BaseFormat {
 
 		/**
 		 * 交信記録に相手局まで送信したナンバーを設定します。
-		 * 
+		 *
 		 * @param item 設定する交信記録
 		 * @param sent ナンバーの文字列
 		 */
@@ -186,7 +186,7 @@ public final class ZDosFormat extends BaseFormat {
 
 		/**
 		 * 交信記録に相手局から受信したナンバーを設定します。
-		 * 
+		 *
 		 * @param item 設定する交信記録
 		 * @param rcvd ナンバーの文字列
 		 */
@@ -196,7 +196,7 @@ public final class ZDosFormat extends BaseFormat {
 
 		/**
 		 * 交信記録に周波数帯を設定します。
-		 * 
+		 *
 		 * @param item 設定する交信記録
 		 * @param band 周波数帯の文字列
 		 */
@@ -213,7 +213,7 @@ public final class ZDosFormat extends BaseFormat {
 
 		/**
 		 * 交信記録に通信方式を設定します。
-		 * 
+		 *
 		 * @param item 設定する交信記録
 		 * @param mode 通信方式の文字列
 		 */
@@ -223,7 +223,7 @@ public final class ZDosFormat extends BaseFormat {
 
 		/**
 		 * 交信記録に運用者名を設定します。
-		 * 
+		 *
 		 * @param item 設定する交信記録
 		 * @param op 運用者名の文字列
 		 */
@@ -233,7 +233,7 @@ public final class ZDosFormat extends BaseFormat {
 
 		/**
 		 * 交信記録に交信の備考を設定します。
-		 * 
+		 *
 		 * @param item 設定する交信記録
 		 * @param note 備考の文字列
 		 */
@@ -256,7 +256,7 @@ public final class ZDosFormat extends BaseFormat {
 
 		/**
 		 * 指定されたライタに出力するエンコーダを構築します。
-		 * 
+		 *
 		 * @param writer 交信記録を出力するライタ
 		 */
 		public ZDosEncoder(Writer writer) {
@@ -266,7 +266,7 @@ public final class ZDosFormat extends BaseFormat {
 
 		/**
 		 * 交信記録を出力します。
-		 * 
+		 *
 		 * @param items 交信記録
 		 * @throws IOException 出力に失敗した場合
 		 */
@@ -279,7 +279,7 @@ public final class ZDosFormat extends BaseFormat {
 
 		/**
 		 * 指定された交信記録をテキスト書式で出力します。
-		 * 
+		 *
 		 * @param item 出力する交信記録
 		 * @throws IOException 出力に失敗した場合
 		 */
@@ -303,7 +303,7 @@ public final class ZDosFormat extends BaseFormat {
 
 		/**
 		 * 指定された日時を文字列として出力します。
-		 * 
+		 *
 		 * @param date 出力する日時
 		 * @throws IOException 出力に失敗した場合
 		 */
@@ -314,7 +314,7 @@ public final class ZDosFormat extends BaseFormat {
 
 		/**
 		 * 指定された周波数帯を文字列として出力します。
-		 * 
+		 *
 		 * @param band 出力する周波数帯
 		 * @throws IOException 出力に失敗した場合
 		 */
@@ -327,7 +327,7 @@ public final class ZDosFormat extends BaseFormat {
 
 		/**
 		 * 指定された運用者名を文字列として出力します。
-		 * 
+		 *
 		 * @param op 出力する運用者名
 		 * @throws IOException 出力に失敗した場合
 		 */
@@ -337,7 +337,7 @@ public final class ZDosFormat extends BaseFormat {
 
 		/**
 		 * 指定された備考を文字列として出力します。
-		 * 
+		 *
 		 * @param note 出力する備考
 		 * @throws IOException 出力に失敗した場合
 		 */

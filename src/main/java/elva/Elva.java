@@ -25,8 +25,8 @@ import static javax.script.ScriptContext.GLOBAL_SCOPE;
 
 /**
  * 無線部開発班が実装するLISP方言「Elva」の{@link ScriptEngine}の実装です。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
  *
  * @since 2019/05/17
@@ -61,11 +61,11 @@ public final class Elva extends AbstractScriptEngine {
 
 	/**
 	 * 新たに構築した環境で指定された入力からLISPの式を読み取って評価します。
-	 * 
+	 *
 	 * @param r 式を読み取るリーダ
 	 * @param c 文脈
 	 * @return LISPの式を評価した結果
-	 * 
+	 *
 	 * @throws ScriptException 読み取り、式の構文上または実行時に発生した例外
 	 */
 	@Override
@@ -79,11 +79,11 @@ public final class Elva extends AbstractScriptEngine {
 
 	/**
 	 * 新たに構築した環境で指定された入力からLISPの式を読み取って評価します。
-	 * 
+	 *
 	 * @param s 式
 	 * @param c 文脈
 	 * @return LISPの最後の式の値
-	 * 
+	 *
 	 * @throws ScriptException 式の構文上または実行時に発生した例外
 	 */
 	@Override
@@ -92,8 +92,8 @@ public final class Elva extends AbstractScriptEngine {
 		final var self = new Nest(c.getBindings(ENGINE_SCOPE), glob);
 		final var eval = new Eval(self);
 		try {
-			final Stream<Sexp> vals = scan(s).stream().map(eval::eval);
-			return vals.reduce((h, tl) -> tl).orElse(Cons.NIL).value();
+			final Stream<Sexp> vals = scan(s).stream().map(eval);
+			return vals.reduce((h, t) -> t).orElse(null).value();
 		} catch (ElvaRuntimeException ex) {
 			throw ex.toScriptException();
 		}
@@ -101,10 +101,10 @@ public final class Elva extends AbstractScriptEngine {
 
 	/**
 	 * 指定された入力からLISPの式を読み取ります。
-	 * 
+	 *
 	 * @param r 式を読み取るリーダ
 	 * @return LISPの式を読み取った結果
-	 * 
+	 *
 	 * @throws ScriptException 式の構文上の例外
 	 */
 	public final List<Sexp> scan(Reader r) throws ScriptException {
@@ -117,10 +117,10 @@ public final class Elva extends AbstractScriptEngine {
 
 	/**
 	 * 指定された入力からLISPの式を読み取ります。
-	 * 
+	 *
 	 * @param s 式
 	 * @return LISPの式を読み取った結果
-	 * 
+	 *
 	 * @throws ScriptException 式の構文上の例外
 	 */
 	public final List<Sexp> scan(String s) throws ScriptException {
@@ -138,8 +138,8 @@ public final class Elva extends AbstractScriptEngine {
 
 	/**
 	 * LISP処理系で使用される構文解析器の実装です。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
 	 *
 	 * @since 2017/02/18
@@ -152,7 +152,7 @@ public final class Elva extends AbstractScriptEngine {
 		 * 指定された式を走査する構文解析器を構築します。
 		 *
 		 * @param exp 走査対象の式
-		 * 
+		 *
 		 * @throws IOException 正規表現の読み込みに失敗した場合
 		 */
 		public Scanner(String exp) throws IOException {
@@ -316,6 +316,15 @@ public final class Elva extends AbstractScriptEngine {
 		public ElvaRuntimeException(String message, Object...args) {
 			this.error = String.format(TEMP, String.format(message, args));
 			this.trace = new StringJoiner("\n");
+		}
+
+		/**
+		 * 指定された例外を包む例外を構築します。
+		 *
+		 * @param ex 例外
+		 */
+		public ElvaRuntimeException(Exception ex) {
+			this(ex.toString());
 		}
 
 		/**

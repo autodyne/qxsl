@@ -20,10 +20,10 @@ import qxsl.table.TableFormat;
 /**
  * このライブラリに内蔵される交信記録の書式の共通実装です。
  * 書式の説明を設定ファイルから取得する仕組みを提供します。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2019/06/16
  *
  */
@@ -48,7 +48,7 @@ public abstract class BaseFormat implements TableFormat {
 
 	/**
 	 * この書式を識別する完全な名前を返します。
-	 * 
+	 *
 	 * @return 書式の名前
 	 */
 	@Override
@@ -58,7 +58,7 @@ public abstract class BaseFormat implements TableFormat {
 
 	/**
 	 * この書式のUIへの表示に適した文字列を返します。
-	 * 
+	 *
 	 * @return 書式のUI文字列
 	 */
 	@Override
@@ -68,7 +68,7 @@ public abstract class BaseFormat implements TableFormat {
 
 	/**
 	 * この書式の詳細を説明する複数行の文字列を返します。
-	 * 
+	 *
 	 * @return 書式の説明
 	 */
 	@Override
@@ -87,7 +87,7 @@ public abstract class BaseFormat implements TableFormat {
 
 	/**
 	 * この書式を適用するファイル名拡張子の不変のリストを返します。
-	 * 
+	 *
 	 * @return ファイル名拡張子のリスト
 	 */
 	@Override
@@ -98,7 +98,7 @@ public abstract class BaseFormat implements TableFormat {
 
 	/**
 	 * この書式をファイルに出力する際のヘッダとなる文字列を返します。
-	 * 
+	 *
 	 * @return ヘッダの文字列
 	 * @since 2019/07/11
 	 */
@@ -108,10 +108,10 @@ public abstract class BaseFormat implements TableFormat {
 
 	/**
 	 * プレインテキストの交信記録を読み込むためのデコーダの共通実装です。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2013/06/24
 	 *
 	 */
@@ -120,7 +120,7 @@ public abstract class BaseFormat implements TableFormat {
 
 		/**
 		 * 指定されたリーダを読み込むデコーダを構築します。
-		 * 
+		 *
 		 * @param reader 交信記録を読み込むリーダ
 		 */
 		public PlainTextDecoder(Reader reader) {
@@ -129,7 +129,7 @@ public abstract class BaseFormat implements TableFormat {
 
 		/**
 		 * リーダを閉じてリソースを解放します。
-		 * 
+		 *
 		 * @throws IOException リソース解放に失敗した場合
 		 */
 		@Override
@@ -208,10 +208,10 @@ public abstract class BaseFormat implements TableFormat {
 
 	/**
 	 * プレインテキストの交信記録を書き出すためのエンコーダの共通実装です。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2013/06/24
 	 *
 	 */
@@ -220,7 +220,7 @@ public abstract class BaseFormat implements TableFormat {
 
 		/**
 		 * 指定されたライタを読み込むデコーダを構築します。
-		 * 
+		 *
 		 * @param writer 交信記録を出力するライタ
 		 */
 		public PlainTextEncoder(Writer writer) {
@@ -229,7 +229,7 @@ public abstract class BaseFormat implements TableFormat {
 
 		/**
 		 * ライタを閉じてリソースを解放します。
-		 * 
+		 *
 		 * @throws IOException リソース解放に失敗した場合
 		 */
 		@Override
@@ -239,7 +239,7 @@ public abstract class BaseFormat implements TableFormat {
 
 		/**
 		 * 指定された文字列を出力します。
-		 * 
+		 *
 		 * @param s 出力する文字列
 		 * @throws IOException 出力例外発生時
 		 */
@@ -249,7 +249,7 @@ public abstract class BaseFormat implements TableFormat {
 
 		/**
 		 * 改行を出力します。
-		 * 
+		 *
 		 * @throws IOException 出力例外発生時
 		 */
 		public final void println() throws IOException {
@@ -258,7 +258,7 @@ public abstract class BaseFormat implements TableFormat {
 
 		/**
 		 * 指定された書式付き文字列を出力します。
-		 * 
+		 *
 		 * @param f 出力する書式
 		 * @param args  引数
 		 * @throws IOException 出力例外発生時
@@ -269,7 +269,7 @@ public abstract class BaseFormat implements TableFormat {
 
 		/**
 		 * 指定された文字数まで空白文字で穴埋めした文字列を右詰で出力します。
-		 * 
+		 *
 		 * @param len 文字列の長さ
 		 * @param s 出力する文字列
 		 * @throws IOException 出力例外発生時
@@ -283,7 +283,7 @@ public abstract class BaseFormat implements TableFormat {
 
 		/**
 		 * 指定された文字数まで空白文字で穴埋めした文字列を左詰で出力します。
-		 * 
+		 *
 		 * @param len 文字列の長さ
 		 * @param s 出力する文字列
 		 * @throws IOException 出力例外発生時
@@ -297,7 +297,7 @@ public abstract class BaseFormat implements TableFormat {
 
 		/**
 		 * 指定された文字数まで右詰で穴埋めした{@link Field}を出力します。
-		 * 
+		 *
 		 * @param len 文字列の長さ
 		 * @param f 出力する属性
 		 * @throws IOException 出力例外発生時
@@ -308,7 +308,7 @@ public abstract class BaseFormat implements TableFormat {
 
 		/**
 		 * 指定された文字数まで左詰で穴埋めした{@link Field}を出力します。
-		 * 
+		 *
 		 * @param len 文字列の長さ
 		 * @param f 出力する属性
 		 * @throws IOException 出力例外発生時

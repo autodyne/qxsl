@@ -12,33 +12,44 @@ import qxsl.model.Item;
 
 /**
  * コンテストの部門の実装は{@link Section}クラスを実装します。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
  *
  * @since 2016/11/25
  */
 public abstract class Section implements Function<Item, Message> {
+	private final String name;
+	private final String code;
+
 	/**
-	 * 秘匿されたコンストラクタです。
+	 * 指定された名前と符牒で部門を構築します。
 	 *
-	 * @since 2020/02/28
+	 * @param name 部門の名前
+	 * @param code 部門の符牒
 	 */
-	Section() {}
+	public Section(String name, String code) {
+		this.name = name;
+		this.code = code;
+	}
 
 	/**
 	 * 部門の名前を返します。
 	 *
 	 * @return 部門の名前
 	 */
-	public abstract String getName();
+	public final String getName() {
+		return name;
+	}
 
 	/**
 	 * 部門の符牒を返します。
 	 *
 	 * @return 部門の符牒
 	 */
-	public abstract String getCode();
+	public final String getCode() {
+		return code;
+	}
 
 	/**
 	 * UIで表示するために部門名を返します。
@@ -55,29 +66,25 @@ public abstract class Section implements Function<Item, Message> {
 	 *
 	 * @param item 検査対象の交信記録
 	 * @return 承認された場合はtrue
-	 * 
-	 * @throws RuntimeException 検査の過程で発生した何らかの例外
 	 */
-	public abstract Message apply(Item item) throws RuntimeException;
+	public abstract Message apply(Item item);
 
 	/**
-	 * 指定された交信記録に対して有効な交信を数え上げて得点を計算します。
+	 * 指定された交信記録から有効な交信を抽出します。
 	 *
 	 * @param items 交信記録
 	 * @return 得点計算の結果
-	 * 
+	 *
 	 * @since 2019/05/16
-	 * 
-	 * @throws RuntimeException 検査の過程で発生した何らかの例外
 	 */
-	public Summary summarize(List<Item> items) throws RuntimeException {
-		final var accepted = new ArrayList<Success>();
-		final var rejected = new ArrayList<Failure>();
+	public final Summary summarize(List<Item> items) {
+		final List<Success> acc = new ArrayList<>();
+		final List<Failure> rej = new ArrayList<>();
 		for(Item item: items) {
 			final Message msg = this.apply(item);
-			if(msg instanceof Success) accepted.add((Success) msg);
-			if(msg instanceof Failure) rejected.add((Failure) msg);
+			if(msg instanceof Success) acc.add((Success) msg);
+			if(msg instanceof Failure) rej.add((Failure) msg);
 		}
-		return new Summary(accepted, rejected);
+		return new Summary(acc, rej);
 	}
 }

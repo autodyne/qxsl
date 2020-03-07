@@ -24,10 +24,10 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
 
 /**
  * ADIFのうちADIと呼ばれる旧方式の書式の部分的な実装です。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2019/07/04
  *
  */
@@ -60,10 +60,10 @@ public final class AdisFormat extends BaseFormat {
 
 	/**
 	 * ADIサブセット書式で直列化された交信記録をデコードします。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2019/07/08
 	 *
 	 */
@@ -74,7 +74,7 @@ public final class AdisFormat extends BaseFormat {
 
 		/**
 		 * 指定されたリーダから交信記録を読み込むデコーダを構築します。
-		 * 
+		 *
 		 * @param reader 交信記録を読み込むリーダ
 		 */
 		public AdisDecoder(Reader reader) {
@@ -85,7 +85,7 @@ public final class AdisFormat extends BaseFormat {
 
 		/**
 		 * 交信記録を読み込みます。
-		 * 
+		 *
 		 * @return 交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
@@ -101,7 +101,7 @@ public final class AdisFormat extends BaseFormat {
 		/**
 		 * ヘッダを読み飛ばして交信記録のリストを読み込みます。
 		 * ヘッダと交信記録の両方が空の場合は例外を発生します。
-		 * 
+		 *
 		 * @return 交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
@@ -122,7 +122,7 @@ public final class AdisFormat extends BaseFormat {
 
 		/**
 		 * 文字列から交信記録を1件読み込みます。
-		 * 
+		 *
 		 * @param text 1件の交信記録の文字列
 		 * @return 読み込んだ1件の交信
 		 */
@@ -142,10 +142,10 @@ public final class AdisFormat extends BaseFormat {
 
 	/**
 	 * ADIサブセット書式で直列化された交信記録をエンコードします。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2019/07/08
 	 *
 	 */
@@ -154,7 +154,7 @@ public final class AdisFormat extends BaseFormat {
 
 		/**
 		 * 指定されたライタに交信記録を書き出すデコーダを構築します。
-		 * 
+		 *
 		 * @param writer 交信記録を出力するライタ
 		 */
 		public AdisEncoder(Writer writer) {
@@ -164,7 +164,7 @@ public final class AdisFormat extends BaseFormat {
 
 		/**
 		 * 交信記録を出力します。
-		 * 
+		 *
 		 * @param items 交信記録
 		 * @throws IOException 出力に失敗した場合
 		 */
@@ -184,7 +184,7 @@ public final class AdisFormat extends BaseFormat {
 
 		/**
 		 * 指定された交信記録をストリームに出力します。
-		 * 
+		 *
 		 * @param item 出力する交信記録
 		 * @throws IOException 出力に失敗した場合
 		 */

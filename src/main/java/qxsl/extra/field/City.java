@@ -20,12 +20,12 @@ import static java.util.stream.Collectors.toList;
 
 /**
  * 交信の相手局の地域を表現する{@link Field}実装クラスです。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2014/04/20
- * 
+ *
  */
 public final class City extends Qxsl<String> {
 	private final String base;
@@ -34,7 +34,7 @@ public final class City extends Qxsl<String> {
 
 	/**
 	 * 地域ベースと地域データを指定して地域を構築します。
-	 * 
+	 *
 	 * @param base 地域ベースの名前
 	 * @param data 地域名と地域番号の配列
 	 */
@@ -82,7 +82,7 @@ public final class City extends Qxsl<String> {
 
 	/**
 	 * 地域ベースと地域番号を指定して地域を返します。
-	 * 
+	 *
 	 * @param base 地域ベースの名前
 	 * @param code 地域番号
 	 *
@@ -113,7 +113,7 @@ public final class City extends Qxsl<String> {
 
 	/**
 	 * ライブラリが内蔵する地域ベースを表現します。
-	 * 
+	 *
 	 *
 	 * @author 無線部開発班
 	 *
@@ -162,10 +162,10 @@ public final class City extends Qxsl<String> {
 
 	/**
 	 * {@link City}を生成する書式です。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2014/04/20
 	 *
 	 */

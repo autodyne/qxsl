@@ -21,10 +21,10 @@ import qxsl.model.Item;
 
 /**
  * {@link TableFormat}実装クラスを自動的に検出して管理します。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2013/02/25
  *
  */
@@ -42,7 +42,7 @@ public final class TableFormats implements Iterable<TableFormat> {
 
 	/**
 	 * 指定されたローダを参照するインスタンスを構築します。
-	 * 
+	 *
 	 * @param cl 書式の実装を検出するクラスローダ
 	 */
 	public TableFormats(ClassLoader cl) {
@@ -61,7 +61,7 @@ public final class TableFormats implements Iterable<TableFormat> {
 
 	/**
 	 * 指定された名前を持つ書式の実装を検索します。
-	 * 
+	 *
 	 * @param name 属性の名前
 	 * @return 対応する書式 存在しない場合null
 	 */
@@ -74,10 +74,10 @@ public final class TableFormats implements Iterable<TableFormat> {
 
 	/**
 	 * 指定されたストリームから適切な書式で交信記録を読み込みます。
-	 * 
+	 *
 	 * @param is 交信記録を読み込むストリーム
 	 * @return 交信記録
-	 * 
+	 *
 	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
 	 */
 	public List<Item> decode(InputStream is) throws IOException {
@@ -86,10 +86,10 @@ public final class TableFormats implements Iterable<TableFormat> {
 
 	/**
 	 * 指定されたバイト配列から適切な書式で交信記録を読み込みます。
-	 * 
+	 *
 	 * @param b 交信記録を読み込むバイト配列
 	 * @return 交信記録
-	 * 
+	 *
 	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
 	 */
 	public List<Item> decode(final byte[] b) throws IOException {
@@ -108,10 +108,10 @@ public final class TableFormats implements Iterable<TableFormat> {
 
 	/**
 	 * 指定されたリーダから適切な書式で交信記録を読み込みます。
-	 * 
+	 *
 	 * @param reader 交信記録を読み込むリーダ
 	 * @return 交信記録
-	 * 
+	 *
 	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
 	 */
 	public List<Item> decode(Reader reader) throws IOException {
@@ -122,10 +122,10 @@ public final class TableFormats implements Iterable<TableFormat> {
 
 	/**
 	 * 指定された文字列から適切な書式で交信記録を読み込みます。
-	 * 
+	 *
 	 * @param string 交信記録を読み込む文字列
 	 * @return 交信記録
-	 * 
+	 *
 	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
 	 */
 	public List<Item> decode(String string) throws IOException {

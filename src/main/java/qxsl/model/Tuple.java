@@ -16,10 +16,10 @@ import qxsl.field.FieldFormats;
 
 /**
  * {@link Item}クラスや{@link Exch}クラスはこのクラスを実装します。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2015/08/05
  *
  */
@@ -29,7 +29,7 @@ public abstract class Tuple implements Iterable<Field> {
 
 	/**
 	 * 指定された名前の空の要素を構築します。
-	 * 
+	 *
 	 * @param qname 名前
 	 */
 	public Tuple(QName qname) {
@@ -48,7 +48,7 @@ public abstract class Tuple implements Iterable<Field> {
 
 	/**
 	 * この要素のハッシュ値を計算します。
-	 * 
+	 *
 	 * @return ハッシュ値
 	 */
 	@Override
@@ -64,7 +64,7 @@ public abstract class Tuple implements Iterable<Field> {
 
 	/**
 	 * 指定されたオブジェクトと等値であるか確認します。
-	 * 
+	 *
 	 * @param obj 比較するオブジェクト
 	 * @return この要素と等しい場合true
 	 */
@@ -77,7 +77,7 @@ public abstract class Tuple implements Iterable<Field> {
 	/**
 	 * この要素に設定された全ての属性をイテレータで反復します。
 	 * 隷下の要素に設定された属性はイテレーターに含まれません。
-	 * 
+	 *
 	 * @return 全ての属性を列挙したイテレータ
 	 */
 	@Override
@@ -87,14 +87,14 @@ public abstract class Tuple implements Iterable<Field> {
 
 	/**
 	 * この要素の隷下にある全ての要素をイテレータで返します。
-	 * 
+	 *
 	 * @return 全ての要素を列挙した反復子
 	 */
 	public abstract Iterator<Tuple> children();
 
 	/**
 	 * 指定された属性をこの要素の隷下に追加します。
-	 * 
+	 *
 	 * @param field 追加する属性
 	 * @return この要素
 	 * @throws NullPointerException 属性がnullの場合
@@ -148,7 +148,7 @@ public abstract class Tuple implements Iterable<Field> {
 
 	/**
 	 * 指定された属性名に対応する属性を削除します。
-	 * 
+	 *
 	 * @param qname 属性の名前
 	 * @return この要素
 	 */
@@ -159,7 +159,7 @@ public abstract class Tuple implements Iterable<Field> {
 
 	/**
 	 * 指定された属性名に対応する属性を返します。
-	 * 
+	 *
 	 * @param qname 属性の名前
 	 * @return 設定されている属性
 	 */
@@ -169,7 +169,7 @@ public abstract class Tuple implements Iterable<Field> {
 
 	/**
 	 * 指定された属性名に対応する属性の値を返します。
-	 * 
+	 *
 	 * @param qname 属性の名前
 	 * @return 設定されている属性の値
 	 */

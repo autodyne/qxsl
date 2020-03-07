@@ -19,10 +19,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * {@link Elva}クラスのテスト用クラスです。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2017/02/26
  *
  */

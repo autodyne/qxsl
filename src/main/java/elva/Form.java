@@ -93,8 +93,8 @@ public abstract class Form implements BiFunction<Cons, Eval, Object> {
 
 	/**
 	 * LISP処理系の内部で構築されるラムダ式の実装です。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
 	 *
 	 * @since 2017/02/18
@@ -144,9 +144,10 @@ public abstract class Form implements BiFunction<Cons, Eval, Object> {
 				for(int i = 0; i < args.size(); i++) {
 					final Sexp par = pars.get(i);
 					final Sexp arg = args.get(i);
-					env.put(par.as(Symbol.class), eval.eval(arg));
+					final Sexp val = eval.apply(arg);
+					env.put(par.as(Symbol.class), val);
 				}
-				return new Eval(env).eval(body);
+				return new Eval(env).apply(body);
 			}
 			final String msg = "%s required, but %s found";
 			throw new ElvaRuntimeException(msg, pars, args);
@@ -155,8 +156,8 @@ public abstract class Form implements BiFunction<Cons, Eval, Object> {
 
 	/**
 	 * LISP処理系の内部で構築されるマクロ式の実装です。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
 	 *
 	 * @since 2017/02/18
@@ -207,7 +208,7 @@ public abstract class Form implements BiFunction<Cons, Eval, Object> {
 					final Sexp arg = args.get(i);
 					env.put(par.as(Symbol.class), arg);
 				}
-				return eval.eval(new Eval(env).eval(body));
+				return eval.apply(new Eval(env).apply(body));
 			}
 			final String msg = "%s required, but %s found";
 			throw new ElvaRuntimeException(msg, pars, args);

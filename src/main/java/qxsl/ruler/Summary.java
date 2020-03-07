@@ -17,8 +17,8 @@ import static java.util.stream.IntStream.range;
 
 /**
  * 有効な交信と無効な交信を保持するとともに識別子から得点を計算します。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
  *
  * @since 2016/11/26
@@ -64,7 +64,7 @@ public final class Summary implements java.io.Serializable {
 	 * 重複を排除した交信の得点の合計を返します。
 	 *
 	 * @return 得点に数えられる交信の得点の合計
-	 * 
+	 *
 	 * @since 2019/05/16
 	 */
 	public final int score() {

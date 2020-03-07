@@ -21,10 +21,10 @@ import qxsl.table.TableFormats;
 
 /**
  * {@link SheetFormat}実装クラスを自動的に検出して管理します。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2017/03/11
  *
  */
@@ -42,7 +42,7 @@ public final class SheetFormats implements Iterable<SheetFormat> {
 
 	/**
 	 * 指定されたローダを参照するインスタンスを構築します。
-	 * 
+	 *
 	 * @param cl 書式の実装を検出するクラスローダ
 	 */
 	public SheetFormats(ClassLoader cl) {
@@ -61,7 +61,7 @@ public final class SheetFormats implements Iterable<SheetFormat> {
 
 	/**
 	 * 指定された名前を持つ書式の実装を検索します。
-	 * 
+	 *
 	 * @param name 属性の名前
 	 * @return 対応する書式 存在しない場合null
 	 */
@@ -77,7 +77,7 @@ public final class SheetFormats implements Iterable<SheetFormat> {
 	 *
 	 * @param reader 要約記録を読み込むリーダ
 	 * @return 交信記録
-	 * 
+	 *
 	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
 	 */
 	public List<Item> unpack(Reader reader) throws IOException {
@@ -91,7 +91,7 @@ public final class SheetFormats implements Iterable<SheetFormat> {
 	 *
 	 * @param string 要約書類を読み込む文字列
 	 * @return 交信記録
-	 * 
+	 *
 	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
 	 */
 	public List<Item> unpack(String string) throws IOException {

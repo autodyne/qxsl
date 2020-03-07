@@ -12,10 +12,10 @@ import javax.xml.namespace.QName;
 
 /**
  * 交信時に相手局と交換した情報を表現する{@link Tuple}実装クラスです。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2013/06/15
  *
  */
@@ -24,7 +24,7 @@ public abstract class Exch extends Tuple {
 
 	/**
 	 * 指定された要素名と親を持つ空のタプルを構築します。
-	 * 
+	 *
 	 * @param item 親となる要素
 	 * @param name タプルの名前
 	 */
@@ -44,7 +44,7 @@ public abstract class Exch extends Tuple {
 
 	/**
 	 * このタプルの文字列による表現を返します。
-	 * 
+	 *
 	 * @return 文字列
 	 */
 	@Override

@@ -6,20 +6,30 @@
 package elva;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 import elva.Elva.ElvaRuntimeException;
 
+import static elva.Form.Parameters;
+import static elva.Symbol.Quote.UQSPL;
+import static elva.Symbol.Quote.UQUOT;
+import static java.lang.Integer.MAX_VALUE;
+
 /**
  * LISP処理系のスコープ付きの評価器の実装です。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
  *
  * @since 2017/02/18
  */
-public final class Eval {
+public final class Eval implements UnaryOperator<Sexp> {
+	private final String MIN = "%s requlres %d+ arguments";
+	private final String MAX = "%s requlres ~%d arguments";
+	private final Class<Parameters> PAR = Parameters.class;
+
 	/**
 	 * この評価器に関連づけられたスコープです。
 	 */
@@ -42,7 +52,7 @@ public final class Eval {
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
 	public final Object peel(Sexp sexp) {
-		return eval(sexp).value();
+		return apply(sexp).value();
 	}
 
 	/**
@@ -54,7 +64,7 @@ public final class Eval {
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
 	public final Object some(Sexp sexp) {
-		return eval(sexp).as(Object.class);
+		return apply(sexp).as(Object.class);
 	}
 
 	/**
@@ -65,7 +75,7 @@ public final class Eval {
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
 	public final Symbol name(Sexp sexp) {
-		return eval(sexp).as(Symbol.class);
+		return apply(sexp).as(Symbol.class);
 	}
 
 	/**
@@ -76,7 +86,7 @@ public final class Eval {
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
 	public final String text(Sexp sexp) {
-		return eval(sexp).as(String.class);
+		return apply(sexp).as(String.class);
 	}
 
 	/**
@@ -87,7 +97,18 @@ public final class Eval {
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
 	public final boolean bool(Sexp sexp) {
-		return eval(sexp).as(Boolean.class);
+		return apply(sexp).as(Boolean.class);
+	}
+
+	/**
+	 * 式を評価して符号付き整数値を返します。
+	 *
+	 * @param sexp 式
+	 * @return 整数値
+	 * @throws ElvaRuntimeException 評価により発生した例外
+	 */
+	public final int sInt(Sexp sexp) {
+		return real(sexp).intValueExact();
 	}
 
 	/**
@@ -98,7 +119,7 @@ public final class Eval {
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
 	public final BigDecimal real(Sexp sexp) {
-		return new Atom(eval(sexp).as(Number.class)).real();
+		return new Atom(apply(sexp).as(Number.class)).real();
 	}
 
 	/**
@@ -109,51 +130,72 @@ public final class Eval {
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
 	public final Cons cons(Sexp sexp) {
-		return Cons.cast(eval(sexp));
+		return Cons.cast(apply(sexp));
 	}
 
 	/**
-	 * 指定された式の値を求めます。
+	 * 式を評価して関数またはマクロを返します。
+	 *
+	 * @param sexp 式
+	 * @return 関数またはマクロ
+	 * @throws ElvaRuntimeException 評価により発生した例外
+	 */
+	public final Form form(Sexp sexp) {
+		return apply(sexp).as(Form.class);
+	}
+
+	/**
+	 * 指定された式の配列をリストに結合して式として評価します。
+	 *
+	 * @param sexp 式の要素
+	 * @return 返り値
+	 *
+	 * @throws ElvaRuntimeException 評価により発生した例外
+	 */
+	public final Sexp apply(Object...sexp) {
+		return this.apply(Cons.wrap(sexp));
+	}
+
+	/**
+	 * 指定された式をアトムまたは関数適用として評価します。
 	 *
 	 * @param sexp 式
 	 * @return 返り値
 	 *
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
-	public Sexp eval(Sexp sexp) {
-		if(Cons.NIL.equals(sexp)) return sexp;
-		if(sexp instanceof Cons) return apply((Cons) sexp);
-		return sexp.isSymbol()? this.scope.get(sexp): sexp;
-	}
-
-	/**
-	 * 指定された式を関数適用として評価した値を返します。
-	 *
-	 * @param sexp 式
-	 * @return 返り値
-	 *
-	 * @throws ElvaRuntimeException 評価により発生した例外
-	 */
-	private final Sexp apply(Cons sexp) {
+	@Override
+	public final Sexp apply(final Sexp sexp) {
 		try {
-			final var form = eval(sexp.car()).as(Form.class);
-			return Sexp.wrap(this.inspect(form, sexp.cdr()));
+			if(Cons.NIL.equals(sexp)) return sexp;
+			if(sexp instanceof Cons) return apply((Cons) sexp);
+			return sexp.isSymbol()? this.scope.get(sexp): sexp;
 		} catch (ElvaRuntimeException ex) {
 			throw ex.add(sexp);
 		} catch (RuntimeException ex) {
-			throw new ElvaRuntimeException(ex.getMessage()).add(sexp);
+			throw new ElvaRuntimeException(ex).add(sexp);
 		}
 	}
 
 	/**
-	 * 準引用の部分解除を表現する識別子です。
+	 * 実引数の個数を検査した後に関数を適用した値を求めます。
+	 *
+	 * @param cons 関数適用の式
+	 * @return 演算子を適用した結果の値
+	 *
+	 * @throws ElvaRuntimeException 引数の個数が誤っている場合
 	 */
-	private final Atom UQUOT = Symbol.Quote.UQUOT.toAtom();
-
-	/**
-	 * 準引用の部分展開を表現する識別子です。
-	 */
-	private final Atom UQSPL = Symbol.Quote.UQSPL.toAtom();
+	private final Sexp apply(final Cons cons) {
+		final Form form = this.form(cons.car());
+		final Cons args = cons.cdr();
+		final int len = args.size();
+		final var par = form.getClass().getAnnotation(PAR);
+		final int min = par.min() >= 0? par.min(): MAX_VALUE;
+		final int max = par.max() >= 0? par.max(): MAX_VALUE;
+		if(len < min) throw new ElvaRuntimeException(MIN, form, min);
+		if(len > max) throw new ElvaRuntimeException(MAX, form, max);
+		return Sexp.wrap(form.apply(args, this));
+	}
 
 	/**
 	 * 準引用の被引用式にて引用の部分解除を示す内部オブジェクトです。
@@ -164,7 +206,7 @@ public final class Eval {
 	 * @sicne 2020/02/26
 	 */
 	static interface Unquote {
-		public void addAll(List<Sexp> seq);
+		public void merge(List<Sexp> seq);
 		public Sexp sexp();
 	}
 
@@ -182,7 +224,7 @@ public final class Eval {
 			this.sexp = sexp;
 		}
 		@Override
-		public void addAll(List<Sexp> seq) {
+		public void merge(List<Sexp> seq) {
 			seq.add(this.sexp);
 		}
 		@Override
@@ -201,11 +243,11 @@ public final class Eval {
 	 */
 	private static final class Splice implements Unquote {
 		public final Cons cons;
-		public Splice(Cons cons) {
-			this.cons = cons;
+		public Splice(Sexp sexp) {
+			this.cons = Cons.cast(sexp);
 		}
 		@Override
-		public void addAll(List<Sexp> seq) {
+		public void merge(List<Sexp> seq) {
 			cons.stream().forEach(seq::add);
 		}
 		@Override
@@ -217,39 +259,17 @@ public final class Eval {
 	/**
 	 * 指定された式を準引用の被引用式として評価した値を返します。
 	 *
-	 * @param quoted 式
+	 * @param quote 式
 	 * @return 返り値
 	 *
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
-	final Unquote qquote(Sexp quoted) {
-		if (quoted instanceof Cons) {
-			final Cons seq = (Cons) quoted;
-			if (Cons.NIL.equals(seq)) return new Normal(Cons.NIL);
-			if (UQUOT.equals(seq.car())) return new Normal(eval(seq));
-			if (UQSPL.equals(seq.car())) return new Splice(cons(seq));
-			final ArrayList<Sexp> list = new ArrayList<>();
-			for (Sexp sexp: seq) qquote(sexp).addAll(list);
-			return new Normal(Cons.cons(list));
-		} else return new Normal(quoted);
-	}
-
-	/**
-	 * 実引数の個数を検査した後に演算子を適用した値を求めます。
-	 *
-	 * @param form 演算子
-	 * @param args 引数の式
-	 * @return 演算子を適用した結果の値
-	 *
-	 * @throws ElvaRuntimeException 引数の個数が誤っている場合
-	 */
-	private final Object inspect(Form form, Cons args) {
-		String temp = "%s requires at-least %d and at-most %d arguments";
-		var annon = form.getClass().getAnnotation(Form.Parameters.class);
-		final int len = args.size();
-		final int min = annon.min() >= 0? annon.min(): Integer.MAX_VALUE;
-		final int max = annon.max() >= 0? annon.max(): Integer.MAX_VALUE;
-		if (min <= len && len <= max) return form.apply(args, this);
-		throw new ElvaRuntimeException(temp, form, min, max);
+	final Unquote quoted(Sexp quote) {
+		if (quote instanceof Atom) return new Normal(quote);
+		if (UQUOT.is(quote)) return new Normal(apply(quote));
+		if (UQSPL.is(quote)) return new Splice(apply(quote));
+		final LinkedList<Sexp> list = new LinkedList<>();
+		for (Sexp e: (Cons) quote) quoted(e).merge(list);
+		return new Normal(Cons.cons(list));
 	}
 }

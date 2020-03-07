@@ -15,38 +15,38 @@ import qxsl.model.Item;
 
 /**
  * 交信記録を永続化する書式はこのインターフェースを継承します。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2013/02/25
  *
  */
 public interface TableFormat {
 	/**
 	 * この書式を識別する完全な名前を返します。
-	 * 
+	 *
 	 * @return 書式の名前
 	 */
 	public String getName();
 
 	/**
 	 * この書式のUIへの表示に適した文字列を返します。
-	 * 
+	 *
 	 * @return 書式のUI文字列
 	 */
 	public String toString();
 
 	/**
 	 * この書式の詳細を説明する複数行の文字列を返します。
-	 * 
+	 *
 	 * @return 書式の説明
 	 */
 	public String getDescription();
 
 	/**
 	 * この書式のファイル名拡張子の不変のリストを返します。
-	 * 
+	 *
 	 * @return ファイル名拡張子のリスト
 	 */
 	public List<String> getExtensions();

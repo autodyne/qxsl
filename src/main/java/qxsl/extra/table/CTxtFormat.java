@@ -21,10 +21,10 @@ import qxsl.model.Item;
 
 /**
  * 2016年4月以前のCTESTWINのテキストファイルの書式です。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2013/07/02
  *
  */
@@ -57,10 +57,10 @@ public final class CTxtFormat extends BaseFormat {
 
 	/**
 	 * CTESTWIN書式で直列化された交信記録をデコードします。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2013/07/02
 	 */
 	@Deprecated
@@ -70,7 +70,7 @@ public final class CTxtFormat extends BaseFormat {
 
 		/**
 		 * 指定されたリーダを読み込むデコーダを構築します。
-		 * 
+		 *
 		 * @param reader 交信記録を読み込むリーダ
 		 */
 		public CTxtDecoder(Reader reader) {
@@ -85,7 +85,7 @@ public final class CTxtFormat extends BaseFormat {
 
 		/**
 		 * 交信記録を読み込みます。
-		 * 
+		 *
 		 * @return 交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
@@ -100,7 +100,7 @@ public final class CTxtFormat extends BaseFormat {
 
 		/**
 		 * 冒頭をスキップして交信記録を1件読み込みます。
-		 * 
+		 *
 		 * @return 読み込んだ交信記録
 		 * @throws IOException 読み込みに失敗した場合
 		 */
@@ -118,7 +118,7 @@ public final class CTxtFormat extends BaseFormat {
 
 		/**
 		 * 1行の文字列から交信記録を1件読み込みます。
-		 * 
+		 *
 		 * @param line 1行
 		 * @return 読み込んだ1件の交信
 		 * @throws IOException 読み込みに失敗した場合
@@ -148,7 +148,7 @@ public final class CTxtFormat extends BaseFormat {
 
 		/**
 		 * {@link Item}に交信日時を設定します。
-		 * 
+		 *
 		 * @param item 設定する{@link Item}
 		 * @param time 交信日時の文字列
 		 * @throws IOException 読み込みに失敗した場合
@@ -159,7 +159,7 @@ public final class CTxtFormat extends BaseFormat {
 
 		/**
 		 * {@link Item}に相手局のコールサインを設定します。
-		 * 
+		 *
 		 * @param item 設定する{@link Item}
 		 * @param call コールサインの文字列
 		 * @throws IOException 読み込みに失敗した場合
@@ -170,7 +170,7 @@ public final class CTxtFormat extends BaseFormat {
 
 		/**
 		 * {@link Item}に周波数帯を設定します。
-		 * 
+		 *
 		 * @param item 設定する{@link Item}
 		 * @param band 周波数帯の文字列
 		 * @throws IOException 読み込みに失敗した場合
@@ -192,7 +192,7 @@ public final class CTxtFormat extends BaseFormat {
 
 		/**
 		 * {@link Item}に通信方式を設定します。
-		 * 
+		 *
 		 * @param item 設定する{@link Item}
 		 * @param mode 通信方式の文字列
 		 * @throws IOException 読み込みに失敗した場合
@@ -203,7 +203,7 @@ public final class CTxtFormat extends BaseFormat {
 
 		/**
 		 * {@link Item}に相手局に送信したナンバーを設定します。
-		 * 
+		 *
 		 * @param item 設定する{@link Item}
 		 * @param sent ナンバーの文字列
 		 * @throws IOException 読み込みに失敗した場合
@@ -214,7 +214,7 @@ public final class CTxtFormat extends BaseFormat {
 
 		/**
 		 * {@link Item}に相手局から受信したナンバーを設定します。
-		 * 
+		 *
 		 * @param item 設定する{@link Item}
 		 * @param rcvd ナンバーの文字列
 		 * @throws IOException 読み込みに失敗した場合
@@ -237,7 +237,7 @@ public final class CTxtFormat extends BaseFormat {
 
 		/**
 		 * 指定されたライタに出力するエンコーダを構築します。
-		 * 
+		 *
 		 * @param writer 交信記録を出力するライタ
 		 */
 		public CTxtEncoder(Writer writer) {
@@ -247,7 +247,7 @@ public final class CTxtFormat extends BaseFormat {
 
 		/**
 		 * 交信記録を出力します。
-		 * 
+		 *
 		 * @param items 交信記録
 		 * @throws IOException 出力に失敗した場合
 		 */
@@ -262,7 +262,7 @@ public final class CTxtFormat extends BaseFormat {
 
 		/**
 		 * 指定された交信記録をテキスト書式で出力します。
-		 * 
+		 *
 		 * @param item 出力する交信記録
 		 * @param num 出力する交信記録の番号
 		 *
@@ -287,7 +287,7 @@ public final class CTxtFormat extends BaseFormat {
 
 		/**
 		 * 指定された日時を文字列として出力します。
-		 * 
+		 *
 		 * @param date 出力する日時
 		 * @throws IOException 出力に失敗した場合
 		 */
@@ -298,7 +298,7 @@ public final class CTxtFormat extends BaseFormat {
 
 		/**
 		 * 指定された周波数帯を文字列として出力します。
-		 * 
+		 *
 		 * @param band 出力する周波数帯
 		 * @throws IOException 出力に失敗した場合
 		 */

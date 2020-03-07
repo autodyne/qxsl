@@ -31,10 +31,10 @@ import static javax.xml.stream.XMLOutputFactory.IS_REPAIRING_NAMESPACES;
 
 /**
  * qxslライブラリに標準的に付属するQXMLの書式です。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2013/02/26
  *
  */
@@ -78,10 +78,10 @@ public final class QxmlFormat extends BaseFormat {
 
 	/**
 	 *  qxml書式で直列化された交信記録をデコードします。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2013/02/22
 	 *
 	 */
@@ -93,7 +93,7 @@ public final class QxmlFormat extends BaseFormat {
 
 		/**
 		 * 指定されたストリームから交信記録を読み込むデコーダを構築します。
-		 * 
+		 *
 		 * @param is 交信記録を読み込むストリーム
 		 * @throws XMLStreamException 通常は発生しない例外
 		 */
@@ -105,7 +105,7 @@ public final class QxmlFormat extends BaseFormat {
 
 		/**
 		 * ストリームを閉じてリソースを解放します。
-		 * 
+		 *
 		 * @throws IOException リソース解放に失敗した場合
 		 */
 		@Override
@@ -121,7 +121,7 @@ public final class QxmlFormat extends BaseFormat {
 
 		/**
 		 * ストリームの内容を検証してから交信記録を読み込みます。
-		 * 
+		 *
 		 * @return 読み込んだ交信記録
 		 * @throws IOException 構文の問題もしくは読み込みに失敗した場合
 		 */
@@ -138,7 +138,7 @@ public final class QxmlFormat extends BaseFormat {
 
 		/**
 		 * ストリームの内容を検証してから交信記録を読み込みます。
-		 * 
+		 *
 		 * @return 読み込んだ交信記録
 		 * @throws Exception 構文の問題もしくは読み込みに失敗した場合
 		 */
@@ -154,7 +154,7 @@ public final class QxmlFormat extends BaseFormat {
 
 		/**
 		 * ストリームから交信記録を読み込みます。
-		 * 
+		 *
 		 * @return 読み込んだ交信記録
 		 * @throws XMLStreamException 構文の問題もしくは読み込みに失敗した場合
 		 */
@@ -168,7 +168,7 @@ public final class QxmlFormat extends BaseFormat {
 
 		/**
 		 * 要素の開始イベントから1件の交信記録を読み込みます。
-		 * 
+		 *
 		 * @return 読み込んだ交信記録
 		 * @throws XMLStreamException 構文の問題もしくは読み込みに失敗した場合
 		 */
@@ -183,7 +183,7 @@ public final class QxmlFormat extends BaseFormat {
 
 		/**
 		 * 要素の開始イベントから属性を読み込んで交信記録に設定します。
-		 * 
+		 *
 		 * @param tuple 属性を設定するタプル
 		 * @param start 開始する要素
 		 * @return 直後に終了すべき要素の名前
@@ -259,10 +259,10 @@ public final class QxmlFormat extends BaseFormat {
 
 	/**
 	 * 交信記録をqxml書式で直列化するエンコーダです。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2013/02/22
 	 *
 	 */
@@ -274,7 +274,7 @@ public final class QxmlFormat extends BaseFormat {
 
 		/**
 		 * 指定されたストリームに出力するエンコーダを構築します。
-		 * 
+		 *
 		 * @param os 交信記録を出力するストリーム
 		 * @throws XMLStreamException 通常は発生しない例外
 		 */
@@ -289,7 +289,7 @@ public final class QxmlFormat extends BaseFormat {
 
 		/**
 		 * ストリームを閉じてリソースを解放します。
-		 * 
+		 *
 		 * @throws IOException リソース解放に失敗した場合
 		 */
 		@Override
@@ -305,7 +305,7 @@ public final class QxmlFormat extends BaseFormat {
 
 		/**
 		 * ストリームに交信記録を出力します。
-		 * 
+		 *
 		 * @param items 出力する交信記録
 		 * @throws IOException XMLの出力に伴う例外
 		 */

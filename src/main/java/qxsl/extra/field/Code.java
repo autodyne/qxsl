@@ -11,10 +11,10 @@ import qxsl.model.Field;
 
 /**
  * コンテストで相手局と交換するシリアル番号です。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2013/06/09
  *
  */
@@ -23,7 +23,7 @@ public final class Code extends Qxsl<String> {
 
 	/**
 	 * シリアル番号を指定して{@link Code}を構築します。
-	 * 
+	 *
 	 * @param code シリアル番号
 	 */
 	public Code(String code) {
@@ -38,10 +38,10 @@ public final class Code extends Qxsl<String> {
 
 	/**
 	 * {@link Code}を生成する書式です。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2013/06/08
 	 *
 	 */

@@ -11,14 +11,15 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
  * LISP処理系内部で利用される不変リストの実装です。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
  *
  * @since 2017/02/18
@@ -185,6 +186,18 @@ public final class Cons extends Sexp implements Iterable<Sexp> {
 	 */
 	public final int size() {
 		return this.size;
+	}
+
+	/**
+	 * このリストの内容を別のリストに変換します。
+	 *
+	 * @param map 写像
+	 * @return 変換されたリスト
+	 */
+	public final Cons map(UnaryOperator<Sexp> map) {
+		final var vals = new LinkedList<Sexp>();
+		for(var v: this) vals.add(map.apply(v));
+		return cons(vals);
 	}
 
 	/**

@@ -9,10 +9,10 @@ import static qxsl.extra.table.QxmlFormat.SENT;
 
 /**
  * 交信記録で相手局まで送信した情報を格納する{@link Tuple}実装クラスです。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2013/06/08
  *
  */

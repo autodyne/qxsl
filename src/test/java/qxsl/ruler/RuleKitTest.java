@@ -22,10 +22,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * {@link RuleKit}クラスをALLJA1コンテストの規約でテストするクラスです。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2017/02/26
  *
  */

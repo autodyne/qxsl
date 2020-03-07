@@ -19,10 +19,10 @@ import qxsl.table.TableFormats;
 
 /**
  * ADIFのうちADXと呼ばれる新方式の書式の部分的な実装です。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2019/06/27
  *
  */
@@ -65,10 +65,10 @@ public final class AdxsFormat extends BaseFormat {
 
 	/**
 	 * ADXサブセット書式で直列化された交信記録をデコードします。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2019/07/08
 	 *
 	 */
@@ -78,7 +78,7 @@ public final class AdxsFormat extends BaseFormat {
 
 		/**
 		 * 指定されたストリームから交信記録を読み込むデコーダを構築します。
-		 * 
+		 *
 		 * @param is 交信記録を読み込むストリーム
 		 * @throws TransformerException 通常は発生しない例外
 		 */
@@ -91,7 +91,7 @@ public final class AdxsFormat extends BaseFormat {
 
 		/**
 		 * ストリームを閉じてリソースを解放します。
-		 * 
+		 *
 		 * @throws IOException リソースの解放に失敗した場合
 		 */
 		@Override
@@ -101,7 +101,7 @@ public final class AdxsFormat extends BaseFormat {
 
 		/**
 		 * ストリームの内容を検証してから交信記録を読み込みます。
-		 * 
+		 *
 		 * @return 読み込んだ交信記録
 		 * @throws IOException 構文の問題もしくは読み込みに失敗した場合
 		 */
@@ -118,7 +118,7 @@ public final class AdxsFormat extends BaseFormat {
 
 		/**
 		 * ストリームの内容を検証してから交信記録を読み込みます。
-		 * 
+		 *
 		 * @param data ストリームの内容
 		 * @return 読み込んだ交信記録
 		 * @throws Exception 構文の問題もしくは読み込みに失敗した場合
@@ -137,10 +137,10 @@ public final class AdxsFormat extends BaseFormat {
 
 	/**
 	 * ADXサブセット書式で直列化された交信記録をエンコードします。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2019/07/08
 	 *
 	 */
@@ -150,7 +150,7 @@ public final class AdxsFormat extends BaseFormat {
 
 		/**
 		 * 指定されたストリームに交信記録を書き出すデコーダを構築します。
-		 * 
+		 *
 		 * @param os 交信記録を出力するストリーム
 		 * @throws TransformerException 通常は発生しない例外
 		 */
@@ -163,7 +163,7 @@ public final class AdxsFormat extends BaseFormat {
 
 		/**
 		 * ストリームを閉じてリソースを解放します。
-		 * 
+		 *
 		 * @throws IOException リソース解放に失敗した場合
 		 */
 		@Override
@@ -173,7 +173,7 @@ public final class AdxsFormat extends BaseFormat {
 
 		/**
 		 * 交信記録を出力します。
-		 * 
+		 *
 		 * @param items 交信記録
 		 * @throws IOException 出力に失敗した場合
 		 */
@@ -190,7 +190,7 @@ public final class AdxsFormat extends BaseFormat {
 
 		/**
 		 * 交信記録を出力します。
-		 * 
+		 *
 		 * @param items 交信記録
 		 * @throws Exception 出力に失敗した場合
 		 */

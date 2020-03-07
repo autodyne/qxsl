@@ -16,10 +16,10 @@ import qxsl.model.Field;
 
 /**
  * {@link FieldFormat}クラスの自動検出及びインスタンス化機構を実装します。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2013/06/08
  *
  */
@@ -36,7 +36,7 @@ public final class FieldFormats implements Iterable<FieldFormat> {
 
 	/**
 	 * 指定されたローダを参照するインスタンスを構築します。
-	 * 
+	 *
 	 * @param cl 書式を検出するクラスローダ
 	 */
 	public FieldFormats(ClassLoader cl) {
@@ -51,7 +51,7 @@ public final class FieldFormats implements Iterable<FieldFormat> {
 
 	/**
 	 * 指定された属性の入出力を行う書式を返します。
-	 * 
+	 *
 	 * @param name 属性の名前
 	 * @return 対応する書式 存在しない場合null
 	 */
@@ -81,7 +81,7 @@ public final class FieldFormats implements Iterable<FieldFormat> {
 
 	/**
 	 * 指定された属性名に対する{@link Cache}を返します。
-	 * 
+	 *
 	 * @param qname 属性の名前
 	 * @return キャッシュ
 	 */
@@ -92,10 +92,10 @@ public final class FieldFormats implements Iterable<FieldFormat> {
 	/**
 	 * 任意の属性を保存的に格納する{@link Field}実装クラスです。
 	 * クラスパスに{@link FieldFormat}がない場合に使用されます。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2019/06/28
 	 *
 	 */
@@ -104,7 +104,7 @@ public final class FieldFormats implements Iterable<FieldFormat> {
 
 		/**
 		 * 属性名と値を指定して{@link Any}を構築します。
-		 * 
+		 *
 		 * @param qname 属性名
 		 * @param value 属性値
 		 */
@@ -121,8 +121,8 @@ public final class FieldFormats implements Iterable<FieldFormat> {
 
 	/**
 	 * 特定の属性名を持つ属性に特化したキャッシュ機構です。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
 	 *
 	 * @since 2019/06/26
@@ -156,7 +156,7 @@ public final class FieldFormats implements Iterable<FieldFormat> {
 
 		/**
 		 * 指定された値の{@link Field}を取得します。
-		 * 
+		 *
 		 * @param value {@link Field}の値を表す文字列
 		 * @return 属性値 属性が未登録の場合はnull
 		 */

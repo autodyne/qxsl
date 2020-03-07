@@ -10,8 +10,8 @@ import elva.Elva.ElvaRuntimeException;
 
 /**
  * LISP処理系で使用されるリストやアトムの抽象化です。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
  *
  * @since 2020/02/29

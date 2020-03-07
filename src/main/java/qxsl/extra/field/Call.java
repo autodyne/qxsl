@@ -14,10 +14,10 @@ import static java.text.Normalizer.normalize;
 
 /**
  * 交信の相手局の呼出符号を表現する{@link Field}実装クラスです。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2013/06/08
  *
  */
@@ -26,7 +26,7 @@ public final class Call extends Qxsl<String> {
 
 	/**
 	 * 呼出符号を指定して{@link Call}を構築します。
-	 * 
+	 *
 	 * @param call 呼出符号
 	 */
 	public Call(String call) {
@@ -51,10 +51,10 @@ public final class Call extends Qxsl<String> {
 
 	/**
 	 * {@link Call}を生成する書式です。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2013/06/08
 	 *
 	 */

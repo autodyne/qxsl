@@ -78,8 +78,8 @@
 (defun 外? it (and (現存? it) (関東? it) (市郡? it)))
 
 ;; validation of 個人部門/団体部門
-(defun SIN-OP? it #t)
-(defun MUL-OP? it (not (member (qxsl-name it) (list null ""))))
+(defun SinOP? it #t)
+(defun MulOp? it (not (member (qxsl-name it) (list null ""))))
 
 ; keys for scoring
 (defun MODES-key it
@@ -129,56 +129,90 @@
 (setq MulDG "Mul2")
 (setq MulJS "Mul3")
 
-(contest "ALLJA1 TEST" scoring
-	(section "1エリア内 個人 電信限定 1.9MHz部門"         SinLB (個 (SIN-OP? 内? 電信? 1.9MHz? LBAND?)))
-	(section "1エリア内 個人 電信限定 3.5MHz部門"         SinLB (個 (SIN-OP? 内? 電信? 3.5MHz? LBAND?)))
-	(section "1エリア内 個人 電信電話 3.5MHz部門"         SinLB (個 (SIN-OP? 内?       3.5MHz? LBAND?)))
-	(section "1エリア内 個人 電信限定 7MHz部門"           SinLB (個 (SIN-OP? 内? 電信?   7MHz? LBAND?)))
-	(section "1エリア内 個人 電信電話 7MHz部門"           SinLB (個 (SIN-OP? 内?         7MHz? LBAND?)))
-	(section "1エリア内 個人 電信限定 1.9/3.5/7MHz部門"   SinLB (個 (SIN-OP? 内? 電信?         LBAND?)))
-	(section "1エリア内 個人 電信電話 1.9/3.5/7MHz部門"   SinLB (個 (SIN-OP? 内?               LBAND?)))
+(setq JA1 (contest "ALLJA1 TEST" scoring))
 
-	(section "1エリア外 個人 電信限定 1.9MHz部門"         SinLB (個 (SIN-OP? 外? 電信? 1.9MHz? LBAND?)))
-	(section "1エリア外 個人 電信限定 3.5MHz部門"         SinLB (個 (SIN-OP? 外? 電信? 3.5MHz? LBAND?)))
-	(section "1エリア外 個人 電信電話 3.5MHz部門"         SinLB (個 (SIN-OP? 外?       3.5MHz? LBAND?)))
-	(section "1エリア外 個人 電信限定 7MHz部門"           SinLB (個 (SIN-OP? 外? 電信?   7MHz? LBAND?)))
-	(section "1エリア外 個人 電信電話 7MHz部門"           SinLB (個 (SIN-OP? 外?         7MHz? LBAND?)))
-	(section "1エリア外 個人 電信限定 1.9/3.5/7MHz部門"   SinLB (個 (SIN-OP? 外? 電信?         LBAND?)))
-	(section "1エリア外 個人 電信電話 1.9/3.5/7MHz部門"   SinLB (個 (SIN-OP? 外?               LBAND?)))
+; schedule
+(starting JA1 (lambda year (date year 6 6 4)))
+(deadline JA1 (lambda year (date year 7 6 3)))
 
-	(section "1エリア内 個人 電信限定 14MHz部門"          SinHB (個 (SIN-OP? 内? 電信?  14MHz? HBAND?)))
-	(section "1エリア内 個人 電信電話 14MHz部門"          SinHB (個 (SIN-OP? 内?        14MHz? HBAND?)))
-	(section "1エリア内 個人 電信限定 21MHz部門"          SinHB (個 (SIN-OP? 内? 電信?  21MHz? HBAND?)))
-	(section "1エリア内 個人 電信電話 21MHz部門"          SinHB (個 (SIN-OP? 内?        21MHz? HBAND?)))
-	(section "1エリア内 個人 電信限定 28MHz部門"          SinHB (個 (SIN-OP? 内? 電信?  28MHz? HBAND?)))
-	(section "1エリア内 個人 電信電話 28MHz部門"          SinHB (個 (SIN-OP? 内?        28MHz? HBAND?)))
-	(section "1エリア内 個人 電信限定 50MHz部門"          SinHB (個 (SIN-OP? 内? 電信?  50MHz? HBAND?)))
-	(section "1エリア内 個人 電信電話 50MHz部門"          SinHB (個 (SIN-OP? 内?        50MHz? HBAND?)))
-	(section "1エリア内 個人 電信限定 14/21/28/50MHz部門" SinHB (個 (SIN-OP? 内? 電信?         HBAND?)))
-	(section "1エリア内 個人 電信電話 14/21/28/50MHz部門" SinHB (個 (SIN-OP? 内?               HBAND?)))
+; section names
+(setq 内 "1エリア内")
+(setq 外 "1エリア外")
 
-	(section "1エリア外 個人 電信限定 14MHz部門"          SinHB (個 (SIN-OP? 外? 電信?  14MHz? HBAND?)))
-	(section "1エリア外 個人 電信電話 14MHz部門"          SinHB (個 (SIN-OP? 外?        14MHz? HBAND?)))
-	(section "1エリア外 個人 電信限定 21MHz部門"          SinHB (個 (SIN-OP? 外? 電信?  21MHz? HBAND?)))
-	(section "1エリア外 個人 電信電話 21MHz部門"          SinHB (個 (SIN-OP? 外?        21MHz? HBAND?)))
-	(section "1エリア外 個人 電信限定 28MHz部門"          SinHB (個 (SIN-OP? 外? 電信?  28MHz? HBAND?)))
-	(section "1エリア外 個人 電信電話 28MHz部門"          SinHB (個 (SIN-OP? 外?        28MHz? HBAND?)))
-	(section "1エリア外 個人 電信限定 50MHz部門"          SinHB (個 (SIN-OP? 外? 電信?  50MHz? HBAND?)))
-	(section "1エリア外 個人 電信電話 50MHz部門"          SinHB (個 (SIN-OP? 外?        50MHz? HBAND?)))
-	(section "1エリア外 個人 電信限定 14/21/28/50MHz部門" SinHB (個 (SIN-OP? 外? 電信?         HBAND?)))
-	(section "1エリア外 個人 電信電話 14/21/28/50MHz部門" SinHB (個 (SIN-OP? 外?               HBAND?)))
+(setq 電信 "電信限定")
+(setq 電電 "電信電話")
+(setq 離散 "デジタル")
+(setq 総合 "総合")
 
-	(section "1エリア内 団体 電信限定 部門"               MulAB (団 (MUL-OP? 内? 電信?         ABAND?)))
-	(section "1エリア内 団体 電信電話 部門"               MulAB (団 (MUL-OP? 内?               ABAND?)))
-	(section "1エリア外 団体 電信限定 部門"               MulAB (団 (MUL-OP? 外? 電信?         ABAND?)))
-	(section "1エリア外 団体 電信電話 部門"               MulAB (団 (MUL-OP? 外?               ABAND?)))
+(setq 1.9MHz "1.9MHz部門")
+(setq 3.5MHz "3.5MHz部門")
+(setq   7MHz   "7MHz部門")
+(setq  14MHz  "14MHz部門")
+(setq  21MHz  "21MHz部門")
+(setq  28MHz  "28MHz部門")
+(setq  50MHz  "50MHz部門")
+(setq LBANDS    "1.9/3.5/7MHz部門")
+(setq HBANDS  "14/21/28/50MHz部門")
 
-	(section "1エリア内 個人 デジタル 部門"               SinDG (個 (SIN-OP? 内?               DIGIT?)))
-	(section "1エリア外 個人 デジタル 部門"               SinDG (個 (SIN-OP? 外?               DIGIT?)))
-	(section "1エリア内 団体 デジタル 部門"               MulDG (団 (MUL-OP? 内?               DIGIT?)))
-	(section "1エリア外 団体 デジタル 部門"               MulDG (団 (MUL-OP? 外?               DIGIT?)))
+(defmacro cat (area opnum mode band)
+	`(concat (list ,area " " ,opnum " " ,mode " " ,band)))
 
-	(section "1エリア内 個人 総合 部門"                   SinJS (個 (SIN-OP? 内?               JOINT?)))
-	(section "1エリア外 個人 総合 部門"                   SinJS (個 (SIN-OP? 外?               JOINT?)))
-	(section "1エリア内 団体 総合 部門"                   MulJS (団 (MUL-OP? 内?               JOINT?)))
-	(section "1エリア外 団体 総合 部門"                   MulJS (団 (MUL-OP? 外?               JOINT?))))
+; 1エリア内 個人 ローバンド部門
+(section JA1 (cat 内 "個人" 電信 1.9MHz) SinLB (個 (SinOP? 内? 電信? 1.9MHz? LBAND?)))
+(section JA1 (cat 内 "個人" 電信 3.5MHz) SinLB (個 (SinOP? 内? 電信? 3.5MHz? LBAND?)))
+(section JA1 (cat 内 "個人" 電電 3.5MHz) SinLB (個 (SinOP? 内?       3.5MHz? LBAND?)))
+(section JA1 (cat 内 "個人" 電信   7MHz) SinLB (個 (SinOP? 内? 電信?   7MHz? LBAND?)))
+(section JA1 (cat 内 "個人" 電電   7MHz) SinLB (個 (SinOP? 内?         7MHz? LBAND?)))
+(section JA1 (cat 内 "個人" 電信 LBANDS) SinLB (個 (SinOP? 内? 電信?         LBAND?)))
+(section JA1 (cat 内 "個人" 電電 LBANDS) SinLB (個 (SinOP? 内?               LBAND?)))
+
+; 1エリア外 個人 ローバンド部門
+(section JA1 (cat 外 "個人" 電信 1.9MHz) SinLB (個 (SinOP? 外? 電信? 1.9MHz? LBAND?)))
+(section JA1 (cat 外 "個人" 電信 3.5MHz) SinLB (個 (SinOP? 外? 電信? 3.5MHz? LBAND?)))
+(section JA1 (cat 外 "個人" 電電 3.5MHz) SinLB (個 (SinOP? 外?       3.5MHz? LBAND?)))
+(section JA1 (cat 外 "個人" 電信   7MHz) SinLB (個 (SinOP? 外? 電信?   7MHz? LBAND?)))
+(section JA1 (cat 外 "個人" 電電   7MHz) SinLB (個 (SinOP? 外?         7MHz? LBAND?)))
+(section JA1 (cat 外 "個人" 電信 LBANDS) SinLB (個 (SinOP? 外? 電信?         LBAND?)))
+(section JA1 (cat 外 "個人" 電電 LBANDS) SinLB (個 (SinOP? 外?               LBAND?)))
+
+; 1エリア内 個人 ハイバンド部門
+(section JA1 (cat 内 "個人" 電信  14MHz) SinHB (個 (SinOP? 内? 電信?  14MHz? HBAND?)))
+(section JA1 (cat 内 "個人" 電電  14MHz) SinHB (個 (SinOP? 内?        14MHz? HBAND?)))
+(section JA1 (cat 内 "個人" 電信  21MHz) SinHB (個 (SinOP? 内? 電信?  21MHz? HBAND?)))
+(section JA1 (cat 内 "個人" 電電  21MHz) SinHB (個 (SinOP? 内?        21MHz? HBAND?)))
+(section JA1 (cat 内 "個人" 電信  28MHz) SinHB (個 (SinOP? 内? 電信?  28MHz? HBAND?)))
+(section JA1 (cat 内 "個人" 電電  28MHz) SinHB (個 (SinOP? 内?        28MHz? HBAND?)))
+(section JA1 (cat 内 "個人" 電信  50MHz) SinHB (個 (SinOP? 内? 電信?  50MHz? HBAND?)))
+(section JA1 (cat 内 "個人" 電電  50MHz) SinHB (個 (SinOP? 内?        50MHz? HBAND?)))
+(section JA1 (cat 内 "個人" 電信 HBANDS) SinHB (個 (SinOP? 内? 電信?         HBAND?)))
+(section JA1 (cat 内 "個人" 電電 HBANDS) SinHB (個 (SinOP? 内?               HBAND?)))
+
+; 1エリア外 個人 ハイバンド部門
+(section JA1 (cat 外 "個人" 電信  14MHz) SinHB (個 (SinOP? 外? 電信?  14MHz? HBAND?)))
+(section JA1 (cat 外 "個人" 電電  14MHz) SinHB (個 (SinOP? 外?        14MHz? HBAND?)))
+(section JA1 (cat 外 "個人" 電信  21MHz) SinHB (個 (SinOP? 外? 電信?  21MHz? HBAND?)))
+(section JA1 (cat 外 "個人" 電電  21MHz) SinHB (個 (SinOP? 外?        21MHz? HBAND?)))
+(section JA1 (cat 外 "個人" 電信  28MHz) SinHB (個 (SinOP? 外? 電信?  28MHz? HBAND?)))
+(section JA1 (cat 外 "個人" 電電  28MHz) SinHB (個 (SinOP? 外?        28MHz? HBAND?)))
+(section JA1 (cat 外 "個人" 電信  50MHz) SinHB (個 (SinOP? 外? 電信?  50MHz? HBAND?)))
+(section JA1 (cat 外 "個人" 電電  50MHz) SinHB (個 (SinOP? 外?        50MHz? HBAND?)))
+(section JA1 (cat 外 "個人" 電信 HBANDS) SinHB (個 (SinOP? 外? 電信?         HBAND?)))
+(section JA1 (cat 外 "個人" 電電 HBANDS) SinHB (個 (SinOP? 外?               HBAND?)))
+
+; 団体 アナログ部門
+(section JA1 (cat 内 "団体" 電信 "部門") MulAB (団 (MulOp? 内? 電信?         ABAND?)))
+(section JA1 (cat 内 "団体" 電電 "部門") MulAB (団 (MulOp? 内?               ABAND?)))
+(section JA1 (cat 外 "団体" 電信 "部門") MulAB (団 (MulOp? 外? 電信?         ABAND?)))
+(section JA1 (cat 外 "団体" 電電 "部門") MulAB (団 (MulOp? 外?               ABAND?)))
+
+; デジタル部門
+(section JA1 (cat 内 "個人" 離散 "部門") SinDG (個 (SinOP? 内?               DIGIT?)))
+(section JA1 (cat 外 "個人" 離散 "部門") SinDG (個 (SinOP? 外?               DIGIT?)))
+(section JA1 (cat 内 "団体" 離散 "部門") MulDG (団 (MulOp? 内?               DIGIT?)))
+(section JA1 (cat 外 "団体" 離散 "部門") MulDG (団 (MulOp? 外?               DIGIT?)))
+
+; 総合部門
+(section JA1 (cat 内 "個人" 総合 "部門") SinJS (個 (SinOP? 内?               JOINT?)))
+(section JA1 (cat 外 "個人" 総合 "部門") SinJS (個 (SinOP? 外?               JOINT?)))
+(section JA1 (cat 内 "団体" 総合 "部門") MulJS (団 (MulOp? 内?               JOINT?)))
+(section JA1 (cat 外 "団体" 総合 "部門") MulJS (団 (MulOp? 外?               JOINT?)))

@@ -13,10 +13,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * {@link FieldFormat}クラスのテスト用クラスです。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2019/07/02
  *
  */
@@ -24,7 +24,7 @@ public final class FieldFormatTest extends test.RandTest {
 	/**
 	 * クラスパスにある全ての書式を返します。
 	 *
-	 * 
+	 *
 	 * @return 書式のイテレータ
 	 */
 	public static Iterator<FieldFormat> testMethodSource() {

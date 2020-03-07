@@ -11,10 +11,10 @@ import qxsl.model.Field;
 
 /**
  * 交信の空中線電力を表現する{@link Field}実装クラスです。
- * 
- * 
+ *
+ *
  * @author 無線部開発班
- * 
+ *
  * @since 2013/06/08
  *
  */
@@ -23,7 +23,7 @@ public final class Watt extends Qxsl<String> {
 
 	/**
 	 * 空中線出力を指定して{@link Watt}を構築します。
-	 * 
+	 *
 	 * @param watt 空中線出力
 	 */
 	public Watt(String watt) {
@@ -38,10 +38,10 @@ public final class Watt extends Qxsl<String> {
 
 	/**
 	 * {@link Watt}を生成する書式です。
-	 * 
-	 * 
+	 *
+	 *
 	 * @author 無線部開発班
-	 * 
+	 *
 	 * @since 2013/06/08
 	 *
 	 */
