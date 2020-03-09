@@ -71,18 +71,6 @@
 (member 'TAIL (list 'HEAD 'TAIL)) #t
 (member 'TAIL (list 'HEAD 'NEXT 'TAIL)) #t
 
-; every
-(every (list #t #t)) #t
-(every (list #t #f)) #f
-(every (list #f #t)) #f
-(every (list #f #f)) #f
-
-; some
-(some (list #t #t)) #t
-(some (list #t #f)) #t
-(some (list #f #t)) #t
-(some (list #f #f)) #f
-
 ; equal
 (equal 1 1) #t
 (equal 1 2) #f
@@ -212,24 +200,12 @@
 (>= 5 4 2 3 1) #f
 
 ; concat
-(concat (list "MUR" "KMR")) "MURKMR"
-(concat (list 8 8 9 4 6 4)) "889464"
+(concat (nth 0 '("snpi" "-")) (list "MUR" "KMR")) "MURsnpiKMR"
+(concat (nth 1 '("snpi" "-")) (list '(11 4) 514)) "(11 4)-514"
 
 ; format
 (format "%s %s" "MUR" "KMR") "MUR KMR"
 (format "%s %s" 114 (+ 200 314)) "114 514"
-
-; number
-(number "114.514") 114.514
-(number "1919810") 1919810
-
-; string
-(string +) "+"
-(string -) "-"
-(string 514.114) "514.114"
-(string 8101919) "8101919"
-(string (lambda x (+ x x))) "(lambda (x) (+ x x))"
-(string (syntax x (+ x x))) "(syntax (x) (+ x x))"
 
 ; match
 (match "\\d{6}" (if (equal 114 514) "114514" "364364")) #t
@@ -239,6 +215,19 @@
 (split "" "ABC") '("A" "B" "C")
 (split ":+" "11:45::14") '("11" "45" "14")
 
+; number
+(number "114.514") 114.514
+(number "1919810") 1919810
+
+; string
+(string +) "+"
+(string -) "-"
+(string "ABCDE") "ABCDE"
+(string 514.114) "514.114"
+(string 8101919) "8101919"
+(string (lambda x (+ x x))) "(lambda (x) (+ x x))"
+(string (syntax x (+ x x))) "(syntax (x) (+ x x))"
+
 ; lambda
 ((lambda x (+ x x)) 114) 228
 ((lambda (x) (* x x)) 114) 12996
@@ -246,3 +235,6 @@
 
 ; syntax
 (progn (set 'setq (syntax (n v) `(set ',n ,v))) (setq MUR "KMR") MUR) "KMR"
+
+; load
+(progn (load "qxsl/ruler/macros.lisp") (defun foo x (+ x x)) (foo 114)) 228

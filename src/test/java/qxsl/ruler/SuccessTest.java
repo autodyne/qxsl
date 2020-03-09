@@ -25,16 +25,19 @@ public final class SuccessTest extends test.RandTest {
 		assertThat(new Success(new Item(), 2).score()).isEqualTo(2);
 		assertThat(new Success(new Item(), 3).score()).isEqualTo(3);
 	}
+
 	@Test
 	public void testItem() {
 		final Item item = new Item();
 		assertThat(new Success(item, 1).item()).isSameAs(item);
 	}
+
 	@Test
 	public void testKey() {
 		assertThat(new Success(null, 1, "A", "B").key(0)).isEqualTo("A");
 		assertThat(new Success(null, 1, "A", "B").key(1)).isEqualTo("B");
 	}
+
 	@Test
 	public void testCountKeys() {
 		assertThat(new Success(null, 2, 1, 23).countKeys()).isEqualTo(2);

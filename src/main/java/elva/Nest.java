@@ -22,13 +22,11 @@ public final class Nest extends SimpleBindings {
 	private final Bindings outer;
 
 	/**
-	 * 内容と上位のスコープを指定してスコープを構築します。
+	 * 局所変数のスコープを構築します。
 	 *
 	 * @param outer 外側のスコープ
-	 * @param binds スコープの内容
 	 */
-	public Nest(Bindings binds, Bindings outer)  {
-		if(binds != null) putAll(binds);
+	public Nest(Bindings outer)  {
 		this.outer = outer;
 	}
 
@@ -65,7 +63,18 @@ public final class Nest extends SimpleBindings {
 	 * @param name 名前
 	 * @param sexp 値
 	 */
-	public final void put(Symbol name, Sexp sexp) {
+	public final void put(Name name, Sexp sexp) {
 		this.put(name.toString(), sexp);
+	}
+
+	/**
+	 * 指定された環境をこの環境に統合します。
+	 *
+	 * @param nest 環境
+	 * @return この環境
+	 */
+	public final Nest merge(Bindings nest) {
+		if(nest != null) this.putAll(nest);
+		return this;
 	}
 }

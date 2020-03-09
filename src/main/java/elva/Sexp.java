@@ -6,6 +6,10 @@
 package elva;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.StringJoiner;
+
 import elva.Elva.ElvaRuntimeException;
 
 /**
@@ -18,28 +22,88 @@ import elva.Elva.ElvaRuntimeException;
  */
 public abstract class Sexp implements Serializable {
 	/**
-	 * リスト自体またはアトムの内容を返します。
+	 * この式の内容を返します。
 	 *
 	 * @return 値
 	 */
 	public abstract Object value();
 
 	/**
-	 * この値が識別子であるか確認します。
+	 * この式の整数型の内容を返します。
 	 *
-	 * @return 識別子の場合にtrue
+	 * @return 整数
 	 */
-	public final boolean isSymbol() {
-		return value() instanceof Symbol;
+	public final int ival() {
+		return real().intValueExact();
 	}
 
 	/**
-	 * この値が文字列であるか確認します。
+	 * この式の実数型の内容を返します。
 	 *
-	 * @return 文字列の場合にtrue
+	 * @return 実数
 	 */
-	public final boolean isString() {
-		return value() instanceof String;
+	public final BigDecimal real() {
+		return value(BigDecimal.class);
+	}
+
+	/**
+	 * この式の真偽型の内容を返します。
+	 *
+	 * @return 真偽
+	 */
+	public final boolean bool() {
+		return value(Boolean.class);
+	}
+
+	/**
+	 * この式の識別子型の内容を返します。
+	 *
+	 * @return 識別子
+	 */
+	public final Name name() {
+		return value(Name.class);
+	}
+
+	/**
+	 * この式の文字列型の内容を返します。
+	 *
+	 * @return 文字列
+	 */
+	public final String text() {
+		return value(String.class);
+	}
+
+	/**
+	 * この式のリスト型の内容を返します。
+	 *
+	 * @return リスト
+	 */
+	public final Cons cons() {
+		return value(Cons.class);
+	}
+
+	/**
+	 * この式の演算子型の内容を返します。
+	 *
+	 * @return 演算子
+	 */
+	public final Form form() {
+		return value(Form.class);
+	}
+
+	/**
+	 * この式の指定された型における内容を返します。
+	 *
+	 * @param type 型
+	 * @return 式の値
+	 *
+	 * @param <V> 返り値の総称型
+	 */
+	public final <V> V value(Class<V> type) {
+		final var body = value();
+		if(type.isInstance(body)) return type.cast(body);
+		final var temp = "type %s required but %s found";
+		throw new ElvaRuntimeException(temp, type, this);
 	}
 
 	/**
@@ -50,23 +114,8 @@ public abstract class Sexp implements Serializable {
 	 */
 	public static final Sexp wrap(Object sexp) {
 		if(sexp instanceof Sexp) return (Sexp) sexp;
+		if(sexp instanceof String) return new Text((String) sexp);
+		if(sexp instanceof Number) return new Real((Number) sexp);
 		return new Atom(sexp);
-	}
-
-	/**
-	 * この値が指定された型であるか検査します。
-	 *
-	 * @param type 型
-	 * @return 式の値
-	 *
-	 * @param <V> 返り値の総称型
-	 */
-	public final <V> V as(Class<V> type) {
-		final var value = this.value();
-		@SuppressWarnings("unchecked")
-		final V valid = type.isInstance(value)? (V) value: null;
-		final String temp = "%s instance required but %s found";
-		if (valid != null) return valid;
-		throw new ElvaRuntimeException(temp, type, value).add(this);
 	}
 }

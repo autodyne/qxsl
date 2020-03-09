@@ -13,8 +13,8 @@ import java.util.function.UnaryOperator;
 import elva.Elva.ElvaRuntimeException;
 
 import static elva.Form.Parameters;
-import static elva.Symbol.Quote.UQSPL;
-import static elva.Symbol.Quote.UQUOT;
+import static elva.Name.Quote.UQSPL;
+import static elva.Name.Quote.UQUOT;
 import static java.lang.Integer.MAX_VALUE;
 
 /**
@@ -33,127 +33,15 @@ public final class Eval implements UnaryOperator<Sexp> {
 	/**
 	 * この評価器に関連づけられたスコープです。
 	 */
-	public final Nest scope;
+	public final Nest locals;
 
 	/**
 	 * 指定されたスコープに対する評価器を構築します。
 	 *
-	 * @param scope 評価器のスコープ
+	 * @param locals 評価器のスコープ
 	 */
-	public Eval(Nest scope) {
-		this.scope = scope;
-	}
-
-	/**
-	 * 式を評価してアトムの内容を返します。
-	 *
-	 * @param sexp 式
-	 * @return 式の内容
-	 * @throws ElvaRuntimeException 評価により発生した例外
-	 */
-	public final Object peel(Sexp sexp) {
-		return apply(sexp).value();
-	}
-
-	/**
-	 * 式を評価してアトムの内容を返します。
-	 * 内容がnullの場合は例外を発生します。
-	 *
-	 * @param sexp 式
-	 * @return 式の内容
-	 * @throws ElvaRuntimeException 評価により発生した例外
-	 */
-	public final Object some(Sexp sexp) {
-		return apply(sexp).as(Object.class);
-	}
-
-	/**
-	 * 式を評価して識別子を返します。
-	 *
-	 * @param sexp 式
-	 * @return 識別子
-	 * @throws ElvaRuntimeException 評価により発生した例外
-	 */
-	public final Symbol name(Sexp sexp) {
-		return apply(sexp).as(Symbol.class);
-	}
-
-	/**
-	 * 式を評価して文字列を返します。
-	 *
-	 * @param sexp 式
-	 * @return 文字列
-	 * @throws ElvaRuntimeException 評価により発生した例外
-	 */
-	public final String text(Sexp sexp) {
-		return apply(sexp).as(String.class);
-	}
-
-	/**
-	 * 式を評価して真偽値を返します。
-	 *
-	 * @param sexp 式
-	 * @return 真偽値
-	 * @throws ElvaRuntimeException 評価により発生した例外
-	 */
-	public final boolean bool(Sexp sexp) {
-		return apply(sexp).as(Boolean.class);
-	}
-
-	/**
-	 * 式を評価して符号付き整数値を返します。
-	 *
-	 * @param sexp 式
-	 * @return 整数値
-	 * @throws ElvaRuntimeException 評価により発生した例外
-	 */
-	public final int sInt(Sexp sexp) {
-		return real(sexp).intValueExact();
-	}
-
-	/**
-	 * 式を評価して実数値を返します。
-	 *
-	 * @param sexp 式
-	 * @return 実数値
-	 * @throws ElvaRuntimeException 評価により発生した例外
-	 */
-	public final BigDecimal real(Sexp sexp) {
-		return new Atom(apply(sexp).as(Number.class)).real();
-	}
-
-	/**
-	 * 式を評価してリストを返します。
-	 *
-	 * @param sexp 式
-	 * @return リスト
-	 * @throws ElvaRuntimeException 評価により発生した例外
-	 */
-	public final Cons cons(Sexp sexp) {
-		return Cons.cast(apply(sexp));
-	}
-
-	/**
-	 * 式を評価して関数またはマクロを返します。
-	 *
-	 * @param sexp 式
-	 * @return 関数またはマクロ
-	 * @throws ElvaRuntimeException 評価により発生した例外
-	 */
-	public final Form form(Sexp sexp) {
-		return apply(sexp).as(Form.class);
-	}
-
-	/**
-	 * 指定された式の配列をリストに結合して式として評価します。
-	 *
-	 * @param sexp 式の要素
-	 * @return 返り値
-	 *
-	 * @throws ElvaRuntimeException 評価により発生した例外
-	 */
-	public final Sexp apply(Object...sexp) {
-		return this.apply(Cons.wrap(sexp));
+	public Eval(Nest locals) {
+		this.locals = locals;
 	}
 
 	/**
@@ -168,8 +56,9 @@ public final class Eval implements UnaryOperator<Sexp> {
 	public final Sexp apply(final Sexp sexp) {
 		try {
 			if(Cons.NIL.equals(sexp)) return sexp;
-			if(sexp instanceof Cons) return apply((Cons) sexp);
-			return sexp.isSymbol()? this.scope.get(sexp): sexp;
+			if(sexp instanceof Name) return locals.get((Name) sexp);
+			if(sexp instanceof Cons) return this.apply((Cons) sexp);
+			return sexp;
 		} catch (ElvaRuntimeException ex) {
 			throw ex.add(sexp);
 		} catch (RuntimeException ex) {
@@ -186,7 +75,7 @@ public final class Eval implements UnaryOperator<Sexp> {
 	 * @throws ElvaRuntimeException 引数の個数が誤っている場合
 	 */
 	private final Sexp apply(final Cons cons) {
-		final Form form = this.form(cons.car());
+		final Form form = apply(cons.car()).form();
 		final Cons args = cons.cdr();
 		final int len = args.size();
 		final var par = form.getClass().getAnnotation(PAR);
@@ -203,7 +92,7 @@ public final class Eval implements UnaryOperator<Sexp> {
 	 *
 	 * @author 無線部開発班
 	 *
-	 * @sicne 2020/02/26
+	 * @since 2020/02/26
 	 */
 	static interface Unquote {
 		public void merge(List<Sexp> seq);
@@ -216,7 +105,7 @@ public final class Eval implements UnaryOperator<Sexp> {
 	 *
 	 * @author 無線部開発班
 	 *
-	 * @sicne 2020/02/26
+	 * @since 2020/02/26
 	 */
 	private static final class Normal implements Unquote {
 		public final Sexp sexp;
@@ -239,7 +128,7 @@ public final class Eval implements UnaryOperator<Sexp> {
 	 *
 	 * @author 無線部開発班
 	 *
-	 * @sicne 2020/02/26
+	 * @since 2020/02/26
 	 */
 	private static final class Splice implements Unquote {
 		public final Cons cons;
@@ -265,11 +154,12 @@ public final class Eval implements UnaryOperator<Sexp> {
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
 	final Unquote quoted(Sexp quote) {
-		if (quote instanceof Atom) return new Normal(quote);
-		if (UQUOT.is(quote)) return new Normal(apply(quote));
-		if (UQSPL.is(quote)) return new Splice(apply(quote));
-		final LinkedList<Sexp> list = new LinkedList<>();
-		for (Sexp e: (Cons) quote) quoted(e).merge(list);
-		return new Normal(Cons.cons(list));
+		if (Cons.class.isInstance(quote)) {
+			if (UQUOT.is(quote)) return new Normal(apply(quote));
+			if (UQSPL.is(quote)) return new Splice(apply(quote));
+			final LinkedList<Sexp> list = new LinkedList<>();
+			for (Sexp e: (Cons) quote) quoted(e).merge(list);
+			return new Normal(Cons.cons(list));
+		} else return new Normal(quote);
 	}
 }

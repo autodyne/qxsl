@@ -5,8 +5,16 @@
 *****************************************************************************/
 package qxsl.ruler;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
+
+import elva.Cons;
+import elva.Eval;
+import elva.Form;
+import elva.Name;
+import elva.Sexp;
 
 /**
  * コンテストの規約の実装は{@link Contest}クラスを実装します。
@@ -17,28 +25,13 @@ import java.util.Iterator;
  * @since 2016/11/25
  */
 public abstract class Contest implements Iterable<Section> {
-	private final String name;
-
 	/**
-	 * 指定された名前で規約を構築します。
-	 *
-	 * @param name コンテストの名前
+	 * 規約を構築します。
 	 */
-	public Contest(String name) {
-		this.name = name;
-	}
+	public Contest() {}
 
 	/**
 	 * コンテストの名前を返します。
-	 *
-	 * @return コンテストの名前
-	 */
-	public final String getName() {
-		return name;
-	}
-
-	/**
-	 * UIで表示するためにコンテスト名を返します。
 	 *
 	 * @return {@link #getName()}と同等
 	 */
@@ -48,24 +41,11 @@ public abstract class Contest implements Iterable<Section> {
 	}
 
 	/**
-	 * 指定された年の開催期間の開始日を返します。
+	 * コンテストの名前を返します。
 	 *
-	 * @param year 年
-	 * @return 開催日 未設定の場合はnull
-	 *
-	 * @since 2020/03/07
+	 * @return コンテストの名前
 	 */
-	public abstract LocalDate getStartingDate(int year);
-
-	/**
-	 * 指定された年の参加登録の締切日を返します。
-	 *
-	 * @param year 年
-	 * @return 締切日 未設定の場合はnull
-	 *
-	 * @since 2020/03/07
-	 */
-	public abstract LocalDate getDeadLineDate(int year);
+	public abstract String getName();
 
 	/**
 	 * このコンテストの部門をイテレータで返します。
@@ -73,19 +53,6 @@ public abstract class Contest implements Iterable<Section> {
 	 * @return 全ての部門を含むイテレータ
 	 */
 	public abstract Iterator<Section> iterator();
-
-	/**
-	 * 指定された名前の部門を返します。
-	 *
-	 * @param name 部門の名前
-	 * @return 該当する部門 見つからない場合はnull
-	 */
-	public final Section getSection(String name) {
-		for(Section sec: this) {
-			if(sec.getName().equals(name)) return sec;
-		}
-		return null;
-	}
 
 	/**
 	 * 指定された交信記録の総得点を計算します。
@@ -96,4 +63,114 @@ public abstract class Contest implements Iterable<Section> {
 	 * @since 2020/02/26
 	 */
 	public abstract int score(Summary sum);
+
+	/**
+	 * このコンテストに紐づけられた関数を実行します。
+	 *
+	 * @param name 関数の名前
+	 * @param args 関数の引数
+	 * @return 関数の値
+	 *
+	 * @since 2020/03/09
+	 */
+	public abstract Object invoke(String name, Object...args);
+
+	/**
+	 * 指定された部門をこのコンテストに追加します。
+	 *
+	 * @param section 追加する部門
+	 * @return この部門
+	 */
+	protected final Contest add(Section section) {
+		((ContestKit) this).list.add(section);
+		return this;
+	}
+
+	/**
+	 * LISP処理系内部における{@link Contest}の実装です。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2017/02/20
+	 */
+	private static final class ContestKit extends Contest {
+		private final List<Section> list;
+		private final String name;
+		private final Form rule;
+		private final Eval eval;
+
+		/**
+		 * 指定された規約定義と評価器で規約を構築します。
+		 *
+		 * @param rule 規約
+		 * @param eval 評価器
+		 */
+		public ContestKit(Cons rule, Eval eval) {
+			this.name = eval.apply(rule.get(0)).text();
+			this.rule = eval.apply(rule.get(1)).form();
+			this.list = new ArrayList<>();
+			this.eval = eval;
+		}
+
+		@Override
+		public String getName() {
+			return this.name;
+		}
+
+		@Override
+		public Iterator<Section> iterator() {
+			return this.list.iterator();
+		}
+
+		@Override
+		public final int score(final Summary sum) {
+			if (sum.accepted().isEmpty()) return 0;
+			final var args = new ArrayList<Sexp>();
+			for(var s: Cons.wrap(rule, sum.score())) args.add(s);
+			for(var mult: sum.mults()) args.add(Cons.wrap(mult));
+			return this.eval.apply(Cons.cons(args)).ival();
+		}
+
+		@Override
+		public Object invoke(String name, Object...args) {
+			return eval.apply(Name.list(name, args)).value();
+		}
+	}
+
+	/**
+	 * この関数はコンテストの規約の実体を生成します。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2019/05/15
+	 */
+	@Form.Native("contest")
+	@Form.Parameters(min = 2, max = 2)
+	static final class $Contest extends Form {
+		public Contest apply(Cons args, Eval eval) {
+			return new ContestKit(args, eval);
+		}
+	}
+
+	/**
+	 * 指定された名前の部門を返します。未知の場合は例外を投げます。
+	 *
+	 * @param name 部門の名前
+	 * @return 該当する部門
+	 *
+	 * @throws NoSuchElementException 未知の部門の場合
+	 */
+	public final Section getSection(String name) {
+		for(Section s: this) if(s.toString().equals(name)) return s;
+		throw new NoSuchElementException(name.concat(" not found"));
+	}
+
+	/**
+	 * このライブラリに同梱されたALLJA1コンテストの規約のパスです。
+	 *
+	 * @since 2020/03/09
+	 */
+	public static final String ALLJA1 = "qxsl/ruler/allja1.lisp";
 }

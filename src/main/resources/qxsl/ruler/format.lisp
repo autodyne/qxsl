@@ -1,6 +1,6 @@
 ;; ADIF-QXSL CONVERTER DEFINED by 無線部開発班
 
-(load "macros.lisp")
+(load "qxsl/ruler/macros.lisp")
 
 ; XML namespaces
 (setq qxsl "qxsl.org")

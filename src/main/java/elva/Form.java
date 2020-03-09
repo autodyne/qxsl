@@ -117,6 +117,7 @@ public abstract class Form implements BiFunction<Cons, Eval, Object> {
 			this.pars = pars;
 			this.body = body;
 			this.lisp = lisp;
+			for(Sexp v: pars) v.value(Name.class);
 		}
 
 		/**
@@ -139,18 +140,18 @@ public abstract class Form implements BiFunction<Cons, Eval, Object> {
 		 * @throws ElvaRuntimeException 評価により発生した例外
 		 */
 		public final Sexp apply(Cons args, Eval eval) {
-			final Nest env = new Nest(null, lisp.scope);
+			final Nest env = new Nest(lisp.locals);
 			if(args.size() == pars.size()) {
 				for(int i = 0; i < args.size(); i++) {
 					final Sexp par = pars.get(i);
 					final Sexp arg = args.get(i);
 					final Sexp val = eval.apply(arg);
-					env.put(par.as(Symbol.class), val);
+					env.put(par.value(Name.class), val);
 				}
 				return new Eval(env).apply(body);
 			}
-			final String msg = "%s required, but %s found";
-			throw new ElvaRuntimeException(msg, pars, args);
+			final String temp = "%s required but %s found";
+			throw new ElvaRuntimeException(temp, pars, args);
 		}
 	}
 
@@ -180,6 +181,7 @@ public abstract class Form implements BiFunction<Cons, Eval, Object> {
 			this.pars = pars;
 			this.body = body;
 			this.lisp = lisp;
+			for(Sexp v: pars) v.value(Name.class);
 		}
 
 		/**
@@ -201,17 +203,17 @@ public abstract class Form implements BiFunction<Cons, Eval, Object> {
 		 * @throws ElvaRuntimeException 評価により発生した例外
 		 */
 		public final Sexp apply(Cons args, Eval eval) {
-			final Nest env = new Nest(null, lisp.scope);
+			final Nest env = new Nest(lisp.locals);
 			if(args.size() == pars.size()) {
 				for(int i = 0; i < args.size(); i++) {
 					final Sexp par = pars.get(i);
 					final Sexp arg = args.get(i);
-					env.put(par.as(Symbol.class), arg);
+					env.put(par.value(Name.class), arg);
 				}
 				return eval.apply(new Eval(env).apply(body));
 			}
-			final String msg = "%s required, but %s found";
-			throw new ElvaRuntimeException(msg, pars, args);
+			final String temp = "%s required but %s found";
+			throw new ElvaRuntimeException(temp, pars, args);
 		}
 	}
 }

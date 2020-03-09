@@ -21,12 +21,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public final class HandlerTest extends test.RandTest {
 	private final Handler format;
 	private HandlerTest() throws ScriptException {
-		format = new RuleKit().handler("format.lisp");
+		format = new RuleKit().handler(Handler.FORMAT);
 	}
+
 	@Test
 	public void testGetName() {
 		assertThat(format.getName()).isNotBlank();
 	}
+
 	@Test
 	public void testToString() {
 		assertThat(format).hasToString(format.getName());

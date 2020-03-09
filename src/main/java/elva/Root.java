@@ -5,6 +5,8 @@
 *****************************************************************************/
 package elva;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -12,11 +14,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.StringJoiner;
 import javax.script.Bindings;
+import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
 import elva.Elva.ElvaRuntimeException;
 
-import static java.math.MathContext.DECIMAL64;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * LISP処理系の大域変数のスコープを実装します。
@@ -72,12 +75,6 @@ final class Root extends SimpleBindings {
 		this.put(new $Member());
 
 		/*
-		 * list reduction
-		 */
-		this.put(new $Every());
-		this.put(new $Some());
-
-		/*
 		 * checking equality
 		 */
 		this.put(new $Equal());
@@ -126,22 +123,27 @@ final class Root extends SimpleBindings {
 		this.put(new $Format());
 
 		/*
-		 * type conversion
-		 */
-		this.put(new $Number());
-		this.put(new $String());
-
-		/*
 		 * regex matching
 		 */
 		this.put(new $Match());
 		this.put(new $Split());
 
 		/*
+		 * type conversion
+		 */
+		this.put(new $Number());
+		this.put(new $String());
+
+		/*
 		 * lambda & syntax generation
 		 */
 		this.put(new $Lambda());
 		this.put(new $Syntax());
+
+		/*
+		 * load another program
+		 */
+		this.put(new $Load());
 	}
 
 	/**
@@ -261,9 +263,9 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 2, max = 2)
 	private static final class $Set extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final var name = eval.name(args.get(0));
+			final var key = eval.apply(args.get(0));
 			final var val = eval.apply(args.get(1));
-			eval.scope.put(name, val);
+			eval.locals.put(key.value(Name.class), val);
 			return val;
 		}
 	}
@@ -296,9 +298,9 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 2, max = 2)
 	private static final class $Cons extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final var head = eval.apply(args.car());
-			final var tail = eval.cons(args.get(1));
-			return new Cons(head, tail);
+			final var head = eval.apply(args.get(0));
+			final var tail = eval.apply(args.get(1));
+			return new Cons(head, tail.cons());
 		}
 	}
 
@@ -332,7 +334,7 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 1, max = 1)
 	private static final class $Car extends Form {
 		public Object apply(Cons args, Eval eval) {
-			return eval.cons(args.car()).car();
+			return eval.apply(args.car()).cons().car();
 		}
 	}
 
@@ -348,7 +350,7 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 1, max = 1)
 	private static final class $Cdr extends Form {
 		public Object apply(Cons args, Eval eval) {
-			return eval.cons(args.car()).cdr();
+			return eval.apply(args.car()).cons().cdr();
 		}
 	}
 
@@ -364,8 +366,8 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 2, max = 2)
 	private static final class $Nth extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final int idx = eval.sInt(args.get(0));
-			final var seq = eval.cons(args.get(1));
+			final int idx = eval.apply(args.get(0)).ival();
+			final var seq = eval.apply(args.get(1)).cons();
 			return seq.get(idx);
 		}
 	}
@@ -382,9 +384,9 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 3, max = 3)
 	private static final class $SubSeq extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final var list = eval.cons(args.get(0));
-			final int head = eval.sInt(args.get(1));
-			final int tail = eval.sInt(args.get(2));
+			final var list = eval.apply(args.get(0)).cons();
+			final int head = eval.apply(args.get(1)).ival();
+			final int tail = eval.apply(args.get(2)).ival();
 			return list.subList(head, tail);
 		}
 	}
@@ -401,7 +403,7 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 1, max = 1)
 	private static final class $Length extends Form {
 		public Object apply(Cons args, Eval eval) {
-			return eval.cons(args.car()).size();
+			return eval.apply(args.car()).cons().size();
 		}
 	}
 
@@ -417,47 +419,9 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 2, max = 2)
 	private static final class $Member extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final Sexp val = eval.apply(args.car());
-			final Cons seq = eval.cons(args.get(1));
-			return seq.contains(val);
-		}
-	}
-
-	/**
-	 * LISP処理系で事前に定義されevery関数です。
-	 *
-	 *
-	 * @author 無線部開発班
-	 *
-	 * @since 2020/02/26
-	 */
-	@Form.Native("every")
-	@Form.Parameters(min = 1, max = 1)
-	private static final class $Every extends Form {
-		public Object apply(Cons args, Eval eval) {
-			for(Sexp val: eval.cons(args.car())) {
-				if(!val.as(Boolean.class)) return false;
-			}
-			return true;
-		}
-	}
-
-	/**
-	 * LISP処理系で事前に定義されsome関数です。
-	 *
-	 *
-	 * @author 無線部開発班
-	 *
-	 * @since 2020/02/26
-	 */
-	@Form.Native("some")
-	@Form.Parameters(min = 1, max = 1)
-	private static final class $Some extends Form {
-		public Object apply(Cons args, Eval eval) {
-			for(Sexp val: eval.cons(args.car())) {
-				if(val.as(Boolean.class)) return true;
-			}
-			return false;
+			final Sexp val = eval.apply(args.get(0));
+			final Sexp seq = eval.apply(args.get(1));
+			return seq.cons().contains(val);
 		}
 	}
 
@@ -491,7 +455,7 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 1, max = 1)
 	private static final class $Null$ extends Form {
 		public Object apply(Cons args, Eval eval) {
-			return eval.peel(args.car()) == null;
+			return eval.apply(args.car()).value() == null;
 		}
 	}
 
@@ -507,8 +471,8 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 2, max = 3)
 	private static final class $If extends Form {
 		public Object apply(Cons args, Eval eval) {
-			int cond = eval.bool(args.car())? 1: 2;
-			return eval.apply(args.cdr(cond).car());
+			boolean cond = eval.apply(args.get(0)).bool();
+			return eval.apply(args.cdr(cond? 1: 2).car());
 		}
 	}
 
@@ -524,7 +488,7 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 2, max = -1)
 	private static final class $And extends Form {
 		public Object apply(Cons args, Eval eval) {
-			for(var v: args) if(!eval.bool(v)) return false;
+			for(var v: args) if(!eval.apply(v).bool()) return false;
 			return true;
 		}
 	}
@@ -541,7 +505,7 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 2, max = -1)
 	private static final class $Or extends Form {
 		public Object apply(Cons args, Eval eval) {
-			for(var v: args) if(eval.bool(v)) return true;
+			for(var v: args) if(eval.apply(v).bool()) return true;
 			return false;
 		}
 	}
@@ -558,7 +522,7 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 1, max = 1)
 	private static final class $Not extends Form {
 		public Object apply(Cons args, Eval eval) {
-			return !eval.bool(args.car());
+			return !eval.apply(args.car()).bool();
 		}
 	}
 
@@ -574,9 +538,9 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 2, max = -1)
 	private static final class $Add extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final BigDecimal car = eval.real(args.get(0));
-			var cdr = args.cdr().stream().map(eval::real);
-			return cdr.reduce(car, BigDecimal::add);
+			final var seq = args.map(eval).toList(Real.class);
+			final var cdr = seq.subList(1, seq.size());
+			return cdr.stream().reduce(seq.get(0), Real::add);
 		}
 	}
 
@@ -592,9 +556,9 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 2, max = -1)
 	private static final class $Sub extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final BigDecimal car = eval.real(args.get(0));
-			var cdr = args.cdr().stream().map(eval::real);
-			return cdr.reduce(car, BigDecimal::subtract);
+			final var seq = args.map(eval).toList(Real.class);
+			final var cdr = seq.subList(1, seq.size());
+			return cdr.stream().reduce(seq.get(0), Real::sub);
 		}
 	}
 
@@ -610,9 +574,9 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 2, max = -1)
 	private static final class $Mul extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final BigDecimal car = eval.real(args.get(0));
-			var cdr = args.cdr().stream().map(eval::real);
-			return cdr.reduce(car, BigDecimal::multiply);
+			final var seq = args.map(eval).toList(Real.class);
+			final var cdr = seq.subList(1, seq.size());
+			return cdr.stream().reduce(seq.get(0), Real::mul);
 		}
 	}
 
@@ -628,9 +592,9 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 2, max = -1)
 	private static final class $Div extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final BigDecimal car = eval.real(args.get(0));
-			var cdr = args.cdr().stream().map(eval::real);
-			return cdr.reduce(car, (l, r) -> l.divide(r, DECIMAL64));
+			final var seq = args.map(eval).toList(Real.class);
+			final var cdr = seq.subList(1, seq.size());
+			return cdr.stream().reduce(seq.get(0), Real::div);
 		}
 	}
 
@@ -646,9 +610,9 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 2, max = -1)
 	private static final class $Mod extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final BigDecimal car = eval.real(args.get(0));
-			var cdr = args.cdr().stream().map(eval::real);
-			return cdr.reduce(car, BigDecimal::remainder);
+			final var seq = args.map(eval).toList(Real.class);
+			final var cdr = seq.subList(1, seq.size());
+			return cdr.stream().reduce(seq.get(0), Real::mod);
 		}
 	}
 
@@ -664,7 +628,7 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 1, max = 1)
 	private static final class $Ceiling extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final BigDecimal val = eval.real(args.car());
+			final var val = eval.apply(args.car()).real();
 			return val.setScale(0, RoundingMode.CEILING);
 		}
 	}
@@ -681,7 +645,7 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 1, max = 1)
 	private static final class $Floor extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final BigDecimal val = eval.real(args.car());
+			final var val = eval.apply(args.car()).real();
 			return val.setScale(0, RoundingMode.FLOOR);
 		}
 	}
@@ -698,7 +662,7 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 1, max = 1)
 	private static final class $Round extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final BigDecimal val = eval.real(args.car());
+			final var val = eval.apply(args.car()).real();
 			return val.setScale(0, RoundingMode.HALF_UP);
 		}
 	}
@@ -715,13 +679,13 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 2, max = -1)
 	private static final class $Lt extends Form {
 		public Object apply(Cons args, Eval eval) {
-			var prev = eval.real(args.car());
-			var flag = true;
-			for(var sexp: args.cdr()) {
-				final BigDecimal next = eval.real(sexp);
-				flag &= prev.compareTo(prev = next) < 0;
+			final var list = args.map(eval);
+			for(int i = 1; i < list.size(); i++) {
+				final var l = list.get(i - 1).real();
+				final var r = list.get(i + 0).real();
+				if(l.compareTo(r) >= 0) return false;
 			}
-			return flag;
+			return true;
 		}
 	}
 
@@ -737,13 +701,13 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 2, max = -1)
 	private static final class $Gt extends Form {
 		public Object apply(Cons args, Eval eval) {
-			var prev = eval.real(args.car());
-			var flag = true;
-			for(var sexp: args.cdr()) {
-				final BigDecimal next = eval.real(sexp);
-				flag &= prev.compareTo(prev = next) > 0;
+			final var list = args.map(eval);
+			for(int i = 1; i < list.size(); i++) {
+				final var l = list.get(i - 1).real();
+				final var r = list.get(i + 0).real();
+				if(l.compareTo(r) <= 0) return false;
 			}
-			return flag;
+			return true;
 		}
 	}
 
@@ -759,13 +723,13 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 2, max = -1)
 	private static final class $Le extends Form {
 		public Object apply(Cons args, Eval eval) {
-			var prev = eval.real(args.car());
-			var flag = true;
-			for(var sexp: args.cdr()) {
-				final BigDecimal next = eval.real(sexp);
-				flag &= prev.compareTo(prev = next) <= 0;
+			final var list = args.map(eval);
+			for(int i = 1; i < list.size(); i++) {
+				final var l = list.get(i - 1).real();
+				final var r = list.get(i + 0).real();
+				if(l.compareTo(r) > 0) return false;
 			}
-			return flag;
+			return true;
 		}
 	}
 
@@ -781,13 +745,13 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 2, max = -1)
 	private static final class $Ge extends Form {
 		public Object apply(Cons args, Eval eval) {
-			var prev = eval.real(args.car());
-			var flag = true;
-			for(var sexp: args.cdr()) {
-				final BigDecimal next = eval.real(sexp);
-				flag &= prev.compareTo(prev = next) >= 0;
+			final var list = args.map(eval);
+			for(int i = 1; i < list.size(); i++) {
+				final var l = list.get(i - 1).real();
+				final var r = list.get(i + 0).real();
+				if(l.compareTo(r) < 0) return false;
 			}
-			return flag;
+			return true;
 		}
 	}
 
@@ -800,13 +764,13 @@ final class Root extends SimpleBindings {
 	 * @since 2020/03/05
 	 */
 	@Form.Native("concat")
-	@Form.Parameters(min = 1, max = 1)
+	@Form.Parameters(min = 2, max = 2)
 	private static final class $Concat extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final var join = new StringJoiner("");
-			for(Sexp sexp: eval.cons(args.car())) {
-				join.add(String.valueOf(sexp.value()));
-			}
+			final var del = eval.apply(args.get(0)).text();
+			final var seq = eval.apply(args.get(1)).cons();
+			final StringJoiner join = new StringJoiner(del);
+			for(Sexp v: seq) join.add(String.valueOf(v.value()));
 			return join.toString();
 		}
 	}
@@ -823,43 +787,10 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 1, max = -1)
 	private static final class $Format extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final var temp = eval.text(args.car());
-			final var strm = args.cdr(1).stream();
-			final var vals = strm.map(eval::peel);
-			return String.format(temp, vals.toArray());
-		}
-	}
-
-	/**
-	 * LISP処理系で事前に定義されるnumber関数です。
-	 *
-	 *
-	 * @author 無線部開発班
-	 *
-	 * @since 2019/06/30
-	 */
-	@Form.Native("number")
-	@Form.Parameters(min = 1, max = 1)
-	private static final class $Number extends Form {
-		public Object apply(Cons args, Eval eval) {
-			final var val = eval.some(args.car());
-			return new BigDecimal(val.toString());
-		}
-	}
-
-	/**
-	 * LISP処理系で事前に定義されるstring関数です。
-	 *
-	 *
-	 * @author 無線部開発班
-	 *
-	 * @since 2019/06/30
-	 */
-	@Form.Native("string")
-	@Form.Parameters(min = 1, max = 1)
-	private static final class $String extends Form {
-		public Object apply(Cons args, Eval eval) {
-			return String.valueOf(eval.apply(args.car()));
+			final var temp = eval.apply(args.car()).text();
+			final var strm = args.cdr().map(eval).stream();
+			final var list = strm.map(Sexp::value);
+			return String.format(temp, list.toArray());
 		}
 	}
 
@@ -875,9 +806,9 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 2, max = 2)
 	private static final class $Match extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final var regex = eval.text(args.car());
-			final var text = eval.text(args.get(1));
-			return text.matches(regex);
+			final var reg = eval.apply(args.get(0)).text();
+			final var str = eval.apply(args.get(1)).text();
+			return str.matches(reg);
 		}
 	}
 
@@ -893,9 +824,43 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 2, max = 2)
 	private static final class $Split extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final String regex = eval.text(args.car());
-			final String text = eval.text(args.get(1));
-			return Cons.wrap((Object[]) text.split(regex));
+			final var reg = eval.apply(args.get(0)).text();
+			final var str = eval.apply(args.get(1)).text();
+			return Cons.wrap(List.of(str.split(reg)));
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるnumber関数です。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2019/06/30
+	 */
+	@Form.Native("number")
+	@Form.Parameters(min = 1, max = 1)
+	private static final class $Number extends Form {
+		public Object apply(Cons args, Eval eval) {
+			final var val = eval.apply(args.car());
+			if(Real.class.isInstance(val)) return val;
+			else return new BigDecimal(val.text());
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるstring関数です。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2019/06/30
+	 */
+	@Form.Native("string")
+	@Form.Parameters(min = 1, max = 1)
+	private static final class $String extends Form {
+		public Object apply(Cons args, Eval eval) {
+			return String.valueOf(eval.apply(args.car()).value());
 		}
 	}
 
@@ -912,11 +877,8 @@ final class Root extends SimpleBindings {
 	private static final class $Lambda extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final var pars = Cons.cast(args.get(0));
-			final var body = args.get(1);
-			if(!pars.containsOnlySymbols()) {
-				final String msg = "%s contains non-name";
-				throw new ElvaRuntimeException(msg, pars);
-			} else return new Lambda(pars, body, eval);
+			final var body = Sexp.wrap(args.get(1));
+			return new Lambda(pars, body, eval);
 		}
 	}
 
@@ -933,11 +895,34 @@ final class Root extends SimpleBindings {
 	private static final class $Syntax extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final var pars = Cons.cast(args.get(0));
-			final var body = args.get(1);
-			if(!pars.containsOnlySymbols()) {
-				final String msg = "%s contains non-name";
-				throw new ElvaRuntimeException(msg, pars);
-			} else return new Syntax(pars, body, eval);
+			final var body = Sexp.wrap(args.get(1));
+			return new Syntax(pars, body, eval);
+		}
+	}
+
+	/**
+	 * この関数はクラスパスからプログラムを読み込みます。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2020/02/26
+	 */
+	@Form.Native("load")
+	@Form.Parameters(min = 1, max = 1)
+	private static final class $Load extends Form {
+		public Object apply(Cons args, Eval eval) {
+			final var elva = new Elva();
+			final var name = eval.apply(args.car()).text();
+			final var load = Root.class.getClassLoader();
+			try (var is = load.getResourceAsStream(name)) {
+				var isr = new InputStreamReader(is, UTF_8);
+				final var list = elva.scan(isr).stream().map(eval);
+				return list.reduce((h, t)->t).orElse(null).value();
+			} catch (IOException | ScriptException ex) {
+				final String msg = "failed in loading %s: %s";
+				throw new ElvaRuntimeException(msg, name, ex);
+			}
 		}
 	}
 }

@@ -20,9 +20,13 @@
 ; check if sexp is an empty list
 (defmacro nil? sexp `(equal nil ,sexp))
 
+; exclusive OR
+(defun xor (a b)
+	(or (and a (not b)) (and (not a) b)))
+
 ; substring from head to tail (exclusive)
 (defun substring (str head tail)
-	(concat (subseq (split "" str) head tail)))
+	(concat "" (subseq (split "" str) head tail)))
 
 ; map each argument to fun(argument)
 (defun mapcar (fun args)
@@ -58,7 +62,7 @@
 
 ; check if all conditions are satisfied for it
 (defmacro forall (it conds)
-	`(every (list ,@(dolist (c conds) `(,c it)))))
+	`(and ,@(dolist (c conds) `(,c it))))
 
 ; extract conditions unsatisfied for it
 (defmacro unsat (it conds)

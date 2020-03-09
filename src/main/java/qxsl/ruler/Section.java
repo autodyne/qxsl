@@ -6,8 +6,15 @@
 package qxsl.ruler;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import java.util.function.Function;
+
+import elva.Cons;
+import elva.Eval;
+import elva.Form;
+import elva.Name;
+import elva.Sexp;
+
 import qxsl.model.Item;
 
 /**
@@ -19,40 +26,13 @@ import qxsl.model.Item;
  * @since 2016/11/25
  */
 public abstract class Section implements Function<Item, Message> {
-	private final String name;
-	private final String code;
-
 	/**
-	 * 指定された名前と符牒で部門を構築します。
-	 *
-	 * @param name 部門の名前
-	 * @param code 部門の符牒
+	 * 部門を構築します。
 	 */
-	public Section(String name, String code) {
-		this.name = name;
-		this.code = code;
-	}
+	public Section() {}
 
 	/**
 	 * 部門の名前を返します。
-	 *
-	 * @return 部門の名前
-	 */
-	public final String getName() {
-		return name;
-	}
-
-	/**
-	 * 部門の符牒を返します。
-	 *
-	 * @return 部門の符牒
-	 */
-	public final String getCode() {
-		return code;
-	}
-
-	/**
-	 * UIで表示するために部門名を返します。
 	 *
 	 * @return {@link #getName()}と同等
 	 */
@@ -60,6 +40,27 @@ public abstract class Section implements Function<Item, Message> {
 	public final String toString() {
 		return getName();
 	}
+
+	/**
+	 * 部門の名前を返します。
+	 *
+	 * @return 部門の名前
+	 */
+	public abstract String getName();
+
+	/**
+	 * 部門の符牒を返します。
+	 *
+	 * @return 部門の符牒
+	 */
+	public abstract String getCode();
+
+	/**
+	 * この部門を有するコンテストを返します。
+	 *
+	 * @return 部門を内包するコンテスト
+	 */
+	public abstract Contest getContest();
 
 	/**
 	 * 指定された{@link Item}の可否を検査します。
@@ -70,6 +71,89 @@ public abstract class Section implements Function<Item, Message> {
 	public abstract Message apply(Item item);
 
 	/**
+	 * この部門に紐づけられた関数を実行します。
+	 *
+	 * @param name 関数の名前
+	 * @param args 関数の引数
+	 * @return 関数の値
+	 *
+	 * @since 2020/03/09
+	 */
+	public abstract Object invoke(String name, Object...args);
+
+	/**
+	 * LISP処理系内部における{@link Section}の実装です。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2017/02/20
+	 */
+	private static final class SectionKit extends Section {
+		private final Contest test;
+		private final String name;
+		private final String code;
+		private final Form rule;
+		private final Eval eval;
+
+		/**
+		 * 指定された部門定義と評価器で部門を構築します。
+		 *
+		 * @param rule 部門
+		 * @param eval 評価器
+		 */
+		public SectionKit(Cons rule, Eval eval) {
+			this.test = eval.apply(rule.get(0)).value(Contest.class);
+			this.name = eval.apply(rule.get(1)).text();
+			this.code = eval.apply(rule.get(2)).text();
+			this.rule = eval.apply(rule.get(3)).form();
+			this.eval = eval;
+			this.test.add(this);
+		}
+
+		@Override
+		public String getName() {
+			return this.name;
+		}
+
+		@Override
+		public String getCode() {
+			return this.code;
+		}
+
+		@Override
+		public Contest getContest() {
+			return this.test;
+		}
+
+		@Override
+		public Message apply(Item item) {
+			return eval.apply(Cons.wrap(rule, item)).value(Message.class);
+		}
+
+		@Override
+		public Object invoke(String name, Object...args) {
+			return eval.apply(Name.list(name, args)).value();
+		}
+	}
+
+	/**
+	 * この関数はコンテストの部門の実体を生成します。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2019/05/15
+	 */
+	@Form.Native("section")
+	@Form.Parameters(min = 4, max = 4)
+	static final class $Section extends Form {
+		public Contest apply(Cons args, Eval eval) {
+			return new SectionKit(args, eval).getContest();
+		}
+	}
+
+	/**
 	 * 指定された交信記録から有効な交信を抽出します。
 	 *
 	 * @param items 交信記録
@@ -77,9 +161,9 @@ public abstract class Section implements Function<Item, Message> {
 	 *
 	 * @since 2019/05/16
 	 */
-	public final Summary summarize(List<Item> items) {
-		final List<Success> acc = new ArrayList<>();
-		final List<Failure> rej = new ArrayList<>();
+	public final Summary summarize(Collection<Item> items) {
+		final var acc = new ArrayList<Success>();
+		final var rej = new ArrayList<Failure>();
 		for(Item item: items) {
 			final Message msg = this.apply(item);
 			if(msg instanceof Success) acc.add((Success) msg);

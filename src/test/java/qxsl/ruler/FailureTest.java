@@ -25,6 +25,7 @@ public final class FailureTest extends test.RandTest {
 		final String text = alnum(100);
 		assertThat(new Failure(item, text).text()).isSameAs(text);
 	}
+
 	@Test
 	public void testGetItem() {
 		final Item item = new Item();

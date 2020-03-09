@@ -5,33 +5,30 @@
 *****************************************************************************/
 package qxsl.ruler;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StringReader;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.time.temporal.TemporalAdjusters;
 import javax.script.Bindings;
 import javax.script.ScriptException;
 import javax.xml.namespace.QName;
 
-import elva.*;
+import elva.Cons;
+import elva.Elva;
+import elva.Eval;
+import elva.Form;
+import elva.Nest;
+import elva.Sexp;
 
 import qxsl.extra.field.City;
 import qxsl.extra.field.Time;
 import qxsl.model.Exch;
 import qxsl.model.Item;
 import qxsl.model.Tuple;
-
-import static elva.Elva.ElvaRuntimeException;
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.time.temporal.TemporalAdjusters.dayOfWeekInMonth;
 
 /**
  * {@link Contest}をLISPベースのドメイン特化言語で表現する仕組みです。
@@ -44,14 +41,10 @@ import static java.time.temporal.TemporalAdjusters.dayOfWeekInMonth;
  * @see Elva 内部で使用されるLISP処理系
  */
 public final class RuleKit {
-	private final Elva elva;
-
 	/**
 	 * LISP処理系を構築します。
 	 */
-	public RuleKit() {
-		this.elva = new Elva();
-	}
+	public RuleKit() {}
 
 	/**
 	 * 指定された入力から文字列を読み取り評価します。
@@ -67,7 +60,7 @@ public final class RuleKit {
 	 * @since 2020/02/26
 	 */
 	public Handler handler(Reader reader) throws ScriptException {
-		return (Handler) this.elva.eval(reader, createBindings());
+		return (Handler) new Elva().eval(reader, createBindings());
 	}
 
 	/**
@@ -82,7 +75,7 @@ public final class RuleKit {
 	 * @throws ScriptException 式の評価時に発生する例外
 	 */
 	public Contest contest(Reader reader) throws ScriptException {
-		return (Contest) this.elva.eval(reader, createBindings());
+		return (Contest) new Elva().eval(reader, createBindings());
 	}
 
 	/**
@@ -94,11 +87,8 @@ public final class RuleKit {
 	 * @throws ScriptException ハンドラ定義読み取り時の例外
 	 */
 	public Handler handler(String name) throws ScriptException {
-		try(var is = getClass().getResourceAsStream(name)) {
-			return handler(new InputStreamReader(is, UTF_8));
-		} catch(IOException ex) {
-			throw new ScriptException(ex);
-		}
+		final var sexp = String.format("(load \"%s\")", name);
+		return handler(new StringReader(sexp));
 	}
 
 	/**
@@ -110,147 +100,17 @@ public final class RuleKit {
 	 * @throws ScriptException コンテスト定義読み取り時の例外
 	 */
 	public Contest contest(String name) throws ScriptException {
-		try(var is = getClass().getResourceAsStream(name)) {
-			return contest(new InputStreamReader(is, UTF_8));
-		} catch(IOException ex) {
-			throw new ScriptException(ex);
-		}
+		final var sexp = String.format("(load \"%s\")", name);
+		return contest(new StringReader(sexp));
 	}
 
 	/**
-	 * LISP処理系内部における{@link Handler}の実装です。
-	 *
-	 *
-	 * @author 無線部開発班
-	 *
-	 * @since 2020/02/26
-	 */
-	private static final class HandlerImpl extends Handler {
-		private final String name;
-		private final Form rule;
-		private final Eval eval;
-
-		/**
-		 * 指定された規約定義と評価器で部門を構築します。
-		 *
-		 * @param rule 規約
-		 * @param eval 評価器
-		 */
-		public HandlerImpl(Cons rule, Eval eval) {
-			this.name = eval.text(rule.get(0));
-			this.rule = eval.form(rule.get(1));
-			this.eval = eval;
-		}
-
-		@Override
-		public String getName() {
-			return name;
-		}
-
-		@Override
-		public Item apply(Item item) {
-			return eval.apply(rule, item).as(Item.class);
-		}
-	}
-
-	/**
-	 * LISP処理系内部における{@link Contest}の実装です。
-	 *
-	 *
-	 * @author 無線部開発班
-	 *
-	 * @since 2017/02/20
-	 */
-	private static final class ContestImpl extends Contest {
-		private final List<Section> list;
-		private final Form rule;
-		private final Eval eval;
-		private Form starting = null;
-		private Form deadLine = null;
-
-		/**
-		 * 指定された規約定義と評価器で規約を構築します。
-		 *
-		 * @param rule 規約
-		 * @param eval 評価器
-		 */
-		public ContestImpl(Cons rule, Eval eval) {
-			super(eval.text(rule.get(0)));
-			this.list = new ArrayList<>();
-			this.rule = eval.form(rule.get(1));
-			this.eval = eval;
-		}
-
-		@Override
-		public LocalDate getStartingDate(int year) {
-			if(starting == null) return null;
-			return eval.apply(starting, year).as(LocalDate.class);
-		}
-
-		@Override
-		public LocalDate getDeadLineDate(int year) {
-			if(deadLine == null) return null;
-			return eval.apply(deadLine, year).as(LocalDate.class);
-		}
-
-		@Override
-		public Iterator<Section> iterator() {
-			return this.list.iterator();
-		}
-
-		@Override
-		public int score(Summary sum) {
-			if (sum.accepted().isEmpty()) return 0;
-			final var args = new ArrayList<Sexp>();
-			for(var s: Cons.wrap(rule, sum.score())) args.add(s);
-			for(var mult: sum.mults()) args.add(Cons.wrap(mult));
-			return this.eval.sInt(Cons.cons(args));
-		}
-	}
-
-	/**
-	 * LISP処理系内部における{@link Section}の実装です。
-	 *
-	 *
-	 * @author 無線部開発班
-	 *
-	 * @since 2017/02/20
-	 */
-	private static final class SectionImpl extends Section {
-		private final Form rule;
-		private final Eval eval;
-
-		/**
-		 * 指定された規約定義と評価器で部門を構築します。
-		 *
-		 * @param rule 規約
-		 * @param eval 評価器
-		 */
-		public SectionImpl(Cons rule, Eval eval) {
-			super(eval.text(rule.get(1)), eval.text(rule.get(2)));
-			this.rule = eval.form(rule.get(3));
-			this.eval = eval;
-		}
-
-		@Override
-		public Message apply(Item item) {
-			return eval.apply(rule, item).as(Message.class);
-		}
-	}
-
-	/**
-	 * LISP処理系で事前に定義された関数や値を保持する環境を作成します。
+	 * LISP処理系が内蔵する関数や値を参照する環境を返します。
 	 *
 	 * @return 事前に定義された環境
 	 */
 	private final Bindings createBindings() {
-		final Nest env = new Nest(null, null);
-		/*
-		 * load script
-		 *
-		 * (load file)
-		 */
-		env.put(new $Load());
+		final Nest env = new Nest(null);
 
 		/*
 		 * define handler, contest, or section
@@ -259,18 +119,9 @@ public final class RuleKit {
 		 * (contest name scoring)
 		 * (section contest name code validation)
 		 */
-		env.put(new $Handler());
-		env.put(new $Contest());
-		env.put(new $Section());
-
-		/*
-		 * schedule contest
-		 *
-		 * (starting contest date)
-		 * (deadline contest date)
-		 */
-		env.put(new $Starting());
-		env.put(new $DeadLine());
+		env.put(new Handler.$Handler());
+		env.put(new Contest.$Contest());
+		env.put(new Section.$Section());
 
 		/*
 		 * create success or failure
@@ -330,121 +181,6 @@ public final class RuleKit {
 	}
 
 	/**
-	 * この関数はクラスパスからプログラムを読み込みます。
-	 *
-	 *
-	 * @author 無線部開発班
-	 *
-	 * @since 2020/02/26
-	 */
-	@Form.Native("load")
-	@Form.Parameters(min = 1, max = 1)
-	private static final class $Load extends Form {
-		public Object apply(Cons args, Eval eval) {
-			Sexp value = null;
-			final var elva = new Elva();
-			final var name = eval.text(args.car());
-			try (var is = getClass().getResourceAsStream(name)) {
-				final var isr = new InputStreamReader(is, UTF_8);
-				for(var s: elva.scan(isr)) value = eval.apply(s);
-				return value;
-			} catch (IOException | ScriptException ex) {
-				final String msg = "failed in loading %s: %s";
-				throw new ElvaRuntimeException(msg, name, ex);
-			}
-		}
-	}
-
-	/**
-	 * この関数は交信記録に対する手続きを生成します。
-	 *
-	 *
-	 * @author 無線部開発班
-	 *
-	 * @since 2020/02/26
-	 */
-	@Form.Native("handler")
-	@Form.Parameters(min = 2, max = -1)
-	private static final class $Handler extends Form {
-		public Object apply(Cons args, Eval eval) {
-			return new HandlerImpl(args, eval);
-		}
-	}
-
-	/**
-	 * この関数はコンテストの規約の実体を生成します。
-	 *
-	 *
-	 * @author 無線部開発班
-	 *
-	 * @since 2019/05/15
-	 */
-	@Form.Native("contest")
-	@Form.Parameters(min = 2, max = 2)
-	private static final class $Contest extends Form {
-		public Object apply(Cons args, Eval eval) {
-			return new ContestImpl(args, eval);
-		}
-	}
-
-	/**
-	 * この関数はコンテストの部門を規約に追加します。
-	 *
-	 *
-	 * @author 無線部開発班
-	 *
-	 * @since 2019/05/15
-	 */
-	@Form.Native("section")
-	@Form.Parameters(min = 4, max = 4)
-	private static final class $Section extends Form {
-		public Object apply(Cons args, Eval eval) {
-			final var test = eval.apply(args.car());
-			final var sect = new SectionImpl(args, eval);
-			test.as(ContestImpl.class).list.add(sect);
-			return test;
-		}
-	}
-
-	/**
-	 * この関数はコンテストの開始日を規約に追加します。
-	 *
-	 *
-	 * @author 無線部開発班
-	 *
-	 * @since 2020/03/07
-	 */
-	@Form.Native("starting")
-	@Form.Parameters(min = 2, max = 2)
-	private static final class $Starting extends Form {
-		public Object apply(Cons args, Eval eval) {
-			final var test = eval.apply(args.car());
-			final var date = eval.form(args.get(1));
-			test.as(ContestImpl.class).starting = date;
-			return test;
-		}
-	}
-
-	/**
-	 * この関数はコンテストの締切日を規約に追加します。
-	 *
-	 *
-	 * @author 無線部開発班
-	 *
-	 * @since 2020/03/07
-	 */
-	@Form.Native("deadline")
-	@Form.Parameters(min = 2, max = 2)
-	private static final class $DeadLine extends Form {
-		public Object apply(Cons args, Eval eval) {
-			final var test = eval.apply(args.car());
-			final var date = eval.form(args.get(1));
-			test.as(ContestImpl.class).deadLine = date;
-			return test;
-		}
-	}
-
-	/**
 	 * この関数は交信記録の検査結果に合格の注釈を付けます。
 	 *
 	 *
@@ -456,12 +192,10 @@ public final class RuleKit {
 	@Form.Parameters(min = 3, max = -1)
 	private static final class $Success extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final var arg1 = eval.apply(args.car());
-			final int arg2 = eval.sInt(args.get(1));
-			final var arg3 = args.cdr(2).map(eval);
-			final var keys = arg3.stream().toArray();
-			final var item = arg1.as(Item.class);
-			return new Success(item, arg2, keys);
+			final Item item = eval.apply(args.get(0)).value(Item.class);
+			final int score = eval.apply(args.get(1)).ival();
+			final var mults = args.cdr(2).map(eval).stream();
+			return new Success(item, score, mults.toArray());
 		}
 	}
 
@@ -477,9 +211,9 @@ public final class RuleKit {
 	@Form.Parameters(min = 2, max = 2)
 	private static final class $Failure extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final var item = eval.apply(args.car());
-			final var text = eval.text(args.get(1));
-			return new Failure(item.as(Item.class), text);
+			final Item item = eval.apply(args.get(0)).value(Item.class);
+			final String ms = eval.apply(args.get(1)).text();
+			return new Failure(item, ms);
 		}
 	}
 
@@ -511,7 +245,7 @@ public final class RuleKit {
 	@Form.Parameters(min = 1, max = 1)
 	private static final class $Rcvd extends Form {
 		public Object apply(Cons args, Eval eval) {
-			return eval.apply(args.car()).as(Item.class).getRcvd();
+			return eval.apply(args.car()).value(Item.class).getRcvd();
 		}
 	}
 
@@ -527,7 +261,7 @@ public final class RuleKit {
 	@Form.Parameters(min = 1, max = 1)
 	private static final class $Sent extends Form {
 		public Object apply(Cons args, Eval eval) {
-			return eval.apply(args.car()).as(Item.class).getSent();
+			return eval.apply(args.car()).value(Item.class).getSent();
 		}
 	}
 
@@ -544,10 +278,10 @@ public final class RuleKit {
 	private static final class $GetField extends Form {
 		public Object apply(Cons args, Eval eval) {
 			final var tuple = eval.apply(args.car());
-			final var space = eval.text(args.get(1));
-			final var local = eval.text(args.get(2));
+			final var space = eval.apply(args.get(1)).text();
+			final var local = eval.apply(args.get(2)).text();
 			final var qname = new QName(space, local);
-			return tuple.as(Tuple.class).value(qname);
+			return tuple.value(Tuple.class).value(qname);
 		}
 	}
 
@@ -563,12 +297,12 @@ public final class RuleKit {
 	@Form.Parameters(min = 4, max = 4)
 	private static final class $SetField extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final var tuple = eval.apply(args.get(0));
-			final var space = eval.text(args.get(1));
-			final var local = eval.text(args.get(2));
-			final var value = eval.text(args.get(3));
+			final var tuple = eval.apply(args.car());
+			final var space = eval.apply(args.get(1)).text();
+			final var local = eval.apply(args.get(2)).text();
+			final var value = eval.apply(args.get(3)).text();
 			final var qname = new QName(space, local);
-			return tuple.as(Tuple.class).set(qname, value);
+			return tuple.value(Tuple.class).set(qname, value);
 		}
 	}
 
@@ -584,11 +318,11 @@ public final class RuleKit {
 	@Form.Parameters(min = 2, max = 2)
 	private static final class $Hour extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final var time = eval.apply(args.get(0));
-			final var text = eval.text(args.get(1));
-			final var date = time.as(ZonedDateTime.class);
-			ZoneId zone = ZoneId.of(text, ZoneId.SHORT_IDS);
-			return date.withZoneSameInstant(zone).getHour();
+			final var head = eval.apply(args.get(0));
+			final var name = eval.apply(args.get(1)).text();
+			final var time = head.value(ZonedDateTime.class);
+			ZoneId zone = ZoneId.of(name, ZoneId.SHORT_IDS);
+			return time.withZoneSameInstant(zone).getHour();
 		}
 	}
 
@@ -604,13 +338,13 @@ public final class RuleKit {
 	@Form.Parameters(min = 2, max = 3)
 	private static final class $City extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final String base = eval.text(args.car());
-			final String code = eval.text(args.get(1));
-			final City city = City.forCode(base, code);
+			final var base = eval.apply(args.get(0)).text();
+			final var code = eval.apply(args.get(1)).text();
+			final var city = City.forCode(base, code);
 			if(city == null) return null;
 			if(args.size() == 2) return city.getFullName();
-			int v = eval.real(args.get(2)).intValueExact();
-			return city.getFullPath().get(v);
+			final int idx = eval.apply(args.get(2)).ival();
+			return city.getFullPath().get(idx);
 		}
 	}
 
@@ -627,13 +361,13 @@ public final class RuleKit {
 	@Form.Parameters(min = 4, max = 4)
 	private static final class $Date extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final int y = eval.sInt(args.get(0));
-			final int m = eval.sInt(args.get(1));
-			final int w = eval.sInt(args.get(2));
-			final int n = eval.sInt(args.get(3));
-			final var a = DayOfWeek.of(w);
-			final var b = dayOfWeekInMonth(n, a);
-			return LocalDate.of(y, m, 1).with(b);
+			final int y = eval.apply(args.get(0)).ival();
+			final var m = eval.apply(args.get(1)).text();
+			final var w = eval.apply(args.get(2)).text();
+			final int n = eval.apply(args.get(3)).ival();
+			final var week = DayOfWeek.valueOf(w);
+			var adj = TemporalAdjusters.dayOfWeekInMonth(n, week);
+			return LocalDate.of(y, Month.valueOf(m), 1).with(adj);
 		}
 	}
 }

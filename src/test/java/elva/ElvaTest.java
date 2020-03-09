@@ -47,7 +47,7 @@ public final class ElvaTest extends test.RandTest {
 		assertThat(elva.eval("#f")).isEqualTo(false);
 	}
 	@Test
-	public void testString() throws ScriptException {
+	public void testText() throws ScriptException {
 		assertThat(elva.eval("\"JA1ZLO\"")).isEqualTo("JA1ZLO");
 		assertThat(elva.eval("\"JA1ZGP\"")).isEqualTo("JA1ZGP");
 	}

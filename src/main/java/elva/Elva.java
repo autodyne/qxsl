@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StringReader;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -51,64 +52,24 @@ public final class Elva extends AbstractScriptEngine {
 	}
 
 	/**
-	 * LISP処理系で事前に定義された関数や値を保持する環境を作成します。
+	 * LISP処理系が内蔵する関数や値を参照する環境を返します。
 	 *
 	 * @return 環境
 	 */
 	public final Bindings createBindings() {
-		return new Nest(null, null);
-	}
-
-	/**
-	 * 新たに構築した環境で指定された入力からLISPの式を読み取って評価します。
-	 *
-	 * @param r 式を読み取るリーダ
-	 * @param c 文脈
-	 * @return LISPの式を評価した結果
-	 *
-	 * @throws ScriptException 読み取り、式の構文上または実行時に発生した例外
-	 */
-	@Override
-	public Object eval(Reader r, ScriptContext c) throws ScriptException {
-		try(BufferedReader br = new BufferedReader(r)) {
-			return eval(br.lines().collect(Collectors.joining("\n")), c);
-		} catch (IOException ex) {
-			throw new ScriptException(ex);
-		}
-	}
-
-	/**
-	 * 新たに構築した環境で指定された入力からLISPの式を読み取って評価します。
-	 *
-	 * @param s 式
-	 * @param c 文脈
-	 * @return LISPの最後の式の値
-	 *
-	 * @throws ScriptException 式の構文上または実行時に発生した例外
-	 */
-	@Override
-	public Object eval(String s, ScriptContext c) throws ScriptException {
-		final var glob = new Nest(c.getBindings(GLOBAL_SCOPE), root);
-		final var self = new Nest(c.getBindings(ENGINE_SCOPE), glob);
-		final var eval = new Eval(self);
-		try {
-			final Stream<Sexp> vals = scan(s).stream().map(eval);
-			return vals.reduce((h, t) -> t).orElse(null).value();
-		} catch (ElvaRuntimeException ex) {
-			throw ex.toScriptException();
-		}
+		return new Nest(null);
 	}
 
 	/**
 	 * 指定された入力からLISPの式を読み取ります。
 	 *
-	 * @param r 式を読み取るリーダ
+	 * @param reader 式を読み取るリーダ
 	 * @return LISPの式を読み取った結果
 	 *
 	 * @throws ScriptException 式の構文上の例外
 	 */
-	public final List<Sexp> scan(Reader r) throws ScriptException {
-		try(BufferedReader br = new BufferedReader(r)) {
+	public final List<Sexp> scan(Reader reader) throws ScriptException {
+		try(BufferedReader br = new BufferedReader(reader)) {
 			return scan(br.lines().collect(Collectors.joining("\n")));
 		} catch (IOException ex) {
 			throw new ScriptException(ex);
@@ -118,15 +79,15 @@ public final class Elva extends AbstractScriptEngine {
 	/**
 	 * 指定された入力からLISPの式を読み取ります。
 	 *
-	 * @param s 式
+	 * @param source 式
 	 * @return LISPの式を読み取った結果
 	 *
 	 * @throws ScriptException 式の構文上の例外
 	 */
-	public final List<Sexp> scan(String s) throws ScriptException {
+	public final List<Sexp> scan(String source) throws ScriptException {
 		final List<Sexp> exps = new ArrayList<>();
 		try {
-			final var scan = new Scanner(s);
+			final Scanner scan = new Scanner(source);
 			while(scan.hasNext()) exps.add(scan.next());
 			return exps;
 		} catch (IOException ex) {
@@ -208,12 +169,12 @@ public final class Elva extends AbstractScriptEngine {
 		public final Sexp next() throws ElvaLexicalException {
 			final String atom = allTokens.get(cursor++);
 			if(atom.equals("(")) return nextList();
-			if(atom.matches("\".*\"")) return new Atom(escape(atom));
-			if(atom.equals("'"))  return Symbol.Quote.QUOTE.quote(next());
-			if(atom.equals("`"))  return Symbol.Quote.QUASI.quote(next());
-			if(atom.equals(","))  return Symbol.Quote.UQUOT.quote(next());
-			if(atom.equals(",@")) return Symbol.Quote.UQSPL.quote(next());
-			if(!atom.equals(")")) return Sexp.wrap(asSymbolOrReal(atom));
+			if(atom.matches("\".*\"")) return escape(atom);
+			if(atom.equals("'"))  return Name.Quote.QUOTE.quote(next());
+			if(atom.equals("`"))  return Name.Quote.QUASI.quote(next());
+			if(atom.equals(","))  return Name.Quote.UQUOT.quote(next());
+			if(atom.equals(",@")) return Name.Quote.UQSPL.quote(next());
+			if(!atom.equals(")")) return Sexp.wrap(asNameOrReal(atom));
 			throw new ElvaLexicalException("isolated ')'", this);
 		}
 
@@ -223,7 +184,7 @@ public final class Elva extends AbstractScriptEngine {
 		 * @param text 文字列
 		 * @return 処理された文字列
 		 */
-		private final String escape(String text) {
+		private final Text escape(String text) {
 			text = text.substring(1, text.length() - 1);
 			text = text.replace("\\t", "\t");
 			text = text.replace("\\b", "\b");
@@ -232,7 +193,7 @@ public final class Elva extends AbstractScriptEngine {
 			text = text.replace("\\f", "\f");
 			text = text.replace("\\\"", "\"");
 			text = text.replace("\\\\", "\\");
-			return text;
+			return new Text(text);
 		}
 
 		/**
@@ -241,12 +202,12 @@ public final class Elva extends AbstractScriptEngine {
 		 * @param atom アトム式
 		 * @return 実数値または名前
 		 */
-		private final Object asSymbolOrReal(String atom) {
+		private final Object asNameOrReal(String atom) {
 			try {
 				if(atom.contains(".")) return new BigDecimal(atom);
 				return BigDecimal.valueOf(+Integer.parseInt(atom));
 			} catch (NumberFormatException ex) {
-				return new Symbol(atom);
+				return new Name(atom);
 			}
 		}
 
@@ -356,5 +317,41 @@ public final class Elva extends AbstractScriptEngine {
 		public final ScriptException toScriptException() {
 			return new ScriptException(this.getMessage());
 		}
+	}
+
+	/**
+	 * 新たに構築した環境で指定された入力からLISPの式を読み取って評価します。
+	 *
+	 * @param r 式を読み取るリーダ
+	 * @param c 文脈
+	 * @return LISPの式を評価した結果
+	 *
+	 * @throws ScriptException 読み取り、式の構文上または実行時に発生した例外
+	 */
+	@Override
+	public Object eval(Reader r, ScriptContext c) throws ScriptException {
+		final Nest glob = new Nest(root).merge(c.getBindings(GLOBAL_SCOPE));
+		final Nest self = new Nest(glob).merge(c.getBindings(ENGINE_SCOPE));
+		final Eval eval = new Eval(self);
+		try {
+			final Stream<Sexp> vals = scan(r).stream().map(eval);
+			return vals.reduce((h, t) -> t).orElse(null).value();
+		} catch (ElvaRuntimeException ex) {
+			throw ex.toScriptException();
+		}
+	}
+
+	/**
+	 * 新たに構築した環境で指定された入力からLISPの式を読み取って評価します。
+	 *
+	 * @param s 式
+	 * @param c 文脈
+	 * @return LISPの最後の式の値
+	 *
+	 * @throws ScriptException 式の構文上または実行時に発生した例外
+	 */
+	@Override
+	public Object eval(String s, ScriptContext c) throws ScriptException {
+		return eval(new StringReader(s), c);
 	}
 }

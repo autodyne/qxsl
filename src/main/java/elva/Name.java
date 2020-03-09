@@ -8,14 +8,14 @@ package elva;
 import java.io.Serializable;
 
 /**
- * LISP処理系で使用される識別子の実装です。
+ * LISP処理系で使用される識別子のための専用のアトムの実装です。
  *
  *
  * @author 無線部開発班
  *
  * @since 2017/02/18
  */
-public final class Symbol implements Serializable {
+public final class Name extends Sexp implements Serializable {
 	private final String name;
 
 	/**
@@ -23,8 +23,18 @@ public final class Symbol implements Serializable {
 	 *
 	 * @param name 名前
 	 */
-	public Symbol(String name) {
+	public Name(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * この識別子の値を返します。
+	 *
+	 * @return 値
+	 */
+	@Override
+	public final Object value() {
+		return this;
 	}
 
 	/**
@@ -56,8 +66,8 @@ public final class Symbol implements Serializable {
 	 */
 	@Override
 	public final boolean equals(Object obj) {
-		if(!Symbol.class.isInstance(obj)) return false;
-		return ((Symbol) obj).name.equals(this.name);
+		if(!Name.class.isInstance(obj)) return false;
+		return ((Name) obj).name.equals(this.name);
 	}
 
 	/**
@@ -74,9 +84,9 @@ public final class Symbol implements Serializable {
 		QUASI ("quasiquote"),
 		UQSPL ("unquote-splicing");
 
-		private final Symbol name;
+		private final Name name;
 		private Quote(String name) {
-			this.name = new Symbol(name);
+			this.name = new Name(name);
 		}
 
 		/**
@@ -86,7 +96,7 @@ public final class Symbol implements Serializable {
 		 * @return 引用式
 		 */
 		public final Cons quote(Sexp sexp) {
-			return Cons.cons(new Atom(name), sexp);
+			return Cons.cons(this.name, sexp);
 		}
 
 		/**
@@ -98,5 +108,16 @@ public final class Symbol implements Serializable {
 		public final boolean is(Sexp sexp) {
 			return Cons.cast(sexp).car().value().equals(name);
 		}
+	}
+
+	/**
+	 * 指定された名前の演算子を引数に適用する式を返します。
+	 *
+	 * @param name 演算子の名前
+	 * @param args 被演算子
+	 * @return 演算子及び被演算子のリスト
+	 */
+	public static final Cons list(String name, Object...args) {
+		return new Cons(new Name(name), Cons.wrap(args));
 	}
 }

@@ -5,16 +5,20 @@
 *****************************************************************************/
 package elva;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BinaryOperator;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
+import static elva.Elva.ElvaRuntimeException;
 
 /**
  * LISP処理系内部で利用される不変リストの実装です。
@@ -280,13 +284,24 @@ public final class Cons extends Sexp implements Iterable<Sexp> {
 	}
 
 	/**
-	 * このリストが識別子のみで構成されるか確認します。
+	 * このリストを指定された型のリストに変換します。
 	 *
-	 * @return 識別子以外の要素を含む場合にtrue
+	 * @param type 型
+	 * @param <V> 要素の総称型
+	 *
+	 * @return 総称型が指定されたリスト
+	 *
+	 * @throws ElvaRuntimeException 型検査により発生する例外
 	 */
-	public final boolean containsOnlySymbols() {
-		for(Sexp elem: this) if(!elem.isSymbol()) return false;
-		return true;
+	public final <V extends Sexp> List<V> toList(Class<V> type) {
+		try {
+			final var list = new ArrayList<V>(this.size());
+			for(Sexp sexp: this) list.add(type.cast(sexp));
+			return list;
+		} catch(ClassCastException ex) {
+			final var temp = "%s list required but %s found";
+			throw new ElvaRuntimeException(temp, type, this);
+		}
 	}
 
 	/**

@@ -5,7 +5,6 @@
 *****************************************************************************/
 package qxsl.ruler;
 
-import javax.script.ScriptException;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,21 +19,25 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public final class ContestTest extends test.RandTest {
 	private final Contest ja1;
-	private ContestTest() throws ScriptException {
-		ja1 = new RuleKit().contest("allja1.lisp");
+	private ContestTest() throws Exception {
+		ja1 = new RuleKit().contest(Contest.ALLJA1);
 	}
+
 	@Test
 	public void testForName() {
 		assertThat(ja1).isNotNull();
 	}
+
 	@Test
 	public void testGetName() {
 		assertThat(ja1.getName()).isNotBlank();
 	}
+
 	@Test
 	public void testIterator() {
 		assertThat(ja1.iterator()).hasNext();
 	}
+
 	@Test
 	public void testToString() {
 		assertThat(ja1).hasToString(ja1.getName());
