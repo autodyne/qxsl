@@ -26,6 +26,7 @@ import static java.util.stream.IntStream.range;
 public final class Summary implements java.io.Serializable {
 	private final List<Success> accepted;
 	private final List<Failure> rejected;
+	private int total = 0;
 
 	/**
 	 * 有効な交信と無効な交信を指定してサマリを構築します。
@@ -69,6 +70,26 @@ public final class Summary implements java.io.Serializable {
 	 */
 	public final int score() {
 		return accepted.stream().mapToInt(Success::score).sum();
+	}
+
+	/**
+	 * この交信記録の総得点を返します。
+	 *
+	 * @return 総得点
+	 */
+	public final int total() {
+		return this.total;
+	}
+
+	/**
+	 * この交信記録の総得点を確定します。
+	 *
+	 * @param section 部門
+	 * @return この交信記録
+	 */
+	protected final Summary confirm(Section section) {
+		this.total = section.getContest().score(this);
+		return this;
 	}
 
 	/**

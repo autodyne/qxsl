@@ -34,10 +34,10 @@ final class Root extends SimpleBindings {
 	 * システム関数を定義するスコープを構築します。
 	 */
 	public Root() {
-		this.put("#t", true);
-		this.put("#f", false);
 		this.put("nil", Cons.NIL);
 		this.put("null", null);
+		this.put(Bool.T.toString(), Bool.T);
+		this.put(Bool.F.toString(), Bool.F);
 
 		/*
 		 * syntax operation
@@ -56,6 +56,8 @@ final class Root extends SimpleBindings {
 		 * variable assignment
 		 */
 		this.put(new $Set());
+		this.put(new $Setq());
+		this.put(new $Let());
 
 		/*
 		 * evaluation
@@ -69,6 +71,8 @@ final class Root extends SimpleBindings {
 		this.put(new $List());
 		this.put(new $Car());
 		this.put(new $Cdr());
+		this.put(new $Cadr());
+		this.put(new $Cddr());
 		this.put(new $Nth());
 		this.put(new $SubSeq());
 		this.put(new $Length());
@@ -78,6 +82,7 @@ final class Root extends SimpleBindings {
 		 * checking equality
 		 */
 		this.put(new $Equal());
+		this.put(new $Nil$());
 		this.put(new $Null$());
 
 		/*
@@ -90,6 +95,7 @@ final class Root extends SimpleBindings {
 		 */
 		this.put(new $And());
 		this.put(new $Or());
+		this.put(new $Xor());
 		this.put(new $Not());
 
 		/*
@@ -245,9 +251,7 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 1, max = -1)
 	private static final class $Progn extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final var list = args.stream().map(eval);
-			final var last = list.reduce((h,t) -> t);
-			return last.orElse(Cons.NIL);
+			return args.map(eval).last();
 		}
 	}
 
@@ -265,8 +269,46 @@ final class Root extends SimpleBindings {
 		public Object apply(Cons args, Eval eval) {
 			final var key = eval.apply(args.get(0));
 			final var val = eval.apply(args.get(1));
-			eval.locals.put(key.value(Name.class), val);
+			eval.locals.put(key.name(), val);
 			return val;
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるsetq関数です。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2020/03/10
+	 */
+	@Form.Native("setq")
+	@Form.Parameters(min = 2, max = 2)
+	private static final class $Setq extends Form {
+		public Object apply(Cons args, Eval eval) {
+			final var val = eval.apply(args.get(1));
+			eval.locals.put(args.car().name(), val);
+			return val;
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるlet関数です。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2020/03/10
+	 */
+	@Form.Native("let")
+	@Form.Parameters(min = 2, max = -1)
+	private static final class $Let extends Form {
+		public Object apply(Cons args, Eval eval) {
+			final Eval local = new Eval(eval);
+			final Atom $setq = new Atom(new $Setq());
+			final Cons value = Cons.cast(args.car());
+			local.apply(new Cons($setq, value));
+			return args.cdr().map(local).last();
 		}
 	}
 
@@ -351,6 +393,38 @@ final class Root extends SimpleBindings {
 	private static final class $Cdr extends Form {
 		public Object apply(Cons args, Eval eval) {
 			return eval.apply(args.car()).cons().cdr();
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるcadr関数です。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2020/03/10
+	 */
+	@Form.Native("cadr")
+	@Form.Parameters(min = 1, max = 1)
+	private static final class $Cadr extends Form {
+		public Object apply(Cons args, Eval eval) {
+			return eval.apply(args.car()).cons().get(1);
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるcddr関数です。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2020/03/10
+	 */
+	@Form.Native("cddr")
+	@Form.Parameters(min = 1, max = 1)
+	private static final class $Cddr extends Form {
+		public Object apply(Cons args, Eval eval) {
+			return eval.apply(args.car()).cons().cdr(2);
 		}
 	}
 
@@ -444,6 +518,22 @@ final class Root extends SimpleBindings {
 	}
 
 	/**
+	 * LISP処理系で事前に定義されるnil?関数です。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2020/03/10
+	 */
+	@Form.Native("nil?")
+	@Form.Parameters(min = 1, max = 1)
+	private static final class $Nil$ extends Form {
+		public Object apply(Cons args, Eval eval) {
+			return Cons.NIL.equals(eval.apply(args.car()));
+		}
+	}
+
+	/**
 	 * LISP処理系で事前に定義されるnull?関数です。
 	 *
 	 *
@@ -507,6 +597,24 @@ final class Root extends SimpleBindings {
 		public Object apply(Cons args, Eval eval) {
 			for(var v: args) if(eval.apply(v).bool()) return true;
 			return false;
+		}
+	}
+
+	/**
+	 * LISP処理系で事前に定義されるxor関数です。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2020/03/10
+	 */
+	@Form.Native("xor")
+	@Form.Parameters(min = 2, max = 2)
+	private static final class $Xor extends Form {
+		public Object apply(Cons args, Eval eval) {
+			final var v1 = eval.apply(args.get(0)).bool();
+			final var v2 = eval.apply(args.get(1)).bool();
+			return v1 ^ v2;
 		}
 	}
 
@@ -912,13 +1020,11 @@ final class Root extends SimpleBindings {
 	@Form.Parameters(min = 1, max = 1)
 	private static final class $Load extends Form {
 		public Object apply(Cons args, Eval eval) {
-			final var elva = new Elva();
 			final var name = eval.apply(args.car()).text();
 			final var load = Root.class.getClassLoader();
 			try (var is = load.getResourceAsStream(name)) {
 				var isr = new InputStreamReader(is, UTF_8);
-				final var list = elva.scan(isr).stream().map(eval);
-				return list.reduce((h, t)->t).orElse(null).value();
+				return new Elva().scan(isr).map(eval).last();
 			} catch (IOException | ScriptException ex) {
 				final String msg = "failed in loading %s: %s";
 				throw new ElvaRuntimeException(msg, name, ex);

@@ -90,14 +90,14 @@ import java.io.StringReader
 import qxsl.ruler.{Contest,RuleKit,Section,Summary}
 
 val contest: Contest = new RuleKit().contest(new StringReader("""
-(contest "CQ AWESOME CONTEST"
-  (syntax (score calls mults) `(* scores (length quote ,mults)))
-  (section "CW 14MHz SINGLE-OP" "CW14SIN" (verify (CW? 14MHz?)))
-  (section "CW 21MHz SINGLE-OP" "CW21SIN" (verify (CW? 21MHz?)))
-  (section "CW 28MHz SINGLE-OP" "CW28SIN" (verify (CW? 28MHz?)))
-  (section "PH 14MHz SINGLE-OP" "PH14SIN" (verify (PH? 14MHz?)))
-  (section "PH 21MHz SINGLE-OP" "PH21SIN" (verify (PH? 21MHz?)))
-  (section "PH 28MHz SINGLE-OP" "PH28SIN" (verify (PH? 28MHz?))))"""))
+(defmacro scoring (score calls mults) `(* score (length ',mults)))
+(setq test (contest "CQ AWESOME CONTEST" scoring))
+(section test "CW 14MHz SingleOP" "SinCW14" (verify (CW? 14MHz?)))
+(section test "CW 21MHz SingleOP" "SinCW21" (verify (CW? 21MHz?)))
+(section test "CW 28MHz SingleOP" "SinCW28" (verify (CW? 28MHz?)))
+(section test "PH 14MHz SingleOP" "SinPH14" (verify (PH? 14MHz?)))
+(section test "PH 21MHz SingleOP" "SinPH21" (verify (PH? 21MHz?)))
+(section test "PH 28MHz SingleOP" "SinPH28" (verify (PH? 28MHz?)))"""))
 
 val section: Section = contest.getSection("CW 14MHz SINGLE-OP")
 val summary: Summary = section.summarize(table)

@@ -54,12 +54,11 @@ public final class ElvaTest extends test.RandTest {
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void test(String source) throws ScriptException {
-		final String str = String.format("(list %s)", source);
-		if(!elva.scan(source).isEmpty()) {
-			final var sexps = (Cons) elva.eval(str);
-			assertThat(sexps).hasSize(2);
-			final Object val1 = sexps.get(0);
-			final Object val2 = sexps.get(1);
+		final Cons cons = elva.scan(source);
+		if(cons.size() > 0) {
+			assertThat(cons).hasSize(2);
+			final var val1 = elva.eval(String.valueOf(cons.get(0)));
+			final var val2 = elva.eval(String.valueOf(cons.get(1)));
 			assertThat(val1).isEqualTo(val2);
 		}
 	}

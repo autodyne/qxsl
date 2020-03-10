@@ -45,6 +45,15 @@ public final class Eval implements UnaryOperator<Sexp> {
 	}
 
 	/**
+	 * 指定された評価器を親に持つ評価器を構築します。
+	 *
+	 * @param outer 外側の評価器
+	 */
+	public Eval(Eval outer) {
+		this.locals = new Nest(outer.locals);
+	}
+
+	/**
 	 * 指定された式をアトムまたは関数適用として評価します。
 	 *
 	 * @param sexp 式

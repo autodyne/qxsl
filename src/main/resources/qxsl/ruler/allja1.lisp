@@ -100,9 +100,9 @@
 
 ; scoring
 (defmacro 得点 (score calls mults names)
-	`(let (
-		(mults (length (quote ,mults)))
-		(names (length (quote ,names))))
+	`(progn
+		(setq mults (length (quote ,mults)))
+		(setq names (length (quote ,names)))
 		(ceiling (/ (* ,score mults) names))))
 
 ; validation routine

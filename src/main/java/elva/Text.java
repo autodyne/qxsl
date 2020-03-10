@@ -5,7 +5,6 @@
 *****************************************************************************/
 package elva;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -34,7 +33,7 @@ public final class Text extends Sexp implements Comparable<Text> {
 	 * @return 値
 	 */
 	@Override
-	public final Object value() {
+	public final String value() {
 		return value;
 	}
 
@@ -81,6 +80,64 @@ public final class Text extends Sexp implements Comparable<Text> {
 	 */
 	@Override
 	public final String toString() {
-		return String.format("\"%s\"", value);
+		return encode(this);
+	}
+
+	/**
+	 * 指定された文字列のエスケープ処理を行います。
+	 *
+	 * @param text 文字列
+	 * @return 処理された文字列
+	 */
+	public static final String encode(Text text) {
+		String code = text.value;
+		code = code.replace("\\", "\\\\");
+		code = code.replace("\"", "\\\"");
+		code = code.replace("\t", "\\t");
+		code = code.replace("\b", "\\b");
+		code = code.replace("\n", "\\n");
+		code = code.replace("\r", "\\r");
+		code = code.replace("\f", "\\f");
+		return "\"".concat(code).concat("\"");
+	}
+
+	/**
+	 * 指定された文字列のエスケープ解除を行います。
+	 *
+	 * @param text 文字列
+	 * @return 処理された文字列
+	 */
+	public static final Text decode(String text) {
+		text = text.substring(1, text.length() - 1);
+		text = text.replace("\\t", "\t");
+		text = text.replace("\\b", "\b");
+		text = text.replace("\\n", "\n");
+		text = text.replace("\\r", "\r");
+		text = text.replace("\\f", "\f");
+		text = text.replace("\\\"", "\"");
+		text = text.replace("\\\\", "\\");
+		return new Text(text);
+	}
+
+	/**
+	 * 指定された値をこのアトム型で包みます。
+	 *
+	 * @param sexp 値
+	 * @return 文字列のアトム
+	 *
+	 * @throws ClassCastException 型検査の例外
+	 */
+	public static final Text asText(Object sexp) {
+		return new Text(String.class.cast(sexp));
+	}
+
+	/**
+	 * 指定された値がこのアトム型に対応するか確認します。
+	 *
+	 * @param sexp 値
+	 * @return 文字列型の場合はtrue
+	 */
+	public static final boolean support(Object sexp) {
+		return String.class.isInstance(sexp);
 	}
 }

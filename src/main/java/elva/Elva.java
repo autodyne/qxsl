@@ -18,7 +18,6 @@ import java.util.StringJoiner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.script.*;
 
 import static javax.script.ScriptContext.ENGINE_SCOPE;
@@ -68,7 +67,7 @@ public final class Elva extends AbstractScriptEngine {
 	 *
 	 * @throws ScriptException 式の構文上の例外
 	 */
-	public final List<Sexp> scan(Reader reader) throws ScriptException {
+	public final Cons scan(Reader reader) throws ScriptException {
 		try(BufferedReader br = new BufferedReader(reader)) {
 			return scan(br.lines().collect(Collectors.joining("\n")));
 		} catch (IOException ex) {
@@ -84,15 +83,13 @@ public final class Elva extends AbstractScriptEngine {
 	 *
 	 * @throws ScriptException 式の構文上の例外
 	 */
-	public final List<Sexp> scan(String source) throws ScriptException {
-		final List<Sexp> exps = new ArrayList<>();
+	public final Cons scan(String source) throws ScriptException {
 		try {
+			final List<Sexp> seq = new ArrayList<>();
 			final Scanner scan = new Scanner(source);
-			while(scan.hasNext()) exps.add(scan.next());
-			return exps;
-		} catch (IOException ex) {
-			throw new ScriptException(ex);
-		} catch (ElvaLexicalException ex) {
+			while(scan.hasNext()) seq.add(scan.next());
+			return Cons.cons(seq);
+		} catch (IOException | ElvaLexicalException ex) {
 			throw new ScriptException(ex.getMessage());
 		}
 	}
@@ -169,31 +166,13 @@ public final class Elva extends AbstractScriptEngine {
 		public final Sexp next() throws ElvaLexicalException {
 			final String atom = allTokens.get(cursor++);
 			if(atom.equals("(")) return nextList();
-			if(atom.matches("\".*\"")) return escape(atom);
+			if(atom.matches("\".*\"")) return Text.decode(atom);
 			if(atom.equals("'"))  return Name.Quote.QUOTE.quote(next());
 			if(atom.equals("`"))  return Name.Quote.QUASI.quote(next());
 			if(atom.equals(","))  return Name.Quote.UQUOT.quote(next());
 			if(atom.equals(",@")) return Name.Quote.UQSPL.quote(next());
 			if(!atom.equals(")")) return Sexp.wrap(asNameOrReal(atom));
 			throw new ElvaLexicalException("isolated ')'", this);
-		}
-
-		/**
-		 * 指定された文字列のエスケープ処理を行います。
-		 *
-		 * @param text 文字列
-		 * @return 処理された文字列
-		 */
-		private final Text escape(String text) {
-			text = text.substring(1, text.length() - 1);
-			text = text.replace("\\t", "\t");
-			text = text.replace("\\b", "\b");
-			text = text.replace("\\n", "\n");
-			text = text.replace("\\r", "\r");
-			text = text.replace("\\f", "\f");
-			text = text.replace("\\\"", "\"");
-			text = text.replace("\\\\", "\\");
-			return new Text(text);
 		}
 
 		/**
@@ -334,8 +313,7 @@ public final class Elva extends AbstractScriptEngine {
 		final Nest self = new Nest(glob).merge(c.getBindings(ENGINE_SCOPE));
 		final Eval eval = new Eval(self);
 		try {
-			final Stream<Sexp> vals = scan(r).stream().map(eval);
-			return vals.reduce((h, t) -> t).orElse(null).value();
+			return scan(r).map(eval).last().value();
 		} catch (ElvaRuntimeException ex) {
 			throw ex.toScriptException();
 		}

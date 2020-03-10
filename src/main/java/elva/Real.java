@@ -5,7 +5,6 @@
 *****************************************************************************/
 package elva;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -82,7 +81,7 @@ public final class Real extends Sexp implements Comparable<Real> {
 	 */
 	@Override
 	public final String toString() {
-		return Objects.toString(value);
+		return String.valueOf(value);
 	}
 
 	/**
@@ -192,5 +191,27 @@ public final class Real extends Sexp implements Comparable<Real> {
 	 */
 	private final BigDecimal dToBD(Number value) {
 		return BigDecimal.valueOf(value.doubleValue());
+	}
+
+	/**
+	 * 指定された値をこのアトム型で包みます。
+	 *
+	 * @param sexp 値
+	 * @return 実数のアトム
+	 *
+	 * @throws ClassCastException 型検査の例外
+	 */
+	public static final Real asReal(Object sexp) {
+		return new Real(Number.class.cast(sexp));
+	}
+
+	/**
+	 * 指定された値がこのアトム型に対応するか確認します。
+	 *
+	 * @param sexp 値
+	 * @return 数値型の場合はtrue
+	 */
+	public static final boolean support(Object sexp) {
+		return Number.class.isInstance(sexp);
 	}
 }

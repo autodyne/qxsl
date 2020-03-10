@@ -13,11 +13,22 @@
 (progn 11) 11
 (progn 11 45) 45
 (progn 11 45 14) 14
+(progn (+ 364 364)) 728
 
 ; set
 (set 'foo 13) 13
 (progn (set 'foo 29) (set 'bar 97) foo) 29
 (progn (set 'foo 29) (set 'bar 97) bar) 97
+
+; setq
+(setq foo 19) 19
+(progn (setq foo 39) (setq bar 93) foo) 39
+(progn (setq foo 39) (setq bar 93) bar) 93
+
+; let
+(let (foo 810) foo) 810
+(let (bar 364) bar (+ bar bar)) 728
+(let (bar 364) bar (+ bar bar) (* bar bar)) 132496
 
 ; eval
 (eval 10) 10
@@ -26,14 +37,15 @@
 
 ; cons
 (cons 1 ()) (list 1)
-(cons 2 (list 3 4)) (list 2 3 4)
+(cons 2 (list 3)) (list 2 3)
+(cons 4 (list 5 6)) (list 4 5 6)
 
 ; list
 (list) '()
 (list 1) '(1)
 (list 3 7) '(3 7)
-(list 8 1 0) '(8 1 0)
-(list 3 6 4) '(3 6 4)
+(list 8 (list 1 0)) '(8 (1 0))
+(list 3 (list 6) 4) '(3 (6) 4)
 
 ; car
 (car (list 'HEAD)) 'HEAD
@@ -44,6 +56,14 @@
 (cdr (list 'HEAD)) ()
 (cdr (list 'HEAD 'TAIL)) (list 'TAIL)
 (cdr (list 'HEAD 'NEXT 'TAIL)) (list 'NEXT 'TAIL)
+
+; cadr
+(cadr (list 'HEAD 'TAIL)) 'TAIL
+(cadr (list 'HEAD 'NEXT 'TAIL)) 'NEXT
+
+; cddr
+(cddr (list 'HEAD 'TAIL)) ()
+(cddr (list 'HEAD 'NEXT 'TAIL)) (list 'TAIL)
 
 ; nth
 (nth 0 (list 11 4 5 14)) 11
@@ -79,7 +99,15 @@
 (equal (+ 1 2) (+ 3 0)) #t
 (equal (+ 4 5) (+ 6 7)) #f
 
+; nil?
+(nil? ()) #t
+(nil? 810) #f
+(nil? null) #f
+(nil? (car (list null))) #f
+(nil? (cdr (list null))) #t
+
 ; null?
+(null? ()) #f
 (null? 810) #f
 (null? null) #t
 (null? (car (list null null))) #t
@@ -104,6 +132,12 @@
 (or (equal 364 364) (equal 114 514)) #t
 (or (equal 114 514) (equal 114 514)) #f
 (or (equal 114 514) (equal 364 364)) #t
+
+; xor
+(xor (equal 364 364) (equal 364 364)) #f
+(xor (equal 364 364) (equal 114 514)) #t
+(xor (equal 114 514) (equal 114 514)) #f
+(xor (equal 114 514) (equal 364 364)) #t
 
 ; not
 (not (equal 114 514)) #t
@@ -234,7 +268,8 @@
 ((lambda (x y) (* x y)) 114 514) 58596
 
 ; syntax
-(progn (set 'setq (syntax (n v) `(set ',n ,v))) (setq MUR "KMR") MUR) "KMR"
+(((syntax (pars body) `(lambda ,pars ,body)) (x y) (+ x y)) 114 514) 628
+(((syntax (pars body) `(syntax ,pars ,body)) (x y) (+ x y)) 364 364) 728
 
 ; load
 (progn (load "qxsl/ruler/macros.lisp") (defun foo x (+ x x)) (foo 114)) 228

@@ -169,6 +169,6 @@ public abstract class Section implements Function<Item, Message> {
 			if(msg instanceof Success) acc.add((Success) msg);
 			if(msg instanceof Failure) rej.add((Failure) msg);
 		}
-		return new Summary(acc, rej);
+		return new Summary(acc, rej).confirm(this);
 	}
 }

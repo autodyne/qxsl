@@ -56,7 +56,7 @@
 
 ; band access for qxsl.org
 (defun qxsl-band it
-	(let ((freq (get-field it qxsl "band")))
+	(let (freq (get-field it qxsl "band"))
 		(cond (
 			((<=  1800 freq  1913)  1900)
 			((<=  3500 freq  3687)  3500)
@@ -68,7 +68,7 @@
 
 ; band access for adif.org
 (defun adif-band it
-	(let ((band (get-field it adif "BAND")))
+	(let (band (get-field it adif "BAND"))
 		(cond (
 			((equal band "160m")  "1900")
 			((equal band  "80m")  "3500")

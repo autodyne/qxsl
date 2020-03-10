@@ -171,6 +171,15 @@ public final class Cons extends Sexp implements Iterable<Sexp> {
 	}
 
 	/**
+	 * このリストの最後の要素を返します。
+	 *
+	 * @return 最後の要素
+	 */
+	public final Sexp last() {
+		return cdr(this.size - 1).car();
+	}
+
+	/**
 	 * このリストの部分リストを返します。
 	 *
 	 * @param head 部分リストが始まる位置

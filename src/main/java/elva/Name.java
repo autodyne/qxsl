@@ -5,7 +5,7 @@
 *****************************************************************************/
 package elva;
 
-import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * LISP処理系で使用される識別子のための専用のアトムの実装です。
@@ -15,16 +15,16 @@ import java.io.Serializable;
  *
  * @since 2017/02/18
  */
-public final class Name extends Sexp implements Serializable {
-	private final String name;
+public final class Name extends Sexp implements Comparable<Name> {
+	private final String value;
 
 	/**
 	 * 名前を指定して識別子を生成します。
 	 *
-	 * @param name 名前
+	 * @param value 名前
 	 */
-	public Name(String name) {
-		this.name = name;
+	public Name(String value) {
+		this.value = value;
 	}
 
 	/**
@@ -33,7 +33,7 @@ public final class Name extends Sexp implements Serializable {
 	 * @return 値
 	 */
 	@Override
-	public final Object value() {
+	public final Name value() {
 		return this;
 	}
 
@@ -44,7 +44,7 @@ public final class Name extends Sexp implements Serializable {
 	 */
 	@Override
 	public final String toString() {
-		return name;
+		return value;
 	}
 
 	/**
@@ -54,20 +54,31 @@ public final class Name extends Sexp implements Serializable {
 	 */
 	@Override
 	public final int hashCode() {
-		return name.hashCode();
+		return Objects.hashCode(value);
 	}
 
 	/**
 	 * この識別子とオブジェクトを比較します。
 	 * 同じ名前の識別子であれば真を返します。
 	 *
-	 * @param obj 比較対象のオブジェクト
+	 * @param atom 比較対象のオブジェクト
 	 * @return 同じ名前の識別子のみtrue
 	 */
 	@Override
-	public final boolean equals(Object obj) {
-		if(!Name.class.isInstance(obj)) return false;
-		return ((Name) obj).name.equals(this.name);
+	public final boolean equals(Object atom) {
+		if(!Name.class.isInstance(atom)) return false;
+		return ((Name) atom).value.equals(this.value);
+	}
+
+	/**
+	 * この識別子と指定された識別子を比較します。
+	 *
+	 * @param name 右側の識別子
+	 * @return 比較した結果
+	 */
+	@Override
+	public final int compareTo(Name name) {
+		return value.compareTo(name.value);
 	}
 
 	/**

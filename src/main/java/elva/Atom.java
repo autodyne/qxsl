@@ -5,7 +5,6 @@
 *****************************************************************************/
 package elva;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -16,7 +15,7 @@ import java.util.Objects;
  *
  * @since 2020/02/29
  */
-public final class Atom extends Sexp implements Serializable {
+public final class Atom extends Sexp implements Comparable<Atom> {
 	private final Object value;
 
 	/**
@@ -64,12 +63,25 @@ public final class Atom extends Sexp implements Serializable {
 	}
 
 	/**
+	 * このアトムと指定されたアトムを比較します。
+	 *
+	 * @param atom 右側のアトム
+	 * @return 比較した結果
+	 */
+	@Override
+	public final int compareTo(Atom atom) {
+		final String v1 = String.valueOf(this);
+		final String v2 = String.valueOf(atom);
+		return v1.compareTo(v2);
+	}
+
+	/**
 	 * このアトムの文字列による表現を返します。
 	 *
 	 * @return 文字列
 	 */
 	@Override
 	public final String toString() {
-		return Objects.toString(value);
+		return String.valueOf(value);
 	}
 }

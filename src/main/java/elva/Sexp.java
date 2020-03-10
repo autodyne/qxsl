@@ -114,8 +114,9 @@ public abstract class Sexp implements Serializable {
 	 */
 	public static final Sexp wrap(Object sexp) {
 		if(sexp instanceof Sexp) return (Sexp) sexp;
-		if(sexp instanceof String) return new Text((String) sexp);
-		if(sexp instanceof Number) return new Real((Number) sexp);
+		if(Text.support(sexp)) return Text.asText(sexp);
+		if(Real.support(sexp)) return Real.asReal(sexp);
+		if(Bool.support(sexp)) return Bool.asBool(sexp);
 		return new Atom(sexp);
 	}
 }
