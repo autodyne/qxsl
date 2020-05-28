@@ -5,6 +5,7 @@
 *****************************************************************************/
 package qxsl.ruler;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -145,5 +146,5 @@ public abstract class Handler implements UnaryOperator<Item> {
 	 *
 	 * @since 2020/03/09
 	 */
-	public static final String FORMAT = "qxsl/ruler/format.lisp";
+	public static final URL FORMAT = Handler.class.getResource("format.lisp");
 }

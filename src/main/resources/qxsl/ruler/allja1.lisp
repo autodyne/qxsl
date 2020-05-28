@@ -128,12 +128,6 @@
 (setq MulDG "Mul2")
 (setq MulJS "Mul3")
 
-(setq JA1 (contest "ALLJA1 TEST" 得点))
-
-; schedule
-(defun starting year (date year "JUNE" "SATURDAY" 4))
-(defun deadline year (date year "JULY" "SATURDAY" 3))
-
 ; section names
 (setq 内 "1エリア内")
 (setq 外 "1エリア外")
@@ -156,24 +150,11 @@
 (setq LBANDS    "1.9/3.5/7MHz部門")
 (setq HBANDS  "14/21/28/50MHz部門")
 
-; routines for ATS-4
-(defmacro 総合部門の選択 sects
-	`(progn
-		(setq sects (dolist (s (list ,@sects)) (split " " s)))
-		(setq corps (cond (
-			((member 団 (mapcar cadr sects)) 団)
-			((member 個 (mapcar cadr sects)) 個))))
-		(setq areas (cond (
-			((member 内 (mapcar car  sects)) 内)
-			((member 外 (mapcar car  sects)) 外))))
-		(cat areas corps 総合 "部門")))
-
-(defun 部門と運用地の検査 (部門 市区町村)
-	(xor
-		(equal (car (split " " 部門)) 外)
-		(equal (city "area" (car (split "(?<=都|道|府|県)" 市区町村)) 2) "関東")))
-
+; section name concatenation
 (defmacro cat (area opnum mode band) `(concat " " (list ,area ,opnum ,mode ,band)))
+
+; contest definition
+(setq JA1 (contest "ALLJA1 TEST" 得点))
 
 ; 1エリア内 個人 ローバンド部門
 (section JA1 (cat 内 個 電信 1.9MHz) SinLB (個検査 (SinOP? 内? 電信? 1.9MHz? LBAND?)))

@@ -7,7 +7,7 @@ package qxsl.ruler;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import qxsl.model.Item;
@@ -16,8 +16,6 @@ import qxsl.table.TableFormats;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-
-import static qxsl.ruler.Contest.ALLJA1;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -58,8 +56,8 @@ public final class ContestTest extends test.RandTest {
 	 * @return 部門と正解のリスト
 	 */
 	private static List<Arguments> scores() throws Exception {
-		final var list = new ArrayList<Arguments>();
-		try(var is = RuleKit.class.getResourceAsStream(CASES)) {
+		final var list = new LinkedList<Arguments>();
+		try(var is = Contest.class.getResourceAsStream(CASES)) {
 			final var ir = new InputStreamReader(is, UTF_8);
 			final var br = new BufferedReader(ir);
 			for(var value: br.lines().toArray(String[]::new)) {
@@ -73,11 +71,13 @@ public final class ContestTest extends test.RandTest {
 	@ParameterizedTest
 	@MethodSource("scores")
 	public void test(Score score, String fmt) throws Exception {
-		final var test = new RuleKit().contest(ALLJA1);
+		final var strm = Contest.ALLJA1.openStream();
+		final var read = new InputStreamReader(strm);
+		final var test = new RuleKit().contest(read);
 		final var sect = test.getSection(score.label);
 		final var path = "allja1.".concat(fmt);
-		try(var strm = RuleKit.class.getResourceAsStream(path)) {
-			final var list = new TableFormats().decode(strm);
+		try(var res = Contest.class.getResourceAsStream(path)) {
+			final var list = new TableFormats().decode(res);
 			final var sums = sect.summarize(list);
 			assertThat(sums.score()).isEqualTo(score.score);
 			assertThat(sums.total()).isEqualTo(score.total);

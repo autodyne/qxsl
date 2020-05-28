@@ -118,7 +118,7 @@ The following LISP programs are bundled inside the JAR file, as sample codes in 
 ## Documents
 
 - [Javadoc](https://nextzlog.github.io/qxsl/doc/index.html)
-- [History and Usage of ATS-4](https://pafelog.net/ats4.pdf)
+- [コンテスト運営を支援する自動集計システム (PDF)](https://pafelog.net/ats4.pdf)
 
 ## Maven
 

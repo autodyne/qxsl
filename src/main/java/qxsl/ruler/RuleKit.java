@@ -6,7 +6,6 @@
 package qxsl.ruler;
 
 import java.io.Reader;
-import java.io.StringReader;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
@@ -76,32 +75,6 @@ public final class RuleKit {
 	 */
 	public Contest contest(Reader reader) throws ScriptException {
 		return (Contest) new Elva().eval(reader, createBindings());
-	}
-
-	/**
-	 * 指定された{@link Handler}をライブラリから読み出します。
-	 *
-	 * @param name ハンドラを定義したファイルの名前
-	 * @return ライブラリに内蔵されたハンドラの定義
-	 *
-	 * @throws ScriptException ハンドラ定義読み取り時の例外
-	 */
-	public Handler handler(String name) throws ScriptException {
-		final var sexp = String.format("(load \"%s\")", name);
-		return handler(new StringReader(sexp));
-	}
-
-	/**
-	 * 指定された{@link Contest}をライブラリから読み出します。
-	 *
-	 * @param name コンテストを定義したファイルの名前
-	 * @return ライブラリに内蔵されたコンテストの定義
-	 *
-	 * @throws ScriptException コンテスト定義読み取り時の例外
-	 */
-	public Contest contest(String name) throws ScriptException {
-		final var sexp = String.format("(load \"%s\")", name);
-		return contest(new StringReader(sexp));
 	}
 
 	/**

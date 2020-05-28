@@ -5,6 +5,7 @@
 *****************************************************************************/
 package qxsl.ruler;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -172,5 +173,5 @@ public abstract class Contest implements Iterable<Section> {
 	 *
 	 * @since 2020/03/09
 	 */
-	public static final String ALLJA1 = "qxsl/ruler/allja1.lisp";
+	public static final URL ALLJA1 = Contest.class.getResource("allja1.lisp");
 }

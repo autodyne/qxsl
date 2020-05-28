@@ -5,6 +5,7 @@
 *****************************************************************************/
 package qxsl.ruler;
 
+import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,8 +17,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import static qxsl.extra.field.Qxsl.*;
-import static qxsl.ruler.Handler.FORMAT;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -65,7 +64,9 @@ public final class HandlerTest extends test.RandTest {
 	 * @return 交信記録の対のリスト
 	 */
 	private static List<Arguments> loadItems() throws Exception {
-		final var form = new RuleKit().handler(FORMAT);
+		final var strm = Handler.FORMAT.openStream();
+		final var read = new InputStreamReader(strm);
+		final var form = new RuleKit().handler(read);
 		final var jarl = form.handle(load("allja1.jarl"));
 		final var adis = form.handle(load("allja1.adis"));
 		final var list = new LinkedList<Arguments>();
