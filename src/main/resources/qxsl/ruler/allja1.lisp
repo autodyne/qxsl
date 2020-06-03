@@ -3,12 +3,12 @@
 (load "qxsl/ruler/format.lisp")
 
 ; UTC-JST conversion for ADIF
-(defun 時刻 it (hour (qxsl-time it) "JST"))
+(defun 時刻 it (hour (qxsl-time it) "Asia/Tokyo"))
 
 ; mode validation
-(defun 電信? it (match "(?i)CW" (qxsl-mode it)))
-(defun 電話? it (match "(?i)PH|AM|FM|[DS]SB" (qxsl-mode it)))
-(defun 離散? it (match "(?i)DG|FT4|FT8|RTTY" (qxsl-mode it)))
+(defun 電信? it (match (qxsl-mode it) "(?i)CW"))
+(defun 電話? it (match (qxsl-mode it) "(?i)PH|AM|FM|[DS]SB"))
+(defun 離散? it (match (qxsl-mode it) "(?i)DG|FT4|FT8|RTTY"))
 (defun 電電? it (or (電信? it) (電話? it)))
 (defun 総合? it (or (電電? it) (離散? it)))
 
@@ -33,9 +33,9 @@
 (defun  50MHz? it (equal (qxsl-band it) 50000))
 
 ; validation of analog/digital sections
-(defun HBAND? it (forall it (朝? 電電?   高?)))
-(defun LBAND? it (forall it (夜? 電電?   低?)))
-(defun DIGIT? it (forall it (昼? 離散? 7MHz?)))
+(defun HBAND? it (every it (朝? 電電?   高?)))
+(defun LBAND? it (every it (夜? 電電?   低?)))
+(defun DIGIT? it (every it (昼? 離散? 7MHz?)))
 (defun ABAND? it (or (HBAND? it) (LBAND? it)))
 (defun JOINT? it (or (HBAND? it) (LBAND? it) (DIGIT? it)))
 
@@ -43,8 +43,8 @@
 (defun peel-JCCG it
 	(cadr
 		(split
-			(if (電話? it) "^.." "^...")
-			(qxsl-code it))))
+			(qxsl-code it)
+			(if (電話? it) "^.." "^..."))))
 (defun qxsl-JCCG it
 	(if
 		(null? (qxsl-rstq it))
@@ -53,14 +53,14 @@
 
 ; conversion of JCC/JCG to city/prefecture name
 (defun 県 it (city "jarl" (qxsl-JCCG it) 0))
-(defun 市 it (city "jarl" (qxsl-JCCG it)))
+(defun 市 it (city "jarl" (qxsl-JCCG it) nil))
 (defun 総 it (city "area" (県 it) 2))
 
 ; JCC/JCG validation
 (defun 現存? it (not (null? (市 it))))
-(defun 支庁? it (match "\\d{3}"  (qxsl-JCCG it)))
-(defun 府県? it (match "\\d{2}"  (qxsl-JCCG it)))
-(defun 市郡? it (match "\\d{4,}" (qxsl-JCCG it)))
+(defun 支庁? it (match (qxsl-JCCG it) "\\d{3,3}"))
+(defun 府県? it (match (qxsl-JCCG it) "\\d{2,2}"))
+(defun 市郡? it (match (qxsl-JCCG it) "\\d{4,9}"))
 
 (defun 関東? it (equal (総 it) "関東"))
 (defun 北海? it (equal (県 it) "北海道"))
@@ -100,7 +100,7 @@
 
 ; scoring
 (defmacro 得点 (score calls mults names)
-	`(progn
+	`(block
 		(setq mults (length (quote ,mults)))
 		(setq names (length (quote ,names)))
 		(ceiling (/ (* ,score mults) names))))
@@ -108,9 +108,9 @@
 ; validation routine
 (defmacro 検査 (conds keys)
 	`(lambda it
-		(progn
+		(block
 			(toQXSL it)
-			(setq error (unsat it ,conds))
+			(setq error (search it ,conds))
 			(if
 				(nil? error)
 				(success it 1 ,@(dolist (k keys) (list k 'it)))
@@ -151,7 +151,7 @@
 (setq HBANDS  "14/21/28/50MHz部門")
 
 ; section name concatenation
-(defmacro cat (area opnum mode band) `(concat " " (list ,area ,opnum ,mode ,band)))
+(defmacro cat (area opnum mode band) `(concatenate " " (list ,area ,opnum ,mode ,band)))
 
 ; contest definition
 (setq JA1 (contest "ALLJA1 TEST" 得点))

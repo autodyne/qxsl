@@ -1,6 +1,6 @@
 ;; ADIF-QXSL CONVERTER DEFINED by 無線部開発班
 
-(load "qxsl/ruler/macros.lisp")
+(load "qxsl/ruler/radial.lisp")
 
 ; XML namespaces
 (setq qxsl "qxsl.org")
@@ -82,7 +82,7 @@
 (defun toQXSL it
 	(if
 		(not (qxsl? it))
-		(progn
+		(block
 			(set-qxsl-time it (adif-time it))
 			(set-qxsl-call it (adif-call it))
 			(set-qxsl-band it (adif-band it))
@@ -92,4 +92,3 @@
 			(set-qxsl-code it (adif-code it))
 			(set-qxsl-RSTQ it (adif-RSTQ it))
 			(set-qxsl-CODE it (adif-CODE it)))))
-(handler "toQXSL" (lambda it (progn (toQXSL it) it)))

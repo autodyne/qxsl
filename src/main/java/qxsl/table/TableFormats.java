@@ -1,8 +1,8 @@
-/*****************************************************************************
+/*******************************************************************************
  * Amateur Radio Operational Logging Library 'qxsl' since 2013 February 16th
  * License : GNU Lesser General Public License v3 (see LICENSE)
  * Author: Journal of Hamradio Informatics (http://pafelog.net)
-*****************************************************************************/
+*******************************************************************************/
 package qxsl.table;
 
 import java.io.BufferedReader;
@@ -37,7 +37,7 @@ public final class TableFormats implements Iterable<TableFormat> {
 	 * @see ServiceLoader#load(Class)
 	 */
 	public TableFormats() {
-		loader = ServiceLoader.load(TableFormat.class);
+		this(TableFormats.class.getClassLoader());
 	}
 
 	/**
@@ -46,7 +46,7 @@ public final class TableFormats implements Iterable<TableFormat> {
 	 * @param cl 書式の実装を検出するクラスローダ
 	 */
 	public TableFormats(ClassLoader cl) {
-		loader = ServiceLoader.load(TableFormat.class, cl);
+		this.loader = ServiceLoader.load(TableFormat.class, cl);
 	}
 
 	/**

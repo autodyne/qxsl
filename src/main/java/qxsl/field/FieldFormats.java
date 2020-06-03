@@ -1,8 +1,8 @@
-/*****************************************************************************
+/*******************************************************************************
  * Amateur Radio Operational Logging Library 'qxsl' since 2013 February 16th
  * License : GNU Lesser General Public License v3 (see LICENSE)
  * Author: Journal of Hamradio Informatics (http://pafelog.net)
-*****************************************************************************/
+*******************************************************************************/
 package qxsl.field;
 
 import java.util.Arrays;
@@ -31,7 +31,7 @@ public final class FieldFormats implements Iterable<FieldFormat> {
 	 * インスタンスを構築します。
 	 */
 	public FieldFormats() {
-		this(Thread.currentThread().getContextClassLoader());
+		this(FieldFormats.class.getClassLoader());
 	}
 
 	/**

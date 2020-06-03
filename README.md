@@ -113,7 +113,6 @@ The following LISP programs are bundled inside the JAR file, as sample codes in 
 
 - [allja1.lisp (ALLJA1 contest definition)](https://github.com/nextzlog/qxsl/tree/master/src/main/resources/qxsl/ruler/allja1.lisp)
 - [format.lisp (ADIF-QXSL field converter)](https://github.com/nextzlog/qxsl/tree/master/src/main/resources/qxsl/ruler/format.lisp)
-- [macros.lisp (utility-macro definitions)](https://github.com/nextzlog/qxsl/tree/master/src/main/resources/qxsl/ruler/macros.lisp)
 
 ## Documents
 

@@ -1,8 +1,8 @@
-/*****************************************************************************
+/*******************************************************************************
  * Amateur Radio Operational Logging Library 'qxsl' since 2013 February 16th
  * License : GNU Lesser General Public License v3 (see LICENSE)
  * Author: Journal of Hamradio Informatics (http://pafelog.net)
-*****************************************************************************/
+*******************************************************************************/
 package qxsl.ruler;
 
 import java.net.URL;
@@ -11,11 +11,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import elva.Cons;
-import elva.Eval;
-import elva.Form;
-import elva.Name;
-import elva.Sexp;
+import elva.core.ElvaEval;
+import elva.core.ElvaForm;
+import elva.core.ElvaList;
+import elva.core.ElvaName;
+import elva.core.ElvaNode;
 
 /**
  * コンテストの規約の実装は{@link Contest}クラスを実装します。
@@ -98,8 +98,8 @@ public abstract class Contest implements Iterable<Section> {
 	private static final class ContestKit extends Contest {
 		private final List<Section> list;
 		private final String name;
-		private final Form rule;
-		private final Eval eval;
+		private final ElvaForm rule;
+		private final ElvaEval eval;
 
 		/**
 		 * 指定された規約定義と評価器で規約を構築します。
@@ -107,7 +107,7 @@ public abstract class Contest implements Iterable<Section> {
 		 * @param rule 規約
 		 * @param eval 評価器
 		 */
-		public ContestKit(Cons rule, Eval eval) {
+		public ContestKit(ElvaList rule, ElvaEval eval) {
 			this.name = eval.apply(rule.get(0)).text();
 			this.rule = eval.apply(rule.get(1)).form();
 			this.list = new ArrayList<>();
@@ -126,16 +126,17 @@ public abstract class Contest implements Iterable<Section> {
 
 		@Override
 		public final int score(final Summary sum) {
-			if (sum.accepted().isEmpty()) return 0;
-			final var args = new ArrayList<Sexp>();
-			for(var s: Cons.wrap(rule, sum.score())) args.add(s);
-			for(var mult: sum.mults()) args.add(Cons.wrap(mult));
-			return this.eval.apply(Cons.cons(args)).ival();
+			if(sum.accepted().isEmpty()) return 0;
+			final var seq = new ArrayList<ElvaNode>();
+			seq.add(ElvaNode.wrap(rule));
+			seq.add(ElvaNode.wrap(sum.score()));
+			for(var m: sum.mults()) seq.add(ElvaList.chain(m));
+			return this.eval.apply(ElvaList.chain(seq)).ival();
 		}
 
 		@Override
 		public Object invoke(String name, Object...args) {
-			return eval.apply(Name.list(name, args)).value();
+			return eval.apply(new ElvaName(name).chain(args)).value();
 		}
 	}
 
@@ -147,10 +148,10 @@ public abstract class Contest implements Iterable<Section> {
 	 *
 	 * @since 2019/05/15
 	 */
-	@Form.Native("contest")
-	@Form.Parameters(min = 2, max = 2)
-	static final class $Contest extends Form {
-		public Contest apply(Cons args, Eval eval) {
+	@ElvaForm.Native("contest")
+	@ElvaForm.Parameters(min = 2, max = 2)
+	static final class $Contest extends ElvaForm {
+		public Contest apply(ElvaList args, ElvaEval eval) {
 			return new ContestKit(args, eval);
 		}
 	}

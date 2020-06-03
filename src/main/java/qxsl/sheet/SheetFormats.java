@@ -1,8 +1,8 @@
-/*****************************************************************************
+/*******************************************************************************
  * Amateur Radio Operational Logging Library 'qxsl' since 2013 February 16th
  * License : GNU Lesser General Public License v3 (see LICENSE)
  * Author: Journal of Hamradio Informatics (http://pafelog.net)
-*****************************************************************************/
+*******************************************************************************/
 package qxsl.sheet;
 
 import java.io.BufferedReader;
@@ -37,7 +37,7 @@ public final class SheetFormats implements Iterable<SheetFormat> {
 	 * @see ServiceLoader#load(Class)
 	 */
 	public SheetFormats() {
-		loader = ServiceLoader.load(SheetFormat.class);
+		this(SheetFormats.class.getClassLoader());
 	}
 
 	/**
@@ -46,7 +46,7 @@ public final class SheetFormats implements Iterable<SheetFormat> {
 	 * @param cl 書式の実装を検出するクラスローダ
 	 */
 	public SheetFormats(ClassLoader cl) {
-		loader = ServiceLoader.load(SheetFormat.class, cl);
+		this.loader = ServiceLoader.load(SheetFormat.class, cl);
 	}
 
 	/**

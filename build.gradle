@@ -32,6 +32,7 @@ task checkout(type: Exec) {
 }
 
 javadoc {
+	exclude 'elva/extra/**'
 	exclude 'qxsl/extra/**'
 	destinationDir = file("$dist/doc")
 	options.links("https://docs.oracle.com/en/java/javase/$java/docs/api/")
