@@ -40,6 +40,7 @@
 (list 3 7) '(3 7)
 (list 8 (list 1 0)) '(8 (1 0))
 (list 3 (list 6) 4) '(3 (6) 4)
+(list 'HEAD 'TAIL) '(HEAD TAIL)
 
 ; cons
 (cons 1 ()) (list 1)
@@ -53,6 +54,7 @@
 (car (list 'HEAD 'NEXT 'TAIL)) 'HEAD
 
 ; cdr
+(cdr '(1 2)) '(2)
 (cdr (list 'HEAD)) ()
 (cdr (list 'HEAD 'TAIL)) (list 'TAIL)
 (cdr (list 'HEAD 'NEXT 'TAIL)) (list 'NEXT 'TAIL)

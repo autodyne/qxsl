@@ -7,8 +7,12 @@ package elva.form;
 
 import elva.core.ElvaEval;
 import elva.core.ElvaForm;
+import elva.core.ElvaList.ChainSeq;
 import elva.core.ElvaList;
 import elva.core.ElvaNode;
+
+import static elva.core.ElvaList.array;
+import static elva.core.ElvaList.chain;
 
 /**
  * LISP処理系のリスト操作の組み込み関数を提供します。
@@ -49,7 +53,7 @@ public final class SequentialFunctionProvider {
 		public Object apply(ElvaList args, ElvaEval eval) {
 			final var head = eval.apply(args.get(0));
 			final var tail = eval.apply(args.get(1));
-			return new ElvaList.Chain(head, tail.list());
+			return new ChainSeq(head, tail.list());
 		}
 	}
 
@@ -129,9 +133,9 @@ public final class SequentialFunctionProvider {
 	@ElvaForm.Parameters(min = 2, max = 2)
 	public static final class $Nth extends ElvaForm {
 		public Object apply(ElvaList args, ElvaEval eval) {
-			final int idx = eval.apply(args.get(0)).ival();
-			final var seq = eval.apply(args.get(1)).list();
-			return seq.get(idx);
+			final var idx = eval.apply(args.get(0));
+			final var seq = eval.apply(args.get(1));
+			return seq.list().get(idx.toInt());
 		}
 	}
 
@@ -147,10 +151,10 @@ public final class SequentialFunctionProvider {
 	@ElvaForm.Parameters(min = 3, max = 3)
 	public static final class $SubSeq extends ElvaForm {
 		public Object apply(ElvaList args, ElvaEval eval) {
-			final var list = eval.apply(args.get(0)).list();
-			final int head = eval.apply(args.get(1)).ival();
-			final int tail = eval.apply(args.get(2)).ival();
-			return list.take(tail).drop(head);
+			final var list = eval.apply(args.get(0));
+			final int head = eval.apply(args.get(1)).toInt();
+			final int tail = eval.apply(args.get(2)).toInt();
+			return list.list().take(tail).drop(head);
 		}
 	}
 
@@ -185,6 +189,38 @@ public final class SequentialFunctionProvider {
 			final ElvaNode val = eval.apply(args.get(0));
 			final ElvaNode seq = eval.apply(args.get(1));
 			return seq.list().contains(val);
+		}
+	}
+
+	/**
+	 * 指定された値を配列リスト構造に明示的に型変換します。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2020/06/07
+	 */
+	@ElvaForm.Native("array")
+	@ElvaForm.Parameters(min = 1, max = 1)
+	public static final class $Array extends ElvaForm {
+		public Object apply(ElvaList args, ElvaEval eval) {
+			return array(eval.apply(args.head()).iter());
+		}
+	}
+
+	/**
+	 * 指定された値を連鎖リスト構造に明示的に型変換します。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2020/06/07
+	 */
+	@ElvaForm.Native("chain")
+	@ElvaForm.Parameters(min = 1, max = 1)
+	public static final class $Chain extends ElvaForm {
+		public Object apply(ElvaList args, ElvaEval eval) {
+			return chain(eval.apply(args.head()).iter());
 		}
 	}
 }

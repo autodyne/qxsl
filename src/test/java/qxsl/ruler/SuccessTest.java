@@ -7,7 +7,7 @@ package qxsl.ruler;
 
 import qxsl.model.Item;
 import org.junit.jupiter.api.Test;
-import static org.assertj.core.api.Assertions.assertThat;
+import static test.RandTest.*;
 
 /**
  * {@link Success}クラスのテスト用クラスです。
@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2019/05/18
  *
  */
-public final class SuccessTest extends test.RandTest {
+public final class SuccessTest extends org.assertj.core.api.Assertions {
 	@Test
 	public void testScore() {
 		assertThat(new Success(new Item(), 1).score()).isEqualTo(1);

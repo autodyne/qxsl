@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import qxsl.field.FieldFormats;
 import qxsl.field.FieldFormats.Cache;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static test.RandTest.*;
 
 /**
  * {@link Time}クラスのテスト用クラスです。
@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/02/24
  *
  */
-public final class TimeTest extends test.RandTest {
+public final class TimeTest extends org.assertj.core.api.Assertions {
 	private final Cache cache = new FieldFormats().cache(Qxsl.TIME);
 	@Test
 	public void testValue() {

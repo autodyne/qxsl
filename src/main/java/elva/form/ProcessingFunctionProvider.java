@@ -33,7 +33,7 @@ public final class ProcessingFunctionProvider {
 	@ElvaForm.Parameters(min = 2, max = 3)
 	public static final class $If extends ElvaForm {
 		public Object apply(ElvaList args, ElvaEval eval) {
-			final boolean cond = eval.logic(args.head());
+			final var cond = eval.apply(args.head()).bool();
 			return eval.apply(args.drop(cond? 1: 2).head());
 		}
 	}
@@ -105,9 +105,9 @@ public final class ProcessingFunctionProvider {
 	@ElvaForm.Parameters(min = 2, max = 2)
 	public static final class $Assert extends ElvaForm {
 		public Object apply(ElvaList args, ElvaEval eval) {
-			if(eval.logic(args.get(0))) return true;
-			final var rhs = eval.apply(args.get(1));
-			throw new ElvaRuntimeException(rhs.text());
+			if(eval.apply(args.head()).bool()) return true;
+			final ElvaNode error = eval.apply(args.get(1));
+			throw new ElvaRuntimeException(error.text());
 		}
 	}
 }

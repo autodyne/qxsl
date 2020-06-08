@@ -8,8 +8,6 @@ package elva.core;
 import javax.script.ScriptException;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 /**
  * {@link ElvaType}クラスのテスト用クラスです。
  *
@@ -18,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @since 2020/06/06
  */
-public final class ElvaTypeTest extends test.RandTest {
+public final class ElvaTypeTest extends org.assertj.core.api.Assertions {
 	private final ElvaType longType = new ElvaType(long.class);
 	private final ElvaType charType = new ElvaType(char.class);
 

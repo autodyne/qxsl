@@ -12,8 +12,6 @@ import org.junit.jupiter.api.Test;
 import static elva.core.ElvaList.array;
 import static elva.core.ElvaList.chain;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 /**
  * {@link ElvaList}クラスのテスト用クラスです。
  *
@@ -22,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @since 2020/06/06
  */
-public final class ElvaListTest extends test.RandTest {
+public final class ElvaListTest extends org.assertj.core.api.Assertions {
 	private final ElvaList array = array(Arrays.asList(7, 5, 3));
 	private final ElvaList chain = chain(Arrays.asList(3, 6, 9));
 
@@ -89,12 +87,6 @@ public final class ElvaListTest extends test.RandTest {
 	}
 
 	@Test
-	public void testValue() {
-		assertThat(array.value()).isEqualTo(array);
-		assertThat(chain.value()).isEqualTo(chain);
-	}
-
-	@Test
 	public void testEquals() {
 		assertThat(array).isEqualTo(array(Arrays.asList(7, 5, 3)));
 		assertThat(chain).isEqualTo(chain(Arrays.asList(3, 6, 9)));
@@ -115,15 +107,21 @@ public final class ElvaListTest extends test.RandTest {
 	}
 
 	@Test
-	public void testValues() {
-		assertThat(array.values()).hasSize(3);
-		assertThat(chain.values()).hasSize(3);
+	public void testValue() {
+		assertThat(Arrays.asList(array.value())).containsExactly(7, 5, 3);
+		assertThat(Arrays.asList(chain.value())).containsExactly(3, 6, 9);
+	}
+
+	@Test
+	public void testToArray() {
+		assertThat(array.toArray(Integer.class)).containsExactly(7, 5, 3);
+		assertThat(chain.toArray(Integer.class)).containsExactly(3, 6, 9);
 	}
 
 	@Test
 	public void testStream() {
-		assertThat(array.stream().toArray()).hasSize(3);
-		assertThat(chain.stream().toArray()).hasSize(3);
+		assertThat(array.stream()).hasSize(3);
+		assertThat(chain.stream()).hasSize(3);
 	}
 
 	@Test
@@ -133,9 +131,15 @@ public final class ElvaListTest extends test.RandTest {
 	}
 
 	@Test
+	public void testIterator() {
+		assertThat(array).hasSize(3);
+		assertThat(chain).hasSize(3);
+	}
+
+	@Test
 	public void testEval() throws ScriptException {
 		final var elva = new elva.lang.ElvaRuntime();
-		assertThat(elva.eval("'(7 5 3)")).isEqualTo(array);
-		assertThat(elva.eval("'(3 6 9)")).isEqualTo(chain);
+		assertThat(elva.eval("'(7 5 3)")).isEqualTo(array.value());
+		assertThat(elva.eval("'(3 6 9)")).isEqualTo(chain.value());
 	}
 }

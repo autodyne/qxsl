@@ -6,8 +6,6 @@
 package elva.core;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 import elva.warn.ElvaRuntimeException;
@@ -23,17 +21,7 @@ import static java.math.MathContext.DECIMAL64;
  * @since 2020/03/08
  */
 public final class ElvaReal extends ElvaAtom implements Comparable<ElvaReal> {
-	private static final Map<Class<?>, Class<?>> boxes = new HashMap<>();
 	private final Number value;
-
-	static {
-		install(Long.class);
-		install(Byte.class);
-		install(Short.class);
-		install(Float.class);
-		install(Double.class);
-		install(Integer.class);
-	}
 
 	/**
 	 * 指定された値で実数値を構築します。
@@ -216,32 +204,6 @@ public final class ElvaReal extends ElvaAtom implements Comparable<ElvaReal> {
 	}
 
 	/**
-	 * 指定された数値型をラッパ型として登録します。
-	 *
-	 * @param type ラッパ型
-	 */
-	private static final void install(Class<?> type) {
-		try {
-			final var fld = type.getField("TYPE");
-			final var cls = (Class) fld.get(null);
-			boxes.put(cls, type);
-		} catch (NoSuchFieldException ex) {
-		} catch (IllegalAccessException ex) {}
-	}
-
-	/**
-	 * この式が指定された型に適合するか確認します。
-	 *
-	 * @param type 型
-	 * @return 式の値
-	 */
-	@Override
-	public final Object isClass(Class<?> type) {
-		final Class<?> box = boxes.get(type);
-		return super.isClass(box == null? type: box);
-	}
-
-	/**
 	 * 指定された値をこのアトム型で包みます。
 	 *
 	 * @param sexp 値
@@ -254,7 +216,7 @@ public final class ElvaReal extends ElvaAtom implements Comparable<ElvaReal> {
 	}
 
 	/**
-	 * 指定された値がこのアトム型に対応するか確認します。
+	 * 指定された値が暗黙的に実数値型に変換可能か確認します。
 	 *
 	 * @param sexp 値
 	 * @return 数値型の場合は真

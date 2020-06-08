@@ -29,9 +29,9 @@ public final class Failure implements Message, Serializable {
 	 * @param item 関連づけられる交信
 	 * @param text 失敗の内容を説明する文字列
 	 */
-	public Failure(Item item, String text) {
+	public Failure(Item item, Object text) {
 		this.item = item;
-		this.text = text;
+		this.text = text.toString();
 	}
 
 	/**

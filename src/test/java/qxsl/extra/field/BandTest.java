@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import qxsl.field.FieldFormats.Cache;
 import qxsl.field.FieldFormats;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static test.RandTest.*;
 
 /**
  * {@link Band}クラスのテスト用クラスです。
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/02/24
  *
  */
-public final class BandTest extends test.RandTest {
+public final class BandTest extends org.assertj.core.api.Assertions {
 	private final Cache cache = new FieldFormats().cache(Qxsl.BAND);
 	@Test
 	public void testEquals() {

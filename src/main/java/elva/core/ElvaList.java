@@ -5,9 +5,9 @@
 *******************************************************************************/
 package elva.core;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,7 +29,7 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 	/**
 	 * 内容が空のリストを示す特別なインスタンスです。
 	 */
-	public static final Empty NIL = new Empty();
+	public static final EmptySeq NIL = new EmptySeq();
 
 	/**
 	 * このリストの先頭を返します。
@@ -96,16 +96,6 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 	}
 
 	/**
-	 * リスト自体を返します。
-	 *
-	 * @return リスト
-	 */
-	@Override
-	public final ElvaList value() {
-		return this;
-	}
-
-	/**
 	 * このリストのハッシュ値を返します。
 	 *
 	 * @return ハッシュ値
@@ -163,10 +153,25 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 	 *
 	 * @return 要素の配列
 	 */
-	public final List<Object> values() {
-		final var list = new ArrayList<>(size());
-		for(var val: this) list.add(val.value());
-		return list;
+	@Override
+	public final Object[] value() {
+		return toArray(Object.class);
+	}
+
+	/**
+	 * このリストを指定された型の要素を並べた配列に変換します。
+	 *
+	 * @param <V> 要素の総称型
+	 *
+	 * @param type 要素の型
+	 * @return 要素の配列
+	 */
+	@SuppressWarnings("unchecked")
+	public final <V extends Object> V[] toArray(Class<V> type) {
+		int idx = 0;
+		final var seq = (Object[]) Array.newInstance(type, size());
+		for(final var value: this) seq[idx++] = value.ofType(type);
+		return (V[]) seq;
 	}
 
 	/**
@@ -181,14 +186,14 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 	/**
 	 * このリストの内容を別のリストに変換します。
 	 *
-	 * @param map 写像
+	 * @param op 写像
 	 * @return 変換されたリスト
 	 */
-	public final ElvaList map(UnaryOperator<ElvaNode> map) {
-		int index = 0;
-		final ElvaNode[] vals = new ElvaNode[this.size()];
-		for(var val: this) vals[index++] = map.apply(val);
-		return new Array(vals);
+	public final ElvaList map(UnaryOperator<ElvaNode> op) {
+		int idx = 0;
+		final var vals = new ElvaNode[this.size()];
+		for(var v: this) vals[idx++] = op.apply(v);
+		return new ArraySeq(vals);
 	}
 
 	/**
@@ -209,8 +214,10 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 	 * @param vals 要素
 	 * @return リスト
 	 */
-	public static final ElvaList array(Collection<?> vals) {
-		return new Array(vals.toArray());
+	public static final ElvaList array(Iterable<?> vals) {
+		final var list = new ArrayList<Object>();
+		for(var e: vals) list.add(e);
+		return new ArraySeq(list.toArray());
 	}
 
 	/**
@@ -219,11 +226,11 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 	 * @param vals 要素
 	 * @return リスト
 	 */
-	public static final ElvaList chain(Collection<?> vals) {
+	public static final ElvaList chain(Iterable<?> vals) {
 		ElvaList chain = NIL;
 		final var list = new LinkedList<ElvaNode>();
 		for(var e: vals) list.push(ElvaNode.wrap(e));
-		for(var e: list) chain = new Chain(e, chain);
+		for(var e: list) chain = new ChainSeq(e, chain);
 		return chain;
 	}
 
@@ -236,7 +243,7 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 	 */
 	public static final ElvaList cast(ElvaNode sexp) {
 		if(sexp instanceof ElvaList) return (ElvaList) sexp;
-		return new Chain(sexp, NIL);
+		return new ChainSeq(sexp, NIL);
 	}
 
 	/**
@@ -248,11 +255,11 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 	 * @throws ClassCastException 配列ではない場合
 	 */
 	public static final ElvaList asList(Object sexp) {
-		return new Array((Object[]) sexp);
+		return new ArraySeq((Object[]) sexp);
 	}
 
 	/**
-	 * 指定された値がこの配列型に対応するか確認します。
+	 * 指定された値が暗黙的にリストに変換可能か確認します。
 	 *
 	 * @param sexp 値
 	 * @return 配列型の場合は真
@@ -357,11 +364,11 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 	 *
 	 * @since 2020/06/06
 	 */
-	public static final class Empty extends ElvaList {
+	public static final class EmptySeq extends ElvaList {
 		/**
 		 * このコンストラクタは隠蔽されます。
 		 */
-		private Empty() {}
+		private EmptySeq() {}
 
 		/**
 		 * 空のリストを返します。
@@ -446,7 +453,7 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 	 *
 	 * @since 2020/06/03
 	 */
-	public static final class Array extends ElvaList {
+	public static final class ArraySeq extends ElvaList {
 		private final Object[] data;
 		private final int head;
 		private final int tail;
@@ -456,7 +463,7 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 		 *
 		 * @param data 内容
 		 */
-		public Array(Object[] data) {
+		public ArraySeq(Object[] data) {
 			this(data, 0, data.length);
 		}
 
@@ -467,7 +474,7 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 		 * @param head 先頭の位置
 		 * @param tail 末尾の位置
 		 */
-		public Array(Object[] data, int head, int tail) {
+		public ArraySeq(Object[] data, int head, int tail) {
 			this.data = data;
 			this.head = Math.min(head, data.length);
 			this.tail = Math.min(tail, data.length);
@@ -490,7 +497,7 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 		 */
 		@Override
 		public final ElvaList tail() {
-			return new Array(data, head + 1, tail);
+			return new ArraySeq(data, head + 1, tail);
 		}
 
 		/**
@@ -501,7 +508,7 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 		 */
 		@Override
 		public final ElvaList drop(int skip) {
-			return new Array(data, head + skip, tail);
+			return new ArraySeq(data, head + skip, tail);
 		}
 
 		/**
@@ -512,7 +519,7 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 		 */
 		@Override
 		public final ElvaList take(int size) {
-			return new Array(data, head, head + size);
+			return new ArraySeq(data, head, head + size);
 		}
 
 		/**
@@ -555,7 +562,7 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 	 *
 	 * @since 2017/02/18
 	 */
-	public static final class Chain extends ElvaList {
+	public static final class ChainSeq extends ElvaList {
 		private final ElvaNode head;
 		private final ElvaList tail;
 		private final int size;
@@ -566,7 +573,7 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 		 * @param head 先頭の要素
 		 * @param tail 末尾の要素
 		 */
-		public Chain(ElvaNode head, ElvaList tail) {
+		public ChainSeq(ElvaNode head, ElvaList tail) {
 			this.head = head;
 			this.tail = tail;
 			this.size = tail.size() + 1;
@@ -614,7 +621,7 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 		 */
 		@Override
 		public final ElvaList take(int size) {
-			return new Limit(this, size);
+			return new LimitSeq(this, size);
 		}
 
 		/**
@@ -659,7 +666,7 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 	 *
 	 * @since 2020/06/06
 	 */
-	public static final class Limit extends ElvaList {
+	public static final class LimitSeq extends ElvaList {
 		private final ElvaList base;
 		private final int size;
 
@@ -669,7 +676,7 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 		 * @param base 内容
 		 * @param size 長さ
 		 */
-		public Limit(ElvaList base, int size) {
+		public LimitSeq(ElvaList base, int size) {
 			this.base = base;
 			this.size = size;
 		}
@@ -691,7 +698,7 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 		 */
 		@Override
 		public final ElvaList tail() {
-			return new Limit(base.tail(), size - 1);
+			return new LimitSeq(base.tail(), size - 1);
 		}
 
 		/**
@@ -702,7 +709,7 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 		 */
 		@Override
 		public final ElvaList drop(int skip) {
-			return new Limit(base.drop(skip), size - skip);
+			return new LimitSeq(base.drop(skip), size - skip);
 		}
 
 		/**
@@ -713,7 +720,7 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 		 */
 		@Override
 		public final ElvaList take(int size) {
-			return new Limit(this, size);
+			return new LimitSeq(this, size);
 		}
 
 		/**

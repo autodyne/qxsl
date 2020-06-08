@@ -14,11 +14,8 @@ import javax.script.ScriptException;
 import elva.core.ElvaList;
 import elva.core.ElvaNode;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * {@link ElvaRuntime}クラスのテスト用クラスです。
@@ -28,36 +25,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @since 2017/02/26
  */
-public final class ElvaRuntimeTest extends test.RandTest {
+public final class ElvaRuntimeTest extends org.assertj.core.api.Assertions {
 	private final ElvaRuntime elva = new ElvaRuntime();
-
-	@Test
-	public void testNil() throws ScriptException {
-		assertThat(elva.eval("()")).isEqualTo(ElvaList.NIL);
-	}
-
-	@Test
-	public void testNull() throws ScriptException {
-		assertThat(elva.eval("null")).isNull();
-	}
-
-	@Test
-	public void testReal() throws ScriptException {
-		assertThat(elva.eval("114")).isEqualTo(114);
-		assertThat(elva.eval("514")).isEqualTo(514);
-	}
-
-	@Test
-	public void testBool() throws ScriptException {
-		assertThat(elva.eval("#t")).isEqualTo(true);
-		assertThat(elva.eval("#f")).isEqualTo(false);
-	}
-
-	@Test
-	public void testText() throws ScriptException {
-		assertThat(elva.eval("\"JA1ZLO\"")).isEqualTo("JA1ZLO");
-		assertThat(elva.eval("\"JA1ZGP\"")).isEqualTo("JA1ZGP");
-	}
 
 	@ParameterizedTest
 	@MethodSource("testMethodSource")

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import qxsl.extra.field.*;
 
 import static qxsl.extra.table.QxmlFormat.ITEM;
-import static org.assertj.core.api.Assertions.assertThat;
+import static test.RandTest.*;
 
 /**
  * {@link Item}クラスのテスト用クラスです。
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/02/25
  *
  */
-public final class ItemTest extends test.RandTest {
+public final class ItemTest extends org.assertj.core.api.Assertions {
 	private final Band band = new Band(7_000);
 	private final Call call = new Call("JA1YYE");
 	private final Mode mode = new Mode("SSB");

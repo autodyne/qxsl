@@ -6,6 +6,8 @@
 package qxsl.extra.sheet;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
@@ -34,11 +36,24 @@ public abstract class BaseFormat implements SheetFormat {
 	public BaseFormat(String name) {
 		this.name = name;
 		this.conf = new Properties();
-		String file = String.format("%s.xml", name);
-		URL url = this.getClass().getResource(file);
-		try(var is = url.openStream()) {
+		install(String.format("%s.xml", name));
+	}
+
+	/**
+	 * 指定された名前の設定ファイルを読み出します。
+	 *
+	 * @param name 設定ファイルの名前
+	 *
+	 * @throws UncheckedIOException 設定の読み出し時の例外
+	 */
+	private final void install(String name) {
+		final var type = getClass();
+		final var path = type.getResource(name);
+		try(InputStream is = path.openStream()) {
 			conf.loadFromXML(is);
-		} catch(IOException ex) {}
+		} catch (IOException ex) {
+			throw new UncheckedIOException(ex);
+		}
 	}
 
 	/**

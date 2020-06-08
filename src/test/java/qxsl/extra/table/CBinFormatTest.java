@@ -16,7 +16,7 @@ import qxsl.table.TableFormats;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import static org.assertj.core.api.Assertions.assertThat;
+import static test.RandTest.*;
 
 /**
  * {@link CBinFormat}クラスのテスト用クラスです。
@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2019/05/03
  *
  */
-public final class CBinFormatTest extends test.RandTest {
+public final class CBinFormatTest extends org.assertj.core.api.Assertions {
 	private final CBinFormat format = new CBinFormat();
 	private final TableFormats tables = new TableFormats();
 	private final ArrayList<Band> bands = new ArrayList<>();

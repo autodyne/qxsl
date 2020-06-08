@@ -16,7 +16,7 @@ import qxsl.table.TableFormats;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import static org.assertj.core.api.Assertions.assertThat;
+import static test.RandTest.*;
 
 /**
  * {@link AdisFormat}クラスのテスト用クラスです。
@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2019/07/09
  *
  */
-public final class AdisFormatTest extends test.RandTest {
+public final class AdisFormatTest extends org.assertj.core.api.Assertions {
 	private final TableFormats tables = new TableFormats();
 	public static IntStream testMethodSource() {
 		return IntStream.range(0, 100);

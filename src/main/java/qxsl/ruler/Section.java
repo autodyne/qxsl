@@ -6,19 +6,12 @@
 package qxsl.ruler;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.function.Function;
-
-import elva.core.ElvaEval;
-import elva.core.ElvaForm;
-import elva.core.ElvaList;
-import elva.core.ElvaName;
 
 import qxsl.model.Item;
 
 /**
- * コンテストの部門の実装は{@link Section}クラスを実装します。
+ * コンテストの部門の実装はこのクラスを継承します。
  *
  *
  * @author 無線部開発班
@@ -26,10 +19,12 @@ import qxsl.model.Item;
  * @since 2016/11/25
  */
 public abstract class Section implements Function<Item, Message> {
+	private Contest contest = null;
+
 	/**
 	 * 部門を構築します。
 	 */
-	public Section() {}
+	protected Section() {}
 
 	/**
 	 * 部門の名前を返します。
@@ -60,7 +55,18 @@ public abstract class Section implements Function<Item, Message> {
 	 *
 	 * @return 部門を内包するコンテスト
 	 */
-	public abstract Contest getContest();
+	public final Contest getContest() {
+		return this.contest;
+	}
+
+	/**
+	 * この部門を有するコンテストを設定します。
+	 *
+	 * @param test 部門を内包するコンテスト
+	 */
+	protected void setContest(Contest test) {
+		this.contest = test;
+	}
 
 	/**
 	 * 指定された{@link Item}の可否を検査します。
@@ -82,79 +88,6 @@ public abstract class Section implements Function<Item, Message> {
 	public abstract Object invoke(String name, Object...args);
 
 	/**
-	 * LISP処理系内部における{@link Section}の実装です。
-	 *
-	 *
-	 * @author 無線部開発班
-	 *
-	 * @since 2017/02/20
-	 */
-	private static final class SectionKit extends Section {
-		private final Contest test;
-		private final String name;
-		private final String code;
-		private final ElvaForm rule;
-		private final ElvaEval eval;
-
-		/**
-		 * 指定された部門定義と評価器で部門を構築します。
-		 *
-		 * @param rule 部門
-		 * @param eval 評価器
-		 */
-		public SectionKit(ElvaList rule, ElvaEval eval) {
-			this.test = eval.apply(rule.get(0)).ofClass(Contest.class);
-			this.name = eval.apply(rule.get(1)).text();
-			this.code = eval.apply(rule.get(2)).text();
-			this.rule = eval.apply(rule.get(3)).form();
-			this.eval = eval;
-			this.test.add(this);
-		}
-
-		@Override
-		public String getName() {
-			return this.name;
-		}
-
-		@Override
-		public String getCode() {
-			return this.code;
-		}
-
-		@Override
-		public Contest getContest() {
-			return this.test;
-		}
-
-		@Override
-		public Message apply(Item item) {
-			ElvaList list = ElvaList.array(Arrays.asList(rule, item));
-			return this.eval.apply(list).ofClass(Message.class);
-		}
-
-		@Override
-		public Object invoke(String name, Object...args) {
-			return eval.apply(new ElvaName(name).chain(args)).value();
-		}
-	}
-
-	/**
-	 * この関数はコンテストの部門の実体を生成します。
-	 *
-	 *
-	 * @author 無線部開発班
-	 *
-	 * @since 2019/05/15
-	 */
-	@ElvaForm.Native("section")
-	@ElvaForm.Parameters(min = 4, max = 4)
-	static final class $Section extends ElvaForm {
-		public Contest apply(ElvaList args, ElvaEval eval) {
-			return new SectionKit(args, eval).getContest();
-		}
-	}
-
-	/**
 	 * 指定された交信記録から有効な交信を抽出します。
 	 *
 	 * @param items 交信記録
@@ -162,7 +95,7 @@ public abstract class Section implements Function<Item, Message> {
 	 *
 	 * @since 2019/05/16
 	 */
-	public final Summary summarize(Collection<Item> items) {
+	public final Summary summarize(Iterable<Item> items) {
 		final var acc = new ArrayList<Success>();
 		final var rej = new ArrayList<Failure>();
 		for(Item item: items) {
@@ -170,6 +103,6 @@ public abstract class Section implements Function<Item, Message> {
 			if(msg instanceof Success) acc.add((Success) msg);
 			if(msg instanceof Failure) rej.add((Failure) msg);
 		}
-		return new Summary(acc, rej).confirm(this);
+		return new Summary(acc, rej).confirm(getContest());
 	}
 }

@@ -9,8 +9,6 @@ import java.math.BigDecimal;
 import javax.script.ScriptException;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 /**
  * {@link ElvaReal}クラスのテスト用クラスです。
  *
@@ -19,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @since 2020/06/06
  */
-public final class ElvaRealTest extends test.RandTest {
+public final class ElvaRealTest extends org.assertj.core.api.Assertions {
 	private final ElvaReal R114 = new ElvaReal("114");
 	private final ElvaReal R514 = new ElvaReal("514");
 	private final ElvaReal R364 = new ElvaReal(364.0);

@@ -8,7 +8,7 @@ package qxsl.table;
 import org.junit.jupiter.api.Test;
 import qxsl.extra.table.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static test.RandTest.*;
 
 /**
  * {@link TableFormats}クラスのテスト用クラスです。
@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/02/26
  *
  */
-public final class TableFormatsTest extends test.RandTest {
+public final class TableFormatsTest extends org.assertj.core.api.Assertions {
 	private final TableFormats tables = new TableFormats();
 	@Test
 	public void testIterator() {

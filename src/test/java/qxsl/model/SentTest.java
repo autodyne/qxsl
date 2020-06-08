@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import qxsl.extra.field.*;
 
 import static qxsl.extra.table.QxmlFormat.SENT;
-import static org.assertj.core.api.Assertions.assertThat;
+import static test.RandTest.*;
 
 /**
  * {@link Sent}クラスのテスト用クラスです。
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/02/25
  *
  */
-public final class SentTest extends test.RandTest {
+public final class SentTest extends org.assertj.core.api.Assertions {
 	private final Code code = new Code("591420");
 	private final RSTQ rstq = new RSTQ(1, 1, 1);
 	private final Watt watt = new Watt("M");

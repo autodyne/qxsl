@@ -31,8 +31,7 @@ public final class ConnectiveFunctionProvider {
 	@ElvaForm.Parameters(min = 2, max = -1)
 	public static final class $And extends ElvaForm {
 		public Object apply(ElvaList args, ElvaEval eval) {
-			for(var v: args) if(!eval.logic(v)) return false;
-			return true;
+			return args.stream().allMatch(s -> eval.apply(s).bool());
 		}
 	}
 
@@ -48,8 +47,7 @@ public final class ConnectiveFunctionProvider {
 	@ElvaForm.Parameters(min = 2, max = -1)
 	public static final class $Or extends ElvaForm {
 		public Object apply(ElvaList args, ElvaEval eval) {
-			for(var v: args) if(eval.logic(v)) return true;
-			return false;
+			return args.stream().anyMatch(s -> eval.apply(s).bool());
 		}
 	}
 
@@ -65,8 +63,8 @@ public final class ConnectiveFunctionProvider {
 	@ElvaForm.Parameters(min = 2, max = 2)
 	public static final class $Xor extends ElvaForm {
 		public Object apply(ElvaList args, ElvaEval eval) {
-			final var v1 = eval.logic(args.get(0));
-			final var v2 = eval.logic(args.get(1));
+			final var v1 = eval.apply(args.get(0)).bool();
+			final var v2 = eval.apply(args.get(1)).bool();
 			return v1 ^ v2;
 		}
 	}
@@ -83,7 +81,7 @@ public final class ConnectiveFunctionProvider {
 	@ElvaForm.Parameters(min = 1, max = 1)
 	public static final class $Not extends ElvaForm {
 		public Object apply(ElvaList args, ElvaEval eval) {
-			return !eval.logic(args.head());
+			return !eval.apply(args.head()).bool();
 		}
 	}
 }

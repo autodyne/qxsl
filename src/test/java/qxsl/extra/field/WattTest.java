@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import qxsl.field.FieldFormats;
 import qxsl.field.FieldFormats.Cache;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static test.RandTest.*;
 
 /**
  * {@link Watt}クラスのテスト用クラスです。
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/02/24
  *
  */
-public final class WattTest extends test.RandTest {
+public final class WattTest extends org.assertj.core.api.Assertions {
 	private final Cache cache = new FieldFormats().cache(Qxsl.WATT);
 	@Test
 	public void testValue() {

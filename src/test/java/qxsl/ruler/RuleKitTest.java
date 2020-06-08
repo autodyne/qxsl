@@ -5,31 +5,26 @@
 *******************************************************************************/
 package qxsl.ruler;
 
-import qxsl.model.Item;
 import org.junit.jupiter.api.Test;
 import static test.RandTest.*;
 
 /**
- * {@link Failure}クラスのテスト用クラスです。
+ * {@link RuleKit}クラスのテスト用クラスです。
  *
  *
  * @author 無線部開発班
  *
- * @since 2019/05/18
+ * @since 2020/06/08
  *
  */
-public final class FailureTest extends org.assertj.core.api.Assertions {
+public final class RuleKitTest extends org.assertj.core.api.Assertions {
 	@Test
-	public void testGetMessage() {
-		final Item item = new Item();
-		final String text = alnum(100);
-		assertThat(new Failure(item, text).text()).isSameAs(text);
+	public void testName() {
+		assertThat(RuleKit.load("elva").name()).isEqualTo("elva");
 	}
 
 	@Test
-	public void testGetItem() {
-		final Item item = new Item();
-		final String text = alnum(100);
-		assertThat(new Failure(item, text).item()).isSameAs(item);
+	public void testLoad() {
+		assertThat(RuleKit.load("elva")).isNotNull();
 	}
 }

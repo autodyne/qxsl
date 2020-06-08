@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import qxsl.extra.field.*;
 
 import static qxsl.extra.table.QxmlFormat.RCVD;
-import static org.assertj.core.api.Assertions.assertThat;
+import static test.RandTest.*;
 
 /**
  * {@link Rcvd}クラスのテスト用クラスです。
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/02/25
  *
  */
-public final class RcvdTest extends test.RandTest {
+public final class RcvdTest extends org.assertj.core.api.Assertions {
 	private final Code code = new Code("591009");
 	private final RSTQ rstq = new RSTQ(5, 9, 9);
 	private final Watt watt = new Watt("H");

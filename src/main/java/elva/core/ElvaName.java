@@ -111,14 +111,4 @@ public final class ElvaName extends ElvaAtom implements Comparable<ElvaName> {
 			return ElvaList.cast(sexp).head().equals(name);
 		}
 	}
-
-	/**
-	 * この名前の演算子を引数に適用する式を返します。
-	 *
-	 * @param args 被演算子
-	 * @return 演算子及び被演算子のリスト
-	 */
-	public final ElvaList chain(Object...args) {
-		return new ElvaList.Chain(this, new ElvaList.Array(args));
-	}
 }

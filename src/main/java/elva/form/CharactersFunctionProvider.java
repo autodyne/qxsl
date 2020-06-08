@@ -30,9 +30,10 @@ public final class CharactersFunctionProvider {
 	@ElvaForm.Parameters(min = 1, max = -1)
 	public static final class $Format extends ElvaForm {
 		public Object apply(ElvaList args, ElvaEval eval) {
-			final var temp = eval.apply(args.head()).text();
-			final var vals = args.tail().map(eval).values();
-			return String.format(temp, vals.toArray());
+			final var list = args.map(eval);
+			final var temp = list.head();
+			final var vals = list.tail();
+			return String.format(temp.text(), vals.value());
 		}
 	}
 }

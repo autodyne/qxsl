@@ -8,8 +8,6 @@ package elva.core;
 import javax.script.ScriptException;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 /**
  * {@link ElvaBool}クラスのテスト用クラスです。
  *
@@ -18,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @since 2020/06/06
  */
-public final class ElvaBoolTest extends test.RandTest {
+public final class ElvaBoolTest extends org.assertj.core.api.Assertions {
 	@Test
 	public void testValue() {
 		assertThat(ElvaBool.T.value()).isTrue();

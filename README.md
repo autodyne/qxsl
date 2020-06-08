@@ -86,18 +86,19 @@ The `Section` object accepts `List[Item]` and validates the communications one b
 The class `RuleKit` provides a LISP engine optimized for this process.
 
 ```Scala
-import java.io.StringReader
 import qxsl.ruler.{Contest,RuleKit,Section,Summary}
 
-val contest: Contest = new RuleKit().contest(new StringReader("""
+val contest: Contest = RuleKit.load("elva").contest("""
+(load "qxsl/ruler/radial.lisp")
+(defmacro SUCCESS (tests) (lambda it (success it 1 (qxsl-call it))))
 (defmacro scoring (score calls mults) `(* score (length ',mults)))
 (setq test (contest "CQ AWESOME CONTEST" scoring))
-(section test "CW 14MHz SingleOP" "SinCW14" (verify (CW? 14MHz?)))
-(section test "CW 21MHz SingleOP" "SinCW21" (verify (CW? 21MHz?)))
-(section test "CW 28MHz SingleOP" "SinCW28" (verify (CW? 28MHz?)))
-(section test "PH 14MHz SingleOP" "SinPH14" (verify (PH? 14MHz?)))
-(section test "PH 21MHz SingleOP" "SinPH21" (verify (PH? 21MHz?)))
-(section test "PH 28MHz SingleOP" "SinPH28" (verify (PH? 28MHz?)))"""))
+(SECTION test "CW 14MHz Single OP" "SinCW14" (SUCCESS (CW? 14MHz?)))
+(SECTION test "CW 21MHz Single OP" "SinCW21" (SUCCESS (CW? 21MHz?)))
+(SECTION test "CW 28MHz Single OP" "SinCW28" (SUCCESS (CW? 28MHz?)))
+(SECTION test "PH 14MHz Single OP" "SinPH14" (SUCCESS (PH? 14MHz?)))
+(SECTION test "PH 21MHz Single OP" "SinPH21" (SUCCESS (PH? 21MHz?)))
+(SECTION test "PH 28MHz Single OP" "SinPH28" (SUCCESS (PH? 28MHz?)))""")
 
 val section: Section = contest.getSection("CW 14MHz SINGLE-OP")
 val summary: Summary = section.summarize(table)

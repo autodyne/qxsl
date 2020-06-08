@@ -8,7 +8,7 @@ package qxsl.field;
 import org.junit.jupiter.api.Test;
 import qxsl.extra.field.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static test.RandTest.*;
 
 /**
  * {@link FieldFormats}クラスのテスト用クラスです。
@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/02/25
  *
  */
-public final class FieldFormatsTest extends test.RandTest {
+public final class FieldFormatsTest extends org.assertj.core.api.Assertions {
 	private final FieldFormats fields = new FieldFormats();
 	@Test
 	public void testIterator() {

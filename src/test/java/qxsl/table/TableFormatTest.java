@@ -9,7 +9,7 @@ import java.util.Iterator;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import static org.assertj.core.api.Assertions.assertThat;
+import static test.RandTest.*;
 
 /**
  * {@link TableFormat}クラスのテスト用クラスです。
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2019/06/16
  *
  */
-public final class TableFormatTest extends test.RandTest {
+public final class TableFormatTest extends org.assertj.core.api.Assertions {
 	/**
 	 * クラスパスにある全ての書式を返します。
 	 *

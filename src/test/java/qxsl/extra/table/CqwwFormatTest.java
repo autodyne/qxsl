@@ -16,7 +16,7 @@ import qxsl.table.TableFormats;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import static org.assertj.core.api.Assertions.assertThat;
+import static test.RandTest.*;
 
 /**
  * {@link CqwwFormat}クラスのテスト用クラスです。
@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2019/05/04
  *
  */
-public final class CqwwFormatTest extends test.RandTest {
+public final class CqwwFormatTest extends org.assertj.core.api.Assertions {
 	private final CqwwFormat format = new CqwwFormat();
 	private final TableFormats tables = new TableFormats();
 	private final ArrayList<Band> bands = new ArrayList<>();

@@ -131,7 +131,7 @@ public final class ElvaType extends ElvaAtom implements Comparable<ElvaType> {
 	}
 
 	/**
-	 * 指定された値がこのアトム型に対応するか確認します。
+	 * 指定された値が暗黙的に型情報型に変換可能か確認します。
 	 *
 	 * @param sexp 値
 	 * @return 型情報型の場合は真

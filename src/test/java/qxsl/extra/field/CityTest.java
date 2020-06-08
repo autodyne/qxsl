@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static test.RandTest.*;
 
 /**
  * {@link City}クラスのテスト用クラスです。
@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/02/24
  *
  */
-public final class CityTest extends test.RandTest {
+public final class CityTest extends org.assertj.core.api.Assertions {
 	private final Cache cache = new FieldFormats().cache(Qxsl.CITY);
 	private City jarl(String code) {
 		return City.forCode("jarl", code);

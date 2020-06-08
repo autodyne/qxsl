@@ -94,7 +94,7 @@ public final class ElvaBool extends ElvaAtom implements Comparable<ElvaBool> {
 	}
 
 	/**
-	 * 指定された値がこのアトム型に対応するか確認します。
+	 * 指定された値が暗黙的に真偽値型に変換可能か確認します。
 	 *
 	 * @param sexp 値
 	 * @return 真偽値型の場合は真

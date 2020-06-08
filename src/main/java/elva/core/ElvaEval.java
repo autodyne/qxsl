@@ -49,18 +49,6 @@ public final class ElvaEval implements UnaryOperator<ElvaNode> {
 	}
 
 	/**
-	 * 指定された式を論理式として評価します。
-	 *
-	 * @param sexp 式
-	 * @return 返り値
-	 *
-	 * @throws ElvaRuntimeException 評価により発生した例外
-	 */
-	public final boolean logic(final ElvaNode sexp) {
-		return apply(sexp).bool();
-	}
-
-	/**
 	 * 指定された式をアトムまたは関数適用として評価します。
 	 *
 	 * @param sexp 式

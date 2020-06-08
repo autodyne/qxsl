@@ -41,7 +41,7 @@ public final class ElvaRuntime extends AbstractScriptEngine {
 	/**
 	 * LISP処理系を構築します。
 	 *
-	 * @param loader パッケージを検索するクラスローダ
+	 * @param loader 関数を供給するクラスローダ
 	 */
 	public ElvaRuntime(ClassLoader loader) {
 		this.lisp = new Forms(new Types(loader));
@@ -50,11 +50,11 @@ public final class ElvaRuntime extends AbstractScriptEngine {
 	/**
 	 * LISP処理系に関連付けられる新たなファクトリを返します。
 	 *
-	 * @return null
+	 * @return ファクトリ
 	 */
 	@Override
-	public ScriptEngineFactory getFactory() {
-		return null;
+	public ElvaFactory getFactory() {
+		return new ElvaFactory();
 	}
 
 	/**

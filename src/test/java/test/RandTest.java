@@ -16,8 +16,8 @@ import java.security.SecureRandom;
  * @since 2017/06/14
  *
  */
-public class RandTest {
-	private final SecureRandom rand = new SecureRandom();
+public final class RandTest {
+	private static final SecureRandom rand = new SecureRandom();
 
 	/**
 	 * 指定された整数値未満の正の整数を返します。
@@ -25,7 +25,7 @@ public class RandTest {
 	 * @param max 最大値 (含まない)
 	 * @return 整数
 	 */
-	public final int randInt(int max) {
+	public static final int randInt(int max) {
 		return rand.nextInt(max);
 	}
 
@@ -35,7 +35,7 @@ public class RandTest {
 	 * @param max 最大文字数
 	 * @return 文字列
 	 */
-	public final String alnum(int max) {
+	public static final String alnum(int max) {
 		char[] text = new char[1+rand.nextInt(max)];
 		for(int i=0; i<text.length; i++) switch(rand.nextInt(3)) {
 			case 0: text[i] = (char)('0' + rand.nextInt(10)); break;

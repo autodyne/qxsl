@@ -84,11 +84,11 @@ public final class Summary implements java.io.Serializable {
 	/**
 	 * この交信記録の総得点を確定します。
 	 *
-	 * @param section 部門
+	 * @param contest 規約
 	 * @return この交信記録
 	 */
-	protected final Summary confirm(Section section) {
-		this.total = section.getContest().score(this);
+	protected final Summary confirm(Contest contest) {
+		this.total = contest.score(this);
 		return this;
 	}
 
@@ -114,7 +114,7 @@ public final class Summary implements java.io.Serializable {
 	 */
 	public final List<Set<Object>> mults() {
 		var cnt = accepted.stream().mapToInt(Success::countKeys).min();
-		final var sets = range(0, cnt.orElse(1)).mapToObj(this::mults);
+		final var sets = range(0, cnt.orElse(0)).mapToObj(this::mults);
 		return sets.collect(Collectors.toList());
 	}
 }

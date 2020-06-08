@@ -122,7 +122,7 @@ public final class ElvaText extends ElvaAtom implements Comparable<ElvaText> {
 	}
 
 	/**
-	 * 指定された値がこのアトム型に対応するか確認します。
+	 * 指定された値が暗黙的に文字列型に変換可能か確認します。
 	 *
 	 * @param sexp 値
 	 * @return 文字列型の場合は真

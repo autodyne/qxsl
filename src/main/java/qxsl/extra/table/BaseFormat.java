@@ -32,18 +32,33 @@ public abstract class BaseFormat implements TableFormat {
 	private final Properties conf;
 
 	/**
-	 * 指定された名前の書式を構築します。
+	 * 各種設定を読み出して指定された名前の書式を構築します。
 	 *
 	 * @param name 書式の名前
+	 *
+	 * @throws UncheckedIOException 設定の読み出し時の例外
 	 */
 	public BaseFormat(String name) {
 		this.name = name;
 		this.conf = new Properties();
-		String file = String.format("%s.xml", name);
-		URL url = this.getClass().getResource(file);
-		try(var is = url.openStream()) {
+		install(String.format("%s.xml", name));
+	}
+
+	/**
+	 * 指定された名前の設定ファイルを読み出します。
+	 *
+	 * @param name 設定ファイルの名前
+	 *
+	 * @throws UncheckedIOException 設定の読み出し時の例外
+	 */
+	private final void install(String name) {
+		final var type = getClass();
+		final var path = type.getResource(name);
+		try(InputStream is = path.openStream()) {
 			conf.loadFromXML(is);
-		} catch(IOException ex) {}
+		} catch (IOException ex) {
+			throw new UncheckedIOException(ex);
+		}
 	}
 
 	/**

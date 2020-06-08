@@ -8,7 +8,7 @@ package qxsl.sheet;
 import org.junit.jupiter.api.Test;
 import qxsl.extra.sheet.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static test.RandTest.*;
 
 /**
  * {@link SheetFormats}クラスのテスト用クラスです。
@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2017/03/12
  *
  */
-public final class SheetFormatsTest extends test.RandTest {
+public final class SheetFormatsTest extends org.assertj.core.api.Assertions {
 	private final SheetFormats sheets = new SheetFormats();
 	@Test
 	public void testIterator() {

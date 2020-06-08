@@ -8,8 +8,6 @@ package elva.core;
 import javax.script.ScriptException;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 /**
  * {@link ElvaWrap}クラスのテスト用クラスです。
  *
@@ -18,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @since 2020/06/06
  */
-public final class ElvaWrapTest extends test.RandTest {
+public final class ElvaWrapTest extends org.assertj.core.api.Assertions {
 	private final ElvaWrap FOO = new ElvaWrap("FOO");
 	private final ElvaWrap foo = new ElvaWrap("foo");
 	private final ElvaWrap BAR = new ElvaWrap("BAR");

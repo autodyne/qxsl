@@ -9,7 +9,11 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
@@ -164,7 +168,7 @@ public abstract class ElvaForm extends ElvaNode {
 			this.pars = pars;
 			this.body = body;
 			this.lisp = lisp;
-			for(ElvaNode v: pars) v.ofClass(ElvaName.class);
+			for(ElvaNode v: pars) v.ofType(ElvaName.class);
 		}
 
 		/**
@@ -188,15 +192,14 @@ public abstract class ElvaForm extends ElvaNode {
 		 */
 		@Override
 		public final ElvaNode apply(ElvaList args, ElvaEval eval) {
-			final Local env = new Local(lisp.locals);
+			final Local local = new Local(lisp.locals);
 			if(args.size() == pars.size()) {
 				for(int i = 0; i < args.size(); i++) {
-					final ElvaNode par = pars.get(i);
-					final ElvaNode arg = args.get(i);
-					final ElvaNode val = eval.apply(arg);
-					env.put(par.ofClass(ElvaName.class), val);
+					final ElvaNode param = pars.get(i);
+					final ElvaNode value = eval.apply(args.get(i));
+					local.put(param.ofType(ElvaName.class), value);
 				}
-				return new ElvaEval(env).apply(body);
+				return new ElvaEval(local).apply(body);
 			}
 			final String temp = "%s required but %s found";
 			throw new ElvaRuntimeException(temp, pars, args);
@@ -229,7 +232,7 @@ public abstract class ElvaForm extends ElvaNode {
 			this.pars = pars;
 			this.body = body;
 			this.lisp = lisp;
-			for(ElvaNode v: pars) v.ofClass(ElvaName.class);
+			for(ElvaNode v: pars) v.ofType(ElvaName.class);
 		}
 
 		/**
@@ -253,14 +256,14 @@ public abstract class ElvaForm extends ElvaNode {
 		 */
 		@Override
 		public final ElvaNode apply(ElvaList args, ElvaEval eval) {
-			final Local env = new Local(lisp.locals);
+			final Local local = new Local(lisp.locals);
 			if(args.size() == pars.size()) {
 				for(int i = 0; i < args.size(); i++) {
-					final ElvaNode par = pars.get(i);
-					final ElvaNode arg = args.get(i);
-					env.put(par.ofClass(ElvaName.class), arg);
+					final ElvaNode param = pars.get(i);
+					final ElvaNode value = args.get(i);
+					local.put(param.ofType(ElvaName.class), value);
 				}
-				return eval.apply(new ElvaEval(env).apply(body));
+				return eval.apply(new ElvaEval(local).apply(body));
 			}
 			final String temp = "%s required but %s found";
 			throw new ElvaRuntimeException(temp, pars, args);
@@ -352,6 +355,8 @@ public abstract class ElvaForm extends ElvaNode {
 			 * 指定された引数でメンバを呼び出します。
 			 *
 			 * @param args 引数
+			 * @return 返り値
+			 *
 			 * @throws Exception 何らかの例外
 			 */
 			public ElvaNode apply(ElvaList args) throws Exception;
@@ -520,11 +525,9 @@ public abstract class ElvaForm extends ElvaNode {
 		 */
 		private final Object pass(Parameter info, ElvaList args) {
 			final var type = info.getType();
-			final var elem = type.getComponentType();
 			try {
-				if(!info.isVarArgs()) return args.head().isClass(type);
-				final var vals = Array.newInstance(elem, args.size());
-				return args.values().toArray((Object[]) vals);
+				if(!info.isVarArgs()) return args.head().ofType(type);
+				else return args.toArray(type.getComponentType());
 			} catch (ClassCastException ex) {
 				final var msg = "parameter %s never accepts %s";
 				throw new ElvaRuntimeException(msg, info, args.head());

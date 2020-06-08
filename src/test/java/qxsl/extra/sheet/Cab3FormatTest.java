@@ -19,7 +19,7 @@ import qxsl.table.TableFormats;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import static org.assertj.core.api.Assertions.assertThat;
+import static test.RandTest.*;
 
 /**
  * {@link Cab3Format}クラスのテスト用クラスです。
@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2019/05/03
  *
  */
-public final class Cab3FormatTest extends test.RandTest {
+public final class Cab3FormatTest extends org.assertj.core.api.Assertions {
 	private final SheetFormats sheets = new SheetFormats();
 	private final TableFormats tables = new TableFormats();
 	private final ArrayList<Band> bands = new ArrayList<>();
