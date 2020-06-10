@@ -27,6 +27,72 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  */
 public final class EvaluationFunctionProvider {
 	/**
+	 * 指定された式をそのまま引用する特殊形式です。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2019/05/14
+	 */
+	@ElvaForm.Native("quote")
+	@ElvaForm.Parameters(min = 1, max = 1)
+	public static final class $Quote extends ElvaForm {
+		public Object apply(ElvaList args, ElvaEval eval) {
+			return args.head();
+		}
+	}
+
+	/**
+	 * 指定された式をそのまま引用する特殊形式です。
+	 * 被引用式の内部で引用が部分的に解除されます。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2019/05/14
+	 */
+	@ElvaForm.Native("quasiquote")
+	@ElvaForm.Parameters(min = 1, max = 1)
+	public static final class $Quasi extends ElvaForm {
+		public Object apply(ElvaList args, ElvaEval eval) {
+			return eval.quote(args.head()).sexp();
+		}
+	}
+
+	/**
+	 * 指定された式の引用を解除する関数です。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2019/05/14
+	 */
+	@ElvaForm.Native("unquote")
+	@ElvaForm.Parameters(min = 1, max = 1)
+	public static final class $Uquot extends ElvaForm {
+		public Object apply(ElvaList args, ElvaEval eval) {
+			return eval.apply(args.head());
+		}
+	}
+
+	/**
+	 * 指定された式の引用を解除する関数です。
+	 * 式の結果はリストの内部に展開されます。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2020/02/26
+	 */
+	@ElvaForm.Native("unquote-splicing")
+	@ElvaForm.Parameters(min = 1, max = 1)
+	public static final class $Uqspl extends ElvaForm {
+		public Object apply(ElvaList args, ElvaEval eval) {
+			return eval.apply(args.head());
+		}
+	}
+
+	/**
 	 * 指定された式を評価した後に再び評価します。
 	 *
 	 *
@@ -36,7 +102,7 @@ public final class EvaluationFunctionProvider {
 	 */
 	@ElvaForm.Native("eval")
 	@ElvaForm.Parameters(min = 1, max = 1)
-	public static final class $ElvaEval extends ElvaForm {
+	public static final class $Eval extends ElvaForm {
 		public Object apply(ElvaList args, ElvaEval eval) {
 			return eval.apply(eval.apply(args.head()));
 		}
@@ -63,6 +129,38 @@ public final class EvaluationFunctionProvider {
 				final String msg = "failed in loading %s: %s";
 				throw new ElvaRuntimeException(msg, name, ex);
 			}
+		}
+	}
+
+	/**
+	 * 指定された式を部分評価して可能なら定数に変換します。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2020/06/10
+	 */
+	@ElvaForm.Native("const")
+	@ElvaForm.Parameters(min = 1, max = 1)
+	public static final class $Const extends ElvaForm {
+		public Object apply(ElvaList args, ElvaEval eval) {
+			return eval.apply(args.head());
+		}
+	}
+
+	/**
+	 * 指定された式に埋め込まれた部分評価の式を評価します。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2020/06/10
+	 */
+	@ElvaForm.Native("compile")
+	@ElvaForm.Parameters(min = 1, max = 1)
+	public static final class $Compile extends ElvaForm {
+		public Object apply(ElvaList args, ElvaEval eval) {
+			return eval.apply(eval.compile(args.head()));
 		}
 	}
 }

@@ -29,11 +29,6 @@
 (symbol "MUR") 'MUR
 (symbol "KMR") 'KMR
 
-; eval
-(eval 10) 10
-(eval '(+ 10 20)) 30
-(block (set 'x 100) (eval x)) 100
-
 ; list
 (list) '()
 (list 1) '(1)
@@ -229,7 +224,17 @@
 (catch (assert (equal 3 (+ 3 2)) "must be true")) "must be true"
 
 ; throw
-(catch (block 1 2 (throw "ERROR") 3)) "ERROR"
+(catch (block 3 6 4 (throw "YATAI") 3)) "YATAI"
+(catch (block 8 1 0 (throw "RAMEN") 3)) "RAMEN"
+
+; eval
+(eval 10) 10
+(eval '(+ 10 20)) 30
+(block (set 'x 100) (eval x)) 100
+
+; compile
+(compile '(19 ! (+ 1 9) 8 10)) '(19 10 8 10)
+(compile '(19 1 9 ! (* 3 64))) '(19 1 9 192)
 
 ; load
 (block (load "qxsl/ruler/common.lisp") (defun foo x (+ x x)) (foo 114)) 228

@@ -423,7 +423,7 @@ public abstract class ElvaList extends ElvaNode implements Sequence<Object[]> {
 		 */
 		@Override
 		public final ElvaNode head() {
-			return ElvaNode.wrap(data[head]);
+			return isEmpty()? NIL: ElvaNode.wrap(data[head]);
 		}
 
 		/**

@@ -15,6 +15,7 @@ import elva.warn.*;
 
 import static elva.core.ElvaName.Quote.UQSPL;
 import static elva.core.ElvaName.Quote.UQUOT;
+import static elva.core.ElvaName.Quote.CONST;
 
 /**
  * LISP処理系のスコープ付きの評価器の実装です。
@@ -59,9 +60,8 @@ public final class ElvaEval implements UnaryOperator<ElvaNode> {
 	@Override
 	public final ElvaNode apply(final ElvaNode sexp) {
 		try {
-			if(ElvaList.NIL.equals(sexp)) return sexp;
-			if(sexp instanceof ElvaName) return locals.get((ElvaName) sexp);
-			if(sexp instanceof ElvaList) return this.apply((ElvaList) sexp);
+			if(sexp instanceof ElvaName) return this.locals.get(sexp);
+			if(sexp instanceof ElvaList) return call((ElvaList) sexp);
 			return sexp;
 		} catch (ElvaRuntimeException ex) {
 			throw ex.add(sexp);
@@ -73,14 +73,16 @@ public final class ElvaEval implements UnaryOperator<ElvaNode> {
 	/**
 	 * 実引数の個数を検査した後に関数を適用した値を求めます。
 	 *
-	 * @param cons 関数適用の式
+	 * @param list 関数適用の式
 	 * @return 演算子を適用した結果の値
 	 *
 	 * @throws ElvaRuntimeException 引数の個数が誤っている場合
 	 */
-	private final ElvaNode apply(final ElvaList cons) {
-		final var form = apply(cons.head()).form();
-		final var args = cons.tail();
+	private final ElvaNode call(final ElvaList list) {
+		if(list.isEmpty()) return list;
+		final var head = list.head();
+		final var args = list.tail();
+		final var form = apply(head).form();
 		form.validate(args);
 		return ElvaNode.wrap(form.apply(args, this));
 	}
@@ -94,7 +96,7 @@ public final class ElvaEval implements UnaryOperator<ElvaNode> {
 	 * @since 2020/02/26
 	 */
 	public static interface Unquote {
-		public void merge(List<ElvaNode> seq);
+		public void expand(List<ElvaNode> seq);
 		public ElvaNode sexp();
 	}
 
@@ -112,7 +114,7 @@ public final class ElvaEval implements UnaryOperator<ElvaNode> {
 			this.sexp = sexp;
 		}
 		@Override
-		public void merge(List<ElvaNode> seq) {
+		public void expand(List<ElvaNode> seq) {
 			seq.add(this.sexp);
 		}
 		@Override
@@ -135,7 +137,7 @@ public final class ElvaEval implements UnaryOperator<ElvaNode> {
 			this.list = ElvaList.cast(sexp);
 		}
 		@Override
-		public void merge(List<ElvaNode> seq) {
+		public void expand(List<ElvaNode> seq) {
 			list.stream().forEach(seq::add);
 		}
 		@Override
@@ -147,18 +149,34 @@ public final class ElvaEval implements UnaryOperator<ElvaNode> {
 	/**
 	 * 指定された式を準引用の被引用式として評価した値を返します。
 	 *
-	 * @param quote 式
+	 * @param sexp 式
 	 * @return 返り値
 	 *
 	 * @throws ElvaRuntimeException 評価により発生した例外
 	 */
-	public final Unquote unquote(final ElvaNode quote) {
-		if(ElvaList.class.isInstance(quote)) {
+	public final Unquote quote(final ElvaNode sexp) {
+		if(ElvaList.class.isInstance(sexp)) {
 			final var list = new LinkedList<ElvaNode>();
-			if(UQUOT.is(quote)) return new Normal(apply(quote));
-			if(UQSPL.is(quote)) return new Splice(apply(quote));
-			for(var e: (ElvaList) quote) unquote(e).merge(list);
+			if(UQUOT.is(sexp)) return new Normal(apply(sexp));
+			if(UQSPL.is(sexp)) return new Splice(apply(sexp));
+			for(var e: (ElvaList) sexp) quote(e).expand(list);
 			return new Normal(ElvaList.chain(list));
-		} else return new Normal(quote);
+		} else return new Normal(sexp);
+	}
+
+	/**
+	 * 指定された式に含まれる変数の参照を即値に置換します。
+	 * 参照する変数の値が更新されても即値は更新されません。
+	 *
+	 * @param sexp 式
+	 * @return 変換された式
+	 *
+	 * @throws ElvaRuntimeException 評価により発生した例外
+	 */
+	public final ElvaNode compile(final ElvaNode sexp) {
+		if(ElvaList.class.isInstance(sexp)) {
+			if(CONST.is(sexp)) return apply(sexp);
+			return sexp.list().map(this::compile);
+		} else return sexp;
 	}
 }

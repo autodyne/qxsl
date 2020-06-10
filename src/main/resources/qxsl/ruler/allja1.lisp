@@ -3,100 +3,100 @@
 (load "qxsl/ruler/format.lisp")
 
 ; UTC-JST conversion for ADIF
-(defun 時刻 it (hour (qxsl-time it) "Asia/Tokyo"))
+(defun 時刻 it (! hour (! qxsl-time it) "Asia/Tokyo"))
 
 ; mode validation
-(defun 電信? it (match (qxsl-mode it) "(?i)CW"))
-(defun 電話? it (match (qxsl-mode it) "(?i)PH|AM|FM|[DS]SB"))
-(defun 離散? it (match (qxsl-mode it) "(?i)DG|FT4|FT8|RTTY"))
-(defun 電電? it (or (電信? it) (電話? it)))
-(defun 総合? it (or (電電? it) (離散? it)))
+(defun 電信? it (! match (! qxsl-mode it) "(?i)CW"))
+(defun 電話? it (! match (! qxsl-mode it) "(?i)PH|AM|FM|[DS]SB"))
+(defun 離散? it (! match (! qxsl-mode it) "(?i)DG|FT4|FT8|RTTY"))
+(defun 電電? it (! or (! 電信? it) (! 電話? it)))
+(defun 総合? it (! or (! 電電? it) (! 離散? it)))
 
 ; time validation
-(defun 朝? it (<= 09 (時刻 it) 11))
-(defun 昼? it (<= 13 (時刻 it) 14))
-(defun 夜? it (<= 16 (時刻 it) 19))
+(defun 朝? it (! <= 09 (! 時刻 it) 11))
+(defun 昼? it (! <= 13 (! 時刻 it) 14))
+(defun 夜? it (! <= 16 (! 時刻 it) 19))
 
 ; multiple-band validation
-(defun 高? it (<= 14000 (qxsl-band it) 50000))
-(defun 低? it (<=  1900 (qxsl-band it)  7000))
+(defun 高? it (! <= 14000 (! qxsl-band it) 50000))
+(defun 低? it (! <=  1900 (! qxsl-band it)  7000))
 
 ; single lower-band validation
-(defun 1.9MHz? it (equal (qxsl-band it)  1900))
-(defun 3.5MHz? it (equal (qxsl-band it)  3500))
-(defun   7MHz? it (equal (qxsl-band it)  7000))
+(defun 1.9MHz? it (! equal (! qxsl-band it)  1900))
+(defun 3.5MHz? it (! equal (! qxsl-band it)  3500))
+(defun   7MHz? it (! equal (! qxsl-band it)  7000))
 
 ; single UPPER-BAND validation
-(defun  14MHz? it (equal (qxsl-band it) 14000))
-(defun  21MHz? it (equal (qxsl-band it) 21000))
-(defun  28MHz? it (equal (qxsl-band it) 28000))
-(defun  50MHz? it (equal (qxsl-band it) 50000))
+(defun  14MHz? it (! equal (! qxsl-band it) 14000))
+(defun  21MHz? it (! equal (! qxsl-band it) 21000))
+(defun  28MHz? it (! equal (! qxsl-band it) 28000))
+(defun  50MHz? it (! equal (! qxsl-band it) 50000))
 
 ; validation of analog/digital sections
-(defun HBAND? it (every it (朝? 電電?   高?)))
-(defun LBAND? it (every it (夜? 電電?   低?)))
-(defun DIGIT? it (every it (昼? 離散? 7MHz?)))
-(defun ABAND? it (or (HBAND? it) (LBAND? it)))
-(defun JOINT? it (or (HBAND? it) (LBAND? it) (DIGIT? it)))
+(defun HBAND? it (! every it (朝? 電電?   高?)))
+(defun LBAND? it (! every it (夜? 電電?   低?)))
+(defun DIGIT? it (! every it (昼? 離散? 7MHz?)))
+(defun ABAND? it (! or (! HBAND? it) (! LBAND? it)))
+(defun JOINT? it (! or (! HBAND? it) (! LBAND? it) (! DIGIT? it)))
 
 ; JCC/JCG
 (defun peel-JCCG it
-	(cadr
-		(split
-			(qxsl-code it)
-			(if (電話? it) "^.." "^..."))))
+	(! cadr
+		(! split
+			(! qxsl-code it)
+			(if (! 電話? it) "^.." "^..."))))
 (defun qxsl-JCCG it
 	(if
 		(null? (qxsl-rstq it))
-		(peel-JCCG it)
-		(qxsl-code it)))
+		(! peel-JCCG it)
+		(! qxsl-code it)))
 
 ; conversion of JCC/JCG to city/prefecture name
-(defun 県 it (city "jarl" (qxsl-JCCG it) 0))
-(defun 市 it (city "jarl" (qxsl-JCCG it) nil))
-(defun 総 it (city "area" (県 it) 2))
+(defun 県 it (! city "jarl" (! qxsl-JCCG it) 0))
+(defun 市 it (! city "jarl" (! qxsl-JCCG it) nil))
+(defun 総 it (! city "area" (! 県 it) 2))
 
 ; JCC/JCG validation
-(defun 現存? it (not (null? (市 it))))
-(defun 支庁? it (match (qxsl-JCCG it) "\\d{3,3}"))
-(defun 府県? it (match (qxsl-JCCG it) "\\d{2,2}"))
-(defun 市郡? it (match (qxsl-JCCG it) "\\d{4,9}"))
+(defun 現存? it (! not (! null? (! 市 it))))
+(defun 支庁? it (! match (! qxsl-JCCG it) "\\d{3,3}"))
+(defun 府県? it (! match (! qxsl-JCCG it) "\\d{2,2}"))
+(defun 市郡? it (! match (! qxsl-JCCG it) "\\d{4,9}"))
 
-(defun 関東? it (equal (総 it) "関東"))
-(defun 北海? it (equal (県 it) "北海道"))
-(defun 管外? it (not (or (関東? it) (北海? it))))
+(defun 関東? it (! equal (! 総 it) "関東"))
+(defun 北海? it (! equal (! 県 it) "北海道"))
+(defun 管外? it (! not (! or (! 関東? it) (! 北海? it))))
 
 ;; validation of 1エリア内/1エリア外部門
 (defun 内? it
-	(and
-		(現存? it)
-		(cond (
-			((離散? it) (市郡? it))
-			((北海? it) (支庁? it))
-			((関東? it) (市郡? it))
-			((管外? it) (府県? it))))))
+	(! and
+		(! 現存? it)
+		(! cond (
+			((! 離散? it) (! 市郡? it))
+			((! 北海? it) (! 支庁? it))
+			((! 関東? it) (! 市郡? it))
+			((! 管外? it) (! 府県? it))))))
 
-(defun 外? it (and (現存? it) (関東? it) (市郡? it)))
+(defun 外? it (! and (! 現存? it) (! 関東? it) (! 市郡? it)))
 
 ;; validation of 個人部門/団体部門
 (defun SinOP? it #t)
-(defun MulOp? it (not (member (qxsl-name it) (list null ""))))
+(defun MulOp? it (! not (! member (! qxsl-name it) (list null ""))))
 
 ; keys for scoring
 (defun CALL it
 	(list
-		(qxsl-call it)
-		(qxsl-band it)
-		(cond (
-			((電信? it) 1)
-			((電話? it) 2)
-			((離散? it) 3)))))
+		(! qxsl-call it)
+		(! qxsl-band it)
+		(! cond (
+			((! 電信? it) 1)
+			((! 電話? it) 2)
+			((! 離散? it) 3)))))
 (defun MULT it
 	(list
-		(qxsl-band it)
-		(qxsl-JCCG it)))
-(defun SOLE it null)
-(defun CORP it (qxsl-name it))
+		(! qxsl-band it)
+		(! qxsl-JCCG it)))
+(defun SOLE it ! null)
+(defun CORP it (! qxsl-name it))
 
 ; scoring
 (defmacro 得点 (score calls mults names)

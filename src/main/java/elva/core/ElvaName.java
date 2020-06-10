@@ -73,7 +73,8 @@ public final class ElvaName extends ElvaAtom<ElvaName> {
 		QUOTE ("quote"),
 		UQUOT ("unquote"),
 		QUASI ("quasiquote"),
-		UQSPL ("unquote-splicing");
+		UQSPL ("unquote-splicing"),
+		CONST ("const");
 
 		private final ElvaName name;
 		private Quote(String name) {

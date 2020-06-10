@@ -33,15 +33,15 @@
 
 ; hour
 (defun hour (zoned zoneId)
-	((access ZonedDateTime 'getHour)
-		((access ZonedDateTime 'withZoneSameInstant)
-			zoned ((access ZoneId 'of) null zoneId))))
+	(! (access ZonedDateTime 'getHour)
+		(! (access ZonedDateTime 'withZoneSameInstant)
+			zoned (! (access ZoneId 'of) ! null zoneId))))
 
 
 ; city
 (defun city (dbname code level)
-	(let (city ((access City 'forCode) null dbname code))
-		(if (nil? level)
+	(let (city (! (access City 'forCode) ! null dbname code))
+		(! if (! nil? level)
 			city
-			((access List 'get)
-				((access City 'getFullPath) city) (integer level)))))
+			(! (access List 'get)
+				(! (access City 'getFullPath) city) (! integer level)))))

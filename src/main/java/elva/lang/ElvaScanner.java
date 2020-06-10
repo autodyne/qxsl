@@ -97,6 +97,7 @@ public final class ElvaScanner implements Iterator<ElvaNode> {
 		if(atom.equals("`"))  return ElvaName.Quote.QUASI.quote(next());
 		if(atom.equals(","))  return ElvaName.Quote.UQUOT.quote(next());
 		if(atom.equals(",@")) return ElvaName.Quote.UQSPL.quote(next());
+		if(atom.equals("!"))  return ElvaName.Quote.CONST.quote(next());
 		if(!atom.equals(")")) return ElvaNode.wrap(asNameOrReal(atom));
 		throw new ElvaLexicalException("isolated ')'", this);
 	}
