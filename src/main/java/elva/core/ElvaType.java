@@ -21,7 +21,7 @@ import java.util.Objects;
  *
  * @since 2020/06/02
  */
-public final class ElvaType extends ElvaAtom implements Comparable<ElvaType> {
+public final class ElvaType extends ElvaAtom<Class<?>> {
 	private final Class<?> value;
 
 	/**
@@ -56,19 +56,6 @@ public final class ElvaType extends ElvaAtom implements Comparable<ElvaType> {
 			final Object val = ((ElvaType) type).value;
 			return Objects.equals(val, this.value);
 		} else return false;
-	}
-
-	/**
-	 * この型情報と指定された型情報を比較します。
-	 *
-	 * @param type 右側の型情報
-	 * @return 比較した結果
-	 */
-	@Override
-	public final int compareTo(ElvaType type) {
-		final String v1 = this.value.toGenericString();
-		final String v2 = type.value.toGenericString();
-		return v1.compareTo(v2);
 	}
 
 	/**
@@ -119,24 +106,22 @@ public final class ElvaType extends ElvaAtom implements Comparable<ElvaType> {
 	}
 
 	/**
-	 * 指定された値をこのアトム型で包みます。
+	 * 処理系の内外における暗黙的な型変換を定めます。
 	 *
-	 * @param sexp 値
-	 * @return 型情報のアトム
 	 *
-	 * @throws ClassCastException 型検査の例外
+	 * @author 無線部開発班
+	 *
+	 * @since 2020/06/10
 	 */
-	public static final ElvaType asType(Object sexp) {
-		return new ElvaType(Class.class.cast(sexp));
-	}
+	public static final class Type implements Implicit {
+		@Override
+		public final boolean support(Object value) {
+			return value instanceof Class;
+		}
 
-	/**
-	 * 指定された値が暗黙的に型情報型に変換可能か確認します。
-	 *
-	 * @param sexp 値
-	 * @return 型情報型の場合は真
-	 */
-	public static final boolean support(Object sexp) {
-		return Class.class.isInstance(sexp);
+		@Override
+		public final ElvaNode encode(Object value) {
+			return new ElvaType((Class<?>) value);
+		}
 	}
 }

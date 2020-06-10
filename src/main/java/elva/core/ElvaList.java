@@ -5,17 +5,13 @@
 *******************************************************************************/
 package elva.core;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.function.UnaryOperator;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 /**
  * LISP処理系内部で利用されるリスト構造の実装です。
@@ -25,7 +21,7 @@ import java.util.stream.StreamSupport;
  *
  * @since 2017/02/18
  */
-public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
+public abstract class ElvaList extends ElvaNode implements Sequence<Object[]> {
 	/**
 	 * 内容が空のリストを示す特別なインスタンスです。
 	 */
@@ -75,16 +71,8 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 	 *
 	 * @return 要素数
 	 */
+	@Override
 	public abstract int size();
-
-	/**
-	 * リストが空であるか確認します。
-	 *
-	 * @return 要素がない場合は真
-	 */
-	public final boolean isEmpty() {
-		return size() == 0;
-	}
 
 	/**
 	 * このリストの最後の要素を返します。
@@ -123,32 +111,6 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 	}
 
 	/**
-	 * このリストに指定された値が含まれるか確認します。
-	 *
-	 * @param sexp 確認する値
-	 * @return 含まれる場合にtrue
-	 *
-	 * @throws NullPointerException sexpがnulである場合
-	 */
-	public final boolean contains(ElvaNode sexp) {
-		for(var v: this) if(sexp.equals(v)) return true;
-		return false;
-	}
-
-	/**
-	 * このリストを実数値の配列に変換します。
-	 *
-	 * @return 実数値の配列
-	 *
-	 * @throws ClassCastException 型検査により発生する例外
-	 */
-	public final List<ElvaReal> reals() {
-		final var list = new ArrayList<ElvaReal>(size());
-		for(ElvaNode val: this) list.add((ElvaReal) val);
-		return list;
-	}
-
-	/**
 	 * このリストを要素の配列に変換します。
 	 *
 	 * @return 要素の配列
@@ -159,36 +121,12 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 	}
 
 	/**
-	 * このリストを指定された型の要素を並べた配列に変換します。
-	 *
-	 * @param <V> 要素の総称型
-	 *
-	 * @param type 要素の型
-	 * @return 要素の配列
-	 */
-	@SuppressWarnings("unchecked")
-	public final <V extends Object> V[] toArray(Class<V> type) {
-		int idx = 0;
-		final var seq = (Object[]) Array.newInstance(type, size());
-		for(final var value: this) seq[idx++] = value.ofType(type);
-		return (V[]) seq;
-	}
-
-	/**
-	 * このリストの内容をストリームで返します。
-	 *
-	 * @return ストリーム
-	 */
-	public final Stream<ElvaNode> stream() {
-		return StreamSupport.stream(spliterator(), false);
-	}
-
-	/**
 	 * このリストの内容を別のリストに変換します。
 	 *
 	 * @param op 写像
 	 * @return 変換されたリスト
 	 */
+	@Override
 	public final ElvaList map(UnaryOperator<ElvaNode> op) {
 		int idx = 0;
 		final var vals = new ElvaNode[this.size()];
@@ -227,11 +165,11 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 	 * @return リスト
 	 */
 	public static final ElvaList chain(Iterable<?> vals) {
-		ElvaList chain = NIL;
+		ElvaList seq = NIL;
 		final var list = new LinkedList<ElvaNode>();
 		for(var e: vals) list.push(ElvaNode.wrap(e));
-		for(var e: list) chain = new ChainSeq(e, chain);
-		return chain;
+		for(var e: list) seq = new ChainSeq(e, seq);
+		return seq;
 	}
 
 	/**
@@ -247,25 +185,23 @@ public abstract class ElvaList extends ElvaNode implements Iterable<ElvaNode> {
 	}
 
 	/**
-	 * 指定された配列をリストに変換して返します。
+	 * 処理系の内外における暗黙的な型変換を定めます。
 	 *
-	 * @param sexp 値
-	 * @return リスト
 	 *
-	 * @throws ClassCastException 配列ではない場合
+	 * @author 無線部開発班
+	 *
+	 * @since 2020/06/10
 	 */
-	public static final ElvaList asList(Object sexp) {
-		return new ArraySeq((Object[]) sexp);
-	}
+	public static final class List implements Implicit {
+		@Override
+		public final boolean support(Object value) {
+			return value instanceof Object[];
+		}
 
-	/**
-	 * 指定された値が暗黙的にリストに変換可能か確認します。
-	 *
-	 * @param sexp 値
-	 * @return 配列型の場合は真
-	 */
-	public static final boolean support(Object sexp) {
-		return Object[].class.isInstance(sexp);
+		@Override
+		public final ElvaNode encode(Object value) {
+			return new ArraySeq((Object[]) value);
+		}
 	}
 
 	/**

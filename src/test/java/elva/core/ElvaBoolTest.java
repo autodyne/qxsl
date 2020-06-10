@@ -38,14 +38,6 @@ public final class ElvaBoolTest extends org.assertj.core.api.Assertions {
 	}
 
 	@Test
-	public void testCompareTo() {
-		assertThat(ElvaBool.T.compareTo(ElvaBool.T)).isZero();
-		assertThat(ElvaBool.F.compareTo(ElvaBool.F)).isZero();
-		assertThat(ElvaBool.T.compareTo(ElvaBool.F)).isPositive();
-		assertThat(ElvaBool.F.compareTo(ElvaBool.T)).isNegative();
-	}
-
-	@Test
 	public void testEval() throws ScriptException {
 		final var elva = new elva.lang.ElvaRuntime();
 		assertThat(elva.eval("#t")).isEqualTo(true);

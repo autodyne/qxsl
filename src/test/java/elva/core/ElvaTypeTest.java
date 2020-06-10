@@ -39,14 +39,6 @@ public final class ElvaTypeTest extends org.assertj.core.api.Assertions {
 	}
 
 	@Test
-	public void testCompareTo() {
-		assertThat(longType.compareTo(longType)).isZero();
-		assertThat(charType.compareTo(charType)).isZero();
-		assertThat(longType.compareTo(charType)).isPositive();
-		assertThat(charType.compareTo(longType)).isNegative();
-	}
-
-	@Test
 	public void testEval() throws ScriptException {
 		final var elva = new elva.lang.ElvaRuntime();
 		assertThat(elva.eval("long")).isEqualTo(long.class);

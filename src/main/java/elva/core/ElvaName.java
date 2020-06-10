@@ -16,7 +16,7 @@ import java.util.Objects;
  *
  * @since 2017/02/18
  */
-public final class ElvaName extends ElvaAtom implements Comparable<ElvaName> {
+public final class ElvaName extends ElvaAtom<ElvaName> {
 	private final String value;
 
 	/**
@@ -59,17 +59,6 @@ public final class ElvaName extends ElvaAtom implements Comparable<ElvaName> {
 	public final boolean equals(Object atom) {
 		if(!ElvaName.class.isInstance(atom)) return false;
 		return ((ElvaName) atom).value.equals(this.value);
-	}
-
-	/**
-	 * この識別子と指定された識別子を比較します。
-	 *
-	 * @param name 右側の識別子
-	 * @return 比較した結果
-	 */
-	@Override
-	public final int compareTo(ElvaName name) {
-		return value.compareTo(name.value);
 	}
 
 	/**

@@ -15,7 +15,7 @@ import java.util.Objects;
  *
  * @since 2020/03/08
  */
-public final class ElvaText extends ElvaAtom implements Comparable<ElvaText> {
+public final class ElvaText extends ElvaAtom<String> {
 	private final String value;
 
 	/**
@@ -50,17 +50,6 @@ public final class ElvaText extends ElvaAtom implements Comparable<ElvaText> {
 			final String val = ((ElvaText) atom).value;
 			return Objects.equals(val, this.value);
 		} else return false;
-	}
-
-	/**
-	 * この文字列と指定された文字列を比較します。
-	 *
-	 * @param text 右側の文字列
-	 * @return 比較した結果
-	 */
-	@Override
-	public final int compareTo(ElvaText text) {
-		return value.compareTo(text.value);
 	}
 
 	/**
@@ -110,24 +99,22 @@ public final class ElvaText extends ElvaAtom implements Comparable<ElvaText> {
 	}
 
 	/**
-	 * 指定された値をこのアトム型で包みます。
+	 * 処理系の内外における暗黙的な型変換を定めます。
 	 *
-	 * @param sexp 値
-	 * @return 文字列のアトム
 	 *
-	 * @throws ClassCastException 型検査の例外
+	 * @author 無線部開発班
+	 *
+	 * @since 2020/06/10
 	 */
-	public static final ElvaText asText(Object sexp) {
-		return new ElvaText(String.class.cast(sexp));
-	}
+	public static final class Text implements Implicit {
+		@Override
+		public final boolean support(Object value) {
+			return value instanceof String;
+		}
 
-	/**
-	 * 指定された値が暗黙的に文字列型に変換可能か確認します。
-	 *
-	 * @param sexp 値
-	 * @return 文字列型の場合は真
-	 */
-	public static final boolean support(Object sexp) {
-		return String.class.isInstance(sexp);
+		@Override
+		public final ElvaNode encode(Object value) {
+			return new ElvaText((String) value);
+		}
 	}
 }

@@ -15,7 +15,7 @@ import java.util.Objects;
  *
  * @since 2020/02/29
  */
-public final class ElvaWrap extends ElvaAtom implements Comparable<ElvaWrap> {
+public final class ElvaWrap extends ElvaAtom<Object> {
 	private final Object value;
 
 	/**
@@ -50,19 +50,6 @@ public final class ElvaWrap extends ElvaAtom implements Comparable<ElvaWrap> {
 			final Object val = ((ElvaWrap) atom).value;
 			return Objects.equals(val, this.value);
 		} else return false;
-	}
-
-	/**
-	 * このアトムと指定されたアトムを比較します。
-	 *
-	 * @param atom 右側のアトム
-	 * @return 比較した結果
-	 */
-	@Override
-	public final int compareTo(ElvaWrap atom) {
-		final String v1 = String.valueOf(this);
-		final String v2 = String.valueOf(atom);
-		return v1.compareTo(v2);
 	}
 
 	/**

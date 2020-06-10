@@ -41,14 +41,6 @@ public final class ElvaWrapTest extends org.assertj.core.api.Assertions {
 	}
 
 	@Test
-	public void testCompareTo() {
-		assertThat(FOO.compareTo(FOO)).isZero();
-		assertThat(bar.compareTo(bar)).isZero();
-		assertThat(FOO.compareTo(BAR)).isPositive();
-		assertThat(FOO.compareTo(bar)).isNegative();
-	}
-
-	@Test
 	public void testEval() throws ScriptException {
 		final var elva = new elva.lang.ElvaRuntime();
 		assertThat(elva.eval("null")).isEqualTo(null);

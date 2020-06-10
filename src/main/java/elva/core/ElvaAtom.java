@@ -11,11 +11,20 @@ import java.util.Objects;
  * LISP処理系で使用される単純型の共通実装です。
  *
  *
+ * @param <V> 値の総称型
+ *
  * @author 無線部開発班
  *
  * @since 2020/06/04
  */
-public abstract class ElvaAtom extends ElvaNode {
+public abstract class ElvaAtom<V> extends ElvaNode {
+	/**
+	 * この式の値を処理系の外部に渡す際に使用します。
+	 *
+	 * @return 値
+	 */
+	public abstract V value();
+
 	/**
 	 * このアトムのハッシュ値を返します。
 	 *

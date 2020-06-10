@@ -20,7 +20,7 @@ import static java.math.MathContext.DECIMAL64;
  *
  * @since 2020/03/08
  */
-public final class ElvaReal extends ElvaAtom implements Comparable<ElvaReal> {
+public final class ElvaReal extends ElvaAtom<Number> {
 	private final Number value;
 
 	/**
@@ -78,7 +78,7 @@ public final class ElvaReal extends ElvaAtom implements Comparable<ElvaReal> {
 	@Override
 	public final boolean equals(Object atom) {
 		if(ElvaReal.class.isInstance(atom)) {
-			return this.compareTo((ElvaReal) atom) == 0;
+			return compareTo((ElvaReal) atom) == 0;
 		} else return false;
 	}
 
@@ -158,7 +158,6 @@ public final class ElvaReal extends ElvaAtom implements Comparable<ElvaReal> {
 	 * @param real 右側の実数値
 	 * @return 比較の結果
 	 */
-	@Override
 	public final int compareTo(ElvaReal real) {
 		final var l = this.toBigDecimal();
 		final var r = real.toBigDecimal();
@@ -204,24 +203,22 @@ public final class ElvaReal extends ElvaAtom implements Comparable<ElvaReal> {
 	}
 
 	/**
-	 * 指定された値をこのアトム型で包みます。
+	 * 処理系の内外における暗黙的な型変換を定めます。
 	 *
-	 * @param sexp 値
-	 * @return 実数のアトム
 	 *
-	 * @throws ClassCastException 型検査の例外
+	 * @author 無線部開発班
+	 *
+	 * @since 2020/06/10
 	 */
-	public static final ElvaReal asReal(Object sexp) {
-		return new ElvaReal(Number.class.cast(sexp));
-	}
+	public static final class Real implements Implicit {
+		@Override
+		public final boolean support(Object value) {
+			return value instanceof Number;
+		}
 
-	/**
-	 * 指定された値が暗黙的に実数値型に変換可能か確認します。
-	 *
-	 * @param sexp 値
-	 * @return 数値型の場合は真
-	 */
-	public static final boolean support(Object sexp) {
-		return Number.class.isInstance(sexp);
+		@Override
+		public final ElvaNode encode(Object value) {
+			return new ElvaReal((Number) value);
+		}
 	}
 }

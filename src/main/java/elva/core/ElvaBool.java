@@ -15,7 +15,7 @@ import java.util.Objects;
  *
  * @since 2020/03/11
  */
-public final class ElvaBool extends ElvaAtom implements Comparable<ElvaBool> {
+public final class ElvaBool extends ElvaAtom<Boolean> {
 	private final boolean value;
 
 	/**
@@ -61,17 +61,6 @@ public final class ElvaBool extends ElvaAtom implements Comparable<ElvaBool> {
 	}
 
 	/**
-	 * この真偽値と指定された真偽値を比較します。
-	 *
-	 * @param text 右側の真偽値
-	 * @return 比較した結果
-	 */
-	@Override
-	public final int compareTo(ElvaBool text) {
-		return value().compareTo(text.value);
-	}
-
-	/**
 	 * この真偽値を式として表す真偽値を返します。
 	 *
 	 * @return 真偽値
@@ -82,24 +71,22 @@ public final class ElvaBool extends ElvaAtom implements Comparable<ElvaBool> {
 	}
 
 	/**
-	 * 指定された値をこのアトム型で包みます。
+	 * 処理系の内外における暗黙的な型変換を定めます。
 	 *
-	 * @param sexp 値
-	 * @return 真偽値のアトム
 	 *
-	 * @throws ClassCastException 型検査の例外
+	 * @author 無線部開発班
+	 *
+	 * @since 2020/06/10
 	 */
-	public static final ElvaBool asBool(Object sexp) {
-		return (boolean) sexp? ElvaBool.T: ElvaBool.F;
-	}
+	public static final class Bool implements Implicit {
+		@Override
+		public final boolean support(Object value) {
+			return value instanceof Boolean;
+		}
 
-	/**
-	 * 指定された値が暗黙的に真偽値型に変換可能か確認します。
-	 *
-	 * @param sexp 値
-	 * @return 真偽値型の場合は真
-	 */
-	public static final boolean support(Object sexp) {
-		return Boolean.class.isInstance(sexp);
+		@Override
+		public final ElvaNode encode(Object value) {
+			return (boolean) value? ElvaBool.T: ElvaBool.F;
+		}
 	}
 }

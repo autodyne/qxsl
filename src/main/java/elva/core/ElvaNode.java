@@ -7,12 +7,14 @@ package elva.core;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import elva.core.ElvaList.ArraySeq;
 import elva.core.ElvaList.ChainSeq;
+import elva.warn.ElvaRuntimeException;
 
 /**
  * LISP処理系で使用されるリストやアトムの抽象化です。
@@ -23,7 +25,8 @@ import elva.core.ElvaList.ChainSeq;
  * @since 2020/02/29
  */
 public abstract class ElvaNode implements Serializable {
-	private static final AutoBoxing WRAP = new AutoBoxing();
+	private static final AutoBoxing AUTO = new AutoBoxing();
+	private static final NodeBoxing NODE = new NodeBoxing();
 
 	/**
 	 * この式の値を処理系の外部に渡す際に使用します。
@@ -125,7 +128,7 @@ public abstract class ElvaNode implements Serializable {
 	public final <V> V ofType(Class<V> type) {
 		final var body = value();
 		try {
-			return (V) WRAP.wrap(type).cast(body);
+			return (V) AUTO.encode(type).cast(body);
 		} catch (ClassCastException ex) {
 			final var self = body.getClass();
 			final var temp = "%s (%s) is detected but %s required";
@@ -161,12 +164,7 @@ public abstract class ElvaNode implements Serializable {
 	 */
 	public static final ElvaNode wrap(Object sexp) {
 		if(sexp instanceof ElvaNode) return (ElvaNode) sexp;
-		if(ElvaType.support(sexp)) return ElvaType.asType(sexp);
-		if(ElvaText.support(sexp)) return ElvaText.asText(sexp);
-		if(ElvaReal.support(sexp)) return ElvaReal.asReal(sexp);
-		if(ElvaBool.support(sexp)) return ElvaBool.asBool(sexp);
-		if(ElvaList.support(sexp)) return ElvaList.asList(sexp);
-		return new ElvaWrap(sexp);
+		return NODE.encode(sexp);
 	}
 
 	/**
@@ -188,10 +186,12 @@ public abstract class ElvaNode implements Serializable {
 	 * @since 2020/06/08
 	 */
 	private static final class AutoBoxing {
-		private final Map<Class<?>, Class<?>> map;
+		private final Map<Class<?>, Class<?>> encode;
+		private final Map<Class<?>, Class<?>> decode;
 
 		private AutoBoxing() {
-			this.map = new HashMap<>();
+			this.encode = new HashMap<>();
+			this.decode = new HashMap<>();
 			install(Long.class);
 			install(Byte.class);
 			install(Short.class);
@@ -211,7 +211,8 @@ public abstract class ElvaNode implements Serializable {
 			try {
 				final var fld = type.getField("TYPE");
 				final var cls = (Class) fld.get(null);
-				map.put(cls, type);
+				encode.put(cls, type);
+				decode.put(type, cls);
 			} catch (NoSuchFieldException ex) {
 			} catch (IllegalAccessException ex) {}
 		}
@@ -223,8 +224,53 @@ public abstract class ElvaNode implements Serializable {
 		 *
 		 * @return 適合するラッパ型
 		 */
-		private final Class<?> wrap(Class<?> cls) {
-			return map.getOrDefault(cls, cls);
+		private final Class<?> encode(Class<?> cls) {
+			return encode.getOrDefault(cls, cls);
+		}
+	
+		/**
+		 * 指定されたラッパ型に適合する基本型を返します。
+		 *
+		 * @param cls 型
+		 *
+		 * @return 適合する基本型
+		 */
+		private final Class<?> decode(Class<?> cls) {
+			return decode.getOrDefault(cls, cls);
+		}
+	}
+
+	/**
+	 * 処理系の内外における暗黙的な型変換を実施します。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2020/06/09
+	 */
+	private static final class NodeBoxing {
+		private final List<Implicit> list;
+
+		private NodeBoxing() {
+			this.list = new ArrayList<>();
+			list.add(new ElvaType.Type());
+			list.add(new ElvaText.Text());
+			list.add(new ElvaReal.Real());
+			list.add(new ElvaBool.Bool());
+			list.add(new ElvaList.List());
+		}
+
+		/**
+		 * 処理系の外部の値を適切に型変換します。
+		 *
+		 * @param value 値
+		 * @return 式
+		 */
+		private final ElvaNode encode(Object value) {
+			for(var imp: list) if(imp.support(value)) {
+				return imp.encode(value);
+			}
+			return new ElvaWrap(value);
 		}
 	}
 }
