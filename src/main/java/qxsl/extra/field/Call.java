@@ -22,17 +22,22 @@ import static java.text.Normalizer.normalize;
  *
  */
 public final class Call extends Qxsl<String> {
+	private static final String PATTERN = "\\w+(/\\w+)?";
 	private final String call;
 
 	/**
 	 * 呼出符号を指定して{@link Call}を構築します。
+	 * 呼出符号が誤っている場合は例外が発生します。
 	 *
 	 * @param call 呼出符号
+	 *
+	 * @throws IllegalArgumentException 不正な文字を含む場合
 	 */
 	public Call(String call) {
 		super(CALL);
 		call = normalize(call.toUpperCase(), NFKC);
-		this.call = call.replaceAll("[^A-Z0-9/]", "");
+		if(call.matches(PATTERN)) this.call = call;
+		else throw new IllegalArgumentException(call);
 	}
 
 	@Override
