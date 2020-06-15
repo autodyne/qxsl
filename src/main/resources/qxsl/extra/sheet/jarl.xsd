@@ -5,41 +5,32 @@
 			<xsd:sequence>
 				<xsd:element name="SUMMARYSHEET">
 					<xsd:complexType>
-						<xsd:choice minOccurs="0" maxOccurs="unbounded">
-							<xsd:element type="xsd:string" name="CONTESTNAME"/>
-							<xsd:element type="xsd:string" name="CATEGORYCODE"/>
-							<xsd:element type="xsd:string" name="CATEGORYNAME"/>
-							<xsd:element type="xsd:string" name="CALLSIGN"/>
-							<xsd:element type="xsd:string" name="OPCALLSIGN"/>
-							<xsd:element type="xsd:string" name="TOTALSCORE"/>
-							<xsd:element type="xsd:string" name="ADDRESS"/>
-							<xsd:element type="xsd:string" name="NAME"/>
-							<xsd:element type="xsd:string" name="TEL"/>
-							<xsd:element type="xsd:string" name="EMAIL"/>
-							<xsd:element type="xsd:string" name="LICENSECLASS"/>
-							<xsd:element type="xsd:string" name="POWER"/>
-							<xsd:element type="xsd:string" name="POWERTYPE"/>
-							<xsd:element type="xsd:string" name="FDCOEFF"/>
-							<xsd:element type="xsd:string" name="OPPLACE"/>
-							<xsd:element type="xsd:string" name="POWERSUPPLY"/>
-							<xsd:element type="xsd:string" name="EQUIPMENT"/>
-							<xsd:element type="xsd:string" name="COMMENTS"/>
-							<xsd:element type="xsd:string" name="MULTIOPLIST"/>
-							<xsd:element type="xsd:string" name="REGCLUBNUMBER"/>
-							<xsd:element type="xsd:string" name="REGCLUBNAME"/>
-							<xsd:element type="xsd:string" name="OATH"/>
-							<xsd:element type="xsd:string" name="DATE"/>
-							<xsd:element type="xsd:string" name="SIGNATURE"/>
-							<xsd:element name="SCORE">
-								<xsd:complexType>
-									<xsd:simpleContent>
-										<xsd:extension base="xsd:string">
-											<xsd:attribute name="BAND"/>
-										</xsd:extension>
-									</xsd:simpleContent>
-								</xsd:complexType>
-							</xsd:element>
-						</xsd:choice>
+						<xsd:all>
+							<xsd:element type="xsd:string" minOccurs="0" name="CONTESTNAME"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="CATEGORYCODE"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="CATEGORYNAME"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="CALLSIGN"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="OPCALLSIGN"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="TOTALSCORE"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="ADDRESS"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="NAME"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="TEL"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="EMAIL"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="LICENSECLASS"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="POWER"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="POWERTYPE"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="FDCOEFF"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="OPPLACE"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="POWERSUPPLY"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="EQUIPMENT"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="COMMENTS"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="MULTIOPLIST"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="REGCLUBNUMBER"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="REGCLUBNAME"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="OATH"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="DATE"/>
+							<xsd:element type="xsd:string" minOccurs="0" name="SIGNATURE"/>
+						</xsd:all>
 						<xsd:attribute name="VERSION">
 							<xsd:simpleType>
 								<xsd:restriction base="xsd:string">

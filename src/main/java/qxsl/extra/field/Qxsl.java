@@ -20,7 +20,6 @@ import qxsl.model.Field;
  */
 public abstract class Qxsl<V> extends Field<V> {
 	public static final String QXSL = "qxsl.org";
-	public static final String ADIF = "adif.org";
 	public static final QName BAND = new QName(QXSL, "band", "qxsl");
 	public static final QName CALL = new QName(QXSL, "call", "qxsl");
 	public static final QName CITY = new QName(QXSL, "city", "qxsl");

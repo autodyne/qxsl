@@ -10,6 +10,7 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.graalvm.sdk:graal-sdk:20.0.+'
 	testImplementation 'junit:junit:+'
 	testImplementation 'org.assertj:assertj-core:+'
 	testImplementation 'org.junit.jupiter:junit-jupiter-engine:+'
@@ -40,7 +41,7 @@ javadoc {
 	options.charSet = options.encoding = utf8
 }
 
-publishing.repositories.maven{
+publishing.repositories.maven {
 	url = "$dist/mvn"
 }
 

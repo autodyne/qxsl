@@ -31,7 +31,6 @@ import static java.time.temporal.ChronoUnit.MILLIS;
  * @author 無線部開発班
  *
  * @since 2013/02/26
- *
  */
 public final class ZBinFormat extends BaseFormat {
 	private static final short USEUTC = 0x7FFF;
@@ -57,7 +56,6 @@ public final class ZBinFormat extends BaseFormat {
 	 * @author 無線部開発班
 	 *
 	 * @since 2013/02/23
-	 *
 	 */
 	private static final class TDateTime {
 		private final int MS_D = 86400000;
@@ -67,6 +65,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * 1899年12月30日を起点にTDateTime型を構築します。
 		 *
 		 * @param zoneId 交信記録に適用する時間帯
+		 *
 		 * @since 2019/05/15
 		 */
 		public TDateTime(ZoneId zoneId) {
@@ -78,6 +77,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * 指定されたTDateTimeを日時にデコードします。
 		 *
 		 * @param led TDateTime型のビット列
+		 *
 		 * @return 日時
 		 */
 		public Time decode(long led) {
@@ -92,6 +92,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * 指定された日時をTDateTimeにエンコードします。
 		 *
 		 * @param field 日時
+		 *
 		 * @return TDateTime型のビット列
 		 */
 		public long encode(Time field) {
@@ -110,7 +111,6 @@ public final class ZBinFormat extends BaseFormat {
 	 * @author 無線部開発班
 	 *
 	 * @since 2013/02/23
-	 *
 	 */
 	public enum BandEnum {
 		M1_9  (    1900),
@@ -155,13 +155,12 @@ public final class ZBinFormat extends BaseFormat {
 		 * 指定された周波数に対応する列挙子を返します。
 		 *
 		 * @param band 周波数
+		 *
 		 * @return 対応する列挙子があれば返す
 		 */
 		public static BandEnum valueOf(Band band) {
 			if(values == null) values = values();
-			for(BandEnum b : values) {
-				if(b.band.equals(band)) return b;
-			}
+			for(var b: values) if(b.band.equals(band)) return b;
 			return null;
 		}
 
@@ -169,13 +168,12 @@ public final class ZBinFormat extends BaseFormat {
 		 * 指定された序数に対応する列挙子を返します。
 		 *
 		 * @param i 序数
+		 *
 		 * @return 対応する列挙子があれば返す
 		 */
 		public static BandEnum forIndex(int i) {
 			if(values == null) values = values();
-			for(BandEnum b : values) {
-				if(b.ordinal() == i) return b;
-			}
+			for(var b: values) if(b.ordinal() == i) return b;
 			return null;
 		}
 	}
@@ -187,7 +185,6 @@ public final class ZBinFormat extends BaseFormat {
 	 * @author 無線部開発班
 	 *
 	 * @since 2013/02/23
-	 *
 	 */
 	public enum ModeEnum {
 		CW    ("CW"),
@@ -217,13 +214,12 @@ public final class ZBinFormat extends BaseFormat {
 		 * 指定されたモードに対応する列挙子を返します。
 		 *
 		 * @param mode モード
+		 *
 		 * @return 対応する列挙子があれば返す
 		 */
 		public static ModeEnum valueOf(Mode mode) {
 			if(values == null) values = values();
-			for(ModeEnum m : values) {
-				if(m.mode.equals(mode)) return m;
-			}
+			for(var m: values) if(m.mode.equals(mode)) return m;
 			return ModeEnum.OTHER;
 		}
 
@@ -231,13 +227,12 @@ public final class ZBinFormat extends BaseFormat {
 		 * 指定された序数に対応する列挙子を返します。
 		 *
 		 * @param i 序数
+		 *
 		 * @return 対応する列挙子があれば返す
 		 */
 		public static ModeEnum forIndex(int i) {
 			if(values == null) values = values();
-			for(ModeEnum m : values) {
-				if(m.ordinal() == i) return m;
-			}
+			for(var m: values) if(m.ordinal() == i) return m;
 			return null;
 		}
 	}
@@ -249,7 +244,6 @@ public final class ZBinFormat extends BaseFormat {
 	 * @author 無線部開発班
 	 *
 	 * @since 2013/02/23
-	 *
 	 */
 	public enum WattEnum {
 		P, L, M, H;
@@ -274,13 +268,12 @@ public final class ZBinFormat extends BaseFormat {
 		 * 指定された出力に対応する列挙子を返します。
 		 *
 		 * @param watt 出力
+		 *
 		 * @return 対応する列挙子があれば返す
 		 */
 		public static WattEnum valueOf(Watt watt) {
 			if(values == null) values = values();
-			for(WattEnum p : values) {
-				if(p.watt.equals(watt)) return p;
-			}
+			for(var p: values) if(p.watt.equals(watt)) return p;
 			return null;
 		}
 
@@ -288,13 +281,12 @@ public final class ZBinFormat extends BaseFormat {
 		 * 指定された序数に対応する列挙子を返します。
 		 *
 		 * @param i 序数
+		 *
 		 * @return 対応する列挙子があれば返す
 		 */
 		public static WattEnum forIndex(int i) {
 			if(values == null) values = values();
-			for(WattEnum p : values) {
-				if(p.ordinal() == i) return p;
-			}
+			for(var p: values) if(p.ordinal() == i) return p;
 			return null;
 		}
 	}
@@ -306,7 +298,6 @@ public final class ZBinFormat extends BaseFormat {
 	 * @author 無線部開発班
 	 *
 	 * @since 2013/02/23
-	 *
 	 */
 	private final class ZBinDecoder implements TableDecoder {
 		private final DataInputStream stream;
@@ -326,7 +317,7 @@ public final class ZBinFormat extends BaseFormat {
 		/**
 		 * ストリームを閉じてリソースを解放します。
 		 *
-		 * @throws IOException リソース解放に失敗した場合
+		 * @throws IOException 解放の例外
 		 */
 		@Override
 		public final void close() throws IOException {
@@ -337,6 +328,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * 冒頭をスキップして交信記録を1件読み込みます。
 		 *
 		 * @return 読み込んだ交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		@Override
@@ -352,6 +344,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * 冒頭をスキップして交信記録を1件読み込みます。
 		 *
 		 * @return 読み込んだ交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final List<Item> items() throws IOException {
@@ -365,6 +358,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * ストリームからヘッダを読み込んで時間帯を返します。
 		 *
 		 * @return 読み込んだ時間帯
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 *
 		 * @since 2019/05/14
@@ -381,6 +375,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * ストリームから交信記録を1件読み込みます。
 		 *
 		 * @return 読み込んだ1件の交信
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final Item item() throws IOException {
@@ -407,6 +402,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * 交信記録に交信日時を読み込みます。
 		 *
 		 * @param item 設定する交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void time(Item item) throws IOException {
@@ -417,6 +413,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * 交信記録に相手局のコールサインを読み込みます。
 		 *
 		 * @param item 設定する交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void call(Item item) throws IOException {
@@ -428,6 +425,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * 交信記録に相手局まで送信したナンバーを読み込みます。
 		 *
 		 * @param item 設定する交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void sent(Item item) throws IOException {
@@ -439,6 +437,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * 交信記録に相手局から受信したナンバーを読み込みます。
 		 *
 		 * @param item 設定する交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void rcvd(Item item) throws IOException {
@@ -450,6 +449,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * 交信記録に相手局まで送信したRSTQを読み込みます。
 		 *
 		 * @param item 設定する交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void sRSTQ(Item item) throws IOException {
@@ -462,6 +462,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * 交信記録に相手局から受信したRSTQを読み込みます。
 		 *
 		 * @param item 設定する交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void rRSTQ(Item item) throws IOException {
@@ -474,6 +475,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * 交信記録に通信方式を読み込みます。
 		 *
 		 * @param item 設定する交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void mode(Item item) throws IOException {
@@ -484,6 +486,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * 交信記録に周波数帯を読み込みます。
 		 *
 		 * @param item 設定する交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void band(Item item) throws IOException {
@@ -494,6 +497,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * 交信記録に空中線出力を読み込みます。
 		 *
 		 * @param item 設定する交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void watt(Item item) throws IOException {
@@ -504,6 +508,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * 交信記録に運用者名を読み込みます。
 		 *
 		 * @param item 設定する交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void oprt(Item item) throws IOException {
@@ -515,6 +520,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * 交信記録に交信の備考を読み込みます。
 		 *
 		 * @param item 設定する交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void note(Item item) throws IOException {
@@ -526,7 +532,9 @@ public final class ZBinFormat extends BaseFormat {
 		 * ストリームから指定された最大文字数の文字列を読み込みます。
 		 *
 		 * @param limit 最大文字数
+		 *
 		 * @return 読み込んだ文字列
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private String readString(int limit) throws IOException {
@@ -563,7 +571,7 @@ public final class ZBinFormat extends BaseFormat {
 		/**
 		 * ストリームを閉じてリソースを解放します。
 		 *
-		 * @throws IOException リソース解放に失敗した場合
+		 * @throws IOException 解放の例外
 		 */
 		@Override
 		public final void close() throws IOException {
@@ -574,7 +582,8 @@ public final class ZBinFormat extends BaseFormat {
 		 * 交信記録を出力します。
 		 *
 		 * @param items 交信記録
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		@Override
 		public void encode(List<Item> items) throws IOException {
@@ -591,7 +600,8 @@ public final class ZBinFormat extends BaseFormat {
 		 * 交信記録をバイナリにシリアライズして出力します。
 		 *
 		 * @param item 出力する交信記録
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		private final void item(Item item) throws IOException {
 			int i = 0;
@@ -617,7 +627,8 @@ public final class ZBinFormat extends BaseFormat {
 		 * 交信日時をTDateTime型で読めるバイト列に変換して出力します。
 		 *
 		 * @param time 交信日時
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		private final void time(Time time) throws IOException {
 			if(time == null) stream.writeLong(0);
@@ -628,7 +639,8 @@ public final class ZBinFormat extends BaseFormat {
 		 * RSTQシグナルレポートを下位バイト、上位バイトの順に出力します。
 		 *
 		 * @param rst RSTQシグナルレポート
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		private final void rst(RSTQ rst) throws IOException {
 			int s = rst == null? 599 : rst.value();
@@ -639,7 +651,8 @@ public final class ZBinFormat extends BaseFormat {
 		 * 交信した通信方式を1バイトで出力します。
 		 *
 		 * @param mode 通信方式
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		private final void mode(Mode mode) throws IOException {
 			stream.writeByte(ModeEnum.valueOf(mode).ordinal());
@@ -649,7 +662,8 @@ public final class ZBinFormat extends BaseFormat {
 		 * 交信した周波数帯を1バイトで出力します。
 		 *
 		 * @param band 周波数帯
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		private final void band(Band band) throws IOException {
 			BandEnum bands = BandEnum.valueOf(band);
@@ -661,7 +675,8 @@ public final class ZBinFormat extends BaseFormat {
 		 * 交信時の空中線出力を1バイトで出力します。
 		 *
 		 * @param watt 空中線出力
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		private final void watt(Watt watt) throws IOException {
 			WattEnum watts = WattEnum.valueOf(watt);
@@ -675,7 +690,8 @@ public final class ZBinFormat extends BaseFormat {
 		 *
 		 * @param limit 最大文字数
 		 * @param f 直列化する属性
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		private void string(int limit, Field f) throws IOException {
 			final String value = f != null? f.value().toString() : "";

@@ -1,7 +1,8 @@
 qxsl: Amateur-Radio Logging Library & LISP
 ====
 
-![image](https://img.shields.io/badge/Java-SE11-red.svg)
+![image](https://img.shields.io/badge/OpenJDK-SE11-red.svg)
+![image](https://img.shields.io/badge/GraalVM-20.0-red.svg)
 ![image](https://img.shields.io/badge/Gradle-5-orange.svg)
 ![image](https://img.shields.io/badge/license-LGPL3-blue.svg)
 
@@ -130,7 +131,7 @@ repositories.maven {
 }
 
 dependencies {
-  compile('qxsl:qxsl:+')
+  implementation('qxsl:qxsl:+')
 }
 ```
 
@@ -140,6 +141,14 @@ dependencies {
 
 ```shell
 $ gradle build javadoc publish
+```
+
+You can create a native library instead of a JAR file.
+[GraalVM](https://www.graalvm.org) must be installed before compilation.
+Then run the command manually as follows:
+
+```shell
+$ native-image --shared -cp build/libs/qxsl.jar
 ```
 
 ## Contribution

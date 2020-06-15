@@ -27,7 +27,6 @@ import static java.time.ZoneOffset.UTC;
  * @author 無線部開発班
  *
  * @since 2019/05/04
- *
  */
 public final class CqwwFormat extends BaseFormat {
 	public CqwwFormat() {
@@ -61,7 +60,6 @@ public final class CqwwFormat extends BaseFormat {
 	 * @author 無線部開発班
 	 *
 	 * @since 2020/02/26
-	 *
 	 */
 	public enum BandEnum {
 		M1_8 ( "1800",       1_800),
@@ -115,13 +113,12 @@ public final class CqwwFormat extends BaseFormat {
 		 * 指定された周波数に対応する列挙子を返します。
 		 *
 		 * @param band 周波数
+		 *
 		 * @return 対応する列挙子があれば返す
 		 */
 		public static BandEnum valueOf(Band band) {
 			if(values == null) values = values();
-			for(BandEnum b : values) {
-				if(b.band.equals(band)) return b;
-			}
+			for(var b: values) if(b.band.equals(band)) return b;
 			return null;
 		}
 
@@ -129,13 +126,12 @@ public final class CqwwFormat extends BaseFormat {
 		 * 指定された文字列に対応する列挙子を返します。
 		 *
 		 * @param text 文字列
+		 *
 		 * @return 対応する列挙子があれば返す
 		 */
 		public static BandEnum value(String text) {
 			if(values == null) values = values();
-			for(BandEnum b : values) {
-				if(b.text.equals(text)) return b;
-			}
+			for(var b : values) if(b.text.equals(text)) return b;
 			return null;
 		}
 	}
@@ -147,7 +143,6 @@ public final class CqwwFormat extends BaseFormat {
 	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/04
-	 *
 	 */
 	private final class CqwwDecoder extends PlainTextDecoder {
 		private final DateTimeFormatter format;
@@ -168,6 +163,7 @@ public final class CqwwFormat extends BaseFormat {
 		 * 交信記録を読み込みます。
 		 *
 		 * @return 交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		@Override
@@ -183,6 +179,7 @@ public final class CqwwFormat extends BaseFormat {
 		 * 交信記録を読み込みます。
 		 *
 		 * @return 交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final List<Item> items() throws IOException {
@@ -201,7 +198,9 @@ public final class CqwwFormat extends BaseFormat {
 		 * 1行の文字列から交信記録を1件読み込みます。
 		 *
 		 * @param line 1行
+		 *
 		 * @return 読み込んだ1件の交信
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private Item item(String line) throws IOException {
@@ -320,7 +319,6 @@ public final class CqwwFormat extends BaseFormat {
 	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/04
-	 *
 	 */
 	private final class CqwwEncoder extends PlainTextEncoder {
 		private final DateTimeFormatter format;
@@ -339,7 +337,8 @@ public final class CqwwFormat extends BaseFormat {
 		 * 交信記録を出力します。
 		 *
 		 * @param items 交信記録
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		@Override
 		public void encode(List<Item> items) throws IOException {
@@ -350,7 +349,8 @@ public final class CqwwFormat extends BaseFormat {
 		 * 指定された交信記録をテキスト書式で出力します。
 		 *
 		 * @param item 出力する交信記録
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		private void item(Item item) throws IOException {
 			print("QSO: ");
@@ -378,7 +378,8 @@ public final class CqwwFormat extends BaseFormat {
 		 * 指定された日時を文字列として出力します。
 		 *
 		 * @param date 出力する日時
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		private void time(Time date) throws IOException {
 			DateTimeFormatter format = this.format.withZone(UTC);
@@ -390,7 +391,8 @@ public final class CqwwFormat extends BaseFormat {
 		 * 指定された周波数帯を文字列として出力します。
 		 *
 		 * @param band 出力する周波数帯
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		private void band(Band band) throws IOException {
 			BandEnum bands = BandEnum.valueOf(band);

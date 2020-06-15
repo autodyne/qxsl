@@ -15,9 +15,18 @@
 						<xsd:sequence>
 							<xsd:element name="RECORD" minOccurs="0" maxOccurs="unbounded">
 								<xsd:complexType>
-									<xsd:sequence>
-										<xsd:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
-									</xsd:sequence>
+									<xsd:all>
+										<xsd:element type="xsd:string" minOccurs="0" name="QSO_DATE"/>
+										<xsd:element type="xsd:string" minOccurs="0" name="TIME_ON"/>
+										<xsd:element type="xsd:string" minOccurs="0" name="CALL"/>
+										<xsd:element type="xsd:string" minOccurs="0" name="BAND"/>
+										<xsd:element type="xsd:string" minOccurs="0" name="MODE"/>
+										<xsd:element type="xsd:string" minOccurs="0" name="OPERATOR"/>
+										<xsd:element type="xsd:string" minOccurs="0" name="RST_RCVD"/>
+										<xsd:element type="xsd:string" minOccurs="0" name="SRX"/>
+										<xsd:element type="xsd:string" minOccurs="0" name="RST_SENT"/>
+										<xsd:element type="xsd:string" minOccurs="0" name="STX"/>
+									</xsd:all>
 								</xsd:complexType>
 							</xsd:element>
 						</xsd:sequence>

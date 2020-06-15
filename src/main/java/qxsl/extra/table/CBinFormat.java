@@ -30,7 +30,6 @@ import static java.time.temporal.ChronoUnit.SECONDS;
  * @author 無線部開発班
  *
  * @since 2017/06/12
- *
  */
 public final class CBinFormat extends BaseFormat {
 	public CBinFormat() {
@@ -54,7 +53,6 @@ public final class CBinFormat extends BaseFormat {
 	 * @author 無線部開発班
 	 *
 	 * @since 2017/06/12
-	 *
 	 */
 	private static final class CDateTime {
 		private final ZonedDateTime epoch;
@@ -71,6 +69,7 @@ public final class CBinFormat extends BaseFormat {
 		 * 指定されたCDateTimeを日時にデコードします。
 		 *
 		 * @param led CDateTime型のビット列
+		 *
 		 * @return 日時
 		 */
 		public Time decode(long led) {
@@ -82,6 +81,7 @@ public final class CBinFormat extends BaseFormat {
 		 * 指定された日時をCDateTimeにエンコードします。
 		 *
 		 * @param field 日時
+		 *
 		 * @return CDateTime型のビット列
 		 */
 		public long encode(Time field) {
@@ -97,7 +97,6 @@ public final class CBinFormat extends BaseFormat {
 	 * @author 無線部開発班
 	 *
 	 * @since 2017/06/12
-	 *
 	 */
 	public enum BandEnum {
 		M1_9 (     1900),
@@ -149,13 +148,12 @@ public final class CBinFormat extends BaseFormat {
 		 * 指定された周波数に対応する列挙子を返します。
 		 *
 		 * @param band 周波数
+		 *
 		 * @return 対応する列挙子があれば返す
 		 */
 		public static BandEnum valueOf(Band band) {
 			if(values == null) values = values();
-			for(BandEnum b : values) {
-				if(b.band.equals(band)) return b;
-			}
+			for(var b: values) if(b.band.equals(band)) return b;
 			return null;
 		}
 
@@ -163,13 +161,12 @@ public final class CBinFormat extends BaseFormat {
 		 * 指定された序数に対応する列挙子を返します。
 		 *
 		 * @param i 序数
+		 *
 		 * @return 対応する列挙子があれば返す
 		 */
 		public static BandEnum forIndex(int i) {
 			if(values == null) values = values();
-			for(BandEnum b : values) {
-				if(b.ordinal() == i) return b;
-			}
+			for(var b: values) if(b.ordinal() == i) return b;
 			return null;
 		}
 	}
@@ -181,7 +178,6 @@ public final class CBinFormat extends BaseFormat {
 	 * @author 無線部開発班
 	 *
 	 * @since 2017/06/12
-	 *
 	 */
 	public enum ModeEnum {
 		CW     ("CW"),
@@ -229,13 +225,12 @@ public final class CBinFormat extends BaseFormat {
 		 * 指定されたモードに対応する列挙子を返します。
 		 *
 		 * @param mode モード
+		 *
 		 * @return 対応する列挙子があれば返す
 		 */
 		public static ModeEnum valueOf(Mode mode) {
 			if(values == null) values = values();
-			for(ModeEnum m : values) {
-				if(m.mode.equals(mode)) return m;
-			}
+			for(var m: values) if(m.mode.equals(mode)) return m;
 			return null;
 		}
 
@@ -243,13 +238,12 @@ public final class CBinFormat extends BaseFormat {
 		 * 指定された序数に対応する列挙子を返します。
 		 *
 		 * @param i 序数
+		 *
 		 * @return 対応する列挙子があれば返す
 		 */
 		public static ModeEnum forIndex(int i) {
 			if(values == null) values = values();
-			for(ModeEnum m : values) {
-				if(m.ordinal() == i) return m;
-			}
+			for(var m: values) if(m.ordinal() == i) return m;
 			return null;
 		}
 	}
@@ -261,7 +255,6 @@ public final class CBinFormat extends BaseFormat {
 	 * @author 無線部開発班
 	 *
 	 * @since 2017/06/12
-	 *
 	 */
 	private final class CBinDecoder implements TableDecoder {
 		private final FieldFormats fields;
@@ -282,7 +275,7 @@ public final class CBinFormat extends BaseFormat {
 		/**
 		 * ストリームを閉じてリソースを解放します。
 		 *
-		 * @throws IOException リソース解放に失敗した場合
+		 * @throws IOException 解放の例外
 		 */
 		@Override
 		public final void close() throws IOException {
@@ -293,6 +286,7 @@ public final class CBinFormat extends BaseFormat {
 		 * 冒頭をスキップして交信記録を1件読み込みます。
 		 *
 		 * @return 読み込んだ交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		@Override
@@ -308,6 +302,7 @@ public final class CBinFormat extends BaseFormat {
 		 * 冒頭をスキップして交信記録を1件読み込みます。
 		 *
 		 * @return 交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final List<Item> items() throws IOException {
@@ -329,6 +324,7 @@ public final class CBinFormat extends BaseFormat {
 		 * ストリームから交信記録を1件読み込みます。
 		 *
 		 * @return 読み込んだ1件の交信
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final Item item() throws IOException {
@@ -352,6 +348,7 @@ public final class CBinFormat extends BaseFormat {
 		 * 交信記録に交信日時を読み込みます。
 		 *
 		 * @param item 設定する交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void time(Item item) throws IOException {
@@ -362,6 +359,7 @@ public final class CBinFormat extends BaseFormat {
 		 * 交信記録に相手局のコールサインを読み込みます。
 		 *
 		 * @param item 設定する交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void call(Item item) throws IOException {
@@ -373,6 +371,7 @@ public final class CBinFormat extends BaseFormat {
 		 * 交信記録に相手局まで送信したナンバーを読み込みます。
 		 *
 		 * @param item 設定する交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void sent(Item item) throws IOException {
@@ -384,6 +383,7 @@ public final class CBinFormat extends BaseFormat {
 		 * 交信記録に相手局から受信したナンバーを読み込みます。
 		 *
 		 * @param item 設定する交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void rcvd(Item item) throws IOException {
@@ -395,6 +395,7 @@ public final class CBinFormat extends BaseFormat {
 		 * 交信記録に通信方式を読み込みます。
 		 *
 		 * @param item 設定する交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void mode(Item item) throws IOException {
@@ -405,6 +406,7 @@ public final class CBinFormat extends BaseFormat {
 		 * 交信記録に周波数帯を読み込みます。
 		 *
 		 * @param item 設定する交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void band(Item item) throws IOException {
@@ -415,6 +417,7 @@ public final class CBinFormat extends BaseFormat {
 		 * 交信記録に運用者名を読み込みます。
 		 *
 		 * @param item 設定する交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void oprt(Item item) throws IOException {
@@ -426,6 +429,7 @@ public final class CBinFormat extends BaseFormat {
 		 * 交信記録に交信の備考を読み込みます。
 		 *
 		 * @param item 設定する交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void note(Item item) throws IOException {
@@ -437,7 +441,9 @@ public final class CBinFormat extends BaseFormat {
 		 * ストリームから指定された最大文字数の文字列を読み込みます。
 		 *
 		 * @param limit 最大文字数
+		 *
 		 * @return 読み込んだ文字列
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private String readString(int limit) throws IOException {
@@ -456,7 +462,6 @@ public final class CBinFormat extends BaseFormat {
 	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/04
-	 *
 	 */
 	private final class CBinEncoder implements TableEncoder {
 		private final CDateTime cDTime;
@@ -475,7 +480,7 @@ public final class CBinFormat extends BaseFormat {
 		/**
 		 * ストリームを閉じてリソースを解放します。
 		 *
-		 * @throws IOException リソース解放に失敗した場合
+		 * @throws IOException 解放の例外
 		 */
 		@Override
 		public final void close() throws IOException {
@@ -486,7 +491,8 @@ public final class CBinFormat extends BaseFormat {
 		 * 交信記録を出力します。
 		 *
 		 * @param items 交信記録
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		@Override
 		public void encode(List<Item> items) throws IOException {
@@ -507,7 +513,7 @@ public final class CBinFormat extends BaseFormat {
 		 *
 		 * @param items 交信記録
 		 *
-		 * @throws IOException 出力に失敗した場合
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		private void confs(List<Item> items) throws IOException {
 			final var last = items.get(items.size()-1);
@@ -524,7 +530,7 @@ public final class CBinFormat extends BaseFormat {
 		/**
 		 * CTESTWINのAADXコンテスト用の点数設定を出力します。
 		 *
-		 * @throws IOException 出力に失敗した場合
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		private void scoresForAADX() throws IOException {
 			final int BANDS = 46; // 23 * (Asia & Non-Asia)
@@ -537,7 +543,7 @@ public final class CBinFormat extends BaseFormat {
 		 *
 		 * @param items 交信記録
 		 *
-		 * @throws IOException 出力に失敗した場合
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		private void names(List<Item> items) throws IOException {
 			final var names = new LinkedHashSet<Name>();
@@ -555,7 +561,7 @@ public final class CBinFormat extends BaseFormat {
 		 * @param item 出力する交信記録
 		 * @param last 以降に交信記録がない場合true
 		 *
-		 * @throws IOException 出力に失敗した場合
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		private void item(Item item, boolean last) throws IOException {
 			string(20, (Call) item.get(Qxsl.CALL));
@@ -582,7 +588,8 @@ public final class CBinFormat extends BaseFormat {
 		 * 交信日時をCDateTime型で読めるバイト列に変換して出力します。
 		 *
 		 * @param time 交信日時
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		private final void time(Time time) throws IOException {
 			if(time == null) stream.writeLong(0);
@@ -593,7 +600,8 @@ public final class CBinFormat extends BaseFormat {
 		 * 交信した通信方式を1バイトで出力します。
 		 *
 		 * @param mode 通信方式
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		private final void mode(Mode mode) throws IOException {
 			ModeEnum modes = ModeEnum.valueOf(mode);
@@ -605,7 +613,8 @@ public final class CBinFormat extends BaseFormat {
 		 * 交信した周波数帯を1バイトで出力します。
 		 *
 		 * @param band 周波数帯
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		private final void band(Band band) throws IOException {
 			BandEnum bands = BandEnum.valueOf(band);
@@ -619,7 +628,8 @@ public final class CBinFormat extends BaseFormat {
 		 *
 		 * @param limit 最大文字数
 		 * @param f 直列化する属性
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		private void string(int limit, Field f) throws IOException {
 			final String value = f != null? f.value().toString() : "";

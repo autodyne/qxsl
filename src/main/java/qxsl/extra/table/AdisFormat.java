@@ -29,7 +29,6 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
  * @author 無線部開発班
  *
  * @since 2019/07/04
- *
  */
 public final class AdisFormat extends BaseFormat {
 	private static final String URI = "adif.org";
@@ -65,7 +64,6 @@ public final class AdisFormat extends BaseFormat {
 	 * @author 無線部開発班
 	 *
 	 * @since 2019/07/08
-	 *
 	 */
 	private final class AdisDecoder extends PlainTextDecoder {
 		private final String PATTERN = "<(\\w+?):(\\d+?)(:\\w)?>";
@@ -73,7 +71,7 @@ public final class AdisFormat extends BaseFormat {
 		private final FieldFormats fields;
 
 		/**
-		 * 指定されたリーダから交信記録を読み込むデコーダを構築します。
+		 * 指定されたリーダを読み込むデコーダを構築します。
 		 *
 		 * @param reader 交信記録を読み込むリーダ
 		 */
@@ -87,6 +85,7 @@ public final class AdisFormat extends BaseFormat {
 		 * 交信記録を読み込みます。
 		 *
 		 * @return 交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		@Override
@@ -103,6 +102,7 @@ public final class AdisFormat extends BaseFormat {
 		 * ヘッダと交信記録の両方が空の場合は例外を発生します。
 		 *
 		 * @return 交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final List<Item> items() throws IOException {
@@ -124,6 +124,7 @@ public final class AdisFormat extends BaseFormat {
 		 * 文字列から交信記録を1件読み込みます。
 		 *
 		 * @param text 1件の交信記録の文字列
+		 *
 		 * @return 読み込んだ1件の交信
 		 */
 		private final Item item(String text) {
@@ -147,7 +148,6 @@ public final class AdisFormat extends BaseFormat {
 	 * @author 無線部開発班
 	 *
 	 * @since 2019/07/08
-	 *
 	 */
 	private final class AdisEncoder extends PlainTextEncoder {
 		private final FieldFormats fields;
@@ -166,7 +166,8 @@ public final class AdisFormat extends BaseFormat {
 		 * 交信記録を出力します。
 		 *
 		 * @param items 交信記録
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		@Override
 		public final void encode(List<Item> items) throws IOException {
@@ -186,12 +187,11 @@ public final class AdisFormat extends BaseFormat {
 		 * 指定された交信記録をストリームに出力します。
 		 *
 		 * @param item 出力する交信記録
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		private final void item(Item item) throws IOException {
-			for(Field f: item) {
-				if(f.name().getNamespaceURI().equals(URI)) field(f);
-			}
+			for(var f: item) if(f.name().getNamespaceURI().equals(URI)) field(f);
 			print("<eor>");
 			println();
 		}
@@ -200,7 +200,8 @@ public final class AdisFormat extends BaseFormat {
 		 * 指定された属性をストリームに出力します。
 		 *
 		 * @param field 出力する属性
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		private final void field(Field field) throws IOException {
 			final String local = field.name().getLocalPart();

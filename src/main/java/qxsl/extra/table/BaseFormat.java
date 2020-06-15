@@ -128,7 +128,6 @@ public abstract class BaseFormat implements TableFormat {
 	 * @author 無線部開発班
 	 *
 	 * @since 2013/06/24
-	 *
 	 */
 	protected abstract class PlainTextDecoder implements TableDecoder {
 		private final BufferedReader reader;
@@ -145,7 +144,7 @@ public abstract class BaseFormat implements TableFormat {
 		/**
 		 * リーダを閉じてリソースを解放します。
 		 *
-		 * @throws IOException リソース解放に失敗した場合
+		 * @throws IOException 解放の例外
 		 */
 		@Override
 		public final void close() throws IOException {
@@ -179,6 +178,7 @@ public abstract class BaseFormat implements TableFormat {
 		 * 分割位置に空白以外の文字がある場合に例外を発生します。
 		 *
 		 * @param splits 文字列を分割する位置
+		 *
 		 * @return 分割された文字列
 		 *
 		 * @throws IOException 構文の問題もしくは読み込みに失敗した場合
@@ -202,6 +202,7 @@ public abstract class BaseFormat implements TableFormat {
 		 * 区切り文字列のうち大文字と小文字は区別されません。
 		 *
 		 * @param delims 区切り文字列の選択肢となる配列
+		 *
 		 * @return 切り出された文字列
 		 *
 		 * @throws IOException 読み込みに失敗した場合
@@ -228,7 +229,6 @@ public abstract class BaseFormat implements TableFormat {
 	 * @author 無線部開発班
 	 *
 	 * @since 2013/06/24
-	 *
 	 */
 	protected abstract class PlainTextEncoder implements TableEncoder {
 		private final PrintWriter writer;
@@ -245,7 +245,7 @@ public abstract class BaseFormat implements TableFormat {
 		/**
 		 * ライタを閉じてリソースを解放します。
 		 *
-		 * @throws IOException リソース解放に失敗した場合
+		 * @throws IOException 解放の例外
 		 */
 		@Override
 		public final void close() throws IOException {
@@ -256,7 +256,8 @@ public abstract class BaseFormat implements TableFormat {
 		 * 指定された文字列を出力します。
 		 *
 		 * @param s 出力する文字列
-		 * @throws IOException 出力例外発生時
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		public final void print(String s) throws IOException {
 			writer.print(s);
@@ -265,7 +266,7 @@ public abstract class BaseFormat implements TableFormat {
 		/**
 		 * 改行を出力します。
 		 *
-		 * @throws IOException 出力例外発生時
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		public final void println() throws IOException {
 			writer.println();
@@ -276,7 +277,8 @@ public abstract class BaseFormat implements TableFormat {
 		 *
 		 * @param f 出力する書式
 		 * @param args  引数
-		 * @throws IOException 出力例外発生時
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		public final void printf(String f, Object...args) throws IOException {
 			writer.printf(f, args);
@@ -287,7 +289,8 @@ public abstract class BaseFormat implements TableFormat {
 		 *
 		 * @param len 文字列の長さ
 		 * @param s 出力する文字列
-		 * @throws IOException 出力例外発生時
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		public final void printR(int len, String s) throws IOException {
 			final String filled = String.format(String.format("%%%ds", len), s);
@@ -301,7 +304,8 @@ public abstract class BaseFormat implements TableFormat {
 		 *
 		 * @param len 文字列の長さ
 		 * @param s 出力する文字列
-		 * @throws IOException 出力例外発生時
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		public final void printL(int len, String s) throws IOException {
 			final String filled = String.format(String.format("%%-%ds", len), s);
@@ -315,7 +319,8 @@ public abstract class BaseFormat implements TableFormat {
 		 *
 		 * @param len 文字列の長さ
 		 * @param f 出力する属性
-		 * @throws IOException 出力例外発生時
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		public final void printR(int len, Field f) throws IOException {
 			printR(len, f != null? String.valueOf(f.value()) : "");
@@ -326,7 +331,8 @@ public abstract class BaseFormat implements TableFormat {
 		 *
 		 * @param len 文字列の長さ
 		 * @param f 出力する属性
-		 * @throws IOException 出力例外発生時
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		public final void printL(int len, Field f) throws IOException {
 			printL(len, f != null? String.valueOf(f.value()) : "");

@@ -27,7 +27,6 @@ import qxsl.model.Item;
  * @author 無線部開発班
  *
  * @since 2013/02/27
- *
  */
 public final class ZDosFormat extends BaseFormat {
 	private final Charset SJIS = Charset.forName("SJIS");
@@ -88,6 +87,7 @@ public final class ZDosFormat extends BaseFormat {
 		 * 交信記録を読み込みます。
 		 *
 		 * @return 交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		@Override
@@ -103,6 +103,7 @@ public final class ZDosFormat extends BaseFormat {
 		 * 冒頭をスキップして交信記録を1件読み込みます。
 		 *
 		 * @return 読み込んだ交信記録
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final List<Item> items() throws IOException {
@@ -121,7 +122,9 @@ public final class ZDosFormat extends BaseFormat {
 		 * 1行の文字列から交信記録を1件読み込みます。
 		 *
 		 * @param line 1行
+		 *
 		 * @return 読み込んだ1件の交信
+		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private Item item(String line) throws IOException {
@@ -268,7 +271,8 @@ public final class ZDosFormat extends BaseFormat {
 		 * 交信記録を出力します。
 		 *
 		 * @param items 交信記録
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		@Override
 		public void encode(List<Item> items) throws IOException {
@@ -281,7 +285,8 @@ public final class ZDosFormat extends BaseFormat {
 		 * 指定された交信記録をテキスト書式で出力します。
 		 *
 		 * @param item 出力する交信記録
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		private void item(Item item) throws IOException {
 			time((Time) item.get(Qxsl.TIME));
@@ -305,7 +310,8 @@ public final class ZDosFormat extends BaseFormat {
 		 * 指定された日時を文字列として出力します。
 		 *
 		 * @param date 出力する日時
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		private void time(Time date) throws IOException {
 			if(date == null) print(" ".repeat(12));
@@ -316,7 +322,8 @@ public final class ZDosFormat extends BaseFormat {
 		 * 指定された周波数帯を文字列として出力します。
 		 *
 		 * @param band 出力する周波数帯
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		private void band(Band band) throws IOException {
 			if(band.value().intValueExact() < 10_000_000) {
@@ -329,7 +336,8 @@ public final class ZDosFormat extends BaseFormat {
 		 * 指定された運用者名を文字列として出力します。
 		 *
 		 * @param op 出力する運用者名
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		private void oprt(Name op) throws IOException {
 			if(op != null) printf("%%%%%s%%%% ", op.value());
@@ -339,7 +347,8 @@ public final class ZDosFormat extends BaseFormat {
 		 * 指定された備考を文字列として出力します。
 		 *
 		 * @param note 出力する備考
-		 * @throws IOException 出力に失敗した場合
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		private void note(Note note) throws IOException {
 			if(note != null) print(note.value());

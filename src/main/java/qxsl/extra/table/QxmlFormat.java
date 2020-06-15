@@ -6,7 +6,6 @@
 package qxsl.extra.table;
 
 import java.io.*;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -30,13 +29,12 @@ import qxsl.model.Tuple;
 import static javax.xml.stream.XMLOutputFactory.IS_REPAIRING_NAMESPACES;
 
 /**
- * qxslライブラリに標準的に付属するQXMLの書式です。
+ * ADIFと比較して名前空間による拡張性が特徴的なQXMLの書式です。
  *
  *
  * @author 無線部開発班
  *
  * @since 2013/02/26
- *
  */
 public final class QxmlFormat extends BaseFormat {
 	public static final QName LIST = new QName("list");
@@ -44,6 +42,7 @@ public final class QxmlFormat extends BaseFormat {
 	public static final QName RCVD = new QName("rcvd");
 	public static final QName SENT = new QName("sent");
 	private final String XSDPATH = "qxml.xsd";
+	private final String LN = "\n";
 	private final Schema schema;
 
 	/**
@@ -53,69 +52,55 @@ public final class QxmlFormat extends BaseFormat {
 	 */
 	public QxmlFormat() throws SAXException {
 		super("qxml");
-		SchemaFactory sf = SchemaFactory.newDefaultInstance();
-		final URL url = QxmlFormat.class.getResource(XSDPATH);
-		this.schema = sf.newSchema(url);
+		final SchemaFactory sf = SchemaFactory.newDefaultInstance();
+		this.schema = sf.newSchema(getClass().getResource(XSDPATH));
 	}
 
 	@Override
 	public TableDecoder decoder(InputStream is) {
-		try {
-			return new QxmlDecoder(is);
-		} catch (XMLStreamException ex) {
-			throw new UnsupportedOperationException(ex);
-		}
+		return new QxmlDecoder(is);
 	}
 
 	@Override
 	public TableEncoder encoder(OutputStream os) {
-		try {
-			return new QxmlEncoder(os);
-		} catch (XMLStreamException ex) {
-			throw new UnsupportedOperationException(ex);
-		}
+		return new QxmlEncoder(os);
 	}
 
 	/**
-	 *  qxml書式で直列化された交信記録をデコードします。
+	 * QXML書式で直列化された交信記録をデコードします。
 	 *
 	 *
 	 * @author 無線部開発班
 	 *
 	 * @since 2013/02/22
-	 *
 	 */
 	private final class QxmlDecoder implements TableDecoder {
 		private final InputStream stream;
 		private final FieldFormats fields;
-		private final XMLInputFactory factor;
-		private XMLEventReader reader = null;
+		private XMLEventReader reader;
+		private InputStream buf;
 
 		/**
-		 * 指定されたストリームから交信記録を読み込むデコーダを構築します。
+		 * 指定されたストリームを読み込むデコーダを構築します。
 		 *
 		 * @param is 交信記録を読み込むストリーム
-		 * @throws XMLStreamException 通常は発生しない例外
 		 */
-		public QxmlDecoder(InputStream is) throws XMLStreamException {
+		public QxmlDecoder(InputStream is) {
 			this.stream = is;
 			this.fields = new FieldFormats();
-			this.factor = XMLInputFactory.newInstance();
 		}
 
 		/**
 		 * ストリームを閉じてリソースを解放します。
 		 *
-		 * @throws IOException リソース解放に失敗した場合
+		 * @throws IOException 解放の例外
 		 */
 		@Override
 		public final void close() throws IOException {
-			try {
+			try(stream) {
 				reader.close();
 			} catch (XMLStreamException ex) {
 				throw new IOException(ex);
-			} finally {
-				stream.close();
 			}
 		}
 
@@ -123,15 +108,16 @@ public final class QxmlFormat extends BaseFormat {
 		 * ストリームの内容を検証してから交信記録を読み込みます。
 		 *
 		 * @return 読み込んだ交信記録
-		 * @throws IOException 構文の問題もしくは読み込みに失敗した場合
+		 *
+		 * @throws IOException 構文もしくは読み込みの例外
 		 */
 		@Override
 		public final List<Item> decode() throws IOException {
+			this.buf = new ByteArrayInputStream(stream.readAllBytes());
 			try {
-				return valid();
-			} catch (IOException ex) {
-				throw ex;
-			} catch (Exception ex) {
+				valid();
+				return items();
+			} catch (XMLStreamException | SAXException ex) {
 				throw new IOException(ex);
 			}
 		}
@@ -140,37 +126,49 @@ public final class QxmlFormat extends BaseFormat {
 		 * ストリームの内容を検証してから交信記録を読み込みます。
 		 *
 		 * @return 読み込んだ交信記録
-		 * @throws Exception 構文の問題もしくは読み込みに失敗した場合
+		 *
+		 * @throws  IOException 読み込みに失敗した場合
+		 * @throws SAXException 構文の例外
 		 */
-		private final List<Item> valid() throws Exception {
-			final byte[] arr = this.stream.readAllBytes();
-			final InputStream stream = new ByteArrayInputStream(arr);
-			schema.newValidator().validate(new StreamSource(stream));
-			stream.reset();
-			XMLEventReader raw = factor.createXMLEventReader(stream);
-			reader = factor.createFilteredReader(raw, new Skipper());
-			return items();
+		private final void valid() throws IOException, SAXException {
+			schema.newValidator().validate(new StreamSource(buf));
+			buf.reset();
 		}
 
 		/**
 		 * ストリームから交信記録を読み込みます。
 		 *
 		 * @return 読み込んだ交信記録
-		 * @throws XMLStreamException 構文の問題もしくは読み込みに失敗した場合
+		 *
+		 * @throws XMLStreamException 構文もしくは読み込みの例外
 		 */
 		private final List<Item> items() throws XMLStreamException {
-			final List<Item> items = new ArrayList<>();
+			final var fac = XMLInputFactory.newInstance();
+			final var raw = fac.createXMLEventReader(buf);
+			this.reader = fac.createFilteredReader(raw, this::skip);
+			final var list = new ArrayList<Item>();
 			start(LIST);
-			while(reader.peek().isStartElement()) items.add(item());
+			while(ahead(ITEM)) list.add(item());
 			close(LIST);
-			return Collections.unmodifiableList(items);
+			return Collections.unmodifiableList(list);
+		}
+
+		/**
+		 * 指定されたイベントを無視すべきか判断します。
+		 *
+		 * @param e イベント
+		 * @return 文字列の場合は偽
+		 */
+		private boolean skip(XMLEvent e) {
+			return !e.isCharacters();
 		}
 
 		/**
 		 * 要素の開始イベントから1件の交信記録を読み込みます。
 		 *
 		 * @return 読み込んだ交信記録
-		 * @throws XMLStreamException 構文の問題もしくは読み込みに失敗した場合
+		 *
+		 * @throws XMLStreamException 構文もしくは読み込みの例外
 		 */
 		private final Item item() throws XMLStreamException {
 			final Item item = new Item();
@@ -186,23 +184,30 @@ public final class QxmlFormat extends BaseFormat {
 		 *
 		 * @param tuple 属性を設定するタプル
 		 * @param start 開始する要素
+		 *
 		 * @return 直後に終了すべき要素の名前
 		 */
 		private final QName fields(Tuple tuple, StartElement start) {
 			final var attrs = start.getAttributes();
-			while(attrs.hasNext()) {
-				Attribute att = attrs.next();
-				final var qname = att.getName();
-				final var value = att.getValue();
-				tuple.add(fields.cache(qname).field(value));
-			}
+			while(attrs.hasNext()) field(tuple, attrs.next());
 			return start.getName();
 		}
 
 		/**
-		 * 次のタグが指定された名前の要素の開始であるかを実稼働時に確認します。
+		 * 指定された属性値を指定されたタプルに設定します。
+		 *
+		 * @param tuple 属性を設定するタプル
+		 * @param field 属性
+		 */
+		private final void field(Tuple tuple, Attribute field) {
+			tuple.add(fields.cache(field.getName()).field(field.getValue()));
+		}
+
+		/**
+		 * 次のタグが指定された名前の要素の開始であるかを確認します。
 		 *
 		 * @param name 開始する要素の名前
+		 *
 		 * @return 指定された要素が見つかった場合に真
 		 *
 		 * @throws XMLStreamException 要素の読取り時の例外
@@ -213,9 +218,10 @@ public final class QxmlFormat extends BaseFormat {
 		}
 
 		/**
-		 * 次のタグが指定された名前の要素の開始であるかをテスト時に確認します。
+		 * 次のタグが指定された名前の要素の開始タグであるかを確認します。
 		 *
 		 * @param name 開始する要素の名前
+		 *
 		 * @return 見つかった要素
 		 *
 		 * @throws XMLStreamException 要素の読取り時の例外
@@ -223,14 +229,15 @@ public final class QxmlFormat extends BaseFormat {
 		private StartElement start(QName name) throws XMLStreamException {
 			final StartElement start = reader.nextTag().asStartElement();
 			if(start.getName().equals(name)) return start;
-			final String msg = "expected <%s> but <%s> found";
+			final String msg = "<%s> required but <%s> found";
 			throw new XMLStreamException(String.format(msg, name, start));
 		}
 
 		/**
-		 * 次のタグが指定された名前の要素の終了であるかをテスト時に確認します。
+		 * 次のタグが指定された名前の要素の終了タグであるかを確認します。
 		 *
 		 * @param name 終了する要素の名前
+		 *
 		 * @return 見つかった要素
 		 *
 		 * @throws XMLStreamException 要素の読取り時の例外
@@ -238,68 +245,47 @@ public final class QxmlFormat extends BaseFormat {
 		private EndElement close(QName name) throws XMLStreamException {
 			final EndElement close = reader.nextTag().asEndElement();
 			if(close.getName().equals(name)) return close;
-			final String msg = "expected </%s> but </%s> found";
+			final String msg = "</%s> required but </%s> found";
 			throw new XMLStreamException(String.format(msg, name, close));
-		}
-
-		/**
-		 * 文字列を読み飛ばすフィルタです。
-		 *
-		 * @author 無線部開発班
-		 *
-		 * @since 2017/02/26
-		 */
-		private final class Skipper implements EventFilter {
-			@Override
-			public boolean accept(XMLEvent e) {
-				return !e.isCharacters();
-			}
 		}
 	}
 
 	/**
-	 * 交信記録をqxml書式で直列化するエンコーダです。
+	 * 交信記録をQXML書式で直列化するエンコーダです。
 	 *
 	 *
 	 * @author 無線部開発班
 	 *
 	 * @since 2013/02/22
-	 *
 	 */
 	private final class QxmlEncoder implements TableEncoder {
-		private final XMLStreamWriter writer;
 		private final OutputStream stream;
 		private final FieldFormats fields;
 		private final Set<String> spaces;
+		private XMLStreamWriter writer;
 
 		/**
 		 * 指定されたストリームに出力するエンコーダを構築します。
 		 *
 		 * @param os 交信記録を出力するストリーム
-		 * @throws XMLStreamException 通常は発生しない例外
 		 */
-		public QxmlEncoder(OutputStream os) throws XMLStreamException {
+		public QxmlEncoder(OutputStream os) {
+			this.fields = new FieldFormats();
 			this.spaces = new HashSet<>();
 			this.stream = os;
-			this.fields = new FieldFormats();
-			XMLOutputFactory f = XMLOutputFactory.newInstance();
-			f.setProperty(IS_REPAIRING_NAMESPACES, Boolean.TRUE);
-			writer = f.createXMLStreamWriter(stream);
 		}
 
 		/**
 		 * ストリームを閉じてリソースを解放します。
 		 *
-		 * @throws IOException リソース解放に失敗した場合
+		 * @throws IOException 解放の例外
 		 */
 		@Override
 		public final void close() throws IOException {
-			try {
+			try(stream) {
 				writer.close();
 			} catch (XMLStreamException ex) {
 				throw new IOException(ex);
-			} finally {
-				stream.close();
 			}
 		}
 
@@ -307,19 +293,23 @@ public final class QxmlFormat extends BaseFormat {
 		 * ストリームに交信記録を出力します。
 		 *
 		 * @param items 出力する交信記録
-		 * @throws IOException XMLの出力に伴う例外
+		 *
+		 * @throws IOException 書き出しに失敗した場合
 		 */
 		@Override
 		public final void encode(List<Item> items) throws IOException {
+			final var of = XMLOutputFactory.newInstance();
+			of.setProperty(IS_REPAIRING_NAMESPACES, true);
 			try {
+				writer = of.createXMLStreamWriter(stream);
 				writer.writeStartDocument("UTF-8", "1.0");
-				writer.writeCharacters("\n");
+				writer.writeCharacters(LN);
 				writer.writeStartElement(LIST.getLocalPart());
-				for(Item item: items) space(item);
-				writer.writeCharacters("\n");
-				for(Item item: items) item(item);
+				for(var item: items) space(item);
+				writer.writeCharacters(LN);
+				for(var item: items) item(item);
 				writer.writeEndElement();
-				writer.writeCharacters("\n");
+				writer.writeCharacters(LN);
 				writer.writeEndDocument();
 			} catch (XMLStreamException ex) {
 				throw new IOException(ex);
@@ -330,21 +320,23 @@ public final class QxmlFormat extends BaseFormat {
 		 * ストリームに名前空間の宣言を出力します。
 		 *
 		 * @param item 名前空間を使用する交信記録
-		 * @throws XMLStreamException XMLの出力に伴う例外
+		 *
+		 * @throws XMLStreamException 書き出しに失敗した場合
 		 */
 		private final void space(Item item) throws XMLStreamException {
-			final Rcvd rcvd = item.getRcvd();
-			final Sent sent = item.getSent();
-			for(Field field: item) space(field.name());
-			for(Field field: sent) space(field.name());
-			for(Field field: sent) space(field.name());
+			final var rcvd = item.getRcvd();
+			final var sent = item.getSent();
+			for(var field: item) space(field.name());
+			for(var field: sent) space(field.name());
+			for(var field: sent) space(field.name());
 		}
 
 		/**
 		 * ストリームに名前空間の宣言を出力します。
 		 *
 		 * @param name 名前空間を使用する属性名
-		 * @throws XMLStreamException XMLの出力に伴う例外
+		 *
+		 * @throws XMLStreamException 書き出しに失敗した場合
 		 */
 		private final void space(QName name) throws XMLStreamException {
 			final String p = name.getPrefix();
@@ -356,16 +348,17 @@ public final class QxmlFormat extends BaseFormat {
 		 * ストリームに1件の交信記録を出力します。
 		 *
 		 * @param item 出力する交信記録
-		 * @throws XMLStreamException XMLの出力に伴う例外
+		 *
+		 * @throws XMLStreamException 書き出しに失敗した場合
 		 */
 		private final void item(Item item) throws XMLStreamException {
 			writer.writeStartElement(ITEM.getLocalPart());
-			for(Field f: item) field(f);
-			writer.writeCharacters("\n");
+			for(var f: item) field(f);
+			writer.writeCharacters(LN);
 			rcvd(item.getRcvd());
 			sent(item.getSent());
 			writer.writeEndElement();
-			writer.writeCharacters("\n");
+			writer.writeCharacters(LN);
 			writer.flush();
 		}
 
@@ -373,13 +366,14 @@ public final class QxmlFormat extends BaseFormat {
 		 * ストリームに1件の相手局から受信した情報を出力します。
 		 *
 		 * @param rcvd 出力する相手局から受信した情報
-		 * @throws XMLStreamException XMLの出力に伴う例外
+		 *
+		 * @throws XMLStreamException 書き出しに失敗した場合
 		 */
 		private final void rcvd(Rcvd rcvd) throws XMLStreamException {
 			if(rcvd.iterator().hasNext()) {
 				writer.writeEmptyElement(RCVD.getLocalPart());
-				for(Field f: rcvd) field(f);
-				writer.writeCharacters("\n");
+				for(var f: rcvd) field(f);
+				writer.writeCharacters(LN);
 			}
 		}
 
@@ -387,27 +381,28 @@ public final class QxmlFormat extends BaseFormat {
 		 * ストリームに1件の相手局まで送信した情報を出力します。
 		 *
 		 * @param sent 出力する相手局まで送信した情報
-		 * @throws XMLStreamException XMLの出力に伴う例外
+		 *
+		 * @throws XMLStreamException 書き出しに失敗した場合
 		 */
 		private final void sent(Sent sent) throws XMLStreamException {
 			if(sent.iterator().hasNext()) {
 				writer.writeEmptyElement(SENT.getLocalPart());
-				for(Field f: sent) field(f);
-				writer.writeCharacters("\n");
+				for(var f: sent) field(f);
+				writer.writeCharacters(LN);
 			}
 		}
 
 		/**
-		 * 属性を直列化してストリームに出力可能な形式に変換します。
+		 * 属性を直列化してストリームに出力します。
 		 *
 		 * @param field 出力する属性
-		 * @throws XMLStreamException XMLの出力に伴う例外
+		 *
+		 * @throws XMLStreamException 書き出しに失敗した場合
 		 */
 		private final void field(Field field) throws XMLStreamException {
-			final QName qname = field.name();
-			final String p = qname.getPrefix();
-			final String l = qname.getLocalPart();
-			final String u = qname.getNamespaceURI();
+			final var p = field.name().getPrefix();
+			final var l = field.name().getLocalPart();
+			final var u = field.name().getNamespaceURI();
 			writer.writeAttribute(p, u, l, fields.encode(field));
 		}
 	}
