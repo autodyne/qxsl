@@ -148,8 +148,10 @@ You can create a native library instead of a JAR file.
 Then run the command manually as follows:
 
 ```shell
-$ native-image --shared -cp build/libs/qxsl.jar
+$ native-image --shared -cp build/libs/qxsl.jar -H:Name=qxsl
 ```
+
+You must implement [entry points](https://www.graalvm.org/sdk/javadoc/org/graalvm/nativeimage/c/function/CEntryPoint.html) by your self.
 
 ## Contribution
 
