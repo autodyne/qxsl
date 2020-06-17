@@ -5,11 +5,14 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
-import org.junit.jupiter.api.Test;
 import qxsl.field.FieldFormats;
 import qxsl.field.FieldFormats.Cache;
 
-import static test.RandTest.*;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import qxsl.junit.RandomStringParameterExtension;
+import qxsl.junit.RandomStringParameterExtension.RandomString;
 
 /**
  * {@link Call}クラスのテスト用クラスです。
@@ -18,29 +21,32 @@ import static test.RandTest.*;
  * @author 無線部開発班
  *
  * @since 2017/02/24
- *
  */
+@ExtendWith(RandomStringParameterExtension.class)
 public final class CallTest extends org.assertj.core.api.Assertions {
 	private final Cache cache = new FieldFormats().cache(Qxsl.CALL);
+
 	@Test
 	public void testValue() {
 		assertThat(new Call("JA1ZLO").value()).isEqualTo("JA1ZLO");
 		assertThat(new Call("JA1YWX").value()).isEqualTo("JA1YWX");
 	}
+
 	@Test
 	public void testStrip() {
 		assertThat(new Call("JA1ZLO/1").strip()).isEqualTo("JA1ZLO");
 		assertThat(new Call("JA1YWX/2").strip()).isEqualTo("JA1YWX");
 	}
+
 	@Test
-	public void testToString() {
-		final String text = alnum(100).toUpperCase();
-		assertThat(new Call(text)).hasToString(text);
+	public void testToString(@RandomString String text) {
+		assertThat(new Call(text)).hasToString(text.toUpperCase());
 	}
+
 	@Test
-	public void testCall$Format() throws Exception {
+	public void testCall$Format(@RandomString String text) throws Exception {
 		final Call.Format form = new Call.Format();
-		final Call call = new Call(alnum(100));
+		final Call call = new Call(text);
 		assertThat(form.decode(form.encode(call))).isEqualTo(call);
 		assertThat(cache.field(form.encode(call))).isEqualTo(call);
 	}

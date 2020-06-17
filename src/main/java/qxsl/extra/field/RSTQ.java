@@ -16,7 +16,6 @@ import qxsl.model.Field;
  * @author 無線部開発班
  *
  * @since 2013/06/08
- *
  */
 public final class RSTQ extends Qxsl<Integer> {
 	private final int r, s, t;
@@ -98,7 +97,6 @@ public final class RSTQ extends Qxsl<Integer> {
 	 * @author 無線部開発班
 	 *
 	 * @since 2013/06/08
-	 *
 	 */
 	public static final class Format implements FieldFormat {
 		@Override

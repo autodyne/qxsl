@@ -9,7 +9,6 @@ import java.util.Iterator;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import static test.RandTest.*;
 
 /**
  * {@link FieldFormat}クラスのテスト用クラスです。
@@ -18,7 +17,6 @@ import static test.RandTest.*;
  * @author 無線部開発班
  *
  * @since 2019/07/02
- *
  */
 public final class FieldFormatTest extends org.assertj.core.api.Assertions {
 	/**
@@ -30,6 +28,7 @@ public final class FieldFormatTest extends org.assertj.core.api.Assertions {
 	public static Iterator<FieldFormat> testMethodSource() {
 		return new FieldFormats().iterator();
 	}
+
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void testTarget(FieldFormat format) {

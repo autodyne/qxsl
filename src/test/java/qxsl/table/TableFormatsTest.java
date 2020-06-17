@@ -5,10 +5,9 @@
 *******************************************************************************/
 package qxsl.table;
 
-import org.junit.jupiter.api.Test;
 import qxsl.extra.table.*;
 
-import static test.RandTest.*;
+import org.junit.jupiter.api.Test;
 
 /**
  * {@link TableFormats}クラスのテスト用クラスです。
@@ -17,14 +16,15 @@ import static test.RandTest.*;
  * @author 無線部開発班
  *
  * @since 2017/02/26
- *
  */
 public final class TableFormatsTest extends org.assertj.core.api.Assertions {
 	private final TableFormats tables = new TableFormats();
+
 	@Test
 	public void testIterator() {
 		assertThat(tables.iterator()).hasNext();
 	}
+
 	@Test
 	public void testGetFormat() {
 		// XML

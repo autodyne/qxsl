@@ -26,7 +26,6 @@ import qxsl.model.Item;
  * @author 無線部開発班
  *
  * @since 2013/02/25
- *
  */
 public final class TableFormats implements Iterable<TableFormat> {
 	private final ServiceLoader<TableFormat> loader;

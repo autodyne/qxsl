@@ -20,7 +20,6 @@ import qxsl.model.Item;
  * @author 無線部開発班
  *
  * @since 2013/02/25
- *
  */
 public interface TableFormat {
 	/**
@@ -100,7 +99,6 @@ public interface TableFormat {
 	 * @author 無線部開発班
 	 *
 	 * @since 2019/07/08
-	 *
 	 */
 	public interface TableDecoder extends AutoCloseable {
 		/**
@@ -125,7 +123,6 @@ public interface TableFormat {
 	 * @author 無線部開発班
 	 *
 	 * @since 2019/07/08
-	 *
 	 */
 	public interface TableEncoder extends AutoCloseable {
 		/**

@@ -14,9 +14,12 @@ import qxsl.extra.field.*;
 import qxsl.model.Item;
 import qxsl.table.TableFormats;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import static test.RandTest.*;
+
+import static qxsl.junit.RandomNumberParameterExtension.randInt;
+import static qxsl.junit.RandomStringParameterExtension.alnum;
 
 /**
  * {@link ZBinFormat}クラスのテスト用クラスです。
@@ -25,7 +28,6 @@ import static test.RandTest.*;
  * @author 無線部開発班
  *
  * @since 2017/02/26
- *
  */
 public final class ZBinFormatTest extends org.assertj.core.api.Assertions {
 	private final ZBinFormat format = new ZBinFormat();
@@ -33,6 +35,7 @@ public final class ZBinFormatTest extends org.assertj.core.api.Assertions {
 	private final ArrayList<Band> bands = new ArrayList<>();
 	private final ArrayList<Mode> modes = new ArrayList<>();
 	private final ArrayList<Watt> watts = new ArrayList<>();
+
 	public ZBinFormatTest() {
 		bands.add(new Band(    3_500));
 		bands.add(new Band(    7_000));
@@ -50,9 +53,11 @@ public final class ZBinFormatTest extends org.assertj.core.api.Assertions {
 		watts.add(new Watt("L"));
 		watts.add(new Watt("P"));
 	}
+
 	public static IntStream testMethodSource() {
 		return IntStream.range(0, 100);
 	}
+
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void testDecode(int numItems) throws IOException {

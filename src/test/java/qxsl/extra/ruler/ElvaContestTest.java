@@ -18,7 +18,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static test.RandTest.*;
 
 /**
  * {@link ElvaContest}クラスのテスト用クラスです。
@@ -27,7 +26,6 @@ import static test.RandTest.*;
  * @author 無線部開発班
  *
  * @since 2017/02/26
- *
  */
 public final class ElvaContestTest extends org.assertj.core.api.Assertions {
 	private static final Class<?> CLS = ElvaContest.class;

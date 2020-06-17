@@ -13,8 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import static test.RandTest.*;
-
 /**
  * {@link City}クラスのテスト用クラスです。
  *
@@ -22,28 +20,31 @@ import static test.RandTest.*;
  * @author 無線部開発班
  *
  * @since 2017/02/24
- *
  */
 public final class CityTest extends org.assertj.core.api.Assertions {
 	private final Cache cache = new FieldFormats().cache(Qxsl.CITY);
 	private City jarl(String code) {
 		return City.forCode("jarl", code);
 	}
+
 	@Test
 	public void testValue() {
 		assertThat(jarl("100110").value()).isEqualTo("jarl:100110");
 		assertThat(jarl("400105").value()).isEqualTo("jarl:400105");
 	}
+
 	@Test
 	public void testGetCode() {
 		assertThat(jarl("100105").getCode()).isEqualTo("100105");
 		assertThat(jarl("200106").getCode()).isEqualTo("200106");
 	}
+
 	@Test
 	public void testToString() {
 		assertThat(jarl("100110")).hasToString("jarl:100110");
 		assertThat(jarl("400105")).hasToString("jarl:400105");
 	}
+
 	/**
 	 * JARLのJCC/JCGに含まれる全ての地域をリストで返します。
 	 *
@@ -53,6 +54,7 @@ public final class CityTest extends org.assertj.core.api.Assertions {
 	public static List<City> testMethodSource() {
 		return City.all("jarl");
 	}
+
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void testGetFullPath(City city) {
@@ -60,21 +62,25 @@ public final class CityTest extends org.assertj.core.api.Assertions {
 		assertThat(city.getFullPath()).doesNotContain("");
 		assertThat(city.getFullPath()).doesNotContainNull();
 	}
+
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void testGetFullName(City city) {
 		var name = String.join("", city.getFullPath());
 		assertThat(city.getFullName()).isEqualTo(name);
 	}
+
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void testForCode(City city) {
 		assertThat(jarl(city.value().split(":")[1])).isEqualTo(city);
 	}
+
 	@Test
 	public void testAll() {
 		assertThat(City.all("jarl")).isNotEmpty();
 	}
+
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void testCity$Format(City city) throws Exception {

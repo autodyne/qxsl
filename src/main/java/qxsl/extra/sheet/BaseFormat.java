@@ -22,7 +22,6 @@ import qxsl.sheet.SheetFormat;
  * @author 無線部開発班
  *
  * @since 2019/06/16
- *
  */
 public abstract class BaseFormat implements SheetFormat {
 	private final String name;

@@ -5,10 +5,9 @@
 *******************************************************************************/
 package qxsl.field;
 
-import org.junit.jupiter.api.Test;
 import qxsl.extra.field.*;
 
-import static test.RandTest.*;
+import org.junit.jupiter.api.Test;
 
 /**
  * {@link FieldFormats}クラスのテスト用クラスです。
@@ -17,15 +16,16 @@ import static test.RandTest.*;
  * @author 無線部開発班
  *
  * @since 2017/02/25
- *
  */
 public final class FieldFormatsTest extends org.assertj.core.api.Assertions {
 	private final FieldFormats fields = new FieldFormats();
+
 	@Test
 	public void testIterator() {
 		assertThat(fields.iterator()).isNotNull();
 		assertThat(fields.iterator()).hasNext();
 	}
+
 	@Test
 	public void testGetFormat() {
 		assertThat(fields.forName(Qxsl.BAND)).isInstanceOf(Band.Format.class);

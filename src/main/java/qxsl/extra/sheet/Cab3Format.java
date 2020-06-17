@@ -18,7 +18,6 @@ import java.util.StringJoiner;
  * @author 無線部開発班
  *
  * @since 2019/05/03
- *
  */
 public final class Cab3Format extends BaseFormat {
 	public Cab3Format() {
@@ -42,7 +41,6 @@ public final class Cab3Format extends BaseFormat {
 	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/03
-	 *
 	 */
 	private final class Cab3Decoder implements SheetDecoder {
 		private final BufferedReader reader;
@@ -128,7 +126,6 @@ public final class Cab3Format extends BaseFormat {
 	 * @author 無線部開発班
 	 *
 	 * @since 2019/05/03
-	 *
 	 */
 	private final class Cab3Encoder implements SheetEncoder {
 		private final PrintWriter writer;

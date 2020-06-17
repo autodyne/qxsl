@@ -26,7 +26,6 @@ import org.xml.sax.SAXException;
  * @author 無線部開発班
  *
  * @since 2017/03/11
- *
  */
 public final class JarlFormat extends BaseFormat {
 	public static final QName DOC = new QName("DOCUMENT");
@@ -68,7 +67,6 @@ public final class JarlFormat extends BaseFormat {
 	 * @author 無線部開発班
 	 *
 	 * @since 2014/11/04
-	 *
 	 */
 	private final class JarlDecoder implements SheetDecoder {
 		private static final String BF = "<(\\S+?) (\\S+?)=(\\S+?)>";
@@ -198,7 +196,6 @@ public final class JarlFormat extends BaseFormat {
 	 * @author 無線部開発班
 	 *
 	 * @since 2017/03/11
-	 *
 	 */
 	private final class JarlEncoder implements SheetEncoder {
 		private final PrintWriter writer;

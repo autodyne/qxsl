@@ -6,11 +6,10 @@
 package qxsl.extra.field;
 
 import java.time.ZonedDateTime;
-import org.junit.jupiter.api.Test;
 import qxsl.field.FieldFormats;
 import qxsl.field.FieldFormats.Cache;
 
-import static test.RandTest.*;
+import org.junit.jupiter.api.Test;
 
 /**
  * {@link Time}クラスのテスト用クラスです。
@@ -19,20 +18,22 @@ import static test.RandTest.*;
  * @author 無線部開発班
  *
  * @since 2017/02/24
- *
  */
 public final class TimeTest extends org.assertj.core.api.Assertions {
 	private final Cache cache = new FieldFormats().cache(Qxsl.TIME);
+
 	@Test
 	public void testValue() {
 		final ZonedDateTime time = ZonedDateTime.now();
 		assertThat(new Time(time).value()).isEqualTo(time);
 	}
+
 	@Test
 	public void testToString() {
 		final ZonedDateTime time = ZonedDateTime.now();
 		assertThat(new Time(time)).hasToString(time.toString());
 	}
+
 	@Test
 	public void testTime$Format() throws Exception {
 		final Time.Format form = new Time.Format();

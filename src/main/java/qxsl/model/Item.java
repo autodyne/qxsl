@@ -19,7 +19,6 @@ import static qxsl.extra.table.QxmlFormat.ITEM;
  * @author 無線部開発班
  *
  * @since 2013/06/04
- *
  */
 public final class Item extends Tuple {
 	private Rcvd rcvd;

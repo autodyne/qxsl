@@ -17,7 +17,6 @@ import qxsl.model.Field;
  * @author 無線部開発班
  *
  * @since 2013/06/08
- *
  */
 public final class Band extends Qxsl<BigDecimal> {
 	private final BigDecimal band;
@@ -144,7 +143,6 @@ public final class Band extends Qxsl<BigDecimal> {
 	 * @author 無線部開発班
 	 *
 	 * @since 2013/06/08
-	 *
 	 */
 	public static final class Format implements FieldFormat {
 		@Override

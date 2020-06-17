@@ -19,7 +19,6 @@ import static java.text.Normalizer.normalize;
  * @author 無線部開発班
  *
  * @since 2013/06/08
- *
  */
 public final class Call extends Qxsl<String> {
 	private static final String PATTERN = "\\w+(/\\w+)?";
@@ -61,7 +60,6 @@ public final class Call extends Qxsl<String> {
 	 * @author 無線部開発班
 	 *
 	 * @since 2013/06/08
-	 *
 	 */
 	public static final class Format implements FieldFormat {
 		@Override

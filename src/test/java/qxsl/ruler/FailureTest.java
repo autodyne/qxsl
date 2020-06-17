@@ -6,8 +6,12 @@
 package qxsl.ruler;
 
 import qxsl.model.Item;
+
 import org.junit.jupiter.api.Test;
-import static test.RandTest.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import qxsl.junit.RandomStringParameterExtension;
+import qxsl.junit.RandomStringParameterExtension.RandomString;
 
 /**
  * {@link Failure}クラスのテスト用クラスです。
@@ -16,20 +20,18 @@ import static test.RandTest.*;
  * @author 無線部開発班
  *
  * @since 2019/05/18
- *
  */
+@ExtendWith(RandomStringParameterExtension.class)
 public final class FailureTest extends org.assertj.core.api.Assertions {
 	@Test
-	public void testGetMessage() {
+	public void testGetMessage(@RandomString String text) {
 		final Item item = new Item();
-		final String text = alnum(100);
 		assertThat(new Failure(item, text).text()).isSameAs(text);
 	}
 
 	@Test
-	public void testGetItem() {
+	public void testGetItem(@RandomString String text) {
 		final Item item = new Item();
-		final String text = alnum(100);
 		assertThat(new Failure(item, text).item()).isSameAs(item);
 	}
 }

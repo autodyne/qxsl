@@ -5,10 +5,9 @@
 *******************************************************************************/
 package qxsl.sheet;
 
-import org.junit.jupiter.api.Test;
 import qxsl.extra.sheet.*;
 
-import static test.RandTest.*;
+import org.junit.jupiter.api.Test;
 
 /**
  * {@link SheetFormats}クラスのテスト用クラスです。
@@ -17,14 +16,15 @@ import static test.RandTest.*;
  * @author 無線部開発班
  *
  * @since 2017/03/12
- *
  */
 public final class SheetFormatsTest extends org.assertj.core.api.Assertions {
 	private final SheetFormats sheets = new SheetFormats();
+
 	@Test
 	public void testIterator() {
 		assertThat(sheets.iterator()).hasNext();
 	}
+
 	@Test
 	public void testGetFormat() {
 		assertThat(sheets.forName("cab3")).isInstanceOf(Cab3Format.class);

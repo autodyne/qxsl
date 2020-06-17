@@ -16,7 +16,6 @@ import qxsl.model.Field;
  * @author 無線部開発班
  *
  * @since 2013/06/09
- *
  */
 public final class Code extends Qxsl<String> {
 	private final String value;
@@ -43,7 +42,6 @@ public final class Code extends Qxsl<String> {
 	 * @author 無線部開発班
 	 *
 	 * @since 2013/06/08
-	 *
 	 */
 	public static final class Format implements FieldFormat {
 		@Override

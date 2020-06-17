@@ -5,11 +5,14 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
-import org.junit.jupiter.api.Test;
 import qxsl.field.FieldFormats;
 import qxsl.field.FieldFormats.Cache;
 
-import static test.RandTest.*;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import qxsl.junit.RandomStringParameterExtension;
+import qxsl.junit.RandomStringParameterExtension.RandomString;
 
 /**
  * {@link Code}クラスのテスト用クラスです。
@@ -18,24 +21,26 @@ import static test.RandTest.*;
  * @author 無線部開発班
  *
  * @since 2017/02/24
- *
  */
+@ExtendWith(RandomStringParameterExtension.class)
 public final class CodeTest extends org.assertj.core.api.Assertions {
 	private final Cache cache = new FieldFormats().cache(Qxsl.CODE);
+
 	@Test
 	public void testValue() {
 		assertThat(new Code("100110H").value()).isEqualTo("100110H");
 		assertThat(new Code("400105M").value()).isEqualTo("400105M");
 	}
+
 	@Test
-	public void testToString() {
-		final String text = alnum(100);
+	public void testToString(@RandomString String text) {
 		assertThat(new Code(text)).hasToString(text);
 	}
+
 	@Test
-	public void testCode$Format() throws Exception {
+	public void testCode$Format(@RandomString String text) throws Exception {
 		final Code.Format form = new Code.Format();
-		final Code code = new Code(alnum(100));
+		final Code code = new Code(text);
 		assertThat(form.decode(form.encode(code))).isEqualTo(code);
 		assertThat(cache.field(form.encode(code))).isEqualTo(code);
 	}

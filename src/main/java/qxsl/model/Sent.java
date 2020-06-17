@@ -14,7 +14,6 @@ import static qxsl.extra.table.QxmlFormat.SENT;
  * @author 無線部開発班
  *
  * @since 2013/06/08
- *
  */
 public final class Sent extends Exch {
 	/**

@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import qxsl.extra.field.*;
 
 import static qxsl.extra.table.QxmlFormat.RCVD;
-import static test.RandTest.*;
 
 /**
  * {@link Rcvd}クラスのテスト用クラスです。
@@ -18,16 +17,17 @@ import static test.RandTest.*;
  * @author 無線部開発班
  *
  * @since 2017/02/25
- *
  */
 public final class RcvdTest extends org.assertj.core.api.Assertions {
 	private final Code code = new Code("591009");
 	private final RSTQ rstq = new RSTQ(5, 9, 9);
 	private final Watt watt = new Watt("H");
+
 	@Test
 	public void testType() {
 		assertThat(new Rcvd(new Item()).name()).isEqualTo(RCVD);
 	}
+
 	@Test
 	public void testEquals() {
 		final Rcvd rcvd1 = new Rcvd(new Item());

@@ -25,7 +25,6 @@ import qxsl.table.TableFormat;
  * @author 無線部開発班
  *
  * @since 2019/06/16
- *
  */
 public abstract class BaseFormat implements TableFormat {
 	private final String name;

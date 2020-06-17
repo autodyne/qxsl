@@ -5,11 +5,14 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
-import org.junit.jupiter.api.Test;
 import qxsl.field.FieldFormats;
 import qxsl.field.FieldFormats.Cache;
 
-import static test.RandTest.*;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import qxsl.junit.RandomNumberParameterExtension;
+import qxsl.junit.RandomNumberParameterExtension.RandomNumber;
 
 /**
  * {@link RSTQ}クラスのテスト用クラスです。
@@ -18,10 +21,11 @@ import static test.RandTest.*;
  * @author 無線部開発班
  *
  * @since 2017/02/24
- *
  */
+@ExtendWith(RandomNumberParameterExtension.class)
 public final class RSTQTest extends org.assertj.core.api.Assertions {
 	private final Cache cache = new FieldFormats().cache(Qxsl.RSTQ);
+
 	@Test
 	public void testValue() {
 		assertThat(new RSTQ(699).value()).isEqualTo(599);
@@ -33,6 +37,7 @@ public final class RSTQTest extends org.assertj.core.api.Assertions {
 		assertThat(new RSTQ( 11).value()).isEqualTo( 11);
 		assertThat(new RSTQ( 10).value()).isEqualTo( 11);
 	}
+
 	@Test
 	public void testToString() {
 		assertThat(new RSTQ(599)).hasToString("599");
@@ -41,10 +46,11 @@ public final class RSTQTest extends org.assertj.core.api.Assertions {
 		assertThat(new RSTQ(100)).hasToString("111");
 		assertThat(new RSTQ( 59)).hasToString( "59");
 	}
+
 	@Test
-	public void testRSTQ$Format() throws Exception {
+	public void testRSTQ$Format(@RandomNumber(489) int num) throws Exception {
 		final RSTQ.Format form = new RSTQ.Format();
-		final RSTQ rstq = new RSTQ(randInt(489) + 111);
+		final RSTQ rstq = new RSTQ(num + 111);
 		assertThat(form.decode(form.encode(rstq))).isEqualTo(rstq);
 		assertThat(cache.field(form.encode(rstq))).isEqualTo(rstq);
 	}

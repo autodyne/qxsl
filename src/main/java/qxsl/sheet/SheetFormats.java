@@ -26,7 +26,6 @@ import qxsl.table.TableFormats;
  * @author 無線部開発班
  *
  * @since 2017/03/11
- *
  */
 public final class SheetFormats implements Iterable<SheetFormat> {
 	private final ServiceLoader<SheetFormat> loader;

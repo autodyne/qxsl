@@ -18,7 +18,6 @@ import java.util.Map;
  * @author 無線部開発班
  *
  * @since 2017/03/11
- *
  */
 public interface SheetFormat {
 	/**
@@ -79,7 +78,6 @@ public interface SheetFormat {
 	 * @author 無線部開発班
 	 *
 	 * @since 2019/07/08
-	 *
 	 */
 	public interface SheetDecoder extends AutoCloseable {
 		/**
@@ -104,7 +102,6 @@ public interface SheetFormat {
 	 * @author 無線部開発班
 	 *
 	 * @since 2019/07/08
-	 *
 	 */
 	public interface SheetEncoder extends AutoCloseable {
 		/**

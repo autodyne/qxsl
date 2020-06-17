@@ -9,7 +9,6 @@ import java.util.Iterator;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import static test.RandTest.*;
 
 /**
  * {@link TableFormat}クラスのテスト用クラスです。
@@ -18,7 +17,6 @@ import static test.RandTest.*;
  * @author 無線部開発班
  *
  * @since 2019/06/16
- *
  */
 public final class TableFormatTest extends org.assertj.core.api.Assertions {
 	/**
@@ -30,21 +28,25 @@ public final class TableFormatTest extends org.assertj.core.api.Assertions {
 	public static Iterator<TableFormat> testMethodSource() {
 		return new TableFormats().iterator();
 	}
+
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void testGetName(TableFormat format) {
 		assertThat(format.getName()).isNotEmpty();
 	}
+
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void testToString(TableFormat format) {
 		assertThat(format.toString()).isNotEmpty();
 	}
+
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void testGetDescription(TableFormat format) {
 		assertThat(format.getDescription()).isNotNull();
 	}
+
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void testGetExtensions(TableFormat format) {

@@ -21,7 +21,6 @@ import qxsl.field.FieldFormats;
  * @author 無線部開発班
  *
  * @since 2015/08/05
- *
  */
 public abstract class Tuple implements Iterable<Field> {
 	private final Map<QName, Field> table;

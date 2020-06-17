@@ -25,7 +25,6 @@ import static java.util.stream.Collectors.toList;
  * @author 無線部開発班
  *
  * @since 2014/04/20
- *
  */
 public final class City extends Qxsl<String> {
 	private final String base;
@@ -167,7 +166,6 @@ public final class City extends Qxsl<String> {
 	 * @author 無線部開発班
 	 *
 	 * @since 2014/04/20
-	 *
 	 */
 	public static final class Format implements FieldFormat {
 		@Override

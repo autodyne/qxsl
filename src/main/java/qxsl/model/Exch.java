@@ -17,7 +17,6 @@ import javax.xml.namespace.QName;
  * @author 無線部開発班
  *
  * @since 2013/06/15
- *
  */
 public abstract class Exch extends Tuple {
 	private final Item item;

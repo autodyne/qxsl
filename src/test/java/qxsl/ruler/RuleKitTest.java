@@ -6,7 +6,6 @@
 package qxsl.ruler;
 
 import org.junit.jupiter.api.Test;
-import static test.RandTest.*;
 
 /**
  * {@link RuleKit}クラスのテスト用クラスです。
@@ -15,7 +14,6 @@ import static test.RandTest.*;
  * @author 無線部開発班
  *
  * @since 2020/06/08
- *
  */
 public final class RuleKitTest extends org.assertj.core.api.Assertions {
 	@Test

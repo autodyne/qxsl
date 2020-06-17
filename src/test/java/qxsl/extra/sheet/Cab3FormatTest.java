@@ -19,7 +19,9 @@ import qxsl.table.TableFormats;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import static test.RandTest.*;
+
+import static qxsl.junit.RandomNumberParameterExtension.randInt;
+import static qxsl.junit.RandomStringParameterExtension.alnum;
 
 /**
  * {@link Cab3Format}クラスのテスト用クラスです。
@@ -28,12 +30,12 @@ import static test.RandTest.*;
  * @author 無線部開発班
  *
  * @since 2019/05/03
- *
  */
 public final class Cab3FormatTest extends org.assertj.core.api.Assertions {
 	private final SheetFormats sheets = new SheetFormats();
 	private final TableFormats tables = new TableFormats();
 	private final ArrayList<Band> bands = new ArrayList<>();
+
 	public Cab3FormatTest() {
 		bands.add(new Band( 1_800));
 		bands.add(new Band( 3_500));
@@ -43,9 +45,11 @@ public final class Cab3FormatTest extends org.assertj.core.api.Assertions {
 		bands.add(new Band(28_000));
 		bands.add(new Band(50_000));
 	}
+
 	public static IntStream testMethodSource() {
 		return IntStream.range(0, 100);
 	}
+
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void testDecode(int numItems) throws Exception {

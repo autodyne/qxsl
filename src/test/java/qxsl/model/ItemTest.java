@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import qxsl.extra.field.*;
 
 import static qxsl.extra.table.QxmlFormat.ITEM;
-import static test.RandTest.*;
 
 /**
  * {@link Item}クラスのテスト用クラスです。
@@ -18,7 +17,6 @@ import static test.RandTest.*;
  * @author 無線部開発班
  *
  * @since 2017/02/25
- *
  */
 public final class ItemTest extends org.assertj.core.api.Assertions {
 	private final Band band = new Band(7_000);
@@ -27,10 +25,12 @@ public final class ItemTest extends org.assertj.core.api.Assertions {
 	private final Name name = new Name("pafelog");
 	private final Note note = new Note("trivial");
 	private final Time time = new Time();
+
 	@Test
 	public void testType() {
 		assertThat(new Item().name()).isEqualTo(ITEM);
 	}
+
 	@Test
 	public void testEquals() {
 		final Item item1 = new Item();

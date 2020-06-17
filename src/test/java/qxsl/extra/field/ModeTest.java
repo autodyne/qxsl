@@ -5,11 +5,14 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
-import org.junit.jupiter.api.Test;
 import qxsl.field.FieldFormats;
 import qxsl.field.FieldFormats.Cache;
 
-import static test.RandTest.*;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import qxsl.junit.RandomStringParameterExtension;
+import qxsl.junit.RandomStringParameterExtension.RandomString;
 
 /**
  * {@link Mode}クラスのテスト用クラスです。
@@ -18,24 +21,26 @@ import static test.RandTest.*;
  * @author 無線部開発班
  *
  * @since 2017/02/24
- *
  */
+@ExtendWith(RandomStringParameterExtension.class)
 public final class ModeTest extends org.assertj.core.api.Assertions {
 	private final Cache cache = new FieldFormats().cache(Qxsl.MODE);
+
 	@Test
 	public void testValue() {
 		assertThat(new Mode("CW").value()).isEqualTo("CW");
 		assertThat(new Mode("AM").value()).isEqualTo("AM");
 	}
+
 	@Test
-	public void testToString() {
-		final String text = alnum(100);
+	public void testToString(@RandomString String text) {
 		assertThat(new Mode(text)).hasToString(text);
 	}
+
 	@Test
-	public void testMode$Format() throws Exception {
+	public void testMode$Format(@RandomString String text) throws Exception {
 		final Mode.Format form = new Mode.Format();
-		final Mode mode = new Mode(alnum(100));
+		final Mode mode = new Mode(text);
 		assertThat(form.decode(form.encode(mode))).isEqualTo(mode);
 		assertThat(cache.field(form.encode(mode))).isEqualTo(mode);
 	}

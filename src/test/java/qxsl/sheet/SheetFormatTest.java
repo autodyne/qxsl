@@ -9,7 +9,6 @@ import java.util.Iterator;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import static test.RandTest.*;
 
 /**
  * {@link SheetFormat}クラスのテスト用クラスです。
@@ -18,7 +17,6 @@ import static test.RandTest.*;
  * @author 無線部開発班
  *
  * @since 2019/06/16
- *
  */
 public final class SheetFormatTest extends org.assertj.core.api.Assertions {
 	/**
@@ -30,26 +28,31 @@ public final class SheetFormatTest extends org.assertj.core.api.Assertions {
 	public static Iterator<SheetFormat> testMethodSource() {
 		return new SheetFormats().iterator();
 	}
+
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void testGetName(SheetFormat format) {
 		assertThat(format.getName()).isNotEmpty();
 	}
+
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void testToString(SheetFormat format) {
 		assertThat(format.toString()).isNotEmpty();
 	}
+
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void testGetDescription(SheetFormat format) {
 		assertThat(format.getDescription()).isNotEmpty();
 	}
+
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void testGetExtensions(SheetFormat format) {
 		assertThat(format.getExtensions()).isNotEmpty();
 	}
+
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void testGetTableKey(SheetFormat format) {

@@ -15,7 +15,6 @@ import qxsl.model.Field;
  * @author 無線部開発班
  *
  * @since 2015/08/05
- *
  */
 public interface FieldFormat {
 	/**

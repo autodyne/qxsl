@@ -14,7 +14,6 @@ import static qxsl.extra.table.QxmlFormat.RCVD;
  * @author 無線部開発班
  *
  * @since 2013/06/08
- *
  */
 public final class Rcvd extends Exch {
 	/**

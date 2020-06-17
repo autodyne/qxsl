@@ -21,7 +21,6 @@ import qxsl.model.Field;
  * @author 無線部開発班
  *
  * @since 2013/06/08
- *
  */
 public final class FieldFormats implements Iterable<FieldFormat> {
 	private final ServiceLoader<FieldFormat> loader;
@@ -97,7 +96,6 @@ public final class FieldFormats implements Iterable<FieldFormat> {
 	 * @author 無線部開発班
 	 *
 	 * @since 2019/06/28
-	 *
 	 */
 	public static final class Any extends Field<String> {
 		private final String value;

@@ -21,7 +21,6 @@ import qxsl.model.Field;
  * @author 無線部開発班
  *
  * @since 2013/06/08
- *
  */
 public final class Time extends Qxsl<ZonedDateTime> {
 	private final ZonedDateTime time;
@@ -87,7 +86,6 @@ public final class Time extends Qxsl<ZonedDateTime> {
 	 * @author 無線部開発班
 	 *
 	 * @since 2013/06/08
-	 *
 	 */
 	public static final class Format implements FieldFormat {
 		private final DateTimeFormatter format;
