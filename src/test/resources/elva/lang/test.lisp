@@ -220,7 +220,7 @@
 ((access java.lang.Class 'getSimpleName) java.lang.Object) "Object"
 
 ; assert
-(catch (assert (equal 3 (+ 1 2)) "must be true")) #t
+(catch (assert (equal 3 (+ 1 2)) "must be true")) null
 (catch (assert (equal 3 (+ 3 2)) "must be true")) "must be true"
 
 ; throw

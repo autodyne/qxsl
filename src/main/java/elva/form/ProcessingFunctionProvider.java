@@ -74,7 +74,6 @@ public final class ProcessingFunctionProvider {
 
 	/**
 	 * 指定された式で例外が発生した場合は捕捉します。
-	 * 例外が発生しなかった場合は式の結果を返します。
 	 *
 	 *
 	 * @author 無線部開発班
@@ -86,7 +85,8 @@ public final class ProcessingFunctionProvider {
 	public static final class $Catch extends ElvaForm {
 		public Object apply(ElvaList args, ElvaEval eval) {
 			try {
-				return eval.apply(args.head());
+				eval.apply(args.head());
+				return null;
 			} catch (ElvaRuntimeException ex) {
 				return ex.getError();
 			}
