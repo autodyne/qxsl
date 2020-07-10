@@ -11,6 +11,7 @@ import elva.core.ElvaEval;
 import elva.core.ElvaForm;
 import elva.core.ElvaList;
 import elva.core.ElvaNode;
+import elva.core.BaseList;
 
 /**
  * LISP処理系の比較演算の組み込み関数を提供します。
@@ -32,7 +33,7 @@ public final class RelationalFunctionProvider {
 	@ElvaForm.Native("<")
 	@ElvaForm.Parameters(min = 2, max = -1)
 	public static final class $Lt extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			final var list = args.map(eval);
 			for(int i = 1; i < list.size(); i++) {
 				final var l = list.get(i - 1).real();
@@ -54,7 +55,7 @@ public final class RelationalFunctionProvider {
 	@ElvaForm.Native(">")
 	@ElvaForm.Parameters(min = 2, max = -1)
 	public static final class $Gt extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			final var list = args.map(eval);
 			for(int i = 1; i < list.size(); i++) {
 				final var l = list.get(i - 1).real();
@@ -76,7 +77,7 @@ public final class RelationalFunctionProvider {
 	@ElvaForm.Native("<=")
 	@ElvaForm.Parameters(min = 2, max = -1)
 	public static final class $Le extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			final var list = args.map(eval);
 			for(int i = 1; i < list.size(); i++) {
 				final var l = list.get(i - 1).real();
@@ -98,7 +99,7 @@ public final class RelationalFunctionProvider {
 	@ElvaForm.Native(">=")
 	@ElvaForm.Parameters(min = 2, max = -1)
 	public static final class $Ge extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			final var list = args.map(eval);
 			for(int i = 1; i < list.size(); i++) {
 				final var l = list.get(i - 1).real();
@@ -120,7 +121,7 @@ public final class RelationalFunctionProvider {
 	@ElvaForm.Native("nil?")
 	@ElvaForm.Parameters(min = 1, max = 1)
 	public static final class $Nil$ extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			return ElvaList.NIL.equals(eval.apply(args.head()));
 		}
 	}
@@ -136,7 +137,7 @@ public final class RelationalFunctionProvider {
 	@ElvaForm.Native("null?")
 	@ElvaForm.Parameters(min = 1, max = 1)
 	public static final class $Null$ extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			return eval.apply(args.head()).value() == null;
 		}
 	}
@@ -152,7 +153,7 @@ public final class RelationalFunctionProvider {
 	@ElvaForm.Native("equal")
 	@ElvaForm.Parameters(min = 2, max = 2)
 	public static final class $Equal extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			final ElvaNode l = eval.apply(args.get(0));
 			final ElvaNode r = eval.apply(args.get(1));
 			return Objects.equals(l, r);

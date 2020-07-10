@@ -113,7 +113,7 @@ public final class ElvaType extends ElvaAtom<Class<?>> {
 	 *
 	 * @since 2020/06/10
 	 */
-	public static final class Type implements Implicit {
+	public static final class TYPE implements Implicit {
 		@Override
 		public final boolean support(Object value) {
 			return value instanceof Class;

@@ -7,8 +7,8 @@ package elva.form;
 
 import elva.core.ElvaEval;
 import elva.core.ElvaForm;
-import elva.core.ElvaList;
 import elva.core.ElvaNode;
+import elva.core.BaseList;
 import elva.warn.ElvaRuntimeException;
 
 /**
@@ -32,7 +32,7 @@ public final class ProcessingFunctionProvider {
 	@ElvaForm.Native("if")
 	@ElvaForm.Parameters(min = 2, max = 3)
 	public static final class $If extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			final var cond = eval.apply(args.head()).bool();
 			return eval.apply(args.drop(cond? 1: 2).head());
 		}
@@ -50,7 +50,7 @@ public final class ProcessingFunctionProvider {
 	@ElvaForm.Native("block")
 	@ElvaForm.Parameters(min = 1, max = -1)
 	public static final class $Block extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			return args.map(new ElvaEval(eval)).last();
 		}
 	}
@@ -66,7 +66,7 @@ public final class ProcessingFunctionProvider {
 	@ElvaForm.Native("throw")
 	@ElvaForm.Parameters(min = 1, max = 1)
 	public static final class $Throw extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			final ElvaNode msg = eval.apply(args.head());
 			throw new ElvaRuntimeException(msg.text());
 		}
@@ -83,7 +83,7 @@ public final class ProcessingFunctionProvider {
 	@ElvaForm.Native("catch")
 	@ElvaForm.Parameters(min = 1, max = 1)
 	public static final class $Catch extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			try {
 				eval.apply(args.head());
 				return null;
@@ -104,7 +104,7 @@ public final class ProcessingFunctionProvider {
 	@ElvaForm.Native("assert")
 	@ElvaForm.Parameters(min = 2, max = 2)
 	public static final class $Assert extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			if(eval.apply(args.head()).bool()) return true;
 			final ElvaNode error = eval.apply(args.get(1));
 			throw new ElvaRuntimeException(error.text());

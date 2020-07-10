@@ -16,7 +16,7 @@ import javax.xml.namespace.QName;
 import elva.bind.Local;
 import elva.core.ElvaEval;
 import elva.core.ElvaForm;
-import elva.core.ElvaList;
+import elva.core.BaseList;
 import elva.lang.ElvaRuntime;
 
 import qxsl.model.Item;
@@ -76,7 +76,7 @@ public final class ElvaRuleKit extends qxsl.ruler.RuleKit {
 	@ElvaForm.Native("contest")
 	@ElvaForm.Parameters(min = 2, max = 2)
 	static final class $Contest extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			return new ElvaContest(args, eval);
 		}
 	}
@@ -92,7 +92,7 @@ public final class ElvaRuleKit extends qxsl.ruler.RuleKit {
 	@ElvaForm.Native("section")
 	@ElvaForm.Parameters(min = 3, max = 3)
 	static final class $Section extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			return new ElvaSection(args, eval);
 		}
 	}
@@ -108,7 +108,7 @@ public final class ElvaRuleKit extends qxsl.ruler.RuleKit {
 	@ElvaForm.Native("success")
 	@ElvaForm.Parameters(min = 3, max = -1)
 	private static final class $Success extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			final var valid = eval.apply(args.get(0));
 			final int score = eval.apply(args.get(1)).toInt();
 			final var mults = args.drop(2).map(eval).stream();
@@ -128,7 +128,7 @@ public final class ElvaRuleKit extends qxsl.ruler.RuleKit {
 	@ElvaForm.Native("failure")
 	@ElvaForm.Parameters(min = 2, max = 2)
 	private static final class $Failure extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			final var bad = eval.apply(args.get(0));
 			final var msg = eval.apply(args.get(1)).value();
 			return new Failure(bad.ofType(Item.class), msg);
@@ -146,7 +146,7 @@ public final class ElvaRuleKit extends qxsl.ruler.RuleKit {
 	@ElvaForm.Native("item")
 	@ElvaForm.Parameters(min = 0, max = 0)
 	private static final class $Item extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			return new Item();
 		}
 	}
@@ -162,7 +162,7 @@ public final class ElvaRuleKit extends qxsl.ruler.RuleKit {
 	@ElvaForm.Native("rcvd")
 	@ElvaForm.Parameters(min = 1, max = 1)
 	private static final class $Rcvd extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			return eval.apply(args.head()).ofType(Item.class).getRcvd();
 		}
 	}
@@ -178,7 +178,7 @@ public final class ElvaRuleKit extends qxsl.ruler.RuleKit {
 	@ElvaForm.Native("sent")
 	@ElvaForm.Parameters(min = 1, max = 1)
 	private static final class $Sent extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			return eval.apply(args.head()).ofType(Item.class).getSent();
 		}
 	}
@@ -194,7 +194,7 @@ public final class ElvaRuleKit extends qxsl.ruler.RuleKit {
 	@ElvaForm.Native("get-field")
 	@ElvaForm.Parameters(min = 3, max = 3)
 	private static final class $GetField extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			final var tuple = eval.apply(args.head());
 			final var space = eval.apply(args.get(1)).text();
 			final var local = eval.apply(args.get(2)).text();
@@ -214,7 +214,7 @@ public final class ElvaRuleKit extends qxsl.ruler.RuleKit {
 	@ElvaForm.Native("set-field")
 	@ElvaForm.Parameters(min = 4, max = 4)
 	private static final class $SetField extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			final var tuple = eval.apply(args.head());
 			final var space = eval.apply(args.get(1)).text();
 			final var local = eval.apply(args.get(2)).text();

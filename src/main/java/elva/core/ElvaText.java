@@ -106,7 +106,7 @@ public final class ElvaText extends ElvaAtom<String> {
 	 *
 	 * @since 2020/06/10
 	 */
-	public static final class Text implements Implicit {
+	public static final class TEXT implements Implicit {
 		@Override
 		public final boolean support(Object value) {
 			return value instanceof String;

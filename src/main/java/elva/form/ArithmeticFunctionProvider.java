@@ -7,8 +7,8 @@ package elva.form;
 
 import elva.core.ElvaEval;
 import elva.core.ElvaForm;
-import elva.core.ElvaList;
 import elva.core.ElvaReal;
+import elva.core.BaseList;
 
 /**
  * LISP処理系の算術演算の組み込み関数を提供します。
@@ -30,7 +30,7 @@ public final class ArithmeticFunctionProvider {
 	@ElvaForm.Native("+")
 	@ElvaForm.Parameters(min = 2, max = -1)
 	public static final class $Add extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			final var reals = args.map(eval).reals();
 			final var tails = reals.stream().skip(1);
 			return tails.reduce(reals.get(0), ElvaReal::add);
@@ -48,7 +48,7 @@ public final class ArithmeticFunctionProvider {
 	@ElvaForm.Native("-")
 	@ElvaForm.Parameters(min = 2, max = -1)
 	public static final class $Sub extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			final var reals = args.map(eval).reals();
 			final var tails = reals.stream().skip(1);
 			return tails.reduce(reals.get(0), ElvaReal::sub);
@@ -66,7 +66,7 @@ public final class ArithmeticFunctionProvider {
 	@ElvaForm.Native("*")
 	@ElvaForm.Parameters(min = 2, max = -1)
 	public static final class $Mul extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			final var reals = args.map(eval).reals();
 			final var tails = reals.stream().skip(1);
 			return tails.reduce(reals.get(0), ElvaReal::mul);
@@ -84,7 +84,7 @@ public final class ArithmeticFunctionProvider {
 	@ElvaForm.Native("/")
 	@ElvaForm.Parameters(min = 2, max = -1)
 	public static final class $Div extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			final var reals = args.map(eval).reals();
 			final var tails = reals.stream().skip(1);
 			return tails.reduce(reals.get(0), ElvaReal::div);
@@ -102,7 +102,7 @@ public final class ArithmeticFunctionProvider {
 	@ElvaForm.Native("mod")
 	@ElvaForm.Parameters(min = 2, max = -1)
 	public static final class $Mod extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			final var reals = args.map(eval).reals();
 			final var tails = reals.stream().skip(1);
 			return tails.reduce(reals.get(0), ElvaReal::mod);

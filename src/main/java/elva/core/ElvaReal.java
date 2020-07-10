@@ -210,7 +210,7 @@ public final class ElvaReal extends ElvaAtom<Number> {
 	 *
 	 * @since 2020/06/10
 	 */
-	public static final class Real implements Implicit {
+	public static final class REAL implements Implicit {
 		@Override
 		public final boolean support(Object value) {
 			return value instanceof Number;

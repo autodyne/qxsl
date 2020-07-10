@@ -7,8 +7,8 @@ package elva.form;
 
 import elva.core.ElvaEval;
 import elva.core.ElvaForm;
-import elva.core.ElvaList;
 import elva.core.ElvaReal;
+import elva.core.BaseList;
 
 /**
  * LISP処理系の論理演算の組み込み関数を提供します。
@@ -30,7 +30,7 @@ public final class ConnectiveFunctionProvider {
 	@ElvaForm.Native("and")
 	@ElvaForm.Parameters(min = 2, max = -1)
 	public static final class $And extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			return args.stream().allMatch(s -> eval.apply(s).bool());
 		}
 	}
@@ -46,7 +46,7 @@ public final class ConnectiveFunctionProvider {
 	@ElvaForm.Native("or")
 	@ElvaForm.Parameters(min = 2, max = -1)
 	public static final class $Or extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			return args.stream().anyMatch(s -> eval.apply(s).bool());
 		}
 	}
@@ -62,7 +62,7 @@ public final class ConnectiveFunctionProvider {
 	@ElvaForm.Native("xor")
 	@ElvaForm.Parameters(min = 2, max = 2)
 	public static final class $Xor extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			final var v1 = eval.apply(args.get(0)).bool();
 			final var v2 = eval.apply(args.get(1)).bool();
 			return v1 ^ v2;
@@ -80,7 +80,7 @@ public final class ConnectiveFunctionProvider {
 	@ElvaForm.Native("not")
 	@ElvaForm.Parameters(min = 1, max = 1)
 	public static final class $Not extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			return !eval.apply(args.head()).bool();
 		}
 	}

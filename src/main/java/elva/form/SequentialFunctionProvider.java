@@ -8,8 +8,8 @@ package elva.form;
 import elva.core.ElvaEval;
 import elva.core.ElvaForm;
 import elva.core.ElvaList.ChainSeq;
-import elva.core.ElvaList;
 import elva.core.ElvaNode;
+import elva.core.BaseList;
 
 import static elva.core.ElvaList.array;
 import static elva.core.ElvaList.chain;
@@ -34,7 +34,7 @@ public final class SequentialFunctionProvider {
 	@ElvaForm.Native("list")
 	@ElvaForm.Parameters(min = 0, max = -1)
 	public static final class $List extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			return args.map(eval);
 		}
 	}
@@ -50,7 +50,7 @@ public final class SequentialFunctionProvider {
 	@ElvaForm.Native("cons")
 	@ElvaForm.Parameters(min = 2, max = 2)
 	public static final class $Cons extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			final var head = eval.apply(args.get(0));
 			final var tail = eval.apply(args.get(1));
 			return new ChainSeq(head, tail.list());
@@ -68,7 +68,7 @@ public final class SequentialFunctionProvider {
 	@ElvaForm.Native("car")
 	@ElvaForm.Parameters(min = 1, max = 1)
 	public static final class $Car extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			return eval.apply(args.head()).list().head();
 		}
 	}
@@ -84,7 +84,7 @@ public final class SequentialFunctionProvider {
 	@ElvaForm.Native("cdr")
 	@ElvaForm.Parameters(min = 1, max = 1)
 	public static final class $Cdr extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			return eval.apply(args.head()).list().tail();
 		}
 	}
@@ -100,7 +100,7 @@ public final class SequentialFunctionProvider {
 	@ElvaForm.Native("cadr")
 	@ElvaForm.Parameters(min = 1, max = 1)
 	public static final class $Cadr extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			return eval.apply(args.head()).list().get(1);
 		}
 	}
@@ -116,7 +116,7 @@ public final class SequentialFunctionProvider {
 	@ElvaForm.Native("cddr")
 	@ElvaForm.Parameters(min = 1, max = 1)
 	public static final class $Cddr extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			return eval.apply(args.head()).list().drop(2);
 		}
 	}
@@ -132,7 +132,7 @@ public final class SequentialFunctionProvider {
 	@ElvaForm.Native("nth")
 	@ElvaForm.Parameters(min = 2, max = 2)
 	public static final class $Nth extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			final var idx = eval.apply(args.get(0));
 			final var seq = eval.apply(args.get(1));
 			return seq.list().get(idx.toInt());
@@ -150,7 +150,7 @@ public final class SequentialFunctionProvider {
 	@ElvaForm.Native("subseq")
 	@ElvaForm.Parameters(min = 3, max = 3)
 	public static final class $SubSeq extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			final var list = eval.apply(args.get(0));
 			final int head = eval.apply(args.get(1)).toInt();
 			final int tail = eval.apply(args.get(2)).toInt();
@@ -169,7 +169,7 @@ public final class SequentialFunctionProvider {
 	@ElvaForm.Native("length")
 	@ElvaForm.Parameters(min = 1, max = 1)
 	public static final class $Length extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			return eval.apply(args.head()).list().size();
 		}
 	}
@@ -185,42 +185,10 @@ public final class SequentialFunctionProvider {
 	@ElvaForm.Native("member")
 	@ElvaForm.Parameters(min = 2, max = 2)
 	public static final class $Member extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			final ElvaNode val = eval.apply(args.get(0));
 			final ElvaNode seq = eval.apply(args.get(1));
 			return seq.list().contains(val);
-		}
-	}
-
-	/**
-	 * 指定された値を配列リスト構造に明示的に型変換します。
-	 *
-	 *
-	 * @author 無線部開発班
-	 *
-	 * @since 2020/06/07
-	 */
-	@ElvaForm.Native("array")
-	@ElvaForm.Parameters(min = 1, max = 1)
-	public static final class $Array extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
-			return array(eval.apply(args.head()).iter());
-		}
-	}
-
-	/**
-	 * 指定された値を連鎖リスト構造に明示的に型変換します。
-	 *
-	 *
-	 * @author 無線部開発班
-	 *
-	 * @since 2020/06/07
-	 */
-	@ElvaForm.Native("chain")
-	@ElvaForm.Parameters(min = 1, max = 1)
-	public static final class $Chain extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
-			return chain(eval.apply(args.head()).iter());
 		}
 	}
 }

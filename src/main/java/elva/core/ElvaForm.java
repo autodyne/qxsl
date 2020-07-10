@@ -109,7 +109,7 @@ public abstract class ElvaForm extends ElvaNode {
 	 * @param eval 評価器
 	 * @return 返り値
 	 */
-	public abstract Object apply(ElvaList args, ElvaEval eval);
+	public abstract Object apply(BaseList args, ElvaEval eval);
 
 	/**
 	 * 指定された個数の引数でこの関数を適用できるか検査します。
@@ -118,7 +118,7 @@ public abstract class ElvaForm extends ElvaNode {
 	 *
 	 * @throws ElvaRuntimeException 引数の個数が誤っている場合
 	 */
-	public final void validate(ElvaList seq) {
+	public final void validate(BaseList seq) {
 		final var p = getClass().getAnnotation(Parameters.class);
 		int min = p != null && p.min() >= 0? p.min(): MAX_VALUE;
 		int max = p != null && p.max() >= 0? p.max(): MAX_VALUE;
@@ -134,7 +134,7 @@ public abstract class ElvaForm extends ElvaNode {
 	 *
 	 * @throws ElvaRuntimeException 引数の個数が誤っている場合
 	 */
-	public final void validate(ElvaList seq, int min, int max) {
+	public final void validate(BaseList seq, int min, int max) {
 		final int n = seq.size();
 		final String MIN = "%s requlres %d+ arguments";
 		final String MAX = "%s requlres ~%d arguments";
@@ -152,7 +152,7 @@ public abstract class ElvaForm extends ElvaNode {
 	 */
 	@ElvaForm.Parameters(min = 0, max = -1)
 	public static final class Lambda extends ElvaForm {
-		private final ElvaList pars;
+		private final BaseList pars;
 		private final ElvaNode body;
 		private final ElvaEval lisp;
 
@@ -164,7 +164,7 @@ public abstract class ElvaForm extends ElvaNode {
 		 * @param body 値の式
 		 * @param lisp 評価器
 		 */
-		public Lambda(ElvaList pars, ElvaNode body, ElvaEval lisp) {
+		public Lambda(BaseList pars, ElvaNode body, ElvaEval lisp) {
 			this.pars = pars;
 			this.body = body;
 			this.lisp = lisp;
@@ -191,7 +191,7 @@ public abstract class ElvaForm extends ElvaNode {
 		 * @throws ElvaRuntimeException 評価により発生した例外
 		 */
 		@Override
-		public final ElvaNode apply(ElvaList args, ElvaEval eval) {
+		public final ElvaNode apply(BaseList args, ElvaEval eval) {
 			final Local local = new Local(lisp.locals);
 			if(args.size() == pars.size()) {
 				for(int i = 0; i < args.size(); i++) {
@@ -216,7 +216,7 @@ public abstract class ElvaForm extends ElvaNode {
 	 */
 	@ElvaForm.Parameters(min = 0, max = -1)
 	public static final class Syntax extends ElvaForm {
-		private final ElvaList pars;
+		private final BaseList pars;
 		private final ElvaNode body;
 		private final ElvaEval lisp;
 
@@ -228,7 +228,7 @@ public abstract class ElvaForm extends ElvaNode {
 		 * @param body 値の式
 		 * @param lisp 評価器
 		 */
-		public Syntax(ElvaList pars, ElvaNode body, ElvaEval lisp) {
+		public Syntax(BaseList pars, ElvaNode body, ElvaEval lisp) {
 			this.pars = pars;
 			this.body = body;
 			this.lisp = lisp;
@@ -255,7 +255,7 @@ public abstract class ElvaForm extends ElvaNode {
 		 * @throws ElvaRuntimeException 評価により発生した例外
 		 */
 		@Override
-		public final ElvaNode apply(ElvaList args, ElvaEval eval) {
+		public final ElvaNode apply(BaseList args, ElvaEval eval) {
 			final Local local = new Local(lisp.locals);
 			if(args.size() == pars.size()) {
 				for(int i = 0; i < args.size(); i++) {
@@ -359,7 +359,7 @@ public abstract class ElvaForm extends ElvaNode {
 			 *
 			 * @throws Exception 何らかの例外
 			 */
-			public ElvaNode apply(ElvaList args) throws Exception;
+			public ElvaNode apply(BaseList args) throws Exception;
 		}
 
 		/**
@@ -399,7 +399,7 @@ public abstract class ElvaForm extends ElvaNode {
 			 * @return 返り値
 			 */
 			@Override
-			public ElvaNode apply(ElvaList args) throws Exception {
+			public ElvaNode apply(BaseList args) throws Exception {
 				final var obj = args.head().value();
 				if(args.size() == 1) return ElvaNode.wrap(form.get(obj));
 				throw new ElvaRuntimeException("field requires no args");
@@ -443,7 +443,7 @@ public abstract class ElvaForm extends ElvaNode {
 			 * @throws Exception 何らかの例外
 			 */
 			@Override
-			public ElvaNode apply(ElvaList args) throws Exception {
+			public ElvaNode apply(BaseList args) throws Exception {
 				final var head = args.head().value();
 				final var tail = pass(form, args.tail());
 				return ElvaNode.wrap(form.invoke(head, tail));
@@ -487,7 +487,7 @@ public abstract class ElvaForm extends ElvaNode {
 			 * @throws Exception 何らかの例外
 			 */
 			@Override
-			public ElvaNode apply(ElvaList args) throws Exception {
+			public ElvaNode apply(BaseList args) throws Exception {
 				return ElvaNode.wrap(form.newInstance(pass(form, args)));
 			}
 		}
@@ -502,7 +502,7 @@ public abstract class ElvaForm extends ElvaNode {
 		 * @throws ElvaRuntimeException 評価により発生した例外
 		 */
 		@Override
-		public final ElvaNode apply(ElvaList args, ElvaEval eval) {
+		public final ElvaNode apply(BaseList args, ElvaEval eval) {
 			final var join = new StringJoiner("\n");
 			final var vals = args.map(eval);
 			for(var op: this.list) try {
@@ -523,7 +523,7 @@ public abstract class ElvaForm extends ElvaNode {
 		 *
 		 * @throws ElvaRuntimeException 引数の型が誤っている場合
 		 */
-		private final Object pass(Parameter info, ElvaList args) {
+		private final Object pass(Parameter info, BaseList args) {
 			final var type = info.getType();
 			try {
 				if(!info.isVarArgs()) return args.head().ofType(type);
@@ -548,14 +548,14 @@ public abstract class ElvaForm extends ElvaNode {
 		 * @throws ElvaRuntimeException 引数の個数が誤っている場合
 		 * @throws ClassCastException 引数の型が誤っている場合
 		 */
-		private final Object[] pass(Executable form, ElvaList args) {
+		private final Object[] pass(Executable form, BaseList args) {
 			final int size = form.getParameterCount();
 			final var pars = form.getParameters();
 			final var vals = new Object[size];
 			if(!form.isVarArgs()) validate(args, size, size);
 			else validate(args, size - 1, Integer.MAX_VALUE);
 			for(int index = 0; index < size; index++) {
-				final ElvaList rests = args.drop(index);
+				final BaseList rests = args.drop(index);
 				vals[index] = pass(pars[index], rests);
 			}
 			return vals;

@@ -9,6 +9,7 @@ import elva.core.ElvaEval;
 import elva.core.ElvaForm;
 import elva.core.ElvaList;
 import elva.core.ElvaName;
+import elva.core.BaseList;
 
 import qxsl.model.Item;
 import qxsl.ruler.Contest;
@@ -35,7 +36,7 @@ public final class ElvaSection extends Section {
 	 * @param rule 部門
 	 * @param eval 評価器
 	 */
-	public ElvaSection(ElvaList rule, ElvaEval eval) {
+	public ElvaSection(BaseList rule, ElvaEval eval) {
 		this.name = eval.apply(rule.get(0)).text();
 		this.code = eval.apply(rule.get(1)).text();
 		this.rule = eval.apply(rule.get(2)).form();

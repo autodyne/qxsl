@@ -7,7 +7,7 @@ package elva.form;
 
 import elva.core.ElvaEval;
 import elva.core.ElvaForm;
-import elva.core.ElvaList;
+import elva.core.BaseList;
 
 /**
  * LISP処理系の文字列操作の組み込み関数を提供します。
@@ -29,11 +29,11 @@ public final class CharactersFunctionProvider {
 	@ElvaForm.Native("format")
 	@ElvaForm.Parameters(min = 1, max = -1)
 	public static final class $Format extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			final var list = args.map(eval);
 			final var temp = list.head();
 			final var vals = list.tail();
-			return String.format(temp.text(), vals.value());
+			return String.format(temp.text(), (Object[]) vals.value());
 		}
 	}
 }

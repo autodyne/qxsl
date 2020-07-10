@@ -253,11 +253,12 @@ public abstract class ElvaNode implements Serializable {
 
 		private NodeBoxing() {
 			this.list = new ArrayList<>();
-			list.add(new ElvaType.Type());
-			list.add(new ElvaText.Text());
-			list.add(new ElvaReal.Real());
-			list.add(new ElvaBool.Bool());
-			list.add(new ElvaList.List());
+			list.add(new ElvaType.TYPE());
+			list.add(new ElvaText.TEXT());
+			list.add(new ElvaReal.REAL());
+			list.add(new ElvaBool.BOOL());
+			list.add(new ElvaList.LIST());
+			list.add(new JavaList.LIST());
 		}
 
 		/**

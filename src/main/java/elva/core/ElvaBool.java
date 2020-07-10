@@ -78,7 +78,7 @@ public final class ElvaBool extends ElvaAtom<Boolean> {
 	 *
 	 * @since 2020/06/10
 	 */
-	public static final class Bool implements Implicit {
+	public static final class BOOL implements Implicit {
 		@Override
 		public final boolean support(Object value) {
 			return value instanceof Boolean;

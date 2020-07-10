@@ -14,6 +14,7 @@ import elva.core.ElvaList;
 import elva.core.ElvaName;
 import elva.core.ElvaNode;
 import elva.core.ElvaReal;
+import elva.core.BaseList;
 
 import qxsl.ruler.Contest;
 import qxsl.ruler.Section;
@@ -38,7 +39,7 @@ public final class ElvaContest extends Contest {
 	 * @param rule 規約
 	 * @param eval 評価器
 	 */
-	public ElvaContest(ElvaList rule, ElvaEval eval) {
+	public ElvaContest(BaseList rule, ElvaEval eval) {
 		this.name = eval.apply(rule.get(0)).text();
 		this.rule = eval.apply(rule.get(1)).form();
 		this.eval = eval;

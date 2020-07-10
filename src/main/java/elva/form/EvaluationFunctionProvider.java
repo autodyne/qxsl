@@ -11,7 +11,7 @@ import javax.script.ScriptException;
 
 import elva.core.ElvaEval;
 import elva.core.ElvaForm;
-import elva.core.ElvaList;
+import elva.core.BaseList;
 import elva.lang.ElvaRuntime;
 import elva.warn.ElvaRuntimeException;
 
@@ -37,7 +37,7 @@ public final class EvaluationFunctionProvider {
 	@ElvaForm.Native("quote")
 	@ElvaForm.Parameters(min = 1, max = 1)
 	public static final class $Quote extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			return args.head();
 		}
 	}
@@ -54,7 +54,7 @@ public final class EvaluationFunctionProvider {
 	@ElvaForm.Native("quasiquote")
 	@ElvaForm.Parameters(min = 1, max = 1)
 	public static final class $Quasi extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			return eval.quote(args.head()).sexp();
 		}
 	}
@@ -70,7 +70,7 @@ public final class EvaluationFunctionProvider {
 	@ElvaForm.Native("unquote")
 	@ElvaForm.Parameters(min = 1, max = 1)
 	public static final class $Uquot extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			return eval.apply(args.head());
 		}
 	}
@@ -87,7 +87,7 @@ public final class EvaluationFunctionProvider {
 	@ElvaForm.Native("unquote-splicing")
 	@ElvaForm.Parameters(min = 1, max = 1)
 	public static final class $Uqspl extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			return eval.apply(args.head());
 		}
 	}
@@ -103,7 +103,7 @@ public final class EvaluationFunctionProvider {
 	@ElvaForm.Native("eval")
 	@ElvaForm.Parameters(min = 1, max = 1)
 	public static final class $Eval extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			return eval.apply(eval.apply(args.head()));
 		}
 	}
@@ -119,7 +119,7 @@ public final class EvaluationFunctionProvider {
 	@ElvaForm.Native("load")
 	@ElvaForm.Parameters(min = 1, max = 1)
 	public static final class $Load extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			final var name = eval.apply(args.head()).text();
 			final var load = $Load.class.getClassLoader();
 			try (var is = load.getResourceAsStream(name)) {
@@ -143,7 +143,7 @@ public final class EvaluationFunctionProvider {
 	@ElvaForm.Native("const")
 	@ElvaForm.Parameters(min = 1, max = 1)
 	public static final class $Const extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			return eval.apply(args.head());
 		}
 	}
@@ -159,7 +159,7 @@ public final class EvaluationFunctionProvider {
 	@ElvaForm.Native("compile")
 	@ElvaForm.Parameters(min = 1, max = 1)
 	public static final class $Compile extends ElvaForm {
-		public Object apply(ElvaList args, ElvaEval eval) {
+		public Object apply(BaseList args, ElvaEval eval) {
 			return eval.apply(eval.compile(args.head()));
 		}
 	}

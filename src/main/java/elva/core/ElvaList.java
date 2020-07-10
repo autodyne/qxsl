@@ -6,109 +6,24 @@
 package elva.core;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Objects;
-import java.util.StringJoiner;
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 /**
- * LISP処理系内部で利用されるリスト構造の実装です。
+ * LISP処理系内部で利用される配列と互換のリスト構造です。
  *
  *
  * @author 無線部開発班
  *
  * @since 2017/02/18
  */
-public abstract class ElvaList extends ElvaNode implements Sequence<Object[]> {
+public abstract class ElvaList extends BaseList {
 	/**
 	 * 内容が空のリストを示す特別なインスタンスです。
 	 */
 	public static final EmptySeq NIL = new EmptySeq();
-
-	/**
-	 * このリストの先頭を返します。
-	 *
-	 * @return 先頭
-	 */
-	public abstract ElvaNode head();
-
-	/**
-	 * このリストの後続を返します。
-	 *
-	 * @return 後続
-	 */
-	public abstract ElvaList tail();
-
-	/**
-	 * 指定された位置で始まる部分リストを返します。
-	 *
-	 * @param skip 部分リストが始まる位置
-	 * @return 部分リスト
-	 */
-	public abstract ElvaList drop(int skip);
-
-	/**
-	 * 指定された位置で終わる部分リストを返します。
-	 *
-	 * @param size 部分リストが終わる位置
-	 * @return 部分リスト
-	 */
-	public abstract ElvaList take(int size);
-
-	/**
-	 * このリストの指定された位置の要素を返します。
-	 * 範囲を外れると例外が発生する場合があります。
-	 *
-	 * @param index 要素の位置
-	 * @return 要素
-	 */
-	public abstract ElvaNode get(int index);
-
-	/**
-	 * このリストの要素数を返します。
-	 *
-	 * @return 要素数
-	 */
-	@Override
-	public abstract int size();
-
-	/**
-	 * このリストの最後の要素を返します。
-	 *
-	 * @return 最後の要素
-	 */
-	public final ElvaNode last() {
-		return drop(size() - 1).head();
-	}
-
-	/**
-	 * このリストのハッシュ値を返します。
-	 *
-	 * @return ハッシュ値
-	 */
-	@Override
-	public final int hashCode() {
-		return Objects.hash(stream().toArray());
-	}
-
-	/**
-	 * このリストとオブジェクトを比較します。
-	 * 同じ内容のリストであれば真を返します。
-	 *
-	 * @param sexp 比較対象のオブジェクト
-	 * @return 同じ内容のリストのみtrue
-	 */
-	@Override
-	public final boolean equals(Object sexp) {
-		if(sexp instanceof ElvaList) {
-			final var list = (ElvaList) sexp;
-			final var s1 = this.stream().toArray();
-			final var s2 = list.stream().toArray();
-			return Arrays.equals(s1, s2);
-		} else return false;
-	}
 
 	/**
 	 * このリストを要素の配列に変換します。
@@ -127,23 +42,11 @@ public abstract class ElvaList extends ElvaNode implements Sequence<Object[]> {
 	 * @return 変換されたリスト
 	 */
 	@Override
-	public final ElvaList map(UnaryOperator<ElvaNode> op) {
+	public final BaseList map(UnaryOperator<ElvaNode> op) {
 		int idx = 0;
 		final var vals = new ElvaNode[this.size()];
 		for(var v: this) vals[idx++] = op.apply(v);
 		return new ArraySeq(vals);
-	}
-
-	/**
-	 * このリストの内容を文字列による表現に変換します。
-	 *
-	 * @return 文字列表現
-	 */
-	@Override
-	public final String toString() {
-		final var join = new StringJoiner(" ", "(", ")");
-		for(ElvaNode val: this) join.add(val.toString());
-		return join.toString();
 	}
 
 	/**
@@ -192,7 +95,7 @@ public abstract class ElvaList extends ElvaNode implements Sequence<Object[]> {
 	 *
 	 * @since 2020/06/10
 	 */
-	public static final class List implements Implicit {
+	public static final class LIST implements Implicit {
 		@Override
 		public final boolean support(Object value) {
 			return value instanceof Object[];
@@ -201,94 +104,6 @@ public abstract class ElvaList extends ElvaNode implements Sequence<Object[]> {
 		@Override
 		public final ElvaNode encode(Object value) {
 			return new ArraySeq((Object[]) value);
-		}
-	}
-
-	/**
-	 * 配列リスト構造に適したイテレータの実装です。
-	 *
-	 *
-	 * @author 無線部開発班
-	 *
-	 * @since 2020/06/03
-	 */
-	private final class ArrayIt implements Iterator<ElvaNode> {
-		private ElvaList list;
-		private int index = 0;
-
-		/**
-		 * 指定されたリストの内容を反復します。
-		 *
-		 * @param list リスト
-		 */
-		public ArrayIt(ElvaList list) {
-			this.list = list;
-		}
-
-		/**
-		 * 後続の値があるか確認します。
-		 *
-		 * @return 後続がある場合は真
-		 */
-		@Override
-		public boolean hasNext() {
-			return index < list.size();
-		}
-
-		/**
-		 * 後続の値を取り出します。
-		 *
-		 * @return 後続の値
-		 */
-		@Override
-		public ElvaNode next() {
-			return ElvaNode.wrap(list.get(index++));
-		}
-	}
-
-	/**
-	 * 連鎖リスト構造に適したイテレータの実装です。
-	 *
-	 *
-	 * @author 無線部開発班
-	 *
-	 * @since 2020/03/02
-	 */
-	private final class ChainIt implements Iterator<ElvaNode> {
-		private ElvaList list;
-		private final int len;
-		private int index = 0;
-
-		/**
-		 * 指定されたリストの内容を反復します。
-		 *
-		 * @param list リスト
-		 */
-		public ChainIt(ElvaList list) {
-			this.len = (this.list = list).size();
-		}
-
-		/**
-		 * 後続の値があるか確認します。
-		 *
-		 * @return 後続がある場合は真
-		 */
-		@Override
-		public boolean hasNext() {
-			return index < len;
-		}
-
-		/**
-		 * 後続の値を取り出します。
-		 *
-		 * @return 後続の値
-		 */
-		@Override
-		public ElvaNode next() {
-			var value = list.head();
-			this.list = list.tail();
-			this.index++;
-			return value;
 		}
 	}
 
@@ -322,7 +137,7 @@ public abstract class ElvaList extends ElvaNode implements Sequence<Object[]> {
 		 * @return 後続
 		 */
 		@Override
-		public final ElvaList tail() {
+		public final BaseList tail() {
 			return this;
 		}
 
@@ -333,7 +148,7 @@ public abstract class ElvaList extends ElvaNode implements Sequence<Object[]> {
 		 * @return 部分リスト
 		 */
 		@Override
-		public final ElvaList drop(int skip) {
+		public final BaseList drop(int skip) {
 			return this;
 		}
 
@@ -344,7 +159,7 @@ public abstract class ElvaList extends ElvaNode implements Sequence<Object[]> {
 		 * @return 部分リスト
 		 */
 		@Override
-		public final ElvaList take(int size) {
+		public final BaseList take(int size) {
 			return this;
 		}
 
@@ -432,7 +247,7 @@ public abstract class ElvaList extends ElvaNode implements Sequence<Object[]> {
 		 * @return 後続
 		 */
 		@Override
-		public final ElvaList tail() {
+		public final BaseList tail() {
 			return new ArraySeq(data, head + 1, tail);
 		}
 
@@ -443,7 +258,7 @@ public abstract class ElvaList extends ElvaNode implements Sequence<Object[]> {
 		 * @return 部分リスト
 		 */
 		@Override
-		public final ElvaList drop(int skip) {
+		public final BaseList drop(int skip) {
 			return new ArraySeq(data, head + skip, tail);
 		}
 
@@ -454,7 +269,7 @@ public abstract class ElvaList extends ElvaNode implements Sequence<Object[]> {
 		 * @return 部分リスト
 		 */
 		@Override
-		public final ElvaList take(int size) {
+		public final BaseList take(int size) {
 			return new ArraySeq(data, head, head + size);
 		}
 
@@ -500,7 +315,7 @@ public abstract class ElvaList extends ElvaNode implements Sequence<Object[]> {
 	 */
 	public static final class ChainSeq extends ElvaList {
 		private final ElvaNode head;
-		private final ElvaList tail;
+		private final BaseList tail;
 		private final int size;
 
 		/**
@@ -531,7 +346,7 @@ public abstract class ElvaList extends ElvaNode implements Sequence<Object[]> {
 		 * @return 後続
 		 */
 		@Override
-		public final ElvaList tail() {
+		public final BaseList tail() {
 			return tail;
 		}
 
@@ -542,7 +357,7 @@ public abstract class ElvaList extends ElvaNode implements Sequence<Object[]> {
 		 * @return 部分リスト
 		 */
 		@Override
-		public final ElvaList drop(int skip) {
+		public final BaseList drop(int skip) {
 			if(skip == 0) return this;
 			if(skip >= 1) return tail.drop(skip - 1);
 			final String msg = String.valueOf(skip);
@@ -556,7 +371,7 @@ public abstract class ElvaList extends ElvaNode implements Sequence<Object[]> {
 		 * @return 部分リスト
 		 */
 		@Override
-		public final ElvaList take(int size) {
+		public final BaseList take(int size) {
 			return new LimitSeq(this, size);
 		}
 
@@ -603,7 +418,7 @@ public abstract class ElvaList extends ElvaNode implements Sequence<Object[]> {
 	 * @since 2020/06/06
 	 */
 	public static final class LimitSeq extends ElvaList {
-		private final ElvaList base;
+		private final BaseList base;
 		private final int size;
 
 		/**
@@ -612,7 +427,7 @@ public abstract class ElvaList extends ElvaNode implements Sequence<Object[]> {
 		 * @param base 内容
 		 * @param size 長さ
 		 */
-		public LimitSeq(ElvaList base, int size) {
+		public LimitSeq(BaseList base, int size) {
 			this.base = base;
 			this.size = size;
 		}
@@ -633,7 +448,7 @@ public abstract class ElvaList extends ElvaNode implements Sequence<Object[]> {
 		 * @return 後続
 		 */
 		@Override
-		public final ElvaList tail() {
+		public final BaseList tail() {
 			return new LimitSeq(base.tail(), size - 1);
 		}
 
@@ -644,7 +459,7 @@ public abstract class ElvaList extends ElvaNode implements Sequence<Object[]> {
 		 * @return 部分リスト
 		 */
 		@Override
-		public final ElvaList drop(int skip) {
+		public final BaseList drop(int skip) {
 			return new LimitSeq(base.drop(skip), size - skip);
 		}
 
@@ -655,7 +470,7 @@ public abstract class ElvaList extends ElvaNode implements Sequence<Object[]> {
 		 * @return 部分リスト
 		 */
 		@Override
-		public final ElvaList take(int size) {
+		public final BaseList take(int size) {
 			return new LimitSeq(this, size);
 		}
 
