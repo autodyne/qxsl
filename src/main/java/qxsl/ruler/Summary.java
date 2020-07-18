@@ -25,40 +25,40 @@ import static java.util.stream.IntStream.range;
  */
 public final class Summary implements java.io.Serializable {
 	private final List<Success> accepted;
+	private final List<Success> distinct;
 	private final List<Failure> rejected;
 	private int total = 0;
 
 	/**
 	 * 有効な交信と無効な交信を指定してサマリを構築します。
-	 * この時点で先頭の識別子が重複する有効な交信は削除されます。
 	 *
 	 * @param succ 受理された交信
 	 * @param fail 拒否された交信
 	 */
-	protected Summary(List<Success> succ, List<Failure> fail) {
+	public Summary(List<Success> succ, List<Failure> fail) {
 		final var map = new LinkedHashMap<Object, Success>();
-		for(Success s: succ) map.putIfAbsent(s.key(0), s);
-		final var acc = new ArrayList<>(map.values());
-		this.accepted = Collections.unmodifiableList(acc);
-		this.rejected = Collections.unmodifiableList(fail);
+		for(Success it: succ) map.putIfAbsent(it.key(0), it);
+		this.distinct = new ArrayList<>(map.values());
+		this.accepted = new ArrayList<>(succ);
+		this.rejected = new ArrayList<>(fail);
 	}
 
 	/**
-	 * 指定された部門で有効かつ重複を排除した交信を列挙します。
+	 * 指定された部門で有効な交信を列挙します。
 	 *
 	 * @return 有効な交信
 	 */
 	public final List<Success> accepted() {
-		return accepted;
+		return Collections.unmodifiableList(accepted);
 	}
 
 	/**
-	 * 指定された部門で無効な交信を重複を排除せずに列挙します。
+	 * 指定された部門で無効な交信を列挙します。
 	 *
 	 * @return 無効な交信
 	 */
 	public final List<Failure> rejected() {
-		return rejected;
+		return Collections.unmodifiableList(rejected);
 	}
 
 	/**
@@ -69,7 +69,7 @@ public final class Summary implements java.io.Serializable {
 	 * @since 2019/05/16
 	 */
 	public final int score() {
-		return accepted.stream().mapToInt(Success::score).sum();
+		return distinct.stream().mapToInt(Success::score).sum();
 	}
 
 	/**
@@ -101,7 +101,7 @@ public final class Summary implements java.io.Serializable {
 	 * @since 2020/02/26
 	 */
 	public final Set<Object> mults(int nkey) {
-		var keys = accepted.stream().map(s -> s.key(nkey));
+		var keys = distinct.stream().map(s -> s.key(nkey));
 		return keys.distinct().collect(Collectors.toSet());
 	}
 
@@ -113,7 +113,7 @@ public final class Summary implements java.io.Serializable {
 	 * @since 2020/02/26
 	 */
 	public final List<Set<Object>> mults() {
-		var cnt = accepted.stream().mapToInt(Success::countKeys).min();
+		var cnt = distinct.stream().mapToInt(Success::countKeys).min();
 		final var sets = range(0, cnt.orElse(0)).mapToObj(this::mults);
 		return sets.collect(Collectors.toList());
 	}

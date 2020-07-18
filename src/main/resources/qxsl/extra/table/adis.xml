@@ -5,7 +5,7 @@
 <entry key="extensions">adi</entry>
 <entry key="desc-text">
 Example:
-&lt;CALL:6&gt;QI1JDS&lt;time_on:6&gt;000000&lt;MODE:2&gt;CW&lt;band:3&gt;10m&lt;RST_RCVD:3&gt;599&lt;SRX:4&gt;1005&lt;eor&gt;
-&lt;CALL:6&gt;QD2LVE&lt;time_on:6&gt;000100&lt;MODE:2&gt;CW&lt;band:3&gt;20m&lt;RST_RCVD:3&gt;599&lt;SRX:4&gt;1336&lt;eor&gt;
+&lt;CALL:6&gt;QI1JDS&lt;QSO_DATE:8&gt;20170604&lt;time_on:6&gt;000000&lt;MODE:2&gt;CW&lt;band:3&gt;10m&lt;RST_RCVD:3&gt;599&lt;SRX:4&gt;1005&lt;eor&gt;
+&lt;CALL:6&gt;QD2LVE&lt;QSO_DATE:8&gt;20170604&lt;time_on:6&gt;000100&lt;MODE:2&gt;CW&lt;band:3&gt;20m&lt;RST_RCVD:3&gt;599&lt;SRX:4&gt;1336&lt;eor&gt;
 </entry>
 </properties>
