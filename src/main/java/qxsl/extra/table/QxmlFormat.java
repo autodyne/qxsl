@@ -42,6 +42,7 @@ public final class QxmlFormat extends BaseFormat {
 	public static final QName RCVD = new QName("rcvd");
 	public static final QName SENT = new QName("sent");
 	private final String XSDPATH = "qxml.xsd";
+	private final String CHARSET = "UTF-8";
 	private final String LN = "\n";
 	private final Schema schema;
 
@@ -301,8 +302,8 @@ public final class QxmlFormat extends BaseFormat {
 			final var of = XMLOutputFactory.newInstance();
 			of.setProperty(IS_REPAIRING_NAMESPACES, true);
 			try {
-				writer = of.createXMLStreamWriter(stream);
-				writer.writeStartDocument("UTF-8", "1.0");
+				writer = of.createXMLStreamWriter(stream, CHARSET);
+				writer.writeStartDocument(CHARSET, "1.0");
 				writer.writeCharacters(LN);
 				writer.writeStartElement(LIST.getLocalPart());
 				for(var item: items) space(item);

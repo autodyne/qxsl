@@ -28,7 +28,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * @since 2017/02/26
  */
 public final class ElvaContestTest extends org.assertj.core.api.Assertions {
-	private static final Class<?> CLS = ElvaContest.class;
+	private static final Class<?> CLS = ElvaRuleKit.class;
 	private static final String CASES = "allja1.test";
 
 	private static final class Score {

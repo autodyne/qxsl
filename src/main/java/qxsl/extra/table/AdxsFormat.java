@@ -37,6 +37,7 @@ public final class AdxsFormat extends BaseFormat {
 	public static final QName ROOT = new QName("ADX");
 	private final String NAMEURI = "adif.org";
 	private final String XSDPATH = "adxs.xsd";
+	private final String CHARSET = "UTF-8";
 	private final String LN = "\n";
 	private final Schema schema;
 
@@ -301,8 +302,8 @@ public final class AdxsFormat extends BaseFormat {
 		public final void encode(List<Item> items) throws IOException {
 			final var of = XMLOutputFactory.newInstance();
 			try {
-				writer = of.createXMLStreamWriter(stream);
-				writer.writeStartDocument("UTF-8", "1.0");
+				writer = of.createXMLStreamWriter(stream, CHARSET);
+				writer.writeStartDocument(CHARSET, "1.0");
 				writer.writeCharacters(LN);
 				writer.writeStartElement(ROOT.getLocalPart());
 				writer.writeCharacters(LN);
