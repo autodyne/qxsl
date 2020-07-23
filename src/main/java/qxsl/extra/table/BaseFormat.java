@@ -121,7 +121,7 @@ public abstract class BaseFormat implements TableFormat {
 	}
 
 	/**
-	 * プレインテキストの交信記録を読み込むためのデコーダの共通実装です。
+	 * 文字列による交信記録を読み込むためのデコーダの共通実装です。
 	 *
 	 *
 	 * @author 無線部開発班
@@ -182,9 +182,9 @@ public abstract class BaseFormat implements TableFormat {
 		 *
 		 * @throws IOException 構文の問題もしくは読み込みに失敗した場合
 		 */
-		public final String[] splitLine(int...splits) throws IOException {
-			final String line = this.reader.readLine();
-			final List<String> list = new ArrayList<>();
+		public final String[] split(int...splits) throws IOException {
+			final var line = this.reader.readLine();
+			final var list = new ArrayList<String>();
 			final int len = splits.length - 1;
 			for(int i = 1; i <= len; i++) {
 				final int from = Math.min(splits[i - 1], line.length());
@@ -206,7 +206,7 @@ public abstract class BaseFormat implements TableFormat {
 		 *
 		 * @throws IOException 読み込みに失敗した場合
 		 */
-		public final String tokenize(String...delims) throws IOException {
+		public final String split(String...delims) throws IOException {
 			final StringBuilder sb = new StringBuilder();
 			boolean seek = true;
 			for(int index = 1; seek && reader.ready(); index++) {
@@ -222,7 +222,7 @@ public abstract class BaseFormat implements TableFormat {
 	}
 
 	/**
-	 * プレインテキストの交信記録を書き出すためのエンコーダの共通実装です。
+	 * 文字列による交信記録を書き出すためのエンコーダの共通実装です。
 	 *
 	 *
 	 * @author 無線部開発班
@@ -256,7 +256,7 @@ public abstract class BaseFormat implements TableFormat {
 		 *
 		 * @param s 出力する文字列
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		public final void print(String s) throws IOException {
 			writer.print(s);
@@ -265,7 +265,7 @@ public abstract class BaseFormat implements TableFormat {
 		/**
 		 * 改行を出力します。
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		public final void println() throws IOException {
 			writer.println();
@@ -275,42 +275,12 @@ public abstract class BaseFormat implements TableFormat {
 		 * 指定された書式付き文字列を出力します。
 		 *
 		 * @param f 出力する書式
-		 * @param args  引数
+		 * @param v 引数
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
-		public final void printf(String f, Object...args) throws IOException {
-			writer.printf(f, args);
-		}
-
-		/**
-		 * 指定された文字数まで空白文字で穴埋めした文字列を右詰で出力します。
-		 *
-		 * @param len 文字列の長さ
-		 * @param s 出力する文字列
-		 *
-		 * @throws IOException 書き出しに失敗した場合
-		 */
-		public final void printR(int len, String s) throws IOException {
-			final String filled = String.format(String.format("%%%ds", len), s);
-			final String msg = "'%s' is too long (consider shortening to '%s').";
-			if(filled.length() == len) writer.print(filled);
-			else throw new IOException(String.format(msg, s, s.substring(0, len)));
-		}
-
-		/**
-		 * 指定された文字数まで空白文字で穴埋めした文字列を左詰で出力します。
-		 *
-		 * @param len 文字列の長さ
-		 * @param s 出力する文字列
-		 *
-		 * @throws IOException 書き出しに失敗した場合
-		 */
-		public final void printL(int len, String s) throws IOException {
-			final String filled = String.format(String.format("%%-%ds", len), s);
-			final String msg = "'%s' is too long (consider shortening to '%s').";
-			if(filled.length() == len) writer.print(filled);
-			else throw new IOException(String.format(msg, s, s.substring(0, len)));
+		public final void printf(String f, Object...v) throws IOException {
+			writer.printf(f, v);
 		}
 
 		/**
@@ -319,7 +289,7 @@ public abstract class BaseFormat implements TableFormat {
 		 * @param len 文字列の長さ
 		 * @param f 出力する属性
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		public final void printR(int len, Field f) throws IOException {
 			printR(len, f != null? String.valueOf(f.value()) : "");
@@ -331,10 +301,40 @@ public abstract class BaseFormat implements TableFormat {
 		 * @param len 文字列の長さ
 		 * @param f 出力する属性
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		public final void printL(int len, Field f) throws IOException {
 			printL(len, f != null? String.valueOf(f.value()) : "");
+		}
+
+		/**
+		 * 指定された文字数まで空白文字で穴埋めした文字列を右詰で出力します。
+		 *
+		 * @param len 文字列の長さ
+		 * @param s 出力する文字列
+		 *
+		 * @throws IOException 書き込みに失敗した場合
+		 */
+		public final void printR(int len, String s) throws IOException {
+			final var str = String.format(String.format("%%%ds", len), s);
+			final var msg = "value '%s' must be truncated into length %d";
+			if(str.length() == len) writer.print(str);
+			else throw new IOException(String.format(str, s, len));
+		}
+
+		/**
+		 * 指定された文字数まで空白文字で穴埋めした文字列を左詰で出力します。
+		 *
+		 * @param len 文字列の長さ
+		 * @param s 出力する文字列
+		 *
+		 * @throws IOException 書き込みに失敗した場合
+		 */
+		public final void printL(int len, String s) throws IOException {
+			final var str = String.format(String.format("%%-%ds", len), s);
+			final var msg = "value '%s' must be truncated into length %d";
+			if(str.length() == len) writer.print(str);
+			else throw new IOException(String.format(str, s, len));
 		}
 	}
 }

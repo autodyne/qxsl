@@ -34,13 +34,9 @@ public final class Failure implements Message, Serializable {
 		this.text = text.toString();
 	}
 
-	/**
-	 * 失敗の内容を説明する文字列を返します。
-	 *
-	 * @return 文字列
-	 */
-	public final String text() {
-		return text;
+	@Override
+	public final int score() {
+		return 0;
 	}
 
 	@Override
@@ -48,11 +44,27 @@ public final class Failure implements Message, Serializable {
 		return item;
 	}
 
+	@Override
+	public final String text() {
+		return text;
+	}
+
+	@Override
+	public final Object key(int keyNum) {
+		throw new IndexOutOfBoundsException();
+	}
+
+	@Override
+	public final int countKeys() {
+		return 0;
+	}
+
 	/**
 	 * この交信の文字列による表現を返します。
 	 *
 	 * @return 文字列
 	 */
+	@Override
 	public final String toString() {
 		StringJoiner sj = new StringJoiner(" ");
 		sj.add(Failure.class.getCanonicalName());

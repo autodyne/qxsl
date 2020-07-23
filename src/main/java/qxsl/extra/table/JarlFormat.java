@@ -255,7 +255,7 @@ public final class JarlFormat extends BaseFormat {
 		 *
 		 * @param items 交信記録
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		@Override
 		public void encode(List<Item> items) throws IOException {
@@ -269,7 +269,7 @@ public final class JarlFormat extends BaseFormat {
 		 *
 		 * @param item 出力する交信記録
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private void item(Item item) throws IOException {
 			time((Time) item.get(Qxsl.TIME));
@@ -297,7 +297,7 @@ public final class JarlFormat extends BaseFormat {
 		 *
 		 * @param date 出力する日時
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private void time(Time date) throws IOException {
 			if(date == null) print(" ".repeat(16));
@@ -309,7 +309,7 @@ public final class JarlFormat extends BaseFormat {
 		 *
 		 * @param band 出力する周波数帯
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private void band(Band band) throws IOException {
 			final String MHz = band.toMHzString();

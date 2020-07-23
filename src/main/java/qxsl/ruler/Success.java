@@ -40,11 +40,7 @@ public final class Success implements Message, Serializable {
 		this.keys = keys;
 	}
 
-	/**
-	 * 交信の成立により得られる素点を返します。
-	 *
-	 * @return 交信1件の得点
-	 */
+	@Override
 	public final int score() {
 		return score;
 	}
@@ -54,23 +50,17 @@ public final class Success implements Message, Serializable {
 		return item;
 	}
 
-	/**
-	 * 総得点や乗数の計算に使用される識別子を返します。
-	 *
-	 * @param keyNum 識別子の配列内の位置
-	 * @return 指定された位置にある識別子
-	 *
-	 * @throws IndexOutOfBoundsException 引数が範囲外の場合
-	 */
+	@Override
+	public final String text() {
+		return "";
+	}
+
+	@Override
 	public final Object key(int keyNum) {
 		return keys[keyNum];
 	}
 
-	/**
-	 * この交信に関連づけられた識別子の個数を返します。
-	 *
-	 * @return 乗数の個数
-	 */
+	@Override
 	public final int countKeys() {
 		return keys.length;
 	}
@@ -80,6 +70,7 @@ public final class Success implements Message, Serializable {
 	 *
 	 * @return 文字列
 	 */
+	@Override
 	public final String toString() {
 		final var outer = new StringJoiner(" ", "{", "}");
 		final var inner = new StringJoiner(",", "[", "]");

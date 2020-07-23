@@ -54,10 +54,9 @@ public final class ElvaScanner implements Iterator<ElvaNode> {
 	 * @throws IOException 正規表現の読み込みに失敗した場合
 	 */
 	public String getRegexPattern() throws IOException {
-		final var path = getClass().getResource("elva.lex");
-		final var r = new InputStreamReader(path.openStream());
-		try (BufferedReader reader = new BufferedReader(r)) {
-			return reader.lines().collect(Collectors.joining());
+		final var r = getClass().getResourceAsStream("elva.lex");
+		try(var b = new BufferedReader(new InputStreamReader(r))) {
+			return b.lines().collect(Collectors.joining());
 		}
 	}
 

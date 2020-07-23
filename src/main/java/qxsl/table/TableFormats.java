@@ -114,7 +114,7 @@ public final class TableFormats implements Iterable<TableFormat> {
 	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
 	 */
 	public List<Item> decode(Reader reader) throws IOException {
-		try(BufferedReader br = new BufferedReader(reader)) {
+		try(final var br = new BufferedReader(reader)) {
 			return decode(br.lines().collect(Collectors.joining("\n")));
 		}
 	}

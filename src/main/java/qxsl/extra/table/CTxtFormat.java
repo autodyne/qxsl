@@ -128,7 +128,7 @@ public final class CTxtFormat extends BaseFormat {
 		 */
 		private Item item(String line) throws IOException {
 			final Item item = new Item();
-			final String[] vals = splitLine(0, 5, 16, 28, 36, 41, 54, 67);
+			final String[] vals = split(0, 5, 16, 28, 36, 41, 54, 67);
 
 			Integer.parseInt(vals[0]);
 
@@ -259,7 +259,7 @@ public final class CTxtFormat extends BaseFormat {
 		 *
 		 * @param items 交信記録
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		@Override
 		public void encode(List<Item> items) throws IOException {
@@ -276,7 +276,7 @@ public final class CTxtFormat extends BaseFormat {
 		 * @param item 出力する交信記録
 		 * @param num 出力する交信記録の番号
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private void item(Item item, int num) throws IOException {
 			printR(4, String.valueOf(num));
@@ -300,7 +300,7 @@ public final class CTxtFormat extends BaseFormat {
 		 *
 		 * @param date 出力する日時
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private void time(Time date) throws IOException {
 			if(date == null) print(" ".repeat(10));
@@ -312,7 +312,7 @@ public final class CTxtFormat extends BaseFormat {
 		 *
 		 * @param band 出力する周波数帯
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private void band(Band band) throws IOException {
 			printf("%-7.7s", band != null? band.toString() : "");

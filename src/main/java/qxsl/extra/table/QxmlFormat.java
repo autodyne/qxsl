@@ -295,7 +295,7 @@ public final class QxmlFormat extends BaseFormat {
 		 *
 		 * @param items 出力する交信記録
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		@Override
 		public final void encode(List<Item> items) throws IOException {
@@ -322,7 +322,7 @@ public final class QxmlFormat extends BaseFormat {
 		 *
 		 * @param item 名前空間を使用する交信記録
 		 *
-		 * @throws XMLStreamException 書き出しに失敗した場合
+		 * @throws XMLStreamException 書き込みに失敗した場合
 		 */
 		private final void space(Item item) throws XMLStreamException {
 			final var rcvd = item.getRcvd();
@@ -337,7 +337,7 @@ public final class QxmlFormat extends BaseFormat {
 		 *
 		 * @param name 名前空間を使用する属性名
 		 *
-		 * @throws XMLStreamException 書き出しに失敗した場合
+		 * @throws XMLStreamException 書き込みに失敗した場合
 		 */
 		private final void space(QName name) throws XMLStreamException {
 			final String p = name.getPrefix();
@@ -350,7 +350,7 @@ public final class QxmlFormat extends BaseFormat {
 		 *
 		 * @param item 出力する交信記録
 		 *
-		 * @throws XMLStreamException 書き出しに失敗した場合
+		 * @throws XMLStreamException 書き込みに失敗した場合
 		 */
 		private final void item(Item item) throws XMLStreamException {
 			writer.writeStartElement(ITEM.getLocalPart());
@@ -368,7 +368,7 @@ public final class QxmlFormat extends BaseFormat {
 		 *
 		 * @param rcvd 出力する相手局から受信した情報
 		 *
-		 * @throws XMLStreamException 書き出しに失敗した場合
+		 * @throws XMLStreamException 書き込みに失敗した場合
 		 */
 		private final void rcvd(Rcvd rcvd) throws XMLStreamException {
 			if(rcvd.iterator().hasNext()) {
@@ -383,7 +383,7 @@ public final class QxmlFormat extends BaseFormat {
 		 *
 		 * @param sent 出力する相手局まで送信した情報
 		 *
-		 * @throws XMLStreamException 書き出しに失敗した場合
+		 * @throws XMLStreamException 書き込みに失敗した場合
 		 */
 		private final void sent(Sent sent) throws XMLStreamException {
 			if(sent.iterator().hasNext()) {
@@ -398,7 +398,7 @@ public final class QxmlFormat extends BaseFormat {
 		 *
 		 * @param field 出力する属性
 		 *
-		 * @throws XMLStreamException 書き出しに失敗した場合
+		 * @throws XMLStreamException 書き込みに失敗した場合
 		 */
 		private final void field(Field field) throws XMLStreamException {
 			final var p = field.name().getPrefix();

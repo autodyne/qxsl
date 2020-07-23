@@ -96,7 +96,7 @@ public interface SheetFormat {
 	}
 
 	/**
-	 * 要約書類を書き出して永続化するためのエンコーダです。
+	 * 要約書類を所定の書式で永続化するためのエンコーダです。
 	 *
 	 *
 	 * @author 無線部開発班
@@ -105,10 +105,10 @@ public interface SheetFormat {
 	 */
 	public interface SheetEncoder extends AutoCloseable {
 		/**
-		 * ストリームに要約書類を書き出します。
+		 * ストリームに要約書類を書き込みます。
 		 *
 		 * @param map 要約書類
-		 * @throws IOException 書き出し時の例外
+		 * @throws IOException 書き込み時の例外
 		 */
 		public void encode(Map<String, String> map) throws IOException;
 		/**

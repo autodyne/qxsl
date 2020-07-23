@@ -205,7 +205,7 @@ public final class CqwwFormat extends BaseFormat {
 		 */
 		private Item item(String line) throws IOException {
 			final Item item = new Item();
-			final String[] vals = splitLine(
+			final String[] vals = split(
 				5, 11, 14, 30, 44, 48, 55, 69, 73, 80
 			);
 
@@ -338,7 +338,7 @@ public final class CqwwFormat extends BaseFormat {
 		 *
 		 * @param items 交信記録
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		@Override
 		public void encode(List<Item> items) throws IOException {
@@ -350,7 +350,7 @@ public final class CqwwFormat extends BaseFormat {
 		 *
 		 * @param item 出力する交信記録
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private void item(Item item) throws IOException {
 			print("QSO: ");
@@ -379,7 +379,7 @@ public final class CqwwFormat extends BaseFormat {
 		 *
 		 * @param date 出力する日時
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private void time(Time date) throws IOException {
 			DateTimeFormatter format = this.format.withZone(UTC);
@@ -392,7 +392,7 @@ public final class CqwwFormat extends BaseFormat {
 		 *
 		 * @param band 出力する周波数帯
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private void band(Band band) throws IOException {
 			BandEnum bands = BandEnum.valueOf(band);

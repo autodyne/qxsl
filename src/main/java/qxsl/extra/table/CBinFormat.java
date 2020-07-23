@@ -492,7 +492,7 @@ public final class CBinFormat extends BaseFormat {
 		 *
 		 * @param items 交信記録
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		@Override
 		public void encode(List<Item> items) throws IOException {
@@ -513,7 +513,7 @@ public final class CBinFormat extends BaseFormat {
 		 *
 		 * @param items 交信記録
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private void confs(List<Item> items) throws IOException {
 			final var last = items.get(items.size()-1);
@@ -530,7 +530,7 @@ public final class CBinFormat extends BaseFormat {
 		/**
 		 * CTESTWINのAADXコンテスト用の点数設定を出力します。
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private void scoresForAADX() throws IOException {
 			final int BANDS = 46; // 23 * (Asia & Non-Asia)
@@ -543,7 +543,7 @@ public final class CBinFormat extends BaseFormat {
 		 *
 		 * @param items 交信記録
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private void names(List<Item> items) throws IOException {
 			final var names = new LinkedHashSet<Name>();
@@ -561,7 +561,7 @@ public final class CBinFormat extends BaseFormat {
 		 * @param item 出力する交信記録
 		 * @param last 以降に交信記録がない場合true
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private void item(Item item, boolean last) throws IOException {
 			string(20, (Call) item.get(Qxsl.CALL));
@@ -589,7 +589,7 @@ public final class CBinFormat extends BaseFormat {
 		 *
 		 * @param time 交信日時
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private final void time(Time time) throws IOException {
 			if(time == null) stream.writeLong(0);
@@ -601,7 +601,7 @@ public final class CBinFormat extends BaseFormat {
 		 *
 		 * @param mode 通信方式
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private final void mode(Mode mode) throws IOException {
 			ModeEnum modes = ModeEnum.valueOf(mode);
@@ -614,7 +614,7 @@ public final class CBinFormat extends BaseFormat {
 		 *
 		 * @param band 周波数帯
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private final void band(Band band) throws IOException {
 			BandEnum bands = BandEnum.valueOf(band);
@@ -629,7 +629,7 @@ public final class CBinFormat extends BaseFormat {
 		 * @param limit 最大文字数
 		 * @param f 直列化する属性
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private void string(int limit, Field f) throws IOException {
 			final String value = f != null? f.value().toString() : "";

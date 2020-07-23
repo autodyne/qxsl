@@ -123,7 +123,7 @@ public final class ZAllFormat extends BaseFormat {
 		 */
 		private Item item(String line) throws IOException {
 			final Item item = new Item();
-			final String[] vals = splitLine(
+			final String[] vals = split(
 				0, 17, 30, 34, 42, 46, 54, 66, 71, 76, 79, 146
 			);
 
@@ -290,7 +290,7 @@ public final class ZAllFormat extends BaseFormat {
 		 *
 		 * @param items 交信記録
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		@Override
 		public void encode(List<Item> items) throws IOException {
@@ -304,7 +304,7 @@ public final class ZAllFormat extends BaseFormat {
 		 *
 		 * @param item 出力する交信記録
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private void item(Item item) throws IOException {
 			time((Time) item.get(Qxsl.TIME));
@@ -333,7 +333,7 @@ public final class ZAllFormat extends BaseFormat {
 		 *
 		 * @param date 出力する日時
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private void time(Time date) throws IOException {
 			if(date == null) print(" ".repeat(16));
@@ -345,7 +345,7 @@ public final class ZAllFormat extends BaseFormat {
 		 *
 		 * @param band 出力する周波数帯
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private void band(Band band) throws IOException {
 			if(band.value().intValueExact() < 10_000_000) {
@@ -359,7 +359,7 @@ public final class ZAllFormat extends BaseFormat {
 		 *
 		 * @param op 出力する運用者名
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private void oprt(Name op) throws IOException {
 			if(op != null) printf("%%%%%s%%%% ", op.value());
@@ -370,7 +370,7 @@ public final class ZAllFormat extends BaseFormat {
 		 *
 		 * @param note 出力する備考
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private void note(Note note) throws IOException {
 			if(note != null) print(note.value());

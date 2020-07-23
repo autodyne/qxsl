@@ -583,7 +583,7 @@ public final class ZBinFormat extends BaseFormat {
 		 *
 		 * @param items 交信記録
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		@Override
 		public void encode(List<Item> items) throws IOException {
@@ -601,7 +601,7 @@ public final class ZBinFormat extends BaseFormat {
 		 *
 		 * @param item 出力する交信記録
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private final void item(Item item) throws IOException {
 			int i = 0;
@@ -628,7 +628,7 @@ public final class ZBinFormat extends BaseFormat {
 		 *
 		 * @param time 交信日時
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private final void time(Time time) throws IOException {
 			if(time == null) stream.writeLong(0);
@@ -640,7 +640,7 @@ public final class ZBinFormat extends BaseFormat {
 		 *
 		 * @param rst RSTQシグナルレポート
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private final void rst(RSTQ rst) throws IOException {
 			int s = rst == null? 599 : rst.value();
@@ -652,7 +652,7 @@ public final class ZBinFormat extends BaseFormat {
 		 *
 		 * @param mode 通信方式
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private final void mode(Mode mode) throws IOException {
 			stream.writeByte(ModeEnum.valueOf(mode).ordinal());
@@ -663,7 +663,7 @@ public final class ZBinFormat extends BaseFormat {
 		 *
 		 * @param band 周波数帯
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private final void band(Band band) throws IOException {
 			BandEnum bands = BandEnum.valueOf(band);
@@ -676,7 +676,7 @@ public final class ZBinFormat extends BaseFormat {
 		 *
 		 * @param watt 空中線出力
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private final void watt(Watt watt) throws IOException {
 			WattEnum watts = WattEnum.valueOf(watt);
@@ -691,7 +691,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @param limit 最大文字数
 		 * @param f 直列化する属性
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private void string(int limit, Field f) throws IOException {
 			final String value = f != null? f.value().toString() : "";

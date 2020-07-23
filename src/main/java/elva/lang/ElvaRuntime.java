@@ -76,7 +76,7 @@ public final class ElvaRuntime extends AbstractScriptEngine {
 	 * @throws ScriptException 式の構文上の例外
 	 */
 	public static final ElvaList scan(Reader reader) throws ScriptException {
-		try(BufferedReader br = new BufferedReader(reader)) {
+		try(final var br = new BufferedReader(reader)) {
 			return scan(br.lines().collect(Collectors.joining("\n")));
 		} catch (IOException ex) {
 			throw new ScriptException(ex);

@@ -80,7 +80,7 @@ public final class SheetFormats implements Iterable<SheetFormat> {
 	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
 	 */
 	public List<Item> unpack(Reader reader) throws IOException {
-		try(BufferedReader br = new BufferedReader(reader)) {
+		try(final var br = new BufferedReader(reader)) {
 			return unpack(br.lines().collect(Collectors.joining("\n")));
 		}
 	}

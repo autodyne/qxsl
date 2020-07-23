@@ -111,8 +111,8 @@ public final class AdisFormat extends BaseFormat {
 			super.reset();
 			String record;
 			boolean valid = false;
-			if(hdr) valid |= tokenize("<eoh>") != null;
-			while((record = tokenize("<eor>")) != null) {
+			if(hdr) valid |= split("<eoh>") != null;
+			while((record = split("<eor>")) != null) {
 				items.add(item(record));
 				valid = true;
 			}
@@ -167,7 +167,7 @@ public final class AdisFormat extends BaseFormat {
 		 *
 		 * @param items 交信記録
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		@Override
 		public final void encode(List<Item> items) throws IOException {
@@ -188,7 +188,7 @@ public final class AdisFormat extends BaseFormat {
 		 *
 		 * @param item 出力する交信記録
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private final void item(Item item) throws IOException {
 			for(var f: item) if(f.name().getNamespaceURI().equals(URI)) field(f);
@@ -201,7 +201,7 @@ public final class AdisFormat extends BaseFormat {
 		 *
 		 * @param field 出力する属性
 		 *
-		 * @throws IOException 書き出しに失敗した場合
+		 * @throws IOException 書き込みに失敗した場合
 		 */
 		private final void field(Field field) throws IOException {
 			final String local = field.name().getLocalPart();

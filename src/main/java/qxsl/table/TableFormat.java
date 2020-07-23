@@ -117,7 +117,7 @@ public interface TableFormat {
 	}
 
 	/**
-	 * 交信記録を書き出して永続化するためのエンコーダです。
+	 * 交信記録を所定の書式で永続化するためのエンコーダです。
 	 *
 	 *
 	 * @author 無線部開発班
@@ -126,10 +126,10 @@ public interface TableFormat {
 	 */
 	public interface TableEncoder extends AutoCloseable {
 		/**
-		 * ストリームに交信記録を書き出します。
+		 * ストリームに交信記録を書き込みます。
 		 *
 		 * @param items 交信記録
-		 * @throws IOException 書き出し時の例外
+		 * @throws IOException 書き込み時の例外
 		 */
 		public void encode(List<Item> items) throws IOException;
 		/**
