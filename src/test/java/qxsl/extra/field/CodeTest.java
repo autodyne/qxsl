@@ -5,12 +5,10 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
-import qxsl.field.FieldFormats;
-import qxsl.field.FieldFormats.Cache;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
+import qxsl.field.FieldFormats;
+import qxsl.field.FieldFormats.Cache;
 import qxsl.junit.RandomStringParameterExtension;
 import qxsl.junit.RandomStringParameterExtension.RandomString;
 
@@ -39,8 +37,8 @@ public final class CodeTest extends org.assertj.core.api.Assertions {
 
 	@Test
 	public void testCode$Format(@RandomString String text) throws Exception {
-		final Code.Format form = new Code.Format();
-		final Code code = new Code(text);
+		final var form = new Code.Format();
+		final var code = new Code(text);
 		assertThat(form.decode(form.encode(code))).isEqualTo(code);
 		assertThat(cache.field(form.encode(code))).isEqualTo(code);
 	}

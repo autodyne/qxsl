@@ -5,13 +5,11 @@
 *******************************************************************************/
 package qxsl.ruler;
 
-import qxsl.model.Item;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import qxsl.junit.RandomStringParameterExtension;
 import qxsl.junit.RandomStringParameterExtension.RandomString;
+import qxsl.model.Item;
 
 /**
  * {@link Failure}クラスのテスト用クラスです。

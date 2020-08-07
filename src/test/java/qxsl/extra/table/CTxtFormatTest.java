@@ -5,19 +5,15 @@
 *******************************************************************************/
 package qxsl.extra.table;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.stream.IntStream;
-
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import qxsl.extra.field.*;
 import qxsl.model.Item;
 import qxsl.table.TableFormats;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.stream.IntStream;
 
 import static qxsl.junit.RandomNumberParameterExtension.randInt;
 import static qxsl.junit.RandomStringParameterExtension.alnum;
@@ -54,16 +50,14 @@ public final class CTxtFormatTest extends org.assertj.core.api.Assertions {
 		final ArrayList<Item> items = new ArrayList<>();
 		for(int row = 0; row < numItems; row++) {
 			final Item item = new Item();
-			item.add(new Time());
-			item.add(bands.get(randInt(bands.size())));
-			item.add(new Call(alnum(11)));
-			item.add(new Mode(alnum(4)));
-			item.getRcvd().add(new Code(alnum(12)));
-			item.getSent().add(new Code(alnum(12)));
+			item.set(new Time());
+			item.set(bands.get(randInt(bands.size())));
+			item.set(new Call(alnum(11)));
+			item.set(new Mode(alnum(4)));
+			item.getRcvd().set(new Code(alnum(12)));
+			item.getSent().set(new Code(alnum(12)));
 			items.add(item);
 		}
-		final ByteArrayOutputStream os = new ByteArrayOutputStream();
-		format.encoder(os).encode(items);
-		assertThat(tables.decode(os.toByteArray())).isEqualTo(items);
+		assertThat(tables.decode(format.encode(items))).isEqualTo(items);
 	}
 }

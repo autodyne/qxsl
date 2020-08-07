@@ -5,18 +5,15 @@
 *******************************************************************************/
 package qxsl.extra.table;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.stream.IntStream;
-
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import qxsl.extra.field.*;
 import qxsl.model.Item;
 import qxsl.table.TableFormats;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.stream.IntStream;
 
 import static qxsl.junit.RandomNumberParameterExtension.randInt;
 import static qxsl.junit.RandomStringParameterExtension.alnum;
@@ -64,21 +61,19 @@ public final class ZBinFormatTest extends org.assertj.core.api.Assertions {
 		final ArrayList<Item> items = new ArrayList<>();
 		for(int row = 0; row < numItems; row++) {
 			final Item item = new Item();
-			item.add(new Time());
-			item.add(bands.get(randInt(bands.size())));
-			item.add(new Call(alnum(12)));
-			item.add(modes.get(randInt(modes.size())));
-			item.add(new Note(alnum(66)));
-			item.add(new Name(alnum(14)));
-			item.getRcvd().add(new RSTQ(randInt(600)));
-			item.getRcvd().add(new Code(alnum(30)));
-			item.getSent().add(new RSTQ(randInt(600)));
-			item.getSent().add(new Code(alnum(30)));
-			item.getSent().add(watts.get(randInt(watts.size())));
+			item.set(new Time());
+			item.set(bands.get(randInt(bands.size())));
+			item.set(new Call(alnum(12)));
+			item.set(modes.get(randInt(modes.size())));
+			item.set(new Note(alnum(66)));
+			item.set(new Name(alnum(14)));
+			item.getRcvd().set(new RSTQ(randInt(600)));
+			item.getRcvd().set(new Code(alnum(30)));
+			item.getSent().set(new RSTQ(randInt(600)));
+			item.getSent().set(new Code(alnum(30)));
+			item.getSent().set(watts.get(randInt(watts.size())));
 			items.add(item);
 		}
-		final ByteArrayOutputStream os = new ByteArrayOutputStream();
-		format.encoder(os).encode(items);
-		assertThat(tables.decode(os.toByteArray())).isEqualTo(items);
+		assertThat(tables.decode(format.encode(items))).isEqualTo(items);
 	}
 }

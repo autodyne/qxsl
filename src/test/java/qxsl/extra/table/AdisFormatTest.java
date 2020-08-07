@@ -5,18 +5,16 @@
 *******************************************************************************/
 package qxsl.extra.table;
 
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.stream.IntStream;
-import javax.xml.namespace.QName;
-
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import qxsl.field.FieldFormats.Any;
 import qxsl.model.Item;
 import qxsl.table.TableFormats;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.stream.IntStream;
+import javax.xml.namespace.QName;
 
 import static qxsl.junit.RandomStringParameterExtension.alnum;
 
@@ -37,19 +35,17 @@ public final class AdisFormatTest extends org.assertj.core.api.Assertions {
 
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
-	public void testDecode(int numItems) throws Exception {
+	public void testDecode(int numItems) throws IOException {
 		final String ADIF = "adif.org";
 		final AdisFormat format = new AdisFormat();
 		final ArrayList<Item> items = new ArrayList<>();
 		for(int row = 0; row < numItems; row++) {
 			final Item item = new Item();
-			item.add(new Any(new QName(ADIF, "CALL"), alnum(10)));
-			item.add(new Any(new QName(ADIF, "BAND"), alnum(10)));
-			item.add(new Any(new QName(ADIF, "MODE"), alnum(10)));
+			item.set(new Any(new QName(ADIF, "CALL"), alnum(10)));
+			item.set(new Any(new QName(ADIF, "BAND"), alnum(10)));
+			item.set(new Any(new QName(ADIF, "MODE"), alnum(10)));
 			items.add(item);
 		}
-		final ByteArrayOutputStream os = new ByteArrayOutputStream();
-		format.encoder(os).encode(items);
-		assertThat(tables.decode(os.toByteArray())).isEqualTo(items);
+		assertThat(tables.decode(format.encode(items))).isEqualTo(items);
 	}
 }

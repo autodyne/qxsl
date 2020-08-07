@@ -5,10 +5,10 @@
 *******************************************************************************/
 package qxsl.ruler;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.StringJoiner;
 import qxsl.model.Item;
+
+import java.io.Serializable;
+import java.util.StringJoiner;
 
 /**
  * 規約により受理された交信に付与され総得点や乗数の計算に使用されます。
@@ -40,26 +40,56 @@ public final class Success implements Message, Serializable {
 		this.keys = keys;
 	}
 
+	/**
+	 * 交信の成立により得られる素点を返します。
+	 *
+	 * @return 交信1件の得点
+	 */
 	@Override
 	public final int score() {
 		return score;
 	}
 
+	/**
+	 * 交信の実体を表す{@link Item}を返します。
+	 *
+	 * @return 交信の実体
+	 */
 	@Override
 	public final Item item() {
 		return item;
 	}
 
+	/**
+	 * 処理の結果を説明する文字列を返します。
+	 *
+	 * @return 文字列
+	 */
 	@Override
 	public final String text() {
 		return "";
 	}
 
+	/**
+	 * 総得点や乗数の計算に使用される識別子を返します。
+	 *
+	 *
+	 * @param keyNum 識別子の配列内の位置
+	 *
+	 * @return 指定された位置にある識別子
+	 *
+	 * @throws IndexOutOfBoundsException 範囲外の場合
+	 */
 	@Override
 	public final Object key(int keyNum) {
 		return keys[keyNum];
 	}
 
+	/**
+	 * この交信に関連づけられた識別子の個数を返します。
+	 *
+	 * @return 乗数の個数
+	 */
 	@Override
 	public final int countKeys() {
 		return keys.length;

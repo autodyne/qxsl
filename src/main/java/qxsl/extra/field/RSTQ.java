@@ -5,9 +5,10 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
-import javax.xml.namespace.QName;
 import qxsl.field.FieldFormat;
 import qxsl.model.Field;
+
+import javax.xml.namespace.QName;
 
 /**
  * 交信のRST(RSQ)レポートを表現する{@link Field}実装クラスです。
@@ -45,6 +46,7 @@ public final class RSTQ extends Qxsl<Integer> {
 
 	/**
 	 * RSTQを整数で指定して{@link RSTQ}を構築します。
+	 *
 	 *
 	 * @param r 了解度
 	 * @param s 信号強度

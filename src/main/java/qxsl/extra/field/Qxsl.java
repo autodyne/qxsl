@@ -5,8 +5,9 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
-import javax.xml.namespace.QName;
 import qxsl.model.Field;
+
+import javax.xml.namespace.QName;
 
 /**
  * QXMLが標準仕様でサポートする属性の名前を定義します。

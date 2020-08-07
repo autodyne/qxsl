@@ -1,6 +1,6 @@
 ;; RADIAL LIBRARY DEFINED by 無線部開発班
 
-(load "qxsl/ruler/common.lisp")
+(load "qxsl/ruler/format.lisp")
 
 
 ; imports
@@ -8,6 +8,9 @@
 
 (import java.time.ZoneId)
 (import java.time.ZonedDateTime)
+
+(import qxsl.ruler.Contest)
+(import qxsl.ruler.Section)
 
 (import qxsl.extra.field.Band)
 (import qxsl.extra.field.Call)
@@ -27,21 +30,22 @@
 
 
 ; section
-(defmacro SECTION (contest name code test)
-	`(. add ,contest ((section ,name ,code ,test))))
+(defmacro SECTION (var name code test)
+	`((method 'add Contest Section)
+		,var (section ,name ,code ,test)))
 
 
 ; hour
 (defun hour (zoned zoneId)
-	(! (access ZonedDateTime 'getHour)
-		(! (access ZonedDateTime 'withZoneSameInstant)
-			zoned (! (access ZoneId 'of) ! null zoneId))))
+	((method 'getHour ZonedDateTime)
+		((method 'withZoneSameInstant ZonedDateTime ZoneId)
+			zoned ((method 'of ZoneId String) null zoneId))))
 
 
 ; city
 (defun city (dbname code level)
-	(let (city (! (access City 'forCode) ! null dbname code))
-		(! if (! nil? level)
+	(let city ((method 'forCode City String String) null dbname code)
+		(if (nil? level)
 			city
-			(! (access List 'get)
-				(! (access City 'getFullPath) city) (! integer level)))))
+			((method 'get List int)
+				((method 'getFullPath City) city) (integer level)))))

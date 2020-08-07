@@ -60,7 +60,9 @@ public abstract class Contest implements Iterable<Section> {
 	/**
 	 * 指定された部門をこの規約に追加します。
 	 *
+	 *
 	 * @param section 追加する部門
+	 *
 	 * @return この規約
 	 */
 	public final Contest add(Section section) {
@@ -72,7 +74,9 @@ public abstract class Contest implements Iterable<Section> {
 	/**
 	 * 指定された部門をこの規約から削除します。
 	 *
+	 *
 	 * @param section 削除する部門
+	 *
 	 * @return この規約
 	 */
 	public final Contest remove(Section section) {
@@ -83,7 +87,9 @@ public abstract class Contest implements Iterable<Section> {
 	/**
 	 * 指定された交信記録の総得点を計算します。
 	 *
+	 *
 	 * @param summ 交信記録
+	 *
 	 * @return 総得点
 	 *
 	 * @since 2020/02/26
@@ -93,8 +99,10 @@ public abstract class Contest implements Iterable<Section> {
 	/**
 	 * このコンテストに紐づけられた関数を実行します。
 	 *
+	 *
 	 * @param name 関数の名前
 	 * @param args 関数の引数
+	 *
 	 * @return 関数の値
 	 *
 	 * @since 2020/03/09
@@ -102,9 +110,12 @@ public abstract class Contest implements Iterable<Section> {
 	public abstract Object invoke(String name, Object...args);
 
 	/**
-	 * 指定された名前の部門を返します。未知の場合は例外を投げます。
+	 * 指定された名前の部門を返します。
+	 * 未知の場合は例外を発生させます。
+	 *
 	 *
 	 * @param name 部門の名前
+	 *
 	 * @return 該当する部門
 	 *
 	 * @throws NoSuchElementException 未知の部門の場合

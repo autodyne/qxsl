@@ -5,19 +5,14 @@
 *******************************************************************************/
 package qxsl.sheet;
 
+import qxsl.model.Item;
+import qxsl.table.TableFormats;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.io.StringReader;
-import java.net.URL;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.ServiceLoader;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.stream.Collectors;
-import qxsl.model.Item;
-import qxsl.table.TableFormats;
 
 /**
  * {@link SheetFormat}実装クラスを自動的に検出して管理します。
@@ -61,20 +56,22 @@ public final class SheetFormats implements Iterable<SheetFormat> {
 	/**
 	 * 指定された名前を持つ書式の実装を検索します。
 	 *
+	 *
 	 * @param name 属性の名前
-	 * @return 対応する書式 存在しない場合null
+	 *
+	 * @return 対応する書式 またはnull
 	 */
 	public SheetFormat forName(String name) {
-		for(SheetFormat fmt: loader) {
-			if(fmt.getName().equals(name)) return fmt;
-		}
+		for(var f: loader) if(f.getName().equals(name)) return f;
 		return null;
 	}
 
 	/**
 	 * 指定されたリーダから適切な書式で交信記録を読み込みます。
 	 *
+	 *
 	 * @param reader 要約記録を読み込むリーダ
+	 *
 	 * @return 交信記録
 	 *
 	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
@@ -88,7 +85,9 @@ public final class SheetFormats implements Iterable<SheetFormat> {
 	/**
 	 * 指定された文字列から適切な書式で交信記録を読み込みます。
 	 *
+	 *
 	 * @param string 要約書類を読み込む文字列
+	 *
 	 * @return 交信記録
 	 *
 	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
@@ -96,13 +95,11 @@ public final class SheetFormats implements Iterable<SheetFormat> {
 	public List<Item> unpack(String string) throws IOException {
 		final var err = new StringJoiner(",");
 		final var tables = new TableFormats();
-		for(SheetFormat fmt: this) {
-			try(var decoder = fmt.decoder(new StringReader(string))) {
-				final Map<String, String> map = decoder.decode();
-				return tables.decode(map.get(fmt.getTableKey()));
-			} catch (IOException ex) {
-				err.add(fmt.toString());
-			}
+		for(var fmt: this) try(var decoder = fmt.decoder(string)) {
+			final Map<String, String> map = decoder.decode();
+			return tables.decode(map.get(fmt.getTableKey()));
+		} catch (IOException ex) {
+			err.add(fmt.toString());
 		}
 		throw new IOException("none of ".concat(err.toString()));
 	}

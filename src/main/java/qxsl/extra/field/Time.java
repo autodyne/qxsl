@@ -5,14 +5,17 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
-import java.time.*;
+import qxsl.field.FieldFormat;
+import qxsl.model.Field;
+
+import javax.xml.namespace.QName;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
-import javax.xml.namespace.QName;
-
-import qxsl.field.FieldFormat;
-import qxsl.model.Field;
 
 /**
  * 交信の日時を表現する{@link Field}実装クラスです。
@@ -67,10 +70,12 @@ public final class Time extends Qxsl<ZonedDateTime> {
 
 	/**
 	 * 指定されたオブジェクトと等値であるか確認します。
-	 * 対象が分まで同じ{@link Time}の場合にtrueを返します。
+	 * 比較の対象が分まで同じ時刻の場合に真を返します。
+	 *
 	 *
 	 * @param obj 比較するオブジェクト
-	 * @return この属性と等しい場合true
+	 *
+	 * @return この属性と等しい場合に真
 	 */
 	@Override
 	public boolean equals(Object obj) {

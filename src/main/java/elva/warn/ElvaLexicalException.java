@@ -5,7 +5,7 @@
 *******************************************************************************/
 package elva.warn;
 
-import elva.lang.ElvaScanner;
+import elva.lang.ElvaLisp.Lexical;
 
 /**
  * LISP処理系で発生する構文の例外を表現します。
@@ -22,10 +22,11 @@ public final class ElvaLexicalException extends RuntimeException {
 	/**
 	 * 字句番号と内容を示す文字列を指定して例外を構築します。
 	 *
+	 *
 	 * @param text 例外の内容
 	 * @param scan 構文解析器
 	 */
-	public ElvaLexicalException(String text, ElvaScanner scan) {
+	public ElvaLexicalException(String text, Lexical scan) {
 		super(String.format(TEMPLATE, text, scan.getLocal()));
 	}
 }

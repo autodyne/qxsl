@@ -2,11 +2,15 @@
 
 ; quote
 '(1 2 3) (list 1 2 3)
+
+; quasi-quote
 `(1 2 3) (list 1 2 3)
 
 ; unquote
 `(3 ,(+ 3 3) 4) '(3 6 4)
 `(1 (2 ,(* 3 4)) 5) '(1 (2 12) 5)
+
+; unquote-splicing
 `(1 (1 4 ,@(cdr '(1 5 1 4)))) '(1 (1 4 5 1 4))
 
 ; block
@@ -21,9 +25,9 @@
 (block (set 'foo 29) (set 'bar 97) bar) 97
 
 ; let
-(let (foo 810) foo) 810
-(let (bar 364) bar (+ bar bar)) 728
-(let (bar 364) bar (+ bar bar) (* bar bar)) 132496
+(let foo 810 foo) 810
+(let bar 364 bar (+ bar bar)) 728
+(let bar 364 bar (+ bar bar) (* bar bar)) 132496
 
 ; symbol
 (symbol "MUR") 'MUR
@@ -211,18 +215,16 @@
 (type "TNOK") java.lang.String
 (type 114514) java.lang.Integer
 
-; access
-((access java.lang.Integer 'MAX_VALUE) null)  2147483647
-((access java.lang.Integer 'MIN_VALUE) null) -2147483648
-((access java.lang.String 'length) "foobar") 6
-((access java.lang.String 'new) "TNOK") "TNOK"
-((access java.lang.Class 'getSimpleName) java.lang.String) "String"
-((access java.lang.Class 'getSimpleName) java.lang.Object) "Object"
+; method
+((method 'length java.lang.String) "foobar") 6
+((method 'getSimpleName java.lang.Class) java.lang.String) "String"
+((method 'getSimpleName java.lang.Class) java.lang.Object) "Object"
 
 ; assert
 (catch (assert (equal 3 (+ 1 2)) "must be true")) null
 (catch (assert (equal 3 (+ 3 2)) "must be true")) "must be true"
 
+; catch
 ; throw
 (catch (block 3 6 4 (throw "YATAI") 3)) "YATAI"
 (catch (block 8 1 0 (throw "RAMEN") 3)) "RAMEN"
@@ -232,10 +234,6 @@
 (eval '(+ 10 20)) 30
 (block (set 'x 100) (eval x)) 100
 
-; compile
-(compile '(19 ! (+ 1 9) 8 10)) '(19 10 8 10)
-(compile '(19 1 9 ! (* 3 64))) '(19 1 9 192)
-
 ; load
 (block (load "qxsl/ruler/common.lisp") (defun foo x (+ x x)) (foo 114)) 228
-(block (load "qxsl/ruler/radial.lisp") (defun bar y (+ y y)) (bar 364)) 728
+(block (load "qxsl/ruler/common.lisp") (defun bar y (+ y y)) (bar 364)) 728

@@ -5,9 +5,10 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
-import javax.xml.namespace.QName;
 import qxsl.field.FieldFormat;
 import qxsl.model.Field;
+
+import javax.xml.namespace.QName;
 
 /**
  * 交信の備考を表現する{@link Field}実装クラスです。

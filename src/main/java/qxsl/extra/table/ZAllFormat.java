@@ -5,6 +5,10 @@
 *******************************************************************************/
 package qxsl.extra.table;
 
+import qxsl.extra.field.*;
+import qxsl.field.FieldFormats;
+import qxsl.model.Item;
+
 import java.io.*;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
@@ -12,10 +16,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import qxsl.extra.field.*;
-import qxsl.field.FieldFormats;
-import qxsl.model.Item;
 
 /**
  * zLogテキストファイルのうちALLと呼ばれる書式です。
@@ -162,7 +162,7 @@ public final class ZAllFormat extends BaseFormat {
 		 * @param time 交信日時の文字列
 		 */
 		private void time(Item item, String time) {
-			item.add(new Time(LocalDateTime.parse(time, format)));
+			item.set(new Time(LocalDateTime.parse(time, format)));
 		}
 
 		/**
@@ -172,7 +172,7 @@ public final class ZAllFormat extends BaseFormat {
 		 * @param call コールサインの文字列
 		 */
 		private void call(Item item, String call) {
-			item.add(fields.cache(Qxsl.CALL).field(call));
+			item.set(fields.cache(Qxsl.CALL).field(call));
 		}
 
 		/**
@@ -182,7 +182,7 @@ public final class ZAllFormat extends BaseFormat {
 		 * @param srst RSTQの文字列
 		 */
 		private void srst(Item item, String srst) {
-			item.getSent().add(fields.cache(Qxsl.RSTQ).field(srst));
+			item.getSent().set(fields.cache(Qxsl.RSTQ).field(srst));
 		}
 
 		/**
@@ -192,7 +192,7 @@ public final class ZAllFormat extends BaseFormat {
 		 * @param snum ナンバーの文字列
 		 */
 		private void snum(Item item, String snum) {
-			item.getSent().add(fields.cache(Qxsl.CODE).field(snum));
+			item.getSent().set(fields.cache(Qxsl.CODE).field(snum));
 		}
 
 		/**
@@ -202,7 +202,7 @@ public final class ZAllFormat extends BaseFormat {
 		 * @param rrst RSTQの文字列
 		 */
 		private void rrst(Item item, String rrst) {
-			item.getRcvd().add(fields.cache(Qxsl.RSTQ).field(rrst));
+			item.getRcvd().set(fields.cache(Qxsl.RSTQ).field(rrst));
 		}
 
 		/**
@@ -212,7 +212,7 @@ public final class ZAllFormat extends BaseFormat {
 		 * @param rnum ナンバーの文字列
 		 */
 		private void rnum(Item item, String rnum) {
-			item.getRcvd().add(fields.cache(Qxsl.CODE).field(rnum));
+			item.getRcvd().set(fields.cache(Qxsl.CODE).field(rnum));
 		}
 
 		/**
@@ -229,7 +229,7 @@ public final class ZAllFormat extends BaseFormat {
 			} else {
 				kHz = (int) (Double.parseDouble(band) * 1000);
 			}
-			item.add(fields.cache(Qxsl.BAND).field(kHz.toString()));
+			item.set(fields.cache(Qxsl.BAND).field(kHz.toString()));
 		}
 
 		/**
@@ -239,7 +239,7 @@ public final class ZAllFormat extends BaseFormat {
 		 * @param mode 通信方式の文字列
 		 */
 		private void mode(Item item, String mode) {
-			item.add(fields.cache(Qxsl.MODE).field(mode));
+			item.set(fields.cache(Qxsl.MODE).field(mode));
 		}
 
 		/**
@@ -249,7 +249,7 @@ public final class ZAllFormat extends BaseFormat {
 		 * @param op 運用者名の文字列
 		 */
 		private void oprt(Item item, String op) {
-			item.add(fields.cache(Qxsl.NAME).field(op));
+			item.set(fields.cache(Qxsl.NAME).field(op));
 		}
 
 		/**
@@ -259,7 +259,7 @@ public final class ZAllFormat extends BaseFormat {
 		 * @param note 備考の文字列
 		 */
 		private void note(Item item, String note) {
-			item.add(fields.cache(Qxsl.NOTE).field(note));
+			item.set(fields.cache(Qxsl.NOTE).field(note));
 		}
 	}
 

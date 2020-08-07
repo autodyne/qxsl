@@ -5,6 +5,10 @@
 *******************************************************************************/
 package qxsl.extra.table;
 
+import qxsl.extra.field.*;
+import qxsl.field.FieldFormats;
+import qxsl.model.Item;
+
 import java.io.*;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
@@ -15,10 +19,6 @@ import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import qxsl.extra.field.*;
-import qxsl.field.FieldFormats;
-import qxsl.model.Item;
 
 /**
  * zLogテキストファイルのうちDOS版と互換の書式です。
@@ -164,7 +164,7 @@ public final class ZDosFormat extends BaseFormat {
 		 * @param time 交信日時の文字列
 		 */
 		private void time(Item item, String time) {
-			item.add(new Time(LocalDateTime.parse(time, format)));
+			item.set(new Time(LocalDateTime.parse(time, format)));
 		}
 
 		/**
@@ -174,7 +174,7 @@ public final class ZDosFormat extends BaseFormat {
 		 * @param call コールサインの文字列
 		 */
 		private void call(Item item, String call) {
-			item.add(fields.cache(Qxsl.CALL).field(call));
+			item.set(fields.cache(Qxsl.CALL).field(call));
 		}
 
 		/**
@@ -184,7 +184,7 @@ public final class ZDosFormat extends BaseFormat {
 		 * @param sent ナンバーの文字列
 		 */
 		private void sent(Item item, String sent) {
-			item.getSent().add(fields.cache(Qxsl.CODE).field(sent));
+			item.getSent().set(fields.cache(Qxsl.CODE).field(sent));
 		}
 
 		/**
@@ -194,7 +194,7 @@ public final class ZDosFormat extends BaseFormat {
 		 * @param rcvd ナンバーの文字列
 		 */
 		private void rcvd(Item item, String rcvd) {
-			item.getRcvd().add(fields.cache(Qxsl.CODE).field(rcvd));
+			item.getRcvd().set(fields.cache(Qxsl.CODE).field(rcvd));
 		}
 
 		/**
@@ -211,7 +211,7 @@ public final class ZDosFormat extends BaseFormat {
 			} else {
 				kHz = (int) (Double.parseDouble(band) * 1000);
 			}
-			item.add(fields.cache(Qxsl.BAND).field(kHz.toString()));
+			item.set(fields.cache(Qxsl.BAND).field(kHz.toString()));
 		}
 
 		/**
@@ -221,7 +221,7 @@ public final class ZDosFormat extends BaseFormat {
 		 * @param mode 通信方式の文字列
 		 */
 		private void mode(Item item, String mode) {
-			item.add(fields.cache(Qxsl.MODE).field(mode));
+			item.set(fields.cache(Qxsl.MODE).field(mode));
 		}
 
 		/**
@@ -231,7 +231,7 @@ public final class ZDosFormat extends BaseFormat {
 		 * @param op 運用者名の文字列
 		 */
 		private void oprt(Item item, String op) {
-			item.add(fields.cache(Qxsl.NAME).field(op));
+			item.set(fields.cache(Qxsl.NAME).field(op));
 		}
 
 		/**
@@ -241,7 +241,7 @@ public final class ZDosFormat extends BaseFormat {
 		 * @param note 備考の文字列
 		 */
 		private void note(Item item, String note) {
-			item.add(fields.cache(Qxsl.NOTE).field(note));
+			item.set(fields.cache(Qxsl.NOTE).field(note));
 		}
 	}
 

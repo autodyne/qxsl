@@ -5,17 +5,16 @@
 *******************************************************************************/
 package qxsl.field;
 
-import java.util.Arrays;
-import java.util.Collections;
+import qxsl.model.Field;
+
+import javax.xml.namespace.QName;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.ServiceLoader;
-import javax.xml.namespace.QName;
-import qxsl.model.Field;
 
 /**
- * {@link FieldFormat}クラスの自動検出及びインスタンス化機構を実装します。
+ * {@link FieldFormat}実装クラスを自動的に検出して管理します。
  *
  *
  * @author 無線部開発班
@@ -25,6 +24,13 @@ import qxsl.model.Field;
 public final class FieldFormats implements Iterable<FieldFormat> {
 	private final ServiceLoader<FieldFormat> loader;
 	private final Map<QName, Cache> caches;
+
+	/**
+	 * デフォルトのクラスパスを参照するインスタンスです。
+	 *
+	 * @since 2020/08/06
+	 */
+	public static final FieldFormats FIELDS = new FieldFormats();
 
 	/**
 	 * インスタンスを構築します。
@@ -43,6 +49,11 @@ public final class FieldFormats implements Iterable<FieldFormat> {
 		this.caches = new HashMap<>();
 	}
 
+	/**
+	 * このインスタンスが検出した書式を返します。
+	 *
+	 * @return 書式のイテレータ
+	 */
 	@Override
 	public Iterator<FieldFormat> iterator() {
 		return loader.iterator();
@@ -51,37 +62,55 @@ public final class FieldFormats implements Iterable<FieldFormat> {
 	/**
 	 * 指定された属性の入出力を行う書式を返します。
 	 *
+	 *
 	 * @param name 属性の名前
-	 * @return 対応する書式 存在しない場合null
+	 *
+	 * @return 対応する書式 またはnull
 	 */
 	public FieldFormat forName(QName name) {
-		for(FieldFormat fmt: loader) {
-			if(fmt.target().equals(name)) return fmt;
-		}
+		for(var f: loader) if(f.target().equals(name)) return f;
 		return null;
 	}
 
 	/**
 	 * 指定された属性を適切な書式で文字列に変換します。
 	 *
-	 * @param field 文字列に変換する属性
-	 * @return 文字列による属性値の表現
 	 *
-	 * @throws UnsupportedOperationException 書式が未定義の場合
+	 * @param field 文字列に変換する属性
+	 *
+	 * @return 文字列による属性値の表現
 	 */
 	public final String encode(Field field) {
-		if(field.isAny()) return field.toString();
 		try {
 			return forName(field.name()).encode(field);
 		} catch (NullPointerException ex) {
-			throw new UnsupportedOperationException();
+			return String.valueOf(field.value());
+		}
+	}
+
+	/**
+	 * 指定された文字列と名前を持つ属性値を取得します。
+	 *
+	 *
+	 * @param qname 属性の名前
+	 * @param value 属性を表す文字列
+	 *
+	 * @return 属性値
+	 */
+	public Field decode(QName qname, String value) {
+		try {
+			return forName(qname).decode(value);
+		} catch (NullPointerException ex) {
+			return new Any(qname, value);
 		}
 	}
 
 	/**
 	 * 指定された属性名に対する{@link Cache}を返します。
 	 *
+	 *
 	 * @param qname 属性の名前
+	 *
 	 * @return キャッシュ
 	 */
 	public final Cache cache(QName qname) {
@@ -102,6 +131,7 @@ public final class FieldFormats implements Iterable<FieldFormat> {
 
 		/**
 		 * 属性名と値を指定して{@link Any}を構築します。
+		 *
 		 *
 		 * @param qname 属性名
 		 * @param value 属性値
@@ -141,7 +171,9 @@ public final class FieldFormats implements Iterable<FieldFormat> {
 		/**
 		 * 指定された値の{@link Field}を生成します。
 		 *
-		 * @param value 属性値の文字列
+		 *
+		 * @param value 属性値を表す文字列
+		 *
 		 * @return 読み込まれた属性
 		 */
 		private Field createField(String value) {
@@ -155,8 +187,10 @@ public final class FieldFormats implements Iterable<FieldFormat> {
 		/**
 		 * 指定された値の{@link Field}を取得します。
 		 *
-		 * @param value {@link Field}の値を表す文字列
-		 * @return 属性値 属性が未登録の場合はnull
+		 *
+		 * @param value 属性値を表す文字列
+		 *
+		 * @return 属性値
 		 */
 		public Field field(String value) {
 			return computeIfAbsent(value, this::createField);

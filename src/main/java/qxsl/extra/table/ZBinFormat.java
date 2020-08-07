@@ -5,6 +5,11 @@
 *******************************************************************************/
 package qxsl.extra.table;
 
+import qxsl.extra.field.*;
+import qxsl.field.FieldFormats;
+import qxsl.model.Field;
+import qxsl.model.Item;
+
 import java.io.*;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -14,11 +19,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import qxsl.extra.field.*;
-import qxsl.field.FieldFormats;
-import qxsl.model.Field;
-import qxsl.model.Item;
 
 import static java.time.ZoneOffset.UTC;
 import static java.time.temporal.ChronoUnit.DAYS;
@@ -406,7 +406,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void time(Item item) throws IOException {
-			item.add(tDTime.decode(stream.readLong()));
+			item.set(tDTime.decode(stream.readLong()));
 		}
 
 		/**
@@ -418,7 +418,7 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		private final void call(Item item) throws IOException {
 			final String s = readString(12);
-			item.add(fields.cache(Qxsl.CALL).field(s));
+			item.set(fields.cache(Qxsl.CALL).field(s));
 		}
 
 		/**
@@ -430,7 +430,7 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		private final void sent(Item item) throws IOException {
 			final String s = readString(30);
-			item.getSent().add(fields.cache(Qxsl.CODE).field(s));
+			item.getSent().set(fields.cache(Qxsl.CODE).field(s));
 		}
 
 		/**
@@ -442,7 +442,7 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		private final void rcvd(Item item) throws IOException {
 			final String s = readString(30);
-			item.getRcvd().add(fields.cache(Qxsl.CODE).field(s));
+			item.getRcvd().set(fields.cache(Qxsl.CODE).field(s));
 		}
 
 		/**
@@ -455,7 +455,7 @@ public final class ZBinFormat extends BaseFormat {
 		private final void sRSTQ(Item item) throws IOException {
 			final var val = Short.reverseBytes(stream.readShort());
 			final var rst = String.valueOf(val);
-			item.getSent().add(fields.cache(Qxsl.RSTQ).field(rst));
+			item.getSent().set(fields.cache(Qxsl.RSTQ).field(rst));
 		}
 
 		/**
@@ -468,7 +468,7 @@ public final class ZBinFormat extends BaseFormat {
 		private final void rRSTQ(Item item) throws IOException {
 			final var val = Short.reverseBytes(stream.readShort());
 			final var rst = String.valueOf(val);
-			item.getRcvd().add(fields.cache(Qxsl.RSTQ).field(rst));
+			item.getRcvd().set(fields.cache(Qxsl.RSTQ).field(rst));
 		}
 
 		/**
@@ -479,7 +479,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void mode(Item item) throws IOException {
-			item.add(ModeEnum.forIndex(stream.read()).toMode());
+			item.set(ModeEnum.forIndex(stream.read()).toMode());
 		}
 
 		/**
@@ -490,7 +490,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void band(Item item) throws IOException {
-			item.add(BandEnum.forIndex(stream.read()).toBand());
+			item.set(BandEnum.forIndex(stream.read()).toBand());
 		}
 
 		/**
@@ -501,7 +501,7 @@ public final class ZBinFormat extends BaseFormat {
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void watt(Item item) throws IOException {
-			item.getSent().add(WattEnum.forIndex(stream.read()).toWatt());
+			item.getSent().set(WattEnum.forIndex(stream.read()).toWatt());
 		}
 
 		/**
@@ -513,7 +513,7 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		private final void oprt(Item item) throws IOException {
 			final String s = readString(14);
-			item.add(fields.cache(Qxsl.NAME).field(s));
+			item.set(fields.cache(Qxsl.NAME).field(s));
 		}
 
 		/**
@@ -525,7 +525,7 @@ public final class ZBinFormat extends BaseFormat {
 		 */
 		private final void note(Item item) throws IOException {
 			final String s = readString(66);
-			item.add(fields.cache(Qxsl.NOTE).field(s));
+			item.set(fields.cache(Qxsl.NOTE).field(s));
 		}
 
 		/**

@@ -5,10 +5,10 @@
 *******************************************************************************/
 package qxsl.ruler;
 
+import qxsl.model.Item;
+
 import java.util.ArrayList;
 import java.util.function.Function;
-
-import qxsl.model.Item;
 
 /**
  * コンテストの部門の実装はこのクラスを継承します。
@@ -71,7 +71,9 @@ public abstract class Section implements Function<Item, Message> {
 	/**
 	 * 指定された{@link Item}の可否を検査します。
 	 *
+	 *
 	 * @param item 検査対象の交信記録
+	 *
 	 * @return 承認された場合はtrue
 	 */
 	public abstract Message apply(Item item);
@@ -79,8 +81,10 @@ public abstract class Section implements Function<Item, Message> {
 	/**
 	 * この部門に紐づけられた関数を実行します。
 	 *
+	 *
 	 * @param name 関数の名前
 	 * @param args 関数の引数
+	 *
 	 * @return 関数の値
 	 *
 	 * @since 2020/03/09
@@ -90,7 +94,9 @@ public abstract class Section implements Function<Item, Message> {
 	/**
 	 * 指定された交信記録から有効な交信を抽出します。
 	 *
+	 *
 	 * @param items 交信記録
+	 *
 	 * @return 得点計算の結果
 	 *
 	 * @since 2019/05/16

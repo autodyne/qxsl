@@ -5,8 +5,12 @@
 *******************************************************************************/
 package qxsl.extra.table;
 
+import qxsl.field.FieldFormats;
+import qxsl.model.Field;
+import qxsl.model.Item;
+
+import javax.xml.namespace.QName;
 import java.io.*;
-import java.nio.charset.Charset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -14,11 +18,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.xml.namespace.QName;
-
-import qxsl.field.FieldFormats;
-import qxsl.model.Field;
-import qxsl.model.Item;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
@@ -135,7 +134,7 @@ public final class AdisFormat extends BaseFormat {
 				final int j = Integer.parseInt(mat.group(2));
 				final String data = text.substring(i, i + j);
 				final String name = mat.group(1).toUpperCase();
-				item.add(fields.cache(new QName(URI, name)).field(data));
+				item.set(fields.cache(new QName(URI, name)).field(data));
 			}
 			return item;
 		}

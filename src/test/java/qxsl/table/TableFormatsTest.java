@@ -5,9 +5,8 @@
 *******************************************************************************/
 package qxsl.table;
 
-import qxsl.extra.table.*;
-
 import org.junit.jupiter.api.Test;
+import qxsl.extra.table.*;
 
 /**
  * {@link TableFormats}クラスのテスト用クラスです。

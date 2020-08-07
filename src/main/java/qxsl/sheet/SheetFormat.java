@@ -7,6 +7,7 @@ package qxsl.sheet;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
 import java.io.Writer;
 import java.util.List;
 import java.util.Map;
@@ -28,28 +29,28 @@ public interface SheetFormat {
 	public String getName();
 
 	/**
-	 * この書式のUIへの表示に適した文字列を返します。
+	 * この書式の表示に適した文字列を返します。
 	 *
-	 * @return 書式のUI文字列
+	 * @return 書式の文字列表現
 	 */
 	public String toString();
 
 	/**
-	 * この書式の詳細を説明する複数行の文字列を返します。
+	 * この書式の詳細を述べる文字列を返します。
 	 *
 	 * @return 書式の説明
 	 */
 	public String getDescription();
 
 	/**
-	 * この書式のファイル名拡張子の不変のリストを返します。
+	 * この書式の拡張子の不変リストを返します。
 	 *
-	 * @return ファイル名拡張子のリスト
+	 * @return 拡張子のリスト
 	 */
 	public List<String> getExtensions();
 
 	/**
-	 * この書式で交信記録を抽出する鍵となる文字列を返します。
+	 * この書式で交信記録を抽出する鍵文字列を返します。
 	 *
 	 * @return 交信記録を指す鍵
 	 */
@@ -58,7 +59,9 @@ public interface SheetFormat {
 	/**
 	 * 指定されたリーダを入力とするデコーダを返します。
 	 *
+	 *
 	 * @param reader 要約書類を読み込むリーダ
+	 *
 	 * @return デコーダ
 	 */
 	public abstract SheetDecoder decoder(Reader reader);
@@ -66,10 +69,24 @@ public interface SheetFormat {
 	/**
 	 * 指定されたライタに出力するエンコーダを返します。
 	 *
+	 *
 	 * @param writer 要約書類を書き出すライタ
+	 *
 	 * @return エンコーダ
 	 */
 	public abstract SheetEncoder encoder(Writer writer);
+
+	/**
+	 * 指定された文字列を入力とするデコーダを返します。
+	 *
+	 *
+	 * @param data 要約書類を読み込む文字列
+	 *
+	 * @return デコーダ
+	 */
+	public default SheetDecoder decoder(String data) {
+		return decoder(new StringReader(data));
+	}
 
 	/**
 	 * 永続化された要約書類を読み込むためのデコーダです。
@@ -83,10 +100,13 @@ public interface SheetFormat {
 		/**
 		 * ストリームから要約書類を読み出します。
 		 *
+		 *
 		 * @return 読み出した要約書類
+		 *
 		 * @throws IOException 構文上または読取り時の例外
 		 */
 		public Map<String, String> decode() throws IOException;
+
 		/**
 		 * ストリームを閉じてリソースを解放します。
 		 *
@@ -107,10 +127,13 @@ public interface SheetFormat {
 		/**
 		 * ストリームに要約書類を書き込みます。
 		 *
+		 *
 		 * @param map 要約書類
+		 *
 		 * @throws IOException 書き込み時の例外
 		 */
 		public void encode(Map<String, String> map) throws IOException;
+
 		/**
 		 * ストリームを閉じてリソースを解放します。
 		 *

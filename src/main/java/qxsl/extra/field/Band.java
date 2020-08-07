@@ -5,10 +5,11 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
-import java.math.BigDecimal;
-import javax.xml.namespace.QName;
 import qxsl.field.FieldFormat;
 import qxsl.model.Field;
+
+import javax.xml.namespace.QName;
+import java.math.BigDecimal;
 
 /**
  * 交信の周波数を表現する{@link Field}実装クラスです。
@@ -96,7 +97,9 @@ public final class Band extends Qxsl<BigDecimal> {
 	/**
 	 * この周波数を実数で表現する文字列を返します。
 	 *
+	 *
 	 * @param scale 小数点の位置
+	 *
 	 * @return 実数により表される周波数
 	 */
 	private String toDecimalString(int scale) {
@@ -107,7 +110,9 @@ public final class Band extends Qxsl<BigDecimal> {
 	/**
 	 * 単位付き文字列を解析してキロヘルツ単位の値を返します。
 	 *
+	 *
 	 * @param text 単位付き文字列 "1.9MHz"等
+	 *
 	 * @return キロヘルツ単位の波長
 	 */
 	private static BigDecimal parse(String text) {
@@ -127,7 +132,9 @@ public final class Band extends Qxsl<BigDecimal> {
 	 * 指定されたオブジェクトと等値であるか確認します。
 	 * 同じ周波数の{@link Band}に対してtrueを返します。
 	 *
+	 *
 	 * @param obj 比較するオブジェクト
+	 *
 	 * @return この属性と等しい場合true
 	 */
 	@Override

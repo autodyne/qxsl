@@ -5,9 +5,8 @@
 *******************************************************************************/
 package qxsl.field;
 
-import qxsl.extra.field.*;
-
 import org.junit.jupiter.api.Test;
+import qxsl.extra.field.*;
 
 /**
  * {@link FieldFormats}クラスのテスト用クラスです。

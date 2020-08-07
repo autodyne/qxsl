@@ -5,15 +5,15 @@
 *******************************************************************************/
 package qxsl.extra.sheet;
 
+import qxsl.sheet.SheetFormat;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
-import qxsl.sheet.SheetFormat;
 
 /**
  * 書式の説明を設定ファイルから取得する仕組みを提供します。

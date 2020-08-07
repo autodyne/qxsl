@@ -5,11 +5,11 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
-import java.time.ZonedDateTime;
+import org.junit.jupiter.api.Test;
 import qxsl.field.FieldFormats;
 import qxsl.field.FieldFormats.Cache;
 
-import org.junit.jupiter.api.Test;
+import java.time.ZonedDateTime;
 
 /**
  * {@link Time}クラスのテスト用クラスです。
@@ -24,20 +24,20 @@ public final class TimeTest extends org.assertj.core.api.Assertions {
 
 	@Test
 	public void testValue() {
-		final ZonedDateTime time = ZonedDateTime.now();
+		final var time = ZonedDateTime.now();
 		assertThat(new Time(time).value()).isEqualTo(time);
 	}
 
 	@Test
 	public void testToString() {
-		final ZonedDateTime time = ZonedDateTime.now();
+		final var time = ZonedDateTime.now();
 		assertThat(new Time(time)).hasToString(time.toString());
 	}
 
 	@Test
 	public void testTime$Format() throws Exception {
-		final Time.Format form = new Time.Format();
-		final Time time = new Time();
+		final var form = new Time.Format();
+		final var time = new Time();
 		assertThat(form.decode(form.encode(time))).isEqualTo(time);
 		assertThat(cache.field(form.encode(time))).isEqualTo(time);
 	}

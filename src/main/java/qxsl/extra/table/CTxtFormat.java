@@ -5,19 +5,20 @@
 *******************************************************************************/
 package qxsl.extra.table;
 
+import qxsl.extra.field.*;
+import qxsl.field.FieldFormats;
+import qxsl.model.Item;
+
 import java.io.*;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.time.Year;
-import java.time.format.*;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import qxsl.extra.field.*;
-import qxsl.field.FieldFormats;
-import qxsl.model.Item;
 
 /**
  * 2016年4月以前のCTESTWINのテキストファイルの書式です。
@@ -158,7 +159,7 @@ public final class CTxtFormat extends BaseFormat {
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private void time(Item item, String time) throws IOException {
-			item.add(new Time(LocalDateTime.parse(time, format)));
+			item.set(new Time(LocalDateTime.parse(time, format)));
 		}
 
 		/**
@@ -170,7 +171,7 @@ public final class CTxtFormat extends BaseFormat {
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private void call(Item item, String call) throws IOException {
-			item.add(fields.cache(Qxsl.CALL).field(call));
+			item.set(fields.cache(Qxsl.CALL).field(call));
 		}
 
 		/**
@@ -193,7 +194,7 @@ public final class CTxtFormat extends BaseFormat {
 				band = band.replace("kHz", "");
 				kHz = Integer.parseInt(band);
 			}
-			item.add(fields.cache(Qxsl.BAND).field(kHz.toString()));
+			item.set(fields.cache(Qxsl.BAND).field(kHz.toString()));
 		}
 
 		/**
@@ -205,7 +206,7 @@ public final class CTxtFormat extends BaseFormat {
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private void mode(Item item, String mode) throws IOException {
-			item.add(fields.cache(Qxsl.MODE).field(mode));
+			item.set(fields.cache(Qxsl.MODE).field(mode));
 		}
 
 		/**
@@ -217,7 +218,7 @@ public final class CTxtFormat extends BaseFormat {
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private void sent(Item item, String sent) throws IOException {
-			item.getSent().add(fields.cache(Qxsl.CODE).field(sent));
+			item.getSent().set(fields.cache(Qxsl.CODE).field(sent));
 		}
 
 		/**
@@ -229,7 +230,7 @@ public final class CTxtFormat extends BaseFormat {
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private void rcvd(Item item, String rcvd) throws IOException {
-			item.getRcvd().add(fields.cache(Qxsl.CODE).field(rcvd));
+			item.getRcvd().set(fields.cache(Qxsl.CODE).field(rcvd));
 		}
 	}
 

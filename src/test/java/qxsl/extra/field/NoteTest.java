@@ -5,12 +5,10 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
-import qxsl.field.FieldFormats;
-import qxsl.field.FieldFormats.Cache;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
+import qxsl.field.FieldFormats;
+import qxsl.field.FieldFormats.Cache;
 import qxsl.junit.RandomStringParameterExtension;
 import qxsl.junit.RandomStringParameterExtension.RandomString;
 
@@ -39,8 +37,8 @@ public final class NoteTest extends org.assertj.core.api.Assertions {
 
 	@Test
 	public void testNote$Format(@RandomString String text) throws Exception {
-		final Note.Format form = new Note.Format();
-		final Note note = new Note(text);
+		final var form = new Note.Format();
+		final var note = new Note(text);
 		assertThat(form.decode(form.encode(note))).isEqualTo(note);
 		assertThat(cache.field(form.encode(note))).isEqualTo(note);
 	}

@@ -5,15 +5,15 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
+import qxsl.field.FieldFormat;
+import qxsl.model.Field;
+
+import javax.xml.namespace.QName;
 import java.io.*;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import javax.xml.namespace.QName;
-
-import qxsl.field.FieldFormat;
-import qxsl.model.Field;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.toList;
@@ -33,6 +33,7 @@ public final class City extends Qxsl<String> {
 
 	/**
 	 * 地域ベースと地域データを指定して地域を構築します。
+	 *
 	 *
 	 * @param base 地域ベースの名前
 	 * @param data 地域名と地域番号の配列
@@ -82,6 +83,7 @@ public final class City extends Qxsl<String> {
 	/**
 	 * 地域ベースと地域番号を指定して地域を返します。
 	 *
+	 *
 	 * @param base 地域ベースの名前
 	 * @param code 地域番号
 	 *
@@ -100,7 +102,9 @@ public final class City extends Qxsl<String> {
 	/**
 	 * ライブラリに内臓された地域ベースが含む全ての地域を返します。
 	 *
+	 *
 	 * @param base 地域ベースの名前
+	 *
 	 * @return 全ての利用可能な地域
 	 *
 	 * @throws IllegalArgumentException 地域ベースが未知の場合
@@ -125,7 +129,9 @@ public final class City extends Qxsl<String> {
 		/**
 		 * 指定された名前の地域ベースをリソースから読み込みます。
 		 *
+		 *
 		 * @param name 地域ベースの名前
+		 *
 		 * @throws UncheckedIOException 主にファイルが存在しない場合
 		 */
 		private DataBase(String name) throws UncheckedIOException {
@@ -145,7 +151,9 @@ public final class City extends Qxsl<String> {
 		/**
 		 * 指定された名前の地域ベースを返します。
 		 *
+		 *
 		 * @param base 地域ベースの名前
+		 *
 		 * @return 地域ベース
 		 *
 		 * @throws IllegalArgumentException 地域ベースが未定義の場合

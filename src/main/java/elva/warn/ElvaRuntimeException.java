@@ -5,10 +5,9 @@
 *******************************************************************************/
 package elva.warn;
 
-import java.util.StringJoiner;
-import javax.script.ScriptException;
+import elva.lang.NodeBase;
 
-import elva.core.ElvaNode;
+import java.util.StringJoiner;
 
 /**
  * LISP処理系で発生する実行時例外を表現します。
@@ -26,6 +25,7 @@ public final class ElvaRuntimeException extends RuntimeException {
 
 	/**
 	 * 問題を示す書式文字列とその引数を指定して例外を構築します。
+	 *
 	 *
 	 * @param text 例外の内容
 	 * @param args 書式文字列の引数
@@ -49,10 +49,12 @@ public final class ElvaRuntimeException extends RuntimeException {
 	/**
 	 * 指定された式をこの例外まで辿れる式の追跡履歴に追加します。
 	 *
+	 *
 	 * @param sexp 追加する式
+	 *
 	 * @return この例外
 	 */
-	public final ElvaRuntimeException add(ElvaNode sexp) {
+	public final ElvaRuntimeException add(NodeBase sexp) {
 		trace.add(" at ".concat(String.valueOf(sexp)));
 		return this;
 	}
@@ -74,16 +76,5 @@ public final class ElvaRuntimeException extends RuntimeException {
 	@Override
 	public final String getMessage() {
 		return trace.toString();
-	}
-
-	/**
-	 * この例外を処理系の外部に公開するための変換処理を行います。
-	 *
-	 * @return 変換された例外
-	 */
-	public final ScriptException toScriptException() {
-		final var ex = new ScriptException(this);
-		ex.setStackTrace(this.getStackTrace());
-		return ex;
 	}
 }

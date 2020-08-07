@@ -5,12 +5,10 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
-import qxsl.field.FieldFormats;
-import qxsl.field.FieldFormats.Cache;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
+import qxsl.field.FieldFormats;
+import qxsl.field.FieldFormats.Cache;
 import qxsl.junit.RandomStringParameterExtension;
 import qxsl.junit.RandomStringParameterExtension.RandomString;
 
@@ -45,8 +43,8 @@ public final class CallTest extends org.assertj.core.api.Assertions {
 
 	@Test
 	public void testCall$Format(@RandomString String text) throws Exception {
-		final Call.Format form = new Call.Format();
-		final Call call = new Call(text);
+		final var form = new Call.Format();
+		final var call = new Call(text);
 		assertThat(form.decode(form.encode(call))).isEqualTo(call);
 		assertThat(cache.field(form.encode(call))).isEqualTo(call);
 	}

@@ -5,10 +5,10 @@
 *******************************************************************************/
 package qxsl.field;
 
-import java.util.Iterator;
-
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.Iterator;
 
 /**
  * {@link FieldFormat}クラスのテスト用クラスです。

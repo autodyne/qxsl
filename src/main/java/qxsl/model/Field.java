@@ -5,12 +5,13 @@
 *******************************************************************************/
 package qxsl.model;
 
-import java.util.Objects;
-import javax.xml.namespace.QName;
 import qxsl.field.FieldFormats.Any;
 
+import javax.xml.namespace.QName;
+import java.util.Objects;
+
 /**
- * {@link Tuple}に付随する各種の属性は{@link Field}クラスを実装します。
+ * 交信に付与される属性の共通実装です。
  *
  *
  * @author 無線部開発班
@@ -23,9 +24,9 @@ public abstract class Field<V> {
 	private final QName qname;
 
 	/**
-	 * 指定された属性名を持つ属性を構築します。
+	 * 指定された名前の属性を構築します。
 	 *
-	 * @param qname 属性名
+	 * @param qname 属性の名前
 	 */
 	public Field(QName qname) {
 		this.qname = qname;
@@ -36,7 +37,7 @@ public abstract class Field<V> {
 	 *
 	 * @return 属性の名前
 	 */
-	public QName name() {
+	public final QName name() {
 		return qname;
 	}
 
@@ -57,6 +58,30 @@ public abstract class Field<V> {
 	}
 
 	/**
+	 * 属性値のハッシュ値を計算します。
+	 *
+	 * @return ハッシュ値
+	 */
+	@Override
+	public final int hashCode() {
+		return Objects.hash(name(), value());
+	}
+
+	/**
+	 * 指定された属性と等値であるか確認します。
+	 *
+	 *
+	 * @param obj 比較する属性
+	 *
+	 * @return 同じ情報を保持する属性は真
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if(!getClass().isInstance(obj)) return false;
+		return value().equals(((Field) obj).value());
+	}
+
+	/**
 	 * 属性値を文字列で返します。
 	 *
 	 * @return 文字列
@@ -64,33 +89,5 @@ public abstract class Field<V> {
 	@Override
 	public String toString() {
 		return String.valueOf(value());
-	}
-
-	/**
-	 * 属性値のハッシュ値を計算します。
-	 *
-	 * @return ハッシュ値
-	 */
-	@Override
-	public int hashCode() {
-		return Objects.hash(name(), value());
-	}
-
-	/**
-	 * 指定されたオブジェクトと等値であるかを確認します。
-	 * 同じ値を持つ同じクラスの属性の場合に真を返します。
-	 *
-	 * @param obj 比較するオブジェクト
-	 * @return この属性と等しい場合true
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if(getClass().isInstance(obj)) {
-			Field nobj = (Field) obj;
-			Object mine = this.value();
-			Object your = nobj.value();
-			return mine.equals(your);
-		}
-		return false;
 	}
 }

@@ -5,20 +5,19 @@
 *******************************************************************************/
 package qxsl.extra.sheet;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import qxsl.extra.field.*;
+import qxsl.model.Item;
+import qxsl.sheet.SheetFormats;
+import qxsl.table.TableFormats;
+
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.IntStream;
-
-import qxsl.extra.field.*;
-import qxsl.model.Item;
-import qxsl.sheet.SheetFormats;
-import qxsl.table.TableFormats;
-
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 
 import static qxsl.junit.RandomNumberParameterExtension.randInt;
 import static qxsl.junit.RandomStringParameterExtension.alnum;
@@ -57,14 +56,14 @@ public final class Cab3FormatTest extends org.assertj.core.api.Assertions {
 		final ArrayList<Item> items = new ArrayList<>();
 		for(int row = 0; row < numItems; row++) {
 			final Item item = new Item();
-			item.add(new Time());
-			item.add(bands.get(randInt(bands.size())));
-			item.add(new Call(alnum(13)));
-			item.add(new Mode(alnum(2)));
-			item.getRcvd().add(new RSTQ(randInt(600)));
-			item.getRcvd().add(new Code(alnum(6)));
-			item.getSent().add(new RSTQ(randInt(600)));
-			item.getSent().add(new Code(alnum(6)));
+			item.set(new Time());
+			item.set(bands.get(randInt(bands.size())));
+			item.set(new Call(alnum(13)));
+			item.set(new Mode(alnum(2)));
+			item.getRcvd().set(new RSTQ(randInt(600)));
+			item.getRcvd().set(new Code(alnum(6)));
+			item.getSent().set(new RSTQ(randInt(600)));
+			item.getSent().set(new Code(alnum(6)));
 			items.add(item);
 		}
 		StringWriter sw1 = new StringWriter();

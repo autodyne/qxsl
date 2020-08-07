@@ -8,7 +8,7 @@ package qxsl.model;
 import static qxsl.extra.table.QxmlFormat.SENT;
 
 /**
- * 交信記録で相手局まで送信した情報を格納する{@link Tuple}実装クラスです。
+ * 交信記録で相手局まで送信した情報を格納します。
  *
  *
  * @author 無線部開発班
@@ -17,12 +17,11 @@ import static qxsl.extra.table.QxmlFormat.SENT;
  */
 public final class Sent extends Exch {
 	/**
-	 * 指定した親の隷下に{@link Rcvd}を構築します。
+	 * 指定した親を持つ要素を構築します。
 	 *
 	 * @param item 親
 	 */
 	protected Sent(Item item) {
 		super(item, SENT);
 	}
-
 }

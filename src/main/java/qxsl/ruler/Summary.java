@@ -5,13 +5,8 @@
 *******************************************************************************/
 package qxsl.ruler;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
-import qxsl.model.Item;
 
 import static java.util.stream.IntStream.range;
 
@@ -84,7 +79,9 @@ public final class Summary implements java.io.Serializable {
 	/**
 	 * この交信記録の総得点を確定します。
 	 *
+	 *
 	 * @param contest 規約
+	 *
 	 * @return この交信記録
 	 */
 	protected final Summary confirm(Contest contest) {
@@ -93,26 +90,28 @@ public final class Summary implements java.io.Serializable {
 	}
 
 	/**
-	 * 指定された位置の識別子の重複を排除した集合を返します。
+	 * 指定された位置の識別子の重複を排除したリストを返します。
+	 *
 	 *
 	 * @param nkey 識別子の位置
+	 *
 	 * @return 指定された位置の識別子の集合
 	 *
 	 * @since 2020/02/26
 	 */
-	public final Set<Object> mults(int nkey) {
+	public final List<Object> mults(int nkey) {
 		var keys = distinct.stream().map(s -> s.key(nkey));
-		return keys.distinct().collect(Collectors.toSet());
+		return keys.distinct().collect(Collectors.toList());
 	}
 
 	/**
-	 * 識別子の重複を排除した集合のリストを返します。
+	 * 識別子の重複を排除したリストのリストを返します。
 	 *
 	 * @return 識別子の集合のリスト
 	 *
 	 * @since 2020/02/26
 	 */
-	public final List<Set<Object>> mults() {
+	public final List<List<Object>> mults() {
 		var cnt = distinct.stream().mapToInt(Success::countKeys).min();
 		final var sets = range(0, cnt.orElse(0)).mapToObj(this::mults);
 		return sets.collect(Collectors.toList());

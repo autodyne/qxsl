@@ -5,15 +5,14 @@
 *******************************************************************************/
 package qxsl.model;
 
-import java.util.Iterator;
+import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.stream.Stream;
-import javax.xml.namespace.QName;
 
 import static qxsl.extra.table.QxmlFormat.ITEM;
 
 /**
- * 交信記録で1件の不可分な交信を表現する{@link Tuple}実装クラスです。
+ * 交信記録で1件の不可分な交信を表現します。
  *
  *
  * @author 無線部開発班
@@ -21,29 +20,62 @@ import static qxsl.extra.table.QxmlFormat.ITEM;
  * @since 2013/06/04
  */
 public final class Item extends Tuple {
-	private Rcvd rcvd;
-	private Sent sent;
+	private final Rcvd rcvd;
+	private final Sent sent;
 
 	/**
 	 * 空の交信記録を構築します。
 	 */
 	public Item() {
 		super(ITEM);
+		this.rcvd = new Rcvd(this);
+		this.sent = new Sent(this);
 	}
 
 	/**
-	 * 指定されたオブジェクトと等値であるか確認します。
+	 * この交信記録の{@link Rcvd}を返します。
 	 *
-	 * @param obj 比較するオブジェクト
-	 * @return この交信記録と等しい場合true
+	 * @return 相手局から受信した情報
+	 */
+	public final Rcvd getRcvd() {
+		return rcvd;
+	}
+
+	/**
+	 * この交信記録の{@link Sent}を返します。
+	 *
+	 * @return 相手局まで送信した情報
+	 */
+	public final Sent getSent() {
+		return sent;
+	}
+
+	/**
+	 * この要素のハッシュ値を計算します。
+	 *
+	 * @return ハッシュ値
 	 */
 	@Override
-	public boolean equals(Object obj) {
-		if(!(obj instanceof Item)) return false;
-		final Item comp = (Item) obj;
-		if(!getRcvd().equals(comp.getRcvd())) return false;
-		if(!getSent().equals(comp.getSent())) return false;
-		return super.equals(comp);
+	public final int hashCode() {
+		return Objects.hash(table, rcvd, sent);
+	}
+
+	/**
+	 * 指定された要素と等値であるか確認します。
+	 *
+	 *
+	 * @param obj 比較する要素
+	 *
+	 * @return 同じ情報を保持する要素は真
+	 */
+	@Override
+	public final boolean equals(Object obj) {
+		if(Item.class.isInstance(obj)) {
+			final var item = (Item) obj;
+			if(!rcvd.equals(item.rcvd)) return false;
+			if(!sent.equals(item.sent)) return false;
+			return table.equals(item.table);
+		} else return false;
 	}
 
 	/**
@@ -52,37 +84,11 @@ public final class Item extends Tuple {
 	 * @return 文字列
 	 */
 	@Override
-	public String toString() {
-		StringJoiner sj = new StringJoiner(" ");
-		sj.add(name().getLocalPart());
-		for(Field f: this) sj.add(f.toString());
-		sj.add(getRcvd().toString());
-		sj.add(getSent().toString());
-		return String.format("{%s}", sj);
-	}
-
-	/**
-	 * この交信記録の直下にある{@link Rcvd}を返します。
-	 *
-	 * @return 相手局から受信した情報
-	 */
-	public Rcvd getRcvd() {
-		if(rcvd == null) rcvd = new Rcvd(this);
-		return rcvd;
-	}
-
-	/**
-	 * この交信記録の直下にある{@link Sent}を返します。
-	 *
-	 * @return 相手局まで送信した情報
-	 */
-	public Sent getSent() {
-		if(sent == null) sent = new Sent(this);
-		return sent;
-	}
-
-	@Override
-	public final Iterator<Tuple> children() {
-		return Stream.<Tuple>of(getRcvd(), getSent()).iterator();
+	public final String toString() {
+		final var join = new StringJoiner(" ");
+		for(var v: this) join.add(v.value().toString());
+		join.add(rcvd.toString());
+		join.add(sent.toString());
+		return String.format("{%s: %s}", name(), join);
 	}
 }

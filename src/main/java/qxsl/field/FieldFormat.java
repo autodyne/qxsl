@@ -5,8 +5,9 @@
 *******************************************************************************/
 package qxsl.field;
 
-import javax.xml.namespace.QName;
 import qxsl.model.Field;
+
+import javax.xml.namespace.QName;
 
 /**
  * 交信記録の属性をQXMLで永続化するための仕組みを提供します。
@@ -25,17 +26,21 @@ public interface FieldFormat {
 	public QName target();
 
 	/**
-	 * 文字列から{@link Field}のインスタンスを構築します。
+	 * 文字列から属性値の実体を読み取ります。
+	 *
 	 *
 	 * @param value 属性値を表す文字列
+	 *
 	 * @return 生成された属性値
 	 */
 	public Field decode(String value);
 
 	/**
-	 * 指定された属性値を文字列に変換して永続化します。
+	 * 指定された属性値を文字列に変換します。
+	 *
 	 *
 	 * @param field 永続化する属性値
+	 *
 	 * @return 文字列化された属性値
 	 */
 	public String encode(Field field);

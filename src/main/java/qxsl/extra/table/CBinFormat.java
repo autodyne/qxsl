@@ -5,20 +5,16 @@
 *******************************************************************************/
 package qxsl.extra.table;
 
-import java.io.*;
-import java.time.LocalDate;
-import java.time.Year;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
-
 import qxsl.extra.field.*;
 import qxsl.field.FieldFormats;
 import qxsl.model.Field;
 import qxsl.model.Item;
+
+import java.io.*;
+import java.time.LocalDate;
+import java.time.Year;
+import java.time.ZonedDateTime;
+import java.util.*;
 
 import static java.time.ZoneOffset.UTC;
 import static java.time.temporal.ChronoUnit.SECONDS;
@@ -352,7 +348,7 @@ public final class CBinFormat extends BaseFormat {
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void time(Item item) throws IOException {
-			item.add(cDTime.decode(stream.readLong()));
+			item.set(cDTime.decode(stream.readLong()));
 		}
 
 		/**
@@ -364,7 +360,7 @@ public final class CBinFormat extends BaseFormat {
 		 */
 		private final void call(Item item) throws IOException {
 			final String s = readString(20);
-			item.add(fields.cache(Qxsl.CALL).field(s));
+			item.set(fields.cache(Qxsl.CALL).field(s));
 		}
 
 		/**
@@ -376,7 +372,7 @@ public final class CBinFormat extends BaseFormat {
 		 */
 		private final void sent(Item item) throws IOException {
 			final String s = readString(30);
-			item.getSent().add(fields.cache(Qxsl.CODE).field(s));
+			item.getSent().set(fields.cache(Qxsl.CODE).field(s));
 		}
 
 		/**
@@ -388,7 +384,7 @@ public final class CBinFormat extends BaseFormat {
 		 */
 		private final void rcvd(Item item) throws IOException {
 			final String s = readString(30);
-			item.getRcvd().add(fields.cache(Qxsl.CODE).field(s));
+			item.getRcvd().set(fields.cache(Qxsl.CODE).field(s));
 		}
 
 		/**
@@ -399,7 +395,7 @@ public final class CBinFormat extends BaseFormat {
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void mode(Item item) throws IOException {
-			item.add(ModeEnum.forIndex(stream.read()).toMode());
+			item.set(ModeEnum.forIndex(stream.read()).toMode());
 		}
 
 		/**
@@ -410,7 +406,7 @@ public final class CBinFormat extends BaseFormat {
 		 * @throws IOException 読み込みに失敗した場合
 		 */
 		private final void band(Item item) throws IOException {
-			item.add(BandEnum.forIndex(stream.read()).toBand());
+			item.set(BandEnum.forIndex(stream.read()).toBand());
 		}
 
 		/**
@@ -422,7 +418,7 @@ public final class CBinFormat extends BaseFormat {
 		 */
 		private final void oprt(Item item) throws IOException {
 			final String s = readString(20);
-			item.add(fields.cache(Qxsl.NAME).field(s));
+			item.set(fields.cache(Qxsl.NAME).field(s));
 		}
 
 		/**
@@ -434,7 +430,7 @@ public final class CBinFormat extends BaseFormat {
 		 */
 		private final void note(Item item) throws IOException {
 			final String s = readString(50);
-			item.add(fields.cache(Qxsl.NOTE).field(s));
+			item.set(fields.cache(Qxsl.NOTE).field(s));
 		}
 
 		/**

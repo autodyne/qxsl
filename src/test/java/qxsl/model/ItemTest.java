@@ -36,19 +36,19 @@ public final class ItemTest extends org.assertj.core.api.Assertions {
 		final Item item1 = new Item();
 		final Item item2 = new Item();
 		assertThat(item1).isEqualTo(item2);
-		assertThat(item1.add(band).get(Qxsl.BAND)).isEqualTo(band);
-		assertThat(item1.add(call).get(Qxsl.CALL)).isEqualTo(call);
-		assertThat(item1.add(mode).get(Qxsl.MODE)).isEqualTo(mode);
-		assertThat(item1.add(name).get(Qxsl.NAME)).isEqualTo(name);
-		assertThat(item1.add(note).get(Qxsl.NOTE)).isEqualTo(note);
-		assertThat(item1.add(time).get(Qxsl.TIME)).isEqualTo(time);
+		assertThat(item1.set(band).get(Qxsl.BAND)).isEqualTo(band);
+		assertThat(item1.set(call).get(Qxsl.CALL)).isEqualTo(call);
+		assertThat(item1.set(mode).get(Qxsl.MODE)).isEqualTo(mode);
+		assertThat(item1.set(name).get(Qxsl.NAME)).isEqualTo(name);
+		assertThat(item1.set(note).get(Qxsl.NOTE)).isEqualTo(note);
+		assertThat(item1.set(time).get(Qxsl.TIME)).isEqualTo(time);
 		assertThat(item1).isNotEqualTo(item2);
-		assertThat(item2.add(band).get(Qxsl.BAND)).isEqualTo(band);
-		assertThat(item2.add(call).get(Qxsl.CALL)).isEqualTo(call);
-		assertThat(item2.add(mode).get(Qxsl.MODE)).isEqualTo(mode);
-		assertThat(item2.add(name).get(Qxsl.NAME)).isEqualTo(name);
-		assertThat(item2.add(note).get(Qxsl.NOTE)).isEqualTo(note);
-		assertThat(item2.add(time).get(Qxsl.TIME)).isEqualTo(time);
+		assertThat(item2.set(band).get(Qxsl.BAND)).isEqualTo(band);
+		assertThat(item2.set(call).get(Qxsl.CALL)).isEqualTo(call);
+		assertThat(item2.set(mode).get(Qxsl.MODE)).isEqualTo(mode);
+		assertThat(item2.set(name).get(Qxsl.NAME)).isEqualTo(name);
+		assertThat(item2.set(note).get(Qxsl.NOTE)).isEqualTo(note);
+		assertThat(item2.set(time).get(Qxsl.TIME)).isEqualTo(time);
 		assertThat(item1).isEqualTo(item2);
 	}
 }

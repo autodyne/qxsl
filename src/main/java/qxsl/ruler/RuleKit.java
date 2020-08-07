@@ -6,11 +6,9 @@
 package qxsl.ruler;
 
 import java.io.Reader;
-import java.io.StringReader;
 import java.io.UncheckedIOException;
 import java.util.Objects;
 import java.util.ServiceLoader;
-import javax.script.ScriptException;
 
 /**
  * ドメイン特化言語でコンテストの規約を表現する仕組みです。
@@ -45,6 +43,7 @@ public abstract class RuleKit {
 	 * この処理系が指定された名前であるか確認します。
 	 *
 	 * @param name 名前
+	 *
 	 * @return 名前が同じ場合は真
 	 */
 	private final boolean isName(String name) {
@@ -72,6 +71,7 @@ public abstract class RuleKit {
 	 *
 	 *
 	 * @param reader 式を読み取るリーダ
+	 *
 	 * @return コンテストの定義
 	 *
 	 * @throws UncheckedIOException 読み取りまたは評価の例外
@@ -84,6 +84,7 @@ public abstract class RuleKit {
 	 *
 	 *
 	 * @param string 式
+	 *
 	 * @return コンテストの定義
 	 *
 	 * @throws UncheckedIOException 読み取りまたは評価の例外

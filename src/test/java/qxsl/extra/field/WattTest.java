@@ -5,12 +5,10 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
-import qxsl.field.FieldFormats;
-import qxsl.field.FieldFormats.Cache;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
+import qxsl.field.FieldFormats;
+import qxsl.field.FieldFormats.Cache;
 import qxsl.junit.RandomStringParameterExtension;
 import qxsl.junit.RandomStringParameterExtension.RandomString;
 
@@ -40,8 +38,8 @@ public final class WattTest extends org.assertj.core.api.Assertions {
 
 	@Test
 	public void testWatt$Format(@RandomString String text) throws Exception {
-		final Watt.Format form = new Watt.Format();
-		final Watt watt = new Watt(text);
+		final var form = new Watt.Format();
+		final var watt = new Watt(text);
 		assertThat(form.decode(form.encode(watt))).isEqualTo(watt);
 		assertThat(cache.field(form.encode(watt))).isEqualTo(watt);
 	}

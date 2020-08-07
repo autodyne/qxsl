@@ -5,14 +5,11 @@
 *******************************************************************************/
 package qxsl.extra.ruler;
 
-import elva.core.ElvaEval;
-import elva.core.ElvaForm;
-import elva.core.ElvaList;
-import elva.core.ElvaName;
-import elva.core.BaseList;
-
+import elva.lang.ElvaEval;
+import elva.lang.FormBase;
+import elva.lang.ListBase;
+import elva.lang.NameNode;
 import qxsl.model.Item;
-import qxsl.ruler.Contest;
 import qxsl.ruler.Message;
 import qxsl.ruler.Section;
 
@@ -27,7 +24,7 @@ import qxsl.ruler.Section;
 public final class ElvaSection extends Section {
 	private final String name;
 	private final String code;
-	private final ElvaForm rule;
+	private final FormBase rule;
 	private final ElvaEval eval;
 
 	/**
@@ -36,7 +33,7 @@ public final class ElvaSection extends Section {
 	 * @param rule 部門
 	 * @param eval 評価器
 	 */
-	public ElvaSection(BaseList rule, ElvaEval eval) {
+	public ElvaSection(ListBase rule, ElvaEval eval) {
 		this.name = eval.apply(rule.get(0)).text();
 		this.code = eval.apply(rule.get(1)).text();
 		this.rule = eval.apply(rule.get(2)).form();
@@ -60,6 +57,6 @@ public final class ElvaSection extends Section {
 
 	@Override
 	public final Object invoke(String name, Object...args) {
-		return eval.apply(new ElvaName(name).form(args)).value();
+		return eval.apply(new NameNode(name).form(args)).value();
 	}
 }

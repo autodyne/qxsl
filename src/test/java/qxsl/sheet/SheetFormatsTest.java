@@ -5,9 +5,9 @@
 *******************************************************************************/
 package qxsl.sheet;
 
-import qxsl.extra.sheet.*;
-
 import org.junit.jupiter.api.Test;
+import qxsl.extra.sheet.Cab3Format;
+import qxsl.extra.sheet.JarlFormat;
 
 /**
  * {@link SheetFormats}クラスのテスト用クラスです。

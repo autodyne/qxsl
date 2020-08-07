@@ -6,7 +6,10 @@
 package qxsl.model;
 
 import org.junit.jupiter.api.Test;
-import qxsl.extra.field.*;
+import qxsl.extra.field.Code;
+import qxsl.extra.field.Qxsl;
+import qxsl.extra.field.RSTQ;
+import qxsl.extra.field.Watt;
 
 import static qxsl.extra.table.QxmlFormat.SENT;
 
@@ -33,13 +36,13 @@ public final class SentTest extends org.assertj.core.api.Assertions {
 		final Sent sent1 = new Sent(new Item());
 		final Sent sent2 = new Sent(new Item());
 		assertThat(sent1).isEqualTo(sent2);
-		assertThat(sent1.add(code).get(Qxsl.CODE)).isEqualTo(code);
-		assertThat(sent1.add(rstq).get(Qxsl.RSTQ)).isEqualTo(rstq);
-		assertThat(sent1.add(watt).get(Qxsl.WATT)).isEqualTo(watt);
+		assertThat(sent1.set(code).get(Qxsl.CODE)).isEqualTo(code);
+		assertThat(sent1.set(rstq).get(Qxsl.RSTQ)).isEqualTo(rstq);
+		assertThat(sent1.set(watt).get(Qxsl.WATT)).isEqualTo(watt);
 		assertThat(sent1).isNotEqualTo(sent2);
-		assertThat(sent2.add(code).get(Qxsl.CODE)).isEqualTo(code);
-		assertThat(sent2.add(rstq).get(Qxsl.RSTQ)).isEqualTo(rstq);
-		assertThat(sent2.add(watt).get(Qxsl.WATT)).isEqualTo(watt);
+		assertThat(sent2.set(code).get(Qxsl.CODE)).isEqualTo(code);
+		assertThat(sent2.set(rstq).get(Qxsl.RSTQ)).isEqualTo(rstq);
+		assertThat(sent2.set(watt).get(Qxsl.WATT)).isEqualTo(watt);
 		assertThat(sent1).isEqualTo(sent2);
 	}
 }

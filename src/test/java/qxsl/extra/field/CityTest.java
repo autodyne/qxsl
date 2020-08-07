@@ -5,13 +5,13 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
-import java.util.List;
-import qxsl.field.FieldFormats;
-import qxsl.field.FieldFormats.Cache;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import qxsl.field.FieldFormats;
+import qxsl.field.FieldFormats.Cache;
+
+import java.util.List;
 
 /**
  * {@link City}クラスのテスト用クラスです。
@@ -84,7 +84,7 @@ public final class CityTest extends org.assertj.core.api.Assertions {
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void testCity$Format(City city) throws Exception {
-		final City.Format form = new City.Format();
+		final var form = new City.Format();
 		assertThat(form.decode(form.encode(city))).isEqualTo(city);
 		assertThat(cache.field(form.encode(city))).isEqualTo(city);
 	}

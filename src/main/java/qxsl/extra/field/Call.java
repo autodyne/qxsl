@@ -5,9 +5,10 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
-import javax.xml.namespace.QName;
 import qxsl.field.FieldFormat;
 import qxsl.model.Field;
+
+import javax.xml.namespace.QName;
 
 import static java.text.Normalizer.Form.NFKC;
 import static java.text.Normalizer.normalize;
@@ -27,6 +28,7 @@ public final class Call extends Qxsl<String> {
 	/**
 	 * 呼出符号を指定して{@link Call}を構築します。
 	 * 呼出符号が誤っている場合は例外が発生します。
+	 *
 	 *
 	 * @param call 呼出符号
 	 *

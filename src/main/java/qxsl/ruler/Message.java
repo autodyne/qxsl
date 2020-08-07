@@ -5,8 +5,9 @@
 *******************************************************************************/
 package qxsl.ruler;
 
-import java.io.Serializable;
 import qxsl.model.Item;
+
+import java.io.Serializable;
 
 /**
  * ライブラリに内蔵されるLISPの処理結果を表現します。
@@ -41,7 +42,9 @@ public interface Message extends Serializable {
 	/**
 	 * 総得点や乗数の計算に使用される識別子を返します。
 	 *
+	 *
 	 * @param keyNum 識別子の配列内の位置
+	 *
 	 * @return 指定された位置にある識別子
 	 *
 	 * @throws IndexOutOfBoundsException 範囲外の場合

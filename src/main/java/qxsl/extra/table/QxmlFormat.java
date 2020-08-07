@@ -5,26 +5,24 @@
 *******************************************************************************/
 package qxsl.extra.table;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import org.xml.sax.SAXException;
+import qxsl.field.FieldFormats;
+import qxsl.model.*;
+
 import javax.xml.namespace.QName;
 import javax.xml.stream.*;
-import javax.xml.stream.events.*;
+import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import org.xml.sax.SAXException;
-
-import qxsl.field.FieldFormats;
-import qxsl.model.Field;
-import qxsl.model.Item;
-import qxsl.model.Rcvd;
-import qxsl.model.Sent;
-import qxsl.model.Tuple;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.*;
 
 import static javax.xml.stream.XMLOutputFactory.IS_REPAIRING_NAMESPACES;
 
@@ -124,9 +122,7 @@ public final class QxmlFormat extends BaseFormat {
 		}
 
 		/**
-		 * ストリームの内容を検証してから交信記録を読み込みます。
-		 *
-		 * @return 読み込んだ交信記録
+		 * ストリームの内容を検証します。
 		 *
 		 * @throws  IOException 読み込みに失敗した場合
 		 * @throws SAXException 構文の例外
@@ -201,7 +197,7 @@ public final class QxmlFormat extends BaseFormat {
 		 * @param field 属性
 		 */
 		private final void field(Tuple tuple, Attribute field) {
-			tuple.add(fields.cache(field.getName()).field(field.getValue()));
+			tuple.set(fields.cache(field.getName()).field(field.getValue()));
 		}
 
 		/**

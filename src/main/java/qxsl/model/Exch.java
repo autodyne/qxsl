@@ -6,12 +6,12 @@
 package qxsl.model;
 
 import java.util.Collections;
-import java.util.Iterator;
+import java.util.Objects;
 import java.util.StringJoiner;
 import javax.xml.namespace.QName;
 
 /**
- * 交信時に相手局と交換した情報を表現する{@link Tuple}実装クラスです。
+ * 交信時に相手局と交換した情報を表現します。
  *
  *
  * @author 無線部開発班
@@ -22,7 +22,8 @@ public abstract class Exch extends Tuple {
 	private final Item item;
 
 	/**
-	 * 指定された要素名と親を持つ空のタプルを構築します。
+	 * 指定された名前と親を持つ空の要素を構築します。
+	 *
 	 *
 	 * @param item 親となる要素
 	 * @param name タプルの名前
@@ -33,7 +34,7 @@ public abstract class Exch extends Tuple {
 	}
 
 	/**
-	 * このタプルの親である交信記録を返します。
+	 * この要素の親である交信記録を返します。
 	 *
 	 * @return 交信記録
 	 */
@@ -42,20 +43,38 @@ public abstract class Exch extends Tuple {
 	}
 
 	/**
-	 * このタプルの文字列による表現を返します。
+	 * この要素のハッシュ値を計算します。
+	 *
+	 * @return ハッシュ値
+	 */
+	@Override
+	public final int hashCode() {
+		return table.hashCode();
+	}
+
+	/**
+	 * 指定された要素と等値であるか確認します。
+	 *
+	 *
+	 * @param obj 比較する要素
+	 *
+	 * @return 同じ情報を保持する要素は真
+	 */
+	@Override
+	public final boolean equals(Object obj) {
+		if(!getClass().isInstance(obj)) return false;
+		else return table.equals(((Exch) obj).table);
+	}
+
+	/**
+	 * この交信記録の文字列による表現を返します。
 	 *
 	 * @return 文字列
 	 */
 	@Override
-	public String toString() {
-		StringJoiner sj = new StringJoiner(" ");
-		sj.add(name().getLocalPart());
-		for(Field f: this) sj.add(f.toString());
-		return String.format("{%s}", sj);
-	}
-
-	@Override
-	public final Iterator<Tuple> children() {
-		return Collections.emptyIterator();
+	public final String toString() {
+		final var join = new StringJoiner(" ");
+		for(var v: this) join.add(v.value().toString());
+		return String.format("{%s: %s}", name(), join);
 	}
 }
