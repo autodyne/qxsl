@@ -5,7 +5,6 @@
 *******************************************************************************/
 package elva.lang;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 import elva.warn.ElvaRuntimeException;
@@ -37,7 +36,7 @@ public final class TypeNode extends AtomBase<Class<?>> {
 
 	@Override
 	public final String toString() {
-		return value.toString();
+		return value.toGenericString();
 	}
 
 	@Override
@@ -68,24 +67,6 @@ public final class TypeNode extends AtomBase<Class<?>> {
 		@Override
 		public final NodeBase encode(Object value) {
 			return new TypeNode((Class<?>) value);
-		}
-	}
-
-	/**
-	 * 指定された引数型のコンストラクタを検索して返します。
-	 *
-	 *
-	 * @param pars 引数の型の配列
-	 *
-	 * @return コンストラクタ
-	 *
-	 * @throws ElvaRuntimeException 未定義の場合
-	 */
-	public final Constructor getConstructor(Class<?>[] pars) {
-		try {
-			return value.getConstructor(pars);
-		} catch (NoSuchMethodException ex) {
-			throw new ElvaRuntimeException(ex);
 		}
 	}
 

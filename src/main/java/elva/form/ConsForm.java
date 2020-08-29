@@ -13,7 +13,7 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * LISP処理系で事前に定義されるcons関数です。
+ * 指定された2個の式の値を要素に持つリストを返します。
  *
  *
  * @author 無線部開発班

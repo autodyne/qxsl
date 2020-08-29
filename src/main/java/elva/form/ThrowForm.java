@@ -10,7 +10,6 @@ import elva.lang.ListBase;
 import elva.lang.NativeOp;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
-import elva.lang.NodeBase;
 import elva.warn.ElvaRuntimeException;
 
 /**
@@ -25,7 +24,7 @@ import elva.warn.ElvaRuntimeException;
 @Args(min = 1, max = 1)
 public final class ThrowForm extends NativeOp {
 	public Object apply(ListBase args, ElvaEval eval) {
-		final NodeBase msg = eval.apply(args.head());
+		final var msg = eval.apply(args.head());
 		throw new ElvaRuntimeException(msg.text());
 	}
 }

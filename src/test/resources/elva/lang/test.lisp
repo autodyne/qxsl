@@ -106,6 +106,11 @@
 (null? (car (list null null))) #t
 (null? (cdr (list null null))) #f
 
+; eq
+(let foo 1 (let bar 2 (let baz 1 (eq foo foo)))) #t
+(let foo 1 (let bar 2 (let baz 1 (eq foo bar)))) #f
+(let foo 1 (let bar 2 (let baz 1 (eq foo baz)))) #f
+
 ; equal
 (equal 1 1) #t
 (equal 1 2) #f
@@ -214,6 +219,9 @@
 ; type
 (type "TNOK") java.lang.String
 (type 114514) java.lang.Integer
+
+; array
+((method 'toGenericString java.lang.Class) (array int)) "int[]"
 
 ; method
 ((method 'length java.lang.String) "foobar") 6

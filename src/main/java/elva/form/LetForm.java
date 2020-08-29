@@ -12,7 +12,7 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * LISP処理系で事前に定義されるlet関数です。
+ * 指定された局所変数を設定して式を評価します。
  *
  *
  * @author 無線部開発班

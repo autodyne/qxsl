@@ -13,7 +13,7 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * LISP処理系で事前に定義されるsymbol関数です。
+ * 指定された名前の識別子を返します。
  *
  *
  * @author 無線部開発班

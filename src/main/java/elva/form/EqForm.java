@@ -10,22 +10,21 @@ import elva.lang.ListBase;
 import elva.lang.NativeOp;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
-import elva.warn.ElvaRuntimeException;
 
 /**
- * 指定された条件式が不成立の場合に例外を発生させます。
+ * 指定された式を評価して両辺の同一性を確認する関数です。
  *
  *
  * @author 無線部開発班
  *
- * @since 2020/06/03
+ * @since 2020/08/29
  */
-@Name("assert")
+@Name("eq")
 @Args(min = 2, max = 2)
-public final class AssertForm extends NativeOp {
+public final class EqForm extends NativeOp {
 	public Object apply(ListBase args, ElvaEval eval) {
-		if(eval.apply(args.head()).bool()) return true;
-		final var msg = eval.apply(args.tail().head());
-		throw new ElvaRuntimeException(msg.text());
+		final var l = eval.apply(args.get(0));
+		final var r = eval.apply(args.get(1));
+		return l == r;
 	}
 }

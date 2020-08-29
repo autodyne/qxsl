@@ -1,5 +1,6 @@
 elva.form.AddForm
 elva.form.AndForm
+elva.form.ArrayForm
 elva.form.AssertForm
 elva.form.BlockForm
 elva.form.CadrForm
@@ -9,6 +10,7 @@ elva.form.CddrForm
 elva.form.CdrForm
 elva.form.ConsForm
 elva.form.DivForm
+elva.form.EqForm
 elva.form.EqualForm
 elva.form.EvalForm
 elva.form.FormatForm

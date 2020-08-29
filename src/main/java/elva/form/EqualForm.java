@@ -12,7 +12,6 @@ import elva.lang.ListBase;
 import elva.lang.NativeOp;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
-import elva.lang.NodeBase;
 
 /**
  * 指定された式を評価して両辺の等値性を確認する関数です。
@@ -26,8 +25,8 @@ import elva.lang.NodeBase;
 @Args(min = 2, max = 2)
 public final class EqualForm extends NativeOp {
 	public Object apply(ListBase args, ElvaEval eval) {
-		final NodeBase l = eval.apply(args.get(0));
-		final NodeBase r = eval.apply(args.get(1));
+		final var l = eval.apply(args.get(0));
+		final var r = eval.apply(args.get(1));
 		return Objects.equals(l, r);
 	}
 }

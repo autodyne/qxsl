@@ -5,27 +5,28 @@
 *******************************************************************************/
 package elva.form;
 
+import java.lang.reflect.Array;
+
 import elva.lang.ElvaEval;
 import elva.lang.ListBase;
-import elva.lang.NativeOp;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
-import elva.warn.ElvaRuntimeException;
+import elva.lang.NativeOp;
+import elva.lang.TypeNode;
 
 /**
- * 指定された条件式が不成立の場合に例外を発生させます。
+ * 指定された型の要素を持つ配列型を返します。
  *
  *
  * @author 無線部開発班
  *
- * @since 2020/06/03
+ * @since 2020/08/29
  */
-@Name("assert")
-@Args(min = 2, max = 2)
-public final class AssertForm extends NativeOp {
+@Name("array")
+@Args(min = 1, max = 1)
+public final class ArrayForm extends NativeOp {
 	public Object apply(ListBase args, ElvaEval eval) {
-		if(eval.apply(args.head()).bool()) return true;
-		final var msg = eval.apply(args.tail().head());
-		throw new ElvaRuntimeException(msg.text());
+		final TypeNode type = eval.apply(args.head()).type();
+		return Array.newInstance(type.value(), 0).getClass();
 	}
 }

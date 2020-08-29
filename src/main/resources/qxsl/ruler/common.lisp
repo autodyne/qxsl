@@ -45,19 +45,6 @@
 (import java.util.Objects)
 
 
-; class-of
-(setq class-name (method 'getName Class))
-
-(assert (equal (class-name String) "java.lang.String") "class-name")
-(assert (equal (class-name Number) "java.lang.Number") "class-name")
-
-
-; ...
-(defun ... class
-	((method 'forName Class String)
-		null (format "[L%s;" (class-name class))))
-
-
 ; mapcar
 (defun mapcar (fun args)
 	(if
@@ -188,7 +175,7 @@
 
 ; concatenate
 (defun concatenate (del seq)
-	(eval `((method 'join String CharSequence (... CharSequence))
+	(eval `((method 'join String CharSequence (array CharSequence))
 		null ,del ,@seq)))
 
 (assert (equal (concatenate "-" (list "MUR" "KMR")) "MUR-KMR") "concatenate")

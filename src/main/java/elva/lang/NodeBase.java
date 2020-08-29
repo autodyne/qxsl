@@ -282,14 +282,9 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 	 */
 	@SuppressWarnings("unchecked")
 	public final <V> V ofType(Class<V> type) {
-		if(!type.isArray()) try {
-			return (V) AUTO.encode(type).cast(value());
-		} catch (ClassCastException ex) {
-			final var self = value().getClass();
-			final var temp = "%s (%s) is found but %s is required";
-			final var text = String.format(temp, this, self, type);
-			throw new ClassCastException(text);
-		} else return (V) list().cast(type.getComponentType());
+		final boolean list = type.isArray();
+		if(!list) return (V) AUTO.encode(type).cast(value());
+		else return (V) list().cast(type.getComponentType());
 	}
 
 	/**
@@ -303,13 +298,10 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 	 * @param <V> 返り値の総称型
 	 */
 	public final <V extends NodeBase> V ofNode(Class<V> type) {
-		try {
-			return type.cast(this);
-		} catch (ClassCastException ex) {
-			final var self = this.getClass();
-			final var temp = "%s (%s) is detected but %s required";
-			final var text = String.format(temp, this, self, type);
-			throw new ClassCastException(text);
-		}
+		if(type.isInstance(this)) return type.cast(this);
+		final var self = this.getClass();
+		final var temp = "%s (%s) is detected but %s required";
+		final var text = String.format(temp, this, self, type);
+		throw new ClassCastException(text);
 	}
 }
