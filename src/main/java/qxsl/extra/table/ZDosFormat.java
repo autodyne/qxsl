@@ -5,10 +5,6 @@
 *******************************************************************************/
 package qxsl.extra.table;
 
-import qxsl.extra.field.*;
-import qxsl.field.FieldFormats;
-import qxsl.model.Item;
-
 import java.io.*;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
@@ -19,6 +15,10 @@ import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import qxsl.extra.field.*;
+import qxsl.field.FieldFormats;
+import qxsl.model.Item;
 
 /**
  * zLogテキストファイルのうちDOS版と互換の書式です。

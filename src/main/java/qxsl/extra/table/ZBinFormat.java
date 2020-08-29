@@ -5,11 +5,6 @@
 *******************************************************************************/
 package qxsl.extra.table;
 
-import qxsl.extra.field.*;
-import qxsl.field.FieldFormats;
-import qxsl.model.Field;
-import qxsl.model.Item;
-
 import java.io.*;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -19,6 +14,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import qxsl.extra.field.*;
+import qxsl.field.FieldFormats;
+import qxsl.model.Field;
+import qxsl.model.Item;
 
 import static java.time.ZoneOffset.UTC;
 import static java.time.temporal.ChronoUnit.DAYS;

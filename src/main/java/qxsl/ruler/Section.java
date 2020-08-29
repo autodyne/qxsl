@@ -5,10 +5,10 @@
 *******************************************************************************/
 package qxsl.ruler;
 
-import qxsl.model.Item;
-
 import java.util.ArrayList;
 import java.util.function.Function;
+
+import qxsl.model.Item;
 
 /**
  * コンテストの部門の実装はこのクラスを継承します。

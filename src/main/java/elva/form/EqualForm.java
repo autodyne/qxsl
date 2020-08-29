@@ -5,14 +5,14 @@
 *******************************************************************************/
 package elva.form;
 
+import java.util.Objects;
+
 import elva.lang.ElvaEval;
 import elva.lang.ListBase;
 import elva.lang.NativeOp;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 import elva.lang.NodeBase;
-
-import java.util.Objects;
 
 /**
  * 指定された式を評価して両辺の等値性を確認する関数です。

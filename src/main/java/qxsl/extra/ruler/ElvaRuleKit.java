@@ -5,26 +5,23 @@
 *******************************************************************************/
 package qxsl.extra.ruler;
 
-import elva.lang.ElvaEval;
-import elva.lang.ElvaLisp;
-import elva.lang.ListBase;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.UncheckedIOException;
+import javax.script.ScriptException;
+import javax.xml.namespace.QName;
+
+import elva.lang.*;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
-import elva.lang.NativeOp;
-import elva.lang.ScopeMap;
 import elva.warn.ElvaLexicalException;
 import elva.warn.ElvaRuntimeException;
+
 import qxsl.model.Item;
 import qxsl.model.Tuple;
 import qxsl.ruler.Contest;
 import qxsl.ruler.Failure;
 import qxsl.ruler.Success;
-
-import javax.script.ScriptException;
-import javax.xml.namespace.QName;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.UncheckedIOException;
 
 /**
  * ドメイン特化のLISPでコンテストの規約を表現する仕組みです。
@@ -231,6 +228,7 @@ public final class ElvaRuleKit extends qxsl.ruler.RuleKit {
 	 *
 	 *
 	 * @param reader 式を読み取るリーダ
+	 *
 	 * @return コンテストの定義
 	 *
 	 * @throws UncheckedIOException 式の読み取りの例外
@@ -253,6 +251,7 @@ public final class ElvaRuleKit extends qxsl.ruler.RuleKit {
 	 *
 	 *
 	 * @param string 式
+	 *
 	 * @return コンテストの定義
 	 *
 	 * @throws UncheckedIOException 式の読み取りの例外

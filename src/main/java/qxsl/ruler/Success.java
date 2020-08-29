@@ -5,10 +5,10 @@
 *******************************************************************************/
 package qxsl.ruler;
 
-import qxsl.model.Item;
-
 import java.io.Serializable;
 import java.util.StringJoiner;
+
+import qxsl.model.Item;
 
 /**
  * 規約により受理された交信に付与され総得点や乗数の計算に使用されます。

@@ -5,9 +5,9 @@
 *******************************************************************************/
 package qxsl.field;
 
-import qxsl.model.Field;
-
 import javax.xml.namespace.QName;
+
+import qxsl.model.Field;
 
 /**
  * 交信記録の属性をQXMLで永続化するための仕組みを提供します。

@@ -5,15 +5,16 @@
 *******************************************************************************/
 package qxsl.extra.ruler;
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-import qxsl.table.TableFormats;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import qxsl.table.TableFormats;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 

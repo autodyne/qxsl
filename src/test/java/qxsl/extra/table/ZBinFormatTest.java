@@ -5,15 +5,16 @@
 *******************************************************************************/
 package qxsl.extra.table;
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-import qxsl.extra.field.*;
-import qxsl.model.Item;
-import qxsl.table.TableFormats;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import qxsl.extra.field.*;
+import qxsl.model.Item;
+import qxsl.table.TableFormats;
 
 import static qxsl.junit.RandomNumberParameterExtension.randInt;
 import static qxsl.junit.RandomStringParameterExtension.alnum;

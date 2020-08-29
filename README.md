@@ -3,7 +3,7 @@ qxsl: Amateur-Radio Logging Library & LISP
 
 ![image](https://img.shields.io/badge/OpenJDK-SE11-red.svg)
 ![image](https://img.shields.io/badge/GraalVM-20.0-red.svg)
-![image](https://img.shields.io/badge/Gradle-5-orange.svg)
+![image](https://img.shields.io/badge/Gradle-6-orange.svg)
 ![image](https://img.shields.io/badge/license-LGPL3-blue.svg)
 
 qxsl is a Java library for processing amateur-radio log files, including scoring and tabulation frameworks for ham radio contests, which are important components of [Automatic Acceptance & Tabulation System (ATS)](https://github.com/nextzlog/ats4) for [the ALLJA1 contest](http://ja1zlo.u-tokyo.org/allja1).
@@ -151,7 +151,7 @@ Then run the command manually as follows:
 $ native-image --shared -cp build/libs/qxsl.jar -H:Name=qxsl
 ```
 
-You must implement [entry points](https://www.graalvm.org/sdk/javadoc/org/graalvm/nativeimage/c/function/CEntryPoint.html) by your self.
+You must implement [entry points](https://www.graalvm.org/sdk/javadoc/org/graalvm/nativeimage/c/function/CEntryPoint.html) by yourself.
 
 ## Contribution
 

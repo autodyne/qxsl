@@ -5,16 +5,16 @@
 *******************************************************************************/
 package qxsl.extra.ruler;
 
-import elva.lang.ArraySeq;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import elva.lang.ElvaEval;
 import elva.lang.FormBase;
 import elva.lang.ListBase;
 import elva.lang.NameNode;
+
 import qxsl.ruler.Contest;
 import qxsl.ruler.Summary;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * LISP処理系の内部におけるコンテストの規約の実装です。

@@ -5,10 +5,11 @@
 *******************************************************************************/
 package qxsl.extra.table;
 
-import org.xml.sax.SAXException;
-import qxsl.field.FieldFormats;
-import qxsl.model.*;
-
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.*;
 import javax.xml.namespace.QName;
 import javax.xml.stream.*;
 import javax.xml.stream.events.Attribute;
@@ -18,11 +19,11 @@ import javax.xml.stream.events.XMLEvent;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.*;
+
+import org.xml.sax.SAXException;
+
+import qxsl.field.FieldFormats;
+import qxsl.model.*;
 
 import static javax.xml.stream.XMLOutputFactory.IS_REPAIRING_NAMESPACES;
 

@@ -5,10 +5,10 @@
 *******************************************************************************/
 package qxsl.model;
 
-import qxsl.field.FieldFormats.Any;
-
-import javax.xml.namespace.QName;
 import java.util.Objects;
+import javax.xml.namespace.QName;
+
+import qxsl.field.FieldFormats.Any;
 
 /**
  * 交信に付与される属性の共通実装です。

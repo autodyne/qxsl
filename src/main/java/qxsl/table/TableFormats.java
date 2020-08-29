@@ -5,14 +5,17 @@
 *******************************************************************************/
 package qxsl.table;
 
-import qxsl.model.Item;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
+
+import qxsl.model.Item;
 
 /**
  * {@link TableFormat}実装クラスを自動的に検出して管理します。

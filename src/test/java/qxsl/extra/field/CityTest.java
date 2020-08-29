@@ -5,13 +5,14 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+
 import qxsl.field.FieldFormats;
 import qxsl.field.FieldFormats.Cache;
-
-import java.util.List;
 
 /**
  * {@link City}クラスのテスト用クラスです。

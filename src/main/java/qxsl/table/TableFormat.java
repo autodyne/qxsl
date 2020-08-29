@@ -5,10 +5,10 @@
 *******************************************************************************/
 package qxsl.table;
 
-import qxsl.model.Item;
-
 import java.io.*;
 import java.util.List;
+
+import qxsl.model.Item;
 
 /**
  * 交信記録を永続化する書式はこのインターフェースを継承します。

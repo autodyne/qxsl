@@ -7,7 +7,6 @@ package qxsl.model;
 
 import java.util.Objects;
 import java.util.StringJoiner;
-import java.util.stream.Stream;
 
 import static qxsl.extra.table.QxmlFormat.ITEM;
 

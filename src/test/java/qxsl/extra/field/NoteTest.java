@@ -7,6 +7,7 @@ package qxsl.extra.field;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import qxsl.field.FieldFormats;
 import qxsl.field.FieldFormats.Cache;
 import qxsl.junit.RandomStringParameterExtension;

@@ -5,10 +5,10 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
+import javax.xml.namespace.QName;
+
 import qxsl.field.FieldFormat;
 import qxsl.model.Field;
-
-import javax.xml.namespace.QName;
 
 /**
  * 交信のRST(RSQ)レポートを表現する{@link Field}実装クラスです。

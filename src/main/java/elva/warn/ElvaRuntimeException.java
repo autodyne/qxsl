@@ -5,9 +5,9 @@
 *******************************************************************************/
 package elva.warn;
 
-import elva.lang.NodeBase;
-
 import java.util.StringJoiner;
+
+import elva.lang.NodeBase;
 
 /**
  * LISP処理系で発生する実行時例外を表現します。

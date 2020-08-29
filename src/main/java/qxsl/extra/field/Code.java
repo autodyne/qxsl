@@ -5,10 +5,10 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
+import javax.xml.namespace.QName;
+
 import qxsl.field.FieldFormat;
 import qxsl.model.Field;
-
-import javax.xml.namespace.QName;
 
 /**
  * コンテストで相手局と交換するシリアル番号です。

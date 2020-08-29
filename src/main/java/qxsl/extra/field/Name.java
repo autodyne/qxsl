@@ -5,10 +5,10 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
+import javax.xml.namespace.QName;
+
 import qxsl.field.FieldFormat;
 import qxsl.model.Field;
-
-import javax.xml.namespace.QName;
 
 /**
  * 交信を行なった運用者の個人の名前を表現します。

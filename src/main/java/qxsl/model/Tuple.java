@@ -5,14 +5,12 @@
 *******************************************************************************/
 package qxsl.model;
 
-import qxsl.field.FieldFormat;
-import qxsl.field.FieldFormats;
-
-import javax.xml.namespace.QName;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Objects;
+import javax.xml.namespace.QName;
+
+import qxsl.field.FieldFormats;
 
 /**
  * 交信に対して複数の属性を設定可能な交信記録の共通実装です。

@@ -5,8 +5,6 @@
 *******************************************************************************/
 package qxsl.model;
 
-import java.util.Collections;
-import java.util.Objects;
 import java.util.StringJoiner;
 import javax.xml.namespace.QName;
 

@@ -5,10 +5,6 @@
 *******************************************************************************/
 package qxsl.extra.table;
 
-import qxsl.extra.field.*;
-import qxsl.field.FieldFormats;
-import qxsl.model.Item;
-
 import java.io.*;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
@@ -16,6 +12,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import qxsl.extra.field.*;
+import qxsl.field.FieldFormats;
+import qxsl.model.Item;
 
 /**
  * zLogテキストファイルのうちALLと呼ばれる書式です。

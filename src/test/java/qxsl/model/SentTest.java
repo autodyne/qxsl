@@ -6,6 +6,7 @@
 package qxsl.model;
 
 import org.junit.jupiter.api.Test;
+
 import qxsl.extra.field.Code;
 import qxsl.extra.field.Qxsl;
 import qxsl.extra.field.RSTQ;

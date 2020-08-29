@@ -5,10 +5,10 @@
 *******************************************************************************/
 package elva.lang;
 
-import elva.warn.ElvaRuntimeException;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
+import elva.warn.ElvaRuntimeException;
 
 /**
  * LISP処理系からメソッドを参照する演算子の実装です。

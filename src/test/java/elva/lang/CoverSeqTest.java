@@ -5,10 +5,10 @@
 *******************************************************************************/
 package elva.lang;
 
-import org.junit.jupiter.api.Test;
-
-import javax.script.ScriptException;
 import java.util.Arrays;
+import javax.script.ScriptException;
+
+import org.junit.jupiter.api.Test;
 
 /**
  * {@link CoverSeq}クラスのテスト用クラスです。

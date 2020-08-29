@@ -5,12 +5,12 @@
 *******************************************************************************/
 package qxsl.ruler;
 
-import qxsl.model.Item;
-
 import java.io.Serializable;
 
+import qxsl.model.Item;
+
 /**
- * ライブラリに内蔵されるLISPの処理結果を表現します。
+ * 規約により受理もしくは拒否された交信に付与されます。
  *
  *
  * @author 無線部開発班

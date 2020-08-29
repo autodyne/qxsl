@@ -5,14 +5,14 @@
 *******************************************************************************/
 package qxsl.sheet;
 
-import qxsl.model.Item;
-import qxsl.table.TableFormats;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import qxsl.model.Item;
+import qxsl.table.TableFormats;
 
 /**
  * {@link SheetFormat}実装クラスを自動的に検出して管理します。

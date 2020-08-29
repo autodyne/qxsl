@@ -5,11 +5,6 @@
 *******************************************************************************/
 package qxsl.extra.table;
 
-import qxsl.field.FieldFormats;
-import qxsl.model.Field;
-import qxsl.model.Item;
-
-import javax.xml.namespace.QName;
 import java.io.*;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,6 +13,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.xml.namespace.QName;
+
+import qxsl.field.FieldFormats;
+import qxsl.model.Field;
+import qxsl.model.Item;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
 

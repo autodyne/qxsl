@@ -5,13 +5,13 @@
 *******************************************************************************/
 package qxsl.field;
 
-import qxsl.model.Field;
-
-import javax.xml.namespace.QName;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.ServiceLoader;
+import javax.xml.namespace.QName;
+
+import qxsl.model.Field;
 
 /**
  * {@link FieldFormat}実装クラスを自動的に検出して管理します。

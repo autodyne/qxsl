@@ -5,11 +5,11 @@
 *******************************************************************************/
 package elva.lang;
 
-import elva.warn.ElvaRuntimeException;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.UnaryOperator;
+
+import elva.warn.ElvaRuntimeException;
 
 import static elva.lang.NameNode.Quote.UQSPL;
 import static elva.lang.NameNode.Quote.UQUOT;

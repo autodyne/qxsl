@@ -5,10 +5,10 @@
 *******************************************************************************/
 package elva.lang;
 
-import elva.warn.ElvaRuntimeException;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+
+import elva.warn.ElvaRuntimeException;
 
 /**
  * LISP処理系で使用される型情報を表す専用のアトムの実装です。

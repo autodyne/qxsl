@@ -5,10 +5,10 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
+import javax.xml.namespace.QName;
+
 import qxsl.field.FieldFormat;
 import qxsl.model.Field;
-
-import javax.xml.namespace.QName;
 
 import static java.text.Normalizer.Form.NFKC;
 import static java.text.Normalizer.normalize;

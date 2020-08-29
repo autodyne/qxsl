@@ -5,10 +5,6 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
-import qxsl.field.FieldFormat;
-import qxsl.model.Field;
-
-import javax.xml.namespace.QName;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -16,6 +12,10 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
+import javax.xml.namespace.QName;
+
+import qxsl.field.FieldFormat;
+import qxsl.model.Field;
 
 /**
  * 交信の日時を表現する{@link Field}実装クラスです。

@@ -5,9 +5,9 @@
 *******************************************************************************/
 package elva.lang;
 
-import org.junit.jupiter.api.Test;
-
 import javax.script.ScriptException;
+
+import org.junit.jupiter.api.Test;
 
 /**
  * {@link TypeNode}クラスのテスト用クラスです。

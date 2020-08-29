@@ -5,12 +5,13 @@
 *******************************************************************************/
 package qxsl.extra.table;
 
-import org.xml.sax.SAXException;
-import qxsl.field.FieldFormats;
-import qxsl.model.Field;
-import qxsl.model.Item;
-import qxsl.model.Tuple;
-
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import javax.xml.namespace.QName;
 import javax.xml.stream.*;
 import javax.xml.stream.events.EndElement;
@@ -19,13 +20,13 @@ import javax.xml.stream.events.XMLEvent;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+
+import org.xml.sax.SAXException;
+
+import qxsl.field.FieldFormats;
+import qxsl.model.Field;
+import qxsl.model.Item;
+import qxsl.model.Tuple;
 
 /**
  * ADIFのうちADXと呼ばれる新方式の書式の部分的な実装です。

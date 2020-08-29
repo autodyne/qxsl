@@ -5,12 +5,12 @@
 *******************************************************************************/
 package qxsl.extra.table;
 
-import qxsl.model.Field;
-import qxsl.table.TableFormat;
-
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import qxsl.model.Field;
+import qxsl.table.TableFormat;
 
 /**
  * このライブラリに内蔵される交信記録の書式の共通実装です。

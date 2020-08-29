@@ -5,15 +5,15 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
-import qxsl.field.FieldFormat;
-import qxsl.model.Field;
-
-import javax.xml.namespace.QName;
 import java.io.*;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.xml.namespace.QName;
+
+import qxsl.field.FieldFormat;
+import qxsl.model.Field;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.toList;

@@ -5,16 +5,16 @@
 *******************************************************************************/
 package qxsl.extra.table;
 
-import qxsl.extra.field.*;
-import qxsl.field.FieldFormats;
-import qxsl.model.Item;
-
 import java.io.*;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import qxsl.extra.field.*;
+import qxsl.field.FieldFormats;
+import qxsl.model.Item;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.time.ZoneOffset.UTC;

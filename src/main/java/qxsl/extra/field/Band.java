@@ -5,11 +5,11 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
+import java.math.BigDecimal;
+import javax.xml.namespace.QName;
+
 import qxsl.field.FieldFormat;
 import qxsl.model.Field;
-
-import javax.xml.namespace.QName;
-import java.math.BigDecimal;
 
 /**
  * 交信の周波数を表現する{@link Field}実装クラスです。

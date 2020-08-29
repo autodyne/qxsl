@@ -5,12 +5,12 @@
 *******************************************************************************/
 package elva.lang;
 
-import elva.warn.ElvaRuntimeException;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import elva.warn.ElvaRuntimeException;
 
 /**
  * 組込関数として利用される特殊形式の共通実装です。
