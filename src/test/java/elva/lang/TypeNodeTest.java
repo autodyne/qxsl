@@ -7,6 +7,7 @@ package elva.lang;
 
 import javax.script.ScriptException;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -17,7 +18,7 @@ import org.junit.jupiter.api.Test;
  *
  * @since 2020/06/06
  */
-public final class TypeNodeTest extends org.assertj.core.api.Assertions {
+public final class TypeNodeTest extends Assertions {
 	private final TypeNode longType = new TypeNode(long.class);
 	private final TypeNode charType = new TypeNode(char.class);
 

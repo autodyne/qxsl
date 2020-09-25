@@ -27,6 +27,7 @@ public final class Failure implements Message, Serializable {
 	/**
 	 * 指定した内容の{@link Failure}を構築します。
 	 *
+	 *
 	 * @param item 関連づけられる交信
 	 * @param text 失敗の内容を説明する文字列
 	 */
@@ -38,6 +39,7 @@ public final class Failure implements Message, Serializable {
 	/**
 	 * 交信の成立により得られる素点を返します。
 	 *
+	 *
 	 * @return 交信1件の得点
 	 */
 	@Override
@@ -48,6 +50,7 @@ public final class Failure implements Message, Serializable {
 	/**
 	 * 交信の実体を表す{@link Item}を返します。
 	 *
+	 *
 	 * @return 交信の実体
 	 */
 	@Override
@@ -57,6 +60,7 @@ public final class Failure implements Message, Serializable {
 
 	/**
 	 * 処理の結果を説明する文字列を返します。
+	 *
 	 *
 	 * @return 文字列
 	 */
@@ -83,23 +87,25 @@ public final class Failure implements Message, Serializable {
 	/**
 	 * この交信に関連づけられた識別子の個数を返します。
 	 *
+	 *
 	 * @return 乗数の個数
 	 */
 	@Override
-	public final int countKeys() {
+	public final int size() {
 		return 0;
 	}
 
 	/**
 	 * この交信の文字列による表現を返します。
 	 *
+	 *
 	 * @return 文字列
 	 */
 	@Override
 	public final String toString() {
-		StringJoiner sj = new StringJoiner(" ");
-		sj.add(Failure.class.getCanonicalName());
-		sj.add(String.format("message:%s", text()));
-		return String.format("{%s}", sj.toString());
+		final var joiner = new StringJoiner(" ", "{", "}");
+		joiner.add(Failure.class.getCanonicalName());
+		joiner.add(String.format("text:%s", text()));
+		return joiner.toString();
 	}
 }

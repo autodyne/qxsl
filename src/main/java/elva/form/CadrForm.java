@@ -23,6 +23,6 @@ import elva.lang.NativeOp.Name;
 @Args(min = 1, max = 1)
 public final class CadrForm extends NativeOp {
 	public Object apply(ListBase args, ElvaEval eval) {
-		return eval.apply(args.head()).list().get(1);
+		return eval.apply(args.head()).list().tail().head();
 	}
 }

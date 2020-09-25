@@ -8,26 +8,27 @@ package qxsl.extra.table;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import qxsl.extra.field.*;
 import qxsl.model.Item;
-import qxsl.table.TableFormats;
+import qxsl.table.TableManager;
 
 import static qxsl.junit.RandomNumberParameterExtension.randInt;
 import static qxsl.junit.RandomStringParameterExtension.alnum;
 
 /**
- * {@link QxmlFormat}クラスのテスト用クラスです。
+ * {@link QxmlFactory}クラスのテスト用クラスです。
  *
  *
  * @author 無線部開発班
  *
  * @since 2017/02/26
  */
-public final class QxmlFormatTest extends org.assertj.core.api.Assertions {
-	private final TableFormats tables = new TableFormats();
+public final class QxmlFormatTest extends Assertions {
+	private final TableManager tables = new TableManager();
 
 	public static IntStream testMethodSource() {
 		return IntStream.range(0, 100);
@@ -36,10 +37,9 @@ public final class QxmlFormatTest extends org.assertj.core.api.Assertions {
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void testDecode(int numItems) throws Exception {
-		final QxmlFormat format = new QxmlFormat();
-		final ArrayList<Item> items = new ArrayList<>();
+		final var items = new ArrayList<Item>();
 		for(int row = 0; row < numItems; row++) {
-			final Item item = new Item();
+			final var item = new Item();
 			item.set(new Time());
 			item.set(new Band(randInt(10_000_000)));
 			item.set(new Call(alnum(10)));
@@ -54,6 +54,8 @@ public final class QxmlFormatTest extends org.assertj.core.api.Assertions {
 			item.getSent().set(new Watt(alnum(10)));
 			items.add(item);
 		}
+		final var format = new QxmlFactory();
+		assertThat(format.decode(format.encode(items))).isEqualTo(items);
 		assertThat(tables.decode(format.encode(items))).isEqualTo(items);
 	}
 }

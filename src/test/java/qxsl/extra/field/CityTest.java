@@ -5,14 +5,15 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
-import java.util.List;
+import java.util.Set;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import qxsl.field.FieldFormats;
-import qxsl.field.FieldFormats.Cache;
+import qxsl.field.FieldManager;
+import qxsl.field.FieldManager.Cache;
 
 /**
  * {@link City}クラスのテスト用クラスです。
@@ -22,8 +23,8 @@ import qxsl.field.FieldFormats.Cache;
  *
  * @since 2017/02/24
  */
-public final class CityTest extends org.assertj.core.api.Assertions {
-	private final Cache cache = new FieldFormats().cache(Qxsl.CITY);
+public final class CityTest extends Assertions {
+	private final Cache cache = new FieldManager().cache(Qxsl.CITY);
 	private City jarl(String code) {
 		return City.forCode("jarl", code);
 	}
@@ -47,12 +48,12 @@ public final class CityTest extends org.assertj.core.api.Assertions {
 	}
 
 	/**
-	 * JARLのJCC/JCGに含まれる全ての地域をリストで返します。
+	 * JARLのJCC/JCGに含まれる全ての地域を返します。
 	 *
 	 *
-	 * @return 地域のリスト
+	 * @return 地域の集合
 	 */
-	public static List<City> testMethodSource() {
+	public static Set<City> testMethodSource() {
 		return City.all("jarl");
 	}
 
@@ -85,7 +86,7 @@ public final class CityTest extends org.assertj.core.api.Assertions {
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void testCity$Format(City city) throws Exception {
-		final var form = new City.Format();
+		final var form = new City.Factory();
 		assertThat(form.decode(form.encode(city))).isEqualTo(city);
 		assertThat(cache.field(form.encode(city))).isEqualTo(city);
 	}

@@ -1,0 +1,10 @@
+qxsl.extra.field.Band$Factory
+qxsl.extra.field.Call$Factory
+qxsl.extra.field.City$Factory
+qxsl.extra.field.Code$Factory
+qxsl.extra.field.Mode$Factory
+qxsl.extra.field.Name$Factory
+qxsl.extra.field.Note$Factory
+qxsl.extra.field.RSTQ$Factory
+qxsl.extra.field.Time$Factory
+qxsl.extra.field.Watt$Factory

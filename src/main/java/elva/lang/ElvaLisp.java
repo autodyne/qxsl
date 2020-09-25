@@ -19,7 +19,11 @@ import javax.script.ScriptEngineFactory;
 import elva.warn.ElvaLexicalException;
 import elva.warn.ElvaRuntimeException;
 
-import static elva.lang.NameNode.Quote.*;
+import static elva.lang.NameNode.Quote.QUASI;
+import static elva.lang.NameNode.Quote.QUOTE;
+import static elva.lang.NameNode.Quote.UQSPL;
+import static elva.lang.NameNode.Quote.UQUOT;
+
 import static java.util.stream.Collectors.joining;
 import static javax.script.ScriptContext.ENGINE_SCOPE;
 import static javax.script.ScriptContext.GLOBAL_SCOPE;
@@ -165,7 +169,7 @@ public final class ElvaLisp extends AbstractScriptEngine {
 		private static final int TOKENS = 20;
 		private final List<String> tokens;
 		private int cursor = 0;
-	
+
 		/**
 		 * 指定された式を走査する構文解析器を構築します。
 		 *
@@ -180,7 +184,7 @@ public final class ElvaLisp extends AbstractScriptEngine {
 			final var matcher = Pattern.compile(regex).matcher(exp);
 			while(matcher.find()) this.tokens.add(matcher.group(1));
 		}
-	
+
 		/**
 		 * リソースファイルからLISPの字句の正規表現を取得します。
 		 *
@@ -195,7 +199,7 @@ public final class ElvaLisp extends AbstractScriptEngine {
 				return b.lines().collect(joining());
 			}
 		}
-	
+
 		/**
 		 * 次の式がある場合は真を返します。
 		 *
@@ -205,7 +209,7 @@ public final class ElvaLisp extends AbstractScriptEngine {
 		public final boolean hasNext() {
 			return cursor < tokens.size();
 		}
-	
+
 		/**
 		 * 現在の位置の直前の字句をまとめた文字列を返します。
 		 *
@@ -216,7 +220,7 @@ public final class ElvaLisp extends AbstractScriptEngine {
 			final var strm = tokens.subList(from, cursor);
 			return strm.stream().collect(joining(" "));
 		}
-	
+
 		/**
 		 * 次の式を返します。
 		 *
@@ -237,7 +241,7 @@ public final class ElvaLisp extends AbstractScriptEngine {
 			if(!token.equals(")")) return asNameOrReal(token);
 			throw new ElvaLexicalException("isolated ')'", this);
 		}
-	
+
 		/**
 		 * 指定されたアトムを実数またはシンボルとして返します。
 		 *
@@ -254,7 +258,7 @@ public final class ElvaLisp extends AbstractScriptEngine {
 				return new NameNode(atom);
 			}
 		}
-	
+
 		/**
 		 * 先頭の括弧が読まれた状態で以降のリスト式を返します。
 		 *

@@ -9,9 +9,9 @@ import java.lang.reflect.Array;
 
 import elva.lang.ElvaEval;
 import elva.lang.ListBase;
+import elva.lang.NativeOp;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
-import elva.lang.NativeOp;
 import elva.lang.TypeNode;
 
 /**

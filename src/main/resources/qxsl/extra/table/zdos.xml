@@ -14,4 +14,6 @@ Examples:
 <entry key="head-text">
 mon day time  callsign      sent         rcvd      multi   MHz mode pts memo
 </entry>
+<entry key="time-decoder">M  ppd HHmm</entry>
+<entry key="time-encoder">MM  dd HHmm</entry>
 </properties>

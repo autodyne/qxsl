@@ -8,6 +8,7 @@ package elva.lang;
 import java.util.Arrays;
 import javax.script.ScriptException;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -18,7 +19,7 @@ import org.junit.jupiter.api.Test;
  *
  * @since 2020/08/05
  */
-public final class CoverSeqTest extends org.assertj.core.api.Assertions {
+public final class CoverSeqTest extends Assertions {
 	private final ListBase list = new CoverSeq(Arrays.asList(7, 5, 3));
 
 	@Test

@@ -5,18 +5,24 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Serializable;
+import java.io.UncheckedIOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.xml.namespace.QName;
 
-import qxsl.field.FieldFormat;
+import qxsl.field.FieldFactory;
 import qxsl.model.Field;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * 交信の相手局の地域を表現する{@link Field}実装クラスです。
@@ -84,16 +90,29 @@ public final class City extends Qxsl<String> {
 	 * 地域ベースと地域番号を指定して地域を返します。
 	 *
 	 *
+	 * @param code 地域ベースの名前:地域番号
+	 *
+	 * @return 地域 不明な地域番号に対してはnull
+	 *
+	 * @throws UncheckedIOException 地域ベースが未知の場合
+	 */
+	public static City forCode(String code) {
+		return forCode(code.split(":")[0], code.split(":")[1]);
+	}
+
+	/**
+	 * 地域ベースと地域番号を指定して地域を返します。
+	 *
+	 *
 	 * @param base 地域ベースの名前
 	 * @param code 地域番号
 	 *
 	 * @return 地域 不明な地域番号に対してはnull
 	 *
-	 * @throws IllegalArgumentException 地域ベースが未知の場合
+	 * @throws UncheckedIOException 地域ベースが未知の場合
 	 */
 	public static City forCode(String base, String code) {
-		final DataBase db = DataBase.forName(base);
-		for(City city: db.cities.values()) {
+		for(var city: DataBase.forName(base).cities.values()) {
 			if(city.code.equals(code)) return city;
 		}
 		return null;
@@ -107,11 +126,11 @@ public final class City extends Qxsl<String> {
 	 *
 	 * @return 全ての利用可能な地域
 	 *
-	 * @throws IllegalArgumentException 地域ベースが未知の場合
+	 * @throws UncheckedIOException 地域ベースが未知の場合
 	 */
-	public static final List<City> all(String base) {
-		final DataBase db = DataBase.forName(base);
-		return db.cities.values().stream().collect(toList());
+	public static final Set<City> all(String base) {
+		final var cities = DataBase.forName(base).cities;
+		return cities.values().stream().collect(toSet());
 	}
 
 	/**
@@ -123,7 +142,7 @@ public final class City extends Qxsl<String> {
 	 * @since 2017/02/28
 	 */
 	private static final class DataBase implements Serializable {
-		static final Map<String,DataBase> bases = new HashMap<>();
+		private static final Map<String,DataBase> bases = new HashMap<>();
 		private final Map<String, City> cities;
 
 		/**
@@ -132,7 +151,7 @@ public final class City extends Qxsl<String> {
 		 *
 		 * @param name 地域ベースの名前
 		 *
-		 * @throws UncheckedIOException 主にファイルが存在しない場合
+		 * @throws UncheckedIOException 地域ベースが未知の場合
 		 */
 		private DataBase(String name) throws UncheckedIOException {
 			this.cities = new LinkedHashMap<>();
@@ -156,14 +175,10 @@ public final class City extends Qxsl<String> {
 		 *
 		 * @return 地域ベース
 		 *
-		 * @throws IllegalArgumentException 地域ベースが未定義の場合
+		 * @throws UncheckedIOException 地域ベースが未知の場合
 		 */
 		public static final DataBase forName(String base) {
-			try {
-				return bases.computeIfAbsent(base, DataBase::new);
-			} catch (UncheckedIOException ex) {
-				throw new IllegalArgumentException(base + " not defined");
-			}
+			return bases.computeIfAbsent(base, DataBase::new);
 		}
 	}
 
@@ -175,7 +190,7 @@ public final class City extends Qxsl<String> {
 	 *
 	 * @since 2014/04/20
 	 */
-	public static final class Format implements FieldFormat {
+	public static final class Factory implements FieldFactory {
 		@Override
 		public QName target() {
 			return CITY;
@@ -183,8 +198,7 @@ public final class City extends Qxsl<String> {
 
 		@Override
 		public City decode(String value) {
-			final String[] basecode = value.split(":", 2);
-			return City.forCode(basecode[0], basecode[1]);
+			return City.forCode(value);
 		}
 
 		@Override

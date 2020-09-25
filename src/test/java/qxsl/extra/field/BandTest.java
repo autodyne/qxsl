@@ -5,11 +5,12 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import qxsl.field.FieldFormats;
-import qxsl.field.FieldFormats.Cache;
+import qxsl.field.FieldManager;
+import qxsl.field.FieldManager.Cache;
 import qxsl.junit.RandomNumberParameterExtension;
 import qxsl.junit.RandomNumberParameterExtension.RandomNumber;
 
@@ -22,8 +23,8 @@ import qxsl.junit.RandomNumberParameterExtension.RandomNumber;
  * @since 2017/02/24
  */
 @ExtendWith(RandomNumberParameterExtension.class)
-public final class BandTest extends org.assertj.core.api.Assertions {
-	private final Cache cache = new FieldFormats().cache(Qxsl.BAND);
+public final class BandTest extends Assertions {
+	private final Cache cache = new FieldManager().cache(Qxsl.BAND);
 
 	@Test
 	public void testEquals() {
@@ -64,7 +65,7 @@ public final class BandTest extends org.assertj.core.api.Assertions {
 
 	@Test
 	public void testBand$Format(@RandomNumber int num) throws Exception {
-		final var form = new Band.Format();
+		final var form = new Band.Factory();
 		final var band = new Band(num);
 		assertThat(form.decode(form.encode(band))).isEqualTo(band);
 		assertThat(cache.field(form.encode(band))).isEqualTo(band);

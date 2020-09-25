@@ -5,10 +5,7 @@
 *******************************************************************************/
 package qxsl.ruler;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.stream.IntStream.range;
@@ -28,7 +25,8 @@ public final class Summary implements java.io.Serializable {
 	private int total = 0;
 
 	/**
-	 * 有効な交信と無効な交信を指定してサマリを構築します。
+	 * 有効な交信と無効な交信を指定して要約を構築します。
+	 *
 	 *
 	 * @param succ 受理された交信
 	 * @param fail 拒否された交信
@@ -44,6 +42,7 @@ public final class Summary implements java.io.Serializable {
 	/**
 	 * 指定された部門で有効な交信を列挙します。
 	 *
+	 *
 	 * @return 有効な交信
 	 */
 	public final List<Success> accepted() {
@@ -53,6 +52,7 @@ public final class Summary implements java.io.Serializable {
 	/**
 	 * 指定された部門で無効な交信を列挙します。
 	 *
+	 *
 	 * @return 無効な交信
 	 */
 	public final List<Failure> rejected() {
@@ -61,6 +61,7 @@ public final class Summary implements java.io.Serializable {
 
 	/**
 	 * 重複を排除した交信の得点の合計を返します。
+	 *
 	 *
 	 * @return 得点に数えられる交信の得点の合計
 	 *
@@ -72,6 +73,7 @@ public final class Summary implements java.io.Serializable {
 
 	/**
 	 * この交信記録の総得点を返します。
+	 *
 	 *
 	 * @return 総得点
 	 */
@@ -93,30 +95,45 @@ public final class Summary implements java.io.Serializable {
 	}
 
 	/**
-	 * 指定された位置の識別子の重複を排除したリストを返します。
+	 * 識別子を列挙した集合を返します。
 	 *
 	 *
-	 * @param nkey 識別子の位置
+	 * @param rank 識別子の位置
 	 *
 	 * @return 指定された位置の識別子の集合
 	 *
 	 * @since 2020/02/26
 	 */
-	public final List<Object> mults(int nkey) {
-		var keys = distinct.stream().map(s -> s.key(nkey));
-		return keys.distinct().collect(Collectors.toList());
+	private final Set<Object> keySet(int rank) {
+		final var keys = distinct.stream().map(message -> message.key(rank));
+		return Collections.unmodifiableSet(keys.collect(Collectors.toSet()));
 	}
 
 	/**
-	 * 識別子の重複を排除したリストのリストを返します。
+	 * 識別子を列挙した集合を先頭から並べたリストを返します。
+	 *
 	 *
 	 * @return 識別子の集合のリスト
 	 *
 	 * @since 2020/02/26
 	 */
-	public final List<List<Object>> mults() {
-		var cnt = distinct.stream().mapToInt(Success::countKeys).min();
-		final var sets = range(0, cnt.orElse(0)).mapToObj(this::mults);
+	public final List<Set<Object>> keySets() {
+		final var size = distinct.stream().mapToInt(Success::size).min();
+		final var sets = range(0, size.orElse(0)).mapToObj(this::keySet);
 		return sets.collect(Collectors.toList());
+	}
+
+	/**
+	 * 得点と識別子を列挙した集合とを並べたリストを返します。
+	 *
+	 *
+	 * @return 得点とそれに続く識別子集合のリスト
+	 *
+	 * @since 2020/09/03
+	 */
+	public final List<Object> toScoreAndKeys() {
+		final var list = new ArrayList<Object>(Arrays.asList(score()));
+		for(var keys: keySets()) list.add(new ArrayList<Object>(keys));
+		return list;
 	}
 }

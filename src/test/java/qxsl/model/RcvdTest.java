@@ -5,6 +5,7 @@
 *******************************************************************************/
 package qxsl.model;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import qxsl.extra.field.Code;
@@ -12,7 +13,7 @@ import qxsl.extra.field.Qxsl;
 import qxsl.extra.field.RSTQ;
 import qxsl.extra.field.Watt;
 
-import static qxsl.extra.table.QxmlFormat.RCVD;
+import static qxsl.extra.table.QxmlFactory.RCVD;
 
 /**
  * {@link Rcvd}クラスのテスト用クラスです。
@@ -22,7 +23,7 @@ import static qxsl.extra.table.QxmlFormat.RCVD;
  *
  * @since 2017/02/25
  */
-public final class RcvdTest extends org.assertj.core.api.Assertions {
+public final class RcvdTest extends Assertions {
 	private final Code code = new Code("591009");
 	private final RSTQ rstq = new RSTQ(5, 9, 9);
 	private final Watt watt = new Watt("H");
@@ -34,8 +35,8 @@ public final class RcvdTest extends org.assertj.core.api.Assertions {
 
 	@Test
 	public void testEquals() {
-		final Rcvd rcvd1 = new Rcvd(new Item());
-		final Rcvd rcvd2 = new Rcvd(new Item());
+		final var rcvd1 = new Rcvd(new Item());
+		final var rcvd2 = new Rcvd(new Item());
 		assertThat(rcvd1).isEqualTo(rcvd2);
 		assertThat(rcvd1.set(code).get(Qxsl.CODE)).isEqualTo(code);
 		assertThat(rcvd1.set(rstq).get(Qxsl.RSTQ)).isEqualTo(rstq);

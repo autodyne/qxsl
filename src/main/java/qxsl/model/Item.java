@@ -8,7 +8,7 @@ package qxsl.model;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-import static qxsl.extra.table.QxmlFormat.ITEM;
+import static qxsl.extra.table.QxmlFactory.ITEM;
 
 /**
  * 交信記録で1件の不可分な交信を表現します。
@@ -23,7 +23,7 @@ public final class Item extends Tuple {
 	private final Sent sent;
 
 	/**
-	 * 空の交信記録を構築します。
+	 * 交信記録を構築します。
 	 */
 	public Item() {
 		super(ITEM);
@@ -34,6 +34,7 @@ public final class Item extends Tuple {
 	/**
 	 * この交信記録の{@link Rcvd}を返します。
 	 *
+	 *
 	 * @return 相手局から受信した情報
 	 */
 	public final Rcvd getRcvd() {
@@ -43,6 +44,7 @@ public final class Item extends Tuple {
 	/**
 	 * この交信記録の{@link Sent}を返します。
 	 *
+	 *
 	 * @return 相手局まで送信した情報
 	 */
 	public final Sent getSent() {
@@ -50,7 +52,23 @@ public final class Item extends Tuple {
 	}
 
 	/**
+	 * この要素を複製します。
+	 *
+	 *
+	 * @return 複製
+	 */
+	@Override
+	public final Item clone() {
+		final Item item = new Item();
+		item.table.putAll(this.table);
+		item.rcvd.table.putAll(this.rcvd.table);
+		item.sent.table.putAll(this.sent.table);
+		return item;
+	}
+
+	/**
 	 * この要素のハッシュ値を計算します。
+	 *
 	 *
 	 * @return ハッシュ値
 	 */
@@ -79,6 +97,7 @@ public final class Item extends Tuple {
 
 	/**
 	 * この交信記録の文字列による表現を返します。
+	 *
 	 *
 	 * @return 文字列
 	 */

@@ -7,6 +7,7 @@ package elva.lang;
 
 import javax.script.ScriptException;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -17,7 +18,7 @@ import org.junit.jupiter.api.Test;
  *
  * @since 2020/06/06
  */
-public final class ArraySeqTest extends org.assertj.core.api.Assertions {
+public final class ArraySeqTest extends Assertions {
 	private final ListBase list = ArraySeq.from(7, 5, 3);
 
 	@Test

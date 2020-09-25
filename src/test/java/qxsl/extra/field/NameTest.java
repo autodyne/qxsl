@@ -5,11 +5,12 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import qxsl.field.FieldFormats;
-import qxsl.field.FieldFormats.Cache;
+import qxsl.field.FieldManager;
+import qxsl.field.FieldManager.Cache;
 import qxsl.junit.RandomStringParameterExtension;
 import qxsl.junit.RandomStringParameterExtension.RandomString;
 
@@ -22,8 +23,8 @@ import qxsl.junit.RandomStringParameterExtension.RandomString;
  * @since 2017/02/24
  */
 @ExtendWith(RandomStringParameterExtension.class)
-public final class NameTest extends org.assertj.core.api.Assertions {
-	private final Cache cache = new FieldFormats().cache(Qxsl.NAME);
+public final class NameTest extends Assertions {
+	private final Cache cache = new FieldManager().cache(Qxsl.NAME);
 
 	@Test
 	public void testValue() {
@@ -38,7 +39,7 @@ public final class NameTest extends org.assertj.core.api.Assertions {
 
 	@Test
 	public void testName$Format(@RandomString String text) throws Exception {
-		final var form = new Name.Format();
+		final var form = new Name.Factory();
 		final var name = new Name(text);
 		assertThat(form.decode(form.encode(name))).isEqualTo(name);
 		assertThat(cache.field(form.encode(name))).isEqualTo(name);

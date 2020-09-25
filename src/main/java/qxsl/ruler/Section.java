@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.function.Function;
 
 import qxsl.model.Item;
+import qxsl.table.TableFactory;
 
 /**
  * コンテストの部門の実装はこのクラスを継承します。
@@ -24,10 +25,11 @@ public abstract class Section implements Function<Item, Message> {
 	/**
 	 * 部門を構築します。
 	 */
-	protected Section() {}
+	public Section() {}
 
 	/**
 	 * 部門の名前を返します。
+	 *
 	 *
 	 * @return {@link #getName()}と同等
 	 */
@@ -39,6 +41,7 @@ public abstract class Section implements Function<Item, Message> {
 	/**
 	 * 部門の名前を返します。
 	 *
+	 *
 	 * @return 部門の名前
 	 */
 	public abstract String getName();
@@ -46,12 +49,14 @@ public abstract class Section implements Function<Item, Message> {
 	/**
 	 * 部門の符牒を返します。
 	 *
+	 *
 	 * @return 部門の符牒
 	 */
 	public abstract String getCode();
 
 	/**
 	 * この部門を有するコンテストを返します。
+	 *
 	 *
 	 * @return 部門を内包するコンテスト
 	 */
@@ -61,6 +66,7 @@ public abstract class Section implements Function<Item, Message> {
 
 	/**
 	 * この部門を有するコンテストを設定します。
+	 *
 	 *
 	 * @param test 部門を内包するコンテスト
 	 */
@@ -92,6 +98,35 @@ public abstract class Section implements Function<Item, Message> {
 	public abstract Object invoke(String name, Object...args);
 
 	/**
+	 * 規約に基づき交信記録を特定の書式に対応した状態に変換します。
+	 *
+	 *
+	 * @param item 交信記録
+	 * @param form 書式
+	 *
+	 * @return 指定された書式で出力可能な交信記録
+	 *
+	 * @since 2020/09/04
+	 */
+	public final Item encode(Item item, TableFactory form) {
+		return (Item) invoke("encode", item.clone(), form.getName());
+	}
+
+	/**
+	 * 規約に基づき交信記録を標準形式に変換して得点計算に備えます。
+	 *
+	 *
+	 * @param item 交信記録
+	 *
+	 * @return 得点計算が可能な標準形式の交信記録
+	 *
+	 * @since 2020/09/04
+	 */
+	public final Item decode(Item item) {
+		return (Item) invoke("decode", item.clone());
+	}
+
+	/**
 	 * 指定された交信記録から有効な交信を抽出します。
 	 *
 	 *
@@ -104,8 +139,8 @@ public abstract class Section implements Function<Item, Message> {
 	public final Summary summarize(Iterable<Item> items) {
 		final var acc = new ArrayList<Success>();
 		final var rej = new ArrayList<Failure>();
-		for(Item item: items) {
-			final Message msg = this.apply(item);
+		for(var item: items) {
+			final var msg = this.apply(item);
 			if(msg instanceof Success) acc.add((Success) msg);
 			if(msg instanceof Failure) rej.add((Failure) msg);
 		}

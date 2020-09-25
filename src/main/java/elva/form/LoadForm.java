@@ -36,7 +36,7 @@ public final class LoadForm extends NativeOp {
 			var isr = new InputStreamReader(is, UTF_8);
 			return ElvaLisp.scan(isr).map(eval).last();
 		} catch (IOException ex) {
-			final String msg = "failed in loading %s: %s";
+			final var msg = "failed in loading %s: %s";
 			throw new ElvaRuntimeException(msg, name, ex);
 		}
 	}

@@ -8,7 +8,7 @@ package qxsl.extra.field;
 import java.math.BigDecimal;
 import javax.xml.namespace.QName;
 
-import qxsl.field.FieldFormat;
+import qxsl.field.FieldFactory;
 import qxsl.model.Field;
 
 /**
@@ -102,8 +102,8 @@ public final class Band extends Qxsl<BigDecimal> {
 	 *
 	 * @return 実数により表される周波数
 	 */
-	private String toDecimalString(int scale) {
-		BigDecimal d = band.scaleByPowerOfTen(-scale);
+	public final String toDecimalString(int scale) {
+		final var d = band.scaleByPowerOfTen(-scale);
 		return d.stripTrailingZeros().toPlainString();
 	}
 
@@ -116,14 +116,14 @@ public final class Band extends Qxsl<BigDecimal> {
 	 * @return キロヘルツ単位の波長
 	 */
 	private static BigDecimal parse(String text) {
-		final String FIX = "(?<=\\d)(?=[kMG]?Hz)";
-		String[] tup = text.split(FIX);
-		final BigDecimal bd = new BigDecimal(tup[0]);
+		final var FIX = "(?<=\\d)(?=[kMG]?Hz)";
+		final var tup = text.split(FIX);
+		final var val = new BigDecimal(tup[0]);
 		switch(tup[1]) {
-			case  "Hz": return bd.scaleByPowerOfTen(-3);
-			case "kHz": return bd.scaleByPowerOfTen(+0);
-			case "MHz": return bd.scaleByPowerOfTen(+3);
-			case "GHz": return bd.scaleByPowerOfTen(+6);
+			case  "Hz": return val.scaleByPowerOfTen(-3);
+			case "kHz": return val.scaleByPowerOfTen(+0);
+			case "MHz": return val.scaleByPowerOfTen(+3);
+			case "GHz": return val.scaleByPowerOfTen(+6);
 		}
 		throw new NumberFormatException(text);
 	}
@@ -151,7 +151,7 @@ public final class Band extends Qxsl<BigDecimal> {
 	 *
 	 * @since 2013/06/08
 	 */
-	public static final class Format implements FieldFormat {
+	public static final class Factory implements FieldFactory {
 		@Override
 		public QName target() {
 			return BAND;

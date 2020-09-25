@@ -10,12 +10,12 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.Temporal;
 import javax.xml.namespace.QName;
 
-import qxsl.field.FieldFormat;
+import qxsl.field.FieldFactory;
 import qxsl.model.Field;
+
+import static java.time.temporal.ChronoUnit.MINUTES;
 
 /**
  * 交信の日時を表現する{@link Field}実装クラスです。
@@ -69,6 +69,15 @@ public final class Time extends Qxsl<ZonedDateTime> {
 	}
 
 	/**
+	 * システムのローカルな時刻を返します。
+	 *
+	 * @return ローカルな時刻
+	 */
+	public ZonedDateTime local() {
+		return time.withZoneSameInstant(ZoneId.systemDefault());
+	}
+
+	/**
 	 * 指定されたオブジェクトと等値であるか確認します。
 	 * 比較の対象が分まで同じ時刻の場合に真を返します。
 	 *
@@ -79,9 +88,10 @@ public final class Time extends Qxsl<ZonedDateTime> {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if(!(obj instanceof Time)) return false;
-		final Temporal comp = ((Time) obj).time;
-		return comp.until(time, ChronoUnit.MINUTES) == 0;
+		if(obj instanceof Time) {
+			final var comp = ((Time) obj).time;
+			return comp.until(time, MINUTES) == 0;
+		} else return false;
 	}
 
 	/**
@@ -92,10 +102,10 @@ public final class Time extends Qxsl<ZonedDateTime> {
 	 *
 	 * @since 2013/06/08
 	 */
-	public static final class Format implements FieldFormat {
+	public static final class Factory implements FieldFactory {
 		private final DateTimeFormatter format;
 
-		public Format() {
+		public Factory() {
 			this.format = DateTimeFormatter.ISO_ZONED_DATE_TIME;
 		}
 

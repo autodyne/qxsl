@@ -17,6 +17,7 @@ elva.form.FormatForm
 elva.form.GeForm
 elva.form.GtForm
 elva.form.IfForm
+elva.form.ImportForm
 elva.form.LambdaForm
 elva.form.LeForm
 elva.form.LengthForm
@@ -45,3 +46,13 @@ elva.form.TypeForm
 elva.form.UqsplForm
 elva.form.UquotForm
 elva.form.XorForm
+elva.qxsl.ContestForm
+elva.qxsl.FailureForm
+elva.qxsl.GetfForm
+elva.qxsl.ItemForm
+elva.qxsl.NameForm
+elva.qxsl.RcvdForm
+elva.qxsl.SectionForm
+elva.qxsl.SentForm
+elva.qxsl.SetfForm
+elva.qxsl.SuccessForm

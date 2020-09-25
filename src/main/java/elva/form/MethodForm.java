@@ -5,6 +5,7 @@
 *******************************************************************************/
 package elva.form;
 
+import elva.lang.CreateOp;
 import elva.lang.ElvaEval;
 import elva.lang.ListBase;
 import elva.lang.MethodOp;
@@ -25,6 +26,10 @@ import elva.lang.NativeOp.Name;
 public final class MethodForm extends NativeOp {
 	public Object apply(ListBase args, ElvaEval eval) {
 		final var name = eval.apply(args.head()).name();
-		return new MethodOp(name, args.map(eval).tail());
+		if(name.toString().equals("new")) {
+			return new CreateOp(name, args.map(eval).tail());
+		} else {
+			return new MethodOp(name, args.map(eval).tail());
+		}
 	}
 }

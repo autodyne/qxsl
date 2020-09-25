@@ -5,6 +5,7 @@
 *******************************************************************************/
 package qxsl.ruler;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -15,7 +16,7 @@ import org.junit.jupiter.api.Test;
  *
  * @since 2020/06/08
  */
-public final class RuleKitTest extends org.assertj.core.api.Assertions {
+public final class RuleKitTest extends Assertions {
 	@Test
 	public void testName() {
 		assertThat(RuleKit.load("elva").name()).isEqualTo("elva");

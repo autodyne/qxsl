@@ -9,27 +9,28 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import qxsl.extra.field.*;
 import qxsl.model.Item;
-import qxsl.table.TableFormats;
+import qxsl.table.TableManager;
 
 import static qxsl.junit.RandomNumberParameterExtension.randInt;
 import static qxsl.junit.RandomStringParameterExtension.alnum;
 
 /**
- * {@link JarlFormat}クラスのテスト用クラスです。
+ * {@link JarlFactory}クラスのテスト用クラスです。
  *
  *
  * @author 無線部開発班
  *
  * @since 2017/02/26
  */
-public final class JarlFormatTest extends org.assertj.core.api.Assertions {
-	private final JarlFormat format = new JarlFormat();
-	private final TableFormats tables = new TableFormats();
+public final class JarlFormatTest extends Assertions {
+	private final JarlFactory format = new JarlFactory();
+	private final TableManager tables = new TableManager();
 	private final ArrayList<Band> bands = new ArrayList<>();
 
 	public JarlFormatTest() {
@@ -48,9 +49,9 @@ public final class JarlFormatTest extends org.assertj.core.api.Assertions {
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void testDecode(int numItems) throws IOException {
-		final ArrayList<Item> items = new ArrayList<>();
+		final var items = new ArrayList<Item>();
 		for(int row = 0; row < numItems; row++) {
-			final Item item = new Item();
+			final var item = new Item();
 			item.set(new Time());
 			item.set(bands.get(randInt(bands.size())));
 			item.set(new Call(alnum(13)));
@@ -61,6 +62,7 @@ public final class JarlFormatTest extends org.assertj.core.api.Assertions {
 			item.getSent().set(new Code(alnum(7)));
 			items.add(item);
 		}
+		assertThat(format.decode(format.encode(items))).isEqualTo(items);
 		assertThat(tables.decode(format.encode(items))).isEqualTo(items);
 	}
 }

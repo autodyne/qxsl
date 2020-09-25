@@ -1,9 +1,5 @@
 ;; FORMAT CONVERTER DEFINED by 無線部開発班
 
-;; SUPPORTED FORMATS:
-;; qxsl: qxml, cqww, jarl, ctxt, zall, zdos, cbin, zbin
-;; adif: adis, adxs
-
 (load "qxsl/ruler/common.lisp")
 
 ; XML namespaces
@@ -12,89 +8,89 @@
 
 ;; GENERAL FIELD ACCESS ROUTINES
 
-; field keys for qxsl.org
-(setq key-qxsl-time "time")
-(setq key-qxsl-call "call")
-(setq key-qxsl-band "band")
-(setq key-qxsl-mode "mode")
-(setq key-qxsl-name "name")
-(setq key-qxsl-rstq "rstq")
-(setq key-qxsl-code "code")
+; field keys for qxsl
+(setq key-qxsl-time (name qxsl "time"))
+(setq key-qxsl-call (name qxsl "call"))
+(setq key-qxsl-band (name qxsl "band"))
+(setq key-qxsl-mode (name qxsl "mode"))
+(setq key-qxsl-name (name qxsl "name"))
+(setq key-qxsl-rstq (name qxsl "rstq"))
+(setq key-qxsl-code (name qxsl "code"))
 
-; field keys for adif.org
-(setq key-adif-DATE "QSO_DATE")
-(setq key-adif-TIME "TIME_ON")
-(setq key-adif-call "CALL")
-(setq key-adif-band "BAND")
-(setq key-adif-mode "MODE")
-(setq key-adif-name "OPERATOR")
-(setq key-adif-rstq "RST_RCVD")
-(setq key-adif-RSTQ "RST_SENT")
-(setq key-adif-code "SRX")
-(setq key-adif-CODE "STX")
+; field keys for adif
+(setq key-adif-DATE (name adif "QSO_DATE"))
+(setq key-adif-TIME (name adif "TIME_ON"))
+(setq key-adif-call (name adif "CALL"))
+(setq key-adif-band (name adif "BAND"))
+(setq key-adif-mode (name adif "MODE"))
+(setq key-adif-name (name adif "OPERATOR"))
+(setq key-adif-rstq (name adif "RST_RCVD"))
+(setq key-adif-RSTQ (name adif "RST_SENT"))
+(setq key-adif-code (name adif "SRX"))
+(setq key-adif-CODE (name adif "STX"))
 
-; field access for qxsl.org
-(defun qxsl-time it (get-field it qxsl key-qxsl-time))
-(defun qxsl-call it (get-field it qxsl key-qxsl-call))
-(defun qxsl-BAND it (get-field it qxsl key-qxsl-band))
-(defun qxsl-mode it (get-field it qxsl key-qxsl-mode))
-(defun qxsl-name it (get-field it qxsl key-qxsl-name))
-(defun qxsl-rstq it (get-field (rcvd it) qxsl key-qxsl-rstq))
-(defun qxsl-RSTQ it (get-field (sent it) qxsl key-qxsl-rstq))
-(defun qxsl-code it (get-field (rcvd it) qxsl key-qxsl-code))
-(defun qxsl-CODE it (get-field (sent it) qxsl key-qxsl-code))
+; field access for qxsl
+(defun qxsl-time it (getf it key-qxsl-time))
+(defun qxsl-call it (getf it key-qxsl-call))
+(defun qxsl-BAND it (getf it key-qxsl-band))
+(defun qxsl-mode it (getf it key-qxsl-mode))
+(defun qxsl-name it (getf it key-qxsl-name))
+(defun qxsl-rstq it (getf (rcvd it) key-qxsl-rstq))
+(defun qxsl-RSTQ it (getf (sent it) key-qxsl-rstq))
+(defun qxsl-code it (getf (rcvd it) key-qxsl-code))
+(defun qxsl-CODE it (getf (sent it) key-qxsl-code))
 
-; field access for adif.org
-(defun adif-DATE it (get-field it adif key-adif-DATE))
-(defun adif-TIME it (get-field it adif key-adif-TIME))
-(defun adif-call it (get-field it adif key-adif-call))
-(defun adif-BAND it (get-field it adif key-adif-band))
-(defun adif-mode it (get-field it adif key-adif-mode))
-(defun adif-name it (get-field it adif key-adif-name))
-(defun adif-rstq it (get-field it adif key-adif-rstq))
-(defun adif-RSTQ it (get-field it adif key-adif-RSTQ))
-(defun adif-code it (get-field it adif key-adif-code))
-(defun adif-CODE it (get-field it adif key-adif-CODE))
+; field access for adif
+(defun adif-DATE it (getf it key-adif-DATE))
+(defun adif-TIME it (getf it key-adif-TIME))
+(defun adif-call it (getf it key-adif-call))
+(defun adif-BAND it (getf it key-adif-band))
+(defun adif-mode it (getf it key-adif-mode))
+(defun adif-name it (getf it key-adif-name))
+(defun adif-rstq it (getf it key-adif-rstq))
+(defun adif-RSTQ it (getf it key-adif-RSTQ))
+(defun adif-code it (getf it key-adif-code))
+(defun adif-CODE it (getf it key-adif-CODE))
 
-; field set for qxsl.org
-(defun set-qxsl-time (it val) (set-field it qxsl key-qxsl-time val))
-(defun set-qxsl-call (it val) (set-field it qxsl key-qxsl-call val))
-(defun set-qxsl-band (it val) (set-field it qxsl key-qxsl-band val))
-(defun set-qxsl-mode (it val) (set-field it qxsl key-qxsl-mode val))
-(defun set-qxsl-name (it val) (set-field it qxsl key-qxsl-name val))
-(defun set-qxsl-rstq (it val) (set-field (rcvd it) qxsl key-qxsl-rstq val))
-(defun set-qxsl-RSTQ (it val) (set-field (sent it) qxsl key-qxsl-rstq val))
-(defun set-qxsl-code (it val) (set-field (rcvd it) qxsl key-qxsl-code val))
-(defun set-qxsl-CODE (it val) (set-field (sent it) qxsl key-qxsl-code val))
+; field set for qxsl
+(defun set-qxsl-time (it val) (setf it key-qxsl-time val))
+(defun set-qxsl-call (it val) (setf it key-qxsl-call val))
+(defun set-qxsl-band (it val) (setf it key-qxsl-band val))
+(defun set-qxsl-mode (it val) (setf it key-qxsl-mode val))
+(defun set-qxsl-name (it val) (setf it key-qxsl-name val))
+(defun set-qxsl-rstq (it val) (setf (rcvd it) key-qxsl-rstq val))
+(defun set-qxsl-RSTQ (it val) (setf (sent it) key-qxsl-rstq val))
+(defun set-qxsl-code (it val) (setf (rcvd it) key-qxsl-code val))
+(defun set-qxsl-CODE (it val) (setf (sent it) key-qxsl-code val))
 
-; field set for adif.org
-(defun set-adif-DATE (it val) (set-field it adif key-adif-DATE it))
-(defun set-adif-TIME (it val) (set-field it adif key-adif-TIME it))
-(defun set-adif-call (it val) (set-field it adif key-adif-call it))
-(defun set-adif-BAND (it val) (set-field it adif key-adif-band it))
-(defun set-adif-mode (it val) (set-field it adif key-adif-mode it))
-(defun set-adif-name (it val) (set-field it adif key-adif-name it))
-(defun set-adif-rstq (it val) (set-field it adif key-adif-rstq it))
-(defun set-adif-RSTQ (it val) (set-field it adif key-adif-RSTQ it))
-(defun set-adif-code (it val) (set-field it adif key-adif-code it))
-(defun set-adif-CODE (it val) (set-field it adif key-adif-CODE it))
+; field set for adif
+(defun set-adif-DATE (it val) (setf it key-adif-DATE val))
+(defun set-adif-TIME (it val) (setf it key-adif-TIME val))
+(defun set-adif-call (it val) (setf it key-adif-call val))
+(defun set-adif-BAND (it val) (setf it key-adif-band val))
+(defun set-adif-mode (it val) (setf it key-adif-mode val))
+(defun set-adif-name (it val) (setf it key-adif-name val))
+(defun set-adif-rstq (it val) (setf it key-adif-rstq val))
+(defun set-adif-RSTQ (it val) (setf it key-adif-RSTQ val))
+(defun set-adif-code (it val) (setf it key-adif-code val))
+(defun set-adif-CODE (it val) (setf it key-adif-CODE val))
 
 ;; TIME FIELD ACCESS ROUTINES
 
-; time access for adif.org
+; time access for adif
 (defun adif-dISO it (replace (adif-DATE it) "(?<=^.{4}|^.{6})" "-"))
 (defun adif-tISO it (replace (adif-TIME it) "(?<=^.{2}|^.{4})" ":"))
 (defun adif-time it (format "%sT%sZ" (adif-dISO it) (adif-tISO it)))
 
-; time set for adif.org
+; time set for adif
 (defun set-adif-time (it val)
-	(block
-		(set-adif-DATE it (replace (substring (qxsl-time it)  0 10) "-" ""))
-		(set-adif-TIME it (replace (substring (qxsl-time it) 11 19) ":" ""))))
+	(let stmp (iso-8601 (at-zone val (zone "UTC")))
+		(set-adif-DATE it (replace (substring stmp  0 10) "-" ""))
+		(set-adif-TIME it (replace (substring stmp 11 19) ":" ""))))
 
 ;; BAND FIELD ACCESS ROUTINES
 
-; band enumeration for qxsl.org
+; band enumeration for qxsl
 (setq 1.9MHz     1900)
 (setq 3.5MHz     3500)
 (setq   7MHz     7000)
@@ -111,7 +107,7 @@
 (setq 5.6GHz  5600000)
 (setq  10GHz 10000000)
 
-; band enumeration for adif.org
+; band enumeration for adif
 (setq 1.9MHz-adif "160m")
 (setq 3.5MHz-adif  "80m")
 (setq   7MHz-adif  "40m")
@@ -128,7 +124,24 @@
 (setq 5.6GHz-adif  "6cm")
 (setq  10GHz-adif  "3cm")
 
-; band access for qxsl.org
+; band enumeration for CQWW
+(setq 1.9MHz-cqww     1800)
+(setq 3.5MHz-cqww     3500)
+(setq   7MHz-cqww     7000)
+(setq  10MHz-cqww    10000)
+(setq  14MHz-cqww    14000)
+(setq  18MHz-cqww    18000)
+(setq  21MHz-cqww    21000)
+(setq  28MHz-cqww    28000)
+(setq  50MHz-cqww    50000)
+(setq 144MHz-cqww   144000)
+(setq 430MHz-cqww   432000)
+(setq 1.2GHz-cqww  1200000)
+(setq 2.4GHz-cqww  2300000)
+(setq 5.6GHz-cqww  5700000)
+(setq  10GHz-cqww 10000000)
+
+; band access for qxsl
 (defun qxsl-band it
 	(let freq (qxsl-BAND it)
 		(cond
@@ -148,7 +161,7 @@
 			((<=  5600000 freq  5850000) 5.6GHz)
 			((<= 10000000 freq 10250000)  10GHz))))
 
-; band access for adif.org
+; band access for adif
 (defun adif-band it
 	(let band (adif-BAND it)
 		(string (cond
@@ -168,7 +181,7 @@
 			((equal band 5.6GHz-adif) 5.6GHz)
 			((equal band  10GHz-adif)  10GHz)))))
 
-; band set for adif.org
+; band set for adif
 (defun set-adif-band (it val)
 	(set-adif-BAND it (cond
 		((equal val 1.9MHz) 1.9MHz-adif)
@@ -186,6 +199,25 @@
 		((equal val 2.4GHz) 2.4GHz-adif)
 		((equal val 5.6GHz) 5.6GHz-adif)
 		((equal val  10GHz)  10GHz-adif))))
+
+; band set for CQWW
+(defun set-cqww-band (it val)
+	(set-qxsl-band it (cond
+		((equal val 1.9MHz) 1.9MHz-cqww)
+		((equal val 3.5MHz) 3.5MHz-cqww)
+		((equal val   7MHz)   7MHz-cqww)
+		((equal val  10MHz)  10MHz-cqww)
+		((equal val  14MHz)  14MHz-cqww)
+		((equal val  18MHz)  18MHz-cqww)
+		((equal val  21MHz)  21MHz-cqww)
+		((equal val  28MHz)  28MHz-cqww)
+		((equal val  50MHz)  50MHz-cqww)
+		((equal val 144MHz) 144MHz-cqww)
+		((equal val 430MHz) 430MHz-cqww)
+		((equal val 1.2GHz) 1.2GHz-cqww)
+		((equal val 2.4GHz) 2.4GHz-cqww)
+		((equal val 5.6GHz) 5.6GHz-cqww)
+		((equal val  10GHz)  10GHz-cqww))))
 
 ; band validation
 (defun 1.9MHz? it (equal (qxsl-band it) 1.9MHz))
@@ -206,74 +238,161 @@
 
 ;; MODE FIELD ACCESS ROUTINES
 
+; mode enumeration
+(setq morse "(?i)CW")
+(setq phone "(?i)PH|AM|FM|[DS]SB")
+(setq digit "(?i)DG|FT4|FT8|RTTY")
+
+; mode access for cqww
+(defun cqww-mode it
+	(let mode (qxsl-mode it)
+		(cond
+			((equal mode "CW") "CW")
+			((equal mode "PH") "SSB")
+			((equal mode "DG") "RTTY"))))
+
+; mode set for cqww
+(defun set-cqww-mode (it val)
+	(set-qxsl-mode it
+		(cond
+			((match val morse) "CW")
+			((match val phone) "PH")
+			((match val digit) "DG"))))
+
+; mode set for zlog
+(defun set-zlog-mode (it val)
+	(set-qxsl-mode it
+		(if (match val digit) "RTTY" val)))
+
 ; mode validation
-(defun Morse? it (match (qxsl-mode it) "(?i)CW"))
-(defun Phone? it (match (qxsl-mode it) "(?i)PH|AM|FM|[DS]SB"))
-(defun Digit? it (match (qxsl-mode it) "(?i)DG|FT4|FT8|RTTY"))
+(defun morse? it (match (qxsl-mode it) morse))
+(defun phone? it (match (qxsl-mode it) phone))
+(defun digit? it (match (qxsl-mode it) digit))
 
 ;; CODE FIELD ACCESS ROUTINES
 
-; remove RST from code
-(defun peel-code it
-	(if
-		(null? (qxsl-rstq it))
-		(replace (qxsl-code it) (if (Phone? it) "^.." "^...") "")
-		(qxsl-code it)))
+; code access for zdos
+(defun zdos-rstq it (car  (cut-rst-num it)))
+(defun zdos-RSTQ it (car  (cut-RST-NUM it)))
+(defun zdos-code it (cadr (cut-rst-num it)))
+(defun zdos-CODE it (cadr (cut-RST-NUM it)))
+
+; split code into RST and code
+(defun reg-rst-num it (if (phone? it) "(?<=^..)" "(?<=^...)"))
+(defun cut-rst-num it (split (qxsl-code it) (reg-rst-num it)))
+(defun cut-RST-NUM it (split (qxsl-CODE it) (reg-rst-num it)))
 
 ; concatenate RST and code
-(defun join-code it (concatenate "" (list (qxsl-rstq it) (qxsl-code it))))
-(defun join-CODE it (concatenate "" (list (qxsl-RSTQ it) (qxsl-CODE it))))
+(defun join-code it (format "%s%s" (qxsl-rstq it) (qxsl-code it)))
+(defun join-CODE it (format "%s%s" (qxsl-RSTQ it) (qxsl-CODE it)))
 
 ;; FORMAT CONVERSION ROUTINES
 
-(defun adif? it (not (null? (adif-TIME it))))
-
-; field conversion into qxsl.org
-(defun toQXSL it
-	(if (adif? it)
-		(block
-			(catch (set-qxsl-time it (adif-time it)))
-			(catch (set-qxsl-call it (adif-call it)))
-			(catch (set-qxsl-band it (adif-band it)))
-			(catch (set-qxsl-mode it (adif-mode it)))
-			(catch (set-qxsl-name it (adif-name it)))
-			(catch (set-qxsl-rstq it (adif-rstq it)))
-			(catch (set-qxsl-RSTQ it (adif-RSTQ it)))
-			(catch (set-qxsl-code it (adif-code it)))
-			(catch (set-qxsl-CODE it (adif-CODE it))))))
-
-; field conversion into adif.org
-(defun toADIF it
-	(block
-		(catch (set-adif-time it (qxsl-time it)))
-		(catch (set-adif-call it (qxsl-call it)))
-		(catch (set-adif-band it (qxsl-band it)))
-		(catch (set-adif-mode it (qxsl-mode it)))
-		(catch (set-adif-name it (qxsl-name it)))
-		(catch (set-adif-rstq it (qxsl-rstq it)))
-		(catch (set-adif-RSTQ it (qxsl-RSTQ it)))
-		(catch (set-adif-code it (qxsl-code it)))
-		(catch (set-adif-CODE it (qxsl-CODE it)))))
-
-; field conversion into ZDOS (or CTXT)
-(defun toZDOS it
-	(block
-		(toQXSL it)
-		(catch (set-qxsl-rstq it null))
-		(catch (set-qxsl-RSTQ it null))
-		(catch (set-qxsl-code it (join-code)))
-		(catch (set-qxsl-CODE it (join-CODE)))))
-
-; reformat item into format whose name specified
-(defun reformat (it fmt)
+; main routines
+(defun encode (it fmt)
 	(cond
-		((equal fmt "qxml") (toQXSL it))
-		((equal fmt "adxs") (toADIF it))
-		((equal fmt "adis") (toADIF it))
-		((equal fmt "cqww") (toQXSL it))
-		((equal fmt "jarl") (toQXSL it))
-		((equal fmt "ctxt") (toZDOS it))
-		((equal fmt "zall") (toQXSL it))
-		((equal fmt "zdos") (toZDOS it))
-		((equal fmt "cbin") (toZDOS it))
-		((equal fmt "zbin") (toQXSL it))))
+		((equal fmt "qxml") (encode-qxsl it))
+		((equal fmt "adxs") (encode-adif it))
+		((equal fmt "adis") (encode-adif it))
+		((equal fmt "cqww") (encode-cqww it))
+		((equal fmt "jarl") (encode-qxsl it))
+		((equal fmt "ctxt") (encode-zdos it))
+		((equal fmt "zall") (encode-zlog it))
+		((equal fmt "zdos") (encode-zdos it))
+		((equal fmt "cbin") (encode-zdos it))
+		((equal fmt "zbin") (encode-zlog it))))
+
+(defun decode it
+	(cond
+		((adif? it) (decode-adif it))
+		((cqww? it) (decode-cqww it))
+		((qxsl? it) (decode-qxsl it))
+		((zdos? it) (decode-zdos it))))
+
+; format identification
+(defun adif? it (not (null? (adif-TIME it))))
+(defun qxsl? it (not (null? (qxsl-rstq it))))
+(defun zdos? it (not (every it adif? qxsl? cqww?)))
+(defun cqww? it (match (qxsl-mode it) "(?i)PH|DG"))
+
+; field conversion into qxsl
+(defun encode-qxsl it
+	(let new (item)
+		(set-qxsl-time new (qxsl-time it))
+		(set-qxsl-call new (qxsl-call it))
+		(set-qxsl-band new (qxsl-band it))
+		(set-qxsl-mode new (qxsl-mode it))
+		(set-qxsl-name new (qxsl-name it))
+		(set-qxsl-rstq new (qxsl-rstq it))
+		(set-qxsl-RSTQ new (qxsl-RSTQ it))
+		(set-qxsl-code new (qxsl-code it))
+		(set-qxsl-CODE new (qxsl-CODE it)) new))
+
+; field conversion from qxsl
+(defun decode-qxsl it
+	(let new (item)
+		(set-qxsl-time new (qxsl-time it))
+		(set-qxsl-call new (qxsl-call it))
+		(set-qxsl-band new (qxsl-band it))
+		(set-qxsl-mode new (qxsl-mode it))
+		(set-qxsl-name new (qxsl-name it))
+		(set-qxsl-rstq new (qxsl-rstq it))
+		(set-qxsl-RSTQ new (qxsl-RSTQ it))
+		(set-qxsl-code new (qxsl-code it))
+		(set-qxsl-CODE new (qxsl-CODE it)) new))
+
+; field conversion into adif
+(defun encode-adif it
+	(let new (item)
+		(set-adif-time new (qxsl-time it))
+		(set-adif-call new (qxsl-call it))
+		(set-adif-band new (qxsl-band it))
+		(set-adif-mode new (qxsl-mode it))
+		(set-adif-name new (qxsl-name it))
+		(set-adif-rstq new (qxsl-rstq it))
+		(set-adif-RSTQ new (qxsl-RSTQ it))
+		(set-adif-code new (qxsl-code it))
+		(set-adif-CODE new (qxsl-CODE it)) new))
+
+; field conversion from adif
+(defun decode-adif it
+	(let new (item)
+		(set-qxsl-time new (adif-time it))
+		(set-qxsl-call new (adif-call it))
+		(set-qxsl-band new (adif-band it))
+		(set-qxsl-mode new (adif-mode it))
+		(set-qxsl-name new (adif-name it))
+		(set-qxsl-rstq new (adif-rstq it))
+		(set-qxsl-RSTQ new (adif-RSTQ it))
+		(set-qxsl-code new (adif-code it))
+		(set-qxsl-CODE new (adif-CODE it)) new))
+
+; field conversion into cqww
+(defun encode-cqww it
+	(let new (encode-qxsl it)
+		(set-cqww-band new (qxsl-band it))
+		(set-cqww-mode new (qxsl-mode it)) new))
+
+; field conversion from cqww
+(defun decode-cqww it
+	(let new (decode-qxsl it)
+		(set-qxsl-mode new (cqww-mode it)) new))
+
+; field conversion into zlog
+(defun encode-zlog it
+	(let new (encode-qxsl it)
+		(set-zlog-mode new (qxsl-mode it)) new))
+
+; field conversion into zdos
+(defun encode-zdos it
+	(let new (encode-qxsl it)
+		(set-qxsl-code new (join-code it))
+		(set-qxsl-CODE new (join-CODE it)) new))
+
+; field conversion from zdos
+(defun decode-zdos it
+	(let new (decode-qxsl it)
+		(set-qxsl-rstq new (zdos-rstq it))
+		(set-qxsl-RSTQ new (zdos-RSTQ it))
+		(set-qxsl-code new (zdos-code it))
+		(set-qxsl-CODE new (zdos-CODE it)) new))

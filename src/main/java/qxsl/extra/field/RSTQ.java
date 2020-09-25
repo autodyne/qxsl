@@ -7,7 +7,7 @@ package qxsl.extra.field;
 
 import javax.xml.namespace.QName;
 
-import qxsl.field.FieldFormat;
+import qxsl.field.FieldFactory;
 import qxsl.model.Field;
 
 /**
@@ -100,7 +100,7 @@ public final class RSTQ extends Qxsl<Integer> {
 	 *
 	 * @since 2013/06/08
 	 */
-	public static final class Format implements FieldFormat {
+	public static final class Factory implements FieldFactory {
 		@Override
 		public QName target() {
 			return RSTQ;

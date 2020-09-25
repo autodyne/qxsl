@@ -11,4 +11,6 @@ Examples:
    1  6/ 4 0117      QV1DOK 14MHz     CW    599100110    599120103
    2  6/ 4 0151      QC2SOA 50MHz     CW    599100110      5991308
 </entry>
+<entry key="time-decoder">M/ppd HHmm</entry>
+<entry key="time-encoder">MM/dd HHmm</entry>
 </properties>

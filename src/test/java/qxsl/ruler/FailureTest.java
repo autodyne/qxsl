@@ -5,6 +5,7 @@
 *******************************************************************************/
 package qxsl.ruler;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -21,16 +22,25 @@ import qxsl.model.Item;
  * @since 2019/05/18
  */
 @ExtendWith(RandomStringParameterExtension.class)
-public final class FailureTest extends org.assertj.core.api.Assertions {
+public final class FailureTest extends Assertions {
 	@Test
-	public void testGetMessage(@RandomString String text) {
-		final Item item = new Item();
-		assertThat(new Failure(item, text).text()).isSameAs(text);
+	public void testScore(@RandomString String text) {
+		assertThat(new Failure(new Item(), text).score()).isEqualTo(0);
 	}
 
 	@Test
-	public void testGetItem(@RandomString String text) {
-		final Item item = new Item();
+	public void testItem(@RandomString String text) {
+		final var item = new Item();
 		assertThat(new Failure(item, text).item()).isSameAs(item);
+	}
+
+	@Test
+	public void testText(@RandomString String text) {
+		assertThat(new Failure(new Item(), text).text()).isEqualTo(text);
+	}
+
+	@Test
+	public void testSize(@RandomString String text) {
+		assertThat(new Failure(new Item(), text).size()).isEqualTo(0);
 	}
 }

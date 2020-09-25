@@ -5,11 +5,12 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import qxsl.field.FieldFormats;
-import qxsl.field.FieldFormats.Cache;
+import qxsl.field.FieldManager;
+import qxsl.field.FieldManager.Cache;
 import qxsl.junit.RandomNumberParameterExtension;
 import qxsl.junit.RandomNumberParameterExtension.RandomNumber;
 
@@ -22,8 +23,8 @@ import qxsl.junit.RandomNumberParameterExtension.RandomNumber;
  * @since 2017/02/24
  */
 @ExtendWith(RandomNumberParameterExtension.class)
-public final class RSTQTest extends org.assertj.core.api.Assertions {
-	private final Cache cache = new FieldFormats().cache(Qxsl.RSTQ);
+public final class RSTQTest extends Assertions {
+	private final Cache cache = new FieldManager().cache(Qxsl.RSTQ);
 
 	@Test
 	public void testValue() {
@@ -48,7 +49,7 @@ public final class RSTQTest extends org.assertj.core.api.Assertions {
 
 	@Test
 	public void testRSTQ$Format(@RandomNumber(489) int num) throws Exception {
-		final var form = new RSTQ.Format();
+		final var form = new RSTQ.Factory();
 		final var rstq = new RSTQ(num + 111);
 		assertThat(form.decode(form.encode(rstq))).isEqualTo(rstq);
 		assertThat(cache.field(form.encode(rstq))).isEqualTo(rstq);

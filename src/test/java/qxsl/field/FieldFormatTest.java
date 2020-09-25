@@ -7,31 +7,32 @@ package qxsl.field;
 
 import java.util.Iterator;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 /**
- * {@link FieldFormat}クラスのテスト用クラスです。
+ * {@link FieldFactory}クラスのテスト用クラスです。
  *
  *
  * @author 無線部開発班
  *
  * @since 2019/07/02
  */
-public final class FieldFormatTest extends org.assertj.core.api.Assertions {
+public final class FieldFormatTest extends Assertions {
 	/**
 	 * クラスパスにある全ての書式を返します。
 	 *
 	 *
 	 * @return 書式のイテレータ
 	 */
-	public static Iterator<FieldFormat> testMethodSource() {
-		return new FieldFormats().iterator();
+	public static Iterator<FieldFactory> testMethodSource() {
+		return new FieldManager().iterator();
 	}
 
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
-	public void testTarget(FieldFormat format) {
+	public void testTarget(FieldFactory format) {
 		assertThat(format.target().getNamespaceURI()).isNotNull();
 	}
 }

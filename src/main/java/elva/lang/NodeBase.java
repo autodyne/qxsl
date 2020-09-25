@@ -105,6 +105,15 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 	public abstract boolean isAtom();
 
 	/**
+	 * この式が空の値であるか確認します。
+	 *
+	 * @return 空の値の場合は真
+	 */
+	public final boolean isNull() {
+		return this instanceof NullNode;
+	}
+
+	/**
 	 * この式が識別子であるか確認します。
 	 *
 	 * @return 識別子の場合は真
@@ -120,6 +129,15 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 	 */
 	public final boolean isList() {
 		return this instanceof ListBase;
+	}
+
+	/**
+	 * この式の値を文字列に変換します。
+	 *
+	 * @return 文字列 値がnullの場合はnull
+	 */
+	public final String valueAsString() {
+		return isNull()? null: value().toString();
 	}
 
 	/**
@@ -142,7 +160,7 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 	 *
 	 * @return 演算子及び被演算子のリスト
 	 */
-	public final ListBase form(Object...args) {
+	public final ListBase form(Object... args) {
 		return new ChainSeq(this, new ArraySeq(args));
 	}
 

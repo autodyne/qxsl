@@ -7,49 +7,50 @@ package qxsl.table;
 
 import java.util.Iterator;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 /**
- * {@link TableFormat}クラスのテスト用クラスです。
+ * {@link TableFactory}クラスのテスト用クラスです。
  *
  *
  * @author 無線部開発班
  *
  * @since 2019/06/16
  */
-public final class TableFormatTest extends org.assertj.core.api.Assertions {
+public final class TableFormatTest extends Assertions {
 	/**
 	 * クラスパスにある全ての書式を返します。
 	 *
 	 *
 	 * @return 書式のイテレータ
 	 */
-	public static Iterator<TableFormat> testMethodSource() {
-		return new TableFormats().iterator();
+	public static Iterator<TableFactory> testMethodSource() {
+		return new TableManager().iterator();
 	}
 
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
-	public void testGetName(TableFormat format) {
+	public void testGetName(TableFactory format) {
 		assertThat(format.getName()).isNotEmpty();
 	}
 
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
-	public void testToString(TableFormat format) {
+	public void testToString(TableFactory format) {
 		assertThat(format.toString()).isNotEmpty();
 	}
 
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
-	public void testGetDescription(TableFormat format) {
+	public void testGetDescription(TableFactory format) {
 		assertThat(format.getDescription()).isNotNull();
 	}
 
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
-	public void testGetExtensions(TableFormat format) {
+	public void testGetExtensions(TableFactory format) {
 		assertThat(format.getExtensions()).isNotEmpty();
 	}
 }

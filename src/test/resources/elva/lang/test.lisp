@@ -216,6 +216,10 @@
 (((syntax (pars body) `(lambda ,pars ,body)) (x y) (+ x y)) 114 514) 628
 (((syntax (pars body) `(syntax ,pars ,body)) (x y) (+ x y)) 364 364) 728
 
+; import
+(block (import java.lang.String) String) java.lang.String
+(block (import java.lang.Object) Object) java.lang.Object
+
 ; type
 (type "TNOK") java.lang.String
 (type 114514) java.lang.Integer
@@ -225,6 +229,7 @@
 
 ; method
 ((method 'length java.lang.String) "foobar") 6
+((method 'new java.lang.String java.lang.String) "foobar") "foobar"
 ((method 'getSimpleName java.lang.Class) java.lang.String) "String"
 ((method 'getSimpleName java.lang.Class) java.lang.Object) "Object"
 

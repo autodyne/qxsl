@@ -5,6 +5,7 @@
 *******************************************************************************/
 package qxsl.model;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import qxsl.extra.field.Code;
@@ -12,7 +13,7 @@ import qxsl.extra.field.Qxsl;
 import qxsl.extra.field.RSTQ;
 import qxsl.extra.field.Watt;
 
-import static qxsl.extra.table.QxmlFormat.SENT;
+import static qxsl.extra.table.QxmlFactory.SENT;
 
 /**
  * {@link Sent}クラスのテスト用クラスです。
@@ -22,7 +23,7 @@ import static qxsl.extra.table.QxmlFormat.SENT;
  *
  * @since 2017/02/25
  */
-public final class SentTest extends org.assertj.core.api.Assertions {
+public final class SentTest extends Assertions {
 	private final Code code = new Code("591420");
 	private final RSTQ rstq = new RSTQ(1, 1, 1);
 	private final Watt watt = new Watt("M");
@@ -34,8 +35,8 @@ public final class SentTest extends org.assertj.core.api.Assertions {
 
 	@Test
 	public void testEquals() {
-		final Sent sent1 = new Sent(new Item());
-		final Sent sent2 = new Sent(new Item());
+		final var sent1 = new Sent(new Item());
+		final var sent2 = new Sent(new Item());
 		assertThat(sent1).isEqualTo(sent2);
 		assertThat(sent1.set(code).get(Qxsl.CODE)).isEqualTo(code);
 		assertThat(sent1.set(rstq).get(Qxsl.RSTQ)).isEqualTo(rstq);

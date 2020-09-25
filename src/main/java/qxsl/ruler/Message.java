@@ -21,6 +21,7 @@ public interface Message extends Serializable {
 	/**
 	 * 交信の成立により得られる素点を返します。
 	 *
+	 *
 	 * @return 交信1件の得点
 	 */
 	public int score();
@@ -28,12 +29,14 @@ public interface Message extends Serializable {
 	/**
 	 * 交信の実体を表す{@link Item}を返します。
 	 *
+	 *
 	 * @return 交信の実体
 	 */
 	public Item item();
 
 	/**
 	 * 処理の結果を説明する文字列を返します。
+	 *
 	 *
 	 * @return 文字列
 	 */
@@ -54,7 +57,8 @@ public interface Message extends Serializable {
 	/**
 	 * この交信に関連づけられた識別子の個数を返します。
 	 *
+	 *
 	 * @return 乗数の個数
 	 */
-	public int countKeys();
+	public int size();
 }

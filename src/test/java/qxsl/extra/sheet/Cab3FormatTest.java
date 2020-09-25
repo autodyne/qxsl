@@ -8,32 +8,31 @@ package qxsl.extra.sheet;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.IntStream;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import qxsl.extra.field.*;
 import qxsl.model.Item;
-import qxsl.sheet.SheetFormats;
-import qxsl.table.TableFormats;
+import qxsl.sheet.SheetManager;
+import qxsl.table.TableManager;
 
 import static qxsl.junit.RandomNumberParameterExtension.randInt;
 import static qxsl.junit.RandomStringParameterExtension.alnum;
 
 /**
- * {@link Cab3Format}クラスのテスト用クラスです。
+ * {@link Cab3Factory}クラスのテスト用クラスです。
  *
  *
  * @author 無線部開発班
  *
  * @since 2019/05/03
  */
-public final class Cab3FormatTest extends org.assertj.core.api.Assertions {
-	private final SheetFormats sheets = new SheetFormats();
-	private final TableFormats tables = new TableFormats();
+public final class Cab3FormatTest extends Assertions {
+	private final SheetManager sheets = new SheetManager();
+	private final TableManager tables = new TableManager();
 	private final ArrayList<Band> bands = new ArrayList<>();
 
 	public Cab3FormatTest() {
@@ -53,10 +52,9 @@ public final class Cab3FormatTest extends org.assertj.core.api.Assertions {
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void testDecode(int numItems) throws Exception {
-		final Cab3Format format = new Cab3Format();
-		final ArrayList<Item> items = new ArrayList<>();
+		final var list = new ArrayList<Item>();
 		for(int row = 0; row < numItems; row++) {
-			final Item item = new Item();
+			final var item = new Item();
 			item.set(new Time());
 			item.set(bands.get(randInt(bands.size())));
 			item.set(new Call(alnum(13)));
@@ -65,18 +63,23 @@ public final class Cab3FormatTest extends org.assertj.core.api.Assertions {
 			item.getRcvd().set(new Code(alnum(6)));
 			item.getSent().set(new RSTQ(randInt(600)));
 			item.getSent().set(new Code(alnum(6)));
-			items.add(item);
+			list.add(item);
 		}
-		StringWriter sw1 = new StringWriter();
-		StringWriter sw2 = new StringWriter();
-		tables.forName("cqww").encoder(sw1).encode(items);
-		final Map<String, String> kvals = new HashMap<>();
-		kvals.put("CONTEST", "JIDX-CW");
-		kvals.put("CALLSIGN", "JA1ZLO");
-		kvals.put("QSO", sw1.toString().trim());
-		format.encoder(sw2).encode(kvals);
-		final StringReader strm = new StringReader(sw2.toString());
-		assertThat(format.decoder(strm).decode()).isEqualTo(kvals);
-		assertThat(sheets.unpack(sw2.toString())).isEqualTo(items);
+		final var KEY = "QSO";
+		final var buf = new StringWriter();
+		final var bin = tables.forName("cqww").encode(list);
+		final var enc = sheets.forName("cab3").encoder(buf);
+		enc.set("CONTEST", "JIDX-CW");
+		enc.set("CALLSIGN", "JA1ZLO");
+		enc.set("QSO", bin);
+		enc.encode();
+		final var str = buf.toString();
+		final var src = new StringReader(str);
+		final var dec = sheets.forName("cab3").decoder(src);
+		dec.decode();
+		assertThat(dec.getString("CONTEST")).isEqualTo("JIDX-CW");
+		assertThat(dec.getString("CALLSIGN")).isEqualTo("JA1ZLO");
+		assertThat(tables.decode(dec.getBinary(KEY))).isEqualTo(list);
+		assertThat(tables.decode(sheets.unpack(str))).isEqualTo(list);
 	}
 }

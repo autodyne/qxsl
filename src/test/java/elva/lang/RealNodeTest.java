@@ -8,6 +8,7 @@ package elva.lang;
 import java.math.BigDecimal;
 import javax.script.ScriptException;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -18,7 +19,7 @@ import org.junit.jupiter.api.Test;
  *
  * @since 2020/06/06
  */
-public final class RealNodeTest extends org.assertj.core.api.Assertions {
+public final class RealNodeTest extends Assertions {
 	private final RealNode R114 = new RealNode("114");
 	private final RealNode R514 = new RealNode("514");
 	private final RealNode R364 = new RealNode(364.0);

@@ -5,11 +5,12 @@
 *******************************************************************************/
 package qxsl.model;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import qxsl.extra.field.*;
 
-import static qxsl.extra.table.QxmlFormat.ITEM;
+import static qxsl.extra.table.QxmlFactory.ITEM;
 
 /**
  * {@link Item}クラスのテスト用クラスです。
@@ -19,7 +20,7 @@ import static qxsl.extra.table.QxmlFormat.ITEM;
  *
  * @since 2017/02/25
  */
-public final class ItemTest extends org.assertj.core.api.Assertions {
+public final class ItemTest extends Assertions {
 	private final Band band = new Band(7_000);
 	private final Call call = new Call("JA1YYE");
 	private final Mode mode = new Mode("SSB");
@@ -34,8 +35,8 @@ public final class ItemTest extends org.assertj.core.api.Assertions {
 
 	@Test
 	public void testEquals() {
-		final Item item1 = new Item();
-		final Item item2 = new Item();
+		final var item1 = new Item();
+		final var item2 = new Item();
 		assertThat(item1).isEqualTo(item2);
 		assertThat(item1.set(band).get(Qxsl.BAND)).isEqualTo(band);
 		assertThat(item1.set(call).get(Qxsl.CALL)).isEqualTo(call);

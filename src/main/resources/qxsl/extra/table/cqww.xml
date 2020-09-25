@@ -11,4 +11,6 @@ Examples:
 QSO: 14000 CW 2017-06-03 1617 JA1ZLO        599 100110 QV1DOK        599 120103 0
 QSO: 28000 CW 2017-06-03 1651 JA1ZLO        599 100110 QC2SOA        599 1308   0
 </entry>
+<entry key="time-decoder">uuuu-MM-dd HHmm</entry>
+<entry key="time-encoder">uuuu-MM-dd HHmm</entry>
 </properties>

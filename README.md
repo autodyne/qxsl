@@ -34,10 +34,10 @@ val sent: Sent = item.getSent
 ### Field Management
 
 The package `qxsl.field` provides a management framework for `Field` implementations.
-The class `FieldFormats` detects `FieldFormat` implementations [from the class path automatically](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/ServiceLoader.html), and each `FieldFormat` provides en/decoders for individual `Field` implementation.
+The class `FieldManager` detects `FieldFactory` implementations [from the class path automatically](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/ServiceLoader.html), and each `FieldFactory` provides en/decoders for individual `Field` implementation.
 
 ```Scala
-val fmts = new qxsl.field.FieldFormats
+val fmts = new qxsl.field.FieldManager
 item.add(fmts.cache(new QName("qxsl.org", "mode")).field("CW"))
 item.add(fmts.cache(new QName("adif.org", "MODE")).field("CW"))
 val mode = item.get(new QName("qxsl.org", "mode")).value()
@@ -63,19 +63,19 @@ This mechanism is utilized for en/decoding the *QXML* format, which is an altern
 ### Decoding & Encoding
 
 The package `qxsl.table` provides a basic framework for en/decoding log files including QXML and ADIF.
-The class `TableFormats` detects individual formats (`TableFormat`s) from the class path automatically, and also provides the `detect` method for automatic format detection.
+The class `TableManager` detects individual formats (`TableFactory`s) from the class path automatically, and also provides the `detect` method for automatic format detection.
 
 ```Scala
-val fmts = new qxsl.table.TableFormats()
+val fmts = new qxsl.table.TableManager()
 val table: List[Item] = fmts.decode(Files.newInputStream(path))
 fmts.forName("qxml").encoder(Files.newOutputStream(path)).encode(table)
 ```
 
 The package `qxsl.sheet` provides an en/decoding framework similar to the `qxsl.table` package, except that `qxsl.sheet` handles contest summary sheets such as Cabrillo and [JARL summary sheet](https://www.jarl.org/Japanese/1_Tanoshimo/1-1_Contest/e-log.htm) R2.0.
-The class `SheetFormats` manages individual `SheetFormat` implementations, and also provides the `unpack` method useful for extracting `List[Item]` from a summary sheet.
+The class `SheetManager` manages individual `SheetFactory` implementations, and also provides the `unpack` method useful for extracting `List[Item]` from a summary sheet.
 
 ```Scala
-val fmts = new qxsl.sheet.SheetFormats()
+val fmts = new qxsl.sheet.SheetManager()
 val table: List[Item] = fmts.unpack(Files.newBufferedReader(path))
 ```
 
@@ -90,16 +90,16 @@ The class `RuleKit` provides a LISP engine optimized for this process.
 import qxsl.ruler.{Contest,RuleKit,Section,Summary}
 
 val contest: Contest = RuleKit.load("elva").contest("""
-(load "qxsl/ruler/radial.lisp")
-(defmacro SUCCESS (tests) (lambda it (success it 1 (qxsl-call it))))
+(load "qxsl/ruler/format.lisp")
+(defmacro SUCCESS tests (lambda it (success it 1 (qxsl-call it))))
 (defmacro scoring (score calls mults) `(* score (length ',mults)))
-(setq test (contest "CQ AWESOME CONTEST" scoring))
-(SECTION test "CW 14MHz Single OP" "SinCW14" (SUCCESS (CW? 14MHz?)))
-(SECTION test "CW 21MHz Single OP" "SinCW21" (SUCCESS (CW? 21MHz?)))
-(SECTION test "CW 28MHz Single OP" "SinCW28" (SUCCESS (CW? 28MHz?)))
-(SECTION test "PH 14MHz Single OP" "SinPH14" (SUCCESS (PH? 14MHz?)))
-(SECTION test "PH 21MHz Single OP" "SinPH21" (SUCCESS (PH? 21MHz?)))
-(SECTION test "PH 28MHz Single OP" "SinPH28" (SUCCESS (PH? 28MHz?)))""")
+(set-contest test "CQ AWESOME CONTEST" scoring)
+(add-section test "CW 14MHz Single OP" "SinCW14" (SUCCESS (CW? 14MHz?)))
+(add-section test "CW 21MHz Single OP" "SinCW21" (SUCCESS (CW? 21MHz?)))
+(add-section test "CW 28MHz Single OP" "SinCW28" (SUCCESS (CW? 28MHz?)))
+(add-section test "PH 14MHz Single OP" "SinPH14" (SUCCESS (PH? 14MHz?)))
+(add-section test "PH 21MHz Single OP" "SinPH21" (SUCCESS (PH? 21MHz?)))
+(add-section test "PH 28MHz Single OP" "SinPH28" (SUCCESS (PH? 28MHz?)))""")
 
 val section: Section = contest.getSection("CW 14MHz SINGLE-OP")
 val summary: Summary = section.summarize(table)

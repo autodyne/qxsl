@@ -24,15 +24,17 @@ public abstract class Contest implements Iterable<Section> {
 	/**
 	 * 指定された部門を有する規約を構築します。
 	 *
+	 *
 	 * @param sects 部門の集合
 	 */
-	protected Contest(Section...sects) {
+	public Contest(Section...sects) {
 		this.list = new ArrayList<>();
 		for(var s: sects) this.add(s);
 	}
 
 	/**
 	 * コンテストの名前を返します。
+	 *
 	 *
 	 * @return {@link #getName()}と同等
 	 */
@@ -44,12 +46,14 @@ public abstract class Contest implements Iterable<Section> {
 	/**
 	 * コンテストの名前を返します。
 	 *
+	 *
 	 * @return コンテストの名前
 	 */
 	public abstract String getName();
 
 	/**
 	 * この規約の部門をイテレータで返します。
+	 *
 	 *
 	 * @return 全ての部門を含むイテレータ
 	 */
@@ -88,13 +92,13 @@ public abstract class Contest implements Iterable<Section> {
 	 * 指定された交信記録の総得点を計算します。
 	 *
 	 *
-	 * @param summ 交信記録
+	 * @param items 交信記録
 	 *
 	 * @return 総得点
 	 *
 	 * @since 2020/02/26
 	 */
-	public abstract int score(Summary summ);
+	public abstract int score(Summary items);
 
 	/**
 	 * このコンテストに紐づけられた関数を実行します。
@@ -110,8 +114,7 @@ public abstract class Contest implements Iterable<Section> {
 	public abstract Object invoke(String name, Object...args);
 
 	/**
-	 * 指定された名前の部門を返します。
-	 * 未知の場合は例外を発生させます。
+	 * 指定された名前の部門を返し、未知の場合は例外を発生させます。
 	 *
 	 *
 	 * @param name 部門の名前

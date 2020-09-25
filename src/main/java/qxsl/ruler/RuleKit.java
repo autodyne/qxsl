@@ -24,6 +24,7 @@ public abstract class RuleKit {
 	/**
 	 * 指定された名前の処理系を構築します。
 	 *
+	 *
 	 * @param name 処理系の名前
 	 */
 	protected RuleKit(String name) {
@@ -33,6 +34,7 @@ public abstract class RuleKit {
 	/**
 	 * この処理系の名前を返します。
 	 *
+	 *
 	 * @return 処理系の名前
 	 */
 	public final String name() {
@@ -41,6 +43,7 @@ public abstract class RuleKit {
 
 	/**
 	 * この処理系が指定された名前であるか確認します。
+	 *
 	 *
 	 * @param name 名前
 	 *
@@ -52,6 +55,7 @@ public abstract class RuleKit {
 
 	/**
 	 * 指定された名前の処理系をライブラリから検索します。
+	 *
 	 *
 	 * @param name 言語の名前
 	 *

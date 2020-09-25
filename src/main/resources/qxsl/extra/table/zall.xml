@@ -12,4 +12,6 @@ Examples:
 2017/06/04 01:51 QC2SOA       599 100110  599 1308    1308  -     50   CW   1
 </entry>
 <entry key="head-text">zLog for Windows</entry>
+<entry key="time-decoder">uuuu/MM/dd HH:mm</entry>
+<entry key="time-encoder">uuuu/MM/dd HH:mm</entry>
 </properties>

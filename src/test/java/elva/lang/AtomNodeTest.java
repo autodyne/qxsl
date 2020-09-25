@@ -7,6 +7,7 @@ package elva.lang;
 
 import javax.script.ScriptException;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -17,7 +18,7 @@ import org.junit.jupiter.api.Test;
  *
  * @since 2020/06/06
  */
-public final class AtomNodeTest extends org.assertj.core.api.Assertions {
+public final class AtomNodeTest extends Assertions {
 	private final AtomNode FOO = new AtomNode("FOO");
 	private final AtomNode foo = new AtomNode("foo");
 	private final AtomNode BAR = new AtomNode("BAR");

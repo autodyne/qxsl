@@ -4,7 +4,7 @@
 <entry key="label">JARL summary-sheet format R2.0</entry>
 <entry key="table">LOGSHEET</entry>
 <entry key="extensions">sum</entry>
-<entry key="description">
+<entry key="desc-text">
 Example:
 &lt;SUMMARYSHEET VERSION=R2.0&gt;
 &lt;CALLSIGN&gt;JA1ZLO&lt;/CALLSIGN&gt;
@@ -24,4 +24,6 @@ mon day time  callsign      sent         rcvd      multi   MHz mode pts memo
 &lt;/LOGSHEET&gt;
 &lt;/SUMMARYSHEET&gt;
 </entry>
+<entry key="BARE">&lt;(\S+?) (\S+?)=(\S+?)&gt;</entry>
+<entry key="QUOT">&lt;$1 $2=&quot;$3&quot;&gt;</entry>
 </properties>

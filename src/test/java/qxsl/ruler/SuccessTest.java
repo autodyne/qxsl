@@ -5,6 +5,7 @@
 *******************************************************************************/
 package qxsl.ruler;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -24,7 +25,7 @@ import qxsl.model.Item;
  */
 @ExtendWith(RandomNumberParameterExtension.class)
 @ExtendWith(RandomStringParameterExtension.class)
-public final class SuccessTest extends org.assertj.core.api.Assertions {
+public final class SuccessTest extends Assertions {
 	@Test
 	public void testScore(@RandomNumber int score) {
 		assertThat(new Success(new Item(), score).score()).isEqualTo(score);
@@ -32,18 +33,23 @@ public final class SuccessTest extends org.assertj.core.api.Assertions {
 
 	@Test
 	public void testItem(@RandomNumber int score) {
-		final Item item = new Item();
+		final var item = new Item();
 		assertThat(new Success(item, score).item()).isSameAs(item);
 	}
 
 	@Test
-	public void testKey(@RandomString String a, @RandomString String b) {
-		assertThat(new Success(null, 1, a, b).key(0)).isEqualTo(a);
-		assertThat(new Success(null, 1, a, b).key(1)).isEqualTo(b);
+	public void testText(@RandomNumber int score) {
+		assertThat(new Success(new Item(), score).text()).isEmpty();
 	}
 
 	@Test
-	public void testCountKeys(@RandomNumber int score) {
-		assertThat(new Success(null, score, 1, 23).countKeys()).isEqualTo(2);
+	public void testKey(@RandomString String a, @RandomString String b) {
+		assertThat(new Success(new Item(), 1, a, b).key(0)).isEqualTo(a);
+		assertThat(new Success(new Item(), 1, a, b).key(1)).isEqualTo(b);
+	}
+
+	@Test
+	public void testSize(@RandomNumber int score) {
+		assertThat(new Success(new Item(), score, 1, 23).size()).isEqualTo(2);
 	}
 }

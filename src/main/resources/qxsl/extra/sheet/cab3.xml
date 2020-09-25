@@ -4,7 +4,7 @@
 <entry key="label">Cabrillo v3 format</entry>
 <entry key="table">QSO</entry>
 <entry key="extensions">cbr</entry>
-<entry key="description">
+<entry key="desc-text">
 Example:
 START-OF-LOG: 3.0
 CALLSIGN: JA1ZLO

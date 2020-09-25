@@ -5,20 +5,21 @@
 *******************************************************************************/
 package qxsl.table;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import qxsl.extra.table.*;
 
 /**
- * {@link TableFormats}クラスのテスト用クラスです。
+ * {@link TableManager}クラスのテスト用クラスです。
  *
  *
  * @author 無線部開発班
  *
  * @since 2017/02/26
  */
-public final class TableFormatsTest extends org.assertj.core.api.Assertions {
-	private final TableFormats tables = new TableFormats();
+public final class TableFormatsTest extends Assertions {
+	private final TableManager tables = new TableManager();
 
 	@Test
 	public void testIterator() {
@@ -28,17 +29,17 @@ public final class TableFormatsTest extends org.assertj.core.api.Assertions {
 	@Test
 	public void testGetFormat() {
 		// XML
-		assertThat(tables.forName("qxml")).isInstanceOf(QxmlFormat.class);
-		assertThat(tables.forName("adxs")).isInstanceOf(AdxsFormat.class);
+		assertThat(tables.forName("qxml")).isInstanceOf(QxmlFactory.class);
+		assertThat(tables.forName("adxs")).isInstanceOf(AdxsFactory.class);
 		// text
-		assertThat(tables.forName("adis")).isInstanceOf(AdisFormat.class);
-		assertThat(tables.forName("cqww")).isInstanceOf(CqwwFormat.class);
-		assertThat(tables.forName("jarl")).isInstanceOf(JarlFormat.class);
-		assertThat(tables.forName("ctxt")).isInstanceOf(CTxtFormat.class);
-		assertThat(tables.forName("zall")).isInstanceOf(ZAllFormat.class);
-		assertThat(tables.forName("zdos")).isInstanceOf(ZDosFormat.class);
+		assertThat(tables.forName("adis")).isInstanceOf(AdisFactory.class);
+		assertThat(tables.forName("cqww")).isInstanceOf(CqwwFactory.class);
+		assertThat(tables.forName("jarl")).isInstanceOf(JarlFactory.class);
+		assertThat(tables.forName("ctxt")).isInstanceOf(CTxtFactory.class);
+		assertThat(tables.forName("zall")).isInstanceOf(ZAllFactory.class);
+		assertThat(tables.forName("zdos")).isInstanceOf(ZDosFactory.class);
 		// binary
-		assertThat(tables.forName("cbin")).isInstanceOf(CBinFormat.class);
-		assertThat(tables.forName("zbin")).isInstanceOf(ZBinFormat.class);
+		assertThat(tables.forName("cbin")).isInstanceOf(CBinFactory.class);
+		assertThat(tables.forName("zbin")).isInstanceOf(ZBinFactory.class);
 	}
 }

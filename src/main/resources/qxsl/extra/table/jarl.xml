@@ -10,4 +10,6 @@ yyyy-MM-dd HH:mm B+ E+ C+ s+ S+ r+ R+
 <entry key="head-text">
 DATE (JST) TIME   BAND MODE  CALLSIGN      SENTNo      RCVDNo      Mlt    Pts
 </entry>
+<entry key="time-decoder">uuuu-MM-dd HH:mm</entry>
+<entry key="time-encoder">uuuu-MM-dd HH:mm</entry>
 </properties>

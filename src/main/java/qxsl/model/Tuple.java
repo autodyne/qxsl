@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.Map;
 import javax.xml.namespace.QName;
 
-import qxsl.field.FieldFormats;
+import qxsl.field.FieldManager;
 
 /**
  * 交信に対して複数の属性を設定可能な交信記録の共通実装です。
@@ -27,6 +27,7 @@ public abstract class Tuple implements Iterable<Field> {
 	/**
 	 * 指定された名前の空の要素を構築します。
 	 *
+	 *
 	 * @param qname 名前
 	 */
 	public Tuple(QName qname) {
@@ -37,6 +38,7 @@ public abstract class Tuple implements Iterable<Field> {
 	/**
 	 * この要素の名前を返します。
 	 *
+	 *
 	 * @return 要素の名前
 	 */
 	public final QName name() {
@@ -45,6 +47,7 @@ public abstract class Tuple implements Iterable<Field> {
 
 	/**
 	 * この要素のハッシュ値を計算します。
+	 *
 	 *
 	 * @return ハッシュ値
 	 */
@@ -64,6 +67,7 @@ public abstract class Tuple implements Iterable<Field> {
 
 	/**
 	 * この要素の属性を並べた反復子を返します。
+	 *
 	 *
 	 * @return 反復子
 	 */
@@ -109,7 +113,7 @@ public abstract class Tuple implements Iterable<Field> {
 	 * @since 2019/06/30
 	 */
 	public final Tuple set(QName key, String val) {
-		set(FieldFormats.FIELDS.decode(key, val));
+		set(FieldManager.FIELDS.decode(key, val));
 		return this;
 	}
 

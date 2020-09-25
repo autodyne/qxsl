@@ -23,7 +23,7 @@ public interface TypeRule {
 	 * @return 対象の場合は真
 	 */
 	public abstract boolean support(Object value);
-	
+
 	/**
 	 * この型変換に従って処理系の外の値を式に変換します。
 	 *

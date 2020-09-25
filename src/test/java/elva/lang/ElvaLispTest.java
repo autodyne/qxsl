@@ -8,11 +8,11 @@ package elva.lang;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.script.ScriptException;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -24,13 +24,13 @@ import org.junit.jupiter.params.provider.MethodSource;
  *
  * @since 2017/02/26
  */
-public final class ElvaLispTest extends org.assertj.core.api.Assertions {
+public final class ElvaLispTest extends Assertions {
 	private final ElvaLisp elva = new ElvaLisp();
 
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void test(String source) throws ScriptException {
-		final ListBase cons = elva.scan(source);
+		final var cons = elva.scan(source);
 		if(cons.size() > 0) {
 			assertThat(cons).hasSize(2);
 			final var lhs = elva.eval(String.valueOf(cons.get(0)));
@@ -40,9 +40,9 @@ public final class ElvaLispTest extends org.assertj.core.api.Assertions {
 	}
 
 	public static Stream<String> testMethodSource() throws IOException {
-		final var path = ElvaLisp.class.getResource("test.lisp");
-		final Reader source = new InputStreamReader(path.openStream());
-		try (final BufferedReader reader = new BufferedReader(source)) {
+		final var url = ElvaLisp.class.getResource("test.lisp");
+		final var isr = new InputStreamReader(url.openStream());
+		try (final var reader = new BufferedReader(isr)) {
 			return reader.lines().collect(Collectors.toList()).stream();
 		}
 	}

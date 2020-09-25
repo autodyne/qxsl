@@ -34,6 +34,7 @@ public abstract class Exch extends Tuple {
 	/**
 	 * この要素の親である交信記録を返します。
 	 *
+	 *
 	 * @return 交信記録
 	 */
 	public final Item getItem() {
@@ -42,6 +43,7 @@ public abstract class Exch extends Tuple {
 
 	/**
 	 * この要素のハッシュ値を計算します。
+	 *
 	 *
 	 * @return ハッシュ値
 	 */
@@ -66,6 +68,7 @@ public abstract class Exch extends Tuple {
 
 	/**
 	 * この交信記録の文字列による表現を返します。
+	 *
 	 *
 	 * @return 文字列
 	 */
