@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.xml.namespace.QName;
 
 import qxsl.field.FieldFactory;
@@ -22,7 +21,6 @@ import qxsl.model.Field;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 
 /**
  * 交信の相手局の地域を表現する{@link Field}実装クラスです。
@@ -128,9 +126,9 @@ public final class City extends Qxsl<String> {
 	 *
 	 * @throws UncheckedIOException 地域ベースが未知の場合
 	 */
-	public static final Set<City> all(String base) {
+	public static final List<City> all(String base) {
 		final var cities = DataBase.forName(base).cities;
-		return cities.values().stream().collect(toSet());
+		return cities.values().stream().collect(toList());
 	}
 
 	/**

@@ -5,7 +5,7 @@
 *******************************************************************************/
 package qxsl.extra.field;
 
-import java.util.Set;
+import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -53,7 +53,7 @@ public final class CityTest extends Assertions {
 	 *
 	 * @return 地域の集合
 	 */
-	public static Set<City> testMethodSource() {
+	public static List<City> testMethodSource() {
 		return City.all("jarl");
 	}
 
