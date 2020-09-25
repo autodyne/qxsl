@@ -40,6 +40,7 @@ public final class LambdaOp extends FormBase {
 	 */
 	@Override
 	public final boolean isVarArgs() {
+		if(pars.isEmpty()) return false;
 		return pars.last().toString().endsWith("...");
 	}
 
