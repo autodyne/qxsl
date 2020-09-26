@@ -135,10 +135,12 @@ public final class ElvaRuleKitTest extends Assertions {
 
 	@ParameterizedTest
 	@MethodSource("items")
-	public void testFormat(TableFactory fmt, Item src) throws Exception {
-		final var sec = RULE.getSection("1エリア内 個人 総合 部門");
-		final var seq = fmt.encode(sec.encode(src, fmt));
-		final var tgt = sec.decode(fmt.decodeSingle(seq));
-		assertThat(sec.apply(src)).hasToString(sec.apply(tgt).toString());
+	public void testFormat(TableFactory fact, Item item) throws Exception {
+		final var sect = RULE.getSection("1エリア内 個人 総合 部門");
+		final var list = fact.encode(sect.encode(item, fact));
+		final var back = sect.decode(fact.decodeSingle(list));
+		final var msg1 = sect.verify(item).toString();
+		final var msg2 = sect.verify(back).toString();
+		assertThat(msg1).isEqualTo(msg2);
 	}
 }

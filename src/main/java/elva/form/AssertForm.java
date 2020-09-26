@@ -23,6 +23,7 @@ import elva.warn.ElvaRuntimeException;
 @Name("assert")
 @Args(min = 2, max = 2)
 public final class AssertForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		if(eval.apply(args.head()).bool()) return true;
 		final var msg = eval.apply(args.tail().head());

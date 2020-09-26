@@ -6,7 +6,6 @@
 package qxsl.extra.ruler;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.UncheckedIOException;
@@ -14,7 +13,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-import qxsl.ruler.Contest;
+import qxsl.ruler.Library;
 
 /**
  * ドメイン特化のRubyでコンテストの規約を表現する仕組みです。
@@ -25,7 +24,6 @@ import qxsl.ruler.Contest;
  * @since 2020/07/19
  */
 public final class RubyRuleKit extends qxsl.ruler.RuleKit {
-	private final Class<?> CLS = Contest.class;
 	private final ScriptEngine engine;
 
 	/**
@@ -39,38 +37,36 @@ public final class RubyRuleKit extends qxsl.ruler.RuleKit {
 
 	/**
 	 * 指定されたリーダから式を読み取って評価します。
-	 * 返り値はコンテストの定義である必要があります。
+	 * 返り値はライブラリの定義である必要があります。
 	 *
 	 *
 	 * @param reader 式を読み取るリーダ
-	 * @return コンテストの定義
+	 * @return ライブラリの定義
 	 *
 	 * @throws UncheckedIOException 読み取りまたは評価の例外
 	 */
 	@Override
-	public final Contest contest(final Reader reader) {
-		final var init = CLS.getResourceAsStream("common.rb");
-		try (init; reader) {
-			engine.eval(new InputStreamReader(init));
-			return (Contest) engine.eval(reader);
-		} catch (ScriptException | IOException ex) {
+	public final Library library(final Reader reader) {
+		try {
+			return (Library) engine.eval(reader);
+		} catch (ScriptException ex) {
 			throw new UncheckedIOException(new IOException(ex));
 		}
 	}
 
 	/**
 	 * 指定された文字列から式を読み取って評価します。
-	 * 返り値はコンテストの定義である必要があります。
+	 * 返り値はライブラリの定義である必要があります。
 	 *
 	 *
 	 * @param string 式
 	 *
-	 * @return コンテストの定義
+	 * @return ライブラリの定義
 	 *
 	 * @throws UncheckedIOException 読み取りまたは評価の例外
 	 */
 	@Override
-	public final Contest contest(final String string) {
-		return contest(new StringReader(string));
+	public final Library library(final String string) {
+		return library(new StringReader(string));
 	}
 }

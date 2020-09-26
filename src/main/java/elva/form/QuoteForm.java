@@ -22,6 +22,7 @@ import elva.lang.NativeOp.Name;
 @Name("quote")
 @Args(min = 1, max = 1)
 public final class QuoteForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		return args.head();
 	}

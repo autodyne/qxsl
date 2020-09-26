@@ -22,6 +22,7 @@ import elva.lang.NativeOp.Name;
 @Name("or")
 @Args(min = 2, max = -1)
 public final class OrForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		return args.stream().anyMatch(s -> eval.apply(s).bool());
 	}

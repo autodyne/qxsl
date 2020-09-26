@@ -22,6 +22,7 @@ import elva.lang.NativeOp.Name;
 @Name("xor")
 @Args(min = 2, max = 2)
 public final class XorForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		final var v1 = eval.apply(args.get(0)).bool();
 		final var v2 = eval.apply(args.get(1)).bool();

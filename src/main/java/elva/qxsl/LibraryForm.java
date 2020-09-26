@@ -6,29 +6,28 @@
 package elva.qxsl;
 
 import elva.lang.ElvaEval;
-import elva.lang.FormBase;
 import elva.lang.ListBase;
 import elva.lang.NameNode;
 import elva.lang.NativeOp;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
-import qxsl.ruler.Contest;
+import qxsl.ruler.Library;
 
 /**
- * この関数はコンテストの規約の実体を生成します。
+ * この関数は可視の関数を参照するライブラリを生成します。
  *
  *
  * @author 無線部開発班
  *
- * @since 2019/05/15
+ * @since 2020/09/26
  */
-@Name("contest")
-@Args(min = 1, max = 1)
-public final class ContestForm extends NativeOp {
+@Name("library")
+@Args(min = 0, max = 0)
+public final class LibraryForm extends NativeOp {
 	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
-		return new ContestImpl(args, eval);
+		return new LibraryImpl(args, eval);
 	}
 
 	/**
@@ -39,9 +38,8 @@ public final class ContestForm extends NativeOp {
 	 *
 	 * @since 2017/02/20
 	 */
-	public static final class ContestImpl extends Contest {
+	public static final class LibraryImpl implements Library {
 		private final ElvaEval eval;
-		private final String name;
 
 		/**
 		 * 指定された規約定義と評価器で規約を構築します。
@@ -49,14 +47,8 @@ public final class ContestForm extends NativeOp {
 		 * @param rule 規約
 		 * @param eval 評価器
 		 */
-		public ContestImpl(ListBase rule, ElvaEval eval) {
-			this.name = eval.apply(rule.head()).text();
+		public LibraryImpl(ListBase rule, ElvaEval eval) {
 			this.eval = eval;
-		}
-
-		@Override
-		public final String getName() {
-			return name;
 		}
 
 		@Override

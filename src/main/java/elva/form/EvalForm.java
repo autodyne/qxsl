@@ -22,6 +22,7 @@ import elva.lang.NativeOp.Name;
 @Name("eval")
 @Args(min = 1, max = 1)
 public final class EvalForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		return eval.apply(eval.apply(args.head()));
 	}

@@ -24,6 +24,7 @@ import elva.lang.NativeOp.Name;
 @Name("name")
 @Args(min = 2, max = 2)
 public final class NameForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		final var space = eval.apply(args.get(0)).text();
 		final var local = eval.apply(args.get(1)).text();

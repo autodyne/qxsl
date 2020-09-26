@@ -23,6 +23,7 @@ import elva.lang.NativeOp.Name;
 @Name("cons")
 @Args(min = 2, max = 2)
 public final class ConsForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		final var head = eval.apply(args.get(0));
 		final var tail = eval.apply(args.get(1));

@@ -29,6 +29,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @Name("load")
 @Args(min = 1, max = 1)
 public final class LoadForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		final var name = eval.apply(args.head()).text();
 		final var load = LoadForm.class.getClassLoader();

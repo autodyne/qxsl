@@ -26,6 +26,7 @@ import qxsl.model.Tuple;
 @Name("getf")
 @Args(min = 2, max = 2)
 public final class GetfForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		final var obj = eval.apply(args.get(0)).ofType(Tuple.class);
 		final var qua = eval.apply(args.get(1)).ofType(QName.class);

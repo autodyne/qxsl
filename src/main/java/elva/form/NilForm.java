@@ -23,6 +23,7 @@ import elva.lang.NodeBase;
 @Name("nil?")
 @Args(min = 1, max = 1)
 public final class NilForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		return NodeBase.NIL.equals(eval.apply(args.head()));
 	}

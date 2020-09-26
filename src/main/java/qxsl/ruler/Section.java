@@ -6,7 +6,7 @@
 package qxsl.ruler;
 
 import java.util.ArrayList;
-import java.util.function.Function;
+import java.util.List;
 
 import qxsl.model.Item;
 import qxsl.table.TableFactory;
@@ -19,7 +19,7 @@ import qxsl.table.TableFactory;
  *
  * @since 2016/11/25
  */
-public abstract class Section implements Function<Item, Message> {
+public abstract class Section implements Library {
 	private Contest contest = null;
 
 	/**
@@ -55,24 +55,16 @@ public abstract class Section implements Function<Item, Message> {
 	public abstract String getCode();
 
 	/**
-	 * この部門を有するコンテストを返します。
+	 * 指定された交信記録の総得点を計算します。
 	 *
 	 *
-	 * @return 部門を内包するコンテスト
+	 * @param items 交信記録
+	 *
+	 * @return 総得点
+	 *
+	 * @since 2020/02/26
 	 */
-	public final Contest getContest() {
-		return this.contest;
-	}
-
-	/**
-	 * この部門を有するコンテストを設定します。
-	 *
-	 *
-	 * @param test 部門を内包するコンテスト
-	 */
-	protected void setContest(Contest test) {
-		this.contest = test;
-	}
+	public abstract int score(Summary items);
 
 	/**
 	 * 指定された{@link Item}の可否を検査します。
@@ -82,34 +74,20 @@ public abstract class Section implements Function<Item, Message> {
 	 *
 	 * @return 承認された場合はtrue
 	 */
-	public abstract Message apply(Item item);
+	public abstract Message verify(Item item);
 
 	/**
-	 * この部門に紐づけられた関数を実行します。
+	 * 指定された交信記録から有効な交信を抽出します。
 	 *
 	 *
-	 * @param name 関数の名前
-	 * @param args 関数の引数
+	 * @param items 交信記録
 	 *
-	 * @return 関数の値
+	 * @return 得点計算の結果
 	 *
-	 * @since 2020/03/09
+	 * @since 2019/05/16
 	 */
-	public abstract Object invoke(String name, Object...args);
-
-	/**
-	 * 規約に基づき交信記録を特定の書式に対応した状態に変換します。
-	 *
-	 *
-	 * @param item 交信記録
-	 * @param form 書式
-	 *
-	 * @return 指定された書式で出力可能な交信記録
-	 *
-	 * @since 2020/09/04
-	 */
-	public final Item encode(Item item, TableFactory form) {
-		return (Item) invoke("encode", item.clone(), form.getName());
+	public final Summary summarize(List<Item> items) {
+		return new Summary(this, items);
 	}
 
 	/**
@@ -127,23 +105,17 @@ public abstract class Section implements Function<Item, Message> {
 	}
 
 	/**
-	 * 指定された交信記録から有効な交信を抽出します。
+	 * 規約に基づき交信記録を特定の書式に対応した状態に変換します。
 	 *
 	 *
-	 * @param items 交信記録
+	 * @param item 交信記録
+	 * @param form 書式
 	 *
-	 * @return 得点計算の結果
+	 * @return 指定された書式で出力可能な交信記録
 	 *
-	 * @since 2019/05/16
+	 * @since 2020/09/04
 	 */
-	public final Summary summarize(Iterable<Item> items) {
-		final var acc = new ArrayList<Success>();
-		final var rej = new ArrayList<Failure>();
-		for(var item: items) {
-			final var msg = this.apply(item);
-			if(msg instanceof Success) acc.add((Success) msg);
-			if(msg instanceof Failure) rej.add((Failure) msg);
-		}
-		return new Summary(acc, rej).confirm(getContest());
+	public final Item encode(Item item, TableFactory form) {
+		return (Item) invoke("encode", item.clone(), form.getName());
 	}
 }

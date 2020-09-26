@@ -6,7 +6,7 @@
 package qxsl.ruler;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
  *
  * @since 2016/11/25
  */
-public abstract class Contest implements Iterable<Section> {
+public abstract class Contest implements Library {
 	private final List<Section> list;
 
 	/**
@@ -52,26 +52,15 @@ public abstract class Contest implements Iterable<Section> {
 	public abstract String getName();
 
 	/**
-	 * この規約の部門をイテレータで返します。
-	 *
-	 *
-	 * @return 全ての部門を含むイテレータ
-	 */
-	public final Iterator<Section> iterator() {
-		return this.list.iterator();
-	}
-
-	/**
 	 * 指定された部門をこの規約に追加します。
 	 *
 	 *
-	 * @param section 追加する部門
+	 * @param sec 追加する部門
 	 *
 	 * @return この規約
 	 */
-	public final Contest add(Section section) {
-		this.list.add(section);
-		section.setContest(this);
+	public final Contest add(Section sec) {
+		this.list.add(sec);
 		return this;
 	}
 
@@ -79,39 +68,24 @@ public abstract class Contest implements Iterable<Section> {
 	 * 指定された部門をこの規約から削除します。
 	 *
 	 *
-	 * @param section 削除する部門
+	 * @param sec 削除する部門
 	 *
 	 * @return この規約
 	 */
-	public final Contest remove(Section section) {
-		this.list.remove(section);
+	public final Contest remove(Section sec) {
+		this.list.remove(sec);
 		return this;
 	}
 
 	/**
-	 * 指定された交信記録の総得点を計算します。
+	 * この規約の下の部門をリストで返します。
 	 *
 	 *
-	 * @param items 交信記録
-	 *
-	 * @return 総得点
-	 *
-	 * @since 2020/02/26
+	 * @return 全ての部門を含むリスト
 	 */
-	public abstract int score(Summary items);
-
-	/**
-	 * このコンテストに紐づけられた関数を実行します。
-	 *
-	 *
-	 * @param name 関数の名前
-	 * @param args 関数の引数
-	 *
-	 * @return 関数の値
-	 *
-	 * @since 2020/03/09
-	 */
-	public abstract Object invoke(String name, Object...args);
+	public final List<Section> getSections() {
+		return Collections.unmodifiableList(list);
+	}
 
 	/**
 	 * 指定された名前の部門を返し、未知の場合は例外を発生させます。
@@ -124,7 +98,7 @@ public abstract class Contest implements Iterable<Section> {
 	 * @throws NoSuchElementException 未知の部門の場合
 	 */
 	public final Section getSection(String name) {
-		for(Section s: this) if(s.toString().equals(name)) return s;
+		for(var s: this.list) if(s.getName().equals(name)) return s;
 		throw new NoSuchElementException(name.concat(" not found"));
 	}
 }

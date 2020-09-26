@@ -23,6 +23,7 @@ import elva.lang.NativeOp.Name;
 @Name("symbol")
 @Args(min = 1, max = 1)
 public final class SymbolForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		return new NameNode(eval.apply(args.head()).text());
 	}

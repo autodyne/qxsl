@@ -23,6 +23,7 @@ import elva.lang.NativeOp.Name;
 @Name("block")
 @Args(min = 1, max = -1)
 public final class BlockForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		return args.map(new ElvaEval(eval)).last();
 	}

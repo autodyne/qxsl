@@ -23,6 +23,7 @@ import elva.lang.NativeOp.Name;
 @Name("if")
 @Args(min = 2, max = 3)
 public final class IfForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		final var cond = eval.apply(args.head()).bool();
 		return eval.apply(args.drop(cond? 1: 2).head());

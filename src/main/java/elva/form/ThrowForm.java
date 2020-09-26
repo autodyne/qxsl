@@ -23,6 +23,7 @@ import elva.warn.ElvaRuntimeException;
 @Name("throw")
 @Args(min = 1, max = 1)
 public final class ThrowForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		final var msg = eval.apply(args.head());
 		throw new ElvaRuntimeException(msg.text());

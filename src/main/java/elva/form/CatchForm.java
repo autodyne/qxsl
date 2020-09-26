@@ -23,6 +23,7 @@ import elva.warn.ElvaRuntimeException;
 @Name("catch")
 @Args(min = 1, max = 1)
 public final class CatchForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		try {
 			eval.apply(args.head());

@@ -50,6 +50,7 @@ elva.qxsl.ContestForm
 elva.qxsl.FailureForm
 elva.qxsl.GetfForm
 elva.qxsl.ItemForm
+elva.qxsl.LibraryForm
 elva.qxsl.NameForm
 elva.qxsl.RcvdForm
 elva.qxsl.SectionForm

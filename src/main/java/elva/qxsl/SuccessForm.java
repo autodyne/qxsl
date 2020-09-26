@@ -25,6 +25,7 @@ import qxsl.ruler.Success;
 @Name("success")
 @Args(min = 3, max = -1)
 public final class SuccessForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		final var obj = eval.apply(args.get(0));
 		final var run = eval.apply(args.get(1));

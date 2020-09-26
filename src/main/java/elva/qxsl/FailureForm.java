@@ -25,6 +25,7 @@ import qxsl.ruler.Failure;
 @Name("failure")
 @Args(min = 2, max = 2)
 public final class FailureForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		final var bad = eval.apply(args.get(0));
 		final var msg = eval.apply(args.get(1)).value();

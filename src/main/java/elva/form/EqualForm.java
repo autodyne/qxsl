@@ -24,6 +24,7 @@ import elva.lang.NativeOp.Name;
 @Name("equal")
 @Args(min = 2, max = 2)
 public final class EqualForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		final var l = eval.apply(args.get(0));
 		final var r = eval.apply(args.get(1));

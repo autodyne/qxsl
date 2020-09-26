@@ -80,18 +80,48 @@ public abstract class RuleKit {
 	 *
 	 * @throws UncheckedIOException 読み取りまたは評価の例外
 	 */
-	public abstract Contest contest(Reader reader);
+	public final Contest contest(Reader reader) {
+		return (Contest) library(reader);
+	}
 
 	/**
 	 * 指定された文字列から式を読み取って評価します。
 	 * 返り値はコンテストの定義である必要があります。
 	 *
 	 *
-	 * @param string 式
+	 * @param source 式
 	 *
 	 * @return コンテストの定義
 	 *
 	 * @throws UncheckedIOException 読み取りまたは評価の例外
 	 */
-	public abstract Contest contest(String string);
+	public final Contest contest(String source) {
+		return (Contest) library(source);
+	}
+
+	/**
+	 * 指定されたリーダから式を読み取って評価します。
+	 * 返り値はライブラリの定義である必要があります。
+	 *
+	 *
+	 * @param reader 式を読み取るリーダ
+	 *
+	 * @return ライブラリの定義
+	 *
+	 * @throws UncheckedIOException 読み取りまたは評価の例外
+	 */
+	public abstract Library library(Reader reader);
+
+	/**
+	 * 指定された文字列から式を読み取って評価します。
+	 * 返り値はライブラリの定義である必要があります。
+	 *
+	 *
+	 * @param source 式
+	 *
+	 * @return ライブラリの定義
+	 *
+	 * @throws UncheckedIOException 読み取りまたは評価の例外
+	 */
+	public abstract Library library(String source);
 }

@@ -22,6 +22,7 @@ import elva.lang.NativeOp.Name;
 @Name("set")
 @Args(min = 2, max = 2)
 public final class SetForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		final var key = eval.apply(args.get(0));
 		final var val = eval.apply(args.get(1));

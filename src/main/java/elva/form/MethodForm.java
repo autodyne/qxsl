@@ -24,6 +24,7 @@ import elva.lang.NativeOp.Name;
 @Name("method")
 @Args(min = 2, max = -1)
 public final class MethodForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		final var name = eval.apply(args.head()).name();
 		if(name.toString().equals("new")) {

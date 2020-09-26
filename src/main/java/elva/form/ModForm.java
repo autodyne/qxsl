@@ -23,6 +23,7 @@ import elva.lang.RealNode;
 @Name("mod")
 @Args(min = 2, max = -1)
 public final class ModForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		final var reals = args.map(eval).reals();
 		final var tails = reals.stream().skip(1);

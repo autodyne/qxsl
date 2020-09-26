@@ -23,6 +23,7 @@ import elva.lang.SyntaxOp;
 @Name("syntax")
 @Args(min = 2, max = 2)
 public final class SyntaxForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		return new SyntaxOp(args, eval);
 	}

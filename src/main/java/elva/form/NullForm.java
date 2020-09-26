@@ -22,6 +22,7 @@ import elva.lang.NativeOp.Name;
 @Name("null?")
 @Args(min = 1, max = 1)
 public final class NullForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		return eval.apply(args.head()).value() == null;
 	}

@@ -14,7 +14,7 @@ import elva.lang.ElvaLisp;
 import elva.warn.ElvaLexicalException;
 import elva.warn.ElvaRuntimeException;
 
-import qxsl.ruler.Contest;
+import qxsl.ruler.Library;
 
 /**
  * ドメイン特化のLISPでコンテストの規約を表現する仕組みです。
@@ -39,21 +39,21 @@ public final class ElvaRuleKit extends qxsl.ruler.RuleKit {
 
 	/**
 	 * 指定されたリーダから式を読み取って評価します。
-	 * 返り値はコンテストの定義である必要があります。
+	 * 返り値はライブラリの定義である必要があります。
 	 *
 	 *
 	 * @param reader 式を読み取るリーダ
 	 *
-	 * @return コンテストの定義
+	 * @return ライブラリの定義
 	 *
 	 * @throws UncheckedIOException 式の読み取りの例外
 	 * @throws ElvaLexicalException 式の構文面での例外
 	 * @throws ElvaRuntimeException 評価で発生した例外
 	 */
 	@Override
-	public final Contest contest(final Reader reader) {
+	public final Library library(final Reader reader) {
 		try {
-			return (Contest) engine.eval(reader);
+			return (Library) engine.eval(reader);
 		} catch (ScriptException ex) {
 			throw new ElvaRuntimeException(ex);
 		}
@@ -61,19 +61,19 @@ public final class ElvaRuleKit extends qxsl.ruler.RuleKit {
 
 	/**
 	 * 指定された文字列から式を読み取って評価します。
-	 * 返り値はコンテストの定義である必要があります。
+	 * 返り値はライブラリの定義である必要があります。
 	 *
 	 *
-	 * @param string 式
+	 * @param source 式
 	 *
-	 * @return コンテストの定義
+	 * @return ライブラリの定義
 	 *
 	 * @throws UncheckedIOException 式の読み取りの例外
 	 * @throws ElvaLexicalException 式の構文面での例外
 	 * @throws ElvaRuntimeException 評価で発生した例外
 	 */
 	@Override
-	public final Contest contest(final String string) {
-		return contest(new StringReader(string));
+	public final Library library(final String source) {
+		return library(new StringReader(source));
 	}
 }

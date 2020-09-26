@@ -24,6 +24,7 @@ import qxsl.model.Item;
 @Name("item")
 @Args(min = 0, max = 0)
 public final class ItemForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		return new Item();
 	}

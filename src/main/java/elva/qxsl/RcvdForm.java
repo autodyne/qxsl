@@ -24,6 +24,7 @@ import qxsl.model.Item;
 @Name("rcvd")
 @Args(min = 1, max = 1)
 public final class RcvdForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		return eval.apply(args.head()).ofType(Item.class).getRcvd();
 	}

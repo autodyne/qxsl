@@ -23,6 +23,7 @@ import elva.lang.NativeOp.Name;
 @Name("lambda")
 @Args(min = 2, max = 2)
 public final class LambdaForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		return new LambdaOp(args, eval);
 	}

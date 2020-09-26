@@ -5,8 +5,11 @@
 *******************************************************************************/
 package qxsl.ruler;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import qxsl.model.Item;
 
 import static java.util.stream.IntStream.range;
 
@@ -18,25 +21,31 @@ import static java.util.stream.IntStream.range;
  *
  * @since 2016/11/26
  */
-public final class Summary implements java.io.Serializable {
+public final class Summary implements Serializable {
 	private final List<Success> accepted;
 	private final List<Success> distinct;
 	private final List<Failure> rejected;
-	private int total = 0;
+	private final int total;
 
 	/**
-	 * 有効な交信と無効な交信を指定して要約を構築します。
+	 * 指定された部門と交信記録を要約します。
 	 *
 	 *
-	 * @param succ 受理された交信
-	 * @param fail 拒否された交信
+	 * @param sect 部門
+	 * @param list 交信記録
 	 */
-	public Summary(List<Success> succ, List<Failure> fail) {
+	public Summary(Section sect, List<Item> list) {
+		this.accepted = new ArrayList<Success>();
+		this.rejected = new ArrayList<Failure>();
+		for(var item: list) {
+			final var m = sect.verify(item);
+			if(m instanceof Success) accepted.add((Success) m);
+			if(m instanceof Failure) rejected.add((Failure) m);
+		}
 		final var map = new LinkedHashMap<Object, Success>();
-		for(Success it: succ) map.putIfAbsent(it.key(0), it);
+		for(var it: accepted) map.putIfAbsent(it.key(0), it);
 		this.distinct = new ArrayList<>(map.values());
-		this.accepted = new ArrayList<>(succ);
-		this.rejected = new ArrayList<>(fail);
+		this.total = sect.score(this);
 	}
 
 	/**
@@ -79,19 +88,6 @@ public final class Summary implements java.io.Serializable {
 	 */
 	public final int total() {
 		return this.total;
-	}
-
-	/**
-	 * この交信記録の総得点を確定します。
-	 *
-	 *
-	 * @param contest 規約
-	 *
-	 * @return この交信記録
-	 */
-	protected final Summary confirm(Contest contest) {
-		this.total = contest.score(this);
-		return this;
 	}
 
 	/**

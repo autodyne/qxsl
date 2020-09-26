@@ -22,6 +22,7 @@ import elva.lang.NativeOp.Name;
 @Name("format")
 @Args(min = 1, max = -1)
 public final class FormatForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		final var list = args.map(eval);
 		final var temp = list.head().text();

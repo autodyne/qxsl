@@ -16,6 +16,7 @@ import elva.lang.NativeOp.Name;
 import qxsl.model.Item;
 import qxsl.ruler.Message;
 import qxsl.ruler.Section;
+import qxsl.ruler.Summary;
 
 /**
  * この関数はコンテストの部門の実体を生成します。
@@ -26,8 +27,9 @@ import qxsl.ruler.Section;
  * @since 2019/05/15
  */
 @Name("section")
-@Args(min = 2, max = 3)
+@Args(min = 4, max = 4)
 public final class SectionForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		return new SectionImpl(args, eval);
 	}
@@ -44,6 +46,7 @@ public final class SectionForm extends NativeOp {
 		private final String name;
 		private final String code;
 		private final FormBase rule;
+		private final FormBase calc;
 		private final ElvaEval eval;
 
 		/**
@@ -56,6 +59,7 @@ public final class SectionForm extends NativeOp {
 			this.name = eval.apply(rule.get(0)).text();
 			this.code = eval.apply(rule.get(1)).text();
 			this.rule = eval.apply(rule.get(2)).form();
+			this.calc = eval.apply(rule.get(3)).form();
 			this.eval = eval;
 		}
 
@@ -70,7 +74,14 @@ public final class SectionForm extends NativeOp {
 		}
 
 		@Override
-		public final Message apply(Item item) {
+		public final int score(Summary items) {
+			if(items.score() == 0) return 0;
+			final var args = items.toScoreAndKeys().toArray();
+			return eval.apply(calc.form(args)).real().toInt();
+		}
+
+		@Override
+		public final Message verify(Item item) {
 			return eval.apply(rule.form(item)).ofType(Message.class);
 		}
 

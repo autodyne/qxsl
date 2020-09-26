@@ -25,6 +25,7 @@ import elva.lang.TypeNode;
 @Name("array")
 @Args(min = 1, max = 1)
 public final class ArrayForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		final TypeNode type = eval.apply(args.head()).type();
 		return Array.newInstance(type.value(), 0).getClass();

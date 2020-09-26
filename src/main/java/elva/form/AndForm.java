@@ -22,6 +22,7 @@ import elva.lang.NativeOp.Name;
 @Name("and")
 @Args(min = 2, max = -1)
 public final class AndForm extends NativeOp {
+	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		return args.stream().allMatch(s -> eval.apply(s).bool());
 	}
