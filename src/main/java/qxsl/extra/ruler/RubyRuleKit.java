@@ -14,6 +14,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import qxsl.ruler.Library;
+import qxsl.ruler.RuleKit;
 
 /**
  * ドメイン特化のRubyでコンテストの規約を表現する仕組みです。
@@ -23,11 +24,14 @@ import qxsl.ruler.Library;
  *
  * @since 2020/07/19
  */
-public final class RubyRuleKit extends qxsl.ruler.RuleKit {
+public final class RubyRuleKit extends RuleKit {
 	private final ScriptEngine engine;
 
 	/**
-	 * Ruby処理系を構築します。
+	 * 処理系を構築します。
+	 *
+	 *
+	 * @since 2020/07/19
 	 */
 	public RubyRuleKit() {
 		super("ruby");
@@ -50,7 +54,8 @@ public final class RubyRuleKit extends qxsl.ruler.RuleKit {
 		try {
 			return (Library) engine.eval(reader);
 		} catch (ScriptException ex) {
-			throw new UncheckedIOException(new IOException(ex));
+			final var io = new IOException(ex);
+			throw new UncheckedIOException(io);
 		}
 	}
 

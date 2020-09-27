@@ -1,10 +1,11 @@
 qxsl: Amateur-Radio Logging Library & LISP
 ====
 
+![image](https://img.shields.io/badge/Gradle-6-red.svg)
 ![image](https://img.shields.io/badge/OpenJDK-SE11-red.svg)
 ![image](https://img.shields.io/badge/GraalVM-20.0-red.svg)
-![image](https://img.shields.io/badge/Gradle-6-orange.svg)
-![image](https://img.shields.io/badge/license-LGPL3-blue.svg)
+![image](https://img.shields.io/badge/JRuby-9.2-orange.svg)
+![image](https://img.shields.io/badge/license-LGPL3-darkblue.svg)
 
 qxsl is a Java library for processing amateur-radio log files, including scoring and tabulation frameworks for ham radio contests, which are important components of [Automatic Acceptance & Tabulation System (ATS)](https://github.com/nextzlog/ats4) for [the ALLJA1 contest](http://ja1zlo.u-tokyo.org/allja1).
 
@@ -12,7 +13,7 @@ qxsl is a Java library for processing amateur-radio log files, including scoring
 
 - qxsl provides log en/decoders for QXML, [ADIF(ADI/ADX)](http://adif.org), [Cabrillo](https://wwrof.org/cabrillo/), [zLog](http://www.zlog.org), [CTESTWIN](http://e.gmobb.jp/ctestwin/Download.html), etc.
 - qxsl provides tabulation & scoring frameworks for amateur-radio contests and awards.
-- qxsl provides a LISP engine named *Elva*, and contest rules can be described in modern S-expression styles.
+- qxsl provides the **rulekit** framework which allows you to write contest rules in LISP or Ruby.
 
 ## Sample Codes
 

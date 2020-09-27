@@ -15,6 +15,7 @@ import elva.warn.ElvaLexicalException;
 import elva.warn.ElvaRuntimeException;
 
 import qxsl.ruler.Library;
+import qxsl.ruler.RuleKit;
 
 /**
  * ドメイン特化のLISPでコンテストの規約を表現する仕組みです。
@@ -26,11 +27,14 @@ import qxsl.ruler.Library;
  *
  * @see ElvaLisp 内部で使用されるLISP処理系
  */
-public final class ElvaRuleKit extends qxsl.ruler.RuleKit {
+public final class ElvaRuleKit extends RuleKit {
 	private final ElvaLisp engine;
 
 	/**
 	 * LISP処理系を構築します。
+	 *
+	 *
+	 * @since 2017/02/27
 	 */
 	public ElvaRuleKit() {
 		super("elva");
