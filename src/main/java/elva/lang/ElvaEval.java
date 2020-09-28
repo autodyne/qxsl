@@ -31,6 +31,7 @@ public final class ElvaEval implements UnaryOperator<NodeBase> {
 	/**
 	 * 指定されたスコープに対する評価器を構築します。
 	 *
+	 *
 	 * @param scope 評価器のスコープ
 	 */
 	public ElvaEval(ScopeMap scope) {
@@ -39,6 +40,7 @@ public final class ElvaEval implements UnaryOperator<NodeBase> {
 
 	/**
 	 * 指定された評価器を親に持つ評価器を構築します。
+	 *
 	 *
 	 * @param outer 外側の評価器
 	 */

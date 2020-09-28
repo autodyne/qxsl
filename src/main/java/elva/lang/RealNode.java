@@ -23,6 +23,7 @@ public final class RealNode extends AtomBase<Number> {
 	/**
 	 * 指定された値で実数値を構築します。
 	 *
+	 *
 	 * @param value 値
 	 */
 	public RealNode(Number value) {
@@ -31,6 +32,7 @@ public final class RealNode extends AtomBase<Number> {
 
 	/**
 	 * 指定された値で実数値を構築します。
+	 *
 	 *
 	 * @param value 値
 	 */
@@ -147,6 +149,7 @@ public final class RealNode extends AtomBase<Number> {
 	/**
 	 * 整数値を返します。
 	 *
+	 *
 	 * @return 整数
 	 */
 	public final int toInt() {
@@ -155,6 +158,7 @@ public final class RealNode extends AtomBase<Number> {
 
 	/**
 	 * 実数値を返します。
+	 *
 	 *
 	 * @return 値
 	 */

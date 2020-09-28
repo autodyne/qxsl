@@ -29,6 +29,7 @@ public final class EmptySeq extends ListBase {
 	/**
 	 * 空のリストを返します。
 	 *
+	 *
 	 * @return 先頭
 	 */
 	@Override
@@ -38,6 +39,7 @@ public final class EmptySeq extends ListBase {
 
 	/**
 	 * 空のリストを返します。
+	 *
 	 *
 	 * @return 後続
 	 */
@@ -89,6 +91,7 @@ public final class EmptySeq extends ListBase {
 	/**
 	 * このリストの要素数を返します。
 	 *
+	 *
 	 * @return 要素数
 	 */
 	@Override
@@ -98,6 +101,7 @@ public final class EmptySeq extends ListBase {
 
 	/**
 	 * このリストの内容をイテレータで返します。
+	 *
 	 *
 	 * @return イテレータ
 	 */

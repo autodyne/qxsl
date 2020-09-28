@@ -16,6 +16,7 @@ import elva.warn.ElvaRuntimeException;
  * 組込関数として利用される特殊形式の共通実装です。
  * 特殊形式の名前と引数の個数は注釈型で指定します。
  *
+ *
  * @author 無線部開発班
  *
  * @since 2020/07/27
@@ -26,6 +27,7 @@ public abstract class NativeOp extends FormBase {
 
 	/**
 	 * 注釈を読み込んで特殊形式を初期化します。
+	 *
 	 *
 	 * @throws ElvaRuntimeException 注釈が不備の場合
 	 */
@@ -48,12 +50,14 @@ public abstract class NativeOp extends FormBase {
 		/**
 		 * 評価前の引数の最小限の個数です。
 		 *
+		 *
 		 * @return 引数の個数
 		 */
 		public int min();
 
 		/**
 		 * 評価前の引数の最大限の個数です。
+		 *
 		 *
 		 * @return 引数の個数
 		 */
@@ -74,6 +78,7 @@ public abstract class NativeOp extends FormBase {
 		/**
 		 * この特殊形式の名前です。
 		 *
+		 *
 		 * @return 特殊形式の名前
 		 */
 		public String value();
@@ -84,6 +89,7 @@ public abstract class NativeOp extends FormBase {
 
 	/**
 	 * この特殊形式の引数に関する注釈を返します。
+	 *
 	 *
 	 * @return 注釈
 	 *
@@ -98,6 +104,7 @@ public abstract class NativeOp extends FormBase {
 	/**
 	 * この特殊形式の名前に関する注釈を返します。
 	 *
+	 *
 	 * @return 注釈
 	 *
 	 * @throws ElvaRuntimeException 注釈が不備の場合
@@ -111,6 +118,7 @@ public abstract class NativeOp extends FormBase {
 	/**
 	 * この特殊形式が可変長引数の特殊形式か確認します。
 	 *
+	 *
 	 * @return 可変長引数なら真
 	 */
 	@Override
@@ -120,6 +128,7 @@ public abstract class NativeOp extends FormBase {
 
 	/**
 	 * この特殊形式が取る引数の最小の個数を返します。
+	 *
 	 *
 	 * @return 最小限の引数の個数
 	 */
@@ -131,6 +140,7 @@ public abstract class NativeOp extends FormBase {
 	/**
 	 * この特殊形式が取る引数の最大の個数を返します。
 	 *
+	 *
 	 * @return 最大限の引数の個数
 	 */
 	@Override
@@ -140,6 +150,7 @@ public abstract class NativeOp extends FormBase {
 
 	/**
 	 * この特殊形式を表す文字列を返します。
+	 *
 	 *
 	 * @return 文字列による式の表現
 	 */

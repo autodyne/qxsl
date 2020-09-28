@@ -35,6 +35,7 @@ public final class VariaSeq extends ListBase {
 	/**
 	 * このリストの先頭を返します。
 	 *
+	 *
 	 * @return 先頭
 	 */
 	@Override
@@ -44,6 +45,7 @@ public final class VariaSeq extends ListBase {
 
 	/**
 	 * このリストの後続を返します。
+	 *
 	 *
 	 * @return 後続
 	 */
@@ -95,6 +97,7 @@ public final class VariaSeq extends ListBase {
 	/**
 	 * このリストの要素数を返します。
 	 *
+	 *
 	 * @return 要素数
 	 */
 	@Override
@@ -104,6 +107,7 @@ public final class VariaSeq extends ListBase {
 
 	/**
 	 * このリストの内容をイテレータで返します。
+	 *
 	 *
 	 * @return イテレータ
 	 */

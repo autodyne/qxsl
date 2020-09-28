@@ -21,6 +21,7 @@ public final class NameNode extends AtomBase<NameNode> {
 	/**
 	 * 名前を指定して識別子を生成します。
 	 *
+	 *
 	 * @param value 名前
 	 */
 	public NameNode(String value) {

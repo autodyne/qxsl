@@ -19,6 +19,7 @@ public final class AtomNode extends AtomBase<Object> {
 	/**
 	 * 指定された値でアトムを構築します。
 	 *
+	 *
 	 * @param value 値
 	 */
 	public AtomNode(Object value) {

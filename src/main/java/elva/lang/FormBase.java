@@ -19,6 +19,7 @@ public abstract class FormBase extends AtomBase {
 	/**
 	 * この演算子を返します。
 	 *
+	 *
 	 * @return 自身への参照
 	 */
 	@Override
@@ -29,6 +30,7 @@ public abstract class FormBase extends AtomBase {
 	/**
 	 * この演算子が特殊関数か確認します。
 	 *
+	 *
 	 * @return 特殊形式の場合は真
 	 */
 	public final boolean isNativeOperator() {
@@ -38,6 +40,7 @@ public abstract class FormBase extends AtomBase {
 	/**
 	 * この演算子が可変長引数の演算子か確認します。
 	 *
+	 *
 	 * @return 可変長引数なら真
 	 */
 	public abstract boolean isVarArgs();
@@ -45,12 +48,14 @@ public abstract class FormBase extends AtomBase {
 	/**
 	 * この演算子が取る引数の最小の個数を返します。
 	 *
+	 *
 	 * @return 最小限の引数の個数
 	 */
 	public abstract int getMinimumArgumentLength();
 
 	/**
 	 * この演算子が取る引数の最大の個数を返します。
+	 *
 	 *
 	 * @return 最大限の引数の個数
 	 */

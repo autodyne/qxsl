@@ -49,6 +49,7 @@ public final class ElvaLisp extends AbstractScriptEngine {
 	/**
 	 * LISP処理系を構築します。
 	 *
+	 *
 	 * @param loader 関数を供給するクラスローダ
 	 */
 	public ElvaLisp(ClassLoader loader) {
@@ -63,6 +64,7 @@ public final class ElvaLisp extends AbstractScriptEngine {
 	/**
 	 * LISP処理系に関連付けられる新たなファクトリを返します。
 	 *
+	 *
 	 * @return ファクトリ
 	 */
 	@Override
@@ -72,6 +74,7 @@ public final class ElvaLisp extends AbstractScriptEngine {
 
 	/**
 	 * LISP処理系が内蔵する関数や値を参照する環境を返します。
+	 *
 	 *
 	 * @return 環境
 	 */
@@ -203,6 +206,7 @@ public final class ElvaLisp extends AbstractScriptEngine {
 		/**
 		 * 次の式がある場合は真を返します。
 		 *
+		 *
 		 * @return 次の式がある場合
 		 */
 		@Override
@@ -212,6 +216,7 @@ public final class ElvaLisp extends AbstractScriptEngine {
 
 		/**
 		 * 現在の位置の直前の字句をまとめた文字列を返します。
+		 *
 		 *
 		 * @return 現在位置の直前の文字列
 		 */

@@ -25,6 +25,7 @@ public final class ScopeMap extends SimpleBindings {
 	/**
 	 * 最も外側のスコープを構築します。
 	 *
+	 *
 	 * @param loader クラスローダ
 	 */
 	public ScopeMap(ClassLoader loader) {
@@ -43,6 +44,7 @@ public final class ScopeMap extends SimpleBindings {
 	/**
 	 * 指定された構造のスコープを構築します。
 	 *
+	 *
 	 * @param outer 外側のスコープ
 	 */
 	private ScopeMap(Bindings outer)  {
@@ -53,6 +55,7 @@ public final class ScopeMap extends SimpleBindings {
 	/**
 	 * スコープの内側にスコープを構築します。
 	 *
+	 *
 	 * @return 内側のスコープ
 	 */
 	public final ScopeMap fork() {
@@ -61,6 +64,7 @@ public final class ScopeMap extends SimpleBindings {
 
 	/**
 	 * 指定された型を短縮名で参照可能にします。
+	 *
 	 *
 	 * @param type 型
 	 */
@@ -84,6 +88,7 @@ public final class ScopeMap extends SimpleBindings {
 	/**
 	 * 指定された変数をこの環境に登録します。
 	 * 変数の名前は値の文字列による表現です。
+	 *
 	 *
 	 * @param sexp 登録する変数の値
 	 */

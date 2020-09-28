@@ -19,6 +19,7 @@ public final class TextNode extends AtomBase<String> {
 	/**
 	 * 指定された値で文字列を構築します。
 	 *
+	 *
 	 * @param value 値
 	 */
 	public TextNode(String value) {

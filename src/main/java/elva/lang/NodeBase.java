@@ -30,12 +30,14 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 	/**
 	 * この式の値を処理系の外部に渡す際に使用します。
 	 *
+	 *
 	 * @return 値
 	 */
 	public abstract Object value();
 
 	/**
 	 * この式の実数型の内容を返します。
+	 *
 	 *
 	 * @return 実数
 	 */
@@ -46,6 +48,7 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 	/**
 	 * この式の真偽型の内容を返します。
 	 *
+	 *
 	 * @return 真偽
 	 */
 	public final boolean bool() {
@@ -54,6 +57,7 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 
 	/**
 	 * この式の識別子型の内容を返します。
+	 *
 	 *
 	 * @return 識別子
 	 */
@@ -64,6 +68,7 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 	/**
 	 * この式の型情報型の内容を返します。
 	 *
+	 *
 	 * @return 型情報
 	 */
 	public final TypeNode type() {
@@ -72,6 +77,7 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 
 	/**
 	 * この式の文字列型の内容を返します。
+	 *
 	 *
 	 * @return 文字列
 	 */
@@ -82,6 +88,7 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 	/**
 	 * この式の演算子型の内容を返します。
 	 *
+	 *
 	 * @return 演算子
 	 */
 	public final FormBase form() {
@@ -90,6 +97,7 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 
 	/**
 	 * この式のリスト型の内容を返します。
+	 *
 	 *
 	 * @return リスト
 	 */
@@ -100,12 +108,14 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 	/**
 	 * この式がアトムであるか確認します。
 	 *
+	 *
 	 * @return アトムの場合は真
 	 */
 	public abstract boolean isAtom();
 
 	/**
 	 * この式が空の値であるか確認します。
+	 *
 	 *
 	 * @return 空の値の場合は真
 	 */
@@ -116,6 +126,7 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 	/**
 	 * この式が識別子であるか確認します。
 	 *
+	 *
 	 * @return 識別子の場合は真
 	 */
 	public final boolean isName() {
@@ -125,6 +136,7 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 	/**
 	 * この式がリストであるか確認します。
 	 *
+	 *
 	 * @return リストの場合は真
 	 */
 	public final boolean isList() {
@@ -133,6 +145,7 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 
 	/**
 	 * この式の値を文字列に変換します。
+	 *
 	 *
 	 * @return 文字列 値がnullの場合はnull
 	 */
@@ -191,6 +204,7 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 
 		/**
 		 * 指定されたクラスをラッパ型として登録します。
+		 *
 		 *
 		 * @param type ラッパ型
 		 */

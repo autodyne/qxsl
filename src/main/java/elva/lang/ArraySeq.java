@@ -23,6 +23,7 @@ public final class ArraySeq extends ListBase {
 	/**
 	 * 内容を指定してリストを構築します。
 	 *
+	 *
 	 * @param data 内容
 	 */
 	public ArraySeq(Object[] data) {
@@ -46,6 +47,7 @@ public final class ArraySeq extends ListBase {
 	/**
 	 * このリストの先頭を返します。
 	 *
+	 *
 	 * @return 先頭
 	 */
 	@Override
@@ -55,6 +57,7 @@ public final class ArraySeq extends ListBase {
 
 	/**
 	 * このリストの後続を返します。
+	 *
 	 *
 	 * @return 後続
 	 */
@@ -105,6 +108,7 @@ public final class ArraySeq extends ListBase {
 	/**
 	 * このリストの要素数を返します。
 	 *
+	 *
 	 * @return 要素数
 	 */
 	@Override
@@ -114,6 +118,7 @@ public final class ArraySeq extends ListBase {
 
 	/**
 	 * このリストの内容をイテレータで返します。
+	 *
 	 *
 	 * @return イテレータ
 	 */

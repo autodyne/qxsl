@@ -29,12 +29,14 @@ public abstract class ListBase extends NodeBase {
 	/**
 	 * このリストの要素数を返します。
 	 *
+	 *
 	 * @return 要素数
 	 */
 	public abstract int size();
 
 	/**
 	 * このリストの先頭を返します。
+	 *
 	 *
 	 * @return 先頭
 	 */
@@ -43,12 +45,14 @@ public abstract class ListBase extends NodeBase {
 	/**
 	 * このリストの後続を返します。
 	 *
+	 *
 	 * @return 後続
 	 */
 	public abstract ListBase tail();
 
 	/**
 	 * 末尾を除く部分リストを返します。
+	 *
 	 *
 	 * @return 末尾を除去したリスト
 	 */
@@ -58,6 +62,7 @@ public abstract class ListBase extends NodeBase {
 
 	/**
 	 * 末尾にある最後の要素を返します。
+	 *
 	 *
 	 * @return 最後の要素
 	 */
@@ -98,6 +103,7 @@ public abstract class ListBase extends NodeBase {
 	/**
 	 * リストが空であるか確認します。
 	 *
+	 *
 	 * @return 要素がない場合は真
 	 */
 	public final boolean isEmpty() {
@@ -106,6 +112,7 @@ public abstract class ListBase extends NodeBase {
 
 	/**
 	 * この式がアトムであるか確認します。
+	 *
 	 *
 	 * @return 要素なしの場合は真
 	 */
@@ -117,6 +124,7 @@ public abstract class ListBase extends NodeBase {
 	/**
 	 * このリストを要素のリストに変換します。
 	 *
+	 *
 	 * @return 要素のリスト
 	 */
 	@Override
@@ -127,6 +135,7 @@ public abstract class ListBase extends NodeBase {
 	/**
 	 * このリストの内容を配列で返します。
 	 *
+	 *
 	 * @return 式の配列
 	 */
 	public final NodeBase[] nodes() {
@@ -135,6 +144,7 @@ public abstract class ListBase extends NodeBase {
 
 	/**
 	 * このリストをストリームに変換します。
+	 *
 	 *
 	 * @return ストリーム
 	 */
@@ -145,6 +155,7 @@ public abstract class ListBase extends NodeBase {
 	/**
 	 * このリストを実数値の列に変換します。
 	 *
+	 *
 	 * @return 実数値の列
 	 */
 	public final List<RealNode> reals() {
@@ -153,6 +164,7 @@ public abstract class ListBase extends NodeBase {
 
 	/**
 	 * このリストの要素の値を並べた配列を返します。
+	 *
 	 *
 	 * @return 要素の配列
 	 */
@@ -209,6 +221,7 @@ public abstract class ListBase extends NodeBase {
 	/**
 	 * このリストのハッシュ値を返します。
 	 *
+	 *
 	 * @return ハッシュ値
 	 */
 	@Override
@@ -232,6 +245,7 @@ public abstract class ListBase extends NodeBase {
 
 	/**
 	 * このリストの内容を文字列による表現に変換します。
+	 *
 	 *
 	 * @return 文字列表現
 	 */
@@ -284,6 +298,7 @@ public abstract class ListBase extends NodeBase {
 		/**
 		 * 指定されたリストの内容を反復します。
 		 *
+		 *
 		 * @param list リスト
 		 */
 		public ArrayIt(ListBase list) {
@@ -292,6 +307,7 @@ public abstract class ListBase extends NodeBase {
 
 		/**
 		 * 後続の値があるか確認します。
+		 *
 		 *
 		 * @return 後続がある場合は真
 		 */
@@ -302,6 +318,7 @@ public abstract class ListBase extends NodeBase {
 
 		/**
 		 * 後続の値を取り出します。
+		 *
 		 *
 		 * @return 後続の値
 		 */
@@ -327,6 +344,7 @@ public abstract class ListBase extends NodeBase {
 		/**
 		 * 指定されたリストの内容を反復します。
 		 *
+		 *
 		 * @param list リスト
 		 */
 		public ChainIt(ListBase list) {
@@ -335,6 +353,7 @@ public abstract class ListBase extends NodeBase {
 
 		/**
 		 * 後続の値があるか確認します。
+		 *
 		 *
 		 * @return 後続がある場合は真
 		 */
@@ -345,6 +364,7 @@ public abstract class ListBase extends NodeBase {
 
 		/**
 		 * 後続の値を取り出します。
+		 *
 		 *
 		 * @return 後続の値
 		 */

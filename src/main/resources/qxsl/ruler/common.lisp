@@ -58,7 +58,7 @@
 (assert (not (nil? (search 0 ((lambda y (> y 1)) (lambda z (< z 3)))))) "search")
 
 ; string
-(defun string obj ((method 'toString Objects Object) null obj))
+(defun string obj ((method 'toString Objects Object) obj))
 (assert (equal (string  114514) "114514") "string")
 (assert (equal (string 'FOOBAR) "FOOBAR") "string")
 (assert (equal (string (lambda x (+ x x))) "(lambda (x) (+ x x))") "string")
@@ -154,7 +154,7 @@
 (setq hour (method 'getHour ZonedDateTime))
 
 ; get ZoneID of the specified name
-(defun zone name ((method 'of ZoneId String) null name))
+(defun zone name ((method 'of ZoneId String) name))
 (assert (not (null? (zone "Asia/Tokyo"))) "zone")
 
 ; get ZonedDateTime at another time zone
@@ -166,11 +166,11 @@
 		time (. DateTimeFormatter ISO_ZONED_DATE_TIME)))
 
 ; get city for the specified database name and city code
-(defun city (db code) ((method 'forCode City String String) null db code))
+(defun city (db code) ((method 'forCode City String String) db code))
 (assert (not (null? (city "jarl" "100110"))) "city")
 (assert (not (null? (city "jarl" "100105"))) "city")
 
 ; get city path of the specified level
-(defun city-region (city lv.) (nth lv. ((method 'getFullPath City) city)))
+(defun city-region (city lv) (nth lv ((method 'getFullPath City) city)))
 (assert (equal (city-region (city "jarl" "100110") 1) "目黒区") "city")
 (assert (equal (city-region (city "jarl" "100105") 1) "文京区") "city")

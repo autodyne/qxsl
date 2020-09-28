@@ -24,6 +24,7 @@ public final class TypeNode extends AtomBase<Class<?>> {
 	/**
 	 * 指定された型のアトムを構築します。
 	 *
+	 *
 	 * @param value 型
 	 */
 	public TypeNode(Class<?> value) {

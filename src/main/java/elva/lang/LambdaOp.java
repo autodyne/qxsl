@@ -36,6 +36,7 @@ public final class LambdaOp extends FormBase {
 	/**
 	 * このラムダ式が可変長引数のラムダ式か確認します。
 	 *
+	 *
 	 * @return 可変長引数なら真
 	 */
 	@Override
@@ -47,6 +48,7 @@ public final class LambdaOp extends FormBase {
 	/**
 	 * このラムダ式が取る引数の最小の個数を返します。
 	 *
+	 *
 	 * @return 最小限の引数の個数
 	 */
 	@Override
@@ -57,6 +59,7 @@ public final class LambdaOp extends FormBase {
 	/**
 	 * このラムダ式が取る引数の最大の個数を返します。
 	 *
+	 *
 	 * @return 最大限の引数の個数
 	 */
 	@Override
@@ -66,6 +69,7 @@ public final class LambdaOp extends FormBase {
 
 	/**
 	 * このラムダ式を表す文字列を返します。
+	 *
 	 *
 	 * @return 文字列による式の表現
 	 */

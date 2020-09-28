@@ -21,12 +21,14 @@ public abstract class AtomBase<V> extends NodeBase {
 	/**
 	 * この式の値を処理系の外部に渡す際に使用します。
 	 *
+	 *
 	 * @return 値
 	 */
 	public abstract V value();
 
 	/**
 	 * このアトムを表す文字列を返します。
+	 *
 	 *
 	 * @return 文字列による式の表現
 	 */
@@ -35,6 +37,7 @@ public abstract class AtomBase<V> extends NodeBase {
 
 	/**
 	 * この式がアトムであるか確認します。
+	 *
 	 *
 	 * @return アトムの場合は真
 	 */
@@ -45,6 +48,7 @@ public abstract class AtomBase<V> extends NodeBase {
 
 	/**
 	 * このアトムの内容をイテレータで返します。
+	 *
 	 *
 	 * @return イテレータ
 	 */
