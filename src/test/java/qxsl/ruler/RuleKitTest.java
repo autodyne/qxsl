@@ -117,9 +117,9 @@ public final class RuleKitTest extends Assertions {
 	private static List<Arguments> items() throws Exception {
 		final var fmts = new TableManager();
 		final var list = new LinkedList<Arguments>();
-		try(var res = CLS.getResourceAsStream(ITEMS)) {
-			for(var f: fmts) for(var i: fmts.decode(res)) {
-				list.add(Arguments.of(i, f.getName()));
+		try(final var res = CLS.getResourceAsStream(ITEMS)) {
+			for(var item: fmts.decode(res)) for(var f: fmts) {
+				list.add(Arguments.of(item, f.getName()));
 			}
 		}
 		return list;

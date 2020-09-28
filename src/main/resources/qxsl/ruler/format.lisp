@@ -295,8 +295,8 @@
 		((equal fmt "adxs") (encode-adif it))
 		((equal fmt "adis") (encode-adif it))
 		((equal fmt "cqww") (encode-cqww it))
-		((equal fmt "jarl") (encode-qxsl it))
-		((equal fmt "ctxt") (encode-zdos it))
+		((equal fmt "jarl") (encode-jarl it))
+		((equal fmt "ctxt") (encode-ctxt it))
 		((equal fmt "zall") (encode-zlog it))
 		((equal fmt "zdos") (encode-zdos it))
 		((equal fmt "cbin") (encode-zdos it))
@@ -370,6 +370,7 @@
 ; field conversion into cqww
 (defun encode-cqww it
 	(let new (encode-qxsl it)
+		(set-qxsl-name new null)
 		(set-cqww-band new (qxsl-band it))
 		(set-cqww-mode new (qxsl-mode it)) new))
 
@@ -377,6 +378,16 @@
 (defun decode-cqww it
 	(let new (decode-qxsl it)
 		(set-qxsl-mode new (cqww-mode it)) new))
+
+; field conversion into jarl
+(defun encode-jarl it
+	(let new (encode-qxsl it)
+		(set-qxsl-name new null) new))
+
+; field conversion into ctxt
+(defun encode-ctxt it
+	(let new (encode-zdos it)
+		(set-qxsl-name new null) new))
 
 ; field conversion into zlog
 (defun encode-zlog it
@@ -386,6 +397,8 @@
 ; field conversion into zdos
 (defun encode-zdos it
 	(let new (encode-qxsl it)
+		(set-qxsl-rstq new null)
+		(set-qxsl-RSTQ new null)
 		(set-qxsl-code new (join-code it))
 		(set-qxsl-CODE new (join-CODE it)) new))
 
