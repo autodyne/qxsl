@@ -6,7 +6,6 @@
 package qxsl.table;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.List;
 
 import qxsl.model.Item;
@@ -186,6 +185,6 @@ public abstract class TableFactory {
 	 * @throws IOException 書き込み時の例外
 	 */
 	public final byte[] encode(Item...sequence) throws IOException {
-		return encode(Arrays.asList(sequence));
+		return encode(List.of(sequence));
 	}
 }

@@ -9,8 +9,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -115,8 +113,7 @@ public abstract class BasicFactory extends SheetFactory {
 	 */
 	@Override
 	public final List<String> getExtensions() {
-		final var e = get("extensions").split(",");
-		return Collections.unmodifiableList(Arrays.asList(e));
+		return List.of(get("extensions").split(","));
 	}
 
   /**

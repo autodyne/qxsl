@@ -5,7 +5,6 @@
 *******************************************************************************/
 package qxsl.ruler;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import qxsl.model.Item;

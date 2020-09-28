@@ -17,7 +17,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import qxsl.model.Item;
-import qxsl.table.TableFactory;
 import qxsl.table.TableManager;
 
 import static java.nio.charset.StandardCharsets.UTF_8;

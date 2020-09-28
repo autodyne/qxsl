@@ -6,7 +6,11 @@
 package qxsl.ruler;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import qxsl.model.Item;
@@ -128,8 +132,8 @@ public final class Summary implements Serializable {
 	 * @since 2020/09/03
 	 */
 	public final List<Object> toScoreAndKeys() {
-		final var list = new ArrayList<Object>(Arrays.asList(score()));
-		for(var keys: keySets()) list.add(new ArrayList<Object>(keys));
+		final var list = new ArrayList<Object>(List.of(score()));
+		for(var k: keySets()) list.add(new ArrayList<Object>(k));
 		return list;
 	}
 }

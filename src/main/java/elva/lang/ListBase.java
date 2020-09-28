@@ -178,14 +178,15 @@ public abstract class ListBase extends NodeBase {
 	 *
 	 * @param <V> 要素の総称型
 	 *
-	 * @param type 要素の型
+	 * @param cls 要素の型
 	 *
 	 * @return 要素の配列
 	 */
 	@SuppressWarnings("unchecked")
-	public final <V> V[] cast(Class<V> type) {
-		final Object array = Array.newInstance(type, size());
-		return Arrays.asList(toArray()).toArray((V[]) array);
+	public final <V> V[] cast(Class<V> cls) {
+		final var array = Array.newInstance(cls, size());
+		System.arraycopy(toArray(), 0, array, 0, size());
+		return (V[]) array;
 	}
 
 	/**

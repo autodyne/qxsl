@@ -13,8 +13,6 @@ import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -119,8 +117,7 @@ public abstract class BasicFactory extends TableFactory {
 	 */
 	@Override
 	public final List<String> getExtensions() {
-		final var e = get("extensions").split(",");
-		return Collections.unmodifiableList(Arrays.asList(e));
+		return List.of(get("extensions").split(","));
 	}
 
 	/**
