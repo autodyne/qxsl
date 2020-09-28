@@ -83,14 +83,35 @@ val table: List[Item] = fmts.unpack(Files.newBufferedReader(path))
 ### Scoring for Awards & Contests
 
 The package `qxsl.ruler` provides a rulemaking framework for amateur radio awards and contests.
-Each contest is represented as a `Contest` object, which involves multiple `Section` objects.
-The `Section` object accepts `List[Item]` and validates the communications one by one, by invoking the `summarize` method.
-The class `RuleKit` provides a LISP engine optimized for this process.
+Each contest is represented as a `Contest` object, which is provided by a `RuleKit` object or a script engine to define the contest.
 
 ```Scala
-import qxsl.ruler.{Contest,RuleKit,Section,Summary}
+import qxsl.ruler.{Contest,RuleKit}
+val engine = RuleKit.load("elva")
+val stream = engine.getClass().getResourceAsStream("allja1.lisp")
+val allja1 = engine.contest(new InputStreamReader(stream, UTF_8))
+```
 
-val contest: Contest = RuleKit.load("elva").contest("""
+Each contest involves multiple `Section` objects.
+The `Section` object accepts `List[Item]` and validates the communications one by one, by invoking the `summarize` method.
+
+```Scala
+import qxsl.ruler.{Section,Summary}
+for(section: Section <- allja1.getSections().asScala) {
+  val summary: Summary = section.summarize(table)
+  println(section.getCode())
+  println(section.getName())
+  summary.accepted.asScala.foreach(println)
+  summary.rejected.asScala.foreach(println)
+  println(summary.score())
+  println(summary.total())
+}
+```
+
+Currently, the `RuleKit` class supports two domain specific languages, namely Ruby (JRuby) and Elva Lisp.
+Elva Lisp is a special LISP for the purpose of contest definition:
+
+```Lisp
 (load "qxsl/ruler/format.lisp")
 (defmacro SUCCESS tests (lambda it (success it 1 (qxsl-call it))))
 (defmacro scoring (score calls mults) `(* score (length ',mults)))
@@ -100,15 +121,8 @@ val contest: Contest = RuleKit.load("elva").contest("""
 (add-section test "CW 28MHz Single OP" "SinCW28" (SUCCESS (CW? 28MHz?)))
 (add-section test "PH 14MHz Single OP" "SinPH14" (SUCCESS (PH? 14MHz?)))
 (add-section test "PH 21MHz Single OP" "SinPH21" (SUCCESS (PH? 21MHz?)))
-(add-section test "PH 28MHz Single OP" "SinPH28" (SUCCESS (PH? 28MHz?)))""")
-
-val section: Section = contest.getSection("CW 14MHz SINGLE-OP")
-val summary: Summary = section.summarize(table)
-summary.accepted.asScala.foreach(println)
-summary.rejected.asScala.foreach(println)
+(add-section test "PH 28MHz Single OP" "SinPH28" (SUCCESS (PH? 28MHz?)))
 ```
-
-The original LISP engine is provided by the package `elva`.
 
 ### Bundled Contest Definitions
 
