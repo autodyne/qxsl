@@ -8,7 +8,6 @@ package qxsl.ruler;
 import java.util.List;
 
 import qxsl.model.Item;
-import qxsl.table.TableFactory;
 
 /**
  * コンテストの部門の実装はこのクラスを継承します。
@@ -18,9 +17,7 @@ import qxsl.table.TableFactory;
  *
  * @since 2016/11/25
  */
-public abstract class Section implements Library {
-	private Contest contest = null;
-
+public abstract class Section extends Library {
 	/**
 	 * 部門を構築します。
 	 */
@@ -87,34 +84,5 @@ public abstract class Section implements Library {
 	 */
 	public final Summary summarize(List<Item> items) {
 		return new Summary(this, items);
-	}
-
-	/**
-	 * 規約に基づき交信記録を標準形式に変換して得点計算に備えます。
-	 *
-	 *
-	 * @param item 交信記録
-	 *
-	 * @return 得点計算が可能な標準形式の交信記録
-	 *
-	 * @since 2020/09/04
-	 */
-	public final Item decode(Item item) {
-		return (Item) invoke("decode", item.clone());
-	}
-
-	/**
-	 * 規約に基づき交信記録を特定の書式に対応した状態に変換します。
-	 *
-	 *
-	 * @param item 交信記録
-	 * @param form 書式
-	 *
-	 * @return 指定された書式で出力可能な交信記録
-	 *
-	 * @since 2020/09/04
-	 */
-	public final Item encode(Item item, TableFactory form) {
-		return (Item) invoke("encode", item.clone(), form.getName());
 	}
 }

@@ -71,12 +71,12 @@ public abstract class RuleKit {
 
 	/**
 	 * 指定されたリーダから式を読み取って評価します。
-	 * 返り値はコンテストの定義である必要があります。
+	 * 返り値はコンテストの規約である必要があります。
 	 *
 	 *
 	 * @param reader 式を読み取るリーダ
 	 *
-	 * @return コンテストの定義
+	 * @return コンテストの規約
 	 *
 	 * @throws UncheckedIOException 読み取りまたは評価の例外
 	 */
@@ -86,17 +86,47 @@ public abstract class RuleKit {
 
 	/**
 	 * 指定された文字列から式を読み取って評価します。
-	 * 返り値はコンテストの定義である必要があります。
+	 * 返り値はコンテストの規約である必要があります。
 	 *
 	 *
 	 * @param source 式
 	 *
-	 * @return コンテストの定義
+	 * @return コンテストの規約
 	 *
 	 * @throws UncheckedIOException 読み取りまたは評価の例外
 	 */
 	public final Contest contest(String source) {
 		return (Contest) library(source);
+	}
+
+	/**
+	 * 指定されたリーダから式を読み取って評価します。
+	 * 返り値はコンテストの部門である必要があります。
+	 *
+	 *
+	 * @param reader 式を読み取るリーダ
+	 *
+	 * @return コンテストの部門
+	 *
+	 * @throws UncheckedIOException 読み取りまたは評価の例外
+	 */
+	public final Section section(Reader reader) {
+		return (Section) library(reader);
+	}
+
+	/**
+	 * 指定された文字列から式を読み取って評価します。
+	 * 返り値はコンテストの部門である必要があります。
+	 *
+	 *
+	 * @param source 式
+	 *
+	 * @return コンテストの部門
+	 *
+	 * @throws UncheckedIOException 読み取りまたは評価の例外
+	 */
+	public final Section section(String source) {
+		return (Section) library(source);
 	}
 
 	/**

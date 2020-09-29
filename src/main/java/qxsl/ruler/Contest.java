@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
  *
  * @since 2016/11/25
  */
-public abstract class Contest implements Library {
+public abstract class Contest extends Library {
 	private final List<Section> list;
 
 	/**

@@ -38,7 +38,7 @@ public final class LibraryForm extends NativeOp {
 	 *
 	 * @since 2017/02/20
 	 */
-	public static final class LibraryImpl implements Library {
+	public static final class LibraryImpl extends Library {
 		private final ElvaEval eval;
 
 		/**
