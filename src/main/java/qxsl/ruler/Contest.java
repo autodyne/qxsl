@@ -5,6 +5,7 @@
 *******************************************************************************/
 package qxsl.ruler;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -50,6 +51,67 @@ public abstract class Contest extends Library {
 	 * @return コンテストの名前
 	 */
 	public abstract String getName();
+
+	/**
+	 * コンテストの主催者を返します。
+	 *
+	 *
+	 * @return コンテストの主催者
+	 */
+	public abstract String getHost();
+
+	/**
+	 * コンテストの連絡先を返します。
+	 *
+	 *
+	 * @return コンテストの連絡先
+	 */
+	public abstract String getMail();
+
+	/**
+	 * コンテストの規約の場所を返します。
+	 *
+	 *
+	 * @return コンテストの規約の場所
+	 */
+	public abstract String getLink();
+
+	/**
+	 * 指定された年のコンテストの開始日を計算します。
+	 * 規約の実装に含まれる同名の関数を呼び出します。
+	 *
+	 *
+	 * @param year 開催年
+	 *
+	 * @return 開始日
+	 */
+	public final LocalDate getStartDay(int year) {
+		return (LocalDate) invoke("getStartDay", year);
+	}
+
+	/**
+	 * 指定された年のコンテストの終了日を計算します。
+	 *
+	 *
+	 * @param year 開催年
+	 *
+	 * @return 終了日
+	 */
+	public final LocalDate getFinalDay(int year) {
+		return (LocalDate) invoke("getFinalDay", year);
+	}
+
+	/**
+	 * 指定された年のコンテストの締切日を計算します。
+	 *
+	 *
+	 * @param year 開催年
+	 *
+	 * @return 締切日
+	 */
+	public final LocalDate getDeadLine(int year) {
+		return (LocalDate) invoke("getDeadLine", year);
+	}
 
 	/**
 	 * 指定された部門をこの規約に追加します。

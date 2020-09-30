@@ -23,7 +23,7 @@ import qxsl.ruler.Contest;
  * @since 2019/05/15
  */
 @Name("contest")
-@Args(min = 1, max = 1)
+@Args(min = 4, max = 4)
 public final class ContestForm extends NativeOp {
 	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
@@ -41,6 +41,9 @@ public final class ContestForm extends NativeOp {
 	public static final class ContestImpl extends Contest {
 		private final ElvaEval eval;
 		private final String name;
+		private final String host;
+		private final String mail;
+		private final String link;
 
 		/**
 		 * 指定された規約定義と評価器で規約を構築します。
@@ -49,13 +52,31 @@ public final class ContestForm extends NativeOp {
 		 * @param eval 評価器
 		 */
 		public ContestImpl(ListBase rule, ElvaEval eval) {
-			this.name = eval.apply(rule.head()).text();
+			this.name = eval.apply(rule.get(0)).text();
+			this.host = eval.apply(rule.get(1)).text();
+			this.mail = eval.apply(rule.get(2)).text();
+			this.link = eval.apply(rule.get(3)).text();
 			this.eval = eval;
 		}
 
 		@Override
 		public final String getName() {
 			return name;
+		}
+
+		@Override
+		public final String getHost() {
+			return host;
+		}
+
+		@Override
+		public final String getMail() {
+			return mail;
+		}
+
+		@Override
+		public final String getLink() {
+			return link;
 		}
 
 		@Override

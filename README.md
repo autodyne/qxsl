@@ -38,9 +38,9 @@ The package `qxsl.field` provides a management framework for `Field` implementat
 The class `FieldManager` detects `FieldFactory` implementations [from the class path automatically](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/ServiceLoader.html), and each `FieldFactory` provides en/decoders for individual `Field` implementation.
 
 ```Scala
-val fmts = new qxsl.field.FieldManager
-item.add(fmts.cache(new QName("qxsl.org", "mode")).field("CW"))
-item.add(fmts.cache(new QName("adif.org", "MODE")).field("CW"))
+val fields = new qxsl.field.FieldManager()
+item.add(fields.cache(new QName("qxsl.org", "mode")).field("CW"))
+item.add(fields.cache(new QName("adif.org", "MODE")).field("CW"))
 val mode = item.get(new QName("qxsl.org", "mode")).value()
 ```
 
@@ -67,17 +67,17 @@ The package `qxsl.table` provides a basic framework for en/decoding log files in
 The class `TableManager` detects individual formats (`TableFactory`s) from the class path automatically, and also provides the `detect` method for automatic format detection.
 
 ```Scala
-val fmts = new qxsl.table.TableManager()
-val table: List[Item] = fmts.decode(Files.newInputStream(path))
-fmts.forName("qxml").encoder(Files.newOutputStream(path)).encode(table)
+val tables = new qxsl.table.TableManager()
+val table: List[Item] = tables.decode(Files.newInputStream(path))
+tables.forName("qxml").encoder(Files.newOutputStream(path)).encode(table)
 ```
 
 The package `qxsl.sheet` provides an en/decoding framework similar to the `qxsl.table` package, except that `qxsl.sheet` handles contest summary sheets such as Cabrillo and [JARL summary sheet](https://www.jarl.org/Japanese/1_Tanoshimo/1-1_Contest/e-log.htm) R2.0.
-The class `SheetManager` manages individual `SheetFactory` implementations, and also provides the `unpack` method useful for extracting `List[Item]` from a summary sheet.
+The class `SheetManager` manages individual `SheetFactory` implementations, and also provides the `unpack` method useful for extracting table items from a summary sheet.
 
 ```Scala
-val fmts = new qxsl.sheet.SheetManager()
-val table: List[Item] = fmts.unpack(Files.newBufferedReader(path))
+val sheets = new qxsl.sheet.SheetManager()
+val table: List[Item] = tables.decode(sheets.unpack(Files.newBufferedReader(path)))
 ```
 
 ### Scoring for Awards & Contests

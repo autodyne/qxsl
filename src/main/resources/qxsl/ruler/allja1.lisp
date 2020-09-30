@@ -132,7 +132,7 @@
 (defmacro cat (area op mode band) `(format "%s %s %s %s" ,area ,op ,mode ,band))
 
 ; contest definition
-(set-contest JA1 "ALLJA1 TEST")
+(set-contest JA1 "ALLJA1" "東大無線部" "allja1@ja1zlo.u-tokyo.org" "ja1zlo.u-tokyo.org")
 
 ; 1エリア内 個人 ローバンド部門
 (add-section JA1 (cat 内 個 電信 19部門) SinLB (個検査 (SinOp? 関東内? morse? 1.9M部門?)) 得点)
