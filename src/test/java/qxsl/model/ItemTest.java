@@ -8,9 +8,9 @@ package qxsl.model;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import qxsl.extra.field.*;
+import gaas.field.*;
 
-import static qxsl.extra.table.QxmlFactory.ITEM;
+import static gaas.table.QxmlFactory.ITEM;
 
 /**
  * {@link Item}クラスのテスト用クラスです。

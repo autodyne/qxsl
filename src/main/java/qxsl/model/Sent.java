@@ -5,7 +5,7 @@
 *******************************************************************************/
 package qxsl.model;
 
-import static qxsl.extra.table.QxmlFactory.SENT;
+import static gaas.table.QxmlFactory.SENT;
 
 /**
  * 交信記録で相手局まで送信した情報を格納します。

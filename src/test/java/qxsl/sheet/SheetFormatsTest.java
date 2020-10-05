@@ -8,8 +8,8 @@ package qxsl.sheet;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import qxsl.extra.sheet.Cab3Factory;
-import qxsl.extra.sheet.JarlFactory;
+import gaas.sheet.Cab3Factory;
+import gaas.sheet.JarlFactory;
 
 /**
  * {@link SheetManager}クラスのテスト用クラスです。

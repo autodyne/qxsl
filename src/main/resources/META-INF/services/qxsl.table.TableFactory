@@ -1,12 +1,12 @@
-qxsl.extra.table.QxmlFactory
-qxsl.extra.table.AdxsFactory
+gaas.table.QxmlFactory
+gaas.table.AdxsFactory
 
-qxsl.extra.table.AdisFactory
-qxsl.extra.table.CqwwFactory
-qxsl.extra.table.JarlFactory
-qxsl.extra.table.CTxtFactory
-qxsl.extra.table.ZAllFactory
-qxsl.extra.table.ZDosFactory
+gaas.table.AdisFactory
+gaas.table.CqwwFactory
+gaas.table.JarlFactory
+gaas.table.CTxtFactory
+gaas.table.ZAllFactory
+gaas.table.ZDosFactory
 
-qxsl.extra.table.CBinFactory
-qxsl.extra.table.ZBinFactory
+gaas.table.CBinFactory
+gaas.table.ZBinFactory

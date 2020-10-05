@@ -8,7 +8,7 @@ package qxsl.model;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-import static qxsl.extra.table.QxmlFactory.ITEM;
+import static gaas.table.QxmlFactory.ITEM;
 
 /**
  * 交信記録で1件の不可分な交信を表現します。

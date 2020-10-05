@@ -8,7 +8,7 @@ package qxsl.table;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import qxsl.extra.table.*;
+import gaas.table.*;
 
 /**
  * {@link TableManager}クラスのテスト用クラスです。

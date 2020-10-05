@@ -5,7 +5,7 @@
 *******************************************************************************/
 package qxsl.model;
 
-import static qxsl.extra.table.QxmlFactory.RCVD;
+import static gaas.table.QxmlFactory.RCVD;
 
 /**
  * 交信記録で相手局から受信した情報を格納します。

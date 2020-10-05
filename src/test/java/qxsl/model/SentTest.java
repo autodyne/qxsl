@@ -8,12 +8,12 @@ package qxsl.model;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import qxsl.extra.field.Code;
-import qxsl.extra.field.Qxsl;
-import qxsl.extra.field.RSTQ;
-import qxsl.extra.field.Watt;
+import gaas.field.Code;
+import gaas.field.Qxsl;
+import gaas.field.RSTQ;
+import gaas.field.Watt;
 
-import static qxsl.extra.table.QxmlFactory.SENT;
+import static gaas.table.QxmlFactory.SENT;
 
 /**
  * {@link Sent}クラスのテスト用クラスです。
