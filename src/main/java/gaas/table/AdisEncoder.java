@@ -10,9 +10,9 @@ import java.io.Writer;
 import java.time.ZonedDateTime;
 
 import qxsl.field.FieldManager;
-import qxsl.model.Field;
 import qxsl.model.Item;
 import qxsl.table.PrintEncoder;
+import qxsl.value.Field;
 
 import static gaas.table.AdisFactory.EOH;
 import static gaas.table.AdisFactory.EOR;

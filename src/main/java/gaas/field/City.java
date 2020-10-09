@@ -17,7 +17,7 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 
 import qxsl.field.FieldFactory;
-import qxsl.model.Field;
+import qxsl.value.Field;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.toList;

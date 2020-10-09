@@ -3,14 +3,10 @@
  * License : GNU Lesser General Public License v3 (see LICENSE)
  * Author: Journal of Hamradio Informatics (http://pafelog.net)
 *******************************************************************************/
-package qxsl.model;
+package qxsl.value;
 
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import javax.xml.namespace.QName;
-
-import qxsl.field.FieldManager;
 
 /**
  * 交信に対して複数の属性を設定可能な交信記録の共通実装です。
@@ -21,18 +17,16 @@ import qxsl.field.FieldManager;
  * @since 2015/08/05
  */
 public abstract class Tuple implements Iterable<Field> {
-	final Map<QName, Field> table;
-	final QName qname;
+	private final QName name;
 
 	/**
-	 * 指定された名前の空の要素を構築します。
+	 * 指定された名前の要素を構築します。
 	 *
 	 *
-	 * @param qname 名前
+	 * @param name 要素の名前
 	 */
-	public Tuple(QName qname) {
-		this.qname = qname;
-		this.table = new HashMap<>();
+	public Tuple(QName name) {
+		this.name = name;
 	}
 
 	/**
@@ -42,7 +36,7 @@ public abstract class Tuple implements Iterable<Field> {
 	 * @return 要素の名前
 	 */
 	public final QName name() {
-		return qname;
+		return name;
 	}
 
 	/**
@@ -72,9 +66,7 @@ public abstract class Tuple implements Iterable<Field> {
 	 * @return 反復子
 	 */
 	@Override
-	public final Iterator<Field> iterator() {
-		return table.values().iterator();
-	}
+	public abstract Iterator<Field> iterator();
 
 	/**
 	 * 指定された名前の属性の有無を確認します。
@@ -84,9 +76,7 @@ public abstract class Tuple implements Iterable<Field> {
 	 *
 	 * @return 属性が設定されている場合は真
 	 */
-	public final boolean containsKey(QName key) {
-		return table.containsKey(key);
-	}
+	public abstract boolean containsKey(QName key);
 
 	/**
 	 * 指定された属性を適切な名前で追加します。
@@ -96,10 +86,7 @@ public abstract class Tuple implements Iterable<Field> {
 	 *
 	 * @return この要素
 	 */
-	public final Tuple set(Field field) {
-		table.put(field.name(), field);
-		return this;
-	}
+	public abstract Tuple set(Field field);
 
 	/**
 	 * 指定された文字列を属性に変換して追加します。
@@ -112,10 +99,7 @@ public abstract class Tuple implements Iterable<Field> {
 	 *
 	 * @since 2019/06/30
 	 */
-	public final Tuple set(QName key, String val) {
-		set(FieldManager.FIELDS.decode(key, val));
-		return this;
-	}
+	public abstract Tuple set(QName key, String val);
 
 	/**
 	 * 指定された属性名に対応する属性を削除します。
@@ -125,10 +109,7 @@ public abstract class Tuple implements Iterable<Field> {
 	 *
 	 * @return この要素
 	 */
-	public final Tuple remove(QName key) {
-		table.remove(key);
-		return this;
-	}
+	public abstract Tuple remove(QName key);
 
 	/**
 	 * 指定された属性名に対応する属性を返します。
@@ -138,9 +119,7 @@ public abstract class Tuple implements Iterable<Field> {
 	 *
 	 * @return 設定されている属性
 	 */
-	public final Field get(QName key) {
-		return table.get(key);
-	}
+	public abstract Field get(QName key);
 
 	/**
 	 * 指定された属性名に対応する属性の値を返します。
@@ -150,7 +129,5 @@ public abstract class Tuple implements Iterable<Field> {
 	 *
 	 * @return 設定されている属性の値
 	 */
-	public final Object value(QName key) {
-		return containsKey(key)? get(key).value(): null;
-	}
+	public abstract Object value(QName key);
 }

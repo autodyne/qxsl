@@ -11,9 +11,9 @@ import java.io.OutputStream;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import qxsl.model.Field;
 import qxsl.model.Item;
 import qxsl.table.TableEncoder;
+import qxsl.value.Field;
 
 import gaas.field.Band;
 import gaas.field.Mode;

@@ -15,11 +15,11 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import qxsl.field.FieldManager;
-import qxsl.model.Field;
 import qxsl.model.Item;
 import qxsl.model.Rcvd;
 import qxsl.model.Sent;
 import qxsl.table.TableEncoder;
+import qxsl.value.Field;
 
 import static gaas.table.QxmlFactory.*;
 

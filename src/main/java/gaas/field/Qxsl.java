@@ -7,7 +7,7 @@ package gaas.field;
 
 import javax.xml.namespace.QName;
 
-import qxsl.model.Field;
+import qxsl.value.Field;
 
 /**
  * QXMLが標準仕様でサポートする属性の名前を定義します。

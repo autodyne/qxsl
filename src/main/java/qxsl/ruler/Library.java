@@ -58,7 +58,7 @@ public abstract class Library {
 	 * @since 2020/09/04
 	 */
 	public final Item decode(Item item) {
-		return (Item) invoke("decode", item.clone());
+		return (Item) invoke("decode", item);
 	}
 
 	/**
@@ -73,6 +73,6 @@ public abstract class Library {
 	 * @since 2020/09/04
 	 */
 	public final Item encode(Item item, TableFactory form) {
-		return (Item) invoke("encode", item.clone(), form.getName());
+		return (Item) invoke("encode", item, form.getName());
 	}
 }

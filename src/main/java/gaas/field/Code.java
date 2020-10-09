@@ -8,7 +8,7 @@ package gaas.field;
 import javax.xml.namespace.QName;
 
 import qxsl.field.FieldFactory;
-import qxsl.model.Field;
+import qxsl.value.Field;
 
 /**
  * コンテストで相手局と交換するシリアル番号です。

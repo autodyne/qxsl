@@ -5,21 +5,21 @@
 *******************************************************************************/
 package qxsl.model;
 
-import static gaas.table.QxmlFactory.SENT;
+import static gaas.table.QxmlFactory.BOTH;
 
 /**
- * 交信記録で相手局まで送信した属性を格納します。
+ * 交信記録で送受信局間に共通の属性を格納します。
  *
  *
  * @author 無線部開発班
  *
- * @since 2013/06/08
+ * @since 2020/10/09
  */
-public final class Sent extends Node {
+public final class Both extends Node {
 	/**
 	 * 空の要素を構築します。
 	 */
-	public Sent() {
-		super(SENT);
+	public Both() {
+		super(BOTH);
 	}
 }

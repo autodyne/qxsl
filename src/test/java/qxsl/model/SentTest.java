@@ -30,13 +30,13 @@ public final class SentTest extends Assertions {
 
 	@Test
 	public void testType() {
-		assertThat(new Sent(new Item()).name()).isEqualTo(SENT);
+		assertThat(new Sent().name()).isEqualTo(SENT);
 	}
 
 	@Test
 	public void testEquals() {
-		final var sent1 = new Sent(new Item());
-		final var sent2 = new Sent(new Item());
+		final var sent1 = new Sent();
+		final var sent2 = new Sent();
 		assertThat(sent1).isEqualTo(sent2);
 		assertThat(sent1.set(code).get(Qxsl.CODE)).isEqualTo(code);
 		assertThat(sent1.set(rstq).get(Qxsl.RSTQ)).isEqualTo(rstq);

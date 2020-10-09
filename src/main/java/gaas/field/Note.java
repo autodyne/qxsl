@@ -8,7 +8,7 @@ package gaas.field;
 import javax.xml.namespace.QName;
 
 import qxsl.field.FieldFactory;
-import qxsl.model.Field;
+import qxsl.value.Field;
 
 /**
  * 交信の備考を表現する{@link Field}実装クラスです。

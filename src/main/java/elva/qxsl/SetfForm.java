@@ -13,7 +13,7 @@ import elva.lang.NativeOp;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
-import qxsl.model.Tuple;
+import qxsl.value.Tuple;
 
 /**
  * この関数は交信記録の属性の設定値を上書きします。

@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 import javax.xml.namespace.QName;
 
 import qxsl.field.FieldFactory;
-import qxsl.model.Field;
+import qxsl.value.Field;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
 

@@ -30,13 +30,13 @@ public final class RcvdTest extends Assertions {
 
 	@Test
 	public void testType() {
-		assertThat(new Rcvd(new Item()).name()).isEqualTo(RCVD);
+		assertThat(new Rcvd().name()).isEqualTo(RCVD);
 	}
 
 	@Test
 	public void testEquals() {
-		final var rcvd1 = new Rcvd(new Item());
-		final var rcvd2 = new Rcvd(new Item());
+		final var rcvd1 = new Rcvd();
+		final var rcvd2 = new Rcvd();
 		assertThat(rcvd1).isEqualTo(rcvd2);
 		assertThat(rcvd1.set(code).get(Qxsl.CODE)).isEqualTo(code);
 		assertThat(rcvd1.set(rstq).get(Qxsl.RSTQ)).isEqualTo(rstq);

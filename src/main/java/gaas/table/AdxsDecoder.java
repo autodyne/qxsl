@@ -18,8 +18,8 @@ import javax.xml.stream.events.XMLEvent;
 
 import qxsl.field.FieldManager;
 import qxsl.model.Item;
-import qxsl.model.Tuple;
 import qxsl.table.TableDecoder;
+import qxsl.value.Tuple;
 
 import static gaas.table.AdxsFactory.*;
 

@@ -9,9 +9,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import qxsl.model.Field;
 import qxsl.model.Item;
 import qxsl.table.TableEncoder;
+import qxsl.value.Field;
 
 import gaas.field.*;
 import gaas.table.ZBinFactory.BandEnum;

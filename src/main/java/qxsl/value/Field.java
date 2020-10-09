@@ -3,7 +3,7 @@
  * License : GNU Lesser General Public License v3 (see LICENSE)
  * Author: Journal of Hamradio Informatics (http://pafelog.net)
 *******************************************************************************/
-package qxsl.model;
+package qxsl.value;
 
 import java.io.IOException;
 import java.util.Objects;

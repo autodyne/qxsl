@@ -12,9 +12,9 @@ import java.util.regex.Pattern;
 import javax.xml.namespace.QName;
 
 import qxsl.field.FieldManager;
-import qxsl.model.Field;
 import qxsl.model.Item;
 import qxsl.table.PrintDecoder;
+import qxsl.value.Field;
 
 import static gaas.table.AdisFactory.EOH;
 import static gaas.table.AdisFactory.EOR;

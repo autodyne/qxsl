@@ -9,9 +9,9 @@ import java.io.IOException;
 import java.io.Writer;
 import java.time.format.DateTimeFormatter;
 
-import qxsl.model.Field;
 import qxsl.model.Item;
 import qxsl.table.PrintEncoder;
+import qxsl.value.Field;
 
 import gaas.field.Band;
 import gaas.field.Qxsl;

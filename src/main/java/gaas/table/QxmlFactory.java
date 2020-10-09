@@ -33,6 +33,7 @@ import qxsl.table.TableEncoder;
 public final class QxmlFactory extends PrintFactory {
 	public static final QName LIST = new QName("list");
 	public static final QName ITEM = new QName("item");
+	public static final QName BOTH = new QName("both");
 	public static final QName RCVD = new QName("rcvd");
 	public static final QName SENT = new QName("sent");
 	public static final String QXSD = "qxml.xsd";

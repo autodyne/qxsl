@@ -8,21 +8,18 @@ package qxsl.model;
 import static gaas.table.QxmlFactory.RCVD;
 
 /**
- * 交信記録で相手局から受信した情報を格納します。
+ * 交信記録で相手局から受信した属性を格納します。
  *
  *
  * @author 無線部開発班
  *
  * @since 2013/06/08
  */
-public final class Rcvd extends Exch {
+public final class Rcvd extends Node {
 	/**
-	 * 指定した親を持つ要素を構築します。
-	 *
-	 *
-	 * @param item 親
+	 * 空の要素を構築します。
 	 */
-	Rcvd(Item item) {
-		super(item, RCVD);
+	public Rcvd() {
+		super(RCVD);
 	}
 }

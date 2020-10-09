@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.ServiceLoader;
 import javax.xml.namespace.QName;
 
-import qxsl.model.Field;
+import qxsl.value.Field;
 
 /**
  * {@link FieldFactory}実装クラスを自動的に検出して管理します。

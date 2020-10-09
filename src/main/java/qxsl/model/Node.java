@@ -5,67 +5,35 @@
 *******************************************************************************/
 package qxsl.model;
 
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Objects;
-import java.util.TreeMap;
+import java.util.Map;
 import javax.xml.namespace.QName;
 
+import qxsl.field.FieldManager;
 import qxsl.value.Field;
 import qxsl.value.Tuple;
 
-import static gaas.table.QxmlFactory.ITEM;
-
 /**
- * 交信記録で不可分な交信を表現します。
+ * 交信記録の末端の要素を表現します。
  *
  *
  * @author 無線部開発班
  *
- * @since 2013/06/04
+ * @since 2013/06/15
  */
-public final class Item extends Tuple {
-	private final Both both;
-	private final Rcvd rcvd;
-	private final Sent sent;
+public abstract class Node extends Tuple {
+	private final Map<QName, Field> table;
 
 	/**
-	 * 交信記録を構築します。
+	 * 指定された名前の要素を構築します。
+	 *
+	 *
+	 * @param name 要素の名前
 	 */
-	public Item() {
-		super(ITEM);
-		this.both = new Both();
-		this.rcvd = new Rcvd();
-		this.sent = new Sent();
-	}
-
-	/**
-	 * 送受信局間に共通の要素を返します。
-	 *
-	 *
-	 * @return 送受信局間に共通の要素
-	 */
-	public final Both getBoth() {
-		return both;
-	}
-
-	/**
-	 * 相手局から受信した要素を返します。
-	 *
-	 *
-	 * @return 相手局から受信した要素
-	 */
-	public final Rcvd getRcvd() {
-		return rcvd;
-	}
-
-	/**
-	 * 相手局まで送信した要素を返します。
-	 *
-	 *
-	 * @return 相手局まで送信した要素
-	 */
-	public final Sent getSent() {
-		return sent;
+	public Node(QName name) {
+		super(name);
+		this.table = new HashMap<>();
 	}
 
 	/**
@@ -76,7 +44,7 @@ public final class Item extends Tuple {
 	 */
 	@Override
 	public final int hashCode() {
-		return Objects.hash(both, rcvd, sent);
+		return table.hashCode();
 	}
 
 	/**
@@ -89,13 +57,8 @@ public final class Item extends Tuple {
 	 */
 	@Override
 	public final boolean equals(Object obj) {
-		if(Item.class.isInstance(obj)) {
-			final var item = (Item) obj;
-			if(!both.equals(item.both)) return false;
-			if(!rcvd.equals(item.rcvd)) return false;
-			if(!sent.equals(item.sent)) return false;
-			return true;
-		} else return false;
+		if(!getClass().isInstance(obj)) return false;
+		else return table.equals(((Node) obj).table);
 	}
 
 	/**
@@ -106,11 +69,7 @@ public final class Item extends Tuple {
 	 */
 	@Override
 	public final String toString() {
-		final var nodes = new TreeMap<QName, Node>();
-		nodes.put(both.name(), both);
-		nodes.put(rcvd.name(), rcvd);
-		nodes.put(sent.name(), sent);
-		return String.format("%s=%s", name(), nodes);
+		return String.format("%s=%s", name(), table);
 	}
 
 	/**
@@ -121,7 +80,7 @@ public final class Item extends Tuple {
 	 */
 	@Override
 	public final Iterator<Field> iterator() {
-		return getBoth().iterator();
+		return this.table.values().iterator();
 	}
 
 	/**
@@ -134,7 +93,7 @@ public final class Item extends Tuple {
 	 */
 	@Override
 	public final boolean containsKey(QName key) {
-		return getBoth().containsKey(key);
+		return this.table.containsKey(key);
 	}
 
 	/**
@@ -147,7 +106,8 @@ public final class Item extends Tuple {
 	 */
 	@Override
 	public final Tuple set(Field field) {
-		return getBoth().set(field);
+		this.table.put(field.name(), field);
+		return this;
 	}
 
 	/**
@@ -163,7 +123,8 @@ public final class Item extends Tuple {
 	 */
 	@Override
 	public final Tuple set(QName key, String val) {
-		return getBoth().set(key, val);
+		set(FieldManager.FIELDS.decode(key, val));
+		return this;
 	}
 
 	/**
@@ -176,7 +137,8 @@ public final class Item extends Tuple {
 	 */
 	@Override
 	public final Tuple remove(QName key) {
-		return getBoth().remove(key);
+		table.remove(key);
+		return this;
 	}
 
 	/**
@@ -189,7 +151,7 @@ public final class Item extends Tuple {
 	 */
 	@Override
 	public final Field get(QName key) {
-		return getBoth().get(key);
+		return table.get(key);
 	}
 
 	/**
@@ -202,6 +164,6 @@ public final class Item extends Tuple {
 	 */
 	@Override
 	public final Object value(QName key) {
-		return getBoth().value(key);
+		return containsKey(key)? get(key).value(): null;
 	}
 }

@@ -8,7 +8,7 @@ package gaas.field;
 import javax.xml.namespace.QName;
 
 import qxsl.field.FieldFactory;
-import qxsl.model.Field;
+import qxsl.value.Field;
 
 import static java.text.Normalizer.Form.NFKC;
 import static java.text.Normalizer.normalize;
