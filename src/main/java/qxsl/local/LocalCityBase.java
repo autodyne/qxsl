@@ -57,7 +57,7 @@ public final class LocalCityBase {
 	 * 指定された識別子に対応する地域を返します。
 	 *
 	 *
-	 * @param 地域の識別子
+	 * @param code 地域の識別子
 	 *
 	 * @return 地域
 	 */
@@ -69,7 +69,7 @@ public final class LocalCityBase {
 	 * 指定された自然名に対応する地域を返します。
 	 *
 	 *
-	 * @param 地域の自然名
+	 * @param name 地域の自然名
 	 *
 	 * @return 地域
 	 */
@@ -81,7 +81,7 @@ public final class LocalCityBase {
 	 * 指定された名前のデータベースを読み取って返します。
 	 *
 	 *
-	 * @param base データベースの名前
+	 * @param name データベースの名前
 	 *
 	 * @return データベース
 	 */

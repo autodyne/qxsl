@@ -236,10 +236,6 @@
 (defun 5.6GHz? it (equal (qxsl-band it) 5.6GHz))
 (defun  10GHz? it (equal (qxsl-band it)  10GHz))
 
-; multiple-band validation
-(defun 1450? it (<= 14000 (qxsl-band it) 50000))
-(defun 1970? it (<=  1900 (qxsl-band it)  7000))
-
 ;; MODE FIELD ACCESS ROUTINES
 
 ; mode enumeration
@@ -291,6 +287,10 @@
 ; concatenate RST and code
 (defun join-code it (format "%s%s" (qxsl-rstq it) (qxsl-code it)))
 (defun join-CODE it (format "%s%s" (qxsl-RSTQ it) (qxsl-CODE it)))
+
+; name validation
+(defun SinOp? it #t)
+(defun MulOp? it (not (member (qxsl-name it) (list null ""))))
 
 ;; FORMAT CONVERSION ROUTINES
 

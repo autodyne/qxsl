@@ -2,22 +2,18 @@
 
 (load "qxsl/ruler/jautil.lisp")
 
-; time validation
-(defun 朝の部門? it (and (<= 09 (時刻 it) 11) (CW/PH? it) (1450? it)))
-(defun 昼の部門? it (and (<= 13 (時刻 it) 14) (DIGIT? it) (7MHz? it)))
-(defun 夜の部門? it (and (<= 16 (時刻 it) 19) (CW/PH? it) (1970? it)))
+; multiple-band validation
+(defun HiBand? it (<= 14000 (qxsl-band it) 50000))
+(defun LoBand? it (<=  1900 (qxsl-band it)  7000))
+(defun DgBand? it (7MHz? it))
 
-; time-band validation
-(defun 1.9M部門? it (every it 夜の部門? 1.9MHz?))
-(defun 3.5M部門? it (every it 夜の部門? 3.5MHz?))
-(defun   7M部門? it (every it 夜の部門?   7MHz?))
-(defun  14M部門? it (every it 朝の部門?  14MHz?))
-(defun  21M部門? it (every it 朝の部門?  21MHz?))
-(defun  28M部門? it (every it 朝の部門?  28MHz?))
-(defun  50M部門? it (every it 朝の部門?  50MHz?))
+; time validation
+(defun 朝の部門? it (and (<= 09 (時刻 it) 11) (CW/PH? it) (HiBand? it)))
+(defun 昼の部門? it (and (<= 13 (時刻 it) 14) (DIGIT? it) (DgBand? it)))
+(defun 夜の部門? it (and (<= 16 (時刻 it) 19) (CW/PH? it) (LoBand? it)))
 
 ; validation of analog/digital sections
-(defun 電信電話? it (some it 朝の部門? 夜の部門? ))
+(defun 電信電話? it (some it 朝の部門? 夜の部門?))
 (defun 総合部門? it (some it 朝の部門? 夜の部門? 昼の部門?))
 
 ;; validation of 1エリア内/1エリア外部門
@@ -31,10 +27,6 @@
 			((always it) (府県? it)))))
 
 (defun エリア外? it (every it 現存? AREA1? 市郡?))
-
-;; validation of 個人部門/団体部門
-(defun SinOp? it #t)
-(defun MulOp? it (not (member (qxsl-name it) (list null ""))))
 
 ; keys for scoring
 (defun CALL it
@@ -68,17 +60,8 @@
 					(success it 1 ,@(dolist (k keys) (list k 'it)))
 					(failure it (format "無効な交信(%s)" msg)))))))
 
-(defmacro 個検査 conds `(検査 ,conds (CALL MULT SOLE)))
-(defmacro 団検査 conds `(検査 ,conds (CALL MULT CORP)))
-
-; section codes
-(setq SinHB "Sin1")
-(setq SinLB "Sin2")
-(setq SinDG "Sin3")
-(setq SinJS "Sin4")
-(setq MulAB "Mul1")
-(setq MulDG "Mul2")
-(setq MulJS "Mul3")
+(defmacro 個検査 conds... `(検査 ,conds... (CALL MULT SOLE)))
+(defmacro 団検査 conds... `(検査 ,conds... (CALL MULT CORP)))
 
 ; section names
 (setq 内 "1エリア内")
@@ -108,62 +91,71 @@
 ; contest definition
 (set-contest JA1 "ALLJA1" "東大無線部" "allja1@ja1zlo.u-tokyo.org" "ja1zlo.u-tokyo.org")
 
+; section codes
+(defmacro SinHB (name test) `(add-section JA1 (cat ,@name) "Sin1" (個検査 ,@test) 得点))
+(defmacro SinLB (name test) `(add-section JA1 (cat ,@name) "Sin2" (個検査 ,@test) 得点))
+(defmacro SinDG (name test) `(add-section JA1 (cat ,@name) "Sin3" (個検査 ,@test) 得点))
+(defmacro SinJS (name test) `(add-section JA1 (cat ,@name) "Sin4" (個検査 ,@test) 得点))
+(defmacro MulAB (name test) `(add-section JA1 (cat ,@name) "Mul1" (団検査 ,@test) 得点))
+(defmacro MulDG (name test) `(add-section JA1 (cat ,@name) "Mul2" (団検査 ,@test) 得点))
+(defmacro MulJS (name test) `(add-section JA1 (cat ,@name) "Mul3" (団検査 ,@test) 得点))
+
 ; 1エリア内 個人 ローバンド部門
-(add-section JA1 (cat 内 個 電信 19部門) SinLB (個検査 (SinOp? エリア内? MORSE? 1.9M部門?)) 得点)
-(add-section JA1 (cat 内 個 電信 35部門) SinLB (個検査 (SinOp? エリア内? MORSE? 3.5M部門?)) 得点)
-(add-section JA1 (cat 内 個 電電 35部門) SinLB (個検査 (SinOp? エリア内? CW/PH? 3.5M部門?)) 得点)
-(add-section JA1 (cat 内 個 電信  7部門) SinLB (個検査 (SinOp? エリア内? MORSE?   7M部門?)) 得点)
-(add-section JA1 (cat 内 個 電電  7部門) SinLB (個検査 (SinOp? エリア内? CW/PH?   7M部門?)) 得点)
-(add-section JA1 (cat 内 個 電信 LB部門) SinLB (個検査 (SinOp? エリア内? MORSE? 夜の部門?)) 得点)
-(add-section JA1 (cat 内 個 電電 LB部門) SinLB (個検査 (SinOp? エリア内? CW/PH? 夜の部門?)) 得点)
+(SinLB (内 個 電信 19部門) (エリア内? SinOp? MORSE? 夜の部門? 1.9MHz?))
+(SinLB (内 個 電信 35部門) (エリア内? SinOp? MORSE? 夜の部門? 3.5MHz?))
+(SinLB (内 個 電電 35部門) (エリア内? SinOp? CW/PH? 夜の部門? 3.5MHz?))
+(SinLB (内 個 電信  7部門) (エリア内? SinOp? MORSE? 夜の部門?   7MHz?))
+(SinLB (内 個 電電  7部門) (エリア内? SinOp? CW/PH? 夜の部門?   7MHz?))
+(SinLB (内 個 電信 LB部門) (エリア内? SinOp? MORSE? 夜の部門?))
+(SinLB (内 個 電電 LB部門) (エリア内? SinOp? CW/PH? 夜の部門?))
 
 ; 1エリア外 個人 ローバンド部門
-(add-section JA1 (cat 外 個 電信 19部門) SinLB (個検査 (SinOp? エリア外? MORSE? 1.9M部門?)) 得点)
-(add-section JA1 (cat 外 個 電信 35部門) SinLB (個検査 (SinOp? エリア外? MORSE? 3.5M部門?)) 得点)
-(add-section JA1 (cat 外 個 電電 35部門) SinLB (個検査 (SinOp? エリア外? CW/PH? 3.5M部門?)) 得点)
-(add-section JA1 (cat 外 個 電信  7部門) SinLB (個検査 (SinOp? エリア外? MORSE?   7M部門?)) 得点)
-(add-section JA1 (cat 外 個 電電  7部門) SinLB (個検査 (SinOp? エリア外? CW/PH?   7M部門?)) 得点)
-(add-section JA1 (cat 外 個 電信 LB部門) SinLB (個検査 (SinOp? エリア外? MORSE? 夜の部門?)) 得点)
-(add-section JA1 (cat 外 個 電電 LB部門) SinLB (個検査 (SinOp? エリア外? CW/PH? 夜の部門?)) 得点)
+(SinLB (外 個 電信 19部門) (エリア外? SinOp? MORSE? 夜の部門? 1.9MHz?))
+(SinLB (外 個 電信 35部門) (エリア外? SinOp? MORSE? 夜の部門? 3.5MHz?))
+(SinLB (外 個 電電 35部門) (エリア外? SinOp? CW/PH? 夜の部門? 3.5MHz?))
+(SinLB (外 個 電信  7部門) (エリア外? SinOp? MORSE? 夜の部門?   7MHz?))
+(SinLB (外 個 電電  7部門) (エリア外? SinOp? CW/PH? 夜の部門?   7MHz?))
+(SinLB (外 個 電信 LB部門) (エリア外? SinOp? MORSE? 夜の部門?))
+(SinLB (外 個 電電 LB部門) (エリア外? SinOp? CW/PH? 夜の部門?))
 
 ; 1エリア内 個人 ハイバンド部門
-(add-section JA1 (cat 内 個 電信 14部門) SinHB (個検査 (SinOp? エリア内? MORSE?  14M部門?)) 得点)
-(add-section JA1 (cat 内 個 電電 14部門) SinHB (個検査 (SinOp? エリア内? CW/PH?  14M部門?)) 得点)
-(add-section JA1 (cat 内 個 電信 21部門) SinHB (個検査 (SinOp? エリア内? MORSE?  21M部門?)) 得点)
-(add-section JA1 (cat 内 個 電電 21部門) SinHB (個検査 (SinOp? エリア内? CW/PH?  21M部門?)) 得点)
-(add-section JA1 (cat 内 個 電信 28部門) SinHB (個検査 (SinOp? エリア内? MORSE?  28M部門?)) 得点)
-(add-section JA1 (cat 内 個 電電 28部門) SinHB (個検査 (SinOp? エリア内? CW/PH?  28M部門?)) 得点)
-(add-section JA1 (cat 内 個 電信 50部門) SinHB (個検査 (SinOp? エリア内? MORSE?  50M部門?)) 得点)
-(add-section JA1 (cat 内 個 電電 50部門) SinHB (個検査 (SinOp? エリア内? CW/PH?  50M部門?)) 得点)
-(add-section JA1 (cat 内 個 電信 HB部門) SinHB (個検査 (SinOp? エリア内? MORSE? 朝の部門?)) 得点)
-(add-section JA1 (cat 内 個 電電 HB部門) SinHB (個検査 (SinOp? エリア内? CW/PH? 朝の部門?)) 得点)
+(SinHB (内 個 電信 14部門) (エリア内? SinOp? MORSE? 朝の部門?  14MHz?))
+(SinHB (内 個 電電 14部門) (エリア内? SinOp? CW/PH? 朝の部門?  14MHz?))
+(SinHB (内 個 電信 21部門) (エリア内? SinOp? MORSE? 朝の部門?  21MHz?))
+(SinHB (内 個 電電 21部門) (エリア内? SinOp? CW/PH? 朝の部門?  21MHz?))
+(SinHB (内 個 電信 28部門) (エリア内? SinOp? MORSE? 朝の部門?  28MHz?))
+(SinHB (内 個 電電 28部門) (エリア内? SinOp? CW/PH? 朝の部門?  28MHz?))
+(SinHB (内 個 電信 50部門) (エリア内? SinOp? MORSE? 朝の部門?  50MHz?))
+(SinHB (内 個 電電 50部門) (エリア内? SinOp? CW/PH? 朝の部門?  50MHz?))
+(SinHB (内 個 電信 HB部門) (エリア内? SinOp? MORSE? 朝の部門?))
+(SinHB (内 個 電電 HB部門) (エリア内? SinOp? CW/PH? 朝の部門?))
 
 ; 1エリア外 個人 ハイバンド部門
-(add-section JA1 (cat 外 個 電信 14部門) SinHB (個検査 (SinOp? エリア外? MORSE?  14M部門?)) 得点)
-(add-section JA1 (cat 外 個 電電 14部門) SinHB (個検査 (SinOp? エリア外? CW/PH?  14M部門?)) 得点)
-(add-section JA1 (cat 外 個 電信 21部門) SinHB (個検査 (SinOp? エリア外? MORSE?  21M部門?)) 得点)
-(add-section JA1 (cat 外 個 電電 21部門) SinHB (個検査 (SinOp? エリア外? CW/PH?  21M部門?)) 得点)
-(add-section JA1 (cat 外 個 電信 28部門) SinHB (個検査 (SinOp? エリア外? MORSE?  28M部門?)) 得点)
-(add-section JA1 (cat 外 個 電電 28部門) SinHB (個検査 (SinOp? エリア外? CW/PH?  28M部門?)) 得点)
-(add-section JA1 (cat 外 個 電信 50部門) SinHB (個検査 (SinOp? エリア外? MORSE?  50M部門?)) 得点)
-(add-section JA1 (cat 外 個 電電 50部門) SinHB (個検査 (SinOp? エリア外? CW/PH?  50M部門?)) 得点)
-(add-section JA1 (cat 外 個 電信 HB部門) SinHB (個検査 (SinOp? エリア外? MORSE? 朝の部門?)) 得点)
-(add-section JA1 (cat 外 個 電電 HB部門) SinHB (個検査 (SinOp? エリア外? CW/PH? 朝の部門?)) 得点)
+(SinHB (外 個 電信 14部門) (エリア外? SinOp? MORSE? 朝の部門?  14MHz?))
+(SinHB (外 個 電電 14部門) (エリア外? SinOp? CW/PH? 朝の部門?  14MHz?))
+(SinHB (外 個 電信 21部門) (エリア外? SinOp? MORSE? 朝の部門?  21MHz?))
+(SinHB (外 個 電電 21部門) (エリア外? SinOp? CW/PH? 朝の部門?  21MHz?))
+(SinHB (外 個 電信 28部門) (エリア外? SinOp? MORSE? 朝の部門?  28MHz?))
+(SinHB (外 個 電電 28部門) (エリア外? SinOp? CW/PH? 朝の部門?  28MHz?))
+(SinHB (外 個 電信 50部門) (エリア外? SinOp? MORSE? 朝の部門?  50MHz?))
+(SinHB (外 個 電電 50部門) (エリア外? SinOp? CW/PH? 朝の部門?  50MHz?))
+(SinHB (外 個 電信 HB部門) (エリア外? SinOp? MORSE? 朝の部門?))
+(SinHB (外 個 電電 HB部門) (エリア外? SinOp? CW/PH? 朝の部門?))
 
 ; 団体 アナログ部門
-(add-section JA1 (cat 内 団 電信 "部門") MulAB (団検査 (MulOp? エリア内? MORSE? 電信電話?)) 得点)
-(add-section JA1 (cat 内 団 電電 "部門") MulAB (団検査 (MulOp? エリア内? CW/PH? 電信電話?)) 得点)
-(add-section JA1 (cat 外 団 電信 "部門") MulAB (団検査 (MulOp? エリア外? MORSE? 電信電話?)) 得点)
-(add-section JA1 (cat 外 団 電電 "部門") MulAB (団検査 (MulOp? エリア外? CW/PH? 電信電話?)) 得点)
+(MulAB (内 団 電信 "部門") (エリア内? MulOp? MORSE? 電信電話?))
+(MulAB (内 団 電電 "部門") (エリア内? MulOp? CW/PH? 電信電話?))
+(MulAB (外 団 電信 "部門") (エリア外? MulOp? MORSE? 電信電話?))
+(MulAB (外 団 電電 "部門") (エリア外? MulOp? CW/PH? 電信電話?))
 
 ; デジタル部門
-(add-section JA1 (cat 内 個 離散 "部門") SinDG (個検査 (SinOp? エリア内? DIGIT? 昼の部門?)) 得点)
-(add-section JA1 (cat 外 個 離散 "部門") SinDG (個検査 (SinOp? エリア外? DIGIT? 昼の部門?)) 得点)
-(add-section JA1 (cat 内 団 離散 "部門") MulDG (団検査 (MulOp? エリア内? DIGIT? 昼の部門?)) 得点)
-(add-section JA1 (cat 外 団 離散 "部門") MulDG (団検査 (MulOp? エリア外? DIGIT? 昼の部門?)) 得点)
+(SinDG (内 個 離散 "部門") (エリア内? SinOp? DIGIT? 昼の部門?))
+(SinDG (外 個 離散 "部門") (エリア外? SinOp? DIGIT? 昼の部門?))
+(MulDG (内 団 離散 "部門") (エリア内? MulOp? DIGIT? 昼の部門?))
+(MulDG (外 団 離散 "部門") (エリア外? MulOp? DIGIT? 昼の部門?))
 
 ; 総合部門
-(add-section JA1 (cat 内 個 総合 "部門") SinJS (個検査 (SinOp? エリア内? AN/DG? 総合部門?)) 得点)
-(add-section JA1 (cat 外 個 総合 "部門") SinJS (個検査 (SinOp? エリア外? AN/DG? 総合部門?)) 得点)
-(add-section JA1 (cat 内 団 総合 "部門") MulJS (団検査 (MulOp? エリア内? AN/DG? 総合部門?)) 得点)
-(add-section JA1 (cat 外 団 総合 "部門") MulJS (団検査 (MulOp? エリア外? AN/DG? 総合部門?)) 得点)
+(SinJS (内 個 総合 "部門") (エリア内? SinOp? AN/DG? 総合部門?))
+(SinJS (外 個 総合 "部門") (エリア外? SinOp? AN/DG? 総合部門?))
+(MulJS (内 団 総合 "部門") (エリア内? MulOp? AN/DG? 総合部門?))
+(MulJS (外 団 総合 "部門") (エリア外? MulOp? AN/DG? 総合部門?))
