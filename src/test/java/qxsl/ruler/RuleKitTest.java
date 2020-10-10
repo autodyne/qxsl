@@ -142,7 +142,7 @@ public final class RuleKitTest extends Assertions {
 	@MethodSource("items")
 	public void testFormat(Item item, String fmt) throws Exception {
 		final var sect = RULE.getSection("1エリア内 個人 総合 部門");
-		final var fact = new TableManager().forName(fmt);
+		final var fact = new TableManager().getFactory(fmt);
 		final var list = fact.encode(sect.encode(item, fact));
 		final var back = sect.decode(fact.decodeSingle(list));
 		final var msg1 = sect.verify(item).toString();

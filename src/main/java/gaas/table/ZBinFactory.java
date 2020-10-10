@@ -12,14 +12,13 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
+import qxsl.draft.Band;
+import qxsl.draft.Mode;
+import qxsl.draft.Time;
+import qxsl.draft.Watt;
 import qxsl.table.BasicFactory;
 import qxsl.table.TableDecoder;
 import qxsl.table.TableEncoder;
-
-import gaas.field.Band;
-import gaas.field.Mode;
-import gaas.field.Time;
-import gaas.field.Watt;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.round;

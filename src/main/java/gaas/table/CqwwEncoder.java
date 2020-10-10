@@ -9,13 +9,13 @@ import java.io.IOException;
 import java.io.Writer;
 import java.time.format.DateTimeFormatter;
 
+import qxsl.draft.Band;
+import qxsl.draft.Qxsl;
+import qxsl.draft.Time;
 import qxsl.model.Item;
 import qxsl.table.PrintEncoder;
 import qxsl.value.Field;
 
-import gaas.field.Band;
-import gaas.field.Qxsl;
-import gaas.field.Time;
 import gaas.table.CqwwFactory.BandEnum;
 
 import static java.time.ZoneOffset.UTC;

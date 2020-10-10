@@ -248,5 +248,5 @@
 (block (set 'x 100) (eval x)) 100
 
 ; load
-(block (load "qxsl/ruler/common.lisp") (defun foo x (+ x x)) (foo 114)) 228
-(block (load "qxsl/ruler/common.lisp") (defun bar y (+ y y)) (bar 364)) 728
+(block (load "qxsl/ruler/jautil.lisp") (defun foo x (+ x x)) (foo 114)) 228
+(block (load "qxsl/ruler/jautil.lisp") (defun bar y (+ y y)) (bar 364)) 728

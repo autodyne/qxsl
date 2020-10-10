@@ -236,12 +236,16 @@
 (defun 5.6GHz? it (equal (qxsl-band it) 5.6GHz))
 (defun  10GHz? it (equal (qxsl-band it)  10GHz))
 
+; multiple-band validation
+(defun 1450? it (<= 14000 (qxsl-band it) 50000))
+(defun 1970? it (<=  1900 (qxsl-band it)  7000))
+
 ;; MODE FIELD ACCESS ROUTINES
 
 ; mode enumeration
-(setq morse "(?i)CW")
-(setq phone "(?i)PH|AM|FM|[DS]SB")
-(setq digit "(?i)DG|FT4|FT8|RTTY")
+(setq MORSE "(?i)CW")
+(setq PHONE "(?i)PH|AM|FM|[DS]SB")
+(setq DIGIT "(?i)DG|FT4|FT8|RTTY")
 
 ; mode access for cqww
 (defun cqww-mode it
@@ -255,19 +259,21 @@
 (defun set-cqww-mode (it val)
 	(set-qxsl-mode it
 		(cond
-			((match val morse) "CW")
-			((match val phone) "PH")
-			((match val digit) "DG"))))
+			((match val MORSE) "CW")
+			((match val PHONE) "PH")
+			((match val DIGIT) "DG"))))
 
 ; mode set for zlog
 (defun set-zlog-mode (it val)
 	(set-qxsl-mode it
-		(if (match val digit) "RTTY" val)))
+		(if (match val DIGIT) "RTTY" val)))
 
 ; mode validation
-(defun morse? it (match (qxsl-mode it) morse))
-(defun phone? it (match (qxsl-mode it) phone))
-(defun digit? it (match (qxsl-mode it) digit))
+(defun MORSE? it (match (qxsl-mode it) MORSE))
+(defun PHONE? it (match (qxsl-mode it) PHONE))
+(defun DIGIT? it (match (qxsl-mode it) DIGIT))
+(defun CW/PH? it (or (MORSE? it) (PHONE? it)))
+(defun AN/DG? it (or (CW/PH? it) (DIGIT? it)))
 
 ;; CODE FIELD ACCESS ROUTINES
 
@@ -278,7 +284,7 @@
 (defun zdos-CODE it (cadr (cut-RST-NUM it)))
 
 ; split code into RST and code
-(defun reg-rst-num it (if (phone? it) "(?<=^..)" "(?<=^...)"))
+(defun reg-rst-num it (if (PHONE? it) "(?<=^..)" "(?<=^...)"))
 (defun cut-rst-num it (split (qxsl-code it) (reg-rst-num it)))
 (defun cut-RST-NUM it (split (qxsl-CODE it) (reg-rst-num it)))
 

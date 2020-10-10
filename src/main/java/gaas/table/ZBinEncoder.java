@@ -9,11 +9,11 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import qxsl.draft.*;
 import qxsl.model.Item;
 import qxsl.table.TableEncoder;
 import qxsl.value.Field;
 
-import gaas.field.*;
 import gaas.table.ZBinFactory.BandEnum;
 import gaas.table.ZBinFactory.DateTime;
 import gaas.table.ZBinFactory.ModeEnum;

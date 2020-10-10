@@ -60,7 +60,7 @@ public final class SheetManager implements Iterable<SheetFactory> {
 	 *
 	 * @return 対応する書式 またはnull
 	 */
-	public SheetFactory forName(String name) {
+	public SheetFactory getFactory(String name) {
 		for(var f: list) if(f.getName().equals(name)) return f;
 		return null;
 	}

@@ -64,7 +64,7 @@ public final class TableManager implements Iterable<TableFactory> {
 	 *
 	 * @return 対応する書式 またはnull
 	 */
-	public TableFactory forName(String name) {
+	public TableFactory getFactory(String name) {
 		for(var f: list) if(f.getName().equals(name)) return f;
 		return null;
 	}

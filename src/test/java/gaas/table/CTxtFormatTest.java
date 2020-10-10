@@ -13,14 +13,13 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import qxsl.draft.Band;
+import qxsl.draft.Call;
+import qxsl.draft.Code;
+import qxsl.draft.Mode;
+import qxsl.draft.Time;
 import qxsl.model.Item;
 import qxsl.table.TableManager;
-
-import gaas.field.Band;
-import gaas.field.Call;
-import gaas.field.Code;
-import gaas.field.Mode;
-import gaas.field.Time;
 
 import static qxsl.junit.RandomNumberParameterExtension.randInt;
 import static qxsl.junit.RandomStringParameterExtension.alnum;

@@ -39,6 +39,12 @@
 (assert (equal (let x 1 (cond ((equal x 1) "A") ((equal x 2) "B"))) "A") "cond")
 (assert (equal (let x 2 (cond ((equal x 1) "A") ((equal x 2) "B"))) "B") "cond")
 
+; always
+(defun always args... #t)
+(assert (always) "always")
+(assert (always 1) "always")
+(assert (always 1 2) "always")
+
 ; every
 (defmacro every (it conds...) `(and ,@(dolist (c conds...) `(,c ,it))))
 (assert (equal (every 2 (lambda y (> y 1)) (lambda z (< z 3))) #t) "every")
@@ -155,7 +161,7 @@
 
 ; get ZoneID of the specified name
 (defun zone name ((method 'of ZoneId String) name))
-(assert (not (null? (zone "Asia/Tokyo"))) "zone")
+(assert (not (null? (zone "Europe/Paris"))) "zone")
 
 ; get ZonedDateTime at another time zone
 (setq at-zone (method 'withZoneSameInstant ZonedDateTime ZoneId))
@@ -165,12 +171,11 @@
 	((method 'format ZonedDateTime DateTimeFormatter)
 		time (. DateTimeFormatter ISO_ZONED_DATE_TIME)))
 
-; get city for the specified database name and city code
-(defun city (db code) ((method 'forCode City String String) db code))
-(assert (not (null? (city "jarl" "100110"))) "city")
-(assert (not (null? (city "jarl" "100105"))) "city")
+; get code or name from the specified city
+(setq code<-city (method 'getCode LocalCityItem))
+(setq area<-city (method 'getArea LocalCityItem))
+(setq name<-city (method 'getName LocalCityItem int))
 
-; get city path of the specified level
-(defun city-region (city lv) (nth lv ((method 'getFullPath City) city)))
-(assert (equal (city-region (city "jarl" "100110") 1) "目黒区") "city")
-(assert (equal (city-region (city "jarl" "100105") 1) "文京区") "city")
+; get city from the specified code or name
+(setq city<-code (method 'getCityByCode LocalCityBase String))
+(setq city<-name (method 'getCityByName LocalCityBase String))

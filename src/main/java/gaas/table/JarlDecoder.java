@@ -10,12 +10,11 @@ import java.io.Reader;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import qxsl.draft.Qxsl;
+import qxsl.draft.Time;
 import qxsl.field.FieldManager;
 import qxsl.model.Item;
 import qxsl.table.PrintDecoder;
-
-import gaas.field.Qxsl;
-import gaas.field.Time;
 
 /**
  * JARL書式で直列化された交信記録をデコードします。

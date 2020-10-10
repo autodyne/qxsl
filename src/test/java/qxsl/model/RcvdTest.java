@@ -8,10 +8,10 @@ package qxsl.model;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import gaas.field.Code;
-import gaas.field.Qxsl;
-import gaas.field.RSTQ;
-import gaas.field.Watt;
+import qxsl.draft.Code;
+import qxsl.draft.Qxsl;
+import qxsl.draft.RSTQ;
+import qxsl.draft.Watt;
 
 import static gaas.table.QxmlFactory.RCVD;
 

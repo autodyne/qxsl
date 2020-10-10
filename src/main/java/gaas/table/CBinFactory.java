@@ -10,13 +10,12 @@ import java.io.OutputStream;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 
+import qxsl.draft.Band;
+import qxsl.draft.Mode;
+import qxsl.draft.Time;
 import qxsl.table.BasicFactory;
 import qxsl.table.TableDecoder;
 import qxsl.table.TableEncoder;
-
-import gaas.field.Band;
-import gaas.field.Mode;
-import gaas.field.Time;
 
 import static java.time.ZoneOffset.UTC;
 import static java.time.temporal.ChronoUnit.SECONDS;

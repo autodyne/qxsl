@@ -11,15 +11,15 @@ import java.io.OutputStream;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import qxsl.draft.Band;
+import qxsl.draft.Mode;
+import qxsl.draft.Name;
+import qxsl.draft.Qxsl;
+import qxsl.draft.Time;
 import qxsl.model.Item;
 import qxsl.table.TableEncoder;
 import qxsl.value.Field;
 
-import gaas.field.Band;
-import gaas.field.Mode;
-import gaas.field.Name;
-import gaas.field.Qxsl;
-import gaas.field.Time;
 import gaas.table.CBinFactory.BandEnum;
 import gaas.table.CBinFactory.DateTime;
 import gaas.table.CBinFactory.ModeEnum;

@@ -13,10 +13,9 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import qxsl.draft.*;
 import qxsl.model.Item;
 import qxsl.table.TableManager;
-
-import gaas.field.*;
 
 import static qxsl.junit.RandomNumberParameterExtension.randInt;
 import static qxsl.junit.RandomStringParameterExtension.alnum;

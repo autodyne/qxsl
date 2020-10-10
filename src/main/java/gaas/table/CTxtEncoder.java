@@ -10,13 +10,12 @@ import java.io.Writer;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
+import qxsl.draft.Band;
+import qxsl.draft.Qxsl;
+import qxsl.draft.Time;
 import qxsl.model.Item;
 import qxsl.table.PrintEncoder;
 import qxsl.value.Field;
-
-import gaas.field.Band;
-import gaas.field.Qxsl;
-import gaas.field.Time;
 
 /**
  * 交信記録をCTESTWIN書式に直列化するエンコーダーです。

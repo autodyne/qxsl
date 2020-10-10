@@ -14,11 +14,10 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import qxsl.draft.*;
 import qxsl.model.Item;
 import qxsl.sheet.SheetManager;
 import qxsl.table.TableManager;
-
-import gaas.field.*;
 
 import static qxsl.junit.RandomNumberParameterExtension.randInt;
 import static qxsl.junit.RandomStringParameterExtension.alnum;
@@ -68,15 +67,15 @@ public final class Cab3FormatTest extends Assertions {
 		}
 		final var KEY = "QSO";
 		final var buf = new StringWriter();
-		final var bin = tables.forName("cqww").encode(list);
-		final var enc = sheets.forName("cab3").encoder(buf);
+		final var bin = tables.getFactory("cqww").encode(list);
+		final var enc = sheets.getFactory("cab3").encoder(buf);
 		enc.set("CONTEST", "JIDX-CW");
 		enc.set("CALLSIGN", "JA1ZLO");
 		enc.set("QSO", bin);
 		enc.encode();
 		final var str = buf.toString();
 		final var src = new StringReader(str);
-		final var dec = sheets.forName("cab3").decoder(src);
+		final var dec = sheets.getFactory("cab3").decoder(src);
 		dec.decode();
 		assertThat(dec.getString("CONTEST")).isEqualTo("JIDX-CW");
 		assertThat(dec.getString("CALLSIGN")).isEqualTo("JA1ZLO");

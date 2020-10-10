@@ -8,7 +8,7 @@ package qxsl.model;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import gaas.field.*;
+import qxsl.draft.*;
 
 import static gaas.table.QxmlFactory.ITEM;
 

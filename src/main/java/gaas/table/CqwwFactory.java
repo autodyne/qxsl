@@ -8,11 +8,10 @@ package gaas.table;
 import java.io.Reader;
 import java.io.Writer;
 
+import qxsl.draft.Band;
 import qxsl.table.PrintFactory;
 import qxsl.table.TableDecoder;
 import qxsl.table.TableEncoder;
-
-import gaas.field.Band;
 
 /**
  * CQWWコンテストの交信記録を表すCabrillo書式です。

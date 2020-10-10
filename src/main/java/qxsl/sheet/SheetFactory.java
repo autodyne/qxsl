@@ -49,13 +49,13 @@ public abstract class SheetFactory {
 	 */
 	public abstract List<String> getExtensions();
 
-  /**
-   * 交信記録を抽出する鍵の文字列を返します。
-   *
+	/**
+	 * 交信記録を抽出する鍵の文字列を返します。
 	 *
-   * @return 交信記録を指す鍵
-   */
-  public abstract String getTableKey();
+	 *
+	 * @return 交信記録を指す鍵
+	 */
+	public abstract String getTableKey();
 
 	/**
 	 * 指定された入力を読み込むデコーダを返します。

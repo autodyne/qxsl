@@ -7,7 +7,7 @@ package qxsl.model;
 
 import java.util.Iterator;
 import java.util.Objects;
-import java.util.TreeMap;
+import java.util.StringJoiner;
 import javax.xml.namespace.QName;
 
 import qxsl.value.Field;
@@ -106,11 +106,11 @@ public final class Item extends Tuple {
 	 */
 	@Override
 	public final String toString() {
-		final var nodes = new TreeMap<QName, Node>();
-		nodes.put(both.name(), both);
-		nodes.put(rcvd.name(), rcvd);
-		nodes.put(sent.name(), sent);
-		return String.format("%s=%s", name(), nodes);
+		final var join = new StringJoiner(",");
+		join.add(both.toString());
+		join.add(rcvd.toString());
+		join.add(sent.toString());
+		return String.format("%s={%s}", name(), join);
 	}
 
 	/**

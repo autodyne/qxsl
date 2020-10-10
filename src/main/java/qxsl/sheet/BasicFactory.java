@@ -116,14 +116,14 @@ public abstract class BasicFactory extends SheetFactory {
 		return List.of(get("extensions").split(","));
 	}
 
-  /**
-   * 交信記録を抽出する鍵の文字列を返します。
-   *
+	/**
+	 * 交信記録を抽出する鍵の文字列を返します。
 	 *
-   * @return 交信記録を指す鍵
-   */
+	 *
+	 * @return 交信記録を指す鍵
+	 */
 	@Override
-  public final String getTableKey() {
+	public final String getTableKey() {
 		return get("table");
 	}
 

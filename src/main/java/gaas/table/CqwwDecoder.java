@@ -10,12 +10,12 @@ import java.io.Reader;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+import qxsl.draft.Qxsl;
+import qxsl.draft.Time;
 import qxsl.field.FieldManager;
 import qxsl.model.Item;
 import qxsl.table.PrintDecoder;
 
-import gaas.field.Qxsl;
-import gaas.field.Time;
 import gaas.table.CqwwFactory.BandEnum;
 
 import static java.time.ZoneOffset.UTC;
