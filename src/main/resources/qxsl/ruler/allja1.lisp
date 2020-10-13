@@ -60,8 +60,8 @@
 					(success it 1 ,@(dolist (k keys) (list k 'it)))
 					(failure it (format "無効な交信(%s)" msg)))))))
 
-(defmacro 個検査 conds... `(検査 ,conds... (CALL MULT SOLE)))
-(defmacro 団検査 conds... `(検査 ,conds... (CALL MULT CORP)))
+(defmacro 個人 conds... `(検査 ,conds... (CALL MULT SOLE)))
+(defmacro 団体 conds... `(検査 ,conds... (CALL MULT CORP)))
 
 ; section names
 (setq 内 "1エリア内")
@@ -89,16 +89,25 @@
 (defmacro cat (area op mode band) `(format "%s %s %s %s" ,area ,op ,mode ,band))
 
 ; contest definition
-(set-contest JA1 "ALLJA1" "東大無線部" "allja1@ja1zlo.u-tokyo.org" "ja1zlo.u-tokyo.org")
+(setq NAME "ALLJA1")
+(setq HOST "東大無線部")
+(setq MAIL "allja1@ja1zlo.u-tokyo.org")
+(setq LINK "ja1zlo.u-tokyo.org/allja1")
+(set-contest JA1 NAME HOST MAIL LINK)
+
+; section macros
+(defmacro score (name code test) `(add-section JA1 ,name ,code ,test 得点))
+(defmacro SinOp (name code test) `(score (cat ,@name) ,code (個人 ,@test)))
+(defmacro MulOp (name code test) `(score (cat ,@name) ,code (団体 ,@test)))
 
 ; section codes
-(defmacro SinHB (name test) `(add-section JA1 (cat ,@name) "Sin1" (個検査 ,@test) 得点))
-(defmacro SinLB (name test) `(add-section JA1 (cat ,@name) "Sin2" (個検査 ,@test) 得点))
-(defmacro SinDG (name test) `(add-section JA1 (cat ,@name) "Sin3" (個検査 ,@test) 得点))
-(defmacro SinJS (name test) `(add-section JA1 (cat ,@name) "Sin4" (個検査 ,@test) 得点))
-(defmacro MulAB (name test) `(add-section JA1 (cat ,@name) "Mul1" (団検査 ,@test) 得点))
-(defmacro MulDG (name test) `(add-section JA1 (cat ,@name) "Mul2" (団検査 ,@test) 得点))
-(defmacro MulJS (name test) `(add-section JA1 (cat ,@name) "Mul3" (団検査 ,@test) 得点))
+(defmacro SinHB (name test) `(SinOp ,name "個人部門 (種目1)" ,test))
+(defmacro SinLB (name test) `(SinOp ,name "個人部門 (種目2)" ,test))
+(defmacro SinDG (name test) `(SinOp ,name "個人部門 (種目3)" ,test))
+(defmacro SinJS (name test) `(SinOp ,name "個人部門 (種目4)" ,test))
+(defmacro MulAB (name test) `(MulOp ,name "団体部門 (種目1)" ,test))
+(defmacro MulDG (name test) `(MulOp ,name "団体部門 (種目2)" ,test))
+(defmacro MulJS (name test) `(MulOp ,name "団体部門 (種目3)" ,test))
 
 ; 1エリア内 個人 ローバンド部門
 (SinLB (内 個 電信 19部門) (エリア内? SinOp? MORSE? 夜の部門? 1.9MHz?))

@@ -15,6 +15,11 @@ qxsl is a Java library for processing amateur-radio log files, including scoring
 - qxsl provides tabulation & scoring frameworks for amateur-radio contests and awards.
 - qxsl provides the **rulekit** framework which allows you to write contest rules in LISP or Ruby.
 
+## Documents
+
+- [Javadoc](https://nextzlog.github.io/qxsl/doc/index.html)
+- [コンテスト運営を支援する自動集計システム (PDF)](https://pafelog.net/ats4.pdf)
+
 ## Sample Codes
 
 Because we are [Scalalians](https://www.scala-lang.org/), please be patient to read Scala codes!
@@ -109,32 +114,14 @@ for(section: Section <- allja1.getSections().asScala) {
 ```
 
 Currently, the `RuleKit` class supports two domain specific languages, namely Ruby (JRuby) and Elva Lisp.
-Elva Lisp is a special LISP for the purpose of contest definition:
-
-```Lisp
-(load "qxsl/ruler/format.lisp")
-(defmacro SUCCESS tests (lambda it (success it 1 (qxsl-call it))))
-(defmacro scoring (score calls mults) `(* score (length ',mults)))
-(set-contest test "CQ AWESOME CONTEST" scoring)
-(add-section test "CW 14MHz Single OP" "SinCW14" (SUCCESS (CW? 14MHz?)))
-(add-section test "CW 21MHz Single OP" "SinCW21" (SUCCESS (CW? 21MHz?)))
-(add-section test "CW 28MHz Single OP" "SinCW28" (SUCCESS (CW? 28MHz?)))
-(add-section test "PH 14MHz Single OP" "SinPH14" (SUCCESS (PH? 14MHz?)))
-(add-section test "PH 21MHz Single OP" "SinPH21" (SUCCESS (PH? 21MHz?)))
-(add-section test "PH 28MHz Single OP" "SinPH28" (SUCCESS (PH? 28MHz?)))
-```
+Elva Lisp is a special LISP for the purpose of contest definition.
 
 ### Bundled Contest Definitions
 
 The following LISP programs are bundled inside the JAR file, as sample codes in Elva Lisp.
 
-- [allja1.lisp (ALLJA1 contest definition)](https://github.com/nextzlog/qxsl/tree/master/src/main/resources/qxsl/ruler/allja1.lisp)
-- [format.lisp (ADIF-QXSL field converter)](https://github.com/nextzlog/qxsl/tree/master/src/main/resources/qxsl/ruler/format.lisp)
-
-## Documents
-
-- [Javadoc](https://nextzlog.github.io/qxsl/doc/index.html)
-- [コンテスト運営を支援する自動集計システム (PDF)](https://pafelog.net/ats4.pdf)
+- [`allja1.lisp`](https://github.com/nextzlog/qxsl/tree/master/src/main/resources/qxsl/ruler/allja1.lisp)
+- [`format.lisp`](https://github.com/nextzlog/qxsl/tree/master/src/main/resources/qxsl/ruler/format.lisp)
 
 ## Maven
 
