@@ -53,7 +53,7 @@ public final class LibraryForm extends NativeOp {
 
 		@Override
 		public final Object get(String name) {
-			return eval.apply(new NameNode(name));
+			return eval.apply(new NameNode(name)).value();
 		}
 
 		@Override

@@ -34,6 +34,17 @@ public final class SyntaxOp extends FormBase {
 	}
 
 	/**
+	 * この演算子の実体を返します。
+	 *
+	 *
+	 * @return 演算子の実体
+	 */
+	@Override
+	public final SyntaxOp value() {
+		return this;
+	}
+
+	/**
 	 * このマクロ式が可変長引数のマクロ式か確認します。
 	 *
 	 * @return 可変長引数なら真

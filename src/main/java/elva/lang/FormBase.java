@@ -17,17 +17,6 @@ import elva.warn.ElvaRuntimeException;
  */
 public abstract class FormBase extends AtomBase {
 	/**
-	 * この演算子を返します。
-	 *
-	 *
-	 * @return 自身への参照
-	 */
-	@Override
-	public final FormBase value() {
-		return this;
-	}
-
-	/**
 	 * この演算子が特殊関数か確認します。
 	 *
 	 *

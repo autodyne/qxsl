@@ -8,6 +8,7 @@ package qxsl.ruler;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -19,7 +20,7 @@ import java.util.NoSuchElementException;
  *
  * @since 2016/11/25
  */
-public abstract class Contest extends Library {
+public abstract class Contest extends Library implements Iterable<Section> {
 	private final List<Section> list;
 
 	/**
@@ -137,6 +138,17 @@ public abstract class Contest extends Library {
 	public final Contest remove(Section sec) {
 		this.list.remove(sec);
 		return this;
+	}
+
+	/**
+	 * この規約の下の部門を反復子で返します。
+	 *
+	 *
+	 * @return 全ての部門を含む反復子
+	 */
+	@Override
+	public final Iterator<Section> iterator() {
+		return list.iterator();
 	}
 
 	/**

@@ -38,6 +38,17 @@ public final class CreateOp extends FormBase {
 	}
 
 	/**
+	 * この演算子の実体を返します。
+	 *
+	 *
+	 * @return 演算子の実体
+	 */
+	@Override
+	public final Constructor value() {
+		return body;
+	}
+
+	/**
 	 * このメソッドが可変長引数のメソッドか確認します。
 	 *
 	 *

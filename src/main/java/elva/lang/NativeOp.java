@@ -37,6 +37,17 @@ public abstract class NativeOp extends FormBase {
 	}
 
 	/**
+	 * この演算子の実体を返します。
+	 *
+	 *
+	 * @return 演算子の実体
+	 */
+	@Override
+	public final NativeOp value() {
+		return this;
+	}
+
+	/**
 	 * 特殊形式の引数の個数を指定する注釈型です。
 	 *
 	 *

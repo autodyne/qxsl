@@ -40,6 +40,17 @@ public final class MethodOp extends FormBase {
 	}
 
 	/**
+	 * この演算子の実体を返します。
+	 *
+	 *
+	 * @return 演算子の実体
+	 */
+	@Override
+	public final Method value() {
+		return body;
+	}
+
+	/**
 	 * このメソッドが静的なメソッドであるか確認します。
 	 *
 	 * @return 文字列による式の表現

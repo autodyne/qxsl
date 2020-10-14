@@ -77,6 +77,11 @@
 (assert (equal (. Integer MAX_VALUE)  2147483647) ":")
 (assert (equal (. Integer MIN_VALUE) -2147483648) ":")
 
+; boolean
+(defun boolean str (equal "#t" str))
+(assert (equal (boolean "#t") #t) "boolean")
+(assert (equal (boolean "#f") #f) "boolean")
+
 ; integer
 (defun integer num ((method 'intValue Number) num))
 (assert (equal (integer 0.0) 0) "integer")

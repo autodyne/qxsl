@@ -122,6 +122,7 @@ The following LISP programs are bundled inside the JAR file, as sample codes in 
 
 - [`allja1.lisp`](https://github.com/nextzlog/qxsl/tree/master/src/main/resources/qxsl/ruler/allja1.lisp)
 - [`format.lisp`](https://github.com/nextzlog/qxsl/tree/master/src/main/resources/qxsl/ruler/format.lisp)
+- [`jautil.lisp`](https://github.com/nextzlog/qxsl/tree/master/src/main/resources/qxsl/ruler/jautil.lisp)
 
 ## Maven
 

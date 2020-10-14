@@ -1,4 +1,7 @@
 .*
 /build
 /dist
+/gradle
+/gradlew
+/gradlew.bat
 !.gitignore

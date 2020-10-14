@@ -87,7 +87,7 @@ public final class SectionForm extends NativeOp {
 
 		@Override
 		public final Object get(String name) {
-			return eval.apply(new NameNode(name));
+			return eval.apply(new NameNode(name)).value();
 		}
 
 		@Override

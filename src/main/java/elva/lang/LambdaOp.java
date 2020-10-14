@@ -34,6 +34,17 @@ public final class LambdaOp extends FormBase {
 	}
 
 	/**
+	 * この演算子の実体を返します。
+	 *
+	 *
+	 * @return 演算子の実体
+	 */
+	@Override
+	public final LambdaOp value() {
+		return this;
+	}
+
+	/**
 	 * このラムダ式が可変長引数のラムダ式か確認します。
 	 *
 	 *

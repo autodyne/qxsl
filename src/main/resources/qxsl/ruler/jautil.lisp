@@ -6,13 +6,13 @@
 (defun 時刻 it (hour (at-zone (qxsl-time it) (zone "Asia/Tokyo"))))
 
 ; city databases
-(setq CITY ((method 'load LocalCityBase String) "city.ja"))
-(setq AREA ((method 'load LocalCityBase String) "area.ja"))
+(setq CITYDB ((method 'load LocalCityBase String) "city.ja"))
+(setq AREADB ((method 'load LocalCityBase String) "area.ja"))
 
 ; city extraction
-(defun 市区町村 it (city<-code CITY (qxsl-code it)))
-(defun 都道府県 it (city<-name CITY (area<-city (市区町村 it))))
-(defun 所轄総通 it (city<-code AREA (code<-city (都道府県 it))))
+(defun 市区町村 it (city<-code CITYDB (qxsl-code it)))
+(defun 都道府県 it (city<-name CITYDB (area<-city (市区町村 it))))
+(defun 所轄総通 it (city<-code AREADB (code<-city (都道府県 it))))
 
 ; city validation
 (defun 現存? it (not (null? (市区町村 it))))
