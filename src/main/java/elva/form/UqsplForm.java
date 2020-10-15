@@ -12,8 +12,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定された式の引用を解除する関数です。
- * 式の結果はリストの内部に展開されます。
+ * embeds the specified list elements into the outer expression.
+ * <pre>
+ * (unquote-splicing list)
+ * </pre>
  *
  *
  * @author 無線部開発班

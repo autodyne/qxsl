@@ -12,7 +12,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定された値が評価してリストに含まれるか確認します。
+ * tests if the list contains the specified value.
+ * <pre>
+ * (member value list)
+ * </pre>
  *
  *
  * @author 無線部開発班

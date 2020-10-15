@@ -19,7 +19,10 @@ import qxsl.ruler.Section;
 import qxsl.ruler.Summary;
 
 /**
- * この関数はコンテストの部門の実体を生成します。
+ * creates and returns a section object.
+ * <pre>
+ * (section name code verifier scoring)
+ * </pre>
  *
  *
  * @author 無線部開発班

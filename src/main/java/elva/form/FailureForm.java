@@ -15,7 +15,10 @@ import qxsl.model.Item;
 import qxsl.ruler.Failure;
 
 /**
- * この関数は交信記録の検査結果に不可の注釈を付けます。
+ * creates and returns a failure object.
+ * <pre>
+ * (failure item message)
+ * </pre>
  *
  *
  * @author 無線部開発班

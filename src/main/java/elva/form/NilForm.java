@@ -13,7 +13,10 @@ import elva.lang.NativeOp.Name;
 import elva.lang.NodeBase;
 
 /**
- * 指定された式を評価して値が空リストか確認する関数です。
+ * tests if the argument is nil or not.
+ * <pre>
+ * (nil? argument)
+ * </pre>
  *
  *
  * @author 無線部開発班

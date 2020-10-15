@@ -12,7 +12,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定された式を評価して排他的論理和を計算します。
+ * performs exclusive-or operation and returns a bool value.
+ * <pre>
+ * (xor bool1 bool2)
+ * </pre>
  *
  *
  * @author 無線部開発班

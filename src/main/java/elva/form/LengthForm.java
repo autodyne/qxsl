@@ -12,7 +12,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定された式を評価してリストの長さを返します。
+ * returns the length of the list.
+ * <pre>
+ * (length list)
+ * </pre>
  *
  *
  * @author 無線部開発班

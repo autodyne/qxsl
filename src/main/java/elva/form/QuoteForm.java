@@ -12,7 +12,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定された式をそのまま引用する特殊形式です。
+ * returns the expression without evaluation.
+ * <pre>
+ * (quote expression)
+ * </pre>
  *
  *
  * @author 無線部開発班

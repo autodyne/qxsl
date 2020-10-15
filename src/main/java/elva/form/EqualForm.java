@@ -14,7 +14,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定された式を評価して両辺の等値性を確認する関数です。
+ * performs equality test and returns a bool value.
+ * <pre>
+ * (equal value1 value2)
+ * </pre>
  *
  *
  * @author 無線部開発班

@@ -13,7 +13,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定された名前の識別子を返します。
+ * returns a symbol of the specified name.
+ * <pre>
+ * (symbol name)
+ * </pre>
  *
  *
  * @author 無線部開発班

@@ -15,7 +15,10 @@ import elva.lang.NativeOp.Name;
 import qxsl.ruler.Contest;
 
 /**
- * この関数はコンテストの規約の実体を生成します。
+ * creates and returns a contest object.
+ * <pre>
+ * (contest name host mail link)
+ * </pre>
  *
  *
  * @author 無線部開発班

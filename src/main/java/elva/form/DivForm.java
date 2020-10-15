@@ -13,7 +13,10 @@ import elva.lang.NativeOp.Name;
 import elva.lang.RealNode;
 
 /**
- * 可変長引数の実数値の除算演算子です。
+ * performs division and returns a real value.
+ * <pre>
+ * (/ real1 reals...)
+ * </pre>
  *
  *
  * @author 無線部開発班

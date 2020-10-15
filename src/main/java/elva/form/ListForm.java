@@ -12,7 +12,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定された式を評価してリストを構築します。
+ * creates a list of elements as specified.
+ * <pre>
+ * (list elements...)
+ * </pre>
  *
  *
  * @author 無線部開発班

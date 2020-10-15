@@ -16,7 +16,10 @@ import elva.lang.NativeOp.Name;
 import qxsl.value.Tuple;
 
 /**
- * この関数は交信記録の属性の設定値を上書きします。
+ * assigns the specified field value into the item.
+ * <pre>
+ * (setf item qname value)
+ * </pre>
  *
  *
  * @author 無線部開発班

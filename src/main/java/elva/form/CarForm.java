@@ -12,7 +12,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定された式を評価してリストの先頭を返します。
+ * returns the first element of the specified list.
+ * <pre>
+ * (car list)
+ * </pre>
  *
  *
  * @author 無線部開発班

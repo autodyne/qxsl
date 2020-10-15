@@ -13,7 +13,10 @@ import elva.lang.NativeOp.Name;
 import elva.warn.ElvaRuntimeException;
 
 /**
- * 指定された条件式が不成立の場合に例外を発生させます。
+ * throws an error if the expression returns false.
+ * <pre>
+ * (assert condition message)
+ * </pre>
  *
  *
  * @author 無線部開発班

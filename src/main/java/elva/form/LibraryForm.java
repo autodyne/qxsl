@@ -15,7 +15,10 @@ import elva.lang.NativeOp.Name;
 import qxsl.ruler.Library;
 
 /**
- * この関数は可視の関数を参照するライブラリを生成します。
+ * creates and returns a library object.
+ * <pre>
+ * (library)
+ * </pre>
  *
  *
  * @author 無線部開発班

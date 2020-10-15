@@ -14,7 +14,10 @@ import elva.lang.NativeOp.Name;
 import qxsl.model.Item;
 
 /**
- * この関数は交信記録の項目を生成します。
+ * creates and returns an item object.
+ * <pre>
+ * (item)
+ * </pre>
  *
  *
  * @author 無線部開発班

@@ -12,8 +12,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 条件式を評価して真の場合は左側の式の値を返します。
- * 偽の場合は右側の式の値または空のリストを返します。
+ * evaluates the first (or second) expression if true (or false).
+ * <pre>
+ * (if condition first second)
+ * </pre>
  *
  *
  * @author 無線部開発班

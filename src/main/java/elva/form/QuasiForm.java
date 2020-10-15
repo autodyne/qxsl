@@ -12,8 +12,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定された式をそのまま引用する特殊形式です。
- * 被引用式の内部で引用が部分的に解除されます。
+ * quotes the expression except for some unquoted sub-expressions.
+ * <pre>
+ * (quasiquote expression)
+ * </pre>
  *
  *
  * @author 無線部開発班

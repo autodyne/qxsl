@@ -12,7 +12,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定された局所変数を設定して式を評価します。
+ * creates a local variable and evaluates the expression.
+ * <pre>
+ * (let variable value expression)
+ * </pre>
  *
  *
  * @author 無線部開発班

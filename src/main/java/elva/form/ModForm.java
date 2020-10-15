@@ -13,7 +13,10 @@ import elva.lang.NativeOp.Name;
 import elva.lang.RealNode;
 
 /**
- * 可変長引数の実数値の剰余演算子です。
+ * performs modulo and returns a real value.
+ * <pre>
+ * (mod real1 reals...)
+ * </pre>
  *
  *
  * @author 無線部開発班

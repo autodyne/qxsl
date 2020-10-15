@@ -13,7 +13,10 @@ import elva.lang.NativeOp.Name;
 import elva.lang.SyntaxOp;
 
 /**
- * 指定された引数と本体で匿名のマクロ式を生成します。
+ * creates and returns an anonymous macro.
+ * <pre>
+ * (syntax (parameters) body)
+ * </pre>
  *
  *
  * @author 無線部開発班

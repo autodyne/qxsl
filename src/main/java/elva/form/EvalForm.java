@@ -12,7 +12,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定された式を評価した後に再び評価します。
+ * evaluates the specified value.
+ * <pre>
+ * (eval value)
+ * </pre>
  *
  *
  * @author 無線部開発班

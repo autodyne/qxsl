@@ -13,7 +13,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定された引数と本体で匿名のラムダ式を生成します。
+ * creates and returns an anonymous closure.
+ * <pre>
+ * (lambda (parameters) body)
+ * </pre>
  *
  *
  * @author 無線部開発班

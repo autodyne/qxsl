@@ -16,7 +16,10 @@ import elva.lang.NativeOp.Name;
 import qxsl.value.Tuple;
 
 /**
- * この関数は交信記録の属性の設定値を取り出します。
+ * extracts the specified field value of the item.
+ * <pre>
+ * (getf item qname)
+ * </pre>
  *
  *
  * @author 無線部開発班

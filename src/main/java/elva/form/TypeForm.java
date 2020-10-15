@@ -12,7 +12,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定された式を評価した結果の型情報を返す関数です。
+ * returns the type of the specified value.
+ * <pre>
+ * (type value)
+ * </pre>
  *
  *
  * @author 無線部開発班

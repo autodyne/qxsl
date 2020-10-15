@@ -13,7 +13,10 @@ import elva.lang.NativeOp.Name;
 import elva.warn.ElvaRuntimeException;
 
 /**
- * 指定された文字列で警告を発する例外を発生させます。
+ * throws an error with the specified message.
+ * <pre>
+ * (throw string)
+ * </pre>
  *
  *
  * @author 無線部開発班

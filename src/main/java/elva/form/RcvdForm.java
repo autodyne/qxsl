@@ -14,7 +14,10 @@ import elva.lang.NativeOp.Name;
 import qxsl.model.Item;
 
 /**
- * この関数は交信相手局が送信した情報を取り出します。
+ * extracts the rcvd object from the item.
+ * <pre>
+ * (rcvd item)
+ * </pre>
  *
  *
  * @author 無線部開発班

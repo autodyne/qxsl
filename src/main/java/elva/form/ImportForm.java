@@ -12,7 +12,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定されたクラスを短縮名で参照可能にする関数です。
+ * imports the specified class.
+ * <pre>
+ * (import class)
+ * </pre>
  *
  *
  * @author 無線部開発班

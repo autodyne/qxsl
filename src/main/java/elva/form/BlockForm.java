@@ -12,8 +12,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 変数の可視範囲を設定して複数の式を実行する関数です。
- * この関数の内部で設定された変数は外部に影響しません。
+ * evaluates the expressions inside a nested scope.
+ * <pre>
+ * (block expressions...)
+ * </pre>
  *
  *
  * @author 無線部開発班

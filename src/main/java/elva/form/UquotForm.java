@@ -12,7 +12,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定された式の引用を解除する関数です。
+ * embeds the specified value into the outer expression.
+ * <pre>
+ * (unquote value)
+ * </pre>
  *
  *
  * @author 無線部開発班

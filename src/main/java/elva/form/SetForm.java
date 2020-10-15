@@ -12,7 +12,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定された値で変数を束縛するset関数です。
+ * creates a variable with the specified name and value.
+ * <pre>
+ * (set name value)
+ * </pre>
  *
  *
  * @author 無線部開発班

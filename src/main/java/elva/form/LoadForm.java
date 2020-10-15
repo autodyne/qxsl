@@ -19,7 +19,10 @@ import elva.warn.ElvaRuntimeException;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
- * この関数はクラスパスからプログラムを読み込みます。
+ * loads the specified LISP file.
+ * <pre>
+ * (load string)
+ * </pre>
  *
  *
  * @author 無線部開発班

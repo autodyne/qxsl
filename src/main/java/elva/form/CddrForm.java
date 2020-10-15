@@ -12,7 +12,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定された式を評価してリストの後続の後続を返します。
+ * returns the third and subsequent elements of the specified list.
+ * <pre>
+ * (cddr list)
+ * </pre>
  *
  *
  * @author 無線部開発班

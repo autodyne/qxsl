@@ -12,7 +12,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 右側の値が左側の値以上であるか確認する関数です。
+ * performs less-equal operation and returns a bool value.
+ * <pre>
+ * (&lt;= real1 reals...)
+ * </pre>
  *
  *
  * @author 無線部開発班

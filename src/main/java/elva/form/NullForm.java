@@ -12,7 +12,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定された式を評価して値が空の参照か確認する関数です。
+ * tests if the argument is null or not.
+ * <pre>
+ * (null? argument)
+ * </pre>
  *
  *
  * @author 無線部開発班

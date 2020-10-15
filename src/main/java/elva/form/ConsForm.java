@@ -13,7 +13,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定された2個の式の値を要素に持つリストを返します。
+ * concatenates the specified value and list into a list.
+ * <pre>
+ * (cons first second)
+ * </pre>
  *
  *
  * @author 無線部開発班

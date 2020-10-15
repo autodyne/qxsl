@@ -14,7 +14,10 @@ import elva.lang.NativeOp.Name;
 import qxsl.model.Item;
 
 /**
- * この関数は交信相手局に送信した情報を取り出します。
+ * extracts the sent object from the item.
+ * <pre>
+ * (sent item)
+ * </pre>
  *
  *
  * @author 無線部開発班

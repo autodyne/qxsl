@@ -14,7 +14,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * この関数は指定された名前の修飾名を返します。
+ * returns a qualified name in the specified namespace.
+ * <pre>
+ * (name namespace local-name)
+ * </pre>
  *
  *
  * @author 無線部開発班

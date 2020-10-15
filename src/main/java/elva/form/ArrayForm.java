@@ -15,7 +15,10 @@ import elva.lang.NativeOp.Name;
 import elva.lang.TypeNode;
 
 /**
- * 指定された型の要素を持つ配列型を返します。
+ * returns an array type.
+ * <pre>
+ * (array element-type)
+ * </pre>
  *
  *
  * @author 無線部開発班

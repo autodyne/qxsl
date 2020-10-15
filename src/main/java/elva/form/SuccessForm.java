@@ -15,7 +15,10 @@ import qxsl.model.Item;
 import qxsl.ruler.Success;
 
 /**
- * この関数は交信記録の検査結果に合格の注釈を付けます。
+ * creates and returns a success object.
+ * <pre>
+ * (success item score keys...)
+ * </pre>
  *
  *
  * @author 無線部開発班

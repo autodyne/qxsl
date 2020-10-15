@@ -12,7 +12,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定された式を評価してリストの後続の先頭を返します。
+ * returns the second element of the specified list.
+ * <pre>
+ * (cadr list)
+ * </pre>
  *
  *
  * @author 無線部開発班

@@ -12,7 +12,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定された式を評価して論理的否定を計算します。
+ * performs not operation and returns a bool value.
+ * <pre>
+ * (not bool)
+ * </pre>
  *
  *
  * @author 無線部開発班

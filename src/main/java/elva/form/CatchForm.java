@@ -13,7 +13,10 @@ import elva.lang.NativeOp.Name;
 import elva.warn.ElvaRuntimeException;
 
 /**
- * 指定された式で例外が発生した場合は捕捉します。
+ * evaluates the expression and returns an error.
+ * <pre>
+ * (catch expression)
+ * </pre>
  *
  *
  * @author 無線部開発班

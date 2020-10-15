@@ -12,7 +12,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定された式を評価してリストの指定位置の部分を返します。
+ * returns a subsequence of the specified list.
+ * <pre>
+ * (subseq list start end)
+ * </pre>
  *
  *
  * @author 無線部開発班

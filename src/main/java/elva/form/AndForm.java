@@ -12,7 +12,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定された式を短絡評価して論理積を計算します。
+ * performs and operation and returns a bool value.
+ * <pre>
+ * (and bool1 bools...)
+ * </pre>
  *
  *
  * @author 無線部開発班

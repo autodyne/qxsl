@@ -12,7 +12,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定された引数と書式で文字列を生成します。
+ * formats a string using the specified arguments.
+ * <pre>
+ * (format string arguments...)
+ * </pre>
  *
  *
  * @author 無線部開発班

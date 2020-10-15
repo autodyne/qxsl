@@ -12,7 +12,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定された式を評価してリストの指定位置の要素を返します。
+ * returns the n-th element of the list.
+ * <pre>
+ * (nth index list)
+ * </pre>
  *
  *
  * @author 無線部開発班

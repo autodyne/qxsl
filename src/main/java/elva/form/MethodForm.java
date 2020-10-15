@@ -14,7 +14,10 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * 指定されたクラスと名前と引数型のメソッドを取得します。
+ * returns a method of the specified class.
+ * <pre>
+ * (method 'name class parameter-types...)
+ * </pre>
  *
  *
  * @author 無線部開発班
