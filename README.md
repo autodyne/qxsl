@@ -13,7 +13,7 @@ qxsl is a Java library for processing amateur-radio log files, including scoring
 
 - qxsl provides log en/decoders for QXML, [ADIF(ADI/ADX)](http://adif.org), [Cabrillo](https://wwrof.org/cabrillo/), [zLog](http://www.zlog.org), [CTESTWIN](http://e.gmobb.jp/ctestwin/Download.html), etc.
 - qxsl provides tabulation & scoring frameworks for amateur-radio contests and awards.
-- qxsl provides the **rulekit** framework which allows you to write contest rules in LISP or Ruby.
+- qxsl provides the **rulekit** framework which allows you to write contest rules in Ruby or LISP.
 
 ## Documents
 
@@ -113,7 +113,7 @@ for(section: Section <- allja1.getSections().asScala) {
 }
 ```
 
-Currently, the `RuleKit` class supports two domain specific languages, namely Ruby (JRuby) and Elva Lisp.
+Currently, the `RuleKit` class supports two domain specific languages, namely Ruby (JRuby) and [Elva Lisp](https://github.com/nextzlog/qxsl/blob/master/ELVA.md).
 Elva Lisp is a special LISP for the purpose of contest definition.
 
 ### Bundled Contest Definitions
