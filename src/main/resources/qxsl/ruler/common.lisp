@@ -70,12 +70,19 @@
 (assert (equal (string (lambda x (+ x x))) "(lambda (x) (+ x x))") "string")
 (assert (equal (string (syntax x (+ x x))) "(syntax (x) (+ x x))") "string")
 
-; . (static field)
-(defmacro . (class field)
+; invoke
+(defmacro invoke (method obj args...)
+	`((method ,method (type ,obj) ,@(dolist (v args...) (type v)))
+		,obj ,@args...))
+(assert (invoke 'matches "364364" "\\d{6}") "invoke")
+(assert (invoke 'startsWith "114514" "114") "invoke")
+
+; static (static field)
+(defmacro static (class field)
 	`((method 'get Field Object)
 		((method 'getField Class String) ,class (string ',field)) null))
-(assert (equal (. Integer MAX_VALUE)  2147483647) ":")
-(assert (equal (. Integer MIN_VALUE) -2147483648) ":")
+(assert (equal (static Integer MAX_VALUE)  2147483647) ":")
+(assert (equal (static Integer MIN_VALUE) -2147483648) ":")
 
 ; boolean
 (defun boolean str (equal "#t" str))
@@ -93,7 +100,7 @@
 (setq setScale (method 'setScale BigDecimal int RoundingMode))
 
 ; floor
-(defun floor num (setScale num 0 (. RoundingMode FLOOR)))
+(defun floor num (setScale num 0 (static RoundingMode FLOOR)))
 (assert (equal (floor (+  5 0.5))  5) "floor")
 (assert (equal (floor (+  2 0.5))  2) "floor")
 (assert (equal (floor (+  1 0.6))  1) "floor")
@@ -106,7 +113,7 @@
 (assert (equal (floor (- -5 0.5)) -6) "floor")
 
 ; ceiling
-(defun ceiling num (setScale num 0 (. RoundingMode CEILING)))
+(defun ceiling num (setScale num 0 (static RoundingMode CEILING)))
 (assert (equal (ceiling (+  5 0.5))  6) "ceiling")
 (assert (equal (ceiling (+  2 0.5))  3) "ceiling")
 (assert (equal (ceiling (+  1 0.6))  2) "ceiling")
@@ -119,7 +126,7 @@
 (assert (equal (ceiling (- -5 0.5)) -5) "ceiling")
 
 ; round
-(defun round num (setScale num 0 (. RoundingMode HALF_UP)))
+(defun round num (setScale num 0 (static RoundingMode HALF_UP)))
 (assert (equal (round (+  5 0.5))  6) "round")
 (assert (equal (round (+  2 0.5))  3) "round")
 (assert (equal (round (+  1 0.6))  2) "round")
@@ -174,7 +181,7 @@
 ; format time into an ISO-8601 string
 (defun iso-8601 time
 	((method 'format ZonedDateTime DateTimeFormatter)
-		time (. DateTimeFormatter ISO_ZONED_DATE_TIME)))
+		time (static DateTimeFormatter ISO_ZONED_DATE_TIME)))
 
 ; get code or name from the specified city
 (setq code<-city (method 'getCode LocalCityItem))

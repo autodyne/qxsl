@@ -295,25 +295,25 @@
 ;; FORMAT CONVERSION ROUTINES
 
 ; main routines
-(defun encode (it fmt)
+(defun transform (it fmt)
 	(cond
-		((equal fmt "qxml") (encode-qxsl it))
-		((equal fmt "adxs") (encode-adif it))
-		((equal fmt "adis") (encode-adif it))
-		((equal fmt "cqww") (encode-cqww it))
-		((equal fmt "jarl") (encode-jarl it))
-		((equal fmt "ctxt") (encode-ctxt it))
-		((equal fmt "zall") (encode-zlog it))
-		((equal fmt "zdos") (encode-zdos it))
-		((equal fmt "cbin") (encode-zdos it))
-		((equal fmt "zbin") (encode-zlog it))))
+		((equal fmt "qxml") (transform-qxsl it))
+		((equal fmt "adxs") (transform-adif it))
+		((equal fmt "adis") (transform-adif it))
+		((equal fmt "cqww") (transform-cqww it))
+		((equal fmt "jarl") (transform-jarl it))
+		((equal fmt "ctxt") (transform-ctxt it))
+		((equal fmt "zall") (transform-zlog it))
+		((equal fmt "zdos") (transform-zdos it))
+		((equal fmt "cbin") (transform-zdos it))
+		((equal fmt "zbin") (transform-zlog it))))
 
-(defun decode it
+(defun normalize (it fmt)
 	(cond
-		((adif? it) (decode-adif it))
-		((cqww? it) (decode-cqww it))
-		((qxsl? it) (decode-qxsl it))
-		((zdos? it) (decode-zdos it))))
+		((adif? it) (normalize-adif it))
+		((cqww? it) (normalize-cqww it))
+		((qxsl? it) (normalize-qxsl it))
+		((zdos? it) (normalize-zdos it))))
 
 ; format identification
 (defun adif? it (not (null? (adif-TIME it))))
@@ -322,7 +322,7 @@
 (defun cqww? it (match (qxsl-mode it) "(?i)PH|DG"))
 
 ; field conversion into qxsl
-(defun encode-qxsl it
+(defun transform-qxsl it
 	(let new (item)
 		(set-qxsl-time new (qxsl-time it))
 		(set-qxsl-call new (qxsl-call it))
@@ -335,7 +335,7 @@
 		(set-qxsl-CODE new (qxsl-CODE it)) new))
 
 ; field conversion from qxsl
-(defun decode-qxsl it
+(defun normalize-qxsl it
 	(let new (item)
 		(set-qxsl-time new (qxsl-time it))
 		(set-qxsl-call new (qxsl-call it))
@@ -348,7 +348,7 @@
 		(set-qxsl-CODE new (qxsl-CODE it)) new))
 
 ; field conversion into adif
-(defun encode-adif it
+(defun transform-adif it
 	(let new (item)
 		(set-adif-time new (qxsl-time it))
 		(set-adif-call new (qxsl-call it))
@@ -361,7 +361,7 @@
 		(set-adif-CODE new (qxsl-CODE it)) new))
 
 ; field conversion from adif
-(defun decode-adif it
+(defun normalize-adif it
 	(let new (item)
 		(set-qxsl-time new (adif-time it))
 		(set-qxsl-call new (adif-call it))
@@ -374,43 +374,43 @@
 		(set-qxsl-CODE new (adif-CODE it)) new))
 
 ; field conversion into cqww
-(defun encode-cqww it
-	(let new (encode-qxsl it)
+(defun transform-cqww it
+	(let new (transform-qxsl it)
 		(set-qxsl-name new null)
 		(set-cqww-band new (qxsl-band it))
 		(set-cqww-mode new (qxsl-mode it)) new))
 
 ; field conversion from cqww
-(defun decode-cqww it
-	(let new (decode-qxsl it)
+(defun normalize-cqww it
+	(let new (normalize-qxsl it)
 		(set-qxsl-mode new (cqww-mode it)) new))
 
 ; field conversion into jarl
-(defun encode-jarl it
-	(let new (encode-qxsl it)
+(defun transform-jarl it
+	(let new (transform-qxsl it)
 		(set-qxsl-name new null) new))
 
 ; field conversion into ctxt
-(defun encode-ctxt it
-	(let new (encode-zdos it)
+(defun transform-ctxt it
+	(let new (transform-zdos it)
 		(set-qxsl-name new null) new))
 
 ; field conversion into zlog
-(defun encode-zlog it
-	(let new (encode-qxsl it)
+(defun transform-zlog it
+	(let new (transform-qxsl it)
 		(set-zlog-mode new (qxsl-mode it)) new))
 
 ; field conversion into zdos
-(defun encode-zdos it
-	(let new (encode-qxsl it)
+(defun transform-zdos it
+	(let new (transform-qxsl it)
 		(set-qxsl-rstq new null)
 		(set-qxsl-RSTQ new null)
 		(set-qxsl-code new (join-code it))
 		(set-qxsl-CODE new (join-CODE it)) new))
 
 ; field conversion from zdos
-(defun decode-zdos it
-	(let new (decode-qxsl it)
+(defun normalize-zdos it
+	(let new (normalize-qxsl it)
 		(set-qxsl-rstq new (zdos-rstq it))
 		(set-qxsl-RSTQ new (zdos-RSTQ it))
 		(set-qxsl-code new (zdos-code it))

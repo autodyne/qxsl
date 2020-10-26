@@ -24,6 +24,7 @@ import static elva.lang.NameNode.Quote.QUOTE;
 import static elva.lang.NameNode.Quote.UQSPL;
 import static elva.lang.NameNode.Quote.UQUOT;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.joining;
 import static javax.script.ScriptContext.ENGINE_SCOPE;
 import static javax.script.ScriptContext.GLOBAL_SCOPE;
@@ -37,6 +38,7 @@ import static javax.script.ScriptContext.GLOBAL_SCOPE;
  * @since 2019/05/17
  */
 public final class ElvaLisp extends AbstractScriptEngine {
+	private static final String PATH = "elva.lex";
 	private final ScopeMap lisp;
 
 	/**
@@ -69,7 +71,7 @@ public final class ElvaLisp extends AbstractScriptEngine {
 	 */
 	@Override
 	public ScriptEngineFactory getFactory() {
-		return null;
+		return new ElvaInfo();
 	}
 
 	/**
@@ -197,9 +199,10 @@ public final class ElvaLisp extends AbstractScriptEngine {
 		 * @throws IOException 正規表現の読み込みに失敗した場合
 		 */
 		public String getRegexPattern() throws IOException {
-			final var r = getClass().getResourceAsStream("elva.lex");
-			try(var b = new BufferedReader(new InputStreamReader(r))) {
-				return b.lines().collect(joining());
+			final var stream = getClass().getResourceAsStream(PATH);
+			final var reader = new InputStreamReader(stream, UTF_8);
+			try(final var br = new BufferedReader(reader)) {
+				return br.lines().collect(joining());
 			}
 		}
 

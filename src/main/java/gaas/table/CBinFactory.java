@@ -247,7 +247,7 @@ public final class CBinFactory extends BasicFactory {
 		/**
 		 * 指定された時刻をデコードします。
 		 *
-		 * @param bits 時刻のビット列
+		 * @param binary 時刻のビット列
 		 *
 		 * @return 日時
 		 */

@@ -10,14 +10,20 @@ repositories {
 }
 
 dependencies {
-	testImplementation 'junit:junit:+'
 	testImplementation 'org.assertj:assertj-core:+'
+	testImplementation 'org.jruby:jruby-core:+'
 	testImplementation 'org.junit.jupiter:junit-jupiter-engine:+'
 	testImplementation 'org.junit.jupiter:junit-jupiter-params:+'
-	testImplementation 'org.jruby:jruby-core:+'
+	testImplementation 'junit:junit:+'
 }
 
 compileJava {
+	options.encoding = utf8
+	sourceCompatibility = java
+	targetCompatibility = java
+}
+
+compileTestJava {
 	options.encoding = utf8
 	sourceCompatibility = java
 	targetCompatibility = java

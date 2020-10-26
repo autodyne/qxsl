@@ -5,7 +5,6 @@
 *******************************************************************************/
 package qxsl.ruler;
 
-import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 
 import org.assertj.core.api.Assertions;
@@ -22,29 +21,17 @@ import org.junit.jupiter.api.Test;
 public final class LibraryTest extends Assertions {
 	private static final Class<?> CLS = Library.class;
 	private static final String RULES = "jautil.lisp";
-	private static final Library RULE = loadLibrary();
-
-	/**
-	 * テスト対象のライブラリ定義を読み出します。
-	 *
-	 *
-	 * @return 規約
-	 */
-	private static final Library loadLibrary() {
-		final var kit = RuleKit.load("elva");
-		final var res = CLS.getResourceAsStream(RULES);
-		return kit.library(new InputStreamReader(res));
-	}
+	private static final Library rule = RuleKit.loadAsLibrary(RULES);
 
 	@Test
 	public void testGet() {
-		assertThat(RULE.get("PHONE")).isInstanceOf(String.class);
-		assertThat(RULE.get("match")).isInstanceOf(Method.class);
+		assertThat(rule.get("PHONE")).isInstanceOf(String.class);
+		assertThat(rule.get("match")).isInstanceOf(Method.class);
 	}
 
 	@Test
 	public void testInvoke() {
-		assertThat(RULE.invoke("boolean", "#t")).isInstanceOf(Boolean.class);
-		assertThat(RULE.invoke("integer", 8590)).isInstanceOf(Integer.class);
+		assertThat(rule.invoke("boolean", "#t")).isInstanceOf(Boolean.class);
+		assertThat(rule.invoke("integer", 8590)).isInstanceOf(Integer.class);
 	}
 }

@@ -5,8 +5,12 @@
 *******************************************************************************/
 package qxsl.ruler;
 
+import java.util.List;
+import java.util.function.Function;
+
 import qxsl.model.Item;
-import qxsl.table.TableFactory;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * ドメイン特化言語で定義された変数や関数の参照を提供します。
@@ -48,31 +52,138 @@ public abstract class Library {
 	public abstract Object invoke(String name, Object...args);
 
 	/**
-	 * 規約に基づき交信記録を標準形式に変換して得点計算に備えます。
+	 * 標準的な構造への変換処理を表現します。
 	 *
 	 *
-	 * @param item 交信記録
+	 * @author 無線部開発班
 	 *
-	 * @return 得点計算が可能な標準形式の交信記録
-	 *
-	 * @since 2020/09/04
+	 * @since 2020/10/25
 	 */
-	public final Item decode(Item item) {
-		return (Item) invoke("decode", item);
+	private final class Normalize implements Function<Item, Item> {
+		private final String format;
+
+		/**
+		 * 変換前の交信の書式を指定します。
+		 *
+		 *
+		 * @param format 変換前の書式
+		 */
+		public Normalize(String format) {
+			this.format = format;
+		}
+
+		/**
+		 * 指定された交信記録を処理します。
+		 *
+		 *
+		 * @param item 交信記録
+		 *
+		 * @return 処理後の交信記録
+		 */
+		@Override
+		public Item apply(Item item) {
+			return normalize(item, this.format);
+		}
 	}
 
 	/**
-	 * 規約に基づき交信記録を特定の書式に対応した状態に変換します。
+	 * 指定された書式の変換処理を表現します。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2020/10/25
+	 */
+	private final class Transform implements Function<Item, Item> {
+		private final String format;
+
+		/**
+		 * 変換後の交信の書式を指定します。
+		 *
+		 *
+		 * @param format 変換後の書式
+		 */
+		public Transform(String format) {
+			this.format = format;
+		}
+
+		/**
+		 * 指定された交信記録を処理します。
+		 *
+		 *
+		 * @param item 交信記録
+		 *
+		 * @return 処理後の交信記録
+		 */
+		@Override
+		public Item apply(Item item) {
+			return transform(item, this.format);
+		}
+	}
+
+	/**
+	 * 交信記録をライブラリが定義する標準構造に変換します。
+	 * この関数は同名の関数を指定された引数で呼び出します。
 	 *
 	 *
 	 * @param item 交信記録
-	 * @param form 書式
+	 * @param form 変換前の書式 nullを許容する
 	 *
-	 * @return 指定された書式で出力可能な交信記録
+	 * @return 標準的な構造の交信記録
+	 *
+	 * @throws RuntimeException 関数の未定義または評価の例外
 	 *
 	 * @since 2020/09/04
 	 */
-	public final Item encode(Item item, TableFactory form) {
-		return (Item) invoke("encode", item, form.getName());
+	public final Item normalize(Item item, String form) {
+		return (Item) invoke("normalize", item, form);
+	}
+
+	/**
+	 * 交信記録を指定された書式に適合する構造に変換します。
+	 * この関数は同名の関数を指定された引数で呼び出します。
+	 *
+	 *
+	 * @param item 交信記録
+	 * @param form 変換後の書式
+	 *
+	 * @return 書式に適合する交信記録
+	 *
+	 * @throws RuntimeException 関数の未定義または評価の例外
+	 *
+	 * @since 2020/09/04
+	 */
+	public final Item transform(Item item, String form) {
+		return (Item) invoke("transform", item, form);
+	}
+
+	/**
+	 * 交信記録をライブラリが定義する標準構造に変換します。
+	 *
+	 *
+	 * @param list 交信記録
+	 * @param form 変換前の書式 nullを許容する
+	 *
+	 * @return 標準的な構造の交信記録
+	 *
+	 * @since 2020/10/25
+	 */
+	public final List<Item> normalize(List<Item> list, String form) {
+		return list.stream().map(new Normalize(form)).collect(toList());
+	}
+
+	/**
+	 * 交信記録を指定された書式に適合する構造に変換します。
+	 *
+	 *
+	 * @param list 交信記録
+	 * @param form 変換後の書式
+	 *
+	 * @return 書式に適合する交信記録
+	 *
+	 * @since 2020/10/25
+	 */
+	public final List<Item> transform(List<Item> list, String form) {
+		return list.stream().map(new Transform(form)).collect(toList());
 	}
 }

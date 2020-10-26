@@ -32,26 +32,20 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public final class RuleKitTest extends Assertions {
 	private static final Class<?> CLS = RuleKit.class;
 	private static final String CASES = "allja1.test";
-	private static final String RULES = "allja1.rb";
+	private static final String RULES = "allja1.lisp";
 	private static final String ITEMS = "allja1.qxml";
-	private static final Contest RULE = loadContest();
+	private static final Contest rule = RuleKit.loadAsContest(RULES);
 
 	@Test
-	public void testName() {
-		assertThat(RuleKit.load("elva").name()).isEqualTo("elva");
-		assertThat(RuleKit.load("ruby").name()).isEqualTo("ruby");
+	public void testForName() {
+		assertThat(RuleKit.forName("elva").name()).isEqualTo("elva");
+		assertThat(RuleKit.forName("ruby").name()).isEqualTo("ruby");
 	}
 
-	/**
-	 * テスト対象のコンテスト規約を読み出します。
-	 *
-	 *
-	 * @return 規約
-	 */
-	private static final Contest loadContest() {
-		final var kit = RuleKit.load("ruby");
-		final var res = CLS.getResourceAsStream(RULES);
-		return kit.contest(new InputStreamReader(res));
+	@Test
+	public void testForFile() {
+		assertThat(RuleKit.forFile("q.lisp").name()).isEqualTo("elva");
+		assertThat(RuleKit.forFile("xsl.rb").name()).isEqualTo("ruby");
 	}
 
 	/**
@@ -118,8 +112,8 @@ public final class RuleKitTest extends Assertions {
 		final var fmts = new TableManager();
 		final var list = new LinkedList<Arguments>();
 		try(final var res = CLS.getResourceAsStream(ITEMS)) {
-			for(var item: fmts.decode(res)) for(var f: fmts) {
-				list.add(Arguments.of(item, f.getName()));
+			for(var item: fmts.decode(res)) for(var fm: fmts) {
+				list.add(Arguments.of(item, fm.getName()));
 			}
 		}
 		return list;
@@ -128,7 +122,7 @@ public final class RuleKitTest extends Assertions {
 	@ParameterizedTest
 	@MethodSource("lines")
 	public void testALLJA1(Line line, String fmt) throws Exception {
-		final var sect = RULE.getSection(line.label);
+		final var sect = rule.getSection(line.label);
 		final var path = "allja1.".concat(fmt);
 		final var fmts = new TableManager();
 		try(var res = CLS.getResourceAsStream(path)) {
@@ -141,10 +135,10 @@ public final class RuleKitTest extends Assertions {
 	@ParameterizedTest
 	@MethodSource("items")
 	public void testFormat(Item item, String fmt) throws Exception {
-		final var sect = RULE.getSection("1エリア内 個人 総合 部門");
+		final var sect = rule.getSection("1エリア内 個人 総合 部門");
 		final var fact = new TableManager().getFactory(fmt);
-		final var list = fact.encode(sect.encode(item, fact));
-		final var back = sect.decode(fact.decodeSingle(list));
+		final var list = fact.encode(sect.transform(item, fmt));
+		final var back = sect.normalize(fact.decode(list), fmt).get(0);
 		final var msg1 = sect.verify(item).toString();
 		final var msg2 = sect.verify(back).toString();
 		assertThat(msg1).isEqualTo(msg2);

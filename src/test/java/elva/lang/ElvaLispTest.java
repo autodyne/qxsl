@@ -16,6 +16,8 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 /**
  * {@link ElvaLisp}クラスのテスト用クラスです。
  *
@@ -40,10 +42,10 @@ public final class ElvaLispTest extends Assertions {
 	}
 
 	public static Stream<String> testMethodSource() throws IOException {
-		final var url = ElvaLisp.class.getResource("test.lisp");
-		final var isr = new InputStreamReader(url.openStream());
-		try (final var reader = new BufferedReader(isr)) {
-			return reader.lines().collect(Collectors.toList()).stream();
+		final var stream = ElvaLisp.class.getResourceAsStream("test.lisp");
+		final var reader = new InputStreamReader(stream, UTF_8);
+		try(final var br = new BufferedReader(reader)) {
+			return br.lines().collect(Collectors.toList()).stream();
 		}
 	}
 }

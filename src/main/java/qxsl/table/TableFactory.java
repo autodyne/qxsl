@@ -129,21 +129,6 @@ public abstract class TableFactory {
 	}
 
 	/**
-	 * 指定された文字列から交信記録を読み取ります。
-	 *
-	 *
-	 * @param data 交信記録を読み込む文字列
-	 *
-	 * @return 交信記録
-	 *
-	 * @throws IOException 読み込み時の例外
-	 * @throws UnsupportedOperationException 未実装の場合
-	 */
-	public final Item decodeSingle(String data) throws IOException {
-		return decode(data).get(0);
-	}
-
-	/**
 	 * 指定されたバイト列から交信記録を読み取ります。
 	 *
 	 *

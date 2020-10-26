@@ -11,9 +11,9 @@ qxsl is a Java library for processing amateur-radio log files, including scoring
 
 ## Features
 
-- qxsl provides log en/decoders for QXML, [ADIF(ADI/ADX)](http://adif.org), [Cabrillo](https://wwrof.org/cabrillo/), [zLog](http://www.zlog.org), [CTESTWIN](http://e.gmobb.jp/ctestwin/Download.html), etc.
-- qxsl provides tabulation & scoring frameworks for amateur-radio contests and awards.
-- qxsl provides the **rulekit** framework which allows you to write contest rules in Ruby or LISP.
+- provides log en/decoders for QXML, [ADIF](http://adif.org), [Cabrillo](https://wwrof.org/cabrillo/), [zLog](http://www.zlog.org), [CTESTWIN](http://e.gmobb.jp/ctestwin/Download.html), etc.
+- provides tabulation & scoring frameworks for amateur-radio contests and awards.
+- provides the rulekit framework which allows you to write contest rules in Ruby or LISP.
 
 ## Documents
 
@@ -73,7 +73,7 @@ The class `TableManager` detects individual formats (`TableFactory`s) from the c
 
 ```Scala
 val tables = new qxsl.table.TableManager()
-val table: List[Item] = tables.decode(Files.newInputStream(path))
+val table: List[Item] = tables.decode(Files.readAllBytes(path))
 tables.forName("qxml").encoder(Files.newOutputStream(path)).encode(table)
 ```
 
@@ -82,7 +82,7 @@ The class `SheetManager` manages individual `SheetFactory` implementations, and 
 
 ```Scala
 val sheets = new qxsl.sheet.SheetManager()
-val table: List[Item] = tables.decode(sheets.unpack(Files.newBufferedReader(path)))
+val table: List[Item] = tables.decode(sheets.unpack(Files.readAllBytes(path)))
 ```
 
 ### Scoring for Awards & Contests
@@ -124,6 +124,30 @@ The following LISP programs are bundled inside the JAR file, as sample codes in 
 - [`format.lisp`](https://github.com/nextzlog/qxsl/tree/master/src/main/resources/qxsl/ruler/format.lisp)
 - [`jautil.lisp`](https://github.com/nextzlog/qxsl/tree/master/src/main/resources/qxsl/ruler/jautil.lisp)
 
+## Supported Formats
+
+### TableFactory
+
+| name | format | ext  |
+|------|--------|------|
+|`qxml`|QXML    |      |
+|`jarl`|JARL    |      |
+|`adis`|ADIF    |`.adi`|
+|`adxs`|ADIF    |`.adx`|
+|`cqww`|CQWW    |`.cbr`|
+|`zbin`|zLog    |`.zlo`|
+|`zdos`|zLog    |`.txt`|
+|`zall`|zLog    |`.all`|
+|`cbin`|CTESTWIN|`.lg8`|
+|`ctxt`|CTESTWIN|`.txt`|
+
+### SheetFactory
+
+| name | format  |
+|------|---------|
+|`jarl`|JARL R2.0|
+|`cab3`|Cabrillo3|
+
 ## Maven
 
 If you want to use the latest build, configure the `build.gradle` as follows:
@@ -151,10 +175,10 @@ You can create a native library instead of a JAR file.
 Then run the command manually as follows:
 
 ```shell
-$ native-image --shared -cp build/libs/qxsl.jar -H:Name=qxsl
+$ native-image -cp build/libs/qxsl.jar
 ```
 
-You must implement [entry points](https://www.graalvm.org/sdk/javadoc/org/graalvm/nativeimage/c/function/CEntryPoint.html) by yourself.
+You can download the latest [`qxsl.dll`](https://github.com/nextzlog/qxsl/releases/download/nightly/qxsl.dll) created by GitHub Actions.
 
 ## Contribution
 

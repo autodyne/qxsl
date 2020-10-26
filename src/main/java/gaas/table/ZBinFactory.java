@@ -138,7 +138,7 @@ public final class ZBinFactory extends BasicFactory {
 		 * 指定された序数に対応する列挙子を返します。
 		 *
 		 *
-		 * @param i 序数
+		 * @param band 序数
 		 *
 		 * @return 対応する列挙子があれば返す
 		 */

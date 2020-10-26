@@ -54,7 +54,7 @@
 ; validation routine
 (defmacro 検査 (conds keys)
 	`(lambda it
-		(let it (decode it)
+		(let it (normalize it null)
 			(let msg (search it ,conds)
 				(if (nil? msg)
 					(success it 1 ,@(dolist (k keys) (list k 'it)))

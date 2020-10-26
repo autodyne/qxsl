@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 /**
  * 書式の説明を設定ファイルから取得する仕組みを提供します。
  *
@@ -141,9 +143,9 @@ public abstract class BasicFactory extends SheetFactory {
 	 */
 	public final String getResourceAsString(String path) {
 		try(var is = getClass().getResourceAsStream(path)) {
-			final var isr = new InputStreamReader(is, "UTF-8");
-			final var stream = new BufferedReader(isr).lines();
-			return stream.collect(Collectors.joining("\n"));
+			final var isr = new InputStreamReader(is, UTF_8);
+			final var strm = new BufferedReader(isr).lines();
+			return strm.collect(Collectors.joining("\n"));
 		} catch (IOException ex) {
 			throw new UncheckedIOException(ex);
 		}
