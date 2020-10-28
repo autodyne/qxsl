@@ -26,7 +26,7 @@ public final class ItemTest extends Assertions {
 	private final Mode mode = new Mode("SSB");
 	private final Name name = new Name("pafelog");
 	private final Note note = new Note("trivial");
-	private final Time time = new Time();
+	private final Time time = Time.now();
 
 	@Test
 	public void testType() {

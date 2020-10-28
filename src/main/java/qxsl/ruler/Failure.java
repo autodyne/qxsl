@@ -12,7 +12,7 @@ import qxsl.model.Item;
 
 /**
  * 規約により拒否された交信に付与されます。
- * 総得点や乗数の計算には反映されません。
+ * 総得点やマルチの計算には反映されません。
  *
  *
  * @author 無線部開発班
@@ -25,7 +25,7 @@ public final class Failure implements Message, Serializable {
 	private final Item item;
 
 	/**
-	 * 指定した内容の{@link Failure}を構築します。
+	 * 交信の実体と失敗の内容を説明する文字列を設定します。
 	 *
 	 *
 	 * @param item 関連づけられる交信
@@ -48,7 +48,7 @@ public final class Failure implements Message, Serializable {
 	}
 
 	/**
-	 * 交信の実体を表す{@link Item}を返します。
+	 * 交信の実体を表す交信記録を返します。
 	 *
 	 *
 	 * @return 交信の実体
@@ -70,7 +70,7 @@ public final class Failure implements Message, Serializable {
 	}
 
 	/**
-	 * 総得点や乗数の計算に使用される識別子を返します。
+	 * 総得点やマルチ計算に使用される識別子を返します。
 	 *
 	 *
 	 * @param keyNum 識別子の配列内の位置
@@ -88,7 +88,7 @@ public final class Failure implements Message, Serializable {
 	 * この交信に関連づけられた識別子の個数を返します。
 	 *
 	 *
-	 * @return 乗数の個数
+	 * @return マルチの個数
 	 */
 	@Override
 	public final int size() {

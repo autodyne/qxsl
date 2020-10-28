@@ -118,15 +118,15 @@ public final class CqwwEncoder extends PrintEncoder {
 	@Override
 	public final void output(Item item) throws IOException {
 		space(format.QSO);
-		band((Band) item.get(Qxsl.BAND));
-		space(item.get(Qxsl.MODE).padHead(2));
-		time((Time) item.get(Qxsl.TIME));
+		band((Band) item.some(Qxsl.BAND));
+		space(item.some(Qxsl.MODE).padHead(2));
+		time((Time) item.some(Qxsl.TIME));
 		space("*************");
-		space(item.getSent().get(Qxsl.RSTQ).padHead(3));
-		space(item.getSent().get(Qxsl.CODE).padHead(6));
-		space(item.get(Qxsl.CALL).padHead(13));
-		space(item.getRcvd().get(Qxsl.RSTQ).padHead(3));
-		space(item.getRcvd().get(Qxsl.CODE).padHead(6));
+		space(item.getSent().some(Qxsl.RSTQ).padHead(3));
+		space(item.getSent().some(Qxsl.CODE).padHead(6));
+		space(item.some(Qxsl.CALL).padHead(13));
+		space(item.getRcvd().some(Qxsl.RSTQ).padHead(3));
+		space(item.getRcvd().some(Qxsl.CODE).padHead(6));
 		println();
 	}
 

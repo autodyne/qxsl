@@ -100,6 +100,7 @@ public final class ZDosEncoder extends PrintEncoder {
 		if(fld.name().equals(Qxsl.TIME)) return;
 		if(fld.name().equals(Qxsl.CALL)) return;
 		if(fld.name().equals(Qxsl.CODE)) return;
+		if(fld.name().equals(Qxsl.MUL1)) return;
 		if(fld.name().equals(Qxsl.BAND)) return;
 		if(fld.name().equals(Qxsl.MODE)) return;
 		if(fld.name().equals(Qxsl.NAME)) return;
@@ -121,16 +122,16 @@ public final class ZDosEncoder extends PrintEncoder {
 	@Override
 	public final void output(Item item) throws IOException {
 		space("");
-		time((Time) item.get(Qxsl.TIME));
-		space(item.get(Qxsl.CALL).padHead(10));
-		space(item.getSent().get(Qxsl.CODE).padHead(12));
-		space(item.getRcvd().get(Qxsl.CODE).padHead(12));
-		space("      ");
-		band((Band) item.get(Qxsl.BAND));
-		space(item.get(Qxsl.MODE).padHead(4));
+		time((Time) item.some(Qxsl.TIME));
+		space(item.some(Qxsl.CALL).padHead(10));
+		space(item.getSent().some(Qxsl.CODE).padHead(12));
+		space(item.getRcvd().some(Qxsl.CODE).padHead(12));
+		space(item.some(Qxsl.MUL1).padHead(6));
+		band((Band) item.some(Qxsl.BAND));
+		space(item.some(Qxsl.MODE).padHead(4));
 		space("1  ");
-		name((Name) item.get(Qxsl.NAME));
-		note((Note) item.get(Qxsl.NOTE));
+		name((Name) item.some(Qxsl.NAME));
+		note((Note) item.some(Qxsl.NOTE));
 		println();
 	}
 

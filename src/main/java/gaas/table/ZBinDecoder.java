@@ -107,7 +107,9 @@ public final class ZBinDecoder extends TableDecoder {
 		mode(item);
 		band(item);
 		watt(item);
-		source.skipBytes(65);
+		mul1(item);
+		mul2(item);
+		source.skipBytes(3);
 		name(item);
 		note(item);
 		source.skipBytes(14);
@@ -254,6 +256,34 @@ public final class ZBinDecoder extends TableDecoder {
 	 */
 	private final void watt(Item item) throws IOException {
 		item.getSent().set(WattEnum.forIndex(source.read()).toWatt());
+	}
+
+	/**
+	 * 交信記録に獲得番号を読み取ります。
+	 *
+	 *
+	 * @param item 設定する交信記録
+	 *
+	 * @throws IOException 読み取りに失敗した場合
+	 *
+	 * @since 2020/10/28
+	 */
+	private final void mul1(Item item) throws IOException {
+		item.set(fields.cache(Qxsl.MUL1).field(read(30)));
+	}
+
+	/**
+	 * 交信記録に追加番号を読み取ります。
+	 *
+	 *
+	 * @param item 設定する交信記録
+	 *
+	 * @throws IOException 読み取りに失敗した場合
+	 *
+	 * @since 2020/10/28
+	 */
+	private final void mul2(Item item) throws IOException {
+		item.set(fields.cache(Qxsl.MUL2).field(read(30)));
 	}
 
 	/**

@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
  * @since 2017/02/24
  */
 public final class LocalCityItemTest extends Assertions {
-	private final LocalCityBase base = LocalCityBase.load("city.ja");
+	final LocalCityBase base = LocalCityBase.load("qxsl/local/city.ja");
 
 	/**
 	 * 指定された識別子に対応する地域を返します。

@@ -17,7 +17,7 @@ import qxsl.junit.RandomStringParameterExtension;
 import qxsl.junit.RandomStringParameterExtension.RandomString;
 
 /**
- * {@link Mode}クラスのテスト用クラスです。
+ * {@link ModeFactory}クラスのテスト用クラスです。
  *
  *
  * @author 無線部開発班
@@ -25,22 +25,11 @@ import qxsl.junit.RandomStringParameterExtension.RandomString;
  * @since 2017/02/24
  */
 @ExtendWith(RandomStringParameterExtension.class)
-public final class ModeTest extends Assertions {
+public final class ModeFactoryTest extends Assertions {
 	private final Cache cache = new FieldManager().cache(Qxsl.MODE);
 
 	@Test
-	public void testValue() {
-		assertThat(new Mode("CW").value()).isEqualTo("CW");
-		assertThat(new Mode("AM").value()).isEqualTo("AM");
-	}
-
-	@Test
-	public void testToString(@RandomString String text) {
-		assertThat(new Mode(text)).hasToString(text);
-	}
-
-	@Test
-	public void testMode$Format(@RandomString String text) throws Exception {
+	public void test(@RandomString String text) throws Exception {
 		final var form = new ModeFactory();
 		final var mode = new Mode(text);
 		assertThat(form.decode(form.encode(mode))).isEqualTo(mode);

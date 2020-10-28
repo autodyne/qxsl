@@ -5,8 +5,10 @@
 *******************************************************************************/
 package qxsl.draft;
 
+import qxsl.value.Tuple;
+
 /**
- * 交信を行なった運用者の個人の名前を表現します。
+ * 運用者の個人名を表す属性の実装です。
  *
  *
  * @author 無線部開発班
@@ -14,8 +16,6 @@ package qxsl.draft;
  * @since 2013/06/08
  */
 public final class Name extends Qxsl<String> {
-	private final String name;
-
 	/**
 	 * 運用者名を指定して属性を構築します。
 	 *
@@ -23,12 +23,20 @@ public final class Name extends Qxsl<String> {
 	 * @param name 運用者名
 	 */
 	public Name(String name) {
-		super(NAME);
-		this.name = name;
+		super(NAME, name);
 	}
 
-	@Override
-	public final String value() {
-		return name;
+	/**
+	 * 交信記録の運用者名を抽出します。
+	 *
+	 *
+	 * @param tuple 交信記録
+	 *
+	 * @return 運用者名の属性
+	 *
+	 * @since 2020/10/28
+	 */
+	public static final Name from(Tuple tuple) {
+		return (Name) tuple.get(Qxsl.NAME);
 	}
 }

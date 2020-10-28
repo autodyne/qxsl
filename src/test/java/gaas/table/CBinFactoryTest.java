@@ -21,25 +21,34 @@ import static qxsl.junit.RandomNumberParameterExtension.randInt;
 import static qxsl.junit.RandomStringParameterExtension.alnum;
 
 /**
- * {@link ZDosFactory}クラスのテスト用クラスです。
+ * {@link CBinFactory}クラスのテスト用クラスです。
  *
  *
  * @author 無線部開発班
  *
- * @since 2017/02/26
+ * @since 2019/05/03
  */
-public final class ZDosFormatTest extends Assertions {
-	private final ZDosFactory format = new ZDosFactory();
+public final class CBinFactoryTest extends Assertions {
+	private final CBinFactory format = new CBinFactory();
 	private final TableManager tables = new TableManager();
 	private final ArrayList<Band> bands = new ArrayList<>();
+	private final ArrayList<Mode> modes = new ArrayList<>();
 
-	public ZDosFormatTest() {
+	public CBinFactoryTest() {
 		bands.add(new Band(    3_500));
 		bands.add(new Band(    7_000));
 		bands.add(new Band(   14_000));
 		bands.add(new Band(  144_000));
 		bands.add(new Band(1_200_000));
 		bands.add(new Band(5_600_000));
+		modes.add(new Mode(  "CW"));
+		modes.add(new Mode(  "AM"));
+		modes.add(new Mode(  "FM"));
+		modes.add(new Mode( "SSB"));
+		modes.add(new Mode("RTTY"));
+		modes.add(new Mode("JT65"));
+		modes.add(new Mode( "FT8"));
+		modes.add(new Mode( "FT4"));
 	}
 
 	public static IntStream testMethodSource() {
@@ -52,14 +61,14 @@ public final class ZDosFormatTest extends Assertions {
 		final var items = new ArrayList<Item>();
 		for(int row = 0; row < numItems; row++) {
 			final var item = new Item();
-			item.set(new Time());
+			item.set(Time.now().copyDropSecond());
 			item.set(bands.get(randInt(bands.size())));
-			item.set(new Call(alnum(10)));
-			item.set(new Mode(alnum(4)));
-			item.set(new Note(alnum(50)));
-			item.set(new Name(alnum(14)));
-			item.getRcvd().set(new Code(alnum(12)));
-			item.getSent().set(new Code(alnum(12)));
+			item.set(new Call(alnum(19)));
+			item.set(modes.get(randInt(modes.size())));
+			item.set(new Note(alnum(49)));
+			item.set(new Name(alnum(19)));
+			item.getRcvd().set(new Code(alnum(29)));
+			item.getSent().set(new Code(alnum(29)));
 			items.add(item);
 		}
 		assertThat(format.decode(format.encode(items))).isEqualTo(items);

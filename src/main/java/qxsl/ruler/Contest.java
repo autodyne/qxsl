@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
- * コンテストの規約の実装はこのクラスを継承します。
+ * コンテストの規約の実装はこの抽象クラスを継承します。
  *
  *
  * @author 無線部開発班
@@ -33,25 +33,6 @@ public abstract class Contest extends Library implements Iterable<Section> {
 		this.list = new ArrayList<>();
 		for(var s: sects) this.add(s);
 	}
-
-	/**
-	 * コンテストの名前を返します。
-	 *
-	 *
-	 * @return {@link #getName()}と同等
-	 */
-	@Override
-	public final String toString() {
-		return getName();
-	}
-
-	/**
-	 * コンテストの名前を返します。
-	 *
-	 *
-	 * @return コンテストの名前
-	 */
-	public abstract String getName();
 
 	/**
 	 * コンテストの主催者を返します。

@@ -29,6 +29,7 @@ public final class ZDosDecoder extends PrintDecoder {
 	private static final int CALL = 1;
 	private static final int SENT = 2;
 	private static final int RCVD = 3;
+	private static final int MUL1 = 4;
 	private static final int BAND = 5;
 	private static final int MODE = 6;
 	private static final int NOTE = 8;
@@ -100,6 +101,7 @@ public final class ZDosDecoder extends PrintDecoder {
 			if(!vals[CALL].isEmpty()) call(item, vals[CALL]);
 			if(!vals[SENT].isEmpty()) sent(item, vals[SENT]);
 			if(!vals[RCVD].isEmpty()) rcvd(item, vals[RCVD]);
+			if(!vals[MUL1].isEmpty()) mul1(item, vals[MUL1]);
 			if(!vals[BAND].isEmpty()) band(item, vals[BAND]);
 			if(!vals[MODE].isEmpty()) mode(item, vals[MODE]);
 			if(!vals[NOTE].isEmpty()) note(item, vals[NOTE]);
@@ -168,6 +170,19 @@ public final class ZDosDecoder extends PrintDecoder {
 	 */
 	private final void rcvd(Item item, String text) {
 		item.getRcvd().set(fields.cache(Qxsl.CODE).field(text));
+	}
+
+	/**
+	 * 交信記録に獲得番号を設定します。
+	 *
+	 *
+	 * @param item 設定する交信記録
+	 * @param text ナンバーの文字列
+	 *
+	 * @since 2020/10/28
+	 */
+	private final void mul1(Item item, String text) {
+		item.set(fields.cache(Qxsl.MUL1).field(text));
 	}
 
 	/**

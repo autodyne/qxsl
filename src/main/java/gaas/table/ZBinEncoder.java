@@ -117,6 +117,8 @@ public final class ZBinEncoder extends TableEncoder {
 		if(fld.name().equals(Qxsl.MODE)) return;
 		if(fld.name().equals(Qxsl.BAND)) return;
 		if(fld.name().equals(Qxsl.WATT)) return;
+		if(fld.name().equals(Qxsl.MUL1)) return;
+		if(fld.name().equals(Qxsl.MUL2)) return;
 		if(fld.name().equals(Qxsl.NAME)) return;
 		if(fld.name().equals(Qxsl.NOTE)) return;
 		final var str = "field element '%s' is not supported";
@@ -146,7 +148,9 @@ public final class ZBinEncoder extends TableEncoder {
 		mode((Mode) item.get(Qxsl.MODE));
 		band((Band) item.get(Qxsl.BAND));
 		watt((Watt) item.getSent().get(Qxsl.WATT));
-		target.write(new byte[65]);
+		write(30, item.get(Qxsl.MUL1));
+		write(30, item.get(Qxsl.MUL2));
+		target.write(new byte[3]);
 		write(14, item.get(Qxsl.NAME));
 		write(66, item.get(Qxsl.NOTE));
 		target.write(new byte[14]);

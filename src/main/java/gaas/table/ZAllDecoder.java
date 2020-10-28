@@ -28,12 +28,14 @@ public final class ZAllDecoder extends PrintDecoder {
 	private static final int TIME = 0;
 	private static final int CALL = 1;
 	private static final int SRST = 2;
-	private static final int SNUM = 3;
+	private static final int SENT = 3;
 	private static final int RRST = 4;
-	private static final int RNUM = 5;
-	private static final int BAND = 7;
-	private static final int MODE = 8;
-	private static final int NOTE = 10;
+	private static final int RCVD = 5;
+	private static final int MUL1 = 6;
+	private static final int MUL2 = 7;
+	private static final int BAND = 8;
+	private static final int MODE = 9;
+	private static final int NOTE = 11;
 	private static final String EMPTY = "";
 	private final DateTimeFormatter tstamp;
 	private final FieldManager fields;
@@ -97,14 +99,16 @@ public final class ZAllDecoder extends PrintDecoder {
 	@Override
 	public final Item next() throws IOException {
 		final var item = new Item();
-		final var vals = split(0, 17, 30, 34, 42, 46, 54, 66, 71, 76, 79, 164);
+		final var vals = split(0, 17, 30, 34, 42, 46, 54, 60, 66, 71, 76, 79, 164);
 		try {
 			if(!vals[TIME].isEmpty()) time(item, vals[TIME]);
 			if(!vals[CALL].isEmpty()) call(item, vals[CALL]);
 			if(!vals[SRST].isEmpty()) sRST(item, vals[SRST]);
-			if(!vals[SNUM].isEmpty()) snum(item, vals[SNUM]);
+			if(!vals[SENT].isEmpty()) sent(item, vals[SENT]);
 			if(!vals[RRST].isEmpty()) rRST(item, vals[RRST]);
-			if(!vals[RNUM].isEmpty()) rnum(item, vals[RNUM]);
+			if(!vals[RCVD].isEmpty()) rcvd(item, vals[RCVD]);
+			if(!vals[MUL1].isEmpty()) mul1(item, vals[MUL1]);
+			if(!vals[MUL2].isEmpty()) mul2(item, vals[MUL2]);
 			if(!vals[BAND].isEmpty()) band(item, vals[BAND]);
 			if(!vals[MODE].isEmpty()) mode(item, vals[MODE]);
 			if(!vals[NOTE].isEmpty()) note(item, vals[NOTE]);
@@ -171,7 +175,7 @@ public final class ZAllDecoder extends PrintDecoder {
 	 * @param item 設定する交信記録
 	 * @param text ナンバーの文字列
 	 */
-	private final void snum(Item item, String text) {
+	private final void sent(Item item, String text) {
 		item.getSent().set(fields.cache(Qxsl.CODE).field(text));
 	}
 
@@ -193,8 +197,34 @@ public final class ZAllDecoder extends PrintDecoder {
 	 * @param item 設定する交信記録
 	 * @param text ナンバーの文字列
 	 */
-	private final void rnum(Item item, String text) {
+	private final void rcvd(Item item, String text) {
 		item.getRcvd().set(fields.cache(Qxsl.CODE).field(text));
+	}
+
+	/**
+	 * 交信記録に獲得番号を設定します。
+	 *
+	 *
+	 * @param item 設定する交信記録
+	 * @param text ナンバーの文字列
+	 *
+	 * @since 2020/10/28
+	 */
+	private final void mul1(Item item, String text) {
+		item.set(fields.cache(Qxsl.MUL1).field(text));
+	}
+
+	/**
+	 * 交信記録に獲得番号を設定します。
+	 *
+	 *
+	 * @param item 設定する交信記録
+	 * @param text ナンバーの文字列
+	 *
+	 * @since 2020/10/28
+	 */
+	private final void mul2(Item item, String text) {
+		item.set(fields.cache(Qxsl.MUL2).field(text));
 	}
 
 	/**

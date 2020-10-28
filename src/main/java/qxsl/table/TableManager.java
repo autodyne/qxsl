@@ -6,7 +6,6 @@
 package qxsl.table;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
@@ -15,7 +14,7 @@ import java.util.StringJoiner;
 import qxsl.model.Item;
 
 /**
- * {@link TableFactory}実装クラスを自動的に検出して管理します。
+ * 交信記録の書式をクラスパスから自動的に検出して管理します。
  *
  *
  * @author 無線部開発班
@@ -52,7 +51,7 @@ public final class TableManager implements Iterable<TableFactory> {
 	 * @return 書式のイテレータ
 	 */
 	@Override
-	public Iterator<TableFactory> iterator() {
+	public final Iterator<TableFactory> iterator() {
 		return list.iterator();
 	}
 
@@ -64,23 +63,9 @@ public final class TableManager implements Iterable<TableFactory> {
 	 *
 	 * @return 対応する書式 またはnull
 	 */
-	public TableFactory getFactory(String name) {
+	public final TableFactory getFactory(String name) {
 		for(var f: list) if(f.getName().equals(name)) return f;
 		return null;
-	}
-
-	/**
-	 * 指定された入力から適切な書式で交信記録を読み込みます。
-	 *
-	 *
-	 * @param in 交信記録を読み込む入力
-	 *
-	 * @return 交信記録
-	 *
-	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
-	 */
-	public List<Item> decode(InputStream in) throws IOException {
-		return decode(in.readAllBytes());
 	}
 
 	/**
@@ -93,7 +78,7 @@ public final class TableManager implements Iterable<TableFactory> {
 	 *
 	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
 	 */
-	public List<Item> decode(byte[] binary) throws IOException {
+	public final List<Item> decode(byte[] binary) throws IOException {
 		final var join = new StringJoiner("\n");
 		for(var f: this) try {
 			return f.decode(binary);
@@ -114,7 +99,7 @@ public final class TableManager implements Iterable<TableFactory> {
 	 *
 	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
 	 */
-	public List<Item> decode(String string) throws IOException {
+	public final List<Item> decode(String string) throws IOException {
 		final var join = new StringJoiner("\n");
 		for(var f: this) try {
 			return f.decode(string);

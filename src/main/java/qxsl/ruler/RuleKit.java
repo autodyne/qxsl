@@ -6,15 +6,14 @@
 package qxsl.ruler;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.UncheckedIOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+
+import gaas.utils.AssetUtils;
 
 /**
  * ドメイン特化言語でコンテストの規約を表現する仕組みです。
@@ -28,21 +27,20 @@ public final class RuleKit {
 	private final ScriptEngine engine;
 
 	/**
-	 * 指定された名前と拡張子の処理系を構築します。
+	 * 指定された言語処理系を利用します。
 	 *
 	 *
-	 * @param name 言語名
-	 * @param exts 拡張子
+	 * @param engine 言語処理系
 	 */
 	private RuleKit(ScriptEngine engine) {
 		this.engine = engine;
 	}
 
 	/**
-	 * この処理系の言語名を返します。
+	 * 処理系が使う言語の名前を返します。
 	 *
 	 *
-	 * @return 言語名
+	 * @return 言語の名前
 	 */
 	public final String name() {
 		return engine.getFactory().getLanguageName();
@@ -205,53 +203,14 @@ public final class RuleKit {
 	 *
 	 * @param path リソースのパス
 	 *
-	 * @return ライブラリの定義
+	 * @return ライブラリの定義 未定義の場合はnull
 	 *
 	 * @throws UncheckedIOException 読み取りまたは評価の例外
 	 */
 	public static final Library loadAsLibrary(String path) {
-		final var kit = Optional.ofNullable(forFile(path));
-		return kit.map(k -> k.resource(path)).orElse(null);
-	}
-
-	/**
-	 * 交信記録の構造を変換する内蔵ライブラリを準備します。
-	 *
-	 *
-	 * @return ライブラリ
-	 */
-	public static final Library getFormatUtils() {
-		return loadAsLibrary("format.lisp");
-	}
-
-	/**
-	 * 指定された名前の内蔵ライブラリの定義を読み取ります。
-	 *
-	 *
-	 * @param path リソースのパス
-	 *
-	 * @return ライブラリの定義
-	 *
-	 * @throws UncheckedIOException 読み取りまたは評価の例外
-	 */
-	public final Library resource(String path) {
-		try(var res = getResourceAsReader(path)) {
-			return evalAsLibrary(res);
-		} catch (IOException ex) {
-			throw new UncheckedIOException(ex);
-		}
-	}
-
-	/**
-	 * 指定された名前のリソースを読み取るリーダを返します。
-	 *
-	 *
-	 * @param path リソースのパス
-	 *
-	 * @return リーダ
-	 */
-	private static final Reader getResourceAsReader(String path) {
-		final var strm = RuleKit.class.getResourceAsStream(path);
-		return new InputStreamReader(strm, StandardCharsets.UTF_8);
+		final var engine = forFile(path);
+		if(engine == null) return null;
+		final var lib = new AssetUtils(Library.class);
+		return engine.evalAsLibrary(lib.string(path));
 	}
 }

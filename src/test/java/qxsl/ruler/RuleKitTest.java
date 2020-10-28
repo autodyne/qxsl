@@ -5,9 +5,7 @@
 *******************************************************************************/
 package qxsl.ruler;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
@@ -16,10 +14,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import qxsl.draft.Mode;
+import qxsl.draft.Name;
+import qxsl.draft.Time;
 import qxsl.model.Item;
+import qxsl.table.TableFactory;
 import qxsl.table.TableManager;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+import gaas.utils.AssetUtils;
 
 /**
  * {@link RuleKit}クラスのテスト用クラスです。
@@ -30,11 +32,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * @since 2017/02/26
  */
 public final class RuleKitTest extends Assertions {
-	private static final Class<?> CLS = RuleKit.class;
-	private static final String CASES = "allja1.test";
-	private static final String RULES = "allja1.lisp";
-	private static final String ITEMS = "allja1.qxml";
-	private static final Contest rule = RuleKit.loadAsContest(RULES);
+	private static final TableManager fmts = new TableManager();
+	private static final AssetUtils asset = new AssetUtils(RuleKitTest.class);
+	private static final Contest rules = RuleKit.loadAsContest("allja1.lisp");
 
 	@Test
 	public void testForName() {
@@ -54,7 +54,7 @@ public final class RuleKitTest extends Assertions {
 	 *
 	 * @since 2020/02/23
 	 */
-	private static final class Line {
+	private static final class Constraint {
 		public final String label;
 		public final int score;
 		public final int total;
@@ -65,7 +65,7 @@ public final class RuleKitTest extends Assertions {
 		 *
 		 * @param vals 名前と素点と総得点の配列
 		 */
-		public Line(String...vals) {
+		public Constraint(String...vals) {
 			this.label = vals[0];
 			this.score = Integer.parseInt(vals[1]);
 			this.total = Integer.parseInt(vals[2]);
@@ -74,6 +74,7 @@ public final class RuleKitTest extends Assertions {
 
 		/**
 		 * テスト項目として文字列表現を返します。
+		 *
 		 *
 		 * @return 文字列表現
 		 */
@@ -89,15 +90,12 @@ public final class RuleKitTest extends Assertions {
 	 *
 	 * @return 部門と正解のリスト
 	 */
-	private static List<Arguments> lines() throws Exception {
-		final var list = new LinkedList<Arguments>();
-		try(var is = CLS.getResourceAsStream(CASES)) {
-			final var ir = new InputStreamReader(is, UTF_8);
-			final var br = new BufferedReader(ir);
-			for(var correct: br.lines().toArray(String[]::new)) {
-				final Line s = new Line(correct.split(", +", 4));
-				for(var f: s.forms) list.add(Arguments.of(s, f));
-			}
+	private static List<Arguments> lines() {
+		final var list = new ArrayList<Arguments>();
+		final var data = asset.lines("allja1.test");
+		for(final var ln: data.toArray(String[]::new)) {
+			final var v = new Constraint(ln.split(", +", 4));
+			for(var f: v.forms) list.add(Arguments.of(v, f));
 		}
 		return list;
 	}
@@ -108,39 +106,34 @@ public final class RuleKitTest extends Assertions {
 	 *
 	 * @return 交信記録と書式のリスト
 	 */
-	private static List<Arguments> items() throws Exception {
-		final var fmts = new TableManager();
-		final var list = new LinkedList<Arguments>();
-		try(final var res = CLS.getResourceAsStream(ITEMS)) {
-			for(var item: fmts.decode(res)) for(var fm: fmts) {
-				list.add(Arguments.of(item, fm.getName()));
-			}
+	private static List<Arguments> items() {
+		final var list = new ArrayList<Arguments>();
+		for(final var item: asset.items("allja1.qxml")) {
+			for(var f: fmts) list.add(Arguments.of(item, f));
 		}
 		return list;
 	}
 
 	@ParameterizedTest
 	@MethodSource("lines")
-	public void testALLJA1(Line line, String fmt) throws Exception {
-		final var sect = rule.getSection(line.label);
+	public void testFormat(Constraint line, String fmt) {
+		final var sect = rules.getSection(line.label);
 		final var path = "allja1.".concat(fmt);
-		final var fmts = new TableManager();
-		try(var res = CLS.getResourceAsStream(path)) {
-			final var sums = sect.summarize(fmts.decode(res));
-			assertThat(sums.score()).isEqualTo(line.score);
-			assertThat(sums.total()).isEqualTo(line.total);
-		}
+		final var sums = sect.summarize(asset.items(path));
+		assertThat(sums.score()).isEqualTo(line.score);
+		assertThat(sums.total()).isEqualTo(line.total);
 	}
 
 	@ParameterizedTest
 	@MethodSource("items")
-	public void testFormat(Item item, String fmt) throws Exception {
-		final var sect = rule.getSection("1エリア内 個人 総合 部門");
-		final var fact = new TableManager().getFactory(fmt);
-		final var list = fact.encode(sect.transform(item, fmt));
-		final var back = sect.normalize(fact.decode(list), fmt).get(0);
-		final var msg1 = sect.verify(item).toString();
-		final var msg2 = sect.verify(back).toString();
-		assertThat(msg1).isEqualTo(msg2);
+	public void testFormat(Item item, TableFactory fmt) throws Exception {
+		final var seq1 = fmt.encode(rules.transform(item, fmt.getName()));
+		final var seq2 = rules.normalize(fmt.decode(seq1), fmt.getName());
+		final var back = seq2.get(0);
+		back.set(Name.from(item));
+		if(Mode.from(back).isRTTY()) back.set(Mode.from(item));
+		item.set(Time.from(item).ofYear(2020).copyDropSecond());
+		back.set(Time.from(back).ofYear(2020).copyDropSecond());
+		assertThat(item).isEqualTo(back);
 	}
 }

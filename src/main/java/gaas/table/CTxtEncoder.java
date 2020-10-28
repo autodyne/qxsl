@@ -119,12 +119,12 @@ public final class CTxtEncoder extends PrintEncoder {
 	@Override
 	public final void output(Item item) throws IOException {
 		space(String.format("%4d", count++));
-		time((Time) item.get(Qxsl.TIME));
-		space(item.get(Qxsl.CALL).padHead(11));
-		band((Band) item.get(Qxsl.BAND));
-		space(item.get(Qxsl.MODE).padHead(4));
-		space(item.getSent().get(Qxsl.CODE).padHead(12));
-		space(item.getRcvd().get(Qxsl.CODE).padHead(12));
+		time((Time) item.some(Qxsl.TIME));
+		space(item.some(Qxsl.CALL).padHead(11));
+		band((Band) item.some(Qxsl.BAND));
+		space(item.some(Qxsl.MODE).padHead(4));
+		space(item.getSent().some(Qxsl.CODE).padHead(12));
+		space(item.getRcvd().some(Qxsl.CODE).padHead(12));
 		println();
 	}
 

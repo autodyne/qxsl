@@ -182,8 +182,6 @@ public final class QxmlDecoder extends TableDecoder {
 	 * 文字列を読み飛ばすフィルタを適用したリーダを返します。
 	 *
 	 *
-	 * @param filter フィルタ
-	 *
 	 * @return リーダ
 	 *
 	 * @throws IOException リーダの構築に失敗した場合

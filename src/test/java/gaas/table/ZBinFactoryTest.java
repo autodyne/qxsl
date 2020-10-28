@@ -28,14 +28,14 @@ import static qxsl.junit.RandomStringParameterExtension.alnum;
  *
  * @since 2017/02/26
  */
-public final class ZBinFormatTest extends Assertions {
+public final class ZBinFactoryTest extends Assertions {
 	private final ZBinFactory format = new ZBinFactory();
 	private final TableManager tables = new TableManager();
 	private final ArrayList<Band> bands = new ArrayList<>();
 	private final ArrayList<Mode> modes = new ArrayList<>();
 	private final ArrayList<Watt> watts = new ArrayList<>();
 
-	public ZBinFormatTest() {
+	public ZBinFactoryTest() {
 		bands.add(new Band(    3_500));
 		bands.add(new Band(    7_000));
 		bands.add(new Band(   14_000));
@@ -63,12 +63,14 @@ public final class ZBinFormatTest extends Assertions {
 		final var items = new ArrayList<Item>();
 		for(int row = 0; row < numItems; row++) {
 			final var item = new Item();
-			item.set(new Time());
+			item.set(Time.now().copyDropSecond());
 			item.set(bands.get(randInt(bands.size())));
 			item.set(new Call(alnum(12)));
 			item.set(modes.get(randInt(modes.size())));
 			item.set(new Note(alnum(66)));
 			item.set(new Name(alnum(14)));
+			item.set(new Mul1(alnum(30)));
+			item.set(new Mul2(alnum(30)));
 			item.getRcvd().set(new RSTQ(randInt(600)));
 			item.getRcvd().set(new Code(alnum(30)));
 			item.getSent().set(new RSTQ(randInt(600)));

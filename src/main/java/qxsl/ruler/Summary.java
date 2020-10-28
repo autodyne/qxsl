@@ -18,7 +18,7 @@ import qxsl.model.Item;
 import static java.util.stream.IntStream.range;
 
 /**
- * 有効な交信と無効な交信を保持するとともに識別子から得点を計算します。
+ * 有効な交信と無効な交信と得点を保持します。
  *
  *
  * @author 無線部開発班
@@ -32,13 +32,13 @@ public final class Summary implements Serializable {
 	private final int total;
 
 	/**
-	 * 指定された部門と交信記録を要約します。
+	 * 指定された部門で交信記録を要約します。
 	 *
 	 *
 	 * @param sect 部門
 	 * @param list 交信記録
 	 */
-	public Summary(Section sect, List<Item> list) {
+	public Summary(Counter sect, List<Item> list) {
 		this.accepted = new ArrayList<Success>();
 		this.rejected = new ArrayList<Failure>();
 		for(var item: list) {
@@ -49,7 +49,7 @@ public final class Summary implements Serializable {
 		final var map = new LinkedHashMap<Object, Success>();
 		for(var it: accepted) map.putIfAbsent(it.key(0), it);
 		this.distinct = new ArrayList<>(map.values());
-		this.total = sect.score(this);
+		this.total = score() > 0? sect.total(this): 0;
 	}
 
 	/**

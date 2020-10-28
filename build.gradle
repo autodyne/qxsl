@@ -10,6 +10,7 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.graalvm.sdk:graal-sdk:20.+'
 	testImplementation 'org.assertj:assertj-core:+'
 	testImplementation 'org.jruby:jruby-core:+'
 	testImplementation 'org.junit.jupiter:junit-jupiter-engine:+'

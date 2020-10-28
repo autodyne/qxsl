@@ -30,9 +30,10 @@ public final class JarlDecoder extends PrintDecoder {
 	private static final int MODE = 3;
 	private static final int CALL = 4;
 	private static final int SRST = 5;
-	private static final int SNUM = 6;
+	private static final int SENT = 6;
 	private static final int RRST = 7;
-	private static final int RNUM = 8;
+	private static final int RCVD = 8;
+	private static final int MUL1 = 9;
 	private final DateTimeFormatter tstamp;
 	private final FieldManager fields;
 	private final JarlFactory format;
@@ -103,9 +104,10 @@ public final class JarlDecoder extends PrintDecoder {
 			if(!vals[MODE].isEmpty()) mode(item, vals[MODE]);
 			if(!vals[CALL].isEmpty()) call(item, vals[CALL]);
 			if(!vals[SRST].isEmpty()) sRST(item, vals[SRST]);
-			if(!vals[SNUM].isEmpty()) snum(item, vals[SNUM]);
+			if(!vals[SENT].isEmpty()) sent(item, vals[SENT]);
 			if(!vals[RRST].isEmpty()) rRST(item, vals[RRST]);
-			if(!vals[RNUM].isEmpty()) rnum(item, vals[RNUM]);
+			if(!vals[RCVD].isEmpty()) rcvd(item, vals[RCVD]);
+			if(!vals[MUL1].isEmpty()) mul1(item, vals[MUL1]);
 			return item;
 		} catch (RuntimeException ex) {
 			throw new IOException(ex);
@@ -192,7 +194,7 @@ public final class JarlDecoder extends PrintDecoder {
 	 * @param item 設定する交信記録
 	 * @param text ナンバーの文字列
 	 */
-	private final void snum(Item item, String text) {
+	private final void sent(Item item, String text) {
 		item.getSent().set(fields.cache(Qxsl.CODE).field(text));
 	}
 
@@ -214,7 +216,18 @@ public final class JarlDecoder extends PrintDecoder {
 	 * @param item 設定する交信記録
 	 * @param text ナンバーの文字列
 	 */
-	private final void rnum(Item item, String text) {
+	private final void rcvd(Item item, String text) {
 		item.getRcvd().set(fields.cache(Qxsl.CODE).field(text));
+	}
+
+	/**
+	 * 交信記録に獲得番号を設定します。
+	 *
+	 *
+	 * @param item 設定する交信記録
+	 * @param text ナンバーの文字列
+	 */
+	private final void mul1(Item item, String text) {
+		item.set(fields.cache(Qxsl.MUL1).field(text));
 	}
 }

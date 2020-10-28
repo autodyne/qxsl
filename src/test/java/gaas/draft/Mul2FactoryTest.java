@@ -9,42 +9,30 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import qxsl.draft.Mul2;
 import qxsl.draft.Qxsl;
-import qxsl.draft.Watt;
 import qxsl.field.FieldManager;
 import qxsl.field.FieldManager.Cache;
 import qxsl.junit.RandomStringParameterExtension;
 import qxsl.junit.RandomStringParameterExtension.RandomString;
 
 /**
- * {@link Watt}クラスのテスト用クラスです。
+ * {@link Mul2Factory}クラスのテスト用クラスです。
  *
  *
  * @author 無線部開発班
  *
- * @since 2017/02/24
+ * @since 2020/10/28
  */
 @ExtendWith(RandomStringParameterExtension.class)
-public final class WattTest extends Assertions {
-	private final Cache cache = new FieldManager().cache(Qxsl.WATT);
+public final class Mul2FactoryTest extends Assertions {
+	private final Cache cache = new FieldManager().cache(Qxsl.MUL2);
 
 	@Test
-	public void testValue() {
-		assertThat(new Watt("10kW").value()).isEqualTo("10kW");
-		assertThat(new Watt("10MW").value()).isEqualTo("10MW");
-		assertThat(new Watt("10GW").value()).isEqualTo("10GW");
-	}
-
-	@Test
-	public void testToString(@RandomString String text) {
-		assertThat(new Watt(text)).hasToString(text);
-	}
-
-	@Test
-	public void testWatt$Format(@RandomString String text) throws Exception {
-		final var form = new WattFactory();
-		final var watt = new Watt(text);
-		assertThat(form.decode(form.encode(watt))).isEqualTo(watt);
-		assertThat(cache.field(form.encode(watt))).isEqualTo(watt);
+	public void test(@RandomString String text) throws Exception {
+		final var form = new Mul2Factory();
+		final var code = new Mul2(text);
+		assertThat(form.decode(form.encode(code))).isEqualTo(code);
+		assertThat(cache.field(form.encode(code))).isEqualTo(code);
 	}
 }

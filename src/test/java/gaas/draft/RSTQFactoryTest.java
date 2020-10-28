@@ -17,7 +17,7 @@ import qxsl.junit.RandomNumberParameterExtension;
 import qxsl.junit.RandomNumberParameterExtension.RandomNumber;
 
 /**
- * {@link RSTQ}クラスのテスト用クラスです。
+ * {@link RSTQFactory}クラスのテスト用クラスです。
  *
  *
  * @author 無線部開発班
@@ -25,32 +25,11 @@ import qxsl.junit.RandomNumberParameterExtension.RandomNumber;
  * @since 2017/02/24
  */
 @ExtendWith(RandomNumberParameterExtension.class)
-public final class RSTQTest extends Assertions {
+public final class RSTQFactoryTest extends Assertions {
 	private final Cache cache = new FieldManager().cache(Qxsl.RSTQ);
 
 	@Test
-	public void testValue() {
-		assertThat(new RSTQ(699).value()).isEqualTo(599);
-		assertThat(new RSTQ(599).value()).isEqualTo(599);
-		assertThat(new RSTQ(590).value()).isEqualTo(591);
-		assertThat(new RSTQ(101).value()).isEqualTo(111);
-		assertThat(new RSTQ(100).value()).isEqualTo(111);
-		assertThat(new RSTQ( 59).value()).isEqualTo( 59);
-		assertThat(new RSTQ( 11).value()).isEqualTo( 11);
-		assertThat(new RSTQ( 10).value()).isEqualTo( 11);
-	}
-
-	@Test
-	public void testToString() {
-		assertThat(new RSTQ(599)).hasToString("599");
-		assertThat(new RSTQ(590)).hasToString("591");
-		assertThat(new RSTQ(101)).hasToString("111");
-		assertThat(new RSTQ(100)).hasToString("111");
-		assertThat(new RSTQ( 59)).hasToString("59");
-	}
-
-	@Test
-	public void testRSTQ$Format(@RandomNumber(489) int num) throws Exception {
+	public void test(@RandomNumber(489) int num) throws Exception {
 		final var form = new RSTQFactory();
 		final var rstq = new RSTQ(num + 111);
 		assertThat(form.decode(form.encode(rstq))).isEqualTo(rstq);

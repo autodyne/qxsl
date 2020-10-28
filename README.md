@@ -4,21 +4,25 @@ qxsl: Amateur-Radio Logging Library & LISP
 ![image](https://img.shields.io/badge/Gradle-6-red.svg)
 ![image](https://img.shields.io/badge/OpenJDK-SE11-red.svg)
 ![image](https://img.shields.io/badge/GraalVM-20.0-red.svg)
-![image](https://img.shields.io/badge/JRuby-9.2-orange.svg)
 ![image](https://img.shields.io/badge/license-LGPL3-darkblue.svg)
 
-qxsl is a Java library for processing amateur-radio log files, including scoring and tabulation frameworks for ham radio contests, which are important components of [Automatic Acceptance & Tabulation System (ATS)](https://github.com/nextzlog/ats4) for [the ALLJA1 contest](http://ja1zlo.u-tokyo.org/allja1).
+qxsl is a Java library for processing amateur-radio log files, including scoring and tabulation frameworks for ham radio contests.
 
 ## Features
 
 - provides log en/decoders for QXML, [ADIF](http://adif.org), [Cabrillo](https://wwrof.org/cabrillo/), [zLog](http://www.zlog.org), [CTESTWIN](http://e.gmobb.jp/ctestwin/Download.html), etc.
 - provides tabulation & scoring frameworks for amateur-radio contests and awards.
-- provides the rulekit framework which allows you to write contest rules in Ruby or LISP.
+- provides the rulekit framework which allows you to write contest rules in Ruby, Python, and LISP.
 
 ## Documents
 
 - [Javadoc](https://nextzlog.github.io/qxsl/doc/index.html)
 - [コンテスト運営を支援する自動集計システム (PDF)](https://pafelog.net/ats4.pdf)
+
+## Applications
+
+- [zLog+ ZyLO](https://github.com/nextzlog/zylo).
+- [Automatic Acceptance & Tabulation System (ATS)](https://github.com/nextzlog/ats4) for [the ALLJA1 contest](http://ja1zlo.u-tokyo.org/allja1).
 
 ## Sample Codes
 
@@ -74,7 +78,7 @@ The class `TableManager` detects individual formats (`TableFactory`s) from the c
 ```Scala
 val tables = new qxsl.table.TableManager()
 val table: List[Item] = tables.decode(Files.readAllBytes(path))
-tables.forName("qxml").encoder(Files.newOutputStream(path)).encode(table)
+tables.getFactory("qxml").encoder(Files.newOutputStream(path)).encode(table)
 ```
 
 The package `qxsl.sheet` provides an en/decoding framework similar to the `qxsl.table` package, except that `qxsl.sheet` handles contest summary sheets such as Cabrillo and [JARL summary sheet](https://www.jarl.org/Japanese/1_Tanoshimo/1-1_Contest/e-log.htm) R2.0.
@@ -92,7 +96,7 @@ Each contest is represented as a `Contest` object, which is provided by a `RuleK
 
 ```Scala
 import qxsl.ruler.{Contest,RuleKit}
-val engine = RuleKit.load("elva")
+val engine = RuleKit.forName("elva")
 val stream = engine.getClass().getResourceAsStream("allja1.lisp")
 val allja1 = engine.contest(new InputStreamReader(stream, UTF_8))
 ```
@@ -113,7 +117,7 @@ for(section: Section <- allja1.getSections().asScala) {
 }
 ```
 
-Currently, the `RuleKit` class supports two domain specific languages, namely Ruby (JRuby) and [Elva Lisp](https://github.com/nextzlog/qxsl/blob/master/ELVA.md).
+Currently, the `RuleKit` class supports some domain specific languages, including Ruby, Python, and [Elva Lisp](https://github.com/nextzlog/qxsl/blob/master/ELVA.md).
 Elva Lisp is a special LISP for the purpose of contest definition.
 
 ### Bundled Contest Definitions

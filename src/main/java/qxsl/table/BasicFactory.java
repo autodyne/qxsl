@@ -5,9 +5,6 @@
 *******************************************************************************/
 package qxsl.table;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
@@ -15,9 +12,8 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.util.List;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+import gaas.utils.AssetUtils;
 
 /**
  * 書式の説明を設定ファイルから取得する仕組みを提供します。
@@ -41,26 +37,7 @@ public abstract class BasicFactory extends TableFactory {
 	 */
 	public BasicFactory(String name) {
 		this.name = name;
-		this.conf = new Properties();
-		install(String.format("%s.xml", name));
-	}
-
-	/**
-	 * 指定された書式の設定を読み取ります。
-	 *
-	 *
-	 * @param name 書式の名前
-	 *
-	 * @throws UncheckedIOException 設定の取得時の例外
-	 */
-	private final void install(String name) {
-		final var type = getClass();
-		final var path = type.getResource(name);
-		try(final var strm = path.openStream()) {
-			conf.loadFromXML(strm);
-		} catch (IOException ex) {
-			throw new UncheckedIOException(ex);
-		}
+		this.conf = AssetUtils.from(this).properties(name);
 	}
 
 	/**
@@ -108,7 +85,7 @@ public abstract class BasicFactory extends TableFactory {
 		final var text = get("desc-text");
 		final var file = get("desc-file");
 		if(text != null) return text;
-		return getResourceAsString(file);
+		return AssetUtils.from(this).string(file);
 	}
 
 	/**
@@ -172,27 +149,5 @@ public abstract class BasicFactory extends TableFactory {
 	 */
 	public final DateTimeFormatter getTimeEncoder() {
 		return DateTimeFormatter.ofPattern(get("time-encoder"));
-	}
-
-	/**
-	 * 指定されたリソースの内容を読み取ります。
-	 *
-	 *
-	 * @param path ファイルのパス
-	 *
-	 * @return ファイルの内容
-	 *
-	 * @throws UncheckedIOException 内容の取得時の例外
-	 *
-	 * @since 2020/09/05
-	 */
-	public final String getResourceAsString(String path) {
-		try(var is = getClass().getResourceAsStream(path)) {
-			final var isr = new InputStreamReader(is, UTF_8);
-			final var strm = new BufferedReader(isr).lines();
-			return strm.collect(Collectors.joining("\n"));
-		} catch (IOException ex) {
-			throw new UncheckedIOException(ex);
-		}
 	}
 }

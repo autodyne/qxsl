@@ -100,6 +100,7 @@ public final class JarlEncoder extends PrintEncoder {
 		if(fld.name().equals(Qxsl.CALL)) return;
 		if(fld.name().equals(Qxsl.RSTQ)) return;
 		if(fld.name().equals(Qxsl.CODE)) return;
+		if(fld.name().equals(Qxsl.MUL1)) return;
 		final var str = "field element '%s' is not supported";
 		throw new IOException(String.format(str, fld.name()));
 	}
@@ -116,15 +117,16 @@ public final class JarlEncoder extends PrintEncoder {
 	 */
 	@Override
 	public final void output(Item item) throws IOException {
-		time((Time) item.get(Qxsl.TIME));
-		band((Band) item.get(Qxsl.BAND));
-		space(item.get(Qxsl.MODE).padHead(5));
-		space(item.get(Qxsl.CALL).padHead(13));
-		space(item.getSent().get(Qxsl.RSTQ).padHead(3));
-		space(item.getSent().get(Qxsl.CODE).padHead(7));
-		space(item.getRcvd().get(Qxsl.RSTQ).padHead(3));
-		space(item.getRcvd().get(Qxsl.CODE).padHead(7));
-		print("          1");
+		time((Time) item.some(Qxsl.TIME));
+		band((Band) item.some(Qxsl.BAND));
+		space(item.some(Qxsl.MODE).padHead(5));
+		space(item.some(Qxsl.CALL).padHead(13));
+		space(item.getSent().some(Qxsl.RSTQ).padHead(3));
+		space(item.getSent().some(Qxsl.CODE).padHead(7));
+		space(item.getRcvd().some(Qxsl.RSTQ).padHead(3));
+		space(item.getRcvd().some(Qxsl.CODE).padHead(7));
+		space(item.some(Qxsl.MUL1).padHead(7));
+		print("   1");
 		println();
 	}
 

@@ -29,6 +29,7 @@
 (import qxsl.draft.Mode)
 (import qxsl.draft.Name)
 (import qxsl.draft.Note)
+(import qxsl.draft.Qxsl)
 (import qxsl.draft.RSTQ)
 (import qxsl.draft.Time)
 (import qxsl.draft.Watt)

@@ -2,6 +2,8 @@ gaas.draft.BandFactory
 gaas.draft.CallFactory
 gaas.draft.CodeFactory
 gaas.draft.ModeFactory
+gaas.draft.Mul1Factory
+gaas.draft.Mul2Factory
 gaas.draft.NameFactory
 gaas.draft.NoteFactory
 gaas.draft.RSTQFactory

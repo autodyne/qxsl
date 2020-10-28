@@ -9,13 +9,13 @@
 ;; GENERAL FIELD ACCESS ROUTINES
 
 ; field keys for qxsl
-(setq key-qxsl-time (name qxsl "time"))
-(setq key-qxsl-call (name qxsl "call"))
-(setq key-qxsl-band (name qxsl "band"))
-(setq key-qxsl-mode (name qxsl "mode"))
-(setq key-qxsl-name (name qxsl "name"))
-(setq key-qxsl-rstq (name qxsl "rstq"))
-(setq key-qxsl-code (name qxsl "code"))
+(setq key-qxsl-time (static Qxsl 'TIME))
+(setq key-qxsl-call (static Qxsl 'CALL))
+(setq key-qxsl-band (static Qxsl 'BAND))
+(setq key-qxsl-mode (static Qxsl 'MODE))
+(setq key-qxsl-name (static Qxsl 'NAME))
+(setq key-qxsl-rstq (static Qxsl 'RSTQ))
+(setq key-qxsl-code (static Qxsl 'CODE))
 
 ; field keys for adif
 (setq key-adif-DATE (name adif "QSO_DATE"))

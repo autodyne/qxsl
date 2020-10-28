@@ -21,19 +21,19 @@ import static qxsl.junit.RandomNumberParameterExtension.randInt;
 import static qxsl.junit.RandomStringParameterExtension.alnum;
 
 /**
- * {@link ZAllFactory}クラスのテスト用クラスです。
+ * {@link ZDosFactory}クラスのテスト用クラスです。
  *
  *
  * @author 無線部開発班
  *
  * @since 2017/02/26
  */
-public final class ZAllFormatTest extends Assertions {
-	private final ZAllFactory format = new ZAllFactory();
+public final class ZDosFactoryTest extends Assertions {
+	private final ZDosFactory format = new ZDosFactory();
 	private final TableManager tables = new TableManager();
 	private final ArrayList<Band> bands = new ArrayList<>();
 
-	public ZAllFormatTest() {
+	public ZDosFactoryTest() {
 		bands.add(new Band(    3_500));
 		bands.add(new Band(    7_000));
 		bands.add(new Band(   14_000));
@@ -52,16 +52,15 @@ public final class ZAllFormatTest extends Assertions {
 		final var items = new ArrayList<Item>();
 		for(int row = 0; row < numItems; row++) {
 			final var item = new Item();
-			item.set(new Time());
+			item.set(Time.now().copyDropSecond());
 			item.set(bands.get(randInt(bands.size())));
-			item.set(new Call(alnum(12)));
+			item.set(new Call(alnum(10)));
 			item.set(new Mode(alnum(4)));
 			item.set(new Note(alnum(50)));
 			item.set(new Name(alnum(14)));
-			item.getRcvd().set(new RSTQ(randInt(600)));
-			item.getRcvd().set(new Code(alnum(7)));
-			item.getSent().set(new RSTQ(randInt(600)));
-			item.getSent().set(new Code(alnum(7)));
+			item.set(new Mul1(alnum(6)));
+			item.getRcvd().set(new Code(alnum(12)));
+			item.getSent().set(new Code(alnum(12)));
 			items.add(item);
 		}
 		assertThat(format.decode(format.encode(items))).isEqualTo(items);

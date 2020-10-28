@@ -21,19 +21,19 @@ import static qxsl.junit.RandomNumberParameterExtension.randInt;
 import static qxsl.junit.RandomStringParameterExtension.alnum;
 
 /**
- * {@link JarlFactory}クラスのテスト用クラスです。
+ * {@link ZAllFactory}クラスのテスト用クラスです。
  *
  *
  * @author 無線部開発班
  *
  * @since 2017/02/26
  */
-public final class JarlFormatTest extends Assertions {
-	private final JarlFactory format = new JarlFactory();
+public final class ZAllFactoryTest extends Assertions {
+	private final ZAllFactory format = new ZAllFactory();
 	private final TableManager tables = new TableManager();
 	private final ArrayList<Band> bands = new ArrayList<>();
 
-	public JarlFormatTest() {
+	public ZAllFactoryTest() {
 		bands.add(new Band(    3_500));
 		bands.add(new Band(    7_000));
 		bands.add(new Band(   14_000));
@@ -52,10 +52,14 @@ public final class JarlFormatTest extends Assertions {
 		final var items = new ArrayList<Item>();
 		for(int row = 0; row < numItems; row++) {
 			final var item = new Item();
-			item.set(new Time());
+			item.set(Time.now().copyDropSecond());
 			item.set(bands.get(randInt(bands.size())));
-			item.set(new Call(alnum(13)));
-			item.set(new Mode(alnum(5)));
+			item.set(new Call(alnum(12)));
+			item.set(new Mode(alnum(4)));
+			item.set(new Note(alnum(50)));
+			item.set(new Name(alnum(14)));
+			item.set(new Mul1(alnum(5)));
+			item.set(new Mul2(alnum(5)));
 			item.getRcvd().set(new RSTQ(randInt(600)));
 			item.getRcvd().set(new Code(alnum(7)));
 			item.getSent().set(new RSTQ(randInt(600)));

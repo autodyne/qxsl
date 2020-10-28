@@ -101,7 +101,7 @@ public final class CBinFactory extends BasicFactory {
 		 * 周波数帯を指定して列挙子を生成します。
 		 *
 		 *
-		 * @param band 周波数帯
+		 * @param kHz 周波数帯
 		 */
 		private BandEnum(int kHz) {
 			this.band = new Band(kHz);

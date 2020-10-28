@@ -5,10 +5,10 @@
 *******************************************************************************/
 package qxsl.draft;
 
-import qxsl.value.Field;
+import qxsl.value.Tuple;
 
 /**
- * 交信の変調方式を表現する{@link Field}実装クラスです。
+ * 交信の通信方式を表す属性の実装です。
  *
  *
  * @author 無線部開発班
@@ -16,21 +16,51 @@ import qxsl.value.Field;
  * @since 2013/06/08
  */
 public final class Mode extends Qxsl<String> {
-	private final String mode;
-
 	/**
-	 * モード名を指定して属性を構築します。
+	 * 通信方式を指定して属性を構築します。
 	 *
 	 *
-	 * @param mode モード名
+	 * @param mode 通信方式
 	 */
 	public Mode(String mode) {
-		super(MODE);
-		this.mode = mode;
+		super(MODE, mode.toUpperCase());
 	}
 
-	@Override
-	public final String value() {
-		return mode;
+	/**
+	 * 通信方式が聴覚電信か確認します。
+	 *
+	 *
+	 * @return CWの場合は真
+	 *
+	 * @since 2020/10/28
+	 */
+	public final boolean isCW() {
+		return value.equals("CW");
+	}
+
+	/**
+	 * 通信方式が印字電信か確認します。
+	 *
+	 *
+	 * @return RTTYの場合は真
+	 *
+	 * @since 2020/10/28
+	 */
+	public final boolean isRTTY() {
+		return value.equals("RTTY");
+	}
+
+	/**
+	 * 交信記録の通信方式を抽出します。
+	 *
+	 *
+	 * @param tuple 交信記録
+	 *
+	 * @return 通信方式の属性
+	 *
+	 * @since 2020/10/28
+	 */
+	public static final Mode from(Tuple tuple) {
+		return (Mode) tuple.get(Qxsl.MODE);
 	}
 }

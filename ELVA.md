@@ -530,7 +530,7 @@ creates a local variable and evaluates the expression.
 creates and returns a [`library`](https://nextzlog.github.io/qxsl/doc/qxsl/ruler/Library.html) object.
 
 ```lisp
-(library)
+(library name)
 ```
 
 ### list

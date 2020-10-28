@@ -1,12 +1,10 @@
 gaas.table.QxmlFactory
 gaas.table.AdxsFactory
-
 gaas.table.AdisFactory
 gaas.table.CqwwFactory
 gaas.table.JarlFactory
 gaas.table.CTxtFactory
 gaas.table.ZAllFactory
 gaas.table.ZDosFactory
-
 gaas.table.CBinFactory
 gaas.table.ZBinFactory

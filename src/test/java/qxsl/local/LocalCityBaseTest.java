@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
  * @since 2020/10/10
  */
 public final class LocalCityBaseTest extends Assertions {
-	private final LocalCityBase base = LocalCityBase.load("city.ja");
+	final LocalCityBase base = LocalCityBase.load("qxsl/local/city.ja");
 
 	@Test
 	public void testGetCityByCode() {

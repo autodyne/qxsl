@@ -228,9 +228,6 @@ public final class ZBinFactory extends BasicFactory {
 
 		/**
 		 * 送信電力を指定して列挙子を生成します。
-		 *
-		 *
-		 * @param watt 送信電力
 		 */
 		private WattEnum() {
 			watt = new Watt(name());

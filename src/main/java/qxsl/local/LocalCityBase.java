@@ -5,16 +5,15 @@
 *******************************************************************************/
 package qxsl.local;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.UncheckedIOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+import gaas.utils.AssetUtils;
 
 /**
  * ライブラリが内蔵する都市または地域のデータベースです。
@@ -33,14 +32,14 @@ public final class LocalCityBase {
 	 * 指定された内容を収録するデータベースを構築します。
 	 *
 	 *
-	 * @param list 内容
+	 * @param stream 内容
 	 */
-	private LocalCityBase(List<LocalCityItem> list) {
-		this.list = Collections.unmodifiableList(list);
+	private LocalCityBase(Stream<LocalCityItem> stream) {
+		this.list = stream.collect(Collectors.toList());
 		this.forwardMap = new HashMap<>();
 		this.reverseMap = new HashMap<>();
-		for(var v: list) this.forwardMap.put(v.getCode(), v);
-		for(var v: list) this.reverseMap.put(v.getName(), v);
+		for(var v: list) forwardMap.put(v.getCode(), v);
+		for(var v: list) reverseMap.put(v.getName(), v);
 	}
 
 	/**
@@ -50,7 +49,7 @@ public final class LocalCityBase {
 	 * @return 全ての利用可能な地域
 	 */
 	public final List<LocalCityItem> toList() {
-		return this.list;
+		return Collections.unmodifiableList(list);
 	}
 
 	/**
@@ -78,23 +77,18 @@ public final class LocalCityBase {
 	}
 
 	/**
-	 * 指定された名前のデータベースを読み取って返します。
+	 * 指定された内蔵データベースを読み取ります。
 	 *
 	 *
 	 * @param name データベースの名前
 	 *
 	 * @return データベース
+	 *
+	 * @throws UncheckedIOException 存在しない場合
 	 */
 	public static final LocalCityBase load(String name) {
-		final var TYPE = LocalCityBase.class;
-		final var strm = TYPE.getResourceAsStream(name);
-		final var text = new InputStreamReader(strm, UTF_8);
-		try(final var b = new BufferedReader(text)) {
-			final var data = b.lines().map(LocalCityItem::new);
-			final var list = data.collect(Collectors.toList());
-			return new LocalCityBase(list);
-		} catch (IOException ex) {
-			return null;
-		}
+		final var lines = AssetUtils.root().lines(name);
+		final var route = lines.map(LocalCityItem::new);
+		return new LocalCityBase(route);
 	}
 }

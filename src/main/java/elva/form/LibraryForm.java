@@ -17,7 +17,7 @@ import qxsl.ruler.Library;
 /**
  * creates and returns a library object.
  * <pre>
- * (library)
+ * (library name)
  * </pre>
  *
  *
@@ -26,42 +26,77 @@ import qxsl.ruler.Library;
  * @since 2020/09/26
  */
 @Name("library")
-@Args(min = 0, max = 0)
+@Args(min = 1, max = 1)
 public final class LibraryForm extends NativeOp {
 	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		return new LibraryImpl(args, eval);
 	}
+}
+
+/**
+ * LISP処理系の内部におけるコンテストの規約の実装です。
+ *
+ *
+ * @author 無線部開発班
+ *
+ * @since 2017/02/20
+ */
+final class LibraryImpl extends Library {
+	private final String name;
+	private final ElvaEval eval;
 
 	/**
-	 * LISP処理系の内部におけるコンテストの規約の実装です。
+	 * 指定された規約定義と評価器で規約を構築します。
 	 *
 	 *
-	 * @author 無線部開発班
-	 *
-	 * @since 2017/02/20
+	 * @param rule 規約
+	 * @param eval 評価器
 	 */
-	public static final class LibraryImpl extends Library {
-		private final ElvaEval eval;
+	public LibraryImpl(ListBase rule, ElvaEval eval) {
+		this.name = eval.apply(rule.head()).text();
+		this.eval = eval;
+	}
 
-		/**
-		 * 指定された規約定義と評価器で規約を構築します。
-		 *
-		 * @param rule 規約
-		 * @param eval 評価器
-		 */
-		public LibraryImpl(ListBase rule, ElvaEval eval) {
-			this.eval = eval;
-		}
+	/**
+	 * ライブラリの名前を返します。
+	 *
+	 *
+	 * @return 名前
+	 */
+	@Override
+	public final String getName() {
+		return name;
+	}
 
-		@Override
-		public final Object get(String name) {
-			return eval.apply(new NameNode(name)).value();
-		}
+	/**
+	 * このライブラリが参照する変数を実行します。
+	 *
+	 *
+	 * @param name 変数の名前
+	 *
+	 * @return 変数の値
+	 *
+	 * @since 2020/09/27
+	 */
+	@Override
+	public final Object get(String name) {
+		return eval.apply(new NameNode(name)).value();
+	}
 
-		@Override
-		public final Object invoke(String name, Object...args) {
-			return eval.apply(new NameNode(name).form(args)).value();
-		}
+	/**
+	 * このライブラリが参照する関数を実行します。
+	 *
+	 *
+	 * @param name 関数の名前
+	 * @param args 関数の引数
+	 *
+	 * @return 関数の値
+	 *
+	 * @since 2020/03/09
+	 */
+	@Override
+	public final Object invoke(String name, Object...args) {
+		return eval.apply(new NameNode(name).form(args)).value();
 	}
 }

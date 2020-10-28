@@ -7,12 +7,12 @@ package qxsl.draft;
 
 import java.text.Normalizer;
 
-import qxsl.value.Field;
+import qxsl.value.Tuple;
 
 import static java.text.Normalizer.Form.NFKC;
 
 /**
- * 交信の相手局の呼出符号を表現する{@link Field}実装クラスです。
+ * 相手の呼出符号を表す属性の実装です。
  *
  *
  * @author 無線部開発班
@@ -21,25 +21,29 @@ import static java.text.Normalizer.Form.NFKC;
  */
 public final class Call extends Qxsl<String> {
 	private static final String PATTERN = "\\w+(/\\w+)?";
-	private final String call;
 
 	/**
 	 * 呼出符号を指定して属性を構築します。
 	 *
 	 *
 	 * @param call 呼出符号
-	 *
-	 * @throws IllegalArgumentException 不正な文字を含む場合
 	 */
 	public Call(String call) {
-		super(CALL);
-		if(isValid(call)) this.call = normalize(call);
-		else throw new IllegalArgumentException(call);
+		super(CALL, normalize(call));
 	}
 
-	@Override
-	public final String value() {
-		return call;
+	/**
+	 * 交信記録の呼出符号を抽出します。
+	 *
+	 *
+	 * @param tuple 交信記録
+	 *
+	 * @return 呼出符号の属性
+	 *
+	 * @since 2020/10/28
+	 */
+	public static final Call from(Tuple tuple) {
+		return (Call) tuple.get(Qxsl.CALL);
 	}
 
 	/**
@@ -49,7 +53,7 @@ public final class Call extends Qxsl<String> {
 	 * @return 呼出符号
 	 */
 	public final String strip() {
-		return call.split("/", 2)[0];
+		return value().split("/", 2)[0];
 	}
 
 	/**

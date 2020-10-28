@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * LISP処理系で使用されるリストやアトムの抽象化です。
+ * LISP処理系で使用される式の抽象化です。
  *
  *
  * @author 無線部開発班
@@ -154,12 +154,12 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 	}
 
 	/**
-	 * 指定された値を{@link NodeBase}で包みます。
+	 * 指定された値を包む式を返します。
 	 *
 	 *
 	 * @param sexp 値
 	 *
-	 * @return 値
+	 * @return 式
 	 */
 	public static final NodeBase wrap(Object sexp) {
 		return NODE.encode(sexp);

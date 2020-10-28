@@ -5,7 +5,11 @@
 *******************************************************************************/
 package elva.lang;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.UncheckedIOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,12 +23,13 @@ import javax.script.ScriptEngineFactory;
 import elva.warn.ElvaLexicalException;
 import elva.warn.ElvaRuntimeException;
 
+import gaas.utils.AssetUtils;
+
 import static elva.lang.NameNode.Quote.QUASI;
 import static elva.lang.NameNode.Quote.QUOTE;
 import static elva.lang.NameNode.Quote.UQSPL;
 import static elva.lang.NameNode.Quote.UQUOT;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.joining;
 import static javax.script.ScriptContext.ENGINE_SCOPE;
 import static javax.script.ScriptContext.GLOBAL_SCOPE;
@@ -38,7 +43,7 @@ import static javax.script.ScriptContext.GLOBAL_SCOPE;
  * @since 2019/05/17
  */
 public final class ElvaLisp extends AbstractScriptEngine {
-	private static final String PATH = "elva.lex";
+	private static final String LEX = "elva.lex";
 	private final ScopeMap lisp;
 
 	/**
@@ -185,25 +190,9 @@ public final class ElvaLisp extends AbstractScriptEngine {
 		 */
 		public Lexical(String exp) throws IOException {
 			this.tokens = new LinkedList<>();
-			final var regex = getRegexPattern();
-			final var matcher = Pattern.compile(regex).matcher(exp);
-			while(matcher.find()) this.tokens.add(matcher.group(1));
-		}
-
-		/**
-		 * リソースファイルからLISPの字句の正規表現を取得します。
-		 *
-		 *
-		 * @return 正規表現
-		 *
-		 * @throws IOException 正規表現の読み込みに失敗した場合
-		 */
-		public String getRegexPattern() throws IOException {
-			final var stream = getClass().getResourceAsStream(PATH);
-			final var reader = new InputStreamReader(stream, UTF_8);
-			try(final var br = new BufferedReader(reader)) {
-				return br.lines().collect(joining());
-			}
+			final var p = AssetUtils.from(this).string(LEX);
+			final var mat = Pattern.compile(p).matcher(exp);
+			while(mat.find()) this.tokens.add(mat.group(1));
 		}
 
 		/**

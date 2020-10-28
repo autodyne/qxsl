@@ -1,0 +1,35 @@
+/*******************************************************************************
+ * Amateur Radio Operational Logging Library 'qxsl' since 2013 February 16th
+ * License : GNU Lesser General Public License v3 (see LICENSE)
+ * Author: Journal of Hamradio Informatics (http://pafelog.net)
+*******************************************************************************/
+package qxsl.draft;
+
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import qxsl.junit.RandomStringParameterExtension;
+import qxsl.junit.RandomStringParameterExtension.RandomString;
+
+/**
+ * {@link Mul1}クラスのテスト用クラスです。
+ *
+ *
+ * @author 無線部開発班
+ *
+ * @since 2020/10/28
+ */
+@ExtendWith(RandomStringParameterExtension.class)
+public final class Mul1Test extends Assertions {
+	@Test
+	public void testValue() {
+		assertThat(new Mul1("100110").value()).isEqualTo("100110");
+		assertThat(new Mul1("400105").value()).isEqualTo("400105");
+	}
+
+	@Test
+	public void testToString(@RandomString String text) {
+		assertThat(new Mul1(text)).hasToString(text);
+	}
+}

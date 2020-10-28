@@ -14,7 +14,7 @@ import javax.xml.namespace.QName;
 import qxsl.value.Field;
 
 /**
- * {@link FieldFactory}実装クラスを自動的に検出して管理します。
+ * 属性の書式をクラスパスから自動的に検出して管理します。
  *
  *
  * @author 無線部開発班
@@ -121,8 +121,8 @@ public final class FieldManager implements Iterable<FieldFactory> {
 	}
 
 	/**
-	 * 任意の属性を保存的に格納する{@link Field}実装クラスです。
-	 * クラスパスに{@link FieldFactory}がない場合に使用されます。
+	 * 任意の属性値を文字列のまま格納する属性の実装です。
+	 * 該当する書式が未提供の場合に暗黙的に生成されます。
 	 *
 	 *
 	 * @author 無線部開発班
@@ -173,7 +173,7 @@ public final class FieldManager implements Iterable<FieldFactory> {
 		}
 
 		/**
-		 * 指定された値の{@link Field}を生成します。
+		 * 指定された値の属性を生成します。
 		 *
 		 *
 		 * @param value 属性値を表す文字列
@@ -189,7 +189,7 @@ public final class FieldManager implements Iterable<FieldFactory> {
 		}
 
 		/**
-		 * 指定された値の{@link Field}を取得します。
+		 * 指定された値の属性を取得します。
 		 *
 		 *
 		 * @param value 属性値を表す整数値
@@ -201,7 +201,7 @@ public final class FieldManager implements Iterable<FieldFactory> {
 		}
 
 		/**
-		 * 指定された値の{@link Field}を取得します。
+		 * 指定された値の属性を取得します。
 		 *
 		 *
 		 * @param value 属性値を表す文字列

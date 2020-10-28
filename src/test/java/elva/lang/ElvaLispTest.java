@@ -5,10 +5,6 @@
 *******************************************************************************/
 package elva.lang;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.script.ScriptException;
 
@@ -16,7 +12,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+import gaas.utils.AssetUtils;
 
 /**
  * {@link ElvaLisp}クラスのテスト用クラスです。
@@ -27,7 +23,11 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * @since 2017/02/26
  */
 public final class ElvaLispTest extends Assertions {
-	private final ElvaLisp elva = new ElvaLisp();
+	private static final ElvaLisp elva = new ElvaLisp();
+
+	private static final Stream<String> testMethodSource() {
+		return AssetUtils.from(elva).lines("test.lisp");
+	}
 
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
@@ -35,17 +35,9 @@ public final class ElvaLispTest extends Assertions {
 		final var cons = elva.scan(source);
 		if(cons.size() > 0) {
 			assertThat(cons).hasSize(2);
-			final var lhs = elva.eval(String.valueOf(cons.get(0)));
-			final var rhs = elva.eval(String.valueOf(cons.get(1)));
-			assertThat(NodeBase.wrap(lhs)).isEqualTo(NodeBase.wrap(rhs));
-		}
-	}
-
-	public static Stream<String> testMethodSource() throws IOException {
-		final var stream = ElvaLisp.class.getResourceAsStream("test.lisp");
-		final var reader = new InputStreamReader(stream, UTF_8);
-		try(final var br = new BufferedReader(reader)) {
-			return br.lines().collect(Collectors.toList()).stream();
+			final var l = elva.eval(String.valueOf(cons.get(0)));
+			final var r = elva.eval(String.valueOf(cons.get(1)));
+			assertThat(NodeBase.wrap(l)).isEqualTo(NodeBase.wrap(r));
 		}
 	}
 }

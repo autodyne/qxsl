@@ -30,12 +30,12 @@ import static qxsl.junit.RandomStringParameterExtension.alnum;
  *
  * @since 2017/03/12
  */
-public final class JarlFormatTest extends Assertions {
+public final class JarlFactoryTest extends Assertions {
 	private final SheetManager sheets = new SheetManager();
 	private final TableManager tables = new TableManager();
 	private final ArrayList<Band> bands = new ArrayList<>();
 
-	public JarlFormatTest() {
+	public JarlFactoryTest() {
 		bands.add(new Band(    3_500));
 		bands.add(new Band(    7_000));
 		bands.add(new Band(   14_000));
@@ -54,10 +54,11 @@ public final class JarlFormatTest extends Assertions {
 		final var list = new ArrayList<Item>();
 		for(int row = 0; row < numItems; row++) {
 			final var item = new Item();
-			item.set(new Time());
+			item.set(Time.now().copyDropSecond());
 			item.set(bands.get(randInt(bands.size())));
 			item.set(new Call(alnum(13)));
 			item.set(new Mode(alnum(5)));
+			item.set(new Mul1(alnum(7)));
 			item.getRcvd().set(new RSTQ(randInt(600)));
 			item.getRcvd().set(new Code(alnum(7)));
 			item.getSent().set(new RSTQ(randInt(600)));

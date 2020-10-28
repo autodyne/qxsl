@@ -3,18 +3,13 @@
  * License : GNU Lesser General Public License v3 (see LICENSE)
  * Author: Journal of Hamradio Informatics (http://pafelog.net)
 *******************************************************************************/
-package gaas.draft;
+package qxsl.draft;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import qxsl.draft.Band;
-import qxsl.draft.Qxsl;
-import qxsl.field.FieldManager;
-import qxsl.field.FieldManager.Cache;
 import qxsl.junit.RandomNumberParameterExtension;
-import qxsl.junit.RandomNumberParameterExtension.RandomNumber;
 
 /**
  * {@link Band}クラスのテスト用クラスです。
@@ -26,8 +21,6 @@ import qxsl.junit.RandomNumberParameterExtension.RandomNumber;
  */
 @ExtendWith(RandomNumberParameterExtension.class)
 public final class BandTest extends Assertions {
-	private final Cache cache = new FieldManager().cache(Qxsl.BAND);
-
 	@Test
 	public void testEquals() {
 		assertThat(new Band("1.9MHz")).isEqualTo(new Band(    1_900));
@@ -63,13 +56,5 @@ public final class BandTest extends Assertions {
 		assertThat(new Band(1_200_000).toGHzString()).isEqualTo("1.2GHz");
 		assertThat(new Band(2_400_000).toGHzString()).isEqualTo("2.4GHz");
 		assertThat(new Band(5_600_000).toGHzString()).isEqualTo("5.6GHz");
-	}
-
-	@Test
-	public void testBand$Format(@RandomNumber int num) throws Exception {
-		final var form = new BandFactory();
-		final var band = new Band(num);
-		assertThat(form.decode(form.encode(band))).isEqualTo(band);
-		assertThat(cache.field(form.encode(band))).isEqualTo(band);
 	}
 }

@@ -5,18 +5,14 @@
 *******************************************************************************/
 package elva.form;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 import elva.lang.ElvaEval;
 import elva.lang.ElvaLisp;
 import elva.lang.ListBase;
 import elva.lang.NativeOp;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
-import elva.warn.ElvaRuntimeException;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+import gaas.utils.AssetUtils;
 
 /**
  * loads the specified LISP file.
@@ -35,13 +31,7 @@ public final class LoadForm extends NativeOp {
 	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		final var name = eval.apply(args.head()).text();
-		final var load = LoadForm.class.getClassLoader();
-		try (var is = load.getResourceAsStream(name)) {
-			var isr = new InputStreamReader(is, UTF_8);
-			return ElvaLisp.scan(isr).map(eval).last();
-		} catch (IOException ex) {
-			final var msg = "failed in loading %s: %s";
-			throw new ElvaRuntimeException(msg, name, ex);
-		}
+		final var text = AssetUtils.root().string(name);
+		return ElvaLisp.scan(text).map(eval).last();
 	}
 }

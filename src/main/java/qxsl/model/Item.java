@@ -193,6 +193,18 @@ public final class Item extends Tuple {
 	}
 
 	/**
+	 * 指定された属性名に対応する属性を返します。
+	 *
+	 *
+	 * @param key 属性の名前
+	 *
+	 * @return 属性なき場合は空の属性
+	 */
+	public final Field some(QName key) {
+		return getBoth().some(key);
+	}
+
+	/**
 	 * 指定された属性名に対応する属性の値を返します。
 	 *
 	 *

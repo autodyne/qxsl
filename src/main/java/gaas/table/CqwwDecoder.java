@@ -33,10 +33,10 @@ public final class CqwwDecoder extends PrintDecoder {
 	private static final int MODE = 1;
 	private static final int TIME = 2;
 	private static final int SRST = 4;
-	private static final int SNUM = 5;
+	private static final int SENT = 5;
 	private static final int CALL = 6;
 	private static final int RRST = 7;
-	private static final int RNUM = 8;
+	private static final int RCVD = 8;
 	private final DateTimeFormatter tstamp;
 	private final FieldManager fields;
 	private final CqwwFactory format;
@@ -96,10 +96,10 @@ public final class CqwwDecoder extends PrintDecoder {
 			if(!vals[MODE].isEmpty()) mode(item, vals[MODE]);
 			if(!vals[TIME].isEmpty()) time(item, vals[TIME]);
 			if(!vals[SRST].isEmpty()) sRST(item, vals[SRST]);
-			if(!vals[SNUM].isEmpty()) snum(item, vals[SNUM]);
+			if(!vals[SENT].isEmpty()) sent(item, vals[SENT]);
 			if(!vals[CALL].isEmpty()) call(item, vals[CALL]);
 			if(!vals[RRST].isEmpty()) rRST(item, vals[RRST]);
-			if(!vals[RNUM].isEmpty()) rnum(item, vals[RNUM]);
+			if(!vals[RCVD].isEmpty()) rcvd(item, vals[RCVD]);
 			return item;
 		} catch (RuntimeException ex) {
 			throw new IOException(ex);
@@ -186,7 +186,7 @@ public final class CqwwDecoder extends PrintDecoder {
 	 * @param item 設定する交信記録
 	 * @param text ナンバーの文字列
 	 */
-	private final void snum(Item item, String text) {
+	private final void sent(Item item, String text) {
 		item.getSent().set(fields.cache(Qxsl.CODE).field(text));
 	}
 
@@ -208,7 +208,7 @@ public final class CqwwDecoder extends PrintDecoder {
 	 * @param item 設定する交信記録
 	 * @param text ナンバーの文字列
 	 */
-	private final void rnum(Item item, String text) {
+	private final void rcvd(Item item, String text) {
 		item.getRcvd().set(fields.cache(Qxsl.CODE).field(text));
 	}
 }

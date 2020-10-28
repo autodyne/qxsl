@@ -11,7 +11,7 @@ import java.util.ServiceLoader;
 import java.util.StringJoiner;
 
 /**
- * {@link SheetFactory}実装クラスを自動的に検出して管理します。
+ * 要約書類の書式をクラスパスから自動的に検出して管理します。
  *
  *
  * @author 無線部開発班
@@ -48,7 +48,7 @@ public final class SheetManager implements Iterable<SheetFactory> {
 	 * @return 書式のイテレータ
 	 */
 	@Override
-	public Iterator<SheetFactory> iterator() {
+	public final Iterator<SheetFactory> iterator() {
 		return list.iterator();
 	}
 
@@ -60,7 +60,7 @@ public final class SheetManager implements Iterable<SheetFactory> {
 	 *
 	 * @return 対応する書式 またはnull
 	 */
-	public SheetFactory getFactory(String name) {
+	public final SheetFactory getFactory(String name) {
 		for(var f: list) if(f.getName().equals(name)) return f;
 		return null;
 	}
@@ -75,7 +75,7 @@ public final class SheetManager implements Iterable<SheetFactory> {
 	 *
 	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
 	 */
-	public byte[] unpack(byte[] binary) throws IOException {
+	public final byte[] unpack(byte[] binary) throws IOException {
 		final var join = new StringJoiner("\n");
 		for(var f: this) try {
 			return f.unpack(binary);
@@ -96,7 +96,7 @@ public final class SheetManager implements Iterable<SheetFactory> {
 	 *
 	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
 	 */
-	public byte[] unpack(String string) throws IOException {
+	public final byte[] unpack(String string) throws IOException {
 		final var join = new StringJoiner("\n");
 		for(var f: this) try {
 			return f.unpack(string);

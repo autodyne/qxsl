@@ -5,8 +5,6 @@
 *******************************************************************************/
 package gaas.draft;
 
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import javax.xml.namespace.QName;
 
 import qxsl.draft.Qxsl;
@@ -14,31 +12,52 @@ import qxsl.draft.Time;
 import qxsl.field.FieldFactory;
 import qxsl.value.Field;
 
+import static java.time.ZonedDateTime.parse;
+import static java.time.format.DateTimeFormatter.ISO_ZONED_DATE_TIME;
+
 /**
- * {@link Time}を生成する書式です。
+ * 交信の現地時刻を表す属性を永続化する書式です。
+ *
  *
  * @author 無線部開発班
+ *
  * @since 2013/06/08
  */
 public final class TimeFactory implements FieldFactory {
-	private final DateTimeFormatter format;
-
-	public TimeFactory() {
-		this.format = DateTimeFormatter.ISO_ZONED_DATE_TIME;
-	}
-
+	/**
+	 * 対応する属性の名前を返します。
+	 *
+	 *
+	 * @return 属性の名前
+	 */
 	@Override
-	public QName target() {
+	public final QName target() {
 		return Qxsl.TIME;
 	}
 
+	/**
+	 * 文字列から属性値の実体を読み取ります。
+	 *
+	 *
+	 * @param value 属性値を表す文字列
+	 *
+	 * @return 生成された属性値
+	 */
 	@Override
-	public Time decode(String value) {
-		return new Time(ZonedDateTime.parse(value, format));
+	public final Field decode(String value) {
+		return new Time(parse(value, ISO_ZONED_DATE_TIME));
 	}
 
+	/**
+	 * 指定された属性値を文字列に変換します。
+	 *
+	 *
+	 * @param field 永続化する属性値
+	 *
+	 * @return 文字列化された属性値
+	 */
 	@Override
-	public String encode(Field field) {
-		return ((Time) field).value().format(format);
+	public final String encode(Field field) {
+		return ((Time) field).value().format(ISO_ZONED_DATE_TIME);
 	}
 }

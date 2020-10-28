@@ -7,10 +7,10 @@ package qxsl.draft;
 
 import java.math.BigDecimal;
 
-import qxsl.value.Field;
+import qxsl.value.Tuple;
 
 /**
- * 交信の周波数を表現する{@link Field}実装クラスです。
+ * 交信の周波数帯を表す属性の実装です。
  *
  *
  * @author 無線部開発班
@@ -18,8 +18,6 @@ import qxsl.value.Field;
  * @since 2013/06/08
  */
 public final class Band extends Qxsl<BigDecimal> {
-	private final BigDecimal band;
-
 	/**
 	 * 周波数を指定して属性を構築します。
 	 *
@@ -28,17 +26,6 @@ public final class Band extends Qxsl<BigDecimal> {
 	 */
 	public Band(int band) {
 		this(BigDecimal.valueOf(band));
-	}
-
-	/**
-	 * 周波数を指定して属性を構築します。
-	 *
-	 *
-	 * @param band キロヘルツ単位の周波数
-	 */
-	public Band(BigDecimal band) {
-		super(BAND);
-		this.band = band;
 	}
 
 	/**
@@ -51,9 +38,28 @@ public final class Band extends Qxsl<BigDecimal> {
 		this(Band.parse(text));
 	}
 
-	@Override
-	public final BigDecimal value() {
-		return band;
+	/**
+	 * 周波数を指定して属性を構築します。
+	 *
+	 *
+	 * @param band キロヘルツ単位の周波数
+	 */
+	public Band(BigDecimal band) {
+		super(BAND, band);
+	}
+
+	/**
+	 * 交信記録の周波数を抽出します。
+	 *
+	 *
+	 * @param tuple 交信記録
+	 *
+	 * @return 周波数の属性
+	 *
+	 * @since 2020/10/28
+	 */
+	public static final Band from(Tuple tuple) {
+		return (Band) tuple.get(Qxsl.BAND);
 	}
 
 	/**
@@ -64,8 +70,8 @@ public final class Band extends Qxsl<BigDecimal> {
 	 */
 	@Override
 	public final String toString() {
-		if(band.doubleValue() > 1e6) return toGHzString();
-		if(band.doubleValue() > 1e3) return toMHzString();
+		if(value.doubleValue() > 1e6) return toGHzString();
+		if(value.doubleValue() > 1e3) return toMHzString();
 		return toKHzString();
 	}
 
@@ -108,7 +114,7 @@ public final class Band extends Qxsl<BigDecimal> {
 	 * @return 実数により表される周波数
 	 */
 	public final String toDecimalString(int scale) {
-		final var d = band.scaleByPowerOfTen(-scale);
+		final var d = value.scaleByPowerOfTen(-scale);
 		return d.stripTrailingZeros().toPlainString();
 	}
 
@@ -143,7 +149,7 @@ public final class Band extends Qxsl<BigDecimal> {
 	 */
 	@Override
 	public final boolean equals(Object obj) {
-		if(!(obj instanceof Band)) return false;
-		return band.compareTo(((Band) obj).band) == 0;
+		if(!Band.class.isInstance(obj)) return false;
+		return value.compareTo(((Band) obj).value) == 0;
 	}
 }

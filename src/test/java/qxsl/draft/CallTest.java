@@ -3,16 +3,12 @@
  * License : GNU Lesser General Public License v3 (see LICENSE)
  * Author: Journal of Hamradio Informatics (http://pafelog.net)
 *******************************************************************************/
-package gaas.draft;
+package qxsl.draft;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import qxsl.draft.Call;
-import qxsl.draft.Qxsl;
-import qxsl.field.FieldManager;
-import qxsl.field.FieldManager.Cache;
 import qxsl.junit.RandomStringParameterExtension;
 import qxsl.junit.RandomStringParameterExtension.RandomString;
 
@@ -26,8 +22,6 @@ import qxsl.junit.RandomStringParameterExtension.RandomString;
  */
 @ExtendWith(RandomStringParameterExtension.class)
 public final class CallTest extends Assertions {
-	private final Cache cache = new FieldManager().cache(Qxsl.CALL);
-
 	@Test
 	public void testValue() {
 		assertThat(new Call("JA1ZLO").value()).isEqualTo("JA1ZLO");
@@ -43,13 +37,5 @@ public final class CallTest extends Assertions {
 	@Test
 	public void testToString(@RandomString String text) {
 		assertThat(new Call(text)).hasToString(text.toUpperCase());
-	}
-
-	@Test
-	public void testCall$Format(@RandomString String text) throws Exception {
-		final var form = new CallFactory();
-		final var call = new Call(text);
-		assertThat(form.decode(form.encode(call))).isEqualTo(call);
-		assertThat(cache.field(form.encode(call))).isEqualTo(call);
 	}
 }

@@ -27,7 +27,7 @@ public interface Message extends Serializable {
 	public int score();
 
 	/**
-	 * 交信の実体を表す{@link Item}を返します。
+	 * 交信の実体を表す交信記録を返します。
 	 *
 	 *
 	 * @return 交信の実体
@@ -43,7 +43,7 @@ public interface Message extends Serializable {
 	public String text();
 
 	/**
-	 * 総得点や乗数の計算に使用される識別子を返します。
+	 * 総得点やマルチ計算に使用される識別子を返します。
 	 *
 	 *
 	 * @param keyNum 識別子の配列内の位置
@@ -58,7 +58,7 @@ public interface Message extends Serializable {
 	 * この交信に関連づけられた識別子の個数を返します。
 	 *
 	 *
-	 * @return 乗数の個数
+	 * @return マルチの個数
 	 */
 	public int size();
 }

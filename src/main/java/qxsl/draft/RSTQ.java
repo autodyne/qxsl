@@ -5,10 +5,10 @@
 *******************************************************************************/
 package qxsl.draft;
 
-import qxsl.value.Field;
+import qxsl.value.Tuple;
 
 /**
- * 交信のRST(RSQ)レポートを表現する{@link Field}実装クラスです。
+ * 交信のレポートを表す属性の実装です。
  *
  *
  * @author 無線部開発班
@@ -16,75 +16,59 @@ import qxsl.value.Field;
  * @since 2013/06/08
  */
 public final class RSTQ extends Qxsl<Integer> {
-	private final int r, s, t;
-
 	/**
-	 * 指定された整数で属性を構築します。
+	 * 指定された整数値で属性を構築します。
 	 *
 	 *
-	 * @param rst RSTQをそのまま整数値にした値
+	 * @param rst 整数値
 	 */
 	public RSTQ(int rst) {
-		super(RSTQ);
-		int r = (rst / 100) % 10;
-		int s = (rst / 10 ) % 10;
-		int t = (rst / 1  ) % 10;
-		if(r > 0) {
-			this.r = Math.max(1, Math.min(5, r));
-			this.s = Math.max(1, Math.min(9, s));
-			this.t = Math.max(1, Math.min(9, t));
-		} else {
-			this.r = Math.max(1, Math.min(5, s));
-			this.s = Math.max(1, Math.min(9, t));
-			this.t = 0;
-		}
+		super(RSTQ, rst);
 	}
 
 	/**
-	 * RSTQを整数で指定して属性を構築します。
+	 * 指定された整数値で属性を構築します。
 	 *
 	 *
 	 * @param r 了解度
 	 * @param s 信号強度
-	 * @param t 音調 または品質
+	 * @param t 音調品質
 	 */
 	public RSTQ(int r, int s, int t) {
 		this(r * 100 + s * 10 + t);
 	}
 
 	/**
-	 * 了解度レポートを返します。
+	 * 交信記録のレポートを抽出します。
 	 *
 	 *
-	 * @return 了解度
+	 * @param tuple 交信記録
+	 *
+	 * @return レポートの属性
+	 *
+	 * @since 2020/10/28
 	 */
-	public final int getR() {
-		return r;
+	public static final RSTQ from(Tuple tuple) {
+		return (RSTQ) tuple.get(Qxsl.RSTQ);
 	}
 
 	/**
-	 * 信号強度レポートを返します。
+	 * 指定された整数値がレポートであるかを確認します。
 	 *
 	 *
-	 * @return 信号強度
+	 * @param rst 値
+	 *
+	 * @return 正規形のレポートに変換可能な場合は真
+	 *
+	 * @since 2020/10/28
 	 */
-	public final int getS() {
-		return s;
-	}
-
-	/**
-	 * 音調レポートを返します。
-	 *
-	 *
-	 * @return 音調 もしくは品質
-	 */
-	public final int getT() {
-		return t;
-	}
-
-	@Override
-	public final Integer value() {
-		if(this.t < 1) return this.r * 10 + this.s;
-		return this.r * 100 + this.s * 10 + this.t;
+	public static final boolean isValid(int rst) {
+		final int r = (rst / 100) % 10;
+		final int s = (rst / 10) % 10;
+		final int t = (rst / 1) % 10;
+		if(r < 1 && r > 5) return false;
+		if(s < 1 && s > 9) return false;
+		if(t < 1 && t > 9) return false;
+		return true;
 	}
 }

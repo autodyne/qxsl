@@ -13,7 +13,7 @@ import qxsl.model.Item;
 
 /**
  * 規約により受理された交信に重複排除と得点計算のための識別子を付与します。
- * 最初の識別子は交信の重複除去に、以降の識別子は乗数の計算に使用されます。
+ * 最初の識別子は交信の重複除去に、以降の識別子はマルチ計算に使用されます。
  *
  *
  * @author 無線部開発班
@@ -32,7 +32,7 @@ public final class Success implements Message, Serializable {
 	 *
 	 * @param item 交信の実体
 	 * @param score 得点
-	 * @param keys 総得点や乗数の計算に使用する識別子
+	 * @param keys 総得点やマルチ計算に使用する識別子
 	 */
 	public Success(Item item, int score, Object...keys) {
 		this.score = score;
@@ -52,7 +52,7 @@ public final class Success implements Message, Serializable {
 	}
 
 	/**
-	 * 交信の実体を表す{@link Item}を返します。
+	 * 交信の実体を表す交信記録を返します。
 	 *
 	 *
 	 * @return 交信の実体
@@ -74,7 +74,7 @@ public final class Success implements Message, Serializable {
 	}
 
 	/**
-	 * 総得点や乗数の計算に使用される識別子を返します。
+	 * 総得点やマルチ計算に使用される識別子を返します。
 	 *
 	 *
 	 * @param keyNum 識別子の配列内の位置
@@ -92,7 +92,7 @@ public final class Success implements Message, Serializable {
 	 * この交信に関連づけられた識別子の個数を返します。
 	 *
 	 *
-	 * @return 乗数の個数
+	 * @return マルチの個数
 	 */
 	@Override
 	public final int size() {

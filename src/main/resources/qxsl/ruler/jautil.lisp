@@ -6,8 +6,8 @@
 (defun 時刻 it (hour (at-zone (qxsl-time it) (zone "Asia/Tokyo"))))
 
 ; city databases
-(setq CITYDB ((method 'load LocalCityBase String) "city.ja"))
-(setq AREADB ((method 'load LocalCityBase String) "area.ja"))
+(setq CITYDB ((method 'load LocalCityBase String) "qxsl/local/city.ja"))
+(setq AREADB ((method 'load LocalCityBase String) "qxsl/local/area.ja"))
 
 ; city extraction
 (defun 市区町村 it (city<-code CITYDB (qxsl-code it)))
@@ -33,4 +33,4 @@
 (defun AREA0? it (equal (area<-city (所轄総通 it)) "0"))
 
 ; returns the environment as a library
-(library)
+(library "jautil")

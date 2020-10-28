@@ -32,64 +32,110 @@ public final class ContestForm extends NativeOp {
 	public Object apply(ListBase args, ElvaEval eval) {
 		return new ContestImpl(args, eval);
 	}
+}
+
+/**
+ * LISP処理系の内部におけるコンテストの規約の実装です。
+ *
+ *
+ * @author 無線部開発班
+ *
+ * @since 2017/02/20
+ */
+final class ContestImpl extends Contest {
+	private final ElvaEval eval;
+	private final String name;
+	private final String host;
+	private final String mail;
+	private final String link;
 
 	/**
-	 * LISP処理系の内部におけるコンテストの規約の実装です。
+	 * 指定された規約定義と評価器で規約を構築します。
 	 *
 	 *
-	 * @author 無線部開発班
-	 *
-	 * @since 2017/02/20
+	 * @param rule 規約
+	 * @param eval 評価器
 	 */
-	public static final class ContestImpl extends Contest {
-		private final ElvaEval eval;
-		private final String name;
-		private final String host;
-		private final String mail;
-		private final String link;
+	public ContestImpl(ListBase rule, ElvaEval eval) {
+		this.name = eval.apply(rule.get(0)).text();
+		this.host = eval.apply(rule.get(1)).text();
+		this.mail = eval.apply(rule.get(2)).text();
+		this.link = eval.apply(rule.get(3)).text();
+		this.eval = eval;
+	}
 
-		/**
-		 * 指定された規約定義と評価器で規約を構築します。
-		 *
-		 * @param rule 規約
-		 * @param eval 評価器
-		 */
-		public ContestImpl(ListBase rule, ElvaEval eval) {
-			this.name = eval.apply(rule.get(0)).text();
-			this.host = eval.apply(rule.get(1)).text();
-			this.mail = eval.apply(rule.get(2)).text();
-			this.link = eval.apply(rule.get(3)).text();
-			this.eval = eval;
-		}
+	/**
+	 * コンテストの名前を返します。
+	 *
+	 *
+	 * @return コンテストの名前
+	 */
+	@Override
+	public final String getName() {
+		return name;
+	}
 
-		@Override
-		public final String getName() {
-			return name;
-		}
+	/**
+	 * コンテストの主催者を返します。
+	 *
+	 *
+	 * @return コンテストの主催者
+	 */
+	@Override
+	public final String getHost() {
+		return host;
+	}
 
-		@Override
-		public final String getHost() {
-			return host;
-		}
+	/**
+	 * コンテストの連絡先を返します。
+	 *
+	 *
+	 * @return コンテストの連絡先
+	 */
+	@Override
+	public final String getMail() {
+		return mail;
+	}
 
-		@Override
-		public final String getMail() {
-			return mail;
-		}
+	/**
+	 * コンテストの規約の場所を返します。
+	 *
+	 *
+	 * @return コンテストの規約の場所
+	 */
+	@Override
+	public final String getLink() {
+		return link;
+	}
 
-		@Override
-		public final String getLink() {
-			return link;
-		}
+	/**
+	 * このコンテスト規約が参照する変数を実行します。
+	 *
+	 *
+	 * @param name 変数の名前
+	 *
+	 * @return 変数の値
+	 *
+	 * @since 2020/09/27
+	 */
+	@Override
+	public final Object get(String name) {
+		return eval.apply(new NameNode(name)).value();
+	}
 
-		@Override
-		public final Object get(String name) {
-			return eval.apply(new NameNode(name)).value();
-		}
-
-		@Override
-		public final Object invoke(String name, Object...args) {
-			return eval.apply(new NameNode(name).form(args)).value();
-		}
+	/**
+	 * このコンテスト規約が参照する関数を実行します。
+	 *
+	 *
+	 * @param name 関数の名前
+	 * @param args 関数の引数
+	 *
+	 * @return 関数の値
+	 *
+	 * @since 2020/03/09
+	 */
+	@Override
+	public final Object invoke(String name, Object...args) {
+		return eval.apply(new NameNode(name).form(args)).value();
 	}
 }

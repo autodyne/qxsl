@@ -5,8 +5,6 @@
 *******************************************************************************/
 package gaas.draft;
 
-import java.time.ZonedDateTime;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -16,32 +14,20 @@ import qxsl.field.FieldManager;
 import qxsl.field.FieldManager.Cache;
 
 /**
- * {@link Time}クラスのテスト用クラスです。
+ * {@link TimeFactory}クラスのテスト用クラスです。
  *
  *
  * @author 無線部開発班
  *
  * @since 2017/02/24
  */
-public final class TimeTest extends Assertions {
+public final class TimeFactoryTest extends Assertions {
 	private final Cache cache = new FieldManager().cache(Qxsl.TIME);
 
 	@Test
-	public void testValue() {
-		final var time = ZonedDateTime.now();
-		assertThat(new Time(time).value()).isEqualTo(time);
-	}
-
-	@Test
-	public void testToString() {
-		final var time = ZonedDateTime.now();
-		assertThat(new Time(time)).hasToString(time.toString());
-	}
-
-	@Test
-	public void testTime$Format() throws Exception {
+	public void test() throws Exception {
 		final var form = new TimeFactory();
-		final var time = new Time();
+		final var time = Time.now();
 		assertThat(form.decode(form.encode(time))).isEqualTo(time);
 		assertThat(cache.field(form.encode(time))).isEqualTo(time);
 	}

@@ -4,5 +4,8 @@
 /gradle
 /gradlew
 /gradlew.bat
+/*.h
+/*.dll
+/*.dylib
 !.github
 !.gitignore

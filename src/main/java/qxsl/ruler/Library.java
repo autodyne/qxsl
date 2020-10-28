@@ -13,7 +13,7 @@ import qxsl.model.Item;
 import static java.util.stream.Collectors.toList;
 
 /**
- * ドメイン特化言語で定義された変数や関数の参照を提供します。
+ * ドメイン特化言語で定義された変数や関数を参照します。
  *
  *
  * @author 無線部開発班
@@ -25,6 +25,25 @@ public abstract class Library {
 	 * ライブラリを構築します。
 	 */
 	public Library() {}
+
+	/**
+	 * ライブラリの名前を返します。
+	 *
+	 *
+	 * @return 名前
+	 */
+	@Override
+	public final String toString() {
+		return getName();
+	}
+
+	/**
+	 * ライブラリの名前を返します。
+	 *
+	 *
+	 * @return 名前
+	 */
+	public abstract String getName();
 
 	/**
 	 * このライブラリが参照する変数を実行します。
