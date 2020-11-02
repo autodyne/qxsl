@@ -41,15 +41,4 @@ public final class SuccessTest extends Assertions {
 	public void testText(@RandomNumber int score) {
 		assertThat(new Success(new Item(), score).text()).isEmpty();
 	}
-
-	@Test
-	public void testKey(@RandomString String a, @RandomString String b) {
-		assertThat(new Success(new Item(), 1, a, b).key(0)).isEqualTo(a);
-		assertThat(new Success(new Item(), 1, a, b).key(1)).isEqualTo(b);
-	}
-
-	@Test
-	public void testSize(@RandomNumber int score) {
-		assertThat(new Success(new Item(), score, 1, 23).size()).isEqualTo(2);
-	}
 }

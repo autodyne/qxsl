@@ -17,7 +17,7 @@ import qxsl.ruler.Success;
 /**
  * creates and returns a success object.
  * <pre>
- * (success item score keys...)
+ * (success item score)
  * </pre>
  *
  *
@@ -26,14 +26,13 @@ import qxsl.ruler.Success;
  * @since 2019/05/18
  */
 @Name("success")
-@Args(min = 3, max = -1)
+@Args(min = 2, max = 2)
 public final class SuccessForm extends NativeOp {
 	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		final var obj = eval.apply(args.get(0));
 		final var run = eval.apply(args.get(1));
 		final var ref = obj.ofType(Item.class);
-		final var mul = args.drop(2).map(eval).toArray();
-		return new Success(ref, run.real().toInt(), mul);
+		return new Success(ref, run.real().toInt());
 	}
 }

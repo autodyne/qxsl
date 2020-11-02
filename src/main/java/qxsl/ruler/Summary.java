@@ -7,15 +7,16 @@ package qxsl.ruler;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import qxsl.model.Item;
 
-import static java.util.stream.IntStream.range;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * 有効な交信と無効な交信と得点を保持します。
@@ -26,30 +27,42 @@ import static java.util.stream.IntStream.range;
  * @since 2016/11/26
  */
 public final class Summary implements Serializable {
-	private final List<Success> accepted;
-	private final List<Success> distinct;
-	private final List<Failure> rejected;
-	private final int total;
+	private final Map<Object, Message> acc;
+	private final Map<Object, Message> rej;
+	private final List<Object[]> mul;
+	private final Formula fml;
 
 	/**
-	 * 指定された部門で交信記録を要約します。
+	 * 有効な交信と無効な交信を設定します。
 	 *
 	 *
-	 * @param sect 部門
+	 * @param form 判定基準
 	 * @param list 交信記録
 	 */
-	public Summary(Counter sect, List<Item> list) {
-		this.accepted = new ArrayList<Success>();
-		this.rejected = new ArrayList<Failure>();
+	public Summary(Formula form, List<Item> list) {
+		this.mul = new ArrayList<>(list.size());
+		this.acc = new LinkedHashMap<>();
+		this.rej = new LinkedHashMap<>();
+		this.fml = form;
+		sort(list);
+		accepted().map(fml::entity).forEach(mul::add);
+	}
+
+	/**
+	 * 有効な交信と無効な交信を分離します。
+	 *
+	 *
+	 * @param form 判定基準
+	 * @param list 交信記録
+	 */
+	private final void sort(List<Item> list) {
 		for(var item: list) {
-			final var m = sect.verify(item);
-			if(m instanceof Success) accepted.add((Success) m);
-			if(m instanceof Failure) rejected.add((Failure) m);
+			final var msg = fml.verify(item);
+			final var idx = fml.unique(item);
+			if(acc.containsKey(idx)) rej.put(idx, msg);
+			else if(msg.isFailure()) rej.put(idx, msg);
+			else if(msg.isSuccess()) acc.put(idx, msg);
 		}
-		final var map = new LinkedHashMap<Object, Success>();
-		for(var it: accepted) map.putIfAbsent(it.key(0), it);
-		this.distinct = new ArrayList<>(map.values());
-		this.total = score() > 0? sect.total(this): 0;
 	}
 
 	/**
@@ -58,8 +71,8 @@ public final class Summary implements Serializable {
 	 *
 	 * @return 有効な交信
 	 */
-	public final List<Success> accepted() {
-		return Collections.unmodifiableList(accepted);
+	public final Stream<Message> accepted() {
+		return acc.values().stream();
 	}
 
 	/**
@@ -68,72 +81,70 @@ public final class Summary implements Serializable {
 	 *
 	 * @return 無効な交信
 	 */
-	public final List<Failure> rejected() {
-		return Collections.unmodifiableList(rejected);
+	public final Stream<Message> rejected() {
+		return rej.values().stream();
 	}
 
 	/**
-	 * 重複を排除した交信の得点の合計を返します。
+	 * 交信で獲得した素点の合計値を計算します。
 	 *
 	 *
-	 * @return 得点に数えられる交信の得点の合計
+	 * @return 交信の得点の合計
 	 *
 	 * @since 2019/05/16
 	 */
 	public final int score() {
-		return distinct.stream().mapToInt(Success::score).sum();
+		return accepted().mapToInt(Message::score).sum();
 	}
 
 	/**
-	 * この交信記録の総得点を返します。
+	 * 素点とマルチ集合から総得点を計算します。
 	 *
 	 *
 	 * @return 総得点
 	 */
 	public final int total() {
-		return this.total;
+		return acc.isEmpty()? 0: fml.result(this);
 	}
 
 	/**
-	 * 識別子を列挙した集合を返します。
+	 * 指定された位置のマルチ集合を返します。
 	 *
 	 *
 	 * @param rank 識別子の位置
 	 *
-	 * @return 指定された位置の識別子の集合
+	 * @return 指定された位置のマルチ集合
 	 *
 	 * @since 2020/02/26
 	 */
-	private final Set<Object> keySet(int rank) {
-		final var keys = distinct.stream().map(message -> message.key(rank));
-		return Collections.unmodifiableSet(keys.collect(Collectors.toSet()));
+	private final Set<Object> keys(int rank) {
+		return mul.stream().map(m -> m[rank]).collect(toSet());
 	}
 
 	/**
-	 * 識別子を列挙した集合を先頭から並べたリストを返します。
+	 * マルチ集合を順番のリストを返します。
 	 *
 	 *
-	 * @return 識別子の集合のリスト
+	 * @return マルチ集合の列
 	 *
 	 * @since 2020/02/26
 	 */
-	public final List<Set<Object>> keySets() {
-		final var size = distinct.stream().mapToInt(Success::size).min();
-		final var sets = range(0, size.orElse(0)).mapToObj(this::keySet);
-		return sets.collect(Collectors.toList());
+	public final Stream<Set<Object>> entity() {
+		final var size = mul.stream().mapToInt(mul -> mul.length).min();
+		return IntStream.range(0, size.getAsInt()).mapToObj(this::keys);
 	}
 
 	/**
-	 * 得点と識別子を列挙した集合とを並べたリストを返します。
+	 * 得点とマルチ集合との配列を返します。
 	 *
 	 *
-	 * @return 得点とそれに続く識別子集合のリスト
+	 * @return 得点とマルチ集合の配列
 	 *
 	 * @since 2020/09/03
 	 */
-	public final List<Object> toScoreAndKeys() {
-		final var list = new ArrayList<Object>(List.of(score()));
-		for(var k: keySets()) list.add(new ArrayList<Object>(k));
-		return list;
+	public final Object[] toScoreAndEntitySets() {
+		final var score = Stream.of(score());
+		final var mults = entity().map(Set::toArray);
+		return Stream.concat(score, mults).toArray();
 	}
 }

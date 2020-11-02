@@ -28,40 +28,48 @@
 
 (defun エリア外? it (every it 現存? AREA1? 市郡?))
 
-; keys for scoring
-(defun CALL it
-	(list
-		(qxsl-call it)
-		(qxsl-band it)
-		(cond
-			((MORSE? it) 1)
-			((PHONE? it) 2)
-			((DIGIT? it) 3))))
-(defun MULT it
+; keys for identification
+(defun unique it
+	(let it (normalize it null)
+		(list
+			(qxsl-call it)
+			(qxsl-band it)
+			(cond
+				((MORSE? it) 1)
+				((PHONE? it) 2)
+				((DIGIT? it) 3)))))
+
+; keys for multiplication
+(defun entity it
 	(list
 		(qxsl-band it)
 		(qxsl-code it)))
-(defun SOLE it null)
-(defun CORP it (qxsl-name it))
+
+; entity for SinOP
+(defun EnSinOp it
+	(let it (normalize it null)
+		(list (entity it) null)))
+
+; entity for MulOP
+(defun EnMulOp it
+	(let it (normalize it null)
+		(list (entity it) (qxsl-name it))))
 
 ; scoring
-(defmacro 得点 (score calls mults names)
+(defmacro result (score mults names)
 	`(block
 		(setq mults (length (quote ,mults)))
 		(setq names (length (quote ,names)))
 		(ceiling (/ (* ,score mults) names))))
 
 ; validation routine
-(defmacro 検査 (conds keys)
+(defmacro verify conds
 	`(lambda it
 		(let it (normalize it null)
 			(let msg (search it ,conds)
 				(if (nil? msg)
-					(success it 1 ,@(dolist (k keys) (list k 'it)))
+					(success it 1)
 					(failure it (format "無効な交信(%s)" msg)))))))
-
-(defmacro 個人 conds... `(検査 ,conds... (CALL MULT SOLE)))
-(defmacro 団体 conds... `(検査 ,conds... (CALL MULT CORP)))
 
 ; section names
 (setq 内 "1エリア内")
@@ -85,20 +93,25 @@
 (setq LB部門 "1.9-7MHz部門")
 (setq HB部門 "14-50MHz部門")
 
-; section name concatenation
-(defmacro cat (area op mode band) `(format "%s %s %s %s" ,area ,op ,mode ,band))
-
 ; contest definition
 (setq NAME "ALLJA1")
 (setq HOST "東大無線部")
 (setq MAIL "allja1@ja1zlo.u-tokyo.org")
 (setq LINK "ja1zlo.u-tokyo.org/allja1")
-(set-contest JA1 NAME HOST MAIL LINK)
+
+; contest schedule
+(defun start-day year (throw "not implemented"))
+(defun final-day year (throw "not implemented"))
+(defun dead-line year (throw "not implemented"))
+(setq TEST (contest NAME HOST MAIL LINK))
 
 ; section macros
-(defmacro score (name code test) `(add-section JA1 ,name ,code ,test 得点))
-(defmacro SinOp (name code test) `(score (cat ,@name) ,code (個人 ,@test)))
-(defmacro MulOp (name code test) `(score (cat ,@name) ,code (団体 ,@test)))
+(setq add-sect (method 'add Contest Section))
+(defmacro assem (nm cd call mul) `(section ,nm ,cd ,call unique ,mul result))
+(defmacro score (nm cd test mul) `(add-sect TEST (assem ,nm ,cd ,test ,mul)))
+(defmacro label (area op md band) `(format "%s %s %s %s" ,area ,op ,md ,band))
+(defmacro SinOp (nm cd test) `(score (label ,@nm) ,cd (verify ,test) EnSinOp))
+(defmacro MulOp (nm cd test) `(score (label ,@nm) ,cd (verify ,test) EnMulOp))
 
 ; section codes
 (defmacro SinHB (name test) `(SinOp ,name "個人部門 (種目1)" ,test))

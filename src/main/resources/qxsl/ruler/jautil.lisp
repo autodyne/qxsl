@@ -32,5 +32,5 @@
 (defun AREA9? it (equal (area<-city (所轄総通 it)) "9"))
 (defun AREA0? it (equal (area<-city (所轄総通 it)) "0"))
 
-; returns the environment as a library
-(library "jautil")
+; returns the environment as a pattern
+(pattern normalize transform)

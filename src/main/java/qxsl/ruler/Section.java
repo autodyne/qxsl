@@ -6,24 +6,38 @@
 package qxsl.ruler;
 
 /**
- * コンテストの部門の実装はこの抽象クラスを継承します。
+ * コンテストの部門はこのクラスを継承します。
  *
  *
  * @author 無線部開発班
  *
  * @since 2016/11/25
  */
-public abstract class Section extends Counter {
+public abstract class Section extends Formula {
 	/**
-	 * 部門を構築します。
+	 * 部門の名前を返します。
+	 *
+	 *
+	 * @return 名前
 	 */
-	public Section() {}
+	@Override
+	public final String toString() {
+		return name();
+	}
+
+	/**
+	 * 部門の名前を返します。
+	 *
+	 *
+	 * @return 名前
+	 */
+	public abstract String name();
 
 	/**
 	 * 部門の番号を返します。
 	 *
 	 *
-	 * @return 部門の番号
+	 * @return 番号
 	 */
-	public abstract String getCode();
+	public abstract String code();
 }

@@ -10,21 +10,25 @@ import java.io.Serializable;
 import qxsl.model.Item;
 
 /**
- * 規約により受理もしくは拒否された交信に付与されます。
+ * コンテスト規約に基づく交信の検証結果です。
  *
  *
  * @author 無線部開発班
  *
  * @since 2016/12/05
  */
-public interface Message extends Serializable {
+public abstract class Message implements Serializable {
+	private final Item item;
+
 	/**
-	 * 交信の成立により得られる素点を返します。
+	 * 交信の実体を設定します。
 	 *
 	 *
-	 * @return 交信1件の得点
+	 * @param item 交信記録
 	 */
-	public int score();
+	public Message(Item item) {
+		this.item = item;
+	}
 
 	/**
 	 * 交信の実体を表す交信記録を返します。
@@ -32,33 +36,43 @@ public interface Message extends Serializable {
 	 *
 	 * @return 交信の実体
 	 */
-	public Item item();
+	public final Item item() {
+		return item;
+	}
 
 	/**
-	 * 処理の結果を説明する文字列を返します。
+	 * 交信の成立で獲得する点数を返します。
+	 *
+	 *
+	 * @return 交信1件の得点
+	 */
+	public abstract int score();
+
+	/**
+	 * 採点結果を説明する文字列を返します。
 	 *
 	 *
 	 * @return 文字列
 	 */
-	public String text();
+	public abstract String text();
 
 	/**
-	 * 総得点やマルチ計算に使用される識別子を返します。
+	 * 規約に基づき有効な交信であるか確認します。
 	 *
 	 *
-	 * @param keyNum 識別子の配列内の位置
-	 *
-	 * @return 指定された位置にある識別子
-	 *
-	 * @throws IndexOutOfBoundsException 範囲外の場合
+	 * @return 有効な交信の場合は真
 	 */
-	public Object key(int keyNum);
+	public final boolean isSuccess() {
+		return this instanceof Success;
+	}
 
 	/**
-	 * この交信に関連づけられた識別子の個数を返します。
+	 * 規約に基づき無効な交信であるか確認します。
 	 *
 	 *
-	 * @return マルチの個数
+	 * @return 無効な交信の場合は真
 	 */
-	public int size();
+	public final boolean isFailure() {
+		return this instanceof Failure;
+	}
 }

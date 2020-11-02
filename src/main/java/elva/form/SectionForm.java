@@ -8,7 +8,6 @@ package elva.form;
 import elva.lang.ElvaEval;
 import elva.lang.FormBase;
 import elva.lang.ListBase;
-import elva.lang.NameNode;
 import elva.lang.NativeOp;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
@@ -19,9 +18,9 @@ import qxsl.ruler.Section;
 import qxsl.ruler.Summary;
 
 /**
- * creates and returns a section object.
+ * takes four functions and returns a section object.
  * <pre>
- * (section name code verifier scoring)
+ * (section name code verify unique entity result)
  * </pre>
  *
  *
@@ -30,7 +29,7 @@ import qxsl.ruler.Summary;
  * @since 2019/05/15
  */
 @Name("section")
-@Args(min = 4, max = 4)
+@Args(min = 6, max = 6)
 public final class SectionForm extends NativeOp {
 	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
@@ -49,9 +48,11 @@ public final class SectionForm extends NativeOp {
 final class SectionImpl extends Section {
 	private final String name;
 	private final String code;
-	private final FormBase rule;
-	private final FormBase calc;
 	private final ElvaEval eval;
+	private final FormBase test;
+	private final FormBase call;
+	private final FormBase mult;
+	private final FormBase calc;
 
 	/**
 	 * 指定された部門定義と評価器で部門を構築します。
@@ -63,8 +64,10 @@ final class SectionImpl extends Section {
 	public SectionImpl(ListBase rule, ElvaEval eval) {
 		this.name = eval.apply(rule.get(0)).text();
 		this.code = eval.apply(rule.get(1)).text();
-		this.rule = eval.apply(rule.get(2)).form();
-		this.calc = eval.apply(rule.get(3)).form();
+		this.test = eval.apply(rule.get(2)).form();
+		this.call = eval.apply(rule.get(3)).form();
+		this.mult = eval.apply(rule.get(4)).form();
+		this.calc = eval.apply(rule.get(5)).form();
 		this.eval = eval;
 	}
 
@@ -75,7 +78,7 @@ final class SectionImpl extends Section {
 	 * @return 部門の名前
 	 */
 	@Override
-	public final String getName() {
+	public final String name() {
 		return name;
 	}
 
@@ -86,8 +89,34 @@ final class SectionImpl extends Section {
 	 * @return 部門の番号
 	 */
 	@Override
-	public final String getCode() {
+	public final String code() {
 		return code;
+	}
+
+	/**
+	 * 指定された交信記録の妥当性を検査します。
+	 *
+	 *
+	 * @param item 検査対象の交信記録
+	 *
+	 * @return 承認された場合はtrue
+	 */
+	@Override
+	public final Message verify(Item item) {
+		return eval.apply(test.form(item)).ofType(Message.class);
+	}
+
+	/**
+	 * 指定された交信記録の識別子を発行します。
+	 *
+	 *
+	 * @param item 検査対象の交信記録
+	 *
+	 * @return 重複を除くための識別子
+	 */
+	@Override
+	public final Object unique(Item item) {
+		return eval.apply(call.form(item)).value();
 	}
 
 	/**
@@ -101,52 +130,21 @@ final class SectionImpl extends Section {
 	 * @since 2020/02/26
 	 */
 	@Override
-	public final int total(Summary items) {
-		final var args = items.toScoreAndKeys().toArray();
-		return eval.apply(calc.form(args)).real().toInt();
+	public final int result(Summary items) {
+		final var sets = items.toScoreAndEntitySets();
+		return eval.apply(calc.form(sets)).real().toInt();
 	}
 
 	/**
-	 * 指定された交信記録の妥当性を検査します。
+	 * 指定された交信記録のマルチを発行します。
 	 *
 	 *
 	 * @param item 検査対象の交信記録
 	 *
-	 * @return 承認された場合はtrue
+	 * @return 総得点を計算する識別子の配列
 	 */
 	@Override
-	public final Message verify(Item item) {
-		return eval.apply(rule.form(item)).ofType(Message.class);
-	}
-
-	/**
-	 * このコンテスト部門が参照する変数を実行します。
-	 *
-	 *
-	 * @param name 変数の名前
-	 *
-	 * @return 変数の値
-	 *
-	 * @since 2020/09/27
-	 */
-	@Override
-	public final Object get(String name) {
-		return eval.apply(new NameNode(name)).value();
-	}
-
-	/**
-	 * このコンテスト部門が参照する関数を実行します。
-	 *
-	 *
-	 * @param name 関数の名前
-	 * @param args 関数の引数
-	 *
-	 * @return 関数の値
-	 *
-	 * @since 2020/03/09
-	 */
-	@Override
-	public final Object invoke(String name, Object...args) {
-		return eval.apply(new NameNode(name).form(args)).value();
+	public final Object[] entity(Item item) {
+		return eval.apply(mult.form(item)).list().toArray();
 	}
 }

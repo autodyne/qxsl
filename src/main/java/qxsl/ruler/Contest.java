@@ -7,13 +7,11 @@ package qxsl.ruler;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 /**
- * コンテストの規約の実装はこの抽象クラスを継承します。
+ * コンテストの規約はこのクラスを継承します。
  *
  *
  * @author 無線部開発班
@@ -35,12 +33,31 @@ public abstract class Contest extends Library implements Iterable<Section> {
 	}
 
 	/**
+	 * コンテストの名前を返します。
+	 *
+	 *
+	 * @return 名前
+	 */
+	@Override
+	public final String toString() {
+		return name();
+	}
+
+	/**
+	 * コンテストの名前を返します。
+	 *
+	 *
+	 * @return 名前
+	 */
+	public abstract String name();
+
+	/**
 	 * コンテストの主催者を返します。
 	 *
 	 *
 	 * @return コンテストの主催者
 	 */
-	public abstract String getHost();
+	public abstract String host();
 
 	/**
 	 * コンテストの連絡先を返します。
@@ -48,7 +65,7 @@ public abstract class Contest extends Library implements Iterable<Section> {
 	 *
 	 * @return コンテストの連絡先
 	 */
-	public abstract String getMail();
+	public abstract String mail();
 
 	/**
 	 * コンテストの規約の場所を返します。
@@ -56,20 +73,17 @@ public abstract class Contest extends Library implements Iterable<Section> {
 	 *
 	 * @return コンテストの規約の場所
 	 */
-	public abstract String getLink();
+	public abstract String link();
 
 	/**
 	 * 指定された年のコンテストの開始日を計算します。
-	 * 規約の実装に含まれる同名の関数を呼び出します。
 	 *
 	 *
 	 * @param year 開催年
 	 *
 	 * @return 開始日
 	 */
-	public final LocalDate getStartDay(int year) {
-		return (LocalDate) invoke("getStartDay", year);
-	}
+	public abstract LocalDate getStartDay(int year);
 
 	/**
 	 * 指定された年のコンテストの終了日を計算します。
@@ -79,9 +93,7 @@ public abstract class Contest extends Library implements Iterable<Section> {
 	 *
 	 * @return 終了日
 	 */
-	public final LocalDate getFinalDay(int year) {
-		return (LocalDate) invoke("getFinalDay", year);
-	}
+	public abstract LocalDate getFinalDay(int year);
 
 	/**
 	 * 指定された年のコンテストの締切日を計算します。
@@ -91,9 +103,7 @@ public abstract class Contest extends Library implements Iterable<Section> {
 	 *
 	 * @return 締切日
 	 */
-	public final LocalDate getDeadLine(int year) {
-		return (LocalDate) invoke("getDeadLine", year);
-	}
+	public abstract LocalDate getDeadLine(int year);
 
 	/**
 	 * 指定された部門をこの規約に追加します。
@@ -133,27 +143,15 @@ public abstract class Contest extends Library implements Iterable<Section> {
 	}
 
 	/**
-	 * この規約の下の部門をリストで返します。
-	 *
-	 *
-	 * @return 全ての部門を含むリスト
-	 */
-	public final List<Section> getSections() {
-		return Collections.unmodifiableList(list);
-	}
-
-	/**
-	 * 指定された名前の部門を返し、未知の場合は例外を発生させます。
+	 * 指定された名前の部門を検索します。
 	 *
 	 *
 	 * @param name 部門の名前
 	 *
 	 * @return 該当する部門
-	 *
-	 * @throws NoSuchElementException 未知の部門の場合
 	 */
-	public final Section getSection(String name) {
-		for(var s: this.list) if(s.getName().equals(name)) return s;
-		throw new NoSuchElementException(name.concat(" not found"));
+	public final Section section(String name) {
+		for(var s: list) if(s.name().equals(name)) return s;
+		return null;
 	}
 }

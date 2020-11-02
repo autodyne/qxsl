@@ -38,9 +38,4 @@ public final class FailureTest extends Assertions {
 	public void testText(@RandomString String text) {
 		assertThat(new Failure(new Item(), text).text()).isEqualTo(text);
 	}
-
-	@Test
-	public void testSize(@RandomString String text) {
-		assertThat(new Failure(new Item(), text).size()).isEqualTo(0);
-	}
 }

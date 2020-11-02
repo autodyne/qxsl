@@ -391,7 +391,7 @@ concatenates the specified value and list into a list.
 
 ### contest
 
-creates and returns a [`contest`](https://nextzlog.github.io/qxsl/doc/qxsl/ruler/Contest.html) object.
+creates and returns a [`contest`](https://nextzlog.github.io/qxsl/doc/qxsl/ruler/Contest.html) object, which references `start-day`, `final-day`, and `dead-line` functions.
 
 ```lisp
 (contest name host mail link)
@@ -525,14 +525,6 @@ creates a local variable and evaluates the expression.
 (let variable value expression)
 ```
 
-### library
-
-creates and returns a [`library`](https://nextzlog.github.io/qxsl/doc/qxsl/ruler/Library.html) object.
-
-```lisp
-(library name)
-```
-
 ### list
 
 creates a list of elements as specified.
@@ -637,6 +629,14 @@ performs or operation and returns a bool value.
 (or bool1 bools...)
 ```
 
+### pattern
+
+creates and returns a [`pattern`](https://nextzlog.github.io/qxsl/doc/qxsl/ruler/Pattern.html) object.
+
+```lisp
+(pattern normalize transform)
+```
+
 ### quasiquote
 
 quotes the expression except for some unquoted sub-expressions.
@@ -663,10 +663,10 @@ extracts the [`rcvd`](https://nextzlog.github.io/qxsl/doc/qxsl/model/Rcvd.html) 
 
 ### section
 
-creates and returns a [`section`](https://nextzlog.github.io/qxsl/doc/qxsl/ruler/Section.html) object.
-
+takes four functions and returns a [`section`](https://nextzlog.github.io/qxsl/doc/qxsl/ruler/Section.html) object.
+ 
 ```lisp
-(section name code verifier scoring)
+(section name code verify unique entity result)
 ```
 
 ### sent
@@ -714,7 +714,7 @@ returns a subsequence of the specified list.
 creates and returns a [`success`](https://nextzlog.github.io/qxsl/doc/qxsl/ruler/Success.html) object.
 
 ```lisp
-(success item score keys...)
+(success item score)
 ```
 
 ### symbol

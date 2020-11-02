@@ -16,7 +16,7 @@ import javax.script.ScriptException;
 import gaas.utils.AssetUtils;
 
 /**
- * ドメイン特化言語でコンテストの規約を表現する仕組みです。
+ * ドメイン特化言語でコンテストを定義します。
  *
  *
  * @author 無線部開発班
@@ -81,34 +81,6 @@ public final class RuleKit {
 	}
 
 	/**
-	 * 指定された文字列からコンテストの規約を読み取ります。
-	 *
-	 *
-	 * @param string 式を提供する文字列
-	 *
-	 * @return コンテストの規約
-	 *
-	 * @throws UncheckedIOException 読み取りまたは評価の例外
-	 */
-	public final Contest evalAsContest(String string) {
-		return evalAsContest(new StringReader(string));
-	}
-
-	/**
-	 * 指定された文字列からコンテストの部門を読み取ります。
-	 *
-	 *
-	 * @param string 式を提供する文字列
-	 *
-	 * @return コンテストの部門
-	 *
-	 * @throws UncheckedIOException 読み取りまたは評価の例外
-	 */
-	public final Section evalAsSection(String string) {
-		return evalAsSection(new StringReader(string));
-	}
-
-	/**
 	 * 指定された文字列からライブラリの定義を読み取ります。
 	 *
 	 *
@@ -118,36 +90,8 @@ public final class RuleKit {
 	 *
 	 * @throws UncheckedIOException 読み取りまたは評価の例外
 	 */
-	public final Library evalAsLibrary(String string) {
-		return evalAsLibrary(new StringReader(string));
-	}
-
-	/**
-	 * 指定されたリーダからコンテストの規約を読み取ります。
-	 *
-	 *
-	 * @param reader 式を提供するリーダ
-	 *
-	 * @return コンテストの規約
-	 *
-	 * @throws UncheckedIOException 読み取りまたは評価の例外
-	 */
-	public final Contest evalAsContest(Reader reader) {
-		return (Contest) evalAsLibrary(reader);
-	}
-
-	/**
-	 * 指定されたリーダからコンテストの部門を読み取ります。
-	 *
-	 *
-	 * @param reader 式を提供するリーダ
-	 *
-	 * @return コンテストの部門
-	 *
-	 * @throws UncheckedIOException 読み取りまたは評価の例外
-	 */
-	public final Section evalAsSection(Reader reader) {
-		return (Section) evalAsLibrary(reader);
+	public final Library eval(String string) {
+		return eval(new StringReader(string));
 	}
 
 	/**
@@ -160,41 +104,13 @@ public final class RuleKit {
 	 *
 	 * @throws UncheckedIOException 読み取りまたは評価の例外
 	 */
-	public final Library evalAsLibrary(Reader reader) {
+	public final Library eval(Reader reader) {
 		try {
 			return (Library) engine.eval(reader);
 		} catch (ScriptException ex) {
 			final var io = new IOException(ex);
 			throw new UncheckedIOException(io);
 		}
-	}
-
-	/**
-	 * 指定された名前の内蔵コンテストの規約を読み取ります。
-	 *
-	 *
-	 * @param path リソースのパス
-	 *
-	 * @return コンテストの規約
-	 *
-	 * @throws UncheckedIOException 読み取りまたは評価の例外
-	 */
-	public static final Contest loadAsContest(String path) {
-		return (Contest) loadAsLibrary(path);
-	}
-
-	/**
-	 * 指定された名前の内蔵コンテストの部門を読み取ります。
-	 *
-	 *
-	 * @param path リソースのパス
-	 *
-	 * @return コンテストの部門
-	 *
-	 * @throws UncheckedIOException 読み取りまたは評価の例外
-	 */
-	public static final Section loadAsSection(String path) {
-		return (Section) loadAsLibrary(path);
 	}
 
 	/**
@@ -207,10 +123,8 @@ public final class RuleKit {
 	 *
 	 * @throws UncheckedIOException 読み取りまたは評価の例外
 	 */
-	public static final Library loadAsLibrary(String path) {
-		final var engine = forFile(path);
-		if(engine == null) return null;
+	public static final Library load(String path) {
 		final var lib = new AssetUtils(Library.class);
-		return engine.evalAsLibrary(lib.string(path));
+		return forFile(path).eval(lib.string(path));
 	}
 }

@@ -5,9 +5,11 @@
 *******************************************************************************/
 package elva.form;
 
+import java.time.LocalDate;
+
 import elva.lang.ElvaEval;
+import elva.lang.FormBase;
 import elva.lang.ListBase;
-import elva.lang.NameNode;
 import elva.lang.NativeOp;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
@@ -48,6 +50,9 @@ final class ContestImpl extends Contest {
 	private final String host;
 	private final String mail;
 	private final String link;
+	private final FormBase from;
+	private final FormBase last;
+	private final FormBase dead;
 
 	/**
 	 * 指定された規約定義と評価器で規約を構築します。
@@ -61,6 +66,9 @@ final class ContestImpl extends Contest {
 		this.host = eval.apply(rule.get(1)).text();
 		this.mail = eval.apply(rule.get(2)).text();
 		this.link = eval.apply(rule.get(3)).text();
+		this.from = eval.scope.get("start-day").form();
+		this.last = eval.scope.get("final-day").form();
+		this.dead = eval.scope.get("dead-line").form();
 		this.eval = eval;
 	}
 
@@ -71,7 +79,7 @@ final class ContestImpl extends Contest {
 	 * @return コンテストの名前
 	 */
 	@Override
-	public final String getName() {
+	public final String name() {
 		return name;
 	}
 
@@ -82,7 +90,7 @@ final class ContestImpl extends Contest {
 	 * @return コンテストの主催者
 	 */
 	@Override
-	public final String getHost() {
+	public final String host() {
 		return host;
 	}
 
@@ -93,7 +101,7 @@ final class ContestImpl extends Contest {
 	 * @return コンテストの連絡先
 	 */
 	@Override
-	public final String getMail() {
+	public final String mail() {
 		return mail;
 	}
 
@@ -104,38 +112,46 @@ final class ContestImpl extends Contest {
 	 * @return コンテストの規約の場所
 	 */
 	@Override
-	public final String getLink() {
+	public final String link() {
 		return link;
 	}
 
 	/**
-	 * このコンテスト規約が参照する変数を実行します。
+	 * 指定された年のコンテストの開始日を計算します。
 	 *
 	 *
-	 * @param name 変数の名前
+	 * @param year 開催年
 	 *
-	 * @return 変数の値
-	 *
-	 * @since 2020/09/27
+	 * @return 開始日
 	 */
 	@Override
-	public final Object get(String name) {
-		return eval.apply(new NameNode(name)).value();
+	public final LocalDate getStartDay(int year) {
+		return eval.apply(from.form(year)).ofType(LocalDate.class);
 	}
 
 	/**
-	 * このコンテスト規約が参照する関数を実行します。
+	 * 指定された年のコンテストの終了日を計算します。
 	 *
 	 *
-	 * @param name 関数の名前
-	 * @param args 関数の引数
+	 * @param year 開催年
 	 *
-	 * @return 関数の値
-	 *
-	 * @since 2020/03/09
+	 * @return 終了日
 	 */
 	@Override
-	public final Object invoke(String name, Object...args) {
-		return eval.apply(new NameNode(name).form(args)).value();
+	public final LocalDate getFinalDay(int year) {
+		return eval.apply(last.form(year)).ofType(LocalDate.class);
+	}
+
+	/**
+	 * 指定された年のコンテストの締切日を計算します。
+	 *
+	 *
+	 * @param year 開催年
+	 *
+	 * @return 締切日
+	 */
+	@Override
+	public final LocalDate getDeadLine(int year) {
+		return eval.apply(dead.form(year)).ofType(LocalDate.class);
 	}
 }

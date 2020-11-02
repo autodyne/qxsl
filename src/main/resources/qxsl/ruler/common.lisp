@@ -159,15 +159,6 @@
 (assert (equal (replace "114" "11|51" "36") "364") "replace")
 (assert (equal (replace "514" "11|51" "36") "364") "replace")
 
-; define contest without having any sections
-(defmacro set-contest (var name host mail link)
-	`(setq ,var (contest ,name ,host ,mail ,link)))
-
-; define section under the specified contest
-(defmacro add-section (var name code test scoring)
-	`((method 'add Contest Section)
-		,var (section ,name ,code ,test ,scoring)))
-
 ; get hour value from ZonedDateTime
 (setq hour (method 'getHour ZonedDateTime))
 

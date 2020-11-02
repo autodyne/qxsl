@@ -83,7 +83,7 @@ public final class AssetUtils {
 	 *
 	 * @return プロパティ
 	 *
-	 * @throws UncheckedIOException 存在しない場合
+	 * @throws UncheckedIOException 読み取りに失敗した場合
 	 */
 	public final Properties properties(String name) {
 		final var path = name.concat(".xml");
@@ -104,7 +104,7 @@ public final class AssetUtils {
 	 *
 	 * @return 交信記録
 	 *
-	 * @throws UncheckedIOException 存在しない場合
+	 * @throws UncheckedIOException 読み取りに失敗した場合
 	 */
 	public final List<Item> items(String path) {
 		try(final var stream = stream(path)) {
@@ -123,7 +123,7 @@ public final class AssetUtils {
 	 *
 	 * @return 行の列
 	 *
-	 * @throws UncheckedIOException 存在しない場合
+	 * @throws UncheckedIOException 読み取りに失敗した場合
 	 */
 	public final Stream<String> lines(String path) {
 		return string(path).lines();
@@ -137,7 +137,7 @@ public final class AssetUtils {
 	 *
 	 * @return 文字列
 	 *
-	 * @throws UncheckedIOException 存在しない場合
+	 * @throws UncheckedIOException 読み取りに失敗した場合
 	 */
 	public final String string(String path) {
 		try(final var br = this.buffer(path)) {
