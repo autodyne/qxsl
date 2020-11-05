@@ -32,26 +32,32 @@ public final class SheetFactoryTest extends Assertions {
 
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
-	public void testGetName(SheetFactory format) {
-		assertThat(format.getName()).isNotEmpty();
+	public void testName(SheetFactory format) {
+		assertThat(format.name()).isNotEmpty();
+	}
+
+	@ParameterizedTest
+	@MethodSource("testMethodSource")
+	public void testLabel(SheetFactory format) {
+		assertThat(format.label()).isNotEmpty();
+	}
+
+	@ParameterizedTest
+	@MethodSource("testMethodSource")
+	public void testDescribe(SheetFactory format) {
+		assertThat(format.describe()).isNotEmpty();
+	}
+
+	@ParameterizedTest
+	@MethodSource("testMethodSource")
+	public void testExtensions(SheetFactory format) {
+		assertThat(format.extensions()).isNotEmpty();
 	}
 
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void testToString(SheetFactory format) {
 		assertThat(format.toString()).isNotEmpty();
-	}
-
-	@ParameterizedTest
-	@MethodSource("testMethodSource")
-	public void testGetDescription(SheetFactory format) {
-		assertThat(format.getDescription()).isNotEmpty();
-	}
-
-	@ParameterizedTest
-	@MethodSource("testMethodSource")
-	public void testGetExtensions(SheetFactory format) {
-		assertThat(format.getExtensions()).isNotEmpty();
 	}
 
 	@ParameterizedTest

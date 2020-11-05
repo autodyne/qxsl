@@ -28,18 +28,15 @@ public final class TableManagerTest extends Assertions {
 
 	@Test
 	public void testGetFactory() {
-		// XML
-		assertThat(tables.getFactory("qxml")).isInstanceOf(QxmlFactory.class);
-		assertThat(tables.getFactory("adxs")).isInstanceOf(AdxsFactory.class);
-		// text
-		assertThat(tables.getFactory("adis")).isInstanceOf(AdisFactory.class);
-		assertThat(tables.getFactory("cqww")).isInstanceOf(CqwwFactory.class);
-		assertThat(tables.getFactory("jarl")).isInstanceOf(JarlFactory.class);
-		assertThat(tables.getFactory("ctxt")).isInstanceOf(CTxtFactory.class);
-		assertThat(tables.getFactory("zall")).isInstanceOf(ZAllFactory.class);
-		assertThat(tables.getFactory("zdos")).isInstanceOf(ZDosFactory.class);
-		// binary
-		assertThat(tables.getFactory("cbin")).isInstanceOf(CBinFactory.class);
-		assertThat(tables.getFactory("zbin")).isInstanceOf(ZBinFactory.class);
+		assertThat(tables.factory("qxml")).isInstanceOf(QxmlFactory.class);
+		assertThat(tables.factory("adxs")).isInstanceOf(AdxsFactory.class);
+		assertThat(tables.factory("adis")).isInstanceOf(AdisFactory.class);
+		assertThat(tables.factory("cqww")).isInstanceOf(CqwwFactory.class);
+		assertThat(tables.factory("jarl")).isInstanceOf(JarlFactory.class);
+		assertThat(tables.factory("ctxt")).isInstanceOf(CTxtFactory.class);
+		assertThat(tables.factory("zall")).isInstanceOf(ZAllFactory.class);
+		assertThat(tables.factory("zdos")).isInstanceOf(ZDosFactory.class);
+		assertThat(tables.factory("cbin")).isInstanceOf(CBinFactory.class);
+		assertThat(tables.factory("zbin")).isInstanceOf(ZBinFactory.class);
 	}
 }

@@ -30,14 +30,13 @@
 
 ; keys for identification
 (defun unique it
-	(let it (normalize it null)
-		(list
-			(qxsl-call it)
-			(qxsl-band it)
-			(cond
-				((MORSE? it) 1)
-				((PHONE? it) 2)
-				((DIGIT? it) 3)))))
+	(list
+		(qxsl-call it)
+		(qxsl-band it)
+		(cond
+			((MORSE? it) 1)
+			((PHONE? it) 2)
+			((DIGIT? it) 3))))
 
 ; keys for multiplication
 (defun entity it
@@ -47,13 +46,11 @@
 
 ; entity for SinOP
 (defun EnSinOp it
-	(let it (normalize it null)
-		(list (entity it) null)))
+	(list (entity it) null))
 
 ; entity for MulOP
 (defun EnMulOp it
-	(let it (normalize it null)
-		(list (entity it) (qxsl-name it))))
+	(list (entity it) (qxsl-name it)))
 
 ; scoring
 (defmacro result (score mults names)

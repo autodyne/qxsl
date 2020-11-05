@@ -5,6 +5,7 @@
 *******************************************************************************/
 package gaas.sheet;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public final class Cab3FactoryTest extends Assertions {
 
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
-	public void testDecode(int numItems) throws Exception {
+	public void testDecode(int numItems) throws IOException {
 		final var list = new ArrayList<Item>();
 		for(int row = 0; row < numItems; row++) {
 			final var item = new Item();
@@ -67,15 +68,15 @@ public final class Cab3FactoryTest extends Assertions {
 		}
 		final var KEY = "QSO";
 		final var buf = new StringWriter();
-		final var bin = tables.getFactory("cqww").encode(list);
-		final var enc = sheets.getFactory("cab3").encoder(buf);
+		final var bin = tables.factory("cqww").encode(list);
+		final var enc = sheets.factory("cab3").encoder(buf);
 		enc.set("CONTEST", "JIDX-CW");
 		enc.set("CALLSIGN", "JA1ZLO");
 		enc.set("QSO", bin);
 		enc.encode();
 		final var str = buf.toString();
 		final var src = new StringReader(str);
-		final var dec = sheets.getFactory("cab3").decoder(src);
+		final var dec = sheets.factory("cab3").decoder(src);
 		dec.decode();
 		assertThat(dec.getString("CONTEST")).isEqualTo("JIDX-CW");
 		assertThat(dec.getString("CALLSIGN")).isEqualTo("JA1ZLO");

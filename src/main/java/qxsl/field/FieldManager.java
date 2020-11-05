@@ -70,7 +70,7 @@ public final class FieldManager implements Iterable<FieldFactory> {
 	 *
 	 * @return 対応する書式 またはnull
 	 */
-	public FieldFactory getFactory(QName name) {
+	public FieldFactory factory(QName name) {
 		for(var f: list) if(f.target().equals(name)) return f;
 		return null;
 	}
@@ -85,7 +85,7 @@ public final class FieldManager implements Iterable<FieldFactory> {
 	 */
 	public final String encode(Field field) {
 		try {
-			return getFactory(field.name()).encode(field);
+			return factory(field.name()).encode(field);
 		} catch (NullPointerException ex) {
 			return String.valueOf(field.value());
 		}
@@ -102,7 +102,7 @@ public final class FieldManager implements Iterable<FieldFactory> {
 	 */
 	public Field decode(QName qname, String value) {
 		try {
-			return getFactory(qname).decode(value);
+			return factory(qname).decode(value);
 		} catch (NullPointerException ex) {
 			return new Any(qname, value);
 		}
@@ -169,7 +169,7 @@ public final class FieldManager implements Iterable<FieldFactory> {
 		 * @param qname 属性名
 		 */
 		private Cache(QName qname) {
-			this.format = getFactory(this.qname = qname);
+			this.format = factory(this.qname = qname);
 		}
 
 		/**

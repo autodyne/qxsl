@@ -29,7 +29,7 @@ public final class SheetManagerTest extends Assertions {
 
 	@Test
 	public void testGetFactory() {
-		assertThat(sheets.getFactory("cab3")).isInstanceOf(Cab3Factory.class);
-		assertThat(sheets.getFactory("jarl")).isInstanceOf(JarlFactory.class);
+		assertThat(sheets.factory("cab3")).isInstanceOf(Cab3Factory.class);
+		assertThat(sheets.factory("jarl")).isInstanceOf(JarlFactory.class);
 	}
 }

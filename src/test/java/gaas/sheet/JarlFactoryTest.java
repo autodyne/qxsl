@@ -5,6 +5,7 @@
 *******************************************************************************/
 package gaas.sheet;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public final class JarlFactoryTest extends Assertions {
 
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
-	public void testDecode(int numItems) throws Exception {
+	public void testDecode(int numItems) throws IOException {
 		final var list = new ArrayList<Item>();
 		for(int row = 0; row < numItems; row++) {
 			final var item = new Item();
@@ -67,15 +68,15 @@ public final class JarlFactoryTest extends Assertions {
 		}
 		final var KEY = "LOGSHEET";
 		final var buf = new StringWriter();
-		final var bin = tables.getFactory("jarl").encode(list);
-		final var enc = sheets.getFactory("jarl").encoder(buf);
+		final var bin = tables.factory("jarl").encode(list);
+		final var enc = sheets.factory("jarl").encoder(buf);
 		enc.set("CALLSIGN", "JA1ZLO");
 		enc.set("COMMENTS", "Groovy");
 		enc.set(KEY, bin);
 		enc.encode();
 		final var str = buf.toString();
 		final var src = new StringReader(str);
-		final var dec = sheets.getFactory("jarl").decoder(src);
+		final var dec = sheets.factory("jarl").decoder(src);
 		dec.decode();
 		assertThat(dec.getString("CALLSIGN")).isEqualTo("JA1ZLO");
 		assertThat(dec.getString("COMMENTS")).isEqualTo("Groovy");

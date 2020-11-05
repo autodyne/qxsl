@@ -233,6 +233,10 @@
 ((method 'getSimpleName java.lang.Class) java.lang.String) "String"
 ((method 'getSimpleName java.lang.Class) java.lang.Object) "Object"
 
+; static
+(static java.lang.Integer 'MAX_VALUE)  2147483647
+(static java.lang.Integer 'MIN_VALUE) -2147483648
+
 ; assert
 (catch (assert (equal 3 (+ 1 2)) "must be true")) null
 (catch (assert (equal 3 (+ 3 2)) "must be true")) "must be true"

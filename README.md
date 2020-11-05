@@ -12,7 +12,7 @@ qxsl is a Java library for processing amateur-radio log files, including scoring
 
 - provides log en/decoders for QXML, [ADIF](http://adif.org), [Cabrillo](https://wwrof.org/cabrillo/), [zLog](http://www.zlog.org), [CTESTWIN](http://e.gmobb.jp/ctestwin/Download.html), etc.
 - provides tabulation & scoring frameworks for amateur-radio contests and awards.
-- provides the rulekit framework which allows you to write contest rules in Ruby, Python, and LISP.
+- provides the rulekit framework which allows you to write contest rules in JS, Ruby, Python, and LISP.
 
 ## Documents
 
@@ -48,9 +48,9 @@ The class `FieldManager` detects `FieldFactory` implementations [from the class 
 
 ```Scala
 val fields = new qxsl.field.FieldManager()
-item.add(fields.cache(new QName("qxsl.org", "mode")).field("CW"))
-item.add(fields.cache(new QName("adif.org", "MODE")).field("CW"))
-val mode = item.get(new QName("qxsl.org", "mode")).value()
+item.set(fields.cache(new QName("qxsl.org", "mode")).field("CW"))
+item.set(fields.cache(new QName("adif.org", "MODE")).field("CW"))
+val mode = item.value(new QName("qxsl.org", "mode"))
 ```
 
 This mechanism is utilized for en/decoding the *QXML* format, which is an alternative log format proposed by the qxsl development team.
@@ -117,16 +117,16 @@ for(section: Section <- allja1.getSections().asScala) {
 }
 ```
 
-Currently, the `RuleKit` class supports some domain specific languages, including Ruby, Python, and [Elva Lisp](https://github.com/nextzlog/qxsl/blob/master/ELVA.md).
-Elva Lisp is a special LISP for the purpose of contest definition.
+Currently, the `RuleKit` class supports some domain specific languages, including JS, Ruby, Python, and [Elva](ELVA.md).
+Elva is a special LISP for the purpose of contest definition.
 
 ### Bundled Contest Definitions
 
-The following LISP programs are bundled inside the JAR file, as sample codes in Elva Lisp.
+The following LISP programs are bundled inside the JAR file, as sample codes in Elva.
 
-- [`allja1.lisp`](https://github.com/nextzlog/qxsl/tree/master/src/main/resources/qxsl/ruler/allja1.lisp)
-- [`format.lisp`](https://github.com/nextzlog/qxsl/tree/master/src/main/resources/qxsl/ruler/format.lisp)
-- [`jautil.lisp`](https://github.com/nextzlog/qxsl/tree/master/src/main/resources/qxsl/ruler/jautil.lisp)
+- [`allja1.lisp`](src/main/resources/qxsl/ruler/allja1.lisp)
+- [`format.lisp`](src/main/resources/qxsl/ruler/format.lisp)
+- [`jautil.lisp`](src/main/resources/qxsl/ruler/jautil.lisp)
 
 ## Supported Formats
 
@@ -181,8 +181,6 @@ Then run the command manually as follows:
 ```shell
 $ native-image -cp build/libs/qxsl.jar
 ```
-
-You can download the latest [`qxsl.dll`](https://github.com/nextzlog/qxsl/releases/download/nightly/qxsl.dll) created by GitHub Actions.
 
 ## Contribution
 

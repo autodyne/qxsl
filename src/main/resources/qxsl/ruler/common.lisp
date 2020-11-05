@@ -77,13 +77,6 @@
 (assert (invoke 'matches "364364" "\\d{6}") "invoke")
 (assert (invoke 'startsWith "114514" "114") "invoke")
 
-; static (static field)
-(defmacro static (class field)
-	`((method 'get Field Object)
-		((method 'getField Class String) ,class (string ,field)) null))
-(assert (equal (static Integer 'MAX_VALUE)  2147483647) ":")
-(assert (equal (static Integer 'MIN_VALUE) -2147483648) ":")
-
 ; boolean
 (defun boolean str (equal "#t" str))
 (assert (equal (boolean "#t") #t) "boolean")
@@ -175,10 +168,10 @@
 		time (static DateTimeFormatter 'ISO_ZONED_DATE_TIME)))
 
 ; get code or name from the specified city
-(setq code<-city (method 'getCode LocalCityItem))
-(setq area<-city (method 'getArea LocalCityItem))
-(setq name<-city (method 'getName LocalCityItem int))
+(setq code<-city (method 'code LocalCityItem))
+(setq area<-city (method 'area LocalCityItem))
+(setq name<-city (method 'name LocalCityItem int))
 
 ; get city from the specified code or name
-(setq city<-code (method 'getCityByCode LocalCityBase String))
-(setq city<-name (method 'getCityByName LocalCityBase String))
+(setq city<-code (method 'getByCode LocalCityBase String))
+(setq city<-name (method 'getByName LocalCityBase String))

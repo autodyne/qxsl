@@ -17,8 +17,6 @@ import org.junit.jupiter.api.Test;
  * @since 2017/02/24
  */
 public final class LocalCityItemTest extends Assertions {
-	final LocalCityBase base = LocalCityBase.load("qxsl/local/city.ja");
-
 	/**
 	 * 指定された識別子に対応する地域を返します。
 	 *
@@ -28,7 +26,7 @@ public final class LocalCityItemTest extends Assertions {
 	 * @return 地域
 	 */
 	private LocalCityItem jarl(String code) {
-		return base.getCityByCode(code);
+		return LocalCityBase.load("qxsl/local/city.ja").getByCode(code);
 	}
 
 	@Test
@@ -38,20 +36,20 @@ public final class LocalCityItemTest extends Assertions {
 	}
 
 	@Test
-	public void testGetCode() {
-		assertThat(jarl("100105").getCode()).isEqualTo("100105");
-		assertThat(jarl("200106").getCode()).isEqualTo("200106");
+	public void testCode() {
+		assertThat(jarl("100105").code()).isEqualTo("100105");
+		assertThat(jarl("200106").code()).isEqualTo("200106");
 	}
 
 	@Test
-	public void testGetArea() {
-		assertThat(jarl("100105").getArea()).isEqualTo("東京都");
-		assertThat(jarl("200106").getArea()).isEqualTo("愛知県");
+	public void testArea() {
+		assertThat(jarl("100105").area()).isEqualTo("東京都");
+		assertThat(jarl("200106").area()).isEqualTo("愛知県");
 	}
 
 	@Test
-	public void testGetName() {
-		assertThat(jarl("100105").getName()).isEqualTo("東京都 文京区");
-		assertThat(jarl("100110").getName()).isEqualTo("東京都 目黒区");
+	public void testName() {
+		assertThat(jarl("100105").name()).isEqualTo("東京都 文京区");
+		assertThat(jarl("100110").name()).isEqualTo("東京都 目黒区");
 	}
 }

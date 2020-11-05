@@ -55,7 +55,7 @@ public abstract class BasicFactory extends SheetFactory {
 	 * @return 書式の名前
 	 */
 	@Override
-	public final String getName() {
+	public final String name() {
 		return name;
 	}
 
@@ -66,7 +66,7 @@ public abstract class BasicFactory extends SheetFactory {
 	 * @return 書式の文字列表現
 	 */
 	@Override
-	public final String toString() {
+	public final String label() {
 		return get("label");
 	}
 
@@ -77,7 +77,7 @@ public abstract class BasicFactory extends SheetFactory {
 	 * @return 書式の説明
 	 */
 	@Override
-	public final String getDescription() {
+	public final String describe() {
 		final var text = get("desc-text");
 		final var file = get("desc-file");
 		if(text != null) return text;
@@ -91,7 +91,7 @@ public abstract class BasicFactory extends SheetFactory {
 	 * @return 拡張子のリスト
 	 */
 	@Override
-	public final List<String> getExtensions() {
+	public final List<String> extensions() {
 		return List.of(get("extensions").split(","));
 	}
 

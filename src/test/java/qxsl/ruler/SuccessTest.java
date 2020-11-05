@@ -12,7 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import qxsl.junit.RandomNumberParameterExtension;
 import qxsl.junit.RandomNumberParameterExtension.RandomNumber;
 import qxsl.junit.RandomStringParameterExtension;
-import qxsl.junit.RandomStringParameterExtension.RandomString;
 import qxsl.model.Item;
 
 /**

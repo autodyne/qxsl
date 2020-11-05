@@ -31,15 +31,15 @@ public final class FieldManagerTest extends Assertions {
 
 	@Test
 	public void testGetFactory() {
-		assertThat(fields.getFactory(Qxsl.BAND)).isInstanceOf(BandFactory.class);
-		assertThat(fields.getFactory(Qxsl.CALL)).isInstanceOf(CallFactory.class);
-		assertThat(fields.getFactory(Qxsl.CODE)).isInstanceOf(CodeFactory.class);
-		assertThat(fields.getFactory(Qxsl.BAND)).isInstanceOf(BandFactory.class);
-		assertThat(fields.getFactory(Qxsl.MODE)).isInstanceOf(ModeFactory.class);
-		assertThat(fields.getFactory(Qxsl.NAME)).isInstanceOf(NameFactory.class);
-		assertThat(fields.getFactory(Qxsl.NOTE)).isInstanceOf(NoteFactory.class);
-		assertThat(fields.getFactory(Qxsl.RSTQ)).isInstanceOf(RSTQFactory.class);
-		assertThat(fields.getFactory(Qxsl.TIME)).isInstanceOf(TimeFactory.class);
-		assertThat(fields.getFactory(Qxsl.WATT)).isInstanceOf(WattFactory.class);
+		assertThat(fields.factory(Qxsl.BAND)).isInstanceOf(BandFactory.class);
+		assertThat(fields.factory(Qxsl.CALL)).isInstanceOf(CallFactory.class);
+		assertThat(fields.factory(Qxsl.CODE)).isInstanceOf(CodeFactory.class);
+		assertThat(fields.factory(Qxsl.BAND)).isInstanceOf(BandFactory.class);
+		assertThat(fields.factory(Qxsl.MODE)).isInstanceOf(ModeFactory.class);
+		assertThat(fields.factory(Qxsl.NAME)).isInstanceOf(NameFactory.class);
+		assertThat(fields.factory(Qxsl.NOTE)).isInstanceOf(NoteFactory.class);
+		assertThat(fields.factory(Qxsl.RSTQ)).isInstanceOf(RSTQFactory.class);
+		assertThat(fields.factory(Qxsl.TIME)).isInstanceOf(TimeFactory.class);
+		assertThat(fields.factory(Qxsl.WATT)).isInstanceOf(WattFactory.class);
 	}
 }

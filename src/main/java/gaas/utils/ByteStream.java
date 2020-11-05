@@ -5,9 +5,7 @@
 *******************************************************************************/
 package gaas.utils;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 
 /**
@@ -40,21 +38,5 @@ public final class ByteStream extends InputStream {
 	@Override
 	public final int read() {
 		return source.hasRemaining()? -1: source.get();
-	}
-
-	/**
-	 * ストリームの終端まで読み取ります。
-	 *
-	 *
-	 * @return バイト列
-	 *
-	 * @throws UncheckedIOException 非検査例外
-	 */
-	public final byte[] readAllBytesUnchecked() {
-		try {
-			return readAllBytes();
-		} catch (IOException ex) {
-			throw new UncheckedIOException(ex);
-		}
 	}
 }

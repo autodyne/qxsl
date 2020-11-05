@@ -40,7 +40,7 @@ public final class LocalCityItem implements Serializable {
 	 */
 	@Override
 	public final String toString() {
-		return getName();
+		return name();
 	}
 
 	/**
@@ -49,7 +49,7 @@ public final class LocalCityItem implements Serializable {
 	 *
 	 * @return 識別番号
 	 */
-	public final String getCode() {
+	public final String code() {
 		return path[path.length - 1];
 	}
 
@@ -59,8 +59,8 @@ public final class LocalCityItem implements Serializable {
 	 *
 	 * @return 最大の区画
 	 */
-	public final String getArea() {
-		return getName(0);
+	public final String area() {
+		return name(0);
 	}
 
 	/**
@@ -69,8 +69,8 @@ public final class LocalCityItem implements Serializable {
 	 *
 	 * @return 平易な名前
 	 */
-	public final String getName() {
-		return getName(size - 1);
+	public final String name() {
+		return name(size - 1);
 	}
 
 	/**
@@ -83,7 +83,7 @@ public final class LocalCityItem implements Serializable {
 	 *
 	 * @throws IndexOutOfBoundsException 階層が深すぎる場合
 	 */
-	public final String getName(int lv) {
+	public final String name(int lv) {
 		if(lv >= size) throw new IndexOutOfBoundsException();
 		return String.join(" ", Arrays.copyOf(path, lv + 1));
 	}

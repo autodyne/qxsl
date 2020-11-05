@@ -38,8 +38,8 @@ public final class LocalCityBase {
 		this.list = stream.collect(Collectors.toList());
 		this.forwardMap = new HashMap<>();
 		this.reverseMap = new HashMap<>();
-		for(var v: list) forwardMap.put(v.getCode(), v);
-		for(var v: list) reverseMap.put(v.getName(), v);
+		for(var v: list) forwardMap.put(v.code(), v);
+		for(var v: list) reverseMap.put(v.name(), v);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public final class LocalCityBase {
 	 *
 	 * @return 地域
 	 */
-	public final LocalCityItem getCityByCode(String code) {
+	public final LocalCityItem getByCode(String code) {
 		return this.forwardMap.get(code);
 	}
 
@@ -72,7 +72,7 @@ public final class LocalCityBase {
 	 *
 	 * @return 地域
 	 */
-	public final LocalCityItem getCityByName(String name) {
+	public final LocalCityItem getByName(String name) {
 		return this.reverseMap.get(name);
 	}
 

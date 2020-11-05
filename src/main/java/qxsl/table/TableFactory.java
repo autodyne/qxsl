@@ -7,6 +7,7 @@ package qxsl.table;
 
 import java.io.*;
 import java.util.List;
+import java.util.StringJoiner;
 
 import qxsl.model.Item;
 
@@ -25,7 +26,7 @@ public abstract class TableFactory {
 	 *
 	 * @return 書式の名前
 	 */
-	public abstract String getName();
+	public abstract String name();
 
 	/**
 	 * この書式の表示に適した文字列を返します。
@@ -33,7 +34,7 @@ public abstract class TableFactory {
 	 *
 	 * @return 書式の文字列表現
 	 */
-	public abstract String toString();
+	public abstract String label();
 
 	/**
 	 * この書式の詳細を述べる文字列を返します。
@@ -41,7 +42,7 @@ public abstract class TableFactory {
 	 *
 	 * @return 書式の説明
 	 */
-	public abstract String getDescription();
+	public abstract String describe();
 
 	/**
 	 * この書式の拡張子の不変リストを返します。
@@ -49,7 +50,7 @@ public abstract class TableFactory {
 	 *
 	 * @return 拡張子のリスト
 	 */
-	public abstract List<String> getExtensions();
+	public abstract List<String> extensions();
 
 	/**
 	 * 指定された入力を読み込むデコーダを返します。
@@ -107,11 +108,15 @@ public abstract class TableFactory {
 	 *
 	 * @return 交信記録
 	 *
-	 * @throws IOException 読み込み時の例外
+	 * @throws UncheckedIOException 読み込み時の例外
 	 * @throws UnsupportedOperationException 未実装の場合
 	 */
-	public final List<Item> decode(String data) throws IOException {
-		return decoder(new StringReader(data)).decode();
+	public final List<Item> decode(String data) {
+		try(final var in = new StringReader(data)) {
+			return decoder(in).decode();
+		} catch (IOException ex) {
+			throw new UncheckedIOException(ex);
+		}
 	}
 
 	/**
@@ -122,10 +127,14 @@ public abstract class TableFactory {
 	 *
 	 * @return 交信記録
 	 *
-	 * @throws IOException 読み込み時の例外
+	 * @throws UncheckedIOException 読み込み時の例外
 	 */
-	public final List<Item> decode(byte[] data) throws IOException {
-		return decoder(new ByteArrayInputStream(data)).decode();
+	public final List<Item> decode(byte[] data) {
+		try(final var in = new ByteArrayInputStream(data)) {
+			return decoder(in).decode();
+		} catch (IOException ex) {
+			throw new UncheckedIOException(ex);
+		}
 	}
 
 	/**
@@ -136,12 +145,14 @@ public abstract class TableFactory {
 	 *
 	 * @return バイト列
 	 *
-	 * @throws IOException 書き込み時の例外
+	 * @throws UncheckedIOException 書き込み時の例外
 	 */
-	public final byte[] encode(List<Item> list) throws IOException {
+	public final byte[] encode(List<Item> list) {
 		try(final var out = new ByteArrayOutputStream()) {
 			this.encoder(out).encode(list);
 			return out.toByteArray();
+		} catch (IOException ex) {
+			throw new UncheckedIOException(ex);
 		}
 	}
 
@@ -153,9 +164,22 @@ public abstract class TableFactory {
 	 *
 	 * @return バイト列
 	 *
-	 * @throws IOException 書き込み時の例外
+	 * @throws UncheckedIOException 書き込み時の例外
 	 */
-	public final byte[] encode(Item...sequence) throws IOException {
+	public final byte[] encode(Item...sequence) {
 		return encode(List.of(sequence));
+	}
+
+	/**
+	 * この書式のファイルフィルタへの表示に適した文字列を返します。
+	 *
+	 *
+	 * @return 書式の文字列表現
+	 */
+	@Override
+	public final String toString() {
+		final var join = new StringJoiner(";", "|", "|");
+		for(var type: extensions()) join.add(String.format("*.%s", type));
+		return String.valueOf(label()).concat(join.toString()).toString();
 	}
 }

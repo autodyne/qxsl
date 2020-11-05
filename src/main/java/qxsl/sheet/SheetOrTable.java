@@ -5,7 +5,7 @@
 *******************************************************************************/
 package qxsl.sheet;
 
-import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.ServiceLoader;
 
@@ -53,12 +53,12 @@ public final class SheetOrTable {
 	 *
 	 * @return 抽出された交信記録
 	 *
-	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
+	 * @throws UncheckedIOException 読み込み時の例外
 	 */
-	public List<Item> unpack(byte[] binary) throws IOException {
+	public List<Item> unpack(byte[] binary) {
 		try {
 			return tables.decode(sheets.unpack(binary));
-		} catch (IOException ex) {
+		} catch (UncheckedIOException ex) {
 			return tables.decode(binary);
 		}
 	}
@@ -71,12 +71,12 @@ public final class SheetOrTable {
 	 *
 	 * @return 抽出された交信記録
 	 *
-	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
+	 * @throws UncheckedIOException 読み込み時の例外
 	 */
-	public List<Item> unpack(String string) throws IOException {
+	public List<Item> unpack(String string) {
 		try {
 			return tables.decode(sheets.unpack(string));
-		} catch (IOException ex) {
+		} catch (UncheckedIOException ex) {
 			return tables.decode(string);
 		}
 	}

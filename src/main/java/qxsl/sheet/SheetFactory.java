@@ -7,6 +7,7 @@ package qxsl.sheet;
 
 import java.io.*;
 import java.util.List;
+import java.util.StringJoiner;
 
 /**
  * 交信記録を要約する書式はこのインターフェースを継承します。
@@ -23,7 +24,7 @@ public abstract class SheetFactory {
 	 *
 	 * @return 書式の名前
 	 */
-	public abstract String getName();
+	public abstract String name();
 
 	/**
 	 * この書式の表示に適した文字列を返します。
@@ -31,7 +32,7 @@ public abstract class SheetFactory {
 	 *
 	 * @return 書式の文字列表現
 	 */
-	public abstract String toString();
+	public abstract String label();
 
 	/**
 	 * この書式の詳細を述べる文字列を返します。
@@ -39,7 +40,7 @@ public abstract class SheetFactory {
 	 *
 	 * @return 書式の説明
 	 */
-	public abstract String getDescription();
+	public abstract String describe();
 
 	/**
 	 * この書式の拡張子の不変リストを返します。
@@ -47,7 +48,7 @@ public abstract class SheetFactory {
 	 *
 	 * @return 拡張子のリスト
 	 */
-	public abstract List<String> getExtensions();
+	public abstract List<String> extensions();
 
 	/**
 	 * 交信記録を抽出する鍵の文字列を返します。
@@ -113,12 +114,14 @@ public abstract class SheetFactory {
 	 *
 	 * @return 抽出された交信記録
 	 *
-	 * @throws IOException 読み込み時の例外
+	 * @throws UncheckedIOException 読み込み時の例外
 	 * @throws UnsupportedOperationException 未実装の場合
 	 */
-	public final byte[] unpack(String data) throws IOException {
-		try(final var reader = new StringReader(data)) {
-			return decoder(reader).decode().getBinary(getTableKey());
+	public final byte[] unpack(String data) {
+		try(final var in = new StringReader(data)) {
+			return decoder(in).decode().getBinary(getTableKey());
+		} catch (IOException ex) {
+			throw new UncheckedIOException(ex);
 		}
 	}
 
@@ -130,11 +133,26 @@ public abstract class SheetFactory {
 	 *
 	 * @return 抽出された交信記録
 	 *
-	 * @throws IOException 読み込み時の例外
+	 * @throws UncheckedIOException 読み込み時の例外
 	 */
-	public final byte[] unpack(byte[] data) throws IOException {
-		try(final var stream = new ByteArrayInputStream(data)) {
-			return decoder(stream).decode().getBinary(getTableKey());
+	public final byte[] unpack(byte[] data) {
+		try(final var in = new ByteArrayInputStream(data)) {
+			return decoder(in).decode().getBinary(getTableKey());
+		} catch (IOException ex) {
+			throw new UncheckedIOException(ex);
 		}
+	}
+
+	/**
+	 * この書式のファイルフィルタへの表示に適した文字列を返します。
+	 *
+	 *
+	 * @return 書式の文字列表現
+	 */
+	@Override
+	public final String toString() {
+		final var join = new StringJoiner(";", "|", "|");
+		for(var type: extensions()) join.add(String.format("*.%s", type));
+		return String.valueOf(label()).concat(join.toString()).toString();
 	}
 }

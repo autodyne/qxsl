@@ -11,6 +11,7 @@ import java.util.stream.IntStream;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.xml.sax.SAXException;
 
 import qxsl.draft.*;
 import qxsl.model.Item;
@@ -36,7 +37,7 @@ public final class QxmlFactoryTest extends Assertions {
 
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
-	public void testDecode(int numItems) throws Exception {
+	public void testDecode(int numItems) throws SAXException {
 		final var items = new ArrayList<Item>();
 		for(int row = 0; row < numItems; row++) {
 			final var item = new Item();

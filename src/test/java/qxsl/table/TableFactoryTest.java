@@ -32,25 +32,31 @@ public final class TableFactoryTest extends Assertions {
 
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
-	public void testGetName(TableFactory format) {
-		assertThat(format.getName()).isNotEmpty();
+	public void testName(TableFactory format) {
+		assertThat(format.name()).isNotEmpty();
+	}
+
+	@ParameterizedTest
+	@MethodSource("testMethodSource")
+	public void testLabel(TableFactory format) {
+		assertThat(format.label()).isNotEmpty();
+	}
+
+	@ParameterizedTest
+	@MethodSource("testMethodSource")
+	public void testDescribe(TableFactory format) {
+		assertThat(format.describe()).isNotNull();
+	}
+
+	@ParameterizedTest
+	@MethodSource("testMethodSource")
+	public void testExtensions(TableFactory format) {
+		assertThat(format.extensions()).isNotEmpty();
 	}
 
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
 	public void testToString(TableFactory format) {
 		assertThat(format.toString()).isNotEmpty();
-	}
-
-	@ParameterizedTest
-	@MethodSource("testMethodSource")
-	public void testGetDescription(TableFactory format) {
-		assertThat(format.getDescription()).isNotNull();
-	}
-
-	@ParameterizedTest
-	@MethodSource("testMethodSource")
-	public void testGetExtensions(TableFactory format) {
-		assertThat(format.getExtensions()).isNotEmpty();
 	}
 }

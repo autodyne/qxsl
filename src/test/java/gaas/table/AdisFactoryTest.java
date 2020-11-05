@@ -5,7 +5,6 @@
 *******************************************************************************/
 package gaas.table;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 import javax.xml.namespace.QName;
@@ -37,7 +36,7 @@ public final class AdisFactoryTest extends Assertions {
 
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
-	public void testDecode(int numItems) throws IOException {
+	public void testDecode(int numItems) {
 		final var space = "adif.org";
 		final var items = new ArrayList<Item>();
 		for(int row = 0; row < numItems; row++) {

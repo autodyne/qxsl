@@ -47,6 +47,7 @@ elva.form.SectionForm
 elva.form.SentForm
 elva.form.SetForm
 elva.form.SetfForm
+elva.form.StaticForm
 elva.form.SubForm
 elva.form.SubSeqForm
 elva.form.SuccessForm

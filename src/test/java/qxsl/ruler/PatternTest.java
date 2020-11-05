@@ -61,9 +61,9 @@ public final class PatternTest extends Assertions {
 
 	@ParameterizedTest
 	@MethodSource("items")
-	public void test(Item item, TableFactory fmt) throws Exception {
-		final var seq1 = fmt.encode(rule.transform(item, fmt.getName()));
-		final var seq2 = rule.normalize(fmt.decode(seq1), fmt.getName());
+	public void test(Item item, TableFactory fmt) {
+		final var seq1 = fmt.encode(rule.transform(item, fmt.name()));
+		final var seq2 = rule.normalize(fmt.decode(seq1), fmt.name());
 		final var back = seq2.get(0);
 		back.set(Name.from(item));
 		if(Mode.from(back).isRTTY()) back.set(Mode.from(item));

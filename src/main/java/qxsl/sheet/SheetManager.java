@@ -6,6 +6,7 @@
 package qxsl.sheet;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 import java.util.StringJoiner;
@@ -60,8 +61,8 @@ public final class SheetManager implements Iterable<SheetFactory> {
 	 *
 	 * @return 対応する書式 またはnull
 	 */
-	public final SheetFactory getFactory(String name) {
-		for(var f: list) if(f.getName().equals(name)) return f;
+	public final SheetFactory factory(String name) {
+		for(var f: list) if(f.name().equals(name)) return f;
 		return null;
 	}
 
@@ -73,9 +74,9 @@ public final class SheetManager implements Iterable<SheetFactory> {
 	 *
 	 * @return 抽出された交信記録
 	 *
-	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
+	 * @throws UncheckedIOException 読み込み時の例外
 	 */
-	public final byte[] unpack(byte[] binary) throws IOException {
+	public final byte[] unpack(byte[] binary) {
 		final var join = new StringJoiner("\n");
 		for(var f: this) try {
 			return f.unpack(binary);
@@ -83,7 +84,9 @@ public final class SheetManager implements Iterable<SheetFactory> {
 			join.add(String.format("-(%s):", f));
 			join.add(ex.toString());
 		}
-		throw new IOException(join.toString());
+		final var ms = join.toString();
+		final var ex = new IOException(ms);
+		throw new UncheckedIOException(ex);
 	}
 
 	/**
@@ -94,9 +97,9 @@ public final class SheetManager implements Iterable<SheetFactory> {
 	 *
 	 * @return 抽出された交信記録
 	 *
-	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
+	 * @throws UncheckedIOException 読み込み時の例外
 	 */
-	public final byte[] unpack(String string) throws IOException {
+	public final byte[] unpack(String string) {
 		final var join = new StringJoiner("\n");
 		for(var f: this) try {
 			return f.unpack(string);
@@ -104,6 +107,8 @@ public final class SheetManager implements Iterable<SheetFactory> {
 			join.add(String.format("-(%s):", f));
 			join.add(ex.toString());
 		}
-		throw new IOException(join.toString());
+		final var ms = join.toString();
+		final var ex = new IOException(ms);
+		throw new UncheckedIOException(ex);
 	}
 }

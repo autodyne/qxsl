@@ -693,6 +693,14 @@ assigns the specified field value into the item.
 (setf item qname value)
 ```
 
+### static
+
+returns the value of the specified static field.
+
+```lisp
+(static class name)
+```
+
 ### -
 
 performs subtraction and returns a real value.

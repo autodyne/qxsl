@@ -52,13 +52,12 @@ public final class Summary implements Serializable {
 	 * 有効な交信と無効な交信を分離します。
 	 *
 	 *
-	 * @param form 判定基準
 	 * @param list 交信記録
 	 */
 	private final void sort(List<Item> list) {
 		for(var item: list) {
 			final var msg = fml.verify(item);
-			final var idx = fml.unique(item);
+			final var idx = fml.unique(msg.item());
 			if(acc.containsKey(idx)) rej.put(idx, msg);
 			else if(msg.isFailure()) rej.put(idx, msg);
 			else if(msg.isSuccess()) acc.put(idx, msg);
@@ -108,7 +107,7 @@ public final class Summary implements Serializable {
 	}
 
 	/**
-	 * 指定された位置のマルチ集合を返します。
+	 * 指定された位置のマルチ集合を集計します。
 	 *
 	 *
 	 * @param rank 識別子の位置
@@ -122,7 +121,7 @@ public final class Summary implements Serializable {
 	}
 
 	/**
-	 * マルチ集合を順番のリストを返します。
+	 * マルチ集合を順に並べたリストを返します。
 	 *
 	 *
 	 * @return マルチ集合の列
@@ -135,7 +134,7 @@ public final class Summary implements Serializable {
 	}
 
 	/**
-	 * 得点とマルチ集合との配列を返します。
+	 * 得点とマルチ集合を並べた配列を返します。
 	 *
 	 *
 	 * @return 得点とマルチ集合の配列

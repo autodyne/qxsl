@@ -5,7 +5,6 @@
 *******************************************************************************/
 package gaas.table;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 
@@ -57,7 +56,7 @@ public final class CBinFactoryTest extends Assertions {
 
 	@ParameterizedTest
 	@MethodSource("testMethodSource")
-	public void testDecode(int numItems) throws IOException {
+	public void testDecode(int numItems) {
 		final var items = new ArrayList<Item>();
 		for(int row = 0; row < numItems; row++) {
 			final var item = new Item();

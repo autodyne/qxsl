@@ -6,6 +6,7 @@
 package qxsl.table;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
@@ -63,8 +64,8 @@ public final class TableManager implements Iterable<TableFactory> {
 	 *
 	 * @return 対応する書式 またはnull
 	 */
-	public final TableFactory getFactory(String name) {
-		for(var f: list) if(f.getName().equals(name)) return f;
+	public final TableFactory factory(String name) {
+		for(var f: list) if(f.name().equals(name)) return f;
 		return null;
 	}
 
@@ -76,9 +77,9 @@ public final class TableManager implements Iterable<TableFactory> {
 	 *
 	 * @return 交信記録
 	 *
-	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
+	 * @throws UncheckedIOException 読み込み時の例外
 	 */
-	public final List<Item> decode(byte[] binary) throws IOException {
+	public final List<Item> decode(byte[] binary) {
 		final var join = new StringJoiner("\n");
 		for(var f: this) try {
 			return f.decode(binary);
@@ -86,7 +87,9 @@ public final class TableManager implements Iterable<TableFactory> {
 			join.add(String.format("-(%s):", f));
 			join.add(ex.toString());
 		}
-		throw new IOException(join.toString());
+		final var ms = join.toString();
+		final var ex = new IOException(ms);
+		throw new UncheckedIOException(ex);
 	}
 
 	/**
@@ -97,9 +100,9 @@ public final class TableManager implements Iterable<TableFactory> {
 	 *
 	 * @return 交信記録
 	 *
-	 * @throws IOException 読み込み時の例外もしくは書式が未知の場合
+	 * @throws UncheckedIOException 読み込み時の例外
 	 */
-	public final List<Item> decode(String string) throws IOException {
+	public final List<Item> decode(String string) {
 		final var join = new StringJoiner("\n");
 		for(var f: this) try {
 			return f.decode(string);
@@ -107,6 +110,8 @@ public final class TableManager implements Iterable<TableFactory> {
 			join.add(String.format("-(%s):", f));
 			join.add(ex.toString());
 		}
-		throw new IOException(join.toString());
+		final var ms = join.toString();
+		final var ex = new IOException(ms);
+		throw new UncheckedIOException(ex);
 	}
 }
