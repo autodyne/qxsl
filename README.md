@@ -174,12 +174,13 @@ dependencies {
 $ gradle build javadoc publish
 ```
 
-You can create a native library instead of a JAR file.
+You can create a native command line application instead of a JAR file.
 [GraalVM](https://www.graalvm.org) must be installed before compilation.
-Then run the command manually as follows:
+Then run the commands manually as follows:
 
 ```shell
 $ native-image -cp build/libs/qxsl.jar
+$ qxsl.exe format foo.adi bar.adx adxs
 ```
 
 ## Contribution

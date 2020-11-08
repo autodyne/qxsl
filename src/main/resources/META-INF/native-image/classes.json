@@ -1,0 +1,1850 @@
+[
+	{
+		"name": "com.sun.org.apache.xerces.internal.impl.dv.xs.SchemaDVFactoryImpl",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.AddForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.AndForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.ArrayForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.AssertForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.BlockForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.CadrForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.CarForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.CatchForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.CddrForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.CdrForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.ConsForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.ContestForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.DivForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.EqForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.EqualForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.EvalForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.FailureForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.FormatForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.GeForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.GetfForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.GtForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.IfForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.ImportForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.ItemForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.LambdaForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.LeForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.LengthForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.LetForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.ListForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.LoadForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.LtForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.MemberForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.MethodForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.ModForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.MulForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.NameForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.NilForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.NotForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.NthForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.NullForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.OrForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.PatternForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.QuasiForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.QuoteForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.RcvdForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.SectionForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.SentForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.SetForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.SetfForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.StaticForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.SubForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.SubSeqForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.SuccessForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.SymbolForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.SyntaxForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.ThrowForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.TypeForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.UqsplForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.UquotForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.XorForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.lang.ElvaInfo",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.draft.BandFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.draft.CallFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.draft.CodeFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.draft.ModeFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.draft.Mul1Factory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.draft.Mul2Factory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.draft.NameFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.draft.NoteFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.draft.RSTQFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.draft.TimeFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.draft.WattFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.sheet.Cab3Factory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.sheet.JarlFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.table.AdisFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.table.AdxsFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.table.CBinFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.table.CTxtFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.table.CqwwFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.table.JarlFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.table.QxmlFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.table.ZAllFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.table.ZBinFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.table.ZDosFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Appendable",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.AutoCloseable",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Boolean",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Byte",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.CharSequence",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Character",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Class",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.ClassLoader",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.ClassValue",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Cloneable",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Comparable",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Compiler",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Deprecated",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Double",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Enum",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Float",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.FunctionalInterface",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.InheritableThreadLocal",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Integer",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Iterable",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Long",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Math",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Module",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Number",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Object",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Override",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Package",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Process",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.ProcessBuilder",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.ProcessHandle",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Readable",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Runnable",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Runtime",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.RuntimePermission",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.SafeVarargs",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.SecurityManager",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Short",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.StackTraceElement",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.StackWalker",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.StrictMath",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.String",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.StringBuffer",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.StringBuilder",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.SuppressWarnings",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.System",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Thread",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.ThreadGroup",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.ThreadLocal",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.lang.Void",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.math.BigDecimal",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.math.BigInteger",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.math.MathContext",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.math.RoundingMode",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.Clock",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.DayOfWeek",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.Duration",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.Instant",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.LocalDate",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.LocalDateTime",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.LocalTime",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.Month",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.MonthDay",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.OffsetDateTime",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.OffsetTime",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.Period",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.Year",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.YearMonth",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.ZoneId",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.ZoneOffset",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.ZonedDateTime",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.format.DateTimeFormatter",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.format.DateTimeFormatterBuilder",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.format.DecimalStyle",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.format.FormatStyle",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.format.ResolverStyle",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.format.SignStyle",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.format.TextStyle",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.temporal.ChronoField",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.temporal.ChronoUnit",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.temporal.IsoFields",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.temporal.JulianFields",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.temporal.Temporal",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.temporal.TemporalAccessor",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.temporal.TemporalAdjuster",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.temporal.TemporalAdjusters",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.temporal.TemporalAmount",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.temporal.TemporalField",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.temporal.TemporalQueries",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.temporal.TemporalQuery",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.temporal.TemporalUnit",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.temporal.ValueRange",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.time.temporal.WeekFields",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.AbstractCollection",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.AbstractList",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.AbstractMap",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.AbstractQueue",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.AbstractSequentialList",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.AbstractSet",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.ArrayDeque",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.ArrayList",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Arrays",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Base64",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.BitSet",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Calendar",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Collection",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Collections",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Comparator",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Currency",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Date",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Deque",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Dictionary",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.DoubleSummaryStatistics",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.EnumMap",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.EnumSet",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Enumeration",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.EventListener",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.EventListenerProxy",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.EventObject",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Formattable",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.FormattableFlags",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Formatter",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.GregorianCalendar",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.HashMap",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.HashSet",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Hashtable",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.IdentityHashMap",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.IntSummaryStatistics",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Iterator",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.LinkedHashMap",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.LinkedHashSet",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.LinkedList",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.List",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.ListIterator",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.ListResourceBundle",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Locale",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.LongSummaryStatistics",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Map",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.NavigableMap",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.NavigableSet",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Objects",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Observable",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Observer",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Optional",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.OptionalDouble",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.OptionalInt",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.OptionalLong",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.PrimitiveIterator",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.PriorityQueue",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Properties",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.PropertyPermission",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.PropertyResourceBundle",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Queue",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Random",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.RandomAccess",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.ResourceBundle",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Scanner",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.ServiceLoader",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Set",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.SimpleTimeZone",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.SortedMap",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.SortedSet",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Spliterator",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Spliterators",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.SplittableRandom",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Stack",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.StringJoiner",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.StringTokenizer",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.TimeZone",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Timer",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.TimerTask",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.TreeMap",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.TreeSet",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.UUID",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.Vector",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "java.util.WeakHashMap",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.draft.Band",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.draft.Call",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.draft.Code",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.draft.Mode",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.draft.Mul1",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.draft.Mul2",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.draft.Name",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.draft.Note",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.draft.Qxsl",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.draft.RSTQ",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.draft.Time",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.draft.Watt",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.field.FieldFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.field.FieldManager",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.local.LocalCityBase",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.local.LocalCityItem",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.model.Both",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.model.Item",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.model.Node",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.model.Rcvd",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.model.Sent",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.ruler.Contest",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.ruler.Failure",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.ruler.Formula",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.ruler.Library",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.ruler.Message",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.ruler.Pattern",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.ruler.RuleKit",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.ruler.Section",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.ruler.Success",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.ruler.Summary",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.sheet.BasicFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.sheet.PrintFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.sheet.SheetDecoder",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.sheet.SheetEncoder",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.sheet.SheetFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.sheet.SheetManager",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.sheet.SheetOrTable",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.table.BasicFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.table.PrintDecoder",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.table.PrintEncoder",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.table.PrintFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.table.TableDecoder",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.table.TableEncoder",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.table.TableFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.table.TableManager",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.value.Field",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.value.Tuple",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	}
+]

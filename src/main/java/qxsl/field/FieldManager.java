@@ -41,7 +41,7 @@ public final class FieldManager implements Iterable<FieldFactory> {
 	}
 
 	/**
-	 * 指定されたローダを参照するインスタンスを構築します。
+	 * 指定されたローダから書式の実装を検索します。
 	 *
 	 *
 	 * @param cl 書式を検出するクラスローダ
@@ -52,7 +52,7 @@ public final class FieldManager implements Iterable<FieldFactory> {
 	}
 
 	/**
-	 * このインスタンスが検出した書式を返します。
+	 * このインスタンスが検出した書式を列挙します。
 	 *
 	 *
 	 * @return 書式のイテレータ

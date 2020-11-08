@@ -5,11 +5,10 @@ def utf8 = 'UTF-8'
 def java = '11'
 def dist = 'dist'
 
-repositories {
-	mavenCentral()
-}
+repositories.mavenCentral()
 
 dependencies {
+	implementation 'info.picocli:picocli:4.5.2'
 	testImplementation 'org.assertj:assertj-core:+'
 	testImplementation 'org.jruby:jruby-core:+'
 	testImplementation 'org.junit.jupiter:junit-jupiter-engine:+'
@@ -29,8 +28,11 @@ compileTestJava {
 	targetCompatibility = java
 }
 
-test {
-	useJUnitPlatform()
+test.useJUnitPlatform()
+
+jar.manifest.attributes 'Main-Class': 'gaas.alone.Gadget'
+jar.from configurations.compileClasspath.collect {
+	it.isDirectory()? it: zipTree(it)
 }
 
 task checkout(type: Exec) {

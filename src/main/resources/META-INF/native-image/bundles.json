@@ -1,0 +1,11 @@
+{
+	"resources": [
+		{"pattern": "^elva/.*"},
+		{"pattern": "^gaas/.*"},
+		{"pattern": "^qxsl/.*"}
+	],
+	"bundles": [
+		{"name": "com.sun.org.apache.xerces.internal.impl.msg.XMLMessages"},
+		{"name": "com.sun.org.apache.xerces.internal.impl.msg.XMLSchemaMessages"}
+	]
+}

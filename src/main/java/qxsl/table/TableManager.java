@@ -36,7 +36,7 @@ public final class TableManager implements Iterable<TableFactory> {
 	}
 
 	/**
-	 * 指定されたローダを参照するインスタンスを構築します。
+	 * 指定されたローダから書式の実装を検索します。
 	 *
 	 *
 	 * @param cl 書式の実装を検出するクラスローダ
@@ -46,7 +46,7 @@ public final class TableManager implements Iterable<TableFactory> {
 	}
 
 	/**
-	 * このインスタンスが検出した書式を返します。
+	 * このインスタンスが検出した書式を列挙します。
 	 *
 	 *
 	 * @return 書式のイテレータ
@@ -57,7 +57,7 @@ public final class TableManager implements Iterable<TableFactory> {
 	}
 
 	/**
-	 * 指定された名前を持つ書式の実装を検索します。
+	 * 指定された名前もしくはラベルを持つ書式の実装を検索します。
 	 *
 	 *
 	 * @param name 属性の名前
@@ -66,6 +66,7 @@ public final class TableManager implements Iterable<TableFactory> {
 	 */
 	public final TableFactory factory(String name) {
 		for(var f: list) if(f.name().equals(name)) return f;
+		for(var f: list) if(f.label().equals(name)) return f;
 		return null;
 	}
 
