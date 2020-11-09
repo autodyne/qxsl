@@ -43,4 +43,16 @@ public abstract class Library {
 	public final Pattern pattern() {
 		return (Pattern) this;
 	}
+
+	/**
+	 * 規約が参照する変数値を返します。
+	 *
+	 *
+	 * @param name 変数の名前
+	 *
+	 * @return 変数の値
+	 *
+	 * @since 2020/09/27
+	 */
+	public abstract Object get(String name);
 }

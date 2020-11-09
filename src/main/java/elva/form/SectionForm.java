@@ -8,6 +8,7 @@ package elva.form;
 import elva.lang.ElvaEval;
 import elva.lang.FormBase;
 import elva.lang.ListBase;
+import elva.lang.NameNode;
 import elva.lang.NativeOp;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
@@ -69,6 +70,21 @@ final class SectionImpl extends Section {
 		this.mult = eval.apply(rule.get(4)).form();
 		this.calc = eval.apply(rule.get(5)).form();
 		this.eval = eval;
+	}
+
+	/**
+	 * 規約が参照する変数値を返します。
+	 *
+	 *
+	 * @param name 変数の名前
+	 *
+	 * @return 変数の値
+	 *
+	 * @since 2020/09/27
+	 */
+	@Override
+	public final Object get(String name) {
+		return eval.apply(new NameNode(name)).value();
 	}
 
 	/**

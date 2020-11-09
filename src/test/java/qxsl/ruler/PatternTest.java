@@ -5,10 +5,12 @@
 *******************************************************************************/
 package qxsl.ruler;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -62,13 +64,20 @@ public final class PatternTest extends Assertions {
 	@ParameterizedTest
 	@MethodSource("items")
 	public void test(Item item, TableFactory fmt) {
-		final var seq1 = fmt.encode(rule.transform(item, fmt.name()));
-		final var seq2 = rule.normalize(fmt.decode(seq1), fmt.name());
+		final var seq1 = fmt.encode(rule.transform(item, fmt.type()));
+		final var seq2 = rule.normalize(fmt.decode(seq1), fmt.type());
 		final var back = seq2.get(0);
 		back.set(Name.from(item));
 		if(Mode.from(back).isRTTY()) back.set(Mode.from(item));
 		item.set(Time.from(item).ofYear(2020).copyDropSecond());
 		back.set(Time.from(back).ofYear(2020).copyDropSecond());
 		assertThat(item).isEqualTo(back);
+	}
+
+	@Test
+	public void testGet() {
+		final var rule = RuleKit.load("jautil.lisp").pattern();
+		assertThat(rule.get("PHONE")).isInstanceOf(String.class);
+		assertThat(rule.get("match")).isInstanceOf(Method.class);
 	}
 }

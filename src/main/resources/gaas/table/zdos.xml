@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-<entry key="label">zLog text format (DOS)</entry>
+<entry key="name">zLog (DOS)</entry>
 <entry key="extensions">txt</entry>
 <entry key="desc-text">
 Template:

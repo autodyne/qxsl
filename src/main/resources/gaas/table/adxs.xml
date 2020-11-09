@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-<entry key="label">ADIF (ADX) Subset</entry>
+<entry key="name">Sub ADIF (ADX)</entry>
 <entry key="extensions">adx</entry>
 <entry key="desc-file">adxs.xsd</entry>
 </properties>

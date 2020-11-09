@@ -65,8 +65,11 @@ public final class TableManager implements Iterable<TableFactory> {
 	 * @return 対応する書式 またはnull
 	 */
 	public final TableFactory factory(String name) {
+		for(var f: list) if(f.type().equals(name)) return f;
 		for(var f: list) if(f.name().equals(name)) return f;
-		for(var f: list) if(f.label().equals(name)) return f;
+		for(var f: list) for(var ext: f.extensions()) {
+			if(ext.equalsIgnoreCase(name)) return f;
+		}
 		return null;
 	}
 

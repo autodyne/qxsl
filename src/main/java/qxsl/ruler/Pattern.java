@@ -25,40 +25,40 @@ public abstract class Pattern extends Library {
 	 *
 	 *
 	 * @param item 交信記録
-	 * @param form 変換前の書式 nullを許容する
+	 * @param type 変換前の書式 nullを許容する
 	 *
 	 * @return 標準的な構造の交信記録
 	 *
 	 * @since 2020/09/04
 	 */
-	public abstract Item normalize(Item item, String form);
+	public abstract Item normalize(Item item, String type);
 
 	/**
 	 * 交信記録を指定された書式に適合する構造に変換します。
 	 *
 	 *
 	 * @param item 交信記録
-	 * @param form 変換後の書式
+	 * @param type 変換後の書式
 	 *
 	 * @return 書式に適合する交信記録
 	 *
 	 * @since 2020/09/04
 	 */
-	public abstract Item transform(Item item, String form);
+	public abstract Item transform(Item item, String type);
 
 	/**
 	 * 交信記録をライブラリが定義する標準構造に変換します。
 	 *
 	 *
 	 * @param list 交信記録
-	 * @param form 変換前の書式 nullを許容する
+	 * @param type 変換前の書式 nullを許容する
 	 *
 	 * @return 標準的な構造の交信記録
 	 *
 	 * @since 2020/10/25
 	 */
-	public final List<Item> normalize(List<Item> list, String form) {
-		return list.stream().map(i -> normalize(i, form)).collect(toList());
+	public final List<Item> normalize(List<Item> list, String type) {
+		return list.stream().map(i -> normalize(i, type)).collect(toList());
 	}
 
 	/**
@@ -66,13 +66,13 @@ public abstract class Pattern extends Library {
 	 *
 	 *
 	 * @param list 交信記録
-	 * @param form 変換後の書式
+	 * @param type 変換後の書式
 	 *
 	 * @return 書式に適合する交信記録
 	 *
 	 * @since 2020/10/25
 	 */
-	public final List<Item> transform(List<Item> list, String form) {
-		return list.stream().map(i -> transform(i, form)).collect(toList());
+	public final List<Item> transform(List<Item> list, String type) {
+		return list.stream().map(i -> transform(i, type)).collect(toList());
 	}
 }

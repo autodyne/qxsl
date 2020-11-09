@@ -59,7 +59,7 @@ public abstract class BasicFactory extends TableFactory {
 	 * @return 書式の名前
 	 */
 	@Override
-	public final String name() {
+	public final String type() {
 		return name;
 	}
 
@@ -70,8 +70,8 @@ public abstract class BasicFactory extends TableFactory {
 	 * @return 書式の文字列表現
 	 */
 	@Override
-	public final String label() {
-		return get("label");
+	public final String name() {
+		return get("name");
 	}
 
 	/**
@@ -81,7 +81,7 @@ public abstract class BasicFactory extends TableFactory {
 	 * @return 書式の説明
 	 */
 	@Override
-	public final String describe() {
+	public final String help() {
 		final var text = get("desc-text");
 		final var file = get("desc-file");
 		if(text != null) return text;

@@ -5,6 +5,8 @@
 *******************************************************************************/
 package qxsl.ruler;
 
+import java.lang.reflect.Method;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -44,5 +46,12 @@ public final class SectionTest extends Assertions {
 	@MethodSource("sections")
 	public void testCode(Section rule) {
 		assertThat(rule.code()).isNotEmpty();
+	}
+
+	@ParameterizedTest
+	@MethodSource("sections")
+	public void testGet(Section rule) {
+		assertThat(rule.get("MORSE")).isInstanceOf(String.class);
+		assertThat(rule.get("match")).isInstanceOf(Method.class);
 	}
 }

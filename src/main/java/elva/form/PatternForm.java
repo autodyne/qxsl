@@ -8,6 +8,7 @@ package elva.form;
 import elva.lang.ElvaEval;
 import elva.lang.FormBase;
 import elva.lang.ListBase;
+import elva.lang.NameNode;
 import elva.lang.NativeOp;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
@@ -59,6 +60,21 @@ final class PatternImpl extends Pattern {
 		this.norm = eval.apply(rule.get(0)).form();
 		this.tran = eval.apply(rule.get(1)).form();
 		this.eval = eval;
+	}
+
+	/**
+	 * 規約が参照する変数値を返します。
+	 *
+	 *
+	 * @param name 変数の名前
+	 *
+	 * @return 変数の値
+	 *
+	 * @since 2020/09/27
+	 */
+	@Override
+	public final Object get(String name) {
+		return eval.apply(new NameNode(name)).value();
 	}
 
 	/**

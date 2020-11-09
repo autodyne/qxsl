@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-<entry key="label">zLog binary format</entry>
+<entry key="name">zLog (ZLO)</entry>
 <entry key="extensions">zlo</entry>
 <entry key="desc-text"></entry>
 </properties>

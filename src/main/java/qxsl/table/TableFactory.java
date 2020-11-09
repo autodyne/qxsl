@@ -26,7 +26,7 @@ public abstract class TableFactory {
 	 *
 	 * @return 書式の名前
 	 */
-	public abstract String name();
+	public abstract String type();
 
 	/**
 	 * この書式の表示に適した文字列を返します。
@@ -34,7 +34,7 @@ public abstract class TableFactory {
 	 *
 	 * @return 書式の文字列表現
 	 */
-	public abstract String label();
+	public abstract String name();
 
 	/**
 	 * この書式の詳細を述べる文字列を返します。
@@ -42,7 +42,7 @@ public abstract class TableFactory {
 	 *
 	 * @return 書式の説明
 	 */
-	public abstract String describe();
+	public abstract String help();
 
 	/**
 	 * この書式の拡張子の不変リストを返します。
@@ -179,7 +179,7 @@ public abstract class TableFactory {
 	@Override
 	public final String toString() {
 		final var join = new StringJoiner(";", "|", "|");
-		for(var type: extensions()) join.add(String.format("*.%s", type));
-		return String.valueOf(label()).concat(join.toString()).toString();
+		for(var ext: extensions()) join.add("*.".concat(ext));
+		return String.valueOf(name()).concat(join.toString());
 	}
 }

@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import elva.lang.ElvaEval;
 import elva.lang.FormBase;
 import elva.lang.ListBase;
+import elva.lang.NameNode;
 import elva.lang.NativeOp;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
@@ -70,6 +71,21 @@ final class ContestImpl extends Contest {
 		this.last = eval.scope.get("final-day").form();
 		this.dead = eval.scope.get("dead-line").form();
 		this.eval = eval;
+	}
+
+	/**
+	 * 規約が参照する変数値を返します。
+	 *
+	 *
+	 * @param name 変数の名前
+	 *
+	 * @return 変数の値
+	 *
+	 * @since 2020/09/27
+	 */
+	@Override
+	public final Object get(String name) {
+		return eval.apply(new NameNode(name)).value();
 	}
 
 	/**

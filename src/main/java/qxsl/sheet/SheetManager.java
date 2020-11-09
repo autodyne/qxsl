@@ -62,8 +62,11 @@ public final class SheetManager implements Iterable<SheetFactory> {
 	 * @return 対応する書式 またはnull
 	 */
 	public final SheetFactory factory(String name) {
+		for(var f: list) if(f.type().equals(name)) return f;
 		for(var f: list) if(f.name().equals(name)) return f;
-		for(var f: list) if(f.label().equals(name)) return f;
+		for(var f: list) for(var ext: f.extensions()) {
+			if(ext.equalsIgnoreCase(name)) return f;
+		}
 		return null;
 	}
 
