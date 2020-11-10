@@ -202,7 +202,7 @@ public abstract class ListBase extends NodeBase {
 		final var target = new ArrayList<Object>(size());
 		final var domain = Arrays.stream(cls).iterator();
 		while(source.hasNext() || domain.hasNext()) {
-			target.add(source.next().ofType(domain.next()));
+			target.add(source.next().to(domain.next()));
 		}
 		return target.toArray();
 	}

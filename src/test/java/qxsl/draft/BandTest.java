@@ -23,18 +23,17 @@ import qxsl.junit.RandomNumberParameterExtension;
 public final class BandTest extends Assertions {
 	@Test
 	public void testEquals() {
-		assertThat(new Band("1.9MHz")).isEqualTo(new Band(    1_900));
-		assertThat(new Band("3.5MHz")).isEqualTo(new Band(    3_500));
-		assertThat(new Band("144MHz")).isEqualTo(new Band(  144_000));
+		assertThat(new Band("1.9MHz")).isEqualTo(new Band(1_900));
+		assertThat(new Band("3.5MHz")).isEqualTo(new Band(3_500));
+		assertThat(new Band("144MHz")).isEqualTo(new Band(144_000));
 		assertThat(new Band("2.4GHz")).isEqualTo(new Band(2_400_000));
 	}
 
 	@Test
-	public void testToString() {
-		assertThat(new Band(    1_900)).hasToString("1.9MHz");
-		assertThat(new Band(    3_500)).hasToString("3.5MHz");
-		assertThat(new Band(  430_000)).hasToString("430MHz");
-		assertThat(new Band(5_600_000)).hasToString("5.6GHz");
+	public void testToGHzString() {
+		assertThat(new Band(1_200_000).toGHzString()).isEqualTo("1.2GHz");
+		assertThat(new Band(2_400_000).toGHzString()).isEqualTo("2.4GHz");
+		assertThat(new Band(5_600_000).toGHzString()).isEqualTo("5.6GHz");
 	}
 
 	@Test
@@ -48,13 +47,14 @@ public final class BandTest extends Assertions {
 	public void testToMHzString() {
 		assertThat(new Band(1_900).toMHzString()).isEqualTo("1.9MHz");
 		assertThat(new Band(3_500).toMHzString()).isEqualTo("3.5MHz");
-		assertThat(new Band(7_000).toMHzString()).isEqualTo(  "7MHz");
+		assertThat(new Band(7_000).toMHzString()).isEqualTo("7MHz");
 	}
 
 	@Test
-	public void testToGHzString() {
-		assertThat(new Band(1_200_000).toGHzString()).isEqualTo("1.2GHz");
-		assertThat(new Band(2_400_000).toGHzString()).isEqualTo("2.4GHz");
-		assertThat(new Band(5_600_000).toGHzString()).isEqualTo("5.6GHz");
+	public void testToString() {
+		assertThat(new Band(1_900)).hasToString("1.9MHz");
+		assertThat(new Band(3_500)).hasToString("3.5MHz");
+		assertThat(new Band(430_000)).hasToString("430MHz");
+		assertThat(new Band(5_600_000)).hasToString("5.6GHz");
 	}
 }

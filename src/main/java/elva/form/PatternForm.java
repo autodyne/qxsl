@@ -90,7 +90,7 @@ final class PatternImpl extends Pattern {
 	 */
 	@Override
 	public final Item normalize(Item item, String form) {
-		return eval.apply(norm.form(item, form)).ofType(Item.class);
+		return eval.apply(norm.form(item, form)).to(Item.class);
 	}
 
 	/**
@@ -106,6 +106,6 @@ final class PatternImpl extends Pattern {
 	 */
 	@Override
 	public final Item transform(Item item, String form) {
-		return eval.apply(tran.form(item, form)).ofType(Item.class);
+		return eval.apply(tran.form(item, form)).to(Item.class);
 	}
 }

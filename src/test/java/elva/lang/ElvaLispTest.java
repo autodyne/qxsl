@@ -25,19 +25,19 @@ import gaas.utils.AssetUtils;
 public final class ElvaLispTest extends Assertions {
 	private static final ElvaLisp elva = new ElvaLisp();
 
-	private static final Stream<String> testMethodSource() {
-		return AssetUtils.from(elva).lines("test.lisp");
-	}
-
 	@ParameterizedTest
-	@MethodSource("testMethodSource")
+	@MethodSource("source")
 	public void test(String source) throws ScriptException {
-		final var cons = elva.scan(source);
-		if(cons.size() > 0) {
+		final var cons = ElvaLisp.scan(source);
+		if (cons.size() > 0) {
 			assertThat(cons).hasSize(2);
 			final var l = elva.eval(String.valueOf(cons.get(0)));
 			final var r = elva.eval(String.valueOf(cons.get(1)));
 			assertThat(NodeBase.wrap(l)).isEqualTo(NodeBase.wrap(r));
 		}
+	}
+
+	private static final Stream<String> source() {
+		return AssetUtils.from(elva).lines("ElvaLisp.lisp");
 	}
 }

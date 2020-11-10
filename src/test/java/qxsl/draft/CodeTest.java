@@ -23,13 +23,13 @@ import qxsl.junit.RandomStringParameterExtension.RandomString;
 @ExtendWith(RandomStringParameterExtension.class)
 public final class CodeTest extends Assertions {
 	@Test
-	public void testValue() {
-		assertThat(new Code("100110H").value()).isEqualTo("100110H");
-		assertThat(new Code("400105M").value()).isEqualTo("400105M");
+	public void testToString(@RandomString String text) {
+		assertThat(new Code(text)).hasToString(text);
 	}
 
 	@Test
-	public void testToString(@RandomString String text) {
-		assertThat(new Code(text)).hasToString(text);
+	public void testValue() {
+		assertThat(new Code("100110H").value()).isEqualTo("100110H");
+		assertThat(new Code("400105M").value()).isEqualTo("400105M");
 	}
 }

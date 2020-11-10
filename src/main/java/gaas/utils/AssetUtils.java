@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import qxsl.model.Item;
@@ -113,6 +114,20 @@ public final class AssetUtils {
 		} catch (IOException ex) {
 			throw new UncheckedIOException(ex);
 		}
+	}
+
+	/**
+	 * 指定されたリソースを行の列として読み取ります。
+	 *
+	 *
+	 * @param path リソースのパス
+	 *
+	 * @return 行の列
+	 *
+	 * @throws UncheckedIOException 読み取りに失敗した場合
+	 */
+	public final List<String> listLines(String path) {
+		return lines(path).collect(Collectors.toList());
 	}
 
 	/**

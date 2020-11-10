@@ -1,4 +1,4 @@
-;; ElvaLisp function & special-forms Tests
+;; ElvaLisp function & special-forms tests
 
 ; quote
 '(1 2 3) (list 1 2 3)

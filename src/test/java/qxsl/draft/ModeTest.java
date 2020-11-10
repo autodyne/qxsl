@@ -23,13 +23,13 @@ import qxsl.junit.RandomStringParameterExtension.RandomString;
 @ExtendWith(RandomStringParameterExtension.class)
 public final class ModeTest extends Assertions {
 	@Test
-	public void testValue() {
-		assertThat(new Mode("CW").value()).isEqualTo("CW");
-		assertThat(new Mode("AM").value()).isEqualTo("AM");
+	public void testToString(@RandomString String text) {
+		assertThat(new Mode(text)).hasToString(text.toUpperCase());
 	}
 
 	@Test
-	public void testToString(@RandomString String text) {
-		assertThat(new Mode(text)).hasToString(text.toUpperCase());
+	public void testValue() {
+		assertThat(new Mode("CW").value()).isEqualTo("CW");
+		assertThat(new Mode("AM").value()).isEqualTo("AM");
 	}
 }

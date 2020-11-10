@@ -29,11 +29,6 @@ public final class RcvdTest extends Assertions {
 	private final Watt watt = new Watt("H");
 
 	@Test
-	public void testType() {
-		assertThat(new Rcvd().name()).isEqualTo(RCVD);
-	}
-
-	@Test
 	public void testEquals() {
 		final var rcvd1 = new Rcvd();
 		final var rcvd2 = new Rcvd();
@@ -46,5 +41,10 @@ public final class RcvdTest extends Assertions {
 		assertThat(rcvd2.set(rstq).get(Qxsl.RSTQ)).isEqualTo(rstq);
 		assertThat(rcvd2.set(watt).get(Qxsl.WATT)).isEqualTo(watt);
 		assertThat(rcvd1).isEqualTo(rcvd2);
+	}
+
+	@Test
+	public void testType() {
+		assertThat(new Rcvd().name()).isEqualTo(RCVD);
 	}
 }

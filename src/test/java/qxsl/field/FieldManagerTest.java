@@ -24,12 +24,6 @@ public final class FieldManagerTest extends Assertions {
 	private final FieldManager fields = new FieldManager();
 
 	@Test
-	public void testIterator() {
-		assertThat(fields.iterator()).isNotNull();
-		assertThat(fields.iterator()).hasNext();
-	}
-
-	@Test
 	public void testGetFactory() {
 		assertThat(fields.factory(Qxsl.BAND)).isInstanceOf(BandFactory.class);
 		assertThat(fields.factory(Qxsl.CALL)).isInstanceOf(CallFactory.class);
@@ -41,5 +35,11 @@ public final class FieldManagerTest extends Assertions {
 		assertThat(fields.factory(Qxsl.RSTQ)).isInstanceOf(RSTQFactory.class);
 		assertThat(fields.factory(Qxsl.TIME)).isInstanceOf(TimeFactory.class);
 		assertThat(fields.factory(Qxsl.WATT)).isInstanceOf(WattFactory.class);
+	}
+
+	@Test
+	public void testIterator() {
+		assertThat(fields.iterator()).isNotNull();
+		assertThat(fields.iterator()).hasNext();
 	}
 }

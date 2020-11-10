@@ -5,21 +5,22 @@
 *******************************************************************************/
 package elva.lang;
 
+import java.util.Arrays;
 import javax.script.ScriptException;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
- * {@link ArraySeq}クラスのテスト用クラスです。
+ * {@link ListNode}クラスのテスト用クラスです。
  *
  *
  * @author 無線部開発班
  *
- * @since 2020/06/06
+ * @since 2020/08/05
  */
-public final class ArraySeqTest extends Assertions {
-	private final ListBase list = ArraySeq.from(7, 5, 3);
+public final class ListNodeTest extends Assertions {
+	private final ListBase list = new ListNode(Arrays.asList(7, 5, 3));
 
 	@Test
 	public void testCast() {

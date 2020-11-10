@@ -23,18 +23,6 @@ public final class TypeNodeTest extends Assertions {
 	private final TypeNode charType = new TypeNode(char.class);
 
 	@Test
-	public void testValue() {
-		assertThat(longType.value()).isEqualTo(long.class);
-		assertThat(charType.value()).isEqualTo(char.class);
-	}
-
-	@Test
-	public void testToString() {
-		assertThat(longType).hasToString("long");
-		assertThat(charType).hasToString("char");
-	}
-
-	@Test
 	public void testEquals() {
 		assertThat(longType).isEqualTo(longType);
 		assertThat(charType).isEqualTo(charType);
@@ -45,5 +33,17 @@ public final class TypeNodeTest extends Assertions {
 		final var elva = new ElvaLisp();
 		assertThat(elva.eval("long")).isEqualTo(long.class);
 		assertThat(elva.eval("char")).isEqualTo(char.class);
+	}
+
+	@Test
+	public void testToString() {
+		assertThat(longType).hasToString("long");
+		assertThat(charType).hasToString("char");
+	}
+
+	@Test
+	public void testValue() {
+		assertThat(longType.value()).isEqualTo(long.class);
+		assertThat(charType.value()).isEqualTo(char.class);
 	}
 }

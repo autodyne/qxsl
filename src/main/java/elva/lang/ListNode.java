@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @since 2020/07/10
  */
-public final class CoverSeq extends ListBase {
+public final class ListNode extends ListBase {
 	private final List<?> data;
 	private final int head;
 	private final int tail;
@@ -27,7 +27,7 @@ public final class CoverSeq extends ListBase {
 	 *
 	 * @param data 内容
 	 */
-	public CoverSeq(List<?> data) {
+	public ListNode(List<?> data) {
 		this(data, 0, data.size());
 	}
 
@@ -39,7 +39,7 @@ public final class CoverSeq extends ListBase {
 	 * @param head 先頭の位置
 	 * @param tail 末尾の位置
 	 */
-	public CoverSeq(List<?> data, int head, int tail) {
+	public ListNode(List<?> data, int head, int tail) {
 		this.data = data;
 		this.head = Math.min(head, data.size());
 		this.tail = Math.min(tail, data.size());
@@ -65,7 +65,7 @@ public final class CoverSeq extends ListBase {
 	 */
 	@Override
 	public final ListBase tail() {
-		return new CoverSeq(data, head + 1, tail);
+		return new ListNode(data, head + 1, tail);
 	}
 
 	/**
@@ -78,7 +78,7 @@ public final class CoverSeq extends ListBase {
 	 */
 	@Override
 	public final ListBase drop(int skip) {
-		return new CoverSeq(data, head + skip, tail);
+		return new ListNode(data, head + skip, tail);
 	}
 
 	/**
@@ -91,7 +91,7 @@ public final class CoverSeq extends ListBase {
 	 */
 	@Override
 	public final ListBase take(int size) {
-		return new CoverSeq(data, head, head + size);
+		return new ListNode(data, head, head + size);
 	}
 
 	/**
@@ -145,7 +145,7 @@ public final class CoverSeq extends ListBase {
 
 		@Override
 		public final NodeBase encode(Object value) {
-			return new CoverSeq((List<?>) value);
+			return new ListNode((List<?>) value);
 		}
 	}
 }

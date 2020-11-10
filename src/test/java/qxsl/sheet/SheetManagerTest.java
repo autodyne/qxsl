@@ -23,13 +23,13 @@ public final class SheetManagerTest extends Assertions {
 	private final SheetManager sheets = new SheetManager();
 
 	@Test
-	public void testIterator() {
-		assertThat(sheets.iterator()).hasNext();
-	}
-
-	@Test
 	public void testGetFactory() {
 		assertThat(sheets.factory("cab3")).isInstanceOf(Cab3Factory.class);
 		assertThat(sheets.factory("jarl")).isInstanceOf(JarlFactory.class);
+	}
+
+	@Test
+	public void testIterator() {
+		assertThat(sheets.iterator()).hasNext();
 	}
 }

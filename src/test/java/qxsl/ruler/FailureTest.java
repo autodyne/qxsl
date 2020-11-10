@@ -24,14 +24,14 @@ import qxsl.model.Item;
 @ExtendWith(RandomStringParameterExtension.class)
 public final class FailureTest extends Assertions {
 	@Test
-	public void testScore(@RandomString String text) {
-		assertThat(new Failure(new Item(), text).score()).isEqualTo(0);
-	}
-
-	@Test
 	public void testItem(@RandomString String text) {
 		final var item = new Item();
 		assertThat(new Failure(item, text).item()).isSameAs(item);
+	}
+
+	@Test
+	public void testScore(@RandomString String text) {
+		assertThat(new Failure(new Item(), text).score()).isEqualTo(0);
 	}
 
 	@Test

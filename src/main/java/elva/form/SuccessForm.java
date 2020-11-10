@@ -32,7 +32,7 @@ public final class SuccessForm extends NativeOp {
 	public Object apply(ListBase args, ElvaEval eval) {
 		final var obj = eval.apply(args.get(0));
 		final var run = eval.apply(args.get(1));
-		final var ref = obj.ofType(Item.class);
+		final var ref = obj.to(Item.class);
 		return new Success(ref, run.real().toInt());
 	}
 }

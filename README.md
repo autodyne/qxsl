@@ -22,6 +22,7 @@ qxsl is a Java library for processing amateur-radio log files, including scoring
 ## Applications
 
 - [zLog+ ZyLO](https://github.com/nextzlog/zylo).
+- [Log Conversion Tool on Command Line (qxsl.exe)](https://github.com/nextzlog/qxsl/releases/tag/nightly).
 - [Automatic Acceptance & Tabulation System (ATS)](https://github.com/nextzlog/ats4) for [the ALLJA1 contest](http://ja1zlo.u-tokyo.org/allja1).
 
 ## Sample Codes

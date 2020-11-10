@@ -189,7 +189,7 @@ public final class ElvaEval implements UnaryOperator<NodeBase> {
 			if(UQUOT.is(sexp)) return new Normal(apply(sexp));
 			if(UQSPL.is(sexp)) return new Splice(apply(sexp));
 			for(var seq: sexp.list()) quote(seq).expand(list);
-			return new Normal(new CoverSeq(list));
+			return new Normal(new ListNode(list));
 		} else return new Normal(sexp);
 	}
 }

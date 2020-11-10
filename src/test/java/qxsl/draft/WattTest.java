@@ -23,14 +23,14 @@ import qxsl.junit.RandomStringParameterExtension.RandomString;
 @ExtendWith(RandomStringParameterExtension.class)
 public final class WattTest extends Assertions {
 	@Test
+	public void testToString(@RandomString String text) {
+		assertThat(new Watt(text)).hasToString(text);
+	}
+
+	@Test
 	public void testValue() {
 		assertThat(new Watt("10kW").value()).isEqualTo("10kW");
 		assertThat(new Watt("10MW").value()).isEqualTo("10MW");
 		assertThat(new Watt("10GW").value()).isEqualTo("10GW");
-	}
-
-	@Test
-	public void testToString(@RandomString String text) {
-		assertThat(new Watt(text)).hasToString(text);
 	}
 }

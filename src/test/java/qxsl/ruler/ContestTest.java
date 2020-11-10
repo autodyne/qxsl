@@ -26,58 +26,6 @@ import gaas.utils.AssetUtils;
  * @since 2020/10/14
  */
 public final class ContestTest extends Assertions {
-	/**
-	 * コンテストの部門の名前と正しい得点を格納します。
-	 *
-	 *
-	 * @since 2020/02/23
-	 */
-	private static final class Constraint {
-		public final String label;
-		public final int score;
-		public final int total;
-		public final String[] forms;
-
-		/**
-		 * 部門の名前と素点と総得点を指定します。
-		 *
-		 * @param vals 名前と素点と総得点の配列
-		 */
-		public Constraint(String...vals) {
-			this.label = vals[0];
-			this.score = Integer.parseInt(vals[1]);
-			this.total = Integer.parseInt(vals[2]);
-			this.forms = vals[3].split(":");
-		}
-
-		/**
-		 * テスト項目として文字列表現を返します。
-		 *
-		 *
-		 * @return 文字列表現
-		 */
-		@Override
-		public final String toString() {
-			return label;
-		}
-	}
-
-	/**
-	 * 得点を計算する部門と正解をクラスパスから読み出します。
-	 *
-	 *
-	 * @return 部門と正解のリスト
-	 */
-	private static final List<Arguments> constraints() {
-		final var list = new ArrayList<Arguments>();
-		final var util = new AssetUtils(Contest.class);
-		util.lines("allja1.test").forEach(ln -> {
-			final var v = new Constraint(ln.split(", +", 4));
-			for(var f: v.forms) list.add(Arguments.of(v, f));
-		});
-		return list;
-	}
-
 	@ParameterizedTest
 	@MethodSource("constraints")
 	public void test(Constraint cs, String fmt) {
@@ -95,5 +43,34 @@ public final class ContestTest extends Assertions {
 		final var rule = RuleKit.load("allja1.lisp").contest();
 		assertThat(rule.get("DIGIT")).isInstanceOf(String.class);
 		assertThat(rule.get("split")).isInstanceOf(Method.class);
+	}
+
+	private static final List<Arguments> constraints() {
+		final var list = new ArrayList<Arguments>();
+		final var util = new AssetUtils(Contest.class);
+		for (final var ln : util.listLines("allja1.test")) {
+			final var v = new Constraint(ln.split(", +", 4));
+			for (var f : v.forms) list.add(Arguments.of(v, f));
+		}
+		return list;
+	}
+
+	private static final class Constraint {
+		public final String label;
+		public final int score;
+		public final int total;
+		public final String[] forms;
+
+		public Constraint(String... vals) {
+			this.label = vals[0];
+			this.score = Integer.parseInt(vals[1]);
+			this.total = Integer.parseInt(vals[2]);
+			this.forms = vals[3].split(":");
+		}
+
+		@Override
+		public final String toString() {
+			return label;
+		}
 	}
 }

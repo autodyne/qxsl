@@ -26,22 +26,6 @@ import org.junit.jupiter.api.extension.ParameterResolver;
 public final class RandomNumberParameterExtension implements ParameterResolver {
 	private static final SecureRandom random = new SecureRandom();
 
-	/**
-	 * 指定された最大値までの整数値を生成します。
-	 *
-	 * @param max 最大値 (除外)
-	 * @retur 整数値
-	 */
-	public static final int randInt(int max) {
-		return random.nextInt(max);
-	}
-
-	@Retention(RetentionPolicy.RUNTIME)
-	@Target(ElementType.PARAMETER)
-	public static @interface RandomNumber {
-		public int value() default Integer.MAX_VALUE;
-	}
-
 	@Override
 	public boolean supportsParameter(ParameterContext p, ExtensionContext e) {
 		return p.isAnnotated(RandomNumber.class);
@@ -50,5 +34,15 @@ public final class RandomNumberParameterExtension implements ParameterResolver {
 	@Override
 	public Integer resolveParameter(ParameterContext p, ExtensionContext e) {
 		return random.nextInt(p.findAnnotation(RandomNumber.class).get().value());
+	}
+
+	public static final int randInt(int max) {
+		return random.nextInt(max);
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.PARAMETER)
+	public @interface RandomNumber {
+		int value() default Integer.MAX_VALUE;
 	}
 }

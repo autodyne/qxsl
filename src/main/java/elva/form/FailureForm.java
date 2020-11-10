@@ -32,6 +32,6 @@ public final class FailureForm extends NativeOp {
 	public Object apply(ListBase args, ElvaEval eval) {
 		final var bad = eval.apply(args.get(0));
 		final var msg = eval.apply(args.get(1)).value();
-		return new Failure(bad.ofType(Item.class), msg);
+		return new Failure(bad.to(Item.class), msg);
 	}
 }

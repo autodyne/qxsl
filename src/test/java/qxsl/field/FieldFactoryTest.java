@@ -20,19 +20,13 @@ import org.junit.jupiter.params.provider.MethodSource;
  * @since 2019/07/02
  */
 public final class FieldFactoryTest extends Assertions {
-	/**
-	 * クラスパスにある全ての書式を返します。
-	 *
-	 *
-	 * @return 書式のイテレータ
-	 */
-	public static Iterator<FieldFactory> testMethodSource() {
-		return new FieldManager().iterator();
-	}
-
 	@ParameterizedTest
-	@MethodSource("testMethodSource")
+	@MethodSource("source")
 	public void testTarget(FieldFactory format) {
 		assertThat(format.target().getNamespaceURI()).isNotNull();
+	}
+
+	public static final Iterator<FieldFactory> source() {
+		return new FieldManager().iterator();
 	}
 }

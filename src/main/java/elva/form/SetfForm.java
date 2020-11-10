@@ -31,8 +31,8 @@ import qxsl.value.Tuple;
 public final class SetfForm extends NativeOp {
 	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
-		final var obj = eval.apply(args.get(0)).ofType(Tuple.class);
-		final var qua = eval.apply(args.get(1)).ofType(QName.class);
+		final var obj = eval.apply(args.get(0)).to(Tuple.class);
+		final var qua = eval.apply(args.get(1)).to(QName.class);
 		final var val = eval.apply(args.get(2)).valueAsString();
 		if(val == null || val.isEmpty()) return obj.remove(qua);
 		return obj.set(qua, val);

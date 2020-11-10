@@ -35,32 +35,6 @@ import gaas.utils.AssetUtils;
 public final class PatternTest extends Assertions {
 	private static final Pattern rule = load();
 
-	/**
-	 * テスト対象である交信記録の変換処理の実装を取得します。
-	 *
-	 *
-	 * @return 変換処理の実装
-	 */
-	private static final Pattern load() {
-		return RuleKit.load("jautil.lisp").pattern();
-	}
-
-	/**
-	 * 書式変換を試みる交信記録とその書式のリストを返します。
-	 *
-	 *
-	 * @return 交信記録と書式のリスト
-	 */
-	private static final List<Arguments> items() {
-		final var fmts = new TableManager();
-		final var list = new ArrayList<Arguments>();
-		final var util = new AssetUtils(Pattern.class);
-		for(final var item: util.items("allja1.qxml")) {
-			for(var f: fmts) list.add(Arguments.of(item, f));
-		}
-		return list;
-	}
-
 	@ParameterizedTest
 	@MethodSource("items")
 	public void test(Item item, TableFactory fmt) {
@@ -68,7 +42,7 @@ public final class PatternTest extends Assertions {
 		final var seq2 = rule.normalize(fmt.decode(seq1), fmt.type());
 		final var back = seq2.get(0);
 		back.set(Name.from(item));
-		if(Mode.from(back).isRTTY()) back.set(Mode.from(item));
+		if (Mode.from(back).isRTTY()) back.set(Mode.from(item));
 		item.set(Time.from(item).ofYear(2020).copyDropSecond());
 		back.set(Time.from(back).ofYear(2020).copyDropSecond());
 		assertThat(item).isEqualTo(back);
@@ -79,5 +53,19 @@ public final class PatternTest extends Assertions {
 		final var rule = RuleKit.load("jautil.lisp").pattern();
 		assertThat(rule.get("PHONE")).isInstanceOf(String.class);
 		assertThat(rule.get("match")).isInstanceOf(Method.class);
+	}
+
+	private static final List<Arguments> items() {
+		final var fmts = new TableManager();
+		final var list = new ArrayList<Arguments>();
+		final var util = new AssetUtils(Pattern.class);
+		for (final var item : util.items("allja1.qxml")) {
+			for (var f : fmts) list.add(Arguments.of(item, f));
+		}
+		return list;
+	}
+
+	private static final Pattern load() {
+		return RuleKit.load("jautil.lisp").pattern();
 	}
 }

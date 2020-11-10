@@ -25,9 +25,16 @@ public final class TextNodeTest extends Assertions {
 	private final TextNode bar = new TextNode("bar");
 
 	@Test
-	public void testValue() {
-		assertThat(foo.value()).isEqualTo("foo");
-		assertThat(BAR.value()).isEqualTo("BAR");
+	public void testEquals() {
+		assertThat(FOO).isEqualTo(FOO);
+		assertThat(bar).isEqualTo(bar);
+	}
+
+	@Test
+	public void testEval() throws ScriptException {
+		final var elva = new elva.lang.ElvaLisp();
+		assertThat(elva.eval("\"bar\"")).isEqualTo("bar");
+		assertThat(elva.eval("\"foo\"")).isEqualTo("foo");
 	}
 
 	@Test
@@ -39,15 +46,8 @@ public final class TextNodeTest extends Assertions {
 	}
 
 	@Test
-	public void testEquals() {
-		assertThat(FOO).isEqualTo(FOO);
-		assertThat(bar).isEqualTo(bar);
-	}
-
-	@Test
-	public void testEval() throws ScriptException {
-		final var elva = new elva.lang.ElvaLisp();
-		assertThat(elva.eval("\"bar\"")).isEqualTo("bar");
-		assertThat(elva.eval("\"foo\"")).isEqualTo("foo");
+	public void testValue() {
+		assertThat(foo.value()).isEqualTo("foo");
+		assertThat(BAR.value()).isEqualTo("BAR");
 	}
 }

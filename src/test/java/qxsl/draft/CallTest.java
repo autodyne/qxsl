@@ -23,12 +23,6 @@ import qxsl.junit.RandomStringParameterExtension.RandomString;
 @ExtendWith(RandomStringParameterExtension.class)
 public final class CallTest extends Assertions {
 	@Test
-	public void testValue() {
-		assertThat(new Call("JA1ZLO").value()).isEqualTo("JA1ZLO");
-		assertThat(new Call("JA1YWX").value()).isEqualTo("JA1YWX");
-	}
-
-	@Test
 	public void testStrip() {
 		assertThat(new Call("JA1ZLO/1").strip()).isEqualTo("JA1ZLO");
 		assertThat(new Call("JA1YWX/2").strip()).isEqualTo("JA1YWX");
@@ -37,5 +31,11 @@ public final class CallTest extends Assertions {
 	@Test
 	public void testToString(@RandomString String text) {
 		assertThat(new Call(text)).hasToString(text.toUpperCase());
+	}
+
+	@Test
+	public void testValue() {
+		assertThat(new Call("JA1ZLO").value()).isEqualTo("JA1ZLO");
+		assertThat(new Call("JA1YWX").value()).isEqualTo("JA1YWX");
 	}
 }

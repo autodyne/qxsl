@@ -29,11 +29,6 @@ public final class SentTest extends Assertions {
 	private final Watt watt = new Watt("M");
 
 	@Test
-	public void testType() {
-		assertThat(new Sent().name()).isEqualTo(SENT);
-	}
-
-	@Test
 	public void testEquals() {
 		final var sent1 = new Sent();
 		final var sent2 = new Sent();
@@ -46,5 +41,10 @@ public final class SentTest extends Assertions {
 		assertThat(sent2.set(rstq).get(Qxsl.RSTQ)).isEqualTo(rstq);
 		assertThat(sent2.set(watt).get(Qxsl.WATT)).isEqualTo(watt);
 		assertThat(sent1).isEqualTo(sent2);
+	}
+
+	@Test
+	public void testType() {
+		assertThat(new Sent().name()).isEqualTo(SENT);
 	}
 }

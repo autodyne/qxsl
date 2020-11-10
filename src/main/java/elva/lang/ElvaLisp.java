@@ -125,7 +125,7 @@ public final class ElvaLisp extends AbstractScriptEngine {
 			final var scan = new Lexical(source);
 			final var list = new LinkedList<NodeBase>();
 			while(scan.hasNext()) list.add(scan.next());
-			return new CoverSeq(list);
+			return new ListNode(list);
 		} catch (IOException ex) {
 			throw new UncheckedIOException(ex);
 		}
@@ -144,7 +144,8 @@ public final class ElvaLisp extends AbstractScriptEngine {
 	 * @throws ElvaLexicalException 式の構文面での例外
 	 * @throws ElvaRuntimeException 評価で発生した例外
 	 */
-	public Object eval(Reader r, ScriptContext c) {
+	@Override
+	public final Object eval(Reader r, ScriptContext c) {
 		final var root = lisp.fork().merge(c.getBindings(GLOBAL_SCOPE));
 		final var self = root.fork().merge(c.getBindings(ENGINE_SCOPE));
 		return scan(r).map(new ElvaEval(self)).last().value();
@@ -163,7 +164,8 @@ public final class ElvaLisp extends AbstractScriptEngine {
 	 * @throws ElvaLexicalException 式の構文面での例外
 	 * @throws ElvaRuntimeException 評価で発生した例外
 	 */
-	public Object eval(String s, ScriptContext c) {
+	@Override
+	public final Object eval(String s, ScriptContext c) {
 		return eval(new StringReader(s), c);
 	}
 
@@ -268,7 +270,7 @@ public final class ElvaLisp extends AbstractScriptEngine {
 			final var list = new LinkedList<NodeBase>();
 			while(cursor < tokens.size()) {
 				switch(tokens.get(cursor++)) {
-					case ")": return new CoverSeq(list);
+					case ")": return new ListNode(list);
 					default: --cursor; list.add(next());
 				}
 			}

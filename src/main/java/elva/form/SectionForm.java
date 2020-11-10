@@ -119,7 +119,7 @@ final class SectionImpl extends Section {
 	 */
 	@Override
 	public final Message verify(Item item) {
-		return eval.apply(test.form(item)).ofType(Message.class);
+		return eval.apply(test.form(item)).to(Message.class);
 	}
 
 	/**

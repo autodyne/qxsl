@@ -20,43 +20,37 @@ import org.junit.jupiter.params.provider.MethodSource;
  * @since 2019/06/16
  */
 public final class TableFactoryTest extends Assertions {
-	/**
-	 * クラスパスにある全ての書式を返します。
-	 *
-	 *
-	 * @return 書式のイテレータ
-	 */
-	public static Iterator<TableFactory> testMethodSource() {
-		return new TableManager().iterator();
-	}
-
 	@ParameterizedTest
-	@MethodSource("testMethodSource")
-	public void testType(TableFactory format) {
-		assertThat(format.type()).isNotEmpty();
-	}
-
-	@ParameterizedTest
-	@MethodSource("testMethodSource")
-	public void testName(TableFactory format) {
-		assertThat(format.name()).isNotEmpty();
-	}
-
-	@ParameterizedTest
-	@MethodSource("testMethodSource")
-	public void testHelp(TableFactory format) {
-		assertThat(format.help()).isNotNull();
-	}
-
-	@ParameterizedTest
-	@MethodSource("testMethodSource")
+	@MethodSource("source")
 	public void testExtensions(TableFactory format) {
 		assertThat(format.extensions()).isNotEmpty();
 	}
 
 	@ParameterizedTest
-	@MethodSource("testMethodSource")
+	@MethodSource("source")
+	public void testHelp(TableFactory format) {
+		assertThat(format.help()).isNotNull();
+	}
+
+	@ParameterizedTest
+	@MethodSource("source")
+	public void testName(TableFactory format) {
+		assertThat(format.name()).isNotEmpty();
+	}
+
+	@ParameterizedTest
+	@MethodSource("source")
 	public void testToString(TableFactory format) {
 		assertThat(format.toString()).isNotEmpty();
+	}
+
+	@ParameterizedTest
+	@MethodSource("source")
+	public void testType(TableFactory format) {
+		assertThat(format.type()).isNotEmpty();
+	}
+
+	public static final Iterator<TableFactory> source() {
+		return new TableManager().iterator();
 	}
 }

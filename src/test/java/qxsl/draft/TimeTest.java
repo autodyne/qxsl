@@ -20,14 +20,14 @@ import org.junit.jupiter.api.Test;
  */
 public final class TimeTest extends Assertions {
 	@Test
-	public void testValue() {
-		final var time = ZonedDateTime.now();
-		assertThat(new Time(time).value()).isEqualTo(time);
-	}
-
-	@Test
 	public void testToString() {
 		final var time = ZonedDateTime.now();
 		assertThat(new Time(time)).hasToString(time.toString());
+	}
+
+	@Test
+	public void testValue() {
+		final var time = ZonedDateTime.now();
+		assertThat(new Time(time).value()).isEqualTo(time);
 	}
 }

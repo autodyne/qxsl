@@ -23,13 +23,13 @@ import qxsl.junit.RandomStringParameterExtension.RandomString;
 @ExtendWith(RandomStringParameterExtension.class)
 public final class Mul2Test extends Assertions {
 	@Test
-	public void testValue() {
-		assertThat(new Mul2("100110").value()).isEqualTo("100110");
-		assertThat(new Mul2("400105").value()).isEqualTo("400105");
+	public void testToString(@RandomString String text) {
+		assertThat(new Mul2(text)).hasToString(text);
 	}
 
 	@Test
-	public void testToString(@RandomString String text) {
-		assertThat(new Mul2(text)).hasToString(text);
+	public void testValue() {
+		assertThat(new Mul2("100110").value()).isEqualTo("100110");
+		assertThat(new Mul2("400105").value()).isEqualTo("400105");
 	}
 }

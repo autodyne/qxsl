@@ -20,28 +20,6 @@ import org.junit.jupiter.params.provider.MethodSource;
  * @since 2020/10/14
  */
 public final class SectionTest extends Assertions {
-	/**
-	 * テスト対象のコンテスト規約を読み出します。
-	 *
-	 *
-	 * @return 規約
-	 */
-	private static final Contest sections() {
-		return RuleKit.load("allja1.lisp").contest();
-	}
-
-	@ParameterizedTest
-	@MethodSource("sections")
-	public void testToString(Section rule) {
-		assertThat(rule).hasToString(rule.name());
-	}
-
-	@ParameterizedTest
-	@MethodSource("sections")
-	public void testName(Section rule) {
-		assertThat(rule.name()).isNotEmpty();
-	}
-
 	@ParameterizedTest
 	@MethodSource("sections")
 	public void testCode(Section rule) {
@@ -53,5 +31,21 @@ public final class SectionTest extends Assertions {
 	public void testGet(Section rule) {
 		assertThat(rule.get("MORSE")).isInstanceOf(String.class);
 		assertThat(rule.get("match")).isInstanceOf(Method.class);
+	}
+
+	@ParameterizedTest
+	@MethodSource("sections")
+	public void testName(Section rule) {
+		assertThat(rule.name()).isNotEmpty();
+	}
+
+	@ParameterizedTest
+	@MethodSource("sections")
+	public void testToString(Section rule) {
+		assertThat(rule).hasToString(rule.name());
+	}
+
+	private static final Contest sections() {
+		return RuleKit.load("allja1.lisp").contest();
 	}
 }

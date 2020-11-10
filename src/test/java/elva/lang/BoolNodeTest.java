@@ -20,18 +20,6 @@ import org.junit.jupiter.api.Test;
  */
 public final class BoolNodeTest extends Assertions {
 	@Test
-	public void testValue() {
-		assertThat(BoolNode.T.value()).isTrue();
-		assertThat(BoolNode.F.value()).isFalse();
-	}
-
-	@Test
-	public void testToString() {
-		assertThat(BoolNode.T).hasToString("#t");
-		assertThat(BoolNode.F).hasToString("#f");
-	}
-
-	@Test
 	public void testEquals() {
 		assertThat(BoolNode.T.equals(BoolNode.T)).isTrue();
 		assertThat(BoolNode.F.equals(BoolNode.F)).isTrue();
@@ -44,5 +32,17 @@ public final class BoolNodeTest extends Assertions {
 		final var elva = new ElvaLisp();
 		assertThat(elva.eval("#t")).isEqualTo(true);
 		assertThat(elva.eval("#f")).isEqualTo(false);
+	}
+
+	@Test
+	public void testToString() {
+		assertThat(BoolNode.T).hasToString("#t");
+		assertThat(BoolNode.F).hasToString("#f");
+	}
+
+	@Test
+	public void testValue() {
+		assertThat(BoolNode.T.value()).isTrue();
+		assertThat(BoolNode.F.value()).isFalse();
 	}
 }

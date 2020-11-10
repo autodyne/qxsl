@@ -31,15 +31,11 @@ import static qxsl.junit.RandomStringParameterExtension.alnum;
 public final class QxmlFactoryTest extends Assertions {
 	private final TableManager tables = new TableManager();
 
-	public static IntStream testMethodSource() {
-		return IntStream.range(0, 100);
-	}
-
 	@ParameterizedTest
-	@MethodSource("testMethodSource")
+	@MethodSource("source")
 	public void testDecode(int numItems) throws SAXException {
 		final var items = new ArrayList<Item>();
-		for(int row = 0; row < numItems; row++) {
+		for (int row = 0; row < numItems; row++) {
 			final var item = new Item();
 			item.set(Time.now().copyDropSecond());
 			item.set(new Band(randInt(10_000_000)));
@@ -60,5 +56,9 @@ public final class QxmlFactoryTest extends Assertions {
 		final var format = new QxmlFactory();
 		assertThat(format.decode(format.encode(items))).isEqualTo(items);
 		assertThat(tables.decode(format.encode(items))).isEqualTo(items);
+	}
+
+	public static final IntStream source() {
+		return IntStream.range(0, 100);
 	}
 }

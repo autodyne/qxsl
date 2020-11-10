@@ -22,18 +22,6 @@ import qxsl.junit.RandomNumberParameterExtension;
 @ExtendWith(RandomNumberParameterExtension.class)
 public final class RSTQTest extends Assertions {
 	@Test
-	public void testValue() {
-		assertThat(new RSTQ(699).value()).isEqualTo(699);
-		assertThat(new RSTQ(599).value()).isEqualTo(599);
-		assertThat(new RSTQ(590).value()).isEqualTo(590);
-		assertThat(new RSTQ(101).value()).isEqualTo(101);
-		assertThat(new RSTQ(100).value()).isEqualTo(100);
-		assertThat(new RSTQ(59).value()).isEqualTo(59);
-		assertThat(new RSTQ(11).value()).isEqualTo(11);
-		assertThat(new RSTQ(10).value()).isEqualTo(10);
-	}
-
-	@Test
 	public void testToString() {
 		assertThat(new RSTQ(699)).hasToString("699");
 		assertThat(new RSTQ(599)).hasToString("599");
@@ -43,5 +31,17 @@ public final class RSTQTest extends Assertions {
 		assertThat(new RSTQ(59)).hasToString("59");
 		assertThat(new RSTQ(11)).hasToString("11");
 		assertThat(new RSTQ(10)).hasToString("10");
+	}
+
+	@Test
+	public void testValue() {
+		assertThat(new RSTQ(699).value()).isEqualTo(699);
+		assertThat(new RSTQ(599).value()).isEqualTo(599);
+		assertThat(new RSTQ(590).value()).isEqualTo(590);
+		assertThat(new RSTQ(101).value()).isEqualTo(101);
+		assertThat(new RSTQ(100).value()).isEqualTo(100);
+		assertThat(new RSTQ(59).value()).isEqualTo(59);
+		assertThat(new RSTQ(11).value()).isEqualTo(11);
+		assertThat(new RSTQ(10).value()).isEqualTo(10);
 	}
 }

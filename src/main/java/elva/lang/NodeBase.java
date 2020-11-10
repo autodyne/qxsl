@@ -42,7 +42,7 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 	 * @return 実数
 	 */
 	public final RealNode real() {
-		return ofNode(RealNode.class);
+		return as(RealNode.class);
 	}
 
 	/**
@@ -52,7 +52,7 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 	 * @return 真偽
 	 */
 	public final boolean bool() {
-		return ofNode(BoolNode.class).value();
+		return as(BoolNode.class).value();
 	}
 
 	/**
@@ -62,7 +62,7 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 	 * @return 識別子
 	 */
 	public final NameNode name() {
-		return ofNode(NameNode.class);
+		return as(NameNode.class);
 	}
 
 	/**
@@ -72,7 +72,7 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 	 * @return 型情報
 	 */
 	public final TypeNode type() {
-		return ofNode(TypeNode.class);
+		return as(TypeNode.class);
 	}
 
 	/**
@@ -82,7 +82,7 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 	 * @return 文字列
 	 */
 	public final String text() {
-		return ofNode(TextNode.class).value();
+		return as(TextNode.class).value();
 	}
 
 	/**
@@ -92,7 +92,7 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 	 * @return 演算子
 	 */
 	public final FormBase form() {
-		return ofNode(FormBase.class);
+		return as(FormBase.class);
 	}
 
 	/**
@@ -102,7 +102,7 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 	 * @return リスト
 	 */
 	public final ListBase list() {
-		return ofNode(ListBase.class);
+		return as(ListBase.class);
 	}
 
 	/**
@@ -262,7 +262,7 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 			list.add(new RealNode.REAL());
 			list.add(new BoolNode.BOOL());
 			list.add(new ArraySeq.LIST());
-			list.add(new CoverSeq.LIST());
+			list.add(new ListNode.LIST());
 			list.add(new NullNode.NULL());
 		}
 
@@ -313,7 +313,7 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 	 * @param <V> 返り値の総称型
 	 */
 	@SuppressWarnings("unchecked")
-	public final <V> V ofType(Class<V> type) {
+	public final <V> V to(Class<V> type) {
 		final boolean list = type.isArray();
 		if(!list) return (V) AUTO.encode(type).cast(value());
 		else return (V) list().cast(type.getComponentType());
@@ -329,7 +329,7 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 	 *
 	 * @param <V> 返り値の総称型
 	 */
-	public final <V extends NodeBase> V ofNode(Class<V> type) {
+	public final <V extends NodeBase> V as(Class<V> type) {
 		if(type.isInstance(this)) return type.cast(this);
 		final var self = this.getClass();
 		final var temp = "%s (%s) is detected but %s required";

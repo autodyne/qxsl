@@ -22,11 +22,6 @@ public final class TableManagerTest extends Assertions {
 	private final TableManager tables = new TableManager();
 
 	@Test
-	public void testIterator() {
-		assertThat(tables.iterator()).hasNext();
-	}
-
-	@Test
 	public void testGetFactory() {
 		assertThat(tables.factory("qxml")).isInstanceOf(QxmlFactory.class);
 		assertThat(tables.factory("adxs")).isInstanceOf(AdxsFactory.class);
@@ -38,5 +33,10 @@ public final class TableManagerTest extends Assertions {
 		assertThat(tables.factory("zdos")).isInstanceOf(ZDosFactory.class);
 		assertThat(tables.factory("cbin")).isInstanceOf(CBinFactory.class);
 		assertThat(tables.factory("zbin")).isInstanceOf(ZBinFactory.class);
+	}
+
+	@Test
+	public void testIterator() {
+		assertThat(tables.iterator()).hasNext();
 	}
 }

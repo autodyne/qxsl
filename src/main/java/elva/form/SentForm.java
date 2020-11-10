@@ -29,6 +29,6 @@ import qxsl.model.Item;
 public final class SentForm extends NativeOp {
 	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
-		return eval.apply(args.head()).ofType(Item.class).getSent();
+		return eval.apply(args.head()).to(Item.class).getSent();
 	}
 }

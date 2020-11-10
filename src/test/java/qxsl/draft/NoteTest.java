@@ -23,13 +23,13 @@ import qxsl.junit.RandomStringParameterExtension.RandomString;
 @ExtendWith(RandomStringParameterExtension.class)
 public final class NoteTest extends Assertions {
 	@Test
-	public void testValue() {
-		assertThat(new Note("RABBIT").value()).isEqualTo("RABBIT");
-		assertThat(new Note("GIBIER").value()).isEqualTo("GIBIER");
+	public void testToString(@RandomString String text) {
+		assertThat(new Note(text)).hasToString(text);
 	}
 
 	@Test
-	public void testToString(@RandomString String text) {
-		assertThat(new Note(text)).hasToString(text);
+	public void testValue() {
+		assertThat(new Note("RABBIT").value()).isEqualTo("RABBIT");
+		assertThat(new Note("GIBIER").value()).isEqualTo("GIBIER");
 	}
 }

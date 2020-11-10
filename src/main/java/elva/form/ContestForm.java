@@ -142,7 +142,7 @@ final class ContestImpl extends Contest {
 	 */
 	@Override
 	public final LocalDate getStartDay(int year) {
-		return eval.apply(from.form(year)).ofType(LocalDate.class);
+		return eval.apply(from.form(year)).to(LocalDate.class);
 	}
 
 	/**
@@ -155,7 +155,7 @@ final class ContestImpl extends Contest {
 	 */
 	@Override
 	public final LocalDate getFinalDay(int year) {
-		return eval.apply(last.form(year)).ofType(LocalDate.class);
+		return eval.apply(last.form(year)).to(LocalDate.class);
 	}
 
 	/**
@@ -168,6 +168,6 @@ final class ContestImpl extends Contest {
 	 */
 	@Override
 	public final LocalDate getDeadLine(int year) {
-		return eval.apply(dead.form(year)).ofType(LocalDate.class);
+		return eval.apply(dead.form(year)).to(LocalDate.class);
 	}
 }

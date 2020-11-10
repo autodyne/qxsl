@@ -29,11 +29,6 @@ public final class ItemTest extends Assertions {
 	private final Time time = Time.now();
 
 	@Test
-	public void testType() {
-		assertThat(new Item().name()).isEqualTo(ITEM);
-	}
-
-	@Test
 	public void testEquals() {
 		final var item1 = new Item();
 		final var item2 = new Item();
@@ -52,5 +47,10 @@ public final class ItemTest extends Assertions {
 		assertThat(item2.set(note).get(Qxsl.NOTE)).isEqualTo(note);
 		assertThat(item2.set(time).get(Qxsl.TIME)).isEqualTo(time);
 		assertThat(item1).isEqualTo(item2);
+	}
+
+	@Test
+	public void testType() {
+		assertThat(new Item().name()).isEqualTo(ITEM);
 	}
 }

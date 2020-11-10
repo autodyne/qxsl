@@ -78,7 +78,7 @@ public final class NameNode extends AtomBase<NameNode> {
 		 * @return 引用式
 		 */
 		public final ListBase quote(NodeBase sexp) {
-			return new CoverSeq(Arrays.asList(name, sexp));
+			return new ListNode(Arrays.asList(name, sexp));
 		}
 
 		/**

@@ -25,18 +25,6 @@ public final class AtomNodeTest extends Assertions {
 	private final AtomNode bar = new AtomNode("bar");
 
 	@Test
-	public void testValue() {
-		assertThat(new AtomNode("114").value()).isEqualTo("114");
-		assertThat(new AtomNode("514").value()).isEqualTo("514");
-	}
-
-	@Test
-	public void testToString() {
-		assertThat(new AtomNode("MUR")).hasToString("MUR");
-		assertThat(new AtomNode("KMR")).hasToString("KMR");
-	}
-
-	@Test
 	public void testEquals() {
 		assertThat(new AtomNode("MuR")).isEqualTo(new AtomNode("MuR"));
 		assertThat(new AtomNode("KmR")).isEqualTo(new AtomNode("KmR"));
@@ -46,5 +34,17 @@ public final class AtomNodeTest extends Assertions {
 	public void testEval() throws ScriptException {
 		final var elva = new ElvaLisp();
 		assertThat(elva.eval("null")).isEqualTo(null);
+	}
+
+	@Test
+	public void testToString() {
+		assertThat(new AtomNode("MUR")).hasToString("MUR");
+		assertThat(new AtomNode("KMR")).hasToString("KMR");
+	}
+
+	@Test
+	public void testValue() {
+		assertThat(new AtomNode("114").value()).isEqualTo("114");
+		assertThat(new AtomNode("514").value()).isEqualTo("514");
 	}
 }

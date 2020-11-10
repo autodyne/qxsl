@@ -23,13 +23,13 @@ import qxsl.junit.RandomStringParameterExtension.RandomString;
 @ExtendWith(RandomStringParameterExtension.class)
 public final class NameTest extends Assertions {
 	@Test
-	public void testValue() {
-		assertThat(new Name("筑波大").value()).isEqualTo("筑波大");
-		assertThat(new Name("電通大").value()).isEqualTo("電通大");
+	public void testToString(@RandomString String text) {
+		assertThat(new Name(text)).hasToString(text);
 	}
 
 	@Test
-	public void testToString(@RandomString String text) {
-		assertThat(new Name(text)).hasToString(text);
+	public void testValue() {
+		assertThat(new Name("筑波大").value()).isEqualTo("筑波大");
+		assertThat(new Name("電通大").value()).isEqualTo("電通大");
 	}
 }

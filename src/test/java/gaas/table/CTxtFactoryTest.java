@@ -37,23 +37,19 @@ public final class CTxtFactoryTest extends Assertions {
 	private final ArrayList<Band> bands = new ArrayList<>();
 
 	public CTxtFactoryTest() {
-		bands.add(new Band(    3_500));
-		bands.add(new Band(    7_000));
-		bands.add(new Band(   14_000));
-		bands.add(new Band(  144_000));
+		bands.add(new Band(3_500));
+		bands.add(new Band(7_000));
+		bands.add(new Band(14_000));
+		bands.add(new Band(144_000));
 		bands.add(new Band(1_200_000));
 		bands.add(new Band(5_600_000));
 	}
 
-	public static IntStream testMethodSource() {
-		return IntStream.range(0, 100);
-	}
-
 	@ParameterizedTest
-	@MethodSource("testMethodSource")
+	@MethodSource("source")
 	public void testDecode(int numItems) {
 		final var items = new ArrayList<Item>();
-		for(int row = 0; row < numItems; row++) {
+		for (int row = 0; row < numItems; row++) {
 			final var item = new Item();
 			item.set(Time.now().copyDropSecond());
 			item.set(bands.get(randInt(bands.size())));
@@ -65,5 +61,9 @@ public final class CTxtFactoryTest extends Assertions {
 		}
 		assertThat(format.decode(format.encode(items))).isEqualTo(items);
 		assertThat(tables.decode(format.encode(items))).isEqualTo(items);
+	}
+
+	public static final IntStream source() {
+		return IntStream.range(0, 100);
 	}
 }
