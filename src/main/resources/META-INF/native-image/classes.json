@@ -1698,12 +1698,6 @@
 		"allPublicFields": true
 	},
 	{
-		"name": "qxsl.ruler.Formula",
-		"allPublicConstructors": true,
-		"allPublicMethods": true,
-		"allPublicFields": true
-	},
-	{
 		"name": "qxsl.ruler.Library",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
@@ -1717,6 +1711,12 @@
 	},
 	{
 		"name": "qxsl.ruler.Pattern",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.ruler.Promise",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
 		"allPublicFields": true

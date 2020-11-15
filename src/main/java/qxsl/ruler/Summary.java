@@ -27,25 +27,25 @@ import static java.util.stream.Collectors.toSet;
  * @since 2016/11/26
  */
 public final class Summary implements Serializable {
-	private final Map<Object, Message> acc;
-	private final Map<Object, Message> rej;
-	private final List<Object[]> mul;
-	private final Formula fml;
+	private final Map<Element, Message> acc;
+	private final Map<Element, Message> rej;
+	private final List<Element> mul;
+	private final Section sec;
 
 	/**
 	 * 有効な交信と無効な交信を設定します。
 	 *
 	 *
-	 * @param form 判定基準
+	 * @param rule 判定基準
 	 * @param list 交信記録
 	 */
-	public Summary(Formula form, List<Item> list) {
+	public Summary(Section rule, List<Item> list) {
 		this.mul = new ArrayList<>(list.size());
 		this.acc = new LinkedHashMap<>();
 		this.rej = new LinkedHashMap<>();
-		this.fml = form;
+		this.sec = rule;
 		sort(list);
-		accepted().map(fml::entity).forEach(mul::add);
+		accepted().forEach(m -> mul.add(sec.entity(m.item())));
 	}
 
 	/**
@@ -56,8 +56,8 @@ public final class Summary implements Serializable {
 	 */
 	private final void sort(List<Item> list) {
 		for(var item: list) {
-			final var msg = fml.verify(item);
-			final var idx = fml.unique(msg.item());
+			final var msg = sec.verify(item);
+			final var idx = sec.unique(msg.item());
 			if(acc.containsKey(idx)) rej.put(idx, msg);
 			else if(msg.isFailure()) rej.put(idx, msg);
 			else if(msg.isSuccess()) acc.put(idx, msg);
@@ -103,7 +103,7 @@ public final class Summary implements Serializable {
 	 * @return 総得点
 	 */
 	public final int total() {
-		return acc.isEmpty()? 0: fml.result(this);
+		return acc.isEmpty()? 0: sec.result(this);
 	}
 
 	/**
@@ -116,8 +116,8 @@ public final class Summary implements Serializable {
 	 *
 	 * @since 2020/02/26
 	 */
-	private final Set<Object> keys(int rank) {
-		return mul.stream().map(m -> m[rank]).collect(toSet());
+	private final Set<Element> keys(int rank) {
+		return mul.stream().map(m -> m.get(rank)).collect(toSet());
 	}
 
 	/**
@@ -128,8 +128,8 @@ public final class Summary implements Serializable {
 	 *
 	 * @since 2020/02/26
 	 */
-	public final Stream<Set<Object>> entity() {
-		final var size = mul.stream().mapToInt(mul -> mul.length).min();
+	public final Stream<Set<Element>> entity() {
+		final var size = mul.stream().mapToInt(mul -> mul.size()).min();
 		return IntStream.range(0, size.getAsInt()).mapToObj(this::keys);
 	}
 

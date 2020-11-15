@@ -14,6 +14,7 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 import qxsl.model.Item;
+import qxsl.ruler.Element;
 import qxsl.ruler.Message;
 import qxsl.ruler.Section;
 import qxsl.ruler.Summary;
@@ -131,8 +132,8 @@ final class SectionImpl extends Section {
 	 * @return 重複を除くための識別子
 	 */
 	@Override
-	public final Object unique(Item item) {
-		return eval.apply(call.form(item)).value();
+	public final Element unique(Item item) {
+		return new Element(eval.apply(call.form(item)).value());
 	}
 
 	/**
@@ -160,7 +161,7 @@ final class SectionImpl extends Section {
 	 * @return 総得点を計算する識別子の配列
 	 */
 	@Override
-	public final Object[] entity(Item item) {
-		return eval.apply(mult.form(item)).list().toArray();
+	public final Element entity(Item item) {
+		return new Element(eval.apply(mult.form(item)).list().toArray());
 	}
 }
