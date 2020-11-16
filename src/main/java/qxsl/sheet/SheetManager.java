@@ -85,7 +85,7 @@ public final class SheetManager implements Iterable<SheetFactory> {
 		for(var f: this) try {
 			return f.unpack(binary);
 		} catch (Exception ex) {
-			join.add(String.format("-(%s):", f));
+			join.add(f.name().concat(":"));
 			join.add(ex.toString());
 		}
 		final var ms = join.toString();
@@ -108,7 +108,7 @@ public final class SheetManager implements Iterable<SheetFactory> {
 		for(var f: this) try {
 			return f.unpack(string);
 		} catch (Exception ex) {
-			join.add(String.format("-(%s):", f));
+			join.add(f.name().concat(":"));
 			join.add(ex.toString());
 		}
 		final var ms = join.toString();

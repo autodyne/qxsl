@@ -88,7 +88,7 @@ public final class TableManager implements Iterable<TableFactory> {
 		for(var f: this) try {
 			return f.decode(binary);
 		} catch (Exception ex) {
-			join.add(String.format("-(%s):", f));
+			join.add(f.name().concat(":"));
 			join.add(ex.toString());
 		}
 		final var ms = join.toString();
@@ -111,11 +111,43 @@ public final class TableManager implements Iterable<TableFactory> {
 		for(var f: this) try {
 			return f.decode(string);
 		} catch (Exception ex) {
-			join.add(String.format("-(%s):", f));
+			join.add(f.name().concat(":"));
 			join.add(ex.toString());
 		}
 		final var ms = join.toString();
 		final var ex = new IOException(ms);
 		throw new UncheckedIOException(ex);
+	}
+
+	/**
+	 * 指定された交信記録をQXML書式のバイト列に書き出します。
+	 *
+	 *
+	 * @param list 交信記録
+	 *
+	 * @return バイト列
+	 *
+	 * @throws UncheckedIOException 書き込み時の例外
+	 *
+	 * @since 2020/11/16
+	 */
+	public final byte[] encode(List<Item> list) {
+		return factory("qxml").encode(list);
+	}
+
+	/**
+	 * 指定された交信記録をQXML書式のバイト列に書き出します。
+	 *
+	 *
+	 * @param sequence 交信記録
+	 *
+	 * @return バイト列
+	 *
+	 * @throws UncheckedIOException 書き込み時の例外
+	 *
+	 * @since 2020/11/16
+	 */
+	public final byte[] encode(Item...sequence) {
+		return encode(List.of(sequence));
 	}
 }
