@@ -227,15 +227,34 @@
 ; array
 ((method 'toGenericString java.lang.Class) (array int)) "int[]"
 
+; new
+((new java.lang.Boolean boolean) #t) #t
+((new java.lang.Boolean boolean) #f) #f
+((new java.lang.Integer int) 114) 114
+((new java.lang.Integer int) 514) 514
+
+; new!
+((new! java.lang.Boolean) #t) #t
+((new! java.lang.Boolean) #f) #f
+((new! java.lang.Integer) 114) 114
+((new! java.lang.Integer) 514) 514
+
 ; method
 ((method 'length java.lang.String) "foobar") 6
-((method 'new java.lang.String java.lang.String) "foobar") "foobar"
 ((method 'getSimpleName java.lang.Class) java.lang.String) "String"
 ((method 'getSimpleName java.lang.Class) java.lang.Object) "Object"
 
-; static
-(static java.lang.Integer 'MAX_VALUE)  2147483647
-(static java.lang.Integer 'MIN_VALUE) -2147483648
+; method!
+((method! 'toUpperCase) "kmr") "KMR"
+((method! 'toLowerCase) "MUR") "mur"
+
+; access
+((access 'MAX_VALUE java.lang.Integer))  2147483647
+((access 'MIN_VALUE java.lang.Integer)) -2147483648
+
+; access!
+((access! 'x) ((new java.awt.Point int int) 114 514)) 114
+((access! 'y) ((new java.awt.Point int int) 114 514)) 514
 
 ; assert
 (catch (assert (equal 3 (+ 1 2)) "must be true")) null

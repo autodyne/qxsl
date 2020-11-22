@@ -10,6 +10,7 @@ import elva.lang.ListBase;
 import elva.lang.NativeOp;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
+import elva.lang.TypeNode;
 
 /**
  * returns the type of the specified value.
@@ -27,6 +28,6 @@ import elva.lang.NativeOp.Name;
 public final class TypeForm extends NativeOp {
 	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
-		return eval.apply(args.head()).value().getClass();
+		return TypeNode.of(eval.apply(args.head()));
 	}
 }

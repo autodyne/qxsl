@@ -15,7 +15,7 @@ import elva.lang.NativeOp.Name;
 /**
  * creates and returns an anonymous closure.
  * <pre>
- * (lambda (parameters) body)
+ * (lambda parameter-names body)
  * </pre>
  *
  *

@@ -11,28 +11,25 @@ import elva.lang.NativeOp;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
-import qxsl.model.Item;
-import qxsl.ruler.Success;
-
 /**
- * creates and returns a success object.
+ * evaluates the argument and print its value.
  * <pre>
- * (success item score)
+ * (print argument)
  * </pre>
  *
  *
  * @author 無線部開発班
  *
- * @since 2019/05/18
+ * @since 2020/11/22
  */
-@Name("success")
-@Args(min = 2, max = 2)
-public final class SuccessForm extends NativeOp {
+@Name("print")
+@Args(min = 1, max = 1)
+public final class PrintForm extends NativeOp {
 	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
-		final var obj = eval.apply(args.get(0));
-		final var run = eval.apply(args.get(1));
-		final var ref = obj.to(Item.class);
-		return new Success(ref, run.real().toInt());
+		final var val = eval.apply(args.head());
+		System.out.print(val.value());
+		System.out.flush();
+		return val;
 	}
 }

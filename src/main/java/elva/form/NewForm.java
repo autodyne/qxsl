@@ -6,29 +6,30 @@
 package elva.form;
 
 import elva.lang.ElvaEval;
+import elva.lang.JavaInit;
 import elva.lang.ListBase;
 import elva.lang.NativeOp;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
-import qxsl.model.Item;
-
 /**
- * extracts the sent object from the item.
+ * returns a constructor of the specified class.
  * <pre>
- * (sent item)
+ * (new class *parameter-types)
  * </pre>
  *
  *
  * @author 無線部開発班
  *
- * @since 2019/05/18
+ * @since 2020/11/22
  */
-@Name("sent")
-@Args(min = 1, max = 1)
-public final class SentForm extends NativeOp {
+@Name("new")
+@Args(min = 1, max = -1)
+public final class NewForm extends NativeOp {
 	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
-		return eval.apply(args.head()).to(Item.class).getSent();
+		final var type = eval.apply(args.head());
+		final var pars = args.tail().map(eval);
+		return new JavaInit(type.type(), pars);
 	}
 }

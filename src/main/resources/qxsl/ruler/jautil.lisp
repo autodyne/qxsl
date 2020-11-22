@@ -17,8 +17,9 @@
 ; city validation
 (defun 現存? it (not (null? (市区町村 it))))
 (defun 支庁? it (match (code<-city (市区町村 it)) "\\d{3,3}"))
-(defun 府県? it (match (code<-city (市区町村 it)) "\\d{2,2}"))
 (defun 市郡? it (match (code<-city (市区町村 it)) "\\d{4,9}"))
+(defun 諸島? it (equal (code<-city (市区町村 it)) "48"))
+(defun 府県? it (not (some it 支庁? 市郡? 諸島?)))
 
 ; area validation
 (defun AREA1? it (equal (area<-city (所轄総通 it)) "1"))

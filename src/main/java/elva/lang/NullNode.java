@@ -21,11 +21,23 @@ public final class NullNode extends AtomBase<Object> {
 	 */
 	private NullNode() {}
 
+	/**
+	 * この式の値を処理系の外部に渡す際に使用します。
+	 *
+	 *
+	 * @return 値
+	 */
 	@Override
 	public final Object value() {
 		return null;
 	}
 
+	/**
+	 * このアトムを表す文字列を返します。
+	 *
+	 *
+	 * @return 文字列による式の表現
+	 */
 	@Override
 	public final String toString() {
 		return "null";

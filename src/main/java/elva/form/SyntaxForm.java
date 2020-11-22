@@ -15,7 +15,7 @@ import elva.lang.SyntaxOp;
 /**
  * creates and returns an anonymous macro.
  * <pre>
- * (syntax (parameters) body)
+ * (syntax parameter-names body)
  * </pre>
  *
  *

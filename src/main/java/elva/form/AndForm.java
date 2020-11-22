@@ -14,7 +14,7 @@ import elva.lang.NativeOp.Name;
 /**
  * performs and operation and returns a bool value.
  * <pre>
- * (and bool1 bools...)
+ * (and bool1 *bools)
  * </pre>
  *
  *
@@ -23,7 +23,7 @@ import elva.lang.NativeOp.Name;
  * @since 2017/02/27
  */
 @Name("and")
-@Args(min = 2, max = -1)
+@Args(min = 1, max = -1)
 public final class AndForm extends NativeOp {
 	@Override
 	public Object apply(ListBase args, ElvaEval eval) {

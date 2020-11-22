@@ -6,29 +6,28 @@
 package elva.form;
 
 import elva.lang.ElvaEval;
+import elva.lang.FlexLoad;
 import elva.lang.ListBase;
 import elva.lang.NativeOp;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
-import qxsl.model.Item;
-
 /**
- * extracts the rcvd object from the item.
+ * returns the field of any class.
  * <pre>
- * (rcvd item)
+ * (access! 'name)
  * </pre>
  *
  *
  * @author 無線部開発班
  *
- * @since 2019/05/18
+ * @since 2020/11/22
  */
-@Name("rcvd")
+@Name("access!")
 @Args(min = 1, max = 1)
-public final class RcvdForm extends NativeOp {
+public final class AccessSpForm extends NativeOp {
 	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
-		return eval.apply(args.head()).to(Item.class).getRcvd();
+		return new FlexLoad(eval.apply(args.head()).name());
 	}
 }

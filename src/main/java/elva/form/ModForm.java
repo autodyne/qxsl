@@ -15,7 +15,7 @@ import elva.lang.RealNode;
 /**
  * performs modulo and returns a real value.
  * <pre>
- * (mod real1 reals...)
+ * (mod real1 *reals)
  * </pre>
  *
  *

@@ -17,14 +17,9 @@ import elva.warn.ElvaRuntimeException;
  */
 public abstract class FormBase extends AtomBase {
 	/**
-	 * この演算子が特殊関数か確認します。
-	 *
-	 *
-	 * @return 特殊形式の場合は真
+	 * 演算子が取る引数の最大の個数です。
 	 */
-	public final boolean isNativeOperator() {
-		return this instanceof NativeOp;
-	}
+	public static final int MAX = 256;
 
 	/**
 	 * この演算子が可変長引数の演算子か確認します。

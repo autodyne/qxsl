@@ -5,36 +5,29 @@
 *******************************************************************************/
 package elva.form;
 
-import javax.xml.namespace.QName;
-
 import elva.lang.ElvaEval;
+import elva.lang.FlexInit;
 import elva.lang.ListBase;
 import elva.lang.NativeOp;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
-import qxsl.value.Tuple;
-
 /**
- * assigns the specified field value into the item.
+ * returns a constructor of the specified class.
  * <pre>
- * (setf item qname value)
+ * (new! class)
  * </pre>
  *
  *
  * @author 無線部開発班
  *
- * @since 2019/06/29
+ * @since 2020/11/22
  */
-@Name("setf")
-@Args(min = 3, max = 3)
-public final class SetfForm extends NativeOp {
+@Name("new!")
+@Args(min = 1, max = 1)
+public final class NewSpForm extends NativeOp {
 	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
-		final var obj = eval.apply(args.get(0)).to(Tuple.class);
-		final var qua = eval.apply(args.get(1)).to(QName.class);
-		final var val = eval.apply(args.get(2)).valueAsString();
-		if(val == null || val.isEmpty()) return obj.remove(qua);
-		return obj.set(qua, val);
+		return new FlexInit(eval.apply(args.head()).type());
 	}
 }

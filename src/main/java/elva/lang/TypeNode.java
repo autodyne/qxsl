@@ -6,7 +6,10 @@
 package elva.lang;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.LinkedList;
+import java.util.List;
 
 import elva.warn.ElvaRuntimeException;
 
@@ -31,14 +34,26 @@ public final class TypeNode extends AtomBase<Class<?>> {
 		this.value = value;
 	}
 
+	/**
+	 * この式の値を処理系の外部に渡す際に使用します。
+	 *
+	 *
+	 * @return 値
+	 */
 	@Override
 	public final Class<?> value() {
 		return value;
 	}
 
+	/**
+	 * このアトムを表す文字列を返します。
+	 *
+	 *
+	 * @return 文字列による式の表現
+	 */
 	@Override
 	public final String toString() {
-		return value.toGenericString();
+		return value.getCanonicalName();
 	}
 
 	@Override
@@ -50,6 +65,18 @@ public final class TypeNode extends AtomBase<Class<?>> {
 	public final boolean equals(Object atom) {
 		if(!TypeNode.class.isInstance(atom)) return false;
 		return ((TypeNode) atom).value.equals(this.value);
+	}
+
+	/**
+	 * 指定された値に対して型情報を返します。
+	 *
+	 *
+	 * @param value 値
+	 *
+	 * @return 型情報
+	 */
+	public static final TypeNode of(NodeBase value) {
+		return new TypeNode(value.value().getClass());
 	}
 
 	/**
@@ -73,6 +100,39 @@ public final class TypeNode extends AtomBase<Class<?>> {
 	}
 
 	/**
+	 * 指定された名前を持つフィールドを検索して返します。
+	 *
+	 *
+	 * @param name フィールドの名前
+	 *
+	 * @return フィールド
+	 *
+	 * @throws ElvaRuntimeException 未定義の場合
+	 */
+	public final Field getField(String name) {
+		try {
+			return value.getField(name);
+		} catch (NoSuchFieldException ex) {
+			throw new ElvaRuntimeException(ex);
+		}
+	}
+
+	/**
+	 * この型が備えるコンストラクタを全て検索して返します。
+	 *
+	 *
+	 * @return コンストラクタのリスト
+	 *
+	 * @throws ElvaRuntimeException 未定義の場合
+	 */
+	public final List<Constructor> getConstructors() {
+		final var list = value.getConstructors();
+		if(list.length > 0) return List.of(list);
+		final var msg = "no %s constructor found";
+		throw new ElvaRuntimeException(msg, this);
+	}
+
+	/**
 	 * 指定された引数型のコンストラクタを検索して返します。
 	 *
 	 *
@@ -88,6 +148,26 @@ public final class TypeNode extends AtomBase<Class<?>> {
 		} catch (NoSuchMethodException ex) {
 			throw new ElvaRuntimeException(ex);
 		}
+	}
+
+	/**
+	 * 指定された名前を持つメソッドを全て検索して返します。
+	 *
+	 *
+	 * @param name メソッドの名前
+	 *
+	 * @return メソッドのリスト
+	 *
+	 * @throws ElvaRuntimeException 未定義の場合
+	 */
+	public final List<Method> getMethods(String name) {
+		final var list = new LinkedList<Method>();
+		for(var m: value.getMethods()) {
+			if(m.getName().equals(name)) list.add(m);
+		}
+		if(!list.isEmpty()) return list;
+		final var msg = "no such method found: '%s.%s'";
+		throw new ElvaRuntimeException(msg, this, name);
 	}
 
 	/**

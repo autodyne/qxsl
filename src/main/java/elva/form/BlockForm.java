@@ -14,7 +14,7 @@ import elva.lang.NativeOp.Name;
 /**
  * evaluates the expressions inside a nested scope.
  * <pre>
- * (block expressions...)
+ * (block *expressions)
  * </pre>
  *
  *

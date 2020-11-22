@@ -197,8 +197,10 @@ public final class ElvaInfo implements ScriptEngineFactory {
 	 */
 	@Override
 	public String getMethodCallSyntax(String obj, String met, String...seq) {
-		final var sexp = new StringJoiner(" ", "(", ")");
-		sexp.add("invoke").add("'".concat(met)).add(obj);
-		return sexp.add(String.join(" ", seq)).toString();
+		final var outer = new StringJoiner(" ", "(", ")");
+		final var inner = new StringJoiner(" ", "(", ")");
+		outer.merge(inner.add("method!").add("'").add(met));
+		for(var v: seq) outer.add(v);
+		return outer.toString();
 	}
 }

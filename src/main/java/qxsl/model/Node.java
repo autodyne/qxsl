@@ -122,8 +122,8 @@ public abstract class Node extends Tuple {
 	 * @since 2019/06/30
 	 */
 	@Override
-	public final Tuple set(QName key, String val) {
-		set(FieldManager.FIELDS.decode(key, val));
+	public final Tuple set(QName key, Object val) {
+		FieldManager.FIELDS.set(this, key, val);
 		return this;
 	}
 

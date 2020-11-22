@@ -130,7 +130,7 @@ public abstract class NativeOp extends FormBase {
 	 * この特殊形式が可変長引数の特殊形式か確認します。
 	 *
 	 *
-	 * @return 可変長引数なら真
+	 * @return 常に偽
 	 */
 	@Override
 	public final boolean isVarArgs() {
@@ -156,7 +156,7 @@ public abstract class NativeOp extends FormBase {
 	 */
 	@Override
 	public final int getMaximumArgumentLength() {
-		return args.max() < 0? Integer.MAX_VALUE: args.max();
+		return args.max() < 0? MAX: args.max();
 	}
 
 	/**

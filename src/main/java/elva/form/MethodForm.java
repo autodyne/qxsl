@@ -5,10 +5,9 @@
 *******************************************************************************/
 package elva.form;
 
-import elva.lang.CreateOp;
 import elva.lang.ElvaEval;
+import elva.lang.JavaCall;
 import elva.lang.ListBase;
-import elva.lang.MethodOp;
 import elva.lang.NativeOp;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
@@ -16,7 +15,7 @@ import elva.lang.NativeOp.Name;
 /**
  * returns a method of the specified class.
  * <pre>
- * (method 'name class parameter-types...)
+ * (method 'name class *parameter-types)
  * </pre>
  *
  *
@@ -29,11 +28,8 @@ import elva.lang.NativeOp.Name;
 public final class MethodForm extends NativeOp {
 	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
-		final var name = eval.apply(args.head()).name();
-		if(name.toString().equals("new")) {
-			return new CreateOp(name, args.map(eval).tail());
-		} else {
-			return new MethodOp(name, args.map(eval).tail());
-		}
+		final var name = eval.apply(args.head());
+		final var pars = args.tail().map(eval);
+		return new JavaCall(name.name(), pars);
 	}
 }

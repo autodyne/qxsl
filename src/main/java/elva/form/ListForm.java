@@ -14,7 +14,7 @@ import elva.lang.NativeOp.Name;
 /**
  * creates a list of elements as specified.
  * <pre>
- * (list elements...)
+ * (list *elements)
  * </pre>
  *
  *

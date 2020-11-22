@@ -15,6 +15,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import qxsl.model.Item;
+
 import gaas.utils.AssetUtils;
 
 /**
@@ -27,13 +29,10 @@ import gaas.utils.AssetUtils;
  */
 public final class ContestTest extends Assertions {
 	@ParameterizedTest
-	@MethodSource("constraints")
-	public void test(Constraint cs, String fmt) {
-		final var path = "allja1.".concat(fmt);
-		final var rule = RuleKit.load("allja1.lisp");
-		final var util = new AssetUtils(Contest.class);
-		final var sect = rule.contest().section(cs.label);
-		final var sums = sect.summarize(util.items(path));
+	@MethodSource({"constraintsJA1", "constraintsRTC"})
+	public void testSummarize(Constraint cs, String fmt) {
+		final var rule = cs.getContest().section(cs.rule);
+		final var sums = rule.summarize(cs.getItems(fmt));
 		assertThat(sums.score()).isEqualTo(cs.score);
 		assertThat(sums.total()).isEqualTo(cs.total);
 	}
@@ -45,32 +44,51 @@ public final class ContestTest extends Assertions {
 		assertThat(rule.get("split")).isInstanceOf(Method.class);
 	}
 
-	private static final List<Arguments> constraints() {
+	private static final List<Arguments> constraintsJA1() {
+		return load("allja1");
+	}
+
+	private static final List<Arguments> constraintsRTC() {
+		return load("online");
+	}
+
+	private static final List<Arguments> load(String name) {
 		final var list = new ArrayList<Arguments>();
 		final var util = new AssetUtils(Contest.class);
-		for (final var ln : util.listLines("allja1.test")) {
-			final var v = new Constraint(ln.split(", +", 4));
-			for (var f : v.forms) list.add(Arguments.of(v, f));
+		for(final var v: util.listLines(name.concat(".test"))) {
+			final var cs = new Constraint(name, v.split(", +", 4));
+			for(var fmt: cs.forms) list.add(Arguments.of(cs, fmt));
 		}
 		return list;
 	}
 
 	private static final class Constraint {
-		public final String label;
+		public final String name;
+		public final String rule;
 		public final int score;
 		public final int total;
 		public final String[] forms;
 
-		public Constraint(String... vals) {
-			this.label = vals[0];
+		public Constraint(String name, String[] vals) {
+			this.name = name;
+			this.rule = vals[0];
 			this.score = Integer.parseInt(vals[1]);
 			this.total = Integer.parseInt(vals[2]);
 			this.forms = vals[3].split(":");
 		}
 
+		public Contest getContest() {
+			return RuleKit.load(name.concat(".lisp")).contest();
+		}
+
+		public List<Item> getItems(String format) {
+			final var path = name.concat(".").concat(format);
+			return new AssetUtils(Contest.class).items(path);
+		}
+
 		@Override
 		public final String toString() {
-			return label;
+			return String.format("%s %s", name, rule);
 		}
 	}
 }

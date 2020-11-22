@@ -14,7 +14,7 @@ import elva.lang.NativeOp.Name;
 /**
  * performs greater-equal operation and returns a bool value.
  * <pre>
- * (&gt;= real1 reals...)
+ * (&gt;= real1 *reals)
  * </pre>
  *
  *

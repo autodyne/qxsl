@@ -20,7 +20,7 @@ import qxsl.ruler.Contest;
 /**
  * creates and returns a contest object.
  * <pre>
- * (contest name host mail link)
+ * (contest name host mail link start-day final-day dead-line)
  * </pre>
  *
  *
@@ -29,7 +29,7 @@ import qxsl.ruler.Contest;
  * @since 2019/05/15
  */
 @Name("contest")
-@Args(min = 4, max = 4)
+@Args(min = 7, max = 7)
 public final class ContestForm extends NativeOp {
 	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
@@ -67,9 +67,9 @@ final class ContestImpl extends Contest {
 		this.host = eval.apply(rule.get(1)).text();
 		this.mail = eval.apply(rule.get(2)).text();
 		this.link = eval.apply(rule.get(3)).text();
-		this.from = eval.scope.get("start-day").form();
-		this.last = eval.scope.get("final-day").form();
-		this.dead = eval.scope.get("dead-line").form();
+		this.from = eval.apply(rule.get(4)).form();
+		this.last = eval.apply(rule.get(5)).form();
+		this.dead = eval.apply(rule.get(6)).form();
 		this.eval = eval;
 	}
 

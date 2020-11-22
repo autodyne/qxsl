@@ -59,8 +59,8 @@ public final class PatternTest extends Assertions {
 		final var fmts = new TableManager();
 		final var list = new ArrayList<Arguments>();
 		final var util = new AssetUtils(Pattern.class);
-		for (final var item : util.items("allja1.qxml")) {
-			for (var f : fmts) list.add(Arguments.of(item, f));
+		for (final var item: util.items("allja1.qxml")) {
+			for (var f: fmts) list.add(Arguments.of(item, f));
 		}
 		return list;
 	}

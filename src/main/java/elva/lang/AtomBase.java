@@ -47,7 +47,7 @@ public abstract class AtomBase<V> extends NodeBase {
 	}
 
 	/**
-	 * このアトムの内容をイテレータで返します。
+	 * リストの内容を列挙するイテレータを返します。
 	 *
 	 *
 	 * @return イテレータ

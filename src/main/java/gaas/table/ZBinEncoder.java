@@ -196,7 +196,7 @@ public final class ZBinEncoder extends TableEncoder {
 	 * @throws IOException 書き込みに失敗した場合
 	 */
 	private final void rstq(RSTQ rst) throws IOException {
-		final int s = rst == null? 599 : rst.value();
+		final int s = rst == null? 599: rst.value();
 		target.writeShort(Short.reverseBytes((short) s));
 	}
 

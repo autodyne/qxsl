@@ -28,11 +28,23 @@ public final class NameNode extends AtomBase<NameNode> {
 		this.value = value;
 	}
 
+	/**
+	 * この式の値を処理系の外部に渡す際に使用します。
+	 *
+	 *
+	 * @return 値
+	 */
 	@Override
 	public final NameNode value() {
 		return this;
 	}
 
+	/**
+	 * このアトムを表す文字列を返します。
+	 *
+	 *
+	 * @return 文字列による式の表現
+	 */
 	@Override
 	public final String toString() {
 		return value;
@@ -47,6 +59,16 @@ public final class NameNode extends AtomBase<NameNode> {
 	public final boolean equals(Object atom) {
 		if(!NameNode.class.isInstance(atom)) return false;
 		return ((NameNode) atom).value.equals(this.value);
+	}
+
+	/**
+	 * この名前が可変長引数の名前であるか確認します。
+	 *
+	 *
+	 * @return 可変長引数なら真
+	 */
+	public final boolean isVarArg() {
+		return value.startsWith("*");
 	}
 
 	/**

@@ -15,7 +15,7 @@ import elva.lang.RealNode;
 /**
  * performs division and returns a real value.
  * <pre>
- * (/ real1 reals...)
+ * (/ real1 *reals)
  * </pre>
  *
  *

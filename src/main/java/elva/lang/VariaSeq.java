@@ -106,7 +106,7 @@ public final class VariaSeq extends ListBase {
 	}
 
 	/**
-	 * このリストの内容をイテレータで返します。
+	 * リストの内容を列挙するイテレータを返します。
 	 *
 	 *
 	 * @return イテレータ

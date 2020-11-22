@@ -15,66 +15,21 @@ import elva.warn.ElvaRuntimeException;
  *
  * @since 2017/02/18
  */
-public final class SyntaxOp extends FormBase {
-	private final ListBase pars;
+public final class SyntaxOp extends CustomOp {
 	private final NodeBase body;
-	private final ElvaEval lisp;
+	private final ListBase sexp;
 
 	/**
 	 * 指定された式と評価器でマクロ式を生成します。
 	 *
 	 *
 	 * @param sexp 定義式
-	 * @param lisp 評価器
+	 * @param eval 評価器
 	 */
-	public SyntaxOp(ListBase sexp, ElvaEval lisp) {
-		this.pars = ListBase.list(sexp.get(0));
-		this.body = sexp.get(1);
-		this.lisp = lisp;
-	}
-
-	/**
-	 * この演算子の実体を返します。
-	 *
-	 *
-	 * @return 演算子の実体
-	 */
-	@Override
-	public final SyntaxOp value() {
-		return this;
-	}
-
-	/**
-	 * このマクロ式が可変長引数のマクロ式か確認します。
-	 *
-	 * @return 可変長引数なら真
-	 */
-	@Override
-	public final boolean isVarArgs() {
-		if(pars.isEmpty()) return false;
-		return pars.last().toString().endsWith("...");
-	}
-
-	/**
-	 * このマクロ式が取る引数の最小の個数を返します。
-	 *
-	 *
-	 * @return 最小限の引数の個数
-	 */
-	@Override
-	public final int getMinimumArgumentLength() {
-		return pars.size() - (isVarArgs()? 1: 0);
-	}
-
-	/**
-	 * このマクロ式が取る引数の最大の個数を返します。
-	 *
-	 *
-	 * @return 最大限の引数の個数
-	 */
-	@Override
-	public final int getMaximumArgumentLength() {
-		return isVarArgs()? Integer.MAX_VALUE: pars.size();
+	public SyntaxOp(ListBase sexp, ElvaEval eval) {
+		super(sexp, eval);
+		this.sexp = sexp;
+		this.body = sexp.last();
 	}
 
 	/**
@@ -85,7 +40,7 @@ public final class SyntaxOp extends FormBase {
 	 */
 	@Override
 	public final String toString() {
-		return String.format("(syntax %s %s)", pars, body);
+		return new NameNode("syntax").form(sexp).toString();
 	}
 
 	/**
@@ -101,8 +56,6 @@ public final class SyntaxOp extends FormBase {
 	 */
 	@Override
 	public final Object apply(ListBase args, ElvaEval eval) {
-		final var local = lisp.scope.fork();
-		local.put(pars, args);
-		return eval.apply(new ElvaEval(local).apply(body));
+		return eval.apply(localize(args).apply(body));
 	}
 }

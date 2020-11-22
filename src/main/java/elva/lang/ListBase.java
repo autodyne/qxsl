@@ -270,6 +270,16 @@ public abstract class ListBase extends NodeBase {
 	}
 
 	/**
+	 * この引数宣言が可変長引数の関数宣言か確認します。
+	 *
+	 *
+	 * @return 可変長引数なら真
+	 */
+	public final boolean isVarArgs() {
+		return !isEmpty() && last().name().isVarArg();
+	}
+
+	/**
 	 * 指定された値をリストに変換して返します。
 	 * 既にリストである場合はそのまま返します。
 	 *

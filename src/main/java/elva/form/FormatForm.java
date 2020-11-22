@@ -14,7 +14,7 @@ import elva.lang.NativeOp.Name;
 /**
  * formats a string using the specified arguments.
  * <pre>
- * (format string arguments...)
+ * (format string *arguments)
  * </pre>
  *
  *

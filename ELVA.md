@@ -234,8 +234,14 @@ In fact, the `defmacro` macro is syntactic sugar equivalent to the following exp
 
 To import a Java class, use the `import` function.
 
-```
+```lisp
 (import java.lang.String)
+```
+
+You can refer to the Java constructor by using the `new` function.
+
+```lisp
+(new Integer int) ;Integer::new
 ```
 
 To reference a Java method, use the `method` function.
@@ -244,20 +250,31 @@ To reference a Java method, use the `method` function.
 (method 'length String) ;String.length()
 ```
 
-Give arguments to call the method.
-The first argument must be the object that has the method.
-This argument is not needed when calling static methods.
+Give arguments to call the constructor and method.
 
 ```lisp
 ((method 'replaceAll String String String) "foobar" "r" "z") ;"foobaz"
+((method 'replaceAll String String String) "foobar" "f" "b") ;"boobar"
 ```
 
-The second and subsequent arguments are passed to the method as its arguments.
-You can refer to the Java constructor by setting the method name to `new`.
+For instance methods, the first argument must be the instance.
+This argument is not needed when calling constructors or static methods.
+The second and subsequent arguments are passed to the constructor or method as their arguments.
+To reference a Java field, use the `access` function.
 
 ```lisp
-((method `new Integer int) 123)
+((access 'x Point) ((new Point int int) 123 321)) ;123
+((access 'y Point) ((new Point int int) 123 321)) ;321
 ```
+
+If you do not mind the processing efficiency, Java APIs can be referenced using the `method!`, `new!`, and `access!` functions.
+
+```lisp
+((new! Integer) 123)
+((method! 'replaceAll) "foobar" "r" "z")
+((access! 'x Point) ((new! Point) 12 3))
+```
+
 Passing an elva list to a Java method will convert the list to a Java `List`.
 If the method requires an array, the list will be converted to an array.
 
@@ -301,12 +318,28 @@ This evaluates the unquoted sub expression as a list and then embeds the element
 
 ## System Functions
 
+### access
+
+returns the field of the specified class.
+
+```lisp
+(access 'name class)
+```
+
+### access!
+
+returns the field of any class.
+
+```lisp
+(access! 'name)
+```
+
 ### +
 
 performs addition and returns a real value.
 
 ```lisp
-(+ real1 reals...)
+(+ real1 *reals)
 ```
 
 ### and
@@ -314,7 +347,7 @@ performs addition and returns a real value.
 performs and operation and returns a bool value.
 
 ```lisp
-(and bool1 bools...)
+(and bool1 *bools)
 ```
 
 ### array
@@ -338,7 +371,7 @@ throws an error if the expression returns false.
 evaluates the expressions inside a nested scope.
 
 ```lisp
-(block expressions...)
+(block *expressions)
 ```
 
 ### cadr
@@ -391,10 +424,10 @@ concatenates the specified value and list into a list.
 
 ### contest
 
-creates and returns a [`contest`](https://nextzlog.github.io/qxsl/doc/qxsl/ruler/Contest.html) object, which references `start-day`, `final-day`, and `dead-line` functions.
+creates and returns a [`contest`](https://nextzlog.github.io/qxsl/doc/qxsl/ruler/Contest.html) object.
 
 ```lisp
-(contest name host mail link)
+(contest name host mail link start-day final-day dead-line)
 ```
 
 ### /
@@ -402,7 +435,7 @@ creates and returns a [`contest`](https://nextzlog.github.io/qxsl/doc/qxsl/ruler
 performs division and returns a real value.
 
 ```lisp
-(/ real1 reals...)
+(/ real1 *reals)
 ```
 
 ### eq
@@ -429,20 +462,12 @@ evaluates the specified value.
 (eval value)
 ```
 
-### failure
-
-creates and returns a [`failure`](https://nextzlog.github.io/qxsl/doc/qxsl/ruler/Failure.html) object.
-
-```lisp
-(failure item message)
-```
-
 ### format
 
 formats a string using the specified arguments.
 
 ```lisp
-(format string arguments...)
+(format string *arguments)
 ```
 
 ### >=
@@ -450,15 +475,7 @@ formats a string using the specified arguments.
 performs greater-equal operation and returns a bool value.
 
 ```lisp
-(>= real1 reals...)
-```
-
-### getf
-
-extracts the specified field value of the item.
-
-```lisp
-(getf item qname)
+(>= real1 *reals)
 ```
 
 ### >
@@ -466,7 +483,7 @@ extracts the specified field value of the item.
 performs greater operation and returns a bool value.
 
 ```lisp
-(> real1 reals...)
+(> real1 *reals)
 ```
 
 ### if
@@ -485,14 +502,6 @@ imports the specified class.
 (import class)
 ```
 
-### item
-
-creates and returns an [`item`](https://nextzlog.github.io/qxsl/doc/qxsl/model/Item.html) object.
-
-```lisp
-(item)
-```
-
 ### lambda
 
 creates and returns an anonymous closure.
@@ -506,7 +515,7 @@ creates and returns an anonymous closure.
 performs less-equal operation and returns a bool value.
 
 ```lisp
-(<= real1 reals...)
+(<= real1 *reals)
 ```
 
 ### length
@@ -530,7 +539,7 @@ creates a local variable and evaluates the expression.
 creates a list of elements as specified.
 
 ```lisp
-(list elements...)
+(list *elements)
 ```
 
 ### load
@@ -546,7 +555,7 @@ loads the specified LISP file.
 performs less operation and returns a bool value.
 
 ```lisp
-(< real1 reals...)
+(< real1 *reals)
 ```
 
 ### member
@@ -562,7 +571,15 @@ tests if the list contains the specified value.
 returns a method of the specified class.
 
 ```lisp
-(method 'name class parameter-types...)
+(method 'name class *parameter-types)
+```
+
+### method!
+
+returns a method of the specified class.
+
+```lisp
+(method! 'name [class])
 ```
 
 ### mod
@@ -570,7 +587,7 @@ returns a method of the specified class.
 performs modulo and returns a real value.
 
 ```lisp
-(mod real1 reals...)
+(mod real1 *reals)
 ```
 
 ### *
@@ -578,7 +595,7 @@ performs modulo and returns a real value.
 performs multiplication and returns a real value.
 
 ```lisp
-(* real1 reals...)
+(* real1 *reals)
 ```
 
 ### name
@@ -587,6 +604,22 @@ returns a qualified name in the specified namespace.
 
 ```lisp
 (name namespace local-name)
+```
+
+### new
+
+returns a constructor of the specified class.
+
+```lisp
+(new class *parameter-types)
+```
+
+### new!
+
+returns a constructor of the specified class.
+
+```lisp
+(new! class)
 ```
 
 ### nil?
@@ -626,7 +659,7 @@ tests if the argument is null or not.
 performs or operation and returns a bool value.
 
 ```lisp
-(or bool1 bools...)
+(or bool1 *bools)
 ```
 
 ### pattern
@@ -635,6 +668,14 @@ creates and returns a [`pattern`](https://nextzlog.github.io/qxsl/doc/qxsl/ruler
 
 ```lisp
 (pattern normalize transform)
+```
+
+### print
+
+evaluates the argument and print its value.
+
+```lisp
+(print argument)
 ```
 
 ### quasiquote
@@ -653,28 +694,12 @@ returns the expression without evaluation.
 (quote expression)
 ```
 
-### rcvd
-
-extracts the [`rcvd`](https://nextzlog.github.io/qxsl/doc/qxsl/model/Rcvd.html) object from the item.
-
-```lisp
-(rcvd item)
-```
-
 ### section
 
 takes four functions and returns a [`section`](https://nextzlog.github.io/qxsl/doc/qxsl/ruler/Section.html) object.
- 
+
 ```lisp
 (section name code verify unique entity result)
-```
-
-### sent
-
-extracts the [`sent`](https://nextzlog.github.io/qxsl/doc/qxsl/model/Sent.html) object from the item.
-
-```lisp
-(sent item)
 ```
 
 ### set
@@ -685,28 +710,12 @@ creates a variable with the specified name and value.
 (set name value)
 ```
 
-### setf
-
-assigns the specified field value into the item.
-
-```lisp
-(setf item qname value)
-```
-
-### static
-
-returns the value of the specified static field.
-
-```lisp
-(static class name)
-```
-
 ### -
 
 performs subtraction and returns a real value.
 
 ```lisp
-(- real1 reals...)
+(- real1 *reals)
 ```
 
 ### subseq
@@ -715,14 +724,6 @@ returns a subsequence of the specified list.
 
 ```lisp
 (subseq list start end)
-```
-
-### success
-
-creates and returns a [`success`](https://nextzlog.github.io/qxsl/doc/qxsl/ruler/Success.html) object.
-
-```lisp
-(success item score)
 ```
 
 ### symbol

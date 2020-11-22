@@ -14,7 +14,7 @@ import elva.lang.NativeOp.Name;
 /**
  * performs or operation and returns a bool value.
  * <pre>
- * (or bool1 bools...)
+ * (or bool1 *bools)
  * </pre>
  *
  *
@@ -23,7 +23,7 @@ import elva.lang.NativeOp.Name;
  * @since 2017/02/27
  */
 @Name("or")
-@Args(min = 2, max = -1)
+@Args(min = 1, max = -1)
 public final class OrForm extends NativeOp {
 	@Override
 	public Object apply(ListBase args, ElvaEval eval) {

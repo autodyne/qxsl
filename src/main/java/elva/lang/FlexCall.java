@@ -5,36 +5,40 @@
 *******************************************************************************/
 package elva.lang;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import elva.warn.ElvaRuntimeException;
 
 /**
- * LISP処理系からコンストラクタを参照する演算子の実装です。
+ * LISP処理系からメソッドを参照する演算子の実装です。
  *
  *
  * @author 無線部開発班
  *
- * @since 2020/09/02
+ * @since 2020/11/22
  */
-public final class CreateOp extends FormBase {
-	private static final int MAX = 256;
-	private final Constructor body;
+public final class FlexCall extends FormBase {
+	private final NameNode name;
+	private final TypeNode type;
 
 	/**
-	 * 指定された式でメソッド参照を生成します。
+	 * 指定された名前のメソッドを参照します。
 	 *
 	 *
 	 * @param name メソッドの名前
-	 *
-	 * @param list 引数の型の配列
-	 *
-	 * @throws ElvaRuntimeException 何らかの例外
 	 */
-	public CreateOp(NameNode name, ListBase list) {
-		final var pars = list.tail().cast(Class.class);
-		body = list.head().type().getConstructor(pars);
+	public FlexCall(NameNode name) {
+		this(name, null);
+	}
+
+	/**
+	 * 指定された名前と型のメソッドを参照します。
+	 *
+	 *
+	 * @param name メソッドの名前
+	 * @param type メソッドを定義した型
+	 */
+	public FlexCall(NameNode name, TypeNode type) {
+		this.name = name;
+		this.type = type;
 	}
 
 	/**
@@ -44,19 +48,19 @@ public final class CreateOp extends FormBase {
 	 * @return 演算子の実体
 	 */
 	@Override
-	public final Constructor value() {
-		return body;
+	public final FlexCall value() {
+		return this;
 	}
 
 	/**
-	 * このメソッドが可変長引数のメソッドか確認します。
+	 * この演算子が可変長引数のメソッドか確認します。
 	 *
 	 *
-	 * @return 可変長引数なら真
+	 * @return 常に偽
 	 */
 	@Override
 	public final boolean isVarArgs() {
-		return body.isVarArgs();
+		return false;
 	}
 
 	/**
@@ -67,8 +71,7 @@ public final class CreateOp extends FormBase {
 	 */
 	@Override
 	public final int getMinimumArgumentLength() {
-		final int cnt = body.getParameterCount();
-		return isVarArgs()? cnt - 1: cnt;
+		return type != null? 0: 1;
 	}
 
 	/**
@@ -79,8 +82,7 @@ public final class CreateOp extends FormBase {
 	 */
 	@Override
 	public final int getMaximumArgumentLength() {
-		final int cnt = body.getParameterCount();
-		return isVarArgs()? MAX: cnt;
+		return MAX;
 	}
 
 	/**
@@ -91,7 +93,26 @@ public final class CreateOp extends FormBase {
 	 */
 	@Override
 	public final String toString() {
-		return body.toGenericString();
+		return String.format("(method '%s)", name);
+	}
+
+	/**
+	 * 指定された対象と実引数でメソッドを実行します。
+	 *
+	 *
+	 * @param type メソッドを定義した型
+	 * @param args オブジェクトと実引数の配列
+	 *
+	 * @return 返り値
+	 *
+	 * @throws ElvaRuntimeException 評価で発生した例外
+	 */
+	private final Object invoke(TypeNode type, ListBase args) {
+		for(var method: type.getMethods(name.toString())) try {
+			return new JavaCall(method).invoke(args);
+		} catch (ClassCastException ex) {}
+		final var msg = "no such method found available: %s";
+		throw new ElvaRuntimeException(msg, this.form(args));
 	}
 
 	/**
@@ -107,16 +128,8 @@ public final class CreateOp extends FormBase {
 	 */
 	@Override
 	public final Object apply(ListBase args, ElvaEval eval) {
-		final var par = body.getParameterTypes();
-		final var seq = args.map(eval).cast(par);
-		try {
-			return body.newInstance(seq);
-		} catch (InvocationTargetException ex) {
-			throw new ElvaRuntimeException(ex);
-		} catch (IllegalAccessException ex) {
-			throw new ElvaRuntimeException(ex);
-		} catch (InstantiationException ex) {
-			throw new ElvaRuntimeException(ex);
-		}
+		final var seq = args.map(eval);
+		if(type != null) return invoke(type, seq);
+		return invoke(TypeNode.of(seq.head()), seq);
 	}
 }

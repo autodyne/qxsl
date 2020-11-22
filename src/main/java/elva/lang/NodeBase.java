@@ -134,6 +134,16 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 	}
 
 	/**
+	 * この式が型情報であるか確認します。
+	 *
+	 *
+	 * @return 型情報の場合は真
+	 */
+	public final boolean isType() {
+		return this instanceof TypeNode;
+	}
+
+	/**
 	 * この式がリストであるか確認します。
 	 *
 	 *
@@ -141,16 +151,6 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 	 */
 	public final boolean isList() {
 		return this instanceof ListBase;
-	}
-
-	/**
-	 * この式の値を文字列に変換します。
-	 *
-	 *
-	 * @return 文字列 値がnullの場合はnull
-	 */
-	public final String valueAsString() {
-		return isNull()? null: value().toString();
 	}
 
 	/**
@@ -173,8 +173,20 @@ public abstract class NodeBase implements Iterable<NodeBase> {
 	 *
 	 * @return 演算子及び被演算子のリスト
 	 */
+	public final ListBase form(ListBase args) {
+		return new ChainSeq(this, args);
+	}
+
+	/**
+	 * この式を演算子として引数に適用する式を返します。
+	 *
+	 *
+	 * @param args 被演算子
+	 *
+	 * @return 演算子及び被演算子のリスト
+	 */
 	public final ListBase form(Object... args) {
-		return new ChainSeq(this, new ArraySeq(args));
+		return form(new ArraySeq(args));
 	}
 
 	/**

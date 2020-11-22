@@ -58,12 +58,6 @@ public final class LambdaOpTest extends Assertions {
 
 	@ParameterizedTest
 	@MethodSource("source")
-	public void testIsNativeOperator(NodeBase node, String sexp) {
-		assertThat(node.form().isNativeOperator()).isFalse();
-	}
-
-	@ParameterizedTest
-	@MethodSource("source")
 	public void testIsNull(NodeBase node, String sexp) {
 		assertThat(node.isNull()).isFalse();
 	}
@@ -95,12 +89,6 @@ public final class LambdaOpTest extends Assertions {
 
 	@ParameterizedTest
 	@MethodSource("source")
-	public void testValueAsString(NodeBase node, String sexp) {
-		assertThat(node.valueAsString()).hasToString(sexp.split(";")[1]);
-	}
-
-	@ParameterizedTest
-	@MethodSource("source")
 	public void testWrap(NodeBase node, String sexp) {
 		assertThat(NodeBase.wrap(node)).isSameAs(node);
 	}
@@ -109,7 +97,7 @@ public final class LambdaOpTest extends Assertions {
 		final var elva = new ElvaLisp();
 		final var list = new LinkedList<Arguments>();
 		final var util = new AssetUtils(LambdaOp.class);
-		for (var line : util.listLines("LambdaOp.lisp")) {
+		for (var line: util.listLines("LambdaOp.lisp")) {
 			list.add(Arguments.of(elva.eval(line), line));
 		}
 		return list;

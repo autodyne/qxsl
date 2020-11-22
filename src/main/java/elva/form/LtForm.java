@@ -14,7 +14,7 @@ import elva.lang.NativeOp.Name;
 /**
  * performs less operation and returns a bool value.
  * <pre>
- * (&lt; real1 reals...)
+ * (&lt; real1 *reals)
  * </pre>
  *
  *

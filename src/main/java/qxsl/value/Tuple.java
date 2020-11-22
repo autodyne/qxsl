@@ -99,7 +99,7 @@ public abstract class Tuple implements Iterable<Field> {
 	 *
 	 * @since 2019/06/30
 	 */
-	public abstract Tuple set(QName key, String val);
+	public abstract Tuple set(QName key, Object val);
 
 	/**
 	 * 指定された属性名に対応する属性を削除します。

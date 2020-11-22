@@ -12,6 +12,7 @@ import java.util.ServiceLoader;
 import javax.xml.namespace.QName;
 
 import qxsl.value.Field;
+import qxsl.value.Tuple;
 
 /**
  * 属性の書式をクラスパスから自動的に検出して管理します。
@@ -76,6 +77,23 @@ public final class FieldManager implements Iterable<FieldFactory> {
 	}
 
 	/**
+	 * 指定された文字列と名前を持つ属性値を取得します。
+	 *
+	 *
+	 * @param qname 属性の名前
+	 * @param value 属性を表す文字列
+	 *
+	 * @return 属性値
+	 */
+	public Field decode(QName qname, String value) {
+		try {
+			return factory(qname).decode(value);
+		} catch (NullPointerException ex) {
+			return new Any(qname, value);
+		}
+	}
+
+	/**
 	 * 指定された属性を適切な書式で文字列に変換します。
 	 *
 	 *
@@ -92,20 +110,16 @@ public final class FieldManager implements Iterable<FieldFactory> {
 	}
 
 	/**
-	 * 指定された文字列と名前を持つ属性値を取得します。
+	 * 指定された文字列と名前を持つ属性地を設定します。
 	 *
 	 *
+	 * @param tuple 交信記録
 	 * @param qname 属性の名前
 	 * @param value 属性を表す文字列
-	 *
-	 * @return 属性値
 	 */
-	public Field decode(QName qname, String value) {
-		try {
-			return factory(qname).decode(value);
-		} catch (NullPointerException ex) {
-			return new Any(qname, value);
-		}
+	public void set(Tuple tuple, QName qname, Object value) {
+		if(value == null) tuple.remove(qname);
+		else tuple.set(decode(qname, value.toString()));
 	}
 
 	/**

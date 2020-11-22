@@ -6,6 +6,18 @@
 		"allPublicFields": true
 	},
 	{
+		"name": "elva.form.AccessForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.AccessSpForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
 		"name": "elva.form.AddForm",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
@@ -102,12 +114,6 @@
 		"allPublicFields": true
 	},
 	{
-		"name": "elva.form.FailureForm",
-		"allPublicConstructors": true,
-		"allPublicMethods": true,
-		"allPublicFields": true
-	},
-	{
 		"name": "elva.form.FormatForm",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
@@ -115,12 +121,6 @@
 	},
 	{
 		"name": "elva.form.GeForm",
-		"allPublicConstructors": true,
-		"allPublicMethods": true,
-		"allPublicFields": true
-	},
-	{
-		"name": "elva.form.GetfForm",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
 		"allPublicFields": true
@@ -139,12 +139,6 @@
 	},
 	{
 		"name": "elva.form.ImportForm",
-		"allPublicConstructors": true,
-		"allPublicMethods": true,
-		"allPublicFields": true
-	},
-	{
-		"name": "elva.form.ItemForm",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
 		"allPublicFields": true
@@ -204,6 +198,12 @@
 		"allPublicFields": true
 	},
 	{
+		"name": "elva.form.MethodSpForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
 		"name": "elva.form.ModForm",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
@@ -217,6 +217,18 @@
 	},
 	{
 		"name": "elva.form.NameForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.NewForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.form.NewSpForm",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
 		"allPublicFields": true
@@ -258,6 +270,12 @@
 		"allPublicFields": true
 	},
 	{
+		"name": "elva.form.PrintForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
 		"name": "elva.form.QuasiForm",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
@@ -270,37 +288,13 @@
 		"allPublicFields": true
 	},
 	{
-		"name": "elva.form.RcvdForm",
-		"allPublicConstructors": true,
-		"allPublicMethods": true,
-		"allPublicFields": true
-	},
-	{
 		"name": "elva.form.SectionForm",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
 		"allPublicFields": true
 	},
 	{
-		"name": "elva.form.SentForm",
-		"allPublicConstructors": true,
-		"allPublicMethods": true,
-		"allPublicFields": true
-	},
-	{
 		"name": "elva.form.SetForm",
-		"allPublicConstructors": true,
-		"allPublicMethods": true,
-		"allPublicFields": true
-	},
-	{
-		"name": "elva.form.SetfForm",
-		"allPublicConstructors": true,
-		"allPublicMethods": true,
-		"allPublicFields": true
-	},
-	{
-		"name": "elva.form.StaticForm",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
 		"allPublicFields": true
@@ -313,12 +307,6 @@
 	},
 	{
 		"name": "elva.form.SubSeqForm",
-		"allPublicConstructors": true,
-		"allPublicMethods": true,
-		"allPublicFields": true
-	},
-	{
-		"name": "elva.form.SuccessForm",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
 		"allPublicFields": true
@@ -1555,6 +1543,12 @@
 	},
 	{
 		"name": "java.util.WeakHashMap",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "javax.xml.namespace.QName",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
 		"allPublicFields": true

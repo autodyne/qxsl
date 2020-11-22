@@ -162,7 +162,7 @@ public final class Item extends Tuple {
 	 * @since 2019/06/30
 	 */
 	@Override
-	public final Tuple set(QName key, String val) {
+	public final Tuple set(QName key, Object val) {
 		return getBoth().set(key, val);
 	}
 

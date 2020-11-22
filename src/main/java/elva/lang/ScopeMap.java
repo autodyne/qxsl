@@ -24,6 +24,13 @@ public final class ScopeMap extends SimpleBindings {
 
 	/**
 	 * 最も外側のスコープを構築します。
+	 */
+	public ScopeMap() {
+		this(ScopeMap.class.getClassLoader());
+	}
+
+	/**
+	 * 最も外側のスコープを構築します。
 	 *
 	 *
 	 * @param loader クラスローダ

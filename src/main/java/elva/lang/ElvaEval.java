@@ -105,8 +105,7 @@ public final class ElvaEval implements UnaryOperator<NodeBase> {
 		final var MAX = "%s accepts a maximum of %d arguments";
 		if(num < min) throw new ElvaRuntimeException(MIN, form, min);
 		if(num > max) throw new ElvaRuntimeException(MAX, form, max);
-		if(form.isNativeOperator() || !form.isVarArgs()) return args;
-		return new VariaSeq(args, min + 1);
+		return form.isVarArgs()? new VariaSeq(args, min + 1): args;
 	}
 
 	/**

@@ -33,25 +33,25 @@
 (assert (equal (dolist (i (list 1 2 3)) (* i 2)) (list 2 4 6)) "dolist")
 
 ; cond
-(defmacro cond conds...
-	(if (not (nil? conds...))
-		`(if ,@(car conds...) (cond ,@(cdr conds...)))))
+(defmacro cond *conds
+	(if (not (nil? *conds))
+		`(if ,@(car *conds) (cond ,@(cdr *conds)))))
 (assert (equal (let x 1 (cond ((equal x 1) "A") ((equal x 2) "B"))) "A") "cond")
 (assert (equal (let x 2 (cond ((equal x 1) "A") ((equal x 2) "B"))) "B") "cond")
 
 ; always
-(defun always args... #t)
+(defun always *args #t)
 (assert (always) "always")
 (assert (always 1) "always")
 (assert (always 1 2) "always")
 
 ; every
-(defmacro every (it conds...) `(and ,@(dolist (c conds...) `(,c ,it))))
+(defmacro every (it *conds) `(and ,@(dolist (c *conds) `(,c ,it))))
 (assert (equal (every 2 (lambda y (> y 1)) (lambda z (< z 3))) #t) "every")
 (assert (equal (every 3 (lambda y (> y 1)) (lambda z (< z 3))) #f) "every")
 
 ; some
-(defmacro some (it conds...) `(or ,@(dolist (c conds...) `(,c ,it))))
+(defmacro some (it *conds) `(or ,@(dolist (c *conds) `(,c ,it))))
 (assert (equal (some 2 (lambda y (> y 1)) (lambda z (< z 3))) #t) "some")
 (assert (equal (some 3 (lambda y (> y 1)) (lambda z (< z 3))) #t) "some")
 
@@ -67,15 +67,8 @@
 (defun string obj ((method 'toString Objects Object) obj))
 (assert (equal (string  114514) "114514") "string")
 (assert (equal (string 'FOOBAR) "FOOBAR") "string")
-(assert (equal (string (lambda x (+ x x))) "(lambda (x) (+ x x))") "string")
-(assert (equal (string (syntax x (+ x x))) "(syntax (x) (+ x x))") "string")
-
-; invoke
-(defmacro invoke (method obj args...)
-	`((method ,method (type ,obj) ,@(dolist (v args...) (type v)))
-		,obj ,@args...))
-(assert (invoke 'matches "364364" "\\d{6}") "invoke")
-(assert (invoke 'startsWith "114514" "114") "invoke")
+(assert (equal (string (lambda x (+ x x))) "(lambda x (+ x x))") "string")
+(assert (equal (string (syntax x (+ x x))) "(syntax x (+ x x))") "string")
 
 ; boolean
 (defun boolean str (equal "#t" str))
@@ -93,7 +86,7 @@
 (setq setScale (method 'setScale BigDecimal int RoundingMode))
 
 ; floor
-(defun floor num (setScale num 0 (static RoundingMode 'FLOOR)))
+(defun floor num (setScale num 0 ((access 'FLOOR RoundingMode))))
 (assert (equal (floor (+  5 0.5))  5) "floor")
 (assert (equal (floor (+  2 0.5))  2) "floor")
 (assert (equal (floor (+  1 0.6))  1) "floor")
@@ -106,7 +99,7 @@
 (assert (equal (floor (- -5 0.5)) -6) "floor")
 
 ; ceiling
-(defun ceiling num (setScale num 0 (static RoundingMode 'CEILING)))
+(defun ceiling num (setScale num 0 ((access 'CEILING RoundingMode))))
 (assert (equal (ceiling (+  5 0.5))  6) "ceiling")
 (assert (equal (ceiling (+  2 0.5))  3) "ceiling")
 (assert (equal (ceiling (+  1 0.6))  2) "ceiling")
@@ -119,7 +112,7 @@
 (assert (equal (ceiling (- -5 0.5)) -5) "ceiling")
 
 ; round
-(defun round num (setScale num 0 (static RoundingMode 'HALF_UP)))
+(defun round num (setScale num 0 ((access 'HALF_UP RoundingMode))))
 (assert (equal (round (+  5 0.5))  6) "round")
 (assert (equal (round (+  2 0.5))  3) "round")
 (assert (equal (round (+  1 0.6))  2) "round")
@@ -165,7 +158,29 @@
 ; format time into an ISO-8601 string
 (defun iso-8601 time
 	((method 'format ZonedDateTime DateTimeFormatter)
-		time (static DateTimeFormatter 'ISO_ZONED_DATE_TIME)))
+		time ((access 'ISO_ZONED_DATE_TIME DateTimeFormatter))))
+
+; contact validation
+(defmacro verify (conds score)
+	`(lambda it
+		(let it (normalize it null)
+			(let msg (search it ,conds)
+				(if (nil? msg)
+					(success it (,score it))
+					(failure it msg))))))
+
+; create item
+(setq item (new Item))
+(setq rcvd (method 'getRcvd Item))
+(setq sent (method 'getSent Item))
+
+; access field
+(setq getf (method 'value Tuple QName))
+(setq setf (method 'set Tuple QName Object))
+
+; create success/failure
+(setq success (new Success Item int))
+(setq failure (new Failure Item Object))
 
 ; get code or name from the specified city
 (setq code<-city (method 'code LocalCityItem))
@@ -175,3 +190,10 @@
 ; get city from the specified code or name
 (setq city<-code (method 'getByCode LocalCityBase String))
 (setq city<-name (method 'getByName LocalCityBase String))
+
+; contest schedule
+(defun schedule (year month week day)
+	(let day ((method! 'valueOf DayOfWeek) day)
+		(let adj (method! 'dayOfWeekInMonth TemporalAdjusters)
+			(let 1st ((method! 'of LocalDate) year month 1)
+				((method! 'with LocalDate) 1st (adj week day))))))

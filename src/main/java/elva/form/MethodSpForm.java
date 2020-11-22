@@ -5,34 +5,32 @@
 *******************************************************************************/
 package elva.form;
 
-import javax.xml.namespace.QName;
-
 import elva.lang.ElvaEval;
+import elva.lang.FlexCall;
 import elva.lang.ListBase;
 import elva.lang.NativeOp;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
-import qxsl.value.Tuple;
-
 /**
- * extracts the specified field value of the item.
+ * returns a method of the specified class.
  * <pre>
- * (getf item qname)
+ * (method! 'name [class])
  * </pre>
  *
  *
  * @author 無線部開発班
  *
- * @since 2019/06/29
+ * @since 2020/11/22
  */
-@Name("getf")
-@Args(min = 2, max = 2)
-public final class GetfForm extends NativeOp {
+@Name("method!")
+@Args(min = 1, max = 2)
+public final class MethodSpForm extends NativeOp {
 	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
-		final var obj = eval.apply(args.get(0)).to(Tuple.class);
-		final var qua = eval.apply(args.get(1)).to(QName.class);
-		return obj.value(qua);
+		final var vals = args.map(eval);
+		final var name = vals.head().name();
+		if(vals.size() < 2) return new FlexCall(name);
+		return new FlexCall(name, vals.last().type());
 	}
 }

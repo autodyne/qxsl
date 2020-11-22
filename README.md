@@ -126,6 +126,7 @@ Elva is a special LISP for the purpose of contest definition.
 The following LISP programs are bundled inside the JAR file, as sample codes in Elva.
 
 - [`allja1.lisp`](src/main/resources/qxsl/ruler/allja1.lisp)
+- [`online.lisp`](src/main/resources/qxsl/ruler/online.lisp)
 - [`format.lisp`](src/main/resources/qxsl/ruler/format.lisp)
 - [`jautil.lisp`](src/main/resources/qxsl/ruler/jautil.lisp)
 
