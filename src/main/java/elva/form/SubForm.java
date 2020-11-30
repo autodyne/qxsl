@@ -10,6 +10,7 @@ import elva.lang.ListBase;
 import elva.lang.NativeOp;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
+import elva.lang.NodeBase;
 import elva.lang.RealNode;
 
 /**
@@ -28,8 +29,8 @@ import elva.lang.RealNode;
 public final class SubForm extends NativeOp {
 	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
-		final var reals = args.map(eval).reals();
-		final var tails = reals.stream().skip(1);
-		return tails.reduce(reals.get(0), RealNode::sub);
+		final var seq = args.map(eval).stream();
+		final var num = seq.map(NodeBase::real);
+		return num.reduce(RealNode::sub).get();
 	}
 }

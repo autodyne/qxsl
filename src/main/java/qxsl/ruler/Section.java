@@ -54,7 +54,17 @@ public abstract class Section extends Library {
 	 * @since 2020/11/15
 	 */
 	public final Section cache() {
-		return new Promise(this);
+		return isAbsence()? this: new Promise(this);
+	}
+
+	/**
+	 * この部門が不参加部門であるか確認します。
+	 *
+	 *
+	 * @return 不参加部門の場合は真
+	 */
+	public final boolean isAbsence() {
+		return this instanceof Absence;
 	}
 
 	/**
@@ -63,7 +73,7 @@ public abstract class Section extends Library {
 	 *
 	 * @param item 検査対象の交信記録
 	 *
-	 * @return 承認された場合はtrue
+	 * @return 検証結果
 	 */
 	public abstract Message verify(Item item);
 
@@ -74,6 +84,8 @@ public abstract class Section extends Library {
 	 * @param item 検査対象の交信記録
 	 *
 	 * @return 重複を除くための識別子
+	 *
+	 * @since 2020/11/02
 	 */
 	public abstract Element unique(Item item);
 
@@ -84,6 +96,8 @@ public abstract class Section extends Library {
 	 * @param item 検査対象の交信記録
 	 *
 	 * @return 総得点を計算する識別子の配列
+	 *
+	 * @since 2020/11/02
 	 */
 	public abstract Element entity(Item item);
 

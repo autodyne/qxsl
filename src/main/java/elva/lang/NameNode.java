@@ -50,11 +50,25 @@ public final class NameNode extends AtomBase<NameNode> {
 		return value;
 	}
 
+	/**
+	 * このアトムからハッシュ値を計算します。
+	 *
+	 *
+	 * @return ハッシュ値
+	 */
 	@Override
 	public final int hashCode() {
 		return value.hashCode();
 	}
 
+	/**
+	 * このアトムと指定された値を比較します。
+	 *
+	 *
+	 * @param sexp 比較対象の値
+	 *
+	 * @return 等価の場合は真
+	 */
 	@Override
 	public final boolean equals(Object atom) {
 		if(!NameNode.class.isInstance(atom)) return false;

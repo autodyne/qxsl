@@ -6,6 +6,7 @@
 package qxsl.ruler;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -104,6 +105,45 @@ public abstract class Contest extends Library implements Iterable<Section> {
 	 * @return 締切日
 	 */
 	public abstract LocalDate getDeadLine(int year);
+
+	/**
+	 * 指定された年の参加登録が受付可能か確認します。
+	 *
+	 *
+	 * @param year 開催年
+	 * @param zone タイムゾーン
+	 *
+	 * @return 現在時刻で受付可能な場合は真
+	 */
+	public boolean openEntries(int year, ZoneId zone) {
+		return !expired(year, LocalDate.now(zone));
+	}
+
+	/**
+	 * 指定された年の集計結果が閲覧可能か確認します。
+	 *
+	 *
+	 * @param year 開催年
+	 * @param zone タイムゾーン
+	 *
+	 * @return 現在時刻で閲覧可能な場合は真
+	 */
+	public boolean openResults(int year, ZoneId zone) {
+		return expired(year, LocalDate.now(zone));
+	}
+
+	/**
+	 * 指定された年の締切日を経過した後か確認します。
+	 *
+	 *
+	 * @param year 開催年
+	 * @param date 時刻
+	 *
+	 * @return 経過後は真
+	 */
+	private boolean expired(int year, LocalDate date) {
+		return date.isAfter(getDeadLine(year));
+	}
 
 	/**
 	 * 指定された部門をこの規約に追加します。

@@ -148,8 +148,7 @@ final class SectionImpl extends Section {
 	 */
 	@Override
 	public final int result(Summary items) {
-		final var sets = items.toScoreAndEntitySets();
-		return eval.apply(calc.form(sets)).real().toInt();
+		return eval.apply(calc.form(items.toArray())).real().toInt();
 	}
 
 	/**

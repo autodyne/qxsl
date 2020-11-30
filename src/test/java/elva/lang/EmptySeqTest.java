@@ -87,16 +87,6 @@ public final class EmptySeqTest extends Assertions {
 	}
 
 	@Test
-	public void testNodes() {
-		assertThat(list.nodes()).hasSize(0);
-	}
-
-	@Test
-	public void testReals() {
-		assertThat(list.reals()).hasSize(0);
-	}
-
-	@Test
 	public void testSize() {
 		assertThat(list.size()).isEqualTo(0);
 	}

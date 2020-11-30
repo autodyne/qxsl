@@ -5,75 +5,17 @@
 *******************************************************************************/
 package qxsl.ruler;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import qxsl.model.Item;
 
 /**
- * コンテストの総得点の計算手順を記憶します。
+ * 参加者が不参加の部門を表す特殊な実装です。
  *
  *
  * @author 無線部開発班
  *
- * @since 2020/11/15
+ * @since 2020/11/23
  */
-public final class Promise extends Section {
-	private final Section form;
-	private final Map<Item, Message> vMap;
-	private final Map<Item, Element> uMap;
-	private final Map<Item, Element> eMap;
-
-	/**
-	 * 指定された計算手順を記憶します。
-	 *
-	 *
-	 * @param form 計算手順
-	 */
-	public Promise(Section form) {
-		this.form = form;
-		this.vMap = new HashMap<>();
-		this.uMap = new HashMap<>();
-		this.eMap = new HashMap<>();
-	}
-
-	/**
-	 * 規約が参照する変数値を返します。
-	 *
-	 *
-	 * @param name 変数の名前
-	 *
-	 * @return 変数の値
-	 *
-	 * @since 2020/09/27
-	 */
-	@Override
-	public final Object get(String name) {
-		return form.get(name);
-	}
-
-	/**
-	 * 部門の名前を返します。
-	 *
-	 *
-	 * @return 名前
-	 */
-	@Override
-	public final String name() {
-		return form.name();
-	}
-
-	/**
-	 * 部門の番号を返します。
-	 *
-	 *
-	 * @return 番号
-	 */
-	@Override
-	public final String code() {
-		return form.code();
-	}
-
+public abstract class Absence extends Section {
 	/**
 	 * 指定された交信記録の妥当性を検査します。
 	 *
@@ -84,7 +26,7 @@ public final class Promise extends Section {
 	 */
 	@Override
 	public final Message verify(Item item) {
-		return vMap.computeIfAbsent(item, form::verify);
+		return new Failure(item, "N/A");
 	}
 
 	/**
@@ -99,7 +41,7 @@ public final class Promise extends Section {
 	 */
 	@Override
 	public final Element unique(Item item) {
-		return uMap.computeIfAbsent(item, form::unique);
+		return new Element();
 	}
 
 	/**
@@ -114,7 +56,7 @@ public final class Promise extends Section {
 	 */
 	@Override
 	public final Element entity(Item item) {
-		return eMap.computeIfAbsent(item, form::entity);
+		return new Element();
 	}
 
 	/**
@@ -129,6 +71,6 @@ public final class Promise extends Section {
 	 */
 	@Override
 	public final int result(Summary items) {
-		return form.result(items);
+		return 0;
 	}
 }

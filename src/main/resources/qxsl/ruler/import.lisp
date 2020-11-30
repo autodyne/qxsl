@@ -44,6 +44,7 @@
 (import qxsl.model.Rcvd)
 (import qxsl.model.Sent)
 
+(import qxsl.ruler.Absence)
 (import qxsl.ruler.Contest)
 (import qxsl.ruler.Failure)
 (import qxsl.ruler.Section)

@@ -104,13 +104,28 @@
 (defmacro MulOp (n c p) `(build (label ,n) ,c (score ,p) EntityMulOp))
 
 ; section codes
-(defmacro SinHB (name test) `(SinOp ,name "個人部門 (HB)" ,test))
-(defmacro SinLB (name test) `(SinOp ,name "個人部門 (LB)" ,test))
-(defmacro SinDG (name test) `(SinOp ,name "個人部門 (DG)" ,test))
-(defmacro SinJS (name test) `(SinOp ,name "個人部門 (JS)" ,test))
-(defmacro MulAB (name test) `(MulOp ,name "団体部門 (AB)" ,test))
-(defmacro MulDG (name test) `(MulOp ,name "団体部門 (DG)" ,test))
-(defmacro MulJS (name test) `(MulOp ,name "団体部門 (JS)" ,test))
+(setq cSinHB "個人部門 (09:00-12:00)")
+(setq cSinLB "個人部門 (16:00-20:00)")
+(setq cSinDG "個人部門 (13:00-15:00)")
+(setq cMulAB "団体部門 (アナログ)")
+(setq cMulDG "団体部門 (デジタル)")
+(setq cMixJS "総合部門")
+
+; section constructors
+(defmacro SinHB (name test) `(SinOp ,name cSinHB ,test))
+(defmacro SinLB (name test) `(SinOp ,name cSinLB ,test))
+(defmacro SinDG (name test) `(SinOp ,name cSinDG ,test))
+(defmacro SinJS (name test) `(SinOp ,name cMixJS ,test))
+(defmacro MulAB (name test) `(MulOp ,name cMulAB ,test))
+(defmacro MulDG (name test) `(MulOp ,name cMulDG ,test))
+(defmacro MulJS (name test) `(MulOp ,name cMixJS ,test))
+
+; 不参加
+(rule (absence (format "%s 不参加" cSinHB) cSinHB))
+(rule (absence (format "%s 不参加" cSinLB) cSinLB))
+(rule (absence (format "%s 不参加" cSinDG) cSinDG))
+(rule (absence (format "%s 不参加" cMulAB) cMulAB))
+(rule (absence (format "%s 不参加" cMulDG) cMulDG))
 
 ; 1エリア内 個人 電信限定 ローバンド部門
 (SinLB (内 個 電信 L19部門) (SinOp? INNER? tLO? MORSE? 1.9MHz?))

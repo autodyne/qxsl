@@ -6,16 +6,13 @@
 package qxsl.ruler;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import qxsl.model.Item;
 
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 /**
@@ -28,7 +25,7 @@ import static java.util.stream.Collectors.toSet;
  */
 public final class Summary implements Serializable {
 	private final Map<Element, Message> acc;
-	private final Map<Element, Message> rej;
+	private final List<Message> rej;
 	private final List<Element> mul;
 	private final Section sec;
 
@@ -40,12 +37,12 @@ public final class Summary implements Serializable {
 	 * @param list 交信記録
 	 */
 	public Summary(Section rule, List<Item> list) {
-		this.mul = new ArrayList<>(list.size());
 		this.acc = new LinkedHashMap<>();
-		this.rej = new LinkedHashMap<>();
+		this.rej = new ArrayList<>(list.size());
+		this.mul = new ArrayList<>(list.size());
 		this.sec = rule;
 		sort(list);
-		accepted().forEach(m -> mul.add(sec.entity(m.item())));
+		for(var v: accepted()) mul.add(sec.entity(v.item()));
 	}
 
 	/**
@@ -58,8 +55,8 @@ public final class Summary implements Serializable {
 		for(var item: list) {
 			final var msg = sec.verify(item);
 			final var idx = sec.unique(msg.item());
-			if(acc.containsKey(idx)) rej.put(idx, msg);
-			else if(msg.isFailure()) rej.put(idx, msg);
+			if(acc.containsKey(idx)) rej.add(msg);
+			else if(msg.isFailure()) rej.add(msg);
 			else if(msg.isSuccess()) acc.put(idx, msg);
 		}
 	}
@@ -70,8 +67,8 @@ public final class Summary implements Serializable {
 	 *
 	 * @return 有効な交信
 	 */
-	public final Stream<Message> accepted() {
-		return acc.values().stream();
+	public final List<Message> accepted() {
+		return acc.values().stream().collect(toList());
 	}
 
 	/**
@@ -80,8 +77,8 @@ public final class Summary implements Serializable {
 	 *
 	 * @return 無効な交信
 	 */
-	public final Stream<Message> rejected() {
-		return rej.values().stream();
+	public final List<Message> rejected() {
+		return Collections.unmodifiableList(rej);
 	}
 
 	/**
@@ -93,7 +90,7 @@ public final class Summary implements Serializable {
 	 * @since 2019/05/16
 	 */
 	public final int score() {
-		return accepted().mapToInt(Message::score).sum();
+		return accepted().stream().mapToInt(Message::score).sum();
 	}
 
 	/**
@@ -141,7 +138,7 @@ public final class Summary implements Serializable {
 	 *
 	 * @since 2020/09/03
 	 */
-	public final Object[] toScoreAndEntitySets() {
+	public final Object[] toArray() {
 		final var score = Stream.of(score());
 		final var mults = entity().map(Set::toArray);
 		return Stream.concat(score, mults).toArray();

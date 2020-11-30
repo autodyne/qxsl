@@ -6,6 +6,12 @@
 		"allPublicFields": true
 	},
 	{
+		"name": "elva.form.AbsenceForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
 		"name": "elva.form.AccessForm",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
@@ -358,6 +364,25 @@
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
 		"allPublicFields": true
+	},
+	{
+		"name": "gaas.alone.Filter",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"fields": [
+			{"name": "showHelp"}
+		]
+	},
+	{
+		"name": "gaas.alone.Format",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"fields": [
+			{"name": "format"},
+			{"name": "showHelp"},
+			{"name": "source"},
+			{"name": "target"}
+		]
 	},
 	{
 		"name": "gaas.draft.BandFactory",
@@ -1675,6 +1700,12 @@
 	},
 	{
 		"name": "qxsl.model.Sent",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.ruler.Absence",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
 		"allPublicFields": true

@@ -91,16 +91,6 @@ public final class ArraySeqTest extends Assertions {
 	}
 
 	@Test
-	public void testNodes() {
-		assertThat(list.nodes()).hasSize(3);
-	}
-
-	@Test
-	public void testReals() {
-		assertThat(list.reals()).hasSize(3);
-	}
-
-	@Test
 	public void testSize() {
 		assertThat(list.size()).isEqualTo(3);
 	}

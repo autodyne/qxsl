@@ -238,7 +238,7 @@ To import a Java class, use the `import` function.
 (import java.lang.String)
 ```
 
-You can refer to the Java constructor by using the `new` function.
+You can access the Java constructor by using the `new` function.
 
 ```lisp
 (new Integer int) ;Integer::new
@@ -267,7 +267,7 @@ To reference a Java field, use the `access` function.
 ((access 'y Point) ((new Point int int) 123 321)) ;321
 ```
 
-If you do not mind the processing efficiency, Java APIs can be referenced using the `method!`, `new!`, and `access!` functions.
+If you do not mind the processing efficiency, Java APIs can be referenced using the `new!`, `method!`, and `access!` functions.
 
 ```lisp
 ((new! Integer) 123)
@@ -317,6 +317,14 @@ This evaluates the unquoted sub expression as a list and then embeds the element
 ```
 
 ## System Functions
+
+### absence
+
+creates and returns a [`absence`](https://nextzlog.github.io/qxsl/doc/qxsl/ruler/Absence.html) object.
+
+```lisp
+(absence name code)
+```
 
 ### access
 

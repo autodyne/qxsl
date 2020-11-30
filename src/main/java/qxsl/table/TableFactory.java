@@ -178,7 +178,7 @@ public abstract class TableFactory {
 	 */
 	@Override
 	public final String toString() {
-		final var join = new StringJoiner(";", "|", "|");
+		final var join = new StringJoiner(";", "|", "");
 		for(var ext: extensions()) join.add("*.".concat(ext));
 		return String.valueOf(name()).concat(join.toString());
 	}

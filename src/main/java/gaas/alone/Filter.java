@@ -5,6 +5,7 @@
 *******************************************************************************/
 package gaas.alone;
 
+import java.util.StringJoiner;
 import java.util.concurrent.Callable;
 
 import qxsl.table.TableManager;
@@ -33,8 +34,10 @@ public final class Filter implements Callable<Integer> {
 	 */
 	@Override
 	public Integer call() {
-		for(var fmt: new TableManager()) System.out.print(fmt);
-		System.out.println();
+		final var man = new TableManager();
+		final var buf = new StringJoiner("|");
+		for(var f: man) buf.add(f.toString());
+		System.out.println(buf);
 		return 0;
 	}
 }

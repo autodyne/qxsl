@@ -43,11 +43,25 @@ public final class NullNode extends AtomBase<Object> {
 		return "null";
 	}
 
+	/**
+	 * このアトムからハッシュ値を計算します。
+	 *
+	 *
+	 * @return ハッシュ値
+	 */
 	@Override
 	public final int hashCode() {
 		return 123527;
 	}
 
+	/**
+	 * このアトムと指定された値を比較します。
+	 *
+	 *
+	 * @param sexp 比較対象の値
+	 *
+	 * @return 等価の場合は真
+	 */
 	@Override
 	public final boolean equals(Object atom) {
 		return atom == this;

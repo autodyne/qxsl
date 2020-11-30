@@ -52,21 +52,21 @@
 (setq LINK "ja1zlo.u-tokyo.org/rt")
 
 ; contest schedule
-(defun startday year (schedule year 2 2 "SATURDAY"))
-(defun finalday year (schedule year 2 2 "SATURDAY"))
-(defun deadline year (schedule year 2 2 "SATURDAY"))
+(defun startday year (schedule year 2 4 "SATURDAY"))
+(defun finalday year (schedule year 2 4 "SATURDAY"))
+(defun deadline year (schedule year 2 4 "SATURDAY"))
 (setq RT (contest NAME HOST MAIL LINK startday finalday deadline))
 
 ; section macros
 (defun rule s ((method 'add Contest Section) RT s))
 (defmacro label args `(format "%s %s 部門" ,@args))
-(defmacro build (n c p m) `(rule (section ,n ,c ,p unique ,m result)))
-(defmacro SinOp (n p) `(build (label ,n) (label ,n) (score ,p) entity))
-(defmacro MulOp (n p) `(build (label ,n) (label ,n) (score ,p) entity))
+(defmacro build (n c p) `(section ,n ,c ,p unique entity result))
+(defmacro SinOp (n c p) `(rule (build (label ,n) ,c (score ,p))))
+(defmacro MulOp (n c p) `(rule (build (label ,n) ,c (score ,p))))
 
-(SinOp (個 電信) (band? time? area? MORSE?))
-(SinOp (個 電話) (band? time? area? PHONE?))
-(SinOp (個 電電) (band? time? area? CW/PH?))
-(MulOp (団 電信) (band? time? area? MORSE?))
-(MulOp (団 電話) (band? time? area? PHONE?))
-(MulOp (団 電電) (band? time? area? CW/PH?))
+(SinOp (個 電信) 電信 (SinOp? band? time? area? MORSE?))
+(SinOp (個 電話) 電話 (SinOp? band? time? area? PHONE?))
+(SinOp (個 電電) 電電 (SinOp? band? time? area? CW/PH?))
+(MulOp (団 電信) 電信 (MulOp? band? time? area? MORSE?))
+(MulOp (団 電話) 電話 (MulOp? band? time? area? PHONE?))
+(MulOp (団 電電) 電電 (MulOp? band? time? area? CW/PH?))

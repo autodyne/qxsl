@@ -6,7 +6,6 @@
 package elva.lang;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -14,8 +13,6 @@ import java.util.StringJoiner;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * LISP処理系内部で利用される複数の値を並べた構造の実装です。
@@ -51,26 +48,6 @@ public abstract class ListBase extends NodeBase {
 	public abstract ListBase tail();
 
 	/**
-	 * 末尾を除く部分リストを返します。
-	 *
-	 *
-	 * @return 末尾を除去したリスト
-	 */
-	public final NodeBase init() {
-		return take(size() - 1);
-	}
-
-	/**
-	 * 末尾にある最後の要素を返します。
-	 *
-	 *
-	 * @return 最後の要素
-	 */
-	public final NodeBase last() {
-		return drop(size() - 1).head();
-	}
-
-	/**
 	 * 指定された位置で始まる部分リストを返します。
 	 *
 	 *
@@ -101,7 +78,27 @@ public abstract class ListBase extends NodeBase {
 	public abstract NodeBase get(int index);
 
 	/**
-	 * リストが空であるか確認します。
+	 * 末尾を除く部分リストを返します。
+	 *
+	 *
+	 * @return 末尾を除去したリスト
+	 */
+	public final NodeBase init() {
+		return take(size() - 1);
+	}
+
+	/**
+	 * 末尾にある最後の要素を返します。
+	 *
+	 *
+	 * @return 最後の要素
+	 */
+	public final NodeBase last() {
+		return drop(size() - 1).head();
+	}
+
+	/**
+	 * このリストが空であるか確認します。
 	 *
 	 *
 	 * @return 要素がない場合は真
@@ -122,7 +119,7 @@ public abstract class ListBase extends NodeBase {
 	}
 
 	/**
-	 * このリストを要素のリストに変換します。
+	 * この式を要素のリストに変換します。
 	 *
 	 *
 	 * @return 要素のリスト
@@ -133,36 +130,6 @@ public abstract class ListBase extends NodeBase {
 	}
 
 	/**
-	 * このリストの内容を配列で返します。
-	 *
-	 *
-	 * @return 式の配列
-	 */
-	public final NodeBase[] nodes() {
-		return stream().toArray(NodeBase[]::new);
-	}
-
-	/**
-	 * このリストをストリームに変換します。
-	 *
-	 *
-	 * @return ストリーム
-	 */
-	public final Stream<NodeBase> stream() {
-		return StreamSupport.stream(spliterator(), false);
-	}
-
-	/**
-	 * このリストを実数値の列に変換します。
-	 *
-	 *
-	 * @return 実数値の列
-	 */
-	public final List<RealNode> reals() {
-		return stream().map(NodeBase::real).collect(toList());
-	}
-
-	/**
 	 * このリストの要素の値を並べた配列を返します。
 	 *
 	 *
@@ -170,41 +137,6 @@ public abstract class ListBase extends NodeBase {
 	 */
 	public final Object[] toArray() {
 		return stream().map(NodeBase::value).toArray();
-	}
-
-	/**
-	 * このリストの要素の値を並べた配列を返します。
-	 *
-	 *
-	 * @param <V> 要素の総称型
-	 *
-	 * @param cls 要素の型
-	 *
-	 * @return 要素の配列
-	 */
-	@SuppressWarnings("unchecked")
-	public final <V> V[] cast(Class<V> cls) {
-		final var array = Array.newInstance(cls, size());
-		System.arraycopy(toArray(), 0, array, 0, size());
-		return (V[]) array;
-	}
-
-	/**
-	 * このリストの要素の値を並べた配列を返します。
-	 *
-	 *
-	 * @param cls 要素の型の配列
-	 *
-	 * @return 要素の配列
-	 */
-	public final Object[] cast(Class<?>[] cls) {
-		final var source = iterator();
-		final var target = new ArrayList<Object>(size());
-		final var domain = Arrays.stream(cls).iterator();
-		while(source.hasNext() || domain.hasNext()) {
-			target.add(source.next().to(domain.next()));
-		}
-		return target.toArray();
 	}
 
 	/**
@@ -220,7 +152,7 @@ public abstract class ListBase extends NodeBase {
 	}
 
 	/**
-	 * このリストのハッシュ値を返します。
+	 * このリストからハッシュ値を計算します。
 	 *
 	 *
 	 * @return ハッシュ値
@@ -231,17 +163,23 @@ public abstract class ListBase extends NodeBase {
 	}
 
 	/**
-	 * このリストとオブジェクトを比較します。
+	 * このリストと指定された値を比較します。
 	 *
 	 *
-	 * @param sexp 比較対象のオブジェクト
+	 * @param sexp 比較対象の値
 	 *
-	 * @return 同じ内容のリストのみtrue
+	 * @return 等価の場合は真
 	 */
 	@Override
 	public final boolean equals(Object sexp) {
 		if(!ListBase.class.isInstance(sexp)) return false;
-		return Arrays.equals(nodes(), list(sexp).nodes());
+		final var list = (ListBase) sexp;
+		final var lhs = this.iterator();
+		final var rhs = list.iterator();
+		while(lhs.hasNext() && rhs.hasNext()) {
+			if(!lhs.next().equals(rhs.next())) return false;
+		}
+		return list.size() == size();
 	}
 
 	/**
@@ -386,5 +324,47 @@ public abstract class ListBase extends NodeBase {
 			this.index++;
 			return value;
 		}
+	}
+
+	/**
+	 * このリストの要素の値を並べた配列を返します。
+	 *
+	 *
+	 * @param <V> 要素の総称型
+	 *
+	 * @param cls 要素の型
+	 *
+	 * @return 要素の配列
+	 */
+	@SuppressWarnings("unchecked")
+	public final <V> V[] cast(Class<V> cls) {
+		final var array = Array.newInstance(cls, size());
+		System.arraycopy(toArray(), 0, array, 0, size());
+		return (V[]) array;
+	}
+
+	/**
+	 * このリストの要素の値を並べた配列を返します。
+	 *
+	 *
+	 * @param cls 要素の型の配列
+	 *
+	 * @return 要素の配列
+	 */
+	public final Object[] cast(Class<?>[] cls) {
+		int i = 0;
+		final var vals = new Object[this.size()];
+		for(var v: this) vals[i] = v.to(cls[i++]);
+		return vals;
+	}
+
+	/**
+	 * このリストをストリームに変換します。
+	 *
+	 *
+	 * @return ストリーム
+	 */
+	public final Stream<NodeBase> stream() {
+		return StreamSupport.stream(spliterator(), false);
 	}
 }

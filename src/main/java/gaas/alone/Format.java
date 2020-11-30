@@ -50,8 +50,8 @@ public final class Format implements Callable<Integer> {
 			final var pack = Files.readAllBytes(source);
 			final var list = new SheetOrTable().unpack(pack);
 			final var norm = util.normalize(list, null);
-			final var data = util.transform(norm, format);
 			final var form = new TableManager().factory(format);
+			final var data = util.transform(norm, form.type());
 			Files.write(target, form.encode(data));
 			return 0;
 		} catch (IOException ex) {
