@@ -22,7 +22,6 @@ qxsl is a Java library for processing amateur-radio log files, including scoring
 ## Applications
 
 - [zLog+ ZyLO](https://github.com/nextzlog/zylo).
-- [Log Conversion Tool on Command Line (qxsl.exe)](https://github.com/nextzlog/qxsl/releases/tag/nightly).
 - [Automatic Acceptance & Tabulation System (ATS)](https://github.com/nextzlog/ats4) for [the ALLJA1 contest](http://ja1zlo.u-tokyo.org/allja1).
 
 ## Sample Codes
@@ -33,7 +32,7 @@ Because we are [Scalalians](https://www.scala-lang.org/), please be patient to r
 
 The package `qxsl.model` defines the structure of log files, where each communication is handled as an `Item` object, while the entire log is represented as `List[Item]`.
 Each `Item` contains some `Field` objects, which indicate properties such as `Time`, `Mode` and `Band`.
-In addition, each `Item` holds two `Exch` objects, namely `Rcvd` and `Sent`, which involve some messages (`Field`s) exchanged by the operator and the contacted station.
+In addition, each `Item` holds two `Node` objects, namely `Rcvd` and `Sent`, which involve some messages (`Field`s) exchanged by the operator and the contacted station.
 
 ```Scala
 import qxsl.model.{Item,Rcvd,Sent}

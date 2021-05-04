@@ -46,7 +46,7 @@
 (setq 電電 "電信電話")
 
 ; contest definition
-(setq NAME "RT CONTEST")
+(setq NAME "リアルタイムコンテスト")
 (setq HOST "東大無線部")
 (setq MAIL "allja1@ja1zlo.u-tokyo.org")
 (setq LINK "ja1zlo.u-tokyo.org/rt")

@@ -114,6 +114,22 @@ public abstract class Section extends Library {
 	public abstract int result(Summary items);
 
 	/**
+	 * 指定された総得点で入賞するか確認します。
+	 *
+	 *
+	 * @param result 総得点
+	 * @param scores 総得点の配列
+	 *
+	 * @return 入賞する場合は真
+	 */
+	public boolean win(int result, int[] scores) {
+		int rank = 0;
+		final int size = scores.length;
+		for(int score: scores) if(score > result) rank++;
+		return rank < Math.min(7, Math.ceil(0.1 * size));
+	}
+
+	/**
 	 * 指定された交信記録のマルチを集計します。
 	 *
 	 *

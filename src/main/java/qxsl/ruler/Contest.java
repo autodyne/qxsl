@@ -115,7 +115,7 @@ public abstract class Contest extends Library implements Iterable<Section> {
 	 *
 	 * @return 現在時刻で受付可能な場合は真
 	 */
-	public boolean openEntries(int year, ZoneId zone) {
+	public boolean accept(int year, ZoneId zone) {
 		return !expired(year, LocalDate.now(zone));
 	}
 
@@ -128,7 +128,7 @@ public abstract class Contest extends Library implements Iterable<Section> {
 	 *
 	 * @return 現在時刻で閲覧可能な場合は真
 	 */
-	public boolean openResults(int year, ZoneId zone) {
+	public boolean finish(int year, ZoneId zone) {
 		return expired(year, LocalDate.now(zone));
 	}
 
