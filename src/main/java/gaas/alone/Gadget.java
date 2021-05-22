@@ -12,27 +12,27 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
 /**
- * コマンドラインツールが備えるサブコマンドを定義します。
+ * コマンドラインツールが提供するコマンド群を定義します。
  *
  *
  * @author 無線部開発班
  *
  * @since 2020/11/09
  */
-@Command(subcommands = {Filter.class, Format.class})
+@Command(name = "qxsl", subcommands = {Filter.class, Format.class})
 public final class Gadget implements Callable<Integer> {
 	@Option(names = {"-h", "--help"}, usageHelp = true)
 	private boolean showHelp;
 
 	/**
-	 * 終了コードを返します。
+	 * 省略されたコマンドを実行して終了コードを返します。
 	 *
 	 *
 	 * @return 終了コード
 	 */
 	@Override
 	public Integer call() {
-		return 0;
+		return new Filter().call();
 	}
 
 	/**

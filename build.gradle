@@ -1,9 +1,11 @@
-apply plugin: 'java'
+apply plugin: 'application'
 apply plugin: 'maven-publish'
 
 def utf8 = 'UTF-8'
 def java = '11'
 def dist = 'dist'
+
+mainClassName = 'gaas.alone.Gadget'
 
 repositories.mavenCentral()
 
@@ -30,7 +32,7 @@ compileTestJava {
 
 test.useJUnitPlatform()
 
-jar.manifest.attributes 'Main-Class': 'gaas.alone.Gadget'
+jar.manifest.attributes 'Main-Class': mainClassName
 jar.from configurations.compileClasspath.collect {
 	it.isDirectory()? it: zipTree(it)
 }
