@@ -13,7 +13,7 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * returns a symbol of the specified name.
+ * returns a symbol with the specified name.
  * <pre>
  * (symbol name)
  * </pre>

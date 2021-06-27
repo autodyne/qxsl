@@ -13,7 +13,7 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * returns a method of the specified class.
+ * returns a method with the specified name.
  * <pre>
  * (method! 'name [class])
  * </pre>

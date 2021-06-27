@@ -328,7 +328,7 @@ creates and returns a [`absence`](https://nextzlog.github.io/qxsl/doc/qxsl/ruler
 
 ### access
 
-returns the field of the specified class.
+returns the field with the specified name.
 
 ```lisp
 (access 'name class)
@@ -336,7 +336,7 @@ returns the field of the specified class.
 
 ### access!
 
-returns the field of any class.
+returns the field with the specified name.
 
 ```lisp
 (access! 'name)
@@ -576,7 +576,7 @@ tests if the list contains the specified value.
 
 ### method
 
-returns a method of the specified class.
+returns a method with the specified name.
 
 ```lisp
 (method 'name class *parameter-types)
@@ -584,7 +584,7 @@ returns a method of the specified class.
 
 ### method!
 
-returns a method of the specified class.
+returns a method with the specified name.
 
 ```lisp
 (method! 'name [class])
@@ -736,7 +736,7 @@ returns a subsequence of the specified list.
 
 ### symbol
 
-returns a symbol of the specified name.
+returns a symbol with the specified name.
 
 ```lisp
 (symbol name)

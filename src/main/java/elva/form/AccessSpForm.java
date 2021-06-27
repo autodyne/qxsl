@@ -13,7 +13,7 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 /**
- * returns the field of any class.
+ * returns the field with the specified name.
  * <pre>
  * (access! 'name)
  * </pre>

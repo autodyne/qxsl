@@ -1,7 +1,7 @@
 qxsl: Amateur-Radio Logging Library & LISP
 ====
 
-![image](https://img.shields.io/badge/Gradle-6-red.svg)
+![image](https://img.shields.io/badge/Gradle-7-red.svg)
 ![image](https://img.shields.io/badge/OpenJDK-SE11-red.svg)
 ![image](https://img.shields.io/badge/GraalVM-20.0-red.svg)
 ![image](https://img.shields.io/badge/license-LGPL3-darkblue.svg)

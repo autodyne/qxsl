@@ -163,7 +163,7 @@
 
 ; band access for adif
 (defun adif-band it
-	(let band (adif-BAND it)
+	(let band (string-downcase (adif-BAND it))
 		(string (cond
 			((equal band 1.9MHz-adif) 1.9MHz)
 			((equal band 3.5MHz-adif) 3.5MHz)

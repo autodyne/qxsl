@@ -70,6 +70,16 @@
 (assert (equal (string (lambda x (+ x x))) "(lambda x (+ x x))") "string")
 (assert (equal (string (syntax x (+ x x))) "(syntax x (+ x x))") "string")
 
+; string-upcase
+(defun string-upcase str ((method 'toUpperCase String) str))
+(assert (equal "ABC" (string-upcase "aBc")) "string-upcase")
+(assert (equal "DEF" (string-upcase "DeF")) "string-upcase")
+
+; string-downcase
+(defun string-downcase str ((method 'toLowerCase String) str))
+(assert (equal "abc" (string-downcase "aBc")) "string-downcase")
+(assert (equal "def" (string-downcase "DeF")) "string-downcase")
+
 ; boolean
 (defun boolean str (equal "#t" str))
 (assert (equal (boolean "#t") #t) "boolean")

@@ -93,7 +93,7 @@ public final class FlexCall extends FormBase {
 	 */
 	@Override
 	public final String toString() {
-		return String.format("(method '%s)", name);
+		return String.format("(method! '%s)", name);
 	}
 
 	/**
@@ -110,7 +110,7 @@ public final class FlexCall extends FormBase {
 	private final Object invoke(TypeNode type, ListBase args) {
 		for(var method: type.getMethods(name.toString())) try {
 			return new JavaCall(method).invoke(args);
-		} catch (ClassCastException ex) {}
+		} catch (ClassCastException | IllegalArgumentException ex) {}
 		final var msg = "no such method found available: %s";
 		throw new ElvaRuntimeException(msg, this.form(args));
 	}
