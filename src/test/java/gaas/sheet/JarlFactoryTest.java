@@ -18,6 +18,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import qxsl.draft.*;
 import qxsl.model.Item;
 import qxsl.sheet.SheetManager;
+import qxsl.sheet.SheetOrTable;
 import qxsl.table.TableManager;
 
 import static qxsl.junit.RandomNumberParameterExtension.randInt;
@@ -62,13 +63,12 @@ public final class JarlFactoryTest extends Assertions {
 			item.getSent().set(new Code(alnum(7)));
 			list.add(item);
 		}
-		final var KEY = "LOGSHEET";
 		final var buf = new StringWriter();
 		final var bin = tables.factory("jarl").encode(list);
 		final var enc = sheets.factory("jarl").encoder(buf);
 		enc.set("CALLSIGN", "JA1ZLO");
 		enc.set("COMMENTS", "Groovy");
-		enc.set(KEY, bin);
+		enc.set("LOGSHEET", bin);
 		enc.encode();
 		final var str = buf.toString();
 		final var src = new StringReader(str);
@@ -76,8 +76,7 @@ public final class JarlFactoryTest extends Assertions {
 		dec.decode();
 		assertThat(dec.getString("CALLSIGN")).isEqualTo("JA1ZLO");
 		assertThat(dec.getString("COMMENTS")).isEqualTo("Groovy");
-		assertThat(tables.decode(dec.getBinary(KEY))).isEqualTo(list);
-		assertThat(tables.decode(sheets.unpack(str))).isEqualTo(list);
+		assertThat(new SheetOrTable().unpack(str)).isEqualTo(list);
 	}
 
 	public static final IntStream source() {

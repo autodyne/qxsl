@@ -5,9 +5,12 @@
 *******************************************************************************/
 package qxsl.sheet;
 
+import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ServiceLoader;
+import java.util.StringJoiner;
 
 import qxsl.model.Item;
 import qxsl.table.TableManager;
@@ -21,8 +24,9 @@ import qxsl.table.TableManager;
  * @since 2020/10/05
  */
 public final class SheetOrTable {
-	private final SheetManager sheets;
 	private final TableManager tables;
+	private final SheetManager sheets;
+	private final List<SheetFactory> strips;
 
 	/**
 	 * インスタンスを構築します。
@@ -41,8 +45,11 @@ public final class SheetOrTable {
 	 * @param cl 書式の実装を検出するクラスローダ
 	 */
 	public SheetOrTable(ClassLoader cl) {
-		this.sheets = new SheetManager(cl);
 		this.tables = new TableManager(cl);
+		this.sheets = new SheetManager(cl);
+		this.strips = new LinkedList<>();
+		for(var f: sheets) strips.add(f);
+		strips.add(null);
 	}
 
 	/**
@@ -56,11 +63,16 @@ public final class SheetOrTable {
 	 * @throws UncheckedIOException 読み込み時の例外
 	 */
 	public List<Item> unpack(byte[] binary) {
-		try {
-			return tables.decode(sheets.unpack(binary));
-		} catch (UncheckedIOException ex) {
-			return tables.decode(binary);
+		final var join = new StringJoiner("\n");
+		for(var f: strips) try {
+			if (f == null) return tables.decode(binary);
+			else return tables.decode(f.unpack(binary));
+		} catch (Exception ex) {
+			join.add(String.format("%s: %s", f, ex));
 		}
+		final var ms = join.toString();
+		final var ex = new IOException(ms);
+		throw new UncheckedIOException(ex);
 	}
 
 	/**
@@ -74,10 +86,15 @@ public final class SheetOrTable {
 	 * @throws UncheckedIOException 読み込み時の例外
 	 */
 	public List<Item> unpack(String string) {
-		try {
-			return tables.decode(sheets.unpack(string));
-		} catch (UncheckedIOException ex) {
-			return tables.decode(string);
+		final var join = new StringJoiner("\n");
+		for(var f: strips) try {
+			if (f == null) return tables.decode(string);
+			else return tables.decode(f.unpack(string));
+		} catch (Exception ex) {
+			join.add(String.format("%s: %s", f, ex));
 		}
+		final var ms = join.toString();
+		final var ex = new IOException(ms);
+		throw new UncheckedIOException(ex);
 	}
 }

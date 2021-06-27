@@ -107,37 +107,64 @@ public abstract class SheetFactory {
 	public abstract SheetEncoder encoder(OutputStream os);
 
 	/**
-	 * 指定された文字列から要約書類を読み取り交信記録を抽出します。
+	 * 指定された要約書類を読み込むデコーダを返します。
 	 *
 	 *
-	 * @param data 要約書類を読み込む文字列
+	 * @param data 要約書類
+	 *
+	 * @return デコーダ
+	 *
+	 * @throws UnsupportedOperationException 未実装の場合
+	 */
+	public final SheetDecoder decoder(String data) {
+		return decoder(new StringReader(data));
+	}
+
+	/**
+	 * 指定された要約書類を読み込むデコーダを返します。
+	 *
+	 *
+	 * @param data 要約書類
+	 *
+	 * @return デコーダ
+	 */
+	public final SheetDecoder decoder(byte[] data) {
+		return decoder(new ByteArrayInputStream(data));
+	}
+
+	/**
+	 * 指定された要約書類を読み取り交信記録を抽出します。
+	 *
+	 *
+	 * @param data 要約書類
 	 *
 	 * @return 抽出された交信記録
 	 *
 	 * @throws UncheckedIOException 読み込み時の例外
+	 *
 	 * @throws UnsupportedOperationException 未実装の場合
 	 */
 	public final byte[] unpack(String data) {
-		try(final var in = new StringReader(data)) {
-			return decoder(in).decode().getBinary(getTableKey());
+		try(final var decoder = decoder(data)) {
+			return decoder.decode().getBinary(getTableKey());
 		} catch (IOException ex) {
 			throw new UncheckedIOException(ex);
 		}
 	}
 
 	/**
-	 * 指定されたバイト列から要約書類を読み取り交信記録を抽出します。
+	 * 指定された要約書類を読み取り交信記録を抽出します。
 	 *
 	 *
-	 * @param data 要約書類を読み込むバイト列
+	 * @param data 要約書類
 	 *
 	 * @return 抽出された交信記録
 	 *
 	 * @throws UncheckedIOException 読み込み時の例外
 	 */
 	public final byte[] unpack(byte[] data) {
-		try(final var in = new ByteArrayInputStream(data)) {
-			return decoder(in).decode().getBinary(getTableKey());
+		try(final var decoder = decoder(data)) {
+			return decoder.decode().getBinary(getTableKey());
 		} catch (IOException ex) {
 			throw new UncheckedIOException(ex);
 		}

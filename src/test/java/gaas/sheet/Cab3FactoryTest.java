@@ -18,6 +18,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import qxsl.draft.*;
 import qxsl.model.Item;
 import qxsl.sheet.SheetManager;
+import qxsl.sheet.SheetOrTable;
 import qxsl.table.TableManager;
 
 import static qxsl.junit.RandomNumberParameterExtension.randInt;
@@ -62,7 +63,6 @@ public final class Cab3FactoryTest extends Assertions {
 			item.getSent().set(new Code(alnum(6)));
 			list.add(item);
 		}
-		final var KEY = "QSO";
 		final var buf = new StringWriter();
 		final var bin = tables.factory("cqww").encode(list);
 		final var enc = sheets.factory("cab3").encoder(buf);
@@ -76,8 +76,7 @@ public final class Cab3FactoryTest extends Assertions {
 		dec.decode();
 		assertThat(dec.getString("CONTEST")).isEqualTo("JIDX-CW");
 		assertThat(dec.getString("CALLSIGN")).isEqualTo("JA1ZLO");
-		assertThat(tables.decode(dec.getBinary(KEY))).isEqualTo(list);
-		assertThat(tables.decode(sheets.unpack(str))).isEqualTo(list);
+		assertThat(new SheetOrTable().unpack(str)).isEqualTo(list);
 	}
 
 	public static final IntStream source() {

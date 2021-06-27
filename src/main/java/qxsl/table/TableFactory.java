@@ -101,6 +101,32 @@ public abstract class TableFactory {
 	public abstract TableEncoder encoder(OutputStream os);
 
 	/**
+	 * 指定された交信記録を読み込むデコーダを返します。
+	 *
+	 *
+	 * @param data 交信記録
+	 *
+	 * @return デコーダ
+	 *
+	 * @throws UnsupportedOperationException 未実装の場合
+	 */
+	public final TableDecoder decoder(String data) {
+		return decoder(new StringReader(data));
+	}
+
+	/**
+	 * 指定された交信記録を読み込むデコーダを返します。
+	 *
+	 *
+	 * @param data 交信記録
+	 *
+	 * @return デコーダ
+	 */
+	public final TableDecoder decoder(byte[] data) {
+		return decoder(new ByteArrayInputStream(data));
+	}
+
+	/**
 	 * 指定された文字列から交信記録を読み取ります。
 	 *
 	 *
@@ -109,11 +135,12 @@ public abstract class TableFactory {
 	 * @return 交信記録
 	 *
 	 * @throws UncheckedIOException 読み込み時の例外
+	 *
 	 * @throws UnsupportedOperationException 未実装の場合
 	 */
 	public final List<Item> decode(String data) {
-		try(final var in = new StringReader(data)) {
-			return decoder(in).decode();
+		try(final var coder = decoder(data)) {
+			return coder.decode();
 		} catch (IOException ex) {
 			throw new UncheckedIOException(ex);
 		}
@@ -130,8 +157,8 @@ public abstract class TableFactory {
 	 * @throws UncheckedIOException 読み込み時の例外
 	 */
 	public final List<Item> decode(byte[] data) {
-		try(final var in = new ByteArrayInputStream(data)) {
-			return decoder(in).decode();
+		try(final var coder = decoder(data)) {
+			return coder.decode();
 		} catch (IOException ex) {
 			throw new UncheckedIOException(ex);
 		}

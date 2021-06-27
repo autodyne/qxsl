@@ -97,17 +97,17 @@ public final class JarlDecoder extends PrintDecoder {
 	public final Item next() throws IOException {
 		final var item = new Item();
 		try {
-			final var vals = readLine().split(" +");
+			final var vals = readLine().split("\\s+");
 			vals[TIME] = vals[0].concat(" ").concat(vals[1]);
-			if(!vals[TIME].isEmpty()) time(item, vals[TIME]);
-			if(!vals[BAND].isEmpty()) band(item, vals[BAND]);
-			if(!vals[MODE].isEmpty()) mode(item, vals[MODE]);
-			if(!vals[CALL].isEmpty()) call(item, vals[CALL]);
-			if(!vals[SRST].isEmpty()) sRST(item, vals[SRST]);
-			if(!vals[SENT].isEmpty()) sent(item, vals[SENT]);
-			if(!vals[RRST].isEmpty()) rRST(item, vals[RRST]);
-			if(!vals[RCVD].isEmpty()) rcvd(item, vals[RCVD]);
-			if(!vals[MUL1].isEmpty()) mul1(item, vals[MUL1]);
+			if(vals.length > TIME) time(item, vals[TIME]);
+			if(vals.length > BAND) band(item, vals[BAND]);
+			if(vals.length > MODE) mode(item, vals[MODE]);
+			if(vals.length > CALL) call(item, vals[CALL]);
+			if(vals.length > SRST) sRST(item, vals[SRST]);
+			if(vals.length > SENT) sent(item, vals[SENT]);
+			if(vals.length > RRST) rRST(item, vals[RRST]);
+			if(vals.length > RCVD) rcvd(item, vals[RCVD]);
+			if(vals.length > MUL1) mul1(item, vals[MUL1]);
 			return item;
 		} catch (RuntimeException ex) {
 			throw new IOException(ex);

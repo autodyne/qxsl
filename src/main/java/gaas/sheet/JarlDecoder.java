@@ -186,9 +186,22 @@ public final class JarlDecoder implements SheetDecoder {
 	 */
 	private final void next() throws XMLStreamException {
 		final var start = reader.nextTag().asStartElement();
-		final var value = reader.nextEvent().asCharacters();
-		final var close = reader.nextEvent().asEndElement();
-		values.put(start.getName().getLocalPart(), value.getData());
+		final var value = value();
+		final var close = reader.nextTag().asEndElement();
+		values.put(start.getName().getLocalPart(), value);
+	}
+
+	/**
+	 * ストリームから文字列を読み取ります。
+	 *
+	 *
+	 * @return 読み取った文字列
+	 *
+	 * @throws XMLStreamException 構文上または読取り時の例外
+	 */
+	private final String value() throws XMLStreamException {
+		if(reader.peek().isEndElement()) return "";
+		return reader.nextEvent().asCharacters().getData();
 	}
 
 	/**

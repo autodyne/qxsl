@@ -88,8 +88,7 @@ public final class TableManager implements Iterable<TableFactory> {
 		for(var f: this) try {
 			return f.decode(binary);
 		} catch (Exception ex) {
-			join.add(f.name().concat(":"));
-			join.add(ex.toString());
+			join.add(String.format("%s: %s", f, ex));
 		}
 		final var ms = join.toString();
 		final var ex = new IOException(ms);
@@ -111,8 +110,7 @@ public final class TableManager implements Iterable<TableFactory> {
 		for(var f: this) try {
 			return f.decode(string);
 		} catch (Exception ex) {
-			join.add(f.name().concat(":"));
-			join.add(ex.toString());
+			join.add(String.format("%s: %s", f, ex));
 		}
 		final var ms = join.toString();
 		final var ex = new IOException(ms);

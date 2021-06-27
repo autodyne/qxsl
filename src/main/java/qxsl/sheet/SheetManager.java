@@ -5,11 +5,8 @@
 *******************************************************************************/
 package qxsl.sheet;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.util.Iterator;
 import java.util.ServiceLoader;
-import java.util.StringJoiner;
 
 /**
  * 要約書類の書式をクラスパスから自動的に検出して管理します。
@@ -68,51 +65,5 @@ public final class SheetManager implements Iterable<SheetFactory> {
 			if(ext.equalsIgnoreCase(name)) return f;
 		}
 		return null;
-	}
-
-	/**
-	 * 指定されたバイト列が表す要約書類から交信記録を抽出します。
-	 *
-	 *
-	 * @param binary 要約書類を読み込むバイト列
-	 *
-	 * @return 抽出された交信記録
-	 *
-	 * @throws UncheckedIOException 読み込み時の例外
-	 */
-	public final byte[] unpack(byte[] binary) {
-		final var join = new StringJoiner("\n");
-		for(var f: this) try {
-			return f.unpack(binary);
-		} catch (Exception ex) {
-			join.add(f.name().concat(":"));
-			join.add(ex.toString());
-		}
-		final var ms = join.toString();
-		final var ex = new IOException(ms);
-		throw new UncheckedIOException(ex);
-	}
-
-	/**
-	 * 指定された文字列が表す要約書類から交信記録を抽出します。
-	 *
-	 *
-	 * @param string 要約書類を読み込む文字列
-	 *
-	 * @return 抽出された交信記録
-	 *
-	 * @throws UncheckedIOException 読み込み時の例外
-	 */
-	public final byte[] unpack(String string) {
-		final var join = new StringJoiner("\n");
-		for(var f: this) try {
-			return f.unpack(string);
-		} catch (Exception ex) {
-			join.add(f.name().concat(":"));
-			join.add(ex.toString());
-		}
-		final var ms = join.toString();
-		final var ex = new IOException(ms);
-		throw new UncheckedIOException(ex);
 	}
 }
