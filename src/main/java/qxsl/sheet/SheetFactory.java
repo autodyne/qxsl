@@ -93,8 +93,12 @@ public abstract class SheetFactory {
 	 * @param is 要約書類を読み込む入力
 	 *
 	 * @return デコーダ
+	 *
+	 * @throws UnsupportedOperationException 未実装の場合
 	 */
-	public abstract SheetDecoder decoder(InputStream is);
+	public SheetDecoder decoder(InputStream is) {
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * 指定された出力に書き込むエンコーダを返します。
@@ -103,8 +107,12 @@ public abstract class SheetFactory {
 	 * @param os 要約書類を書き込む出力
 	 *
 	 * @return エンコーダ
+	 *
+	 * @throws UnsupportedOperationException 未実装の場合
 	 */
-	public abstract SheetEncoder encoder(OutputStream os);
+	public SheetEncoder encoder(OutputStream os) {
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * 指定された要約書類を読み込むデコーダを返します。
@@ -130,44 +138,6 @@ public abstract class SheetFactory {
 	 */
 	public final SheetDecoder decoder(byte[] data) {
 		return decoder(new ByteArrayInputStream(data));
-	}
-
-	/**
-	 * 指定された要約書類を読み取り交信記録を抽出します。
-	 *
-	 *
-	 * @param data 要約書類
-	 *
-	 * @return 抽出された交信記録
-	 *
-	 * @throws UncheckedIOException 読み込み時の例外
-	 *
-	 * @throws UnsupportedOperationException 未実装の場合
-	 */
-	public final byte[] unpack(String data) {
-		try(final var decoder = decoder(data)) {
-			return decoder.decode().getBinary(getTableKey());
-		} catch (IOException ex) {
-			throw new UncheckedIOException(ex);
-		}
-	}
-
-	/**
-	 * 指定された要約書類を読み取り交信記録を抽出します。
-	 *
-	 *
-	 * @param data 要約書類
-	 *
-	 * @return 抽出された交信記録
-	 *
-	 * @throws UncheckedIOException 読み込み時の例外
-	 */
-	public final byte[] unpack(byte[] data) {
-		try(final var decoder = decoder(data)) {
-			return decoder.decode().getBinary(getTableKey());
-		} catch (IOException ex) {
-			throw new UncheckedIOException(ex);
-		}
 	}
 
 	/**

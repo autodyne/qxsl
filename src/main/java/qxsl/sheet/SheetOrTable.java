@@ -26,7 +26,7 @@ import qxsl.table.TableManager;
 public final class SheetOrTable {
 	private final TableManager tables;
 	private final SheetManager sheets;
-	private final List<SheetFactory> strips;
+	private final List<Format> strips;
 
 	/**
 	 * インスタンスを構築します。
@@ -48,8 +48,8 @@ public final class SheetOrTable {
 		this.tables = new TableManager(cl);
 		this.sheets = new SheetManager(cl);
 		this.strips = new LinkedList<>();
-		for(var f: sheets) strips.add(f);
-		strips.add(null);
+		for(var f: sheets) strips.add(new Format(f));
+		strips.add(new Format(new RawDataFactory()));
 	}
 
 	/**
@@ -65,10 +65,10 @@ public final class SheetOrTable {
 	public List<Item> unpack(byte[] binary) {
 		final var join = new StringJoiner("\n");
 		for(var f: strips) try {
-			if (f == null) return tables.decode(binary);
-			else return tables.decode(f.unpack(binary));
+			return tables.decode(f.unpack(binary));
 		} catch (Exception ex) {
-			join.add(String.format("%s: %s", f, ex));
+			join.add(f.fmt.name().concat(":"));
+			join.add(ex.getMessage()).add("");
 		}
 		final var ms = join.toString();
 		final var ex = new IOException(ms);
@@ -88,13 +88,89 @@ public final class SheetOrTable {
 	public List<Item> unpack(String string) {
 		final var join = new StringJoiner("\n");
 		for(var f: strips) try {
-			if (f == null) return tables.decode(string);
-			else return tables.decode(f.unpack(string));
+			return tables.decode(f.unpack(string));
 		} catch (Exception ex) {
-			join.add(String.format("%s: %s", f, ex));
+			join.add(f.fmt.name().concat(":"));
+			join.add(ex.getMessage()).add("");
 		}
 		final var ms = join.toString();
 		final var ex = new IOException(ms);
 		throw new UncheckedIOException(ex);
+	}
+
+	/**
+	 * 剥き出しの交信記録を表す便宜的な要約書類の書式です。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2021/06/28
+	 */
+	private final class RawDataFactory extends BasicFactory {
+		/**
+		 * 書式を構築します。
+		 */
+		public RawDataFactory() {
+			super("raw");
+		}
+	}
+
+	/**
+	 * 指定された要約書類の書式により交信記録を抽出します。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2021/06/28
+	 */
+	private static final class Format {
+		private final SheetFactory fmt;
+
+		/**
+		 * 書式を指定します。
+		 *
+		 * @param fmt 書式
+		 */
+		public Format(SheetFactory fmt) {
+			this.fmt = fmt;
+		}
+
+		/**
+		 * 指定された要約書類を読み取り交信記録を抽出します。
+		 *
+		 *
+		 * @param data 要約書類
+		 *
+		 * @return 抽出された交信記録
+		 *
+		 * @throws IOException 読み込み時の例外
+		 *
+		 * @throws UnsupportedOperationException 未実装の場合
+		 */
+		private String unpack(String data) throws IOException {
+			if(fmt instanceof RawDataFactory) return data;
+			try(var decoder = fmt.decoder(data).decode()) {
+				return decoder.getString(fmt.getTableKey());
+			}
+		}
+
+		/**
+		 * 指定された要約書類を読み取り交信記録を抽出します。
+		 *
+		 *
+		 * @param data 要約書類
+		 *
+		 * @return 抽出された交信記録
+		 *
+		 * @throws IOException 読み込み時の例外
+		 *
+		 * @throws UnsupportedOperationException 未実装の場合
+		 */
+		private byte[] unpack(byte[] data) throws IOException {
+			if(fmt instanceof RawDataFactory) return data;
+			try(var decoder = fmt.decoder(data).decode()) {
+				return decoder.getBinary(fmt.getTableKey());
+			}
+		}
 	}
 }

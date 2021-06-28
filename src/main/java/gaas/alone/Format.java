@@ -44,19 +44,14 @@ public final class Format implements Callable<Integer> {
 	 * @return 終了コード
 	 */
 	@Override
-	public Integer call() {
-		try {
-			final var util = RuleKit.load("jautil.lisp").pattern();
-			final var pack = Files.readAllBytes(source);
-			final var list = new SheetOrTable().unpack(pack);
-			final var norm = util.normalize(list, null);
-			final var form = new TableManager().factory(format);
-			final var data = util.transform(norm, form.type());
-			Files.write(target, form.encode(data));
-			return 0;
-		} catch (IOException ex) {
-			ex.printStackTrace();
-			return 1;
-		}
+	public Integer call() throws IOException {
+		final var util = RuleKit.load("jautil.lisp").pattern();
+		final var pack = Files.readAllBytes(source);
+		final var list = new SheetOrTable().unpack(pack);
+		final var norm = util.normalize(list, null);
+		final var form = new TableManager().factory(format);
+		final var data = util.transform(norm, form.type());
+		Files.write(target, form.encode(data));
+		return 0;
 	}
 }
