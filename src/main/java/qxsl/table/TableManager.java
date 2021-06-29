@@ -88,7 +88,7 @@ public final class TableManager implements Iterable<TableFactory> {
 		for(var f: this) try {
 			return f.decode(binary);
 		} catch (Exception ex) {
-			join.add(String.format("%s: %s", f, ex.getMessage()));
+			join.add(cause(f, ex));
 		}
 		final var ms = join.toString();
 		final var ex = new IOException(ms);
@@ -110,11 +110,26 @@ public final class TableManager implements Iterable<TableFactory> {
 		for(var f: this) try {
 			return f.decode(string);
 		} catch (Exception ex) {
-			join.add(String.format("%s: %s", f, ex.getMessage()));
+			join.add(cause(f, ex));
 		}
 		final var ms = join.toString();
 		final var ex = new IOException(ms);
 		throw new UncheckedIOException(ex);
+	}
+
+	/**
+	 * 指定された例外またはエラーの最初の原因を返します。
+	 *
+	 *
+	 * @param tf 書式
+	 * @param ex 例外またはエラー
+	 *
+	 * @return 最初の原因の文字列
+	 */
+	private final String cause(TableFactory tf, Throwable ex) {
+		while(ex.getCause() != null) ex = ex.getCause();
+		final var m = (ex != null)? ex.getMessage(): "";
+		return String.format(" [%s]: %s", tf.name(), m);
 	}
 
 	/**
