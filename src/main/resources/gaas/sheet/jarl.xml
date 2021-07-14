@@ -24,6 +24,6 @@ mon day time  callsign      sent         rcvd      multi   MHz mode pts memo
 &lt;/LOGSHEET&gt;
 &lt;/SUMMARYSHEET&gt;
 </entry>
-<entry key="BARE">&lt;(\S+?) (\S+?)=(\S+?)&gt;</entry>
+<entry key="BARE">&lt;(\S+?) (\S+?)=([^\s"]+?)&gt;</entry>
 <entry key="QUOT">&lt;$1 $2=&quot;$3&quot;&gt;</entry>
 </properties>
