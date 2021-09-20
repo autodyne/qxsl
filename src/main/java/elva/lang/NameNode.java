@@ -65,7 +65,7 @@ public final class NameNode extends AtomBase<NameNode> {
 	 * このアトムと指定された値を比較します。
 	 *
 	 *
-	 * @param sexp 比較対象の値
+	 * @param atom 比較対象の値
 	 *
 	 * @return 等価の場合は真
 	 */
