@@ -9,7 +9,6 @@ import java.util.concurrent.Callable;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
-import picocli.CommandLine.Option;
 
 /**
  * コマンドラインツールが提供するコマンド群を定義します。
@@ -19,11 +18,13 @@ import picocli.CommandLine.Option;
  *
  * @since 2020/11/09
  */
-@Command(name = "qxsl", subcommands = {Filter.class, Format.class})
-public final class Gadget implements Callable<Integer> {
-	@Option(names = {"-h", "--help"}, usageHelp = true)
-	private boolean showHelp;
+@Command(name = "qxsl", subcommands = {
+	Filter.class,
+	Format.class,
+	Melody.class
+})
 
+public final class Gadget implements Callable<Integer> {
 	/**
 	 * 省略されたコマンドを実行して終了コードを返します。
 	 *

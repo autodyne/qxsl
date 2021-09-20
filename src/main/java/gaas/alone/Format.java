@@ -15,7 +15,6 @@ import qxsl.sheet.SheetOrTable;
 import qxsl.table.TableManager;
 
 import picocli.CommandLine.Command;
-import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 /**
@@ -28,8 +27,6 @@ import picocli.CommandLine.Parameters;
  */
 @Command(name = "format", description = {"convert file format"})
 public final class Format implements Callable<Integer> {
-	@Option(names = {"-h", "--help"}, usageHelp = true)
-	private boolean showHelp;
 	@Parameters(index = "0", description = {"source file"})
 	private Path source;
 	@Parameters(index = "1", description = {"target file"})

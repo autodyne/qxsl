@@ -11,7 +11,6 @@ import java.util.concurrent.Callable;
 import qxsl.table.TableManager;
 
 import picocli.CommandLine.Command;
-import picocli.CommandLine.Option;
 
 /**
  * 対応済みの交信記録の書式と拡張子のラベルを表示します。
@@ -23,9 +22,6 @@ import picocli.CommandLine.Option;
  */
 @Command(name = "filter", description = {"display filter text"})
 public final class Filter implements Callable<Integer> {
-	@Option(names = {"-h", "--help"}, usageHelp = true)
-	private boolean showHelp;
-
 	/**
 	 * サブコマンドを実行して終了コードを返します。
 	 *
