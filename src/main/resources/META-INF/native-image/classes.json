@@ -530,6 +530,12 @@
 		"allPublicFields": true
 	},
 	{
+		"name": "gaas.table.ZNewFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
 		"name": "java.lang.Appendable",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,

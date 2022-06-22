@@ -133,18 +133,19 @@ The following LISP programs are bundled inside the JAR file, as sample codes in 
 
 ### TableFactory
 
-| name | format | ext  |
-|------|--------|------|
-|`qxml`|QXML    |      |
-|`jarl`|JARL    |      |
-|`adis`|ADIF    |`.adi`|
-|`adxs`|ADIF    |`.adx`|
-|`cqww`|CQWW    |`.cbr`|
-|`zbin`|zLog    |`.zlo`|
-|`zdos`|zLog    |`.txt`|
-|`zall`|zLog    |`.all`|
-|`cbin`|CTESTWIN|`.lg8`|
-|`ctxt`|CTESTWIN|`.txt`|
+| name | format | ext   |
+|------|--------|-------|
+|`qxml`|QXML    |       |
+|`jarl`|JARL    |       |
+|`adis`|ADIF    |`.adi` |
+|`adxs`|ADIF    |`.adx` |
+|`cqww`|CQWW    |`.cbr` |
+|`zbin`|zLog    |`.zlo` |
+|`znew`|zLog    |`.zlox`|
+|`zdos`|zLog    |`.txt` |
+|`zall`|zLog    |`.all` |
+|`cbin`|CTESTWIN|`.lg8` |
+|`ctxt`|CTESTWIN|`.txt` |
 
 ### SheetFactory
 

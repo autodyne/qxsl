@@ -8,3 +8,4 @@ gaas.table.ZAllFactory
 gaas.table.ZDosFactory
 gaas.table.CBinFactory
 gaas.table.ZBinFactory
+gaas.table.ZNewFactory
