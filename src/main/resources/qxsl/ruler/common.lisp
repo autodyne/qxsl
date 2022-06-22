@@ -32,6 +32,12 @@
 (assert (equal (dolist (i (list 1 2 3)) (+ i 3)) (list 4 5 6)) "dolist")
 (assert (equal (dolist (i (list 1 2 3)) (* i 2)) (list 2 4 6)) "dolist")
 
+; remove-if-not
+(defun remove-if-not (fun args)
+	(remove-if (lambda x (not (fun x))) args))
+(assert (equal (remove-if-not (lambda x (not (equal x 9))) '(8 8 9)) '(8 8)) "remove-if-not")
+(assert (equal (remove-if-not (lambda x (not (equal x 3))) '(3 6 4)) '(6 4)) "remove-if-not")
+
 ; cond
 (defmacro cond *conds
 	(if (not (nil? *conds))

@@ -1,12 +1,12 @@
 ;; STANDARD IMPORTS DEFINED by 無線部開発班
 
-(import java.lang.CharSequence)
 (import java.lang.Class)
 (import java.lang.Boolean)
 (import java.lang.Integer)
 (import java.lang.Number)
 (import java.lang.Object)
 (import java.lang.String)
+(import java.lang.CharSequence)
 
 (import java.math.BigDecimal)
 (import java.math.RoundingMode)

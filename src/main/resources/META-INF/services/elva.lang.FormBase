@@ -46,6 +46,7 @@ elva.form.PatternForm
 elva.form.PrintForm
 elva.form.QuasiForm
 elva.form.QuoteForm
+elva.form.RemoveIfForm
 elva.form.SectionForm
 elva.form.SetForm
 elva.form.SubForm

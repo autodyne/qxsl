@@ -702,6 +702,14 @@ returns the expression without evaluation.
 (quote expression)
 ```
 
+### remove-if
+
+removes elements for which the specified function returns false.
+
+```lisp
+(remove-if fun list)
+```
+
 ### section
 
 takes four functions and returns a [`section`](https://nextzlog.github.io/qxsl/doc/qxsl/ruler/Section.html) object.

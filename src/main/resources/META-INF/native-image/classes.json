@@ -294,6 +294,12 @@
 		"allPublicFields": true
 	},
 	{
+		"name": "elva.form.RemoveIfForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
 		"name": "elva.form.SectionForm",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,

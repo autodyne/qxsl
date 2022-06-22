@@ -92,6 +92,10 @@
 (member 'TAIL (list 'HEAD 'TAIL)) #t
 (member 'TAIL (list 'HEAD 'NEXT 'TAIL)) #t
 
+; remove-if
+(remove-if (lambda x (equal x 4)) '(11 4)) '(11)
+(remove-if (lambda x (equal x 5)) '(5 14)) '(14)
+
 ; nil?
 (nil? ()) #t
 (nil? 810) #f
