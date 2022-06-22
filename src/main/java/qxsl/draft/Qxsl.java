@@ -20,7 +20,7 @@ import qxsl.value.Field;
  * @param <V> 属性の属性値の総称型
  */
 public abstract class Qxsl<V> extends Field<V> {
-	final V value;
+	private final V value;
 
 	/**
 	 * 指定した名前と値の属性を構築します。

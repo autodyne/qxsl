@@ -88,7 +88,7 @@ public final class Time extends Qxsl<ZonedDateTime> {
 	 * @since 2020/10/28
 	 */
 	public final Time ofYear(int year) {
-		return new Time(value.withYear(year));
+		return new Time(value().withYear(year));
 	}
 
 	/**
@@ -100,7 +100,7 @@ public final class Time extends Qxsl<ZonedDateTime> {
 	 * @since 2020/10/28
 	 */
 	public final Time copyDropSecond() {
-		return new Time(value.truncatedTo(MINUTES));
+		return new Time(value().truncatedTo(MINUTES));
 	}
 
 	/**
@@ -110,7 +110,7 @@ public final class Time extends Qxsl<ZonedDateTime> {
 	 * @return 現地時刻
 	 */
 	public final ZonedDateTime local() {
-		return value.withZoneSameInstant(systemDefault());
+		return value().withZoneSameInstant(systemDefault());
 	}
 
 	/**
@@ -124,6 +124,6 @@ public final class Time extends Qxsl<ZonedDateTime> {
 	@Override
 	public final boolean equals(Object obj) {
 		if(!Time.class.isInstance(obj)) return false;
-		else return value.isEqual(((Time) obj).value);
+		return value().isEqual(((Time) obj).value());
 	}
 }

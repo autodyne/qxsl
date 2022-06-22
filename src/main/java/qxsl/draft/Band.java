@@ -70,8 +70,8 @@ public final class Band extends Qxsl<BigDecimal> {
 	 */
 	@Override
 	public final String toString() {
-		if(value.doubleValue() > 1e6) return toGHzString();
-		if(value.doubleValue() > 1e3) return toMHzString();
+		if(value().doubleValue() > 1e6) return toGHzString();
+		if(value().doubleValue() > 1e3) return toMHzString();
 		return toKHzString();
 	}
 
@@ -109,12 +109,12 @@ public final class Band extends Qxsl<BigDecimal> {
 	 * この周波数を実数で表現する文字列を返します。
 	 *
 	 *
-	 * @param scale 小数点の位置
+	 * @param exp 小数点の位置
 	 *
 	 * @return 実数により表される周波数
 	 */
-	public final String toDecimalString(int scale) {
-		final var d = value.scaleByPowerOfTen(-scale);
+	public final String toDecimalString(int exp) {
+		final var d = value().scaleByPowerOfTen(-exp);
 		return d.stripTrailingZeros().toPlainString();
 	}
 
@@ -150,6 +150,6 @@ public final class Band extends Qxsl<BigDecimal> {
 	@Override
 	public final boolean equals(Object obj) {
 		if(!Band.class.isInstance(obj)) return false;
-		return value.compareTo(((Band) obj).value) == 0;
+		return value().compareTo(((Band) obj).value()) == 0;
 	}
 }

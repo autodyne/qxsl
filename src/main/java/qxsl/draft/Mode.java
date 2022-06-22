@@ -35,7 +35,7 @@ public final class Mode extends Qxsl<String> {
 	 * @since 2020/10/28
 	 */
 	public final boolean isCW() {
-		return value.equals("CW");
+		return value().equals("CW");
 	}
 
 	/**
@@ -47,7 +47,7 @@ public final class Mode extends Qxsl<String> {
 	 * @since 2020/10/28
 	 */
 	public final boolean isRTTY() {
-		return value.equals("RTTY");
+		return value().equals("RTTY");
 	}
 
 	/**
