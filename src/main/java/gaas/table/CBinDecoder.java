@@ -32,7 +32,7 @@ public final class CBinDecoder extends TableDecoder {
 	private final FieldManager fields;
 	private final CBinFactory format;
 	private DateTime cDTime;
-	private int count;
+	private int numQSOs;
 
 	/**
 	 * 指定された入力を読み込むデコーダを構築します。
@@ -69,15 +69,14 @@ public final class CBinDecoder extends TableDecoder {
 	 */
 	@Override
 	public final void head() throws IOException {
-		final var QSO = "CQsoData".getBytes();
-		final var hdr = source.readShort();
-		final var rdh = Short.reverseBytes(hdr);
-		this.count = Short.toUnsignedInt(rdh);
+		final var num = source.readShort();
+		final var mun = Short.reverseBytes(num);
+		this.numQSOs = Short.toUnsignedInt(mun);
 		source.skipBytes(6);
-		var trial = new byte[8];
-		source.readFully(trial);
-		if(Arrays.equals(trial, QSO)) return;
-		throw new IOException("unsupported");
+		var mno = new byte[8];
+		source.readFully(mno);
+		if(Arrays.equals(mno, "CQsoData".getBytes())) return;
+		throw new IOException("malformed CTESTWIN sequence");
 	}
 
 	/**
@@ -116,7 +115,7 @@ public final class CBinDecoder extends TableDecoder {
 		source.skipBytes(2);
 		note(item);
 		source.skipBytes(2);
-		this.count--;
+		this.numQSOs--;
 		return item;
 	}
 
@@ -132,7 +131,7 @@ public final class CBinDecoder extends TableDecoder {
 	 */
 	@Override
 	public final boolean hasNext() throws IOException {
-		return count > 0;
+		return numQSOs > 0;
 	}
 
 	/**
