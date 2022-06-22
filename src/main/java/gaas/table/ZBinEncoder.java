@@ -46,6 +46,18 @@ public final class ZBinEncoder extends TableEncoder {
 	}
 
 	/**
+	 * タイムゾーンを返します。
+	 *
+	 *
+	 * @return zone タイムゾーン
+	 *
+	 * @since 2022/06/22
+	 */
+	protected final short getTimeZone() {
+		return (short) tDTime.getOffset();
+	}
+
+	/**
 	 * ストリームを閉じて資源を解放します。
 	 *
 	 *
@@ -67,7 +79,7 @@ public final class ZBinEncoder extends TableEncoder {
 	@Override
 	public final void head() throws IOException {
 		target.write(new byte[0x54]);
-		target.writeShort(tDTime.getOffset());
+		target.writeShort(getTimeZone());
 		target.write(new byte[0xAA]);
 	}
 

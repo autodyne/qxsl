@@ -8,8 +8,11 @@ package gaas.table;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
+import qxsl.draft.Call;
 import qxsl.draft.Qxsl;
+import qxsl.draft.RSTQ;
 import qxsl.field.FieldManager;
 import qxsl.model.Item;
 import qxsl.table.TableDecoder;
@@ -47,6 +50,18 @@ public final class ZBinDecoder extends TableDecoder {
 	}
 
 	/**
+	 * タイムゾーンを設定します。
+	 *
+	 *
+	 * @param zone タイムゾーン
+	 *
+	 * @since 2022/06/22
+	 */
+	protected final void setTimeZone(short zone) {
+		this.tDTime = DateTime.newInstance(zone);
+	}
+
+	/**
 	 * ストリームを閉じて資源を解放します。
 	 *
 	 *
@@ -67,9 +82,13 @@ public final class ZBinDecoder extends TableDecoder {
 	 */
 	@Override
 	public final void head() throws IOException {
-		source.readFully(new byte[0x54]);
-		this.tDTime = DateTime.newInstance(source.readShort());
+		var mno = new byte[4];
+		source.readFully(mno);
+		source.readFully(new byte[0x50]);
+		setTimeZone(source.readShort());
 		source.readFully(new byte[0xAA]);
+		if(!Arrays.equals(mno, "ZLOX".getBytes())) return;
+		else throw new IOException("TQSODataEx detected");
 	}
 
 	/**
@@ -100,19 +119,19 @@ public final class ZBinDecoder extends TableDecoder {
 		call(item);
 		sent(item);
 		rcvd(item);
-		source.skipBytes(1);
+		source.skipBytes(0x1);
 		sRST(item);
 		rRST(item);
-		source.skipBytes(4);
+		source.skipBytes(0x4);
 		mode(item);
 		band(item);
 		watt(item);
 		mul1(item);
 		mul2(item);
-		source.skipBytes(3);
+		source.skipBytes(0x3);
 		name(item);
 		note(item);
-		source.skipBytes(14);
+		source.skipBytes(0xE);
 		return item;
 	}
 
