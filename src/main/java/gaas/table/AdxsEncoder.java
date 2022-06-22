@@ -30,7 +30,6 @@ import static javax.xml.stream.XMLOutputFactory.IS_REPAIRING_NAMESPACES;
  */
 public final class AdxsEncoder extends TableEncoder {
 	private final FieldManager fields;
-	private final AdxsFactory format;
 	private final Writer target;
 	private XMLStreamWriter writer;
 
@@ -39,11 +38,9 @@ public final class AdxsEncoder extends TableEncoder {
 	 *
 	 *
 	 * @param writer 出力
-	 * @param format 書式
 	 */
-	public AdxsEncoder(Writer writer, AdxsFactory format) {
+	public AdxsEncoder(Writer writer) {
 		this.fields = new FieldManager();
-		this.format = format;
 		this.target = writer;
 	}
 

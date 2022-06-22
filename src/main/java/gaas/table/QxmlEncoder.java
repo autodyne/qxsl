@@ -36,7 +36,6 @@ import static javax.xml.stream.XMLOutputFactory.IS_REPAIRING_NAMESPACES;
 public final class QxmlEncoder extends TableEncoder {
 	private final FieldManager fields;
 	private final Set<String> spaces;
-	private final QxmlFactory format;
 	private final Writer target;
 	private XMLStreamWriter writer;
 
@@ -45,12 +44,10 @@ public final class QxmlEncoder extends TableEncoder {
 	 *
 	 *
 	 * @param writer 出力
-	 * @param format 書式
 	 */
-	public QxmlEncoder(Writer writer, QxmlFactory format) {
+	public QxmlEncoder(Writer writer) {
 		this.fields = new FieldManager();
 		this.spaces = new HashSet<>();
-		this.format = format;
 		this.target = writer;
 	}
 

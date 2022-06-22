@@ -74,7 +74,7 @@ public final class QxmlFactory extends PrintFactory {
 	 */
 	@Override
 	public final TableEncoder encoder(Writer writer) {
-		return new QxmlEncoder(writer, this);
+		return new QxmlEncoder(writer);
 	}
 
 	/**

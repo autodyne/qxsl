@@ -34,7 +34,6 @@ import gaas.table.CBinFactory.ModeEnum;
  */
 public final class CBinEncoder extends TableEncoder {
 	private final DataOutputStream target;
-	private final CBinFactory format;
 	private final DateTime cDTime;
 	private final Set<Name> names;
 	private Item last;
@@ -45,13 +44,11 @@ public final class CBinEncoder extends TableEncoder {
 	 *
 	 *
 	 * @param stream 出力
-	 * @param format 書式
 	 */
-	public CBinEncoder(OutputStream stream, CBinFactory format) {
+	public CBinEncoder(OutputStream stream) {
 		this.names = new LinkedHashSet<Name>();
 		this.target = new DataOutputStream(stream);
 		this.cDTime = new DateTime();
-		this.format = format;
 	}
 
 	/**

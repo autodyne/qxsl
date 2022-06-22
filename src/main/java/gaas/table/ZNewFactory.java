@@ -38,7 +38,7 @@ public final class ZNewFactory extends BasicFactory {
 	 */
 	@Override
 	public final TableDecoder decoder(InputStream is) {
-		return new ZNewDecoder(is, this);
+		return new ZNewDecoder(is);
 	}
 
 	/**
@@ -51,6 +51,6 @@ public final class ZNewFactory extends BasicFactory {
 	 */
 	@Override
 	public final TableEncoder encoder(OutputStream os) {
-		return new ZNewEncoder(os, this);
+		return new ZNewEncoder(os);
 	}
 }

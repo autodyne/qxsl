@@ -52,7 +52,7 @@ public final class ZBinFactory extends BasicFactory {
 	 */
 	@Override
 	public final TableDecoder decoder(InputStream is) {
-		return new ZBinDecoder(is, this);
+		return new ZBinDecoder(is);
 	}
 
 	/**
@@ -65,7 +65,7 @@ public final class ZBinFactory extends BasicFactory {
 	 */
 	@Override
 	public final TableEncoder encoder(OutputStream os) {
-		return new ZBinEncoder(os, this);
+		return new ZBinEncoder(os);
 	}
 
 	/**

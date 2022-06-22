@@ -46,7 +46,7 @@ public final class CBinFactory extends BasicFactory {
 	 */
 	@Override
 	public final TableDecoder decoder(InputStream is) {
-		return new CBinDecoder(is, this);
+		return new CBinDecoder(is);
 	}
 
 	/**
@@ -59,7 +59,7 @@ public final class CBinFactory extends BasicFactory {
 	 */
 	@Override
 	public final TableEncoder encoder(OutputStream os) {
-		return new CBinEncoder(os, this);
+		return new CBinEncoder(os);
 	}
 
 	/**

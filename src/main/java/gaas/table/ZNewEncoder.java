@@ -23,19 +23,16 @@ import qxsl.table.TableEncoder;
 public final class ZNewEncoder extends TableEncoder {
 	private final DataOutputStream target;
 	private final ZBinEncoder writer;
-	private final ZNewFactory format;
 
 	/**
 	 * 指定された出力に書き込むエンコーダを構築します。
 	 *
 	 *
 	 * @param stream 出力
-	 * @param format 書式
 	 */
-	public ZNewEncoder(OutputStream stream, ZNewFactory format) {
+	public ZNewEncoder(OutputStream stream) {
 		this.target = new DataOutputStream(stream);
-		this.writer = new ZBinEncoder(stream, null);
-		this.format = format;
+		this.writer = new ZBinEncoder(stream);
 	}
 
 	/**

@@ -29,7 +29,6 @@ import gaas.table.ZBinFactory.WattEnum;
  */
 public final class ZBinEncoder extends TableEncoder {
 	private final DataOutputStream target;
-	private final ZBinFactory format;
 	private final DateTime tDTime;
 
 	/**
@@ -37,12 +36,10 @@ public final class ZBinEncoder extends TableEncoder {
 	 *
 	 *
 	 * @param stream 出力
-	 * @param format 書式
 	 */
-	public ZBinEncoder(OutputStream stream, ZBinFactory format) {
+	public ZBinEncoder(OutputStream stream) {
 		this.target = new DataOutputStream(stream);
 		this.tDTime = new DateTime();
-		this.format = format;
 	}
 
 	/**

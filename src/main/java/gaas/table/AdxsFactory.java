@@ -74,7 +74,7 @@ public final class AdxsFactory extends PrintFactory {
 	 */
 	@Override
 	public final TableEncoder encoder(Writer writer) {
-		return new AdxsEncoder(writer, this);
+		return new AdxsEncoder(writer);
 	}
 
 	/**

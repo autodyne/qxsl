@@ -30,7 +30,6 @@ import gaas.table.CBinFactory.ModeEnum;
 public final class CBinDecoder extends TableDecoder {
 	private final DataInputStream source;
 	private final FieldManager fields;
-	private final CBinFactory format;
 	private DateTime cDTime;
 	private int numQSOs;
 
@@ -39,13 +38,11 @@ public final class CBinDecoder extends TableDecoder {
 	 *
 	 *
 	 * @param stream 入力
-	 * @param format 書式
 	 */
-	public CBinDecoder(InputStream stream, CBinFactory format) {
+	public CBinDecoder(InputStream stream) {
 		this.source = new DataInputStream(stream);
 		this.fields = new FieldManager();
 		this.cDTime = new DateTime();
-		this.format = format;
 	}
 
 	/**

@@ -24,7 +24,6 @@ import qxsl.table.TableDecoder;
 public final class ZNewDecoder extends TableDecoder {
 	private final DataInputStream source;
 	private final ZBinDecoder reader;
-	private final ZNewFactory format;
 	private int numQSOs;
 
 	/**
@@ -32,12 +31,10 @@ public final class ZNewDecoder extends TableDecoder {
 	 *
 	 *
 	 * @param stream 入力
-	 * @param format 書式
 	 */
-	public ZNewDecoder(InputStream stream, ZNewFactory format) {
+	public ZNewDecoder(InputStream stream) {
 		this.source = new DataInputStream(stream);
-		this.reader = new ZBinDecoder(stream, null);
-		this.format = format;
+		this.reader = new ZBinDecoder(stream);
 	}
 
 	/**

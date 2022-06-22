@@ -10,9 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
-import qxsl.draft.Call;
 import qxsl.draft.Qxsl;
-import qxsl.draft.RSTQ;
 import qxsl.field.FieldManager;
 import qxsl.model.Item;
 import qxsl.table.TableDecoder;
@@ -33,7 +31,6 @@ import gaas.table.ZBinFactory.WattEnum;
 public final class ZBinDecoder extends TableDecoder {
 	private final DataInputStream source;
 	private final FieldManager fields;
-	private final ZBinFactory format;
 	private DateTime tDTime;
 
 	/**
@@ -41,12 +38,10 @@ public final class ZBinDecoder extends TableDecoder {
 	 *
 	 *
 	 * @param stream 入力
-	 * @param format 書式
 	 */
-	public ZBinDecoder(InputStream stream, ZBinFactory format) {
+	public ZBinDecoder(InputStream stream) {
 		this.source = new DataInputStream(stream);
 		this.fields = new FieldManager();
-		this.format = format;
 	}
 
 	/**
