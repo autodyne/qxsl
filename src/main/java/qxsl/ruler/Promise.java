@@ -6,8 +6,10 @@
 package qxsl.ruler;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import qxsl.local.LocalCityItem;
 import qxsl.model.Item;
 
 /**
@@ -72,6 +74,19 @@ public final class Promise extends Section {
 	@Override
 	public final String code() {
 		return form.code();
+	}
+
+	/**
+	 * この部門に参加可能な運用場所を返します。
+	 *
+	 *
+	 * @return 空のリスト
+	 *
+	 * @since 2022/06/22
+	 */
+	@Override
+	public final List<LocalCityItem> getCityList() {
+		return form.getCityList();
 	}
 
 	/**

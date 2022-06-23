@@ -5,6 +5,8 @@
 *******************************************************************************/
 package elva.form;
 
+import java.util.List;
+
 import elva.lang.ElvaEval;
 import elva.lang.FormBase;
 import elva.lang.ListBase;
@@ -13,6 +15,7 @@ import elva.lang.NativeOp;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
+import qxsl.local.LocalCityItem;
 import qxsl.model.Item;
 import qxsl.ruler.Element;
 import qxsl.ruler.Message;
@@ -22,7 +25,7 @@ import qxsl.ruler.Summary;
 /**
  * takes four functions and returns a section object.
  * <pre>
- * (section name code verify unique entity result)
+ * (section name code cities verify unique entity result)
  * </pre>
  *
  *
@@ -31,7 +34,7 @@ import qxsl.ruler.Summary;
  * @since 2019/05/15
  */
 @Name("section")
-@Args(min = 6, max = 6)
+@Args(min = 7, max = 7)
 public final class SectionForm extends NativeOp {
 	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
@@ -51,6 +54,7 @@ final class SectionImpl extends Section {
 	private final String name;
 	private final String code;
 	private final ElvaEval eval;
+	private final ListBase area;
 	private final FormBase test;
 	private final FormBase call;
 	private final FormBase mult;
@@ -66,10 +70,11 @@ final class SectionImpl extends Section {
 	public SectionImpl(ListBase rule, ElvaEval eval) {
 		this.name = eval.apply(rule.get(0)).text();
 		this.code = eval.apply(rule.get(1)).text();
-		this.test = eval.apply(rule.get(2)).form();
-		this.call = eval.apply(rule.get(3)).form();
-		this.mult = eval.apply(rule.get(4)).form();
-		this.calc = eval.apply(rule.get(5)).form();
+		this.area = eval.apply(rule.get(2)).list();
+		this.test = eval.apply(rule.get(3)).form();
+		this.call = eval.apply(rule.get(4)).form();
+		this.mult = eval.apply(rule.get(5)).form();
+		this.calc = eval.apply(rule.get(6)).form();
 		this.eval = eval;
 	}
 
@@ -108,6 +113,19 @@ final class SectionImpl extends Section {
 	@Override
 	public final String code() {
 		return code;
+	}
+
+	/**
+	 * この部門に参加可能な運用場所を返します。
+	 *
+	 *
+	 * @return 運用場所
+	 *
+	 * @since 2022/06/22
+	 */
+	@Override
+	public final List<LocalCityItem> getCityList() {
+		return List.of(area.cast(LocalCityItem.class));
 	}
 
 	/**

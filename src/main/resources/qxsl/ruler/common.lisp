@@ -199,9 +199,9 @@
 (setq failure (new Failure Item Object))
 
 ; get code or name from the specified city
-(setq code<-city (method 'code LocalCityItem))
-(setq area<-city (method 'area LocalCityItem))
-(setq name<-city (method 'name LocalCityItem int))
+(setq city-code (method 'code LocalCityItem))
+(setq city-area (method 'area LocalCityItem))
+(setq city-name (method 'name LocalCityItem int))
 
 ; get city from the specified code or name
 (setq city<-code (method 'getByCode LocalCityBase String))

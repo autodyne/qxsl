@@ -14,17 +14,15 @@
 (defun tAN? it (some it tHI? tLO?))
 (defun tJS? it (some it tHI? tLO? tDG?))
 
-;; area validation
-(defun INNER? it
-	(and
-		(現存? it)
-		(cond
-			((DIGIT? it) (市郡? it))
-			((AREA1? it) (市郡? it))
-			((AREA8? it) (支庁? it))
-			((always it) (府県? it)))))
+; area validation
+(defun 内? it
+	(cond
+		((DIGIT? it) (every it 現存? 市郡?))
+		((AREA1? it) (every it 現存? 市郡?))
+		((AREA8? it) (every it 現存? 支庁?))
+		((always it) (every it 現存? 府県?))))
 
-(defun OUTER? it (every it 現存? AREA1? 市郡?))
+(defun 外? it (every it 現存? AREA1? 市郡?))
 
 ; contact validation
 (defmacro score conds
@@ -99,9 +97,9 @@
 ; section macros
 (defun rule s ((method! 'add) JA1 s))
 (defmacro label args `(format "%s %s %s %s部門" ,@args))
-(defmacro build (n c p m) `(rule (section ,n ,c ,p unique ,m result)))
-(defmacro SinOp (n c p) `(build (label ,n) ,c (score ,p) EntitySinOp))
-(defmacro MulOp (n c p) `(build (label ,n) ,c (score ,p) EntityMulOp))
+(defmacro build (n c a p m) `(rule (section ,n ,c ,a ,p unique ,m result)))
+(defmacro SinOp (n c a p) `(build (label ,n) ,c ,a (score ,p) EntitySinOp))
+(defmacro MulOp (n c a p) `(build (label ,n) ,c ,a (score ,p) EntityMulOp))
 
 ; section codes
 (setq cSinHB "個人部門 (09:00-12:00)")
@@ -111,14 +109,18 @@
 (setq cMulDG "団体部門 (デジタル)")
 (setq cMixJS "総合部門")
 
+; remove prefectures
+(setq cities-ja1 (remove-if (city-match "\\d{2,3}") cities-area1))
+(setq out-of-ja1 (remove-if (city-match "\\d{2,3}") out-of-area1))
+
 ; section constructors
-(defmacro SinHB (name test) `(SinOp ,name cSinHB ,test))
-(defmacro SinLB (name test) `(SinOp ,name cSinLB ,test))
-(defmacro SinDG (name test) `(SinOp ,name cSinDG ,test))
-(defmacro SinJS (name test) `(SinOp ,name cMixJS ,test))
-(defmacro MulAB (name test) `(MulOp ,name cMulAB ,test))
-(defmacro MulDG (name test) `(MulOp ,name cMulDG ,test))
-(defmacro MulJS (name test) `(MulOp ,name cMixJS ,test))
+(defmacro SinHB (name area test) `(SinOp ,name cSinHB ,area ,test))
+(defmacro SinLB (name area test) `(SinOp ,name cSinLB ,area ,test))
+(defmacro SinDG (name area test) `(SinOp ,name cSinDG ,area ,test))
+(defmacro SinJS (name area test) `(SinOp ,name cMixJS ,area ,test))
+(defmacro MulAB (name area test) `(MulOp ,name cMulAB ,area ,test))
+(defmacro MulDG (name area test) `(MulOp ,name cMulDG ,area ,test))
+(defmacro MulJS (name area test) `(MulOp ,name cMixJS ,area ,test))
 
 ; 不参加
 (rule (absence (format "%s 不参加" cSinHB) cSinHB))
@@ -128,75 +130,75 @@
 (rule (absence (format "%s 不参加" cMulDG) cMulDG))
 
 ; 1エリア内 個人 電信限定 ローバンド部門
-(SinLB (内 個 電信 L19部門) (SinOp? INNER? tLO? MORSE? 1.9MHz?))
-(SinLB (内 個 電信 L35部門) (SinOp? INNER? tLO? MORSE? 3.5MHz?))
-(SinLB (内 個 電信 L70部門) (SinOp? INNER? tLO? MORSE?   7MHz?))
-(SinLB (内 個 電信 LAB部門) (SinOp? INNER? tLO? MORSE?))
+(SinLB (内 個 電信 L19部門) cities-ja1 (SinOp? 内? tLO? MORSE? 1.9MHz?))
+(SinLB (内 個 電信 L35部門) cities-ja1 (SinOp? 内? tLO? MORSE? 3.5MHz?))
+(SinLB (内 個 電信 L70部門) cities-ja1 (SinOp? 内? tLO? MORSE?   7MHz?))
+(SinLB (内 個 電信 LAB部門) cities-ja1 (SinOp? 内? tLO? MORSE?))
 
 ; 1エリア内 個人 電信電話 ローバンド部門
-(SinLB (内 個 電電 L35部門) (SinOp? INNER? tLO? CW/PH? 3.5MHz?))
-(SinLB (内 個 電電 L70部門) (SinOp? INNER? tLO? CW/PH?   7MHz?))
-(SinLB (内 個 電電 LAB部門) (SinOp? INNER? tLO? CW/PH?))
+(SinLB (内 個 電電 L35部門) cities-ja1 (SinOp? 内? tLO? CW/PH? 3.5MHz?))
+(SinLB (内 個 電電 L70部門) cities-ja1 (SinOp? 内? tLO? CW/PH?   7MHz?))
+(SinLB (内 個 電電 LAB部門) cities-ja1 (SinOp? 内? tLO? CW/PH?))
 
 ; 1エリア外 個人 電信限定 ローバンド部門
-(SinLB (外 個 電信 L19部門) (SinOp? OUTER? tLO? MORSE? 1.9MHz?))
-(SinLB (外 個 電信 L35部門) (SinOp? OUTER? tLO? MORSE? 3.5MHz?))
-(SinLB (外 個 電信 L70部門) (SinOp? OUTER? tLO? MORSE?   7MHz?))
-(SinLB (外 個 電信 LAB部門) (SinOp? OUTER? tLO? MORSE?))
+(SinLB (外 個 電信 L19部門) out-of-ja1 (SinOp? 外? tLO? MORSE? 1.9MHz?))
+(SinLB (外 個 電信 L35部門) out-of-ja1 (SinOp? 外? tLO? MORSE? 3.5MHz?))
+(SinLB (外 個 電信 L70部門) out-of-ja1 (SinOp? 外? tLO? MORSE?   7MHz?))
+(SinLB (外 個 電信 LAB部門) out-of-ja1 (SinOp? 外? tLO? MORSE?))
 
 ; 1エリア外 個人 電信電話 ローバンド部門
-(SinLB (外 個 電電 L35部門) (SinOp? OUTER? tLO? CW/PH? 3.5MHz?))
-(SinLB (外 個 電電 L70部門) (SinOp? OUTER? tLO? CW/PH?   7MHz?))
-(SinLB (外 個 電電 LAB部門) (SinOp? OUTER? tLO? CW/PH?))
+(SinLB (外 個 電電 L35部門) out-of-ja1 (SinOp? 外? tLO? CW/PH? 3.5MHz?))
+(SinLB (外 個 電電 L70部門) out-of-ja1 (SinOp? 外? tLO? CW/PH?   7MHz?))
+(SinLB (外 個 電電 LAB部門) out-of-ja1 (SinOp? 外? tLO? CW/PH?))
 
 ; 1エリア内 個人 電信限定 ハイバンド部門
-(SinHB (内 個 電信 H14部門) (SinOp? INNER? tHI? MORSE?  14MHz?))
-(SinHB (内 個 電信 H21部門) (SinOp? INNER? tHI? MORSE?  21MHz?))
-(SinHB (内 個 電信 H28部門) (SinOp? INNER? tHI? MORSE?  28MHz?))
-(SinHB (内 個 電信 H50部門) (SinOp? INNER? tHI? MORSE?  50MHz?))
-(SinHB (内 個 電信 HAB部門) (SinOp? INNER? tHI? MORSE?))
+(SinHB (内 個 電信 H14部門) cities-ja1 (SinOp? 内? tHI? MORSE?  14MHz?))
+(SinHB (内 個 電信 H21部門) cities-ja1 (SinOp? 内? tHI? MORSE?  21MHz?))
+(SinHB (内 個 電信 H28部門) cities-ja1 (SinOp? 内? tHI? MORSE?  28MHz?))
+(SinHB (内 個 電信 H50部門) cities-ja1 (SinOp? 内? tHI? MORSE?  50MHz?))
+(SinHB (内 個 電信 HAB部門) cities-ja1 (SinOp? 内? tHI? MORSE?))
 
 ; 1エリア内 個人 電信電話 ハイバンド部門
-(SinHB (内 個 電電 H14部門) (SinOp? INNER? tHI? CW/PH?  14MHz?))
-(SinHB (内 個 電電 H21部門) (SinOp? INNER? tHI? CW/PH?  21MHz?))
-(SinHB (内 個 電電 H28部門) (SinOp? INNER? tHI? CW/PH?  28MHz?))
-(SinHB (内 個 電電 H50部門) (SinOp? INNER? tHI? CW/PH?  50MHz?))
-(SinHB (内 個 電電 HAB部門) (SinOp? INNER? tHI? CW/PH?))
+(SinHB (内 個 電電 H14部門) cities-ja1 (SinOp? 内? tHI? CW/PH?  14MHz?))
+(SinHB (内 個 電電 H21部門) cities-ja1 (SinOp? 内? tHI? CW/PH?  21MHz?))
+(SinHB (内 個 電電 H28部門) cities-ja1 (SinOp? 内? tHI? CW/PH?  28MHz?))
+(SinHB (内 個 電電 H50部門) cities-ja1 (SinOp? 内? tHI? CW/PH?  50MHz?))
+(SinHB (内 個 電電 HAB部門) cities-ja1 (SinOp? 内? tHI? CW/PH?))
 
 ; 1エリア外 個人 電信限定 ハイバンド部門
-(SinHB (外 個 電信 H14部門) (SinOp? OUTER? tHI? MORSE?  14MHz?))
-(SinHB (外 個 電信 H21部門) (SinOp? OUTER? tHI? MORSE?  21MHz?))
-(SinHB (外 個 電信 H28部門) (SinOp? OUTER? tHI? MORSE?  28MHz?))
-(SinHB (外 個 電信 H50部門) (SinOp? OUTER? tHI? MORSE?  50MHz?))
-(SinHB (外 個 電信 HAB部門) (SinOp? OUTER? tHI? MORSE?))
+(SinHB (外 個 電信 H14部門) out-of-ja1 (SinOp? 外? tHI? MORSE?  14MHz?))
+(SinHB (外 個 電信 H21部門) out-of-ja1 (SinOp? 外? tHI? MORSE?  21MHz?))
+(SinHB (外 個 電信 H28部門) out-of-ja1 (SinOp? 外? tHI? MORSE?  28MHz?))
+(SinHB (外 個 電信 H50部門) out-of-ja1 (SinOp? 外? tHI? MORSE?  50MHz?))
+(SinHB (外 個 電信 HAB部門) out-of-ja1 (SinOp? 外? tHI? MORSE?))
 
 ; 1エリア外 個人 電信電話 ハイバンド部門
-(SinHB (外 個 電電 H14部門) (SinOp? OUTER? tHI? CW/PH?  14MHz?))
-(SinHB (外 個 電電 H21部門) (SinOp? OUTER? tHI? CW/PH?  21MHz?))
-(SinHB (外 個 電電 H28部門) (SinOp? OUTER? tHI? CW/PH?  28MHz?))
-(SinHB (外 個 電電 H50部門) (SinOp? OUTER? tHI? CW/PH?  50MHz?))
-(SinHB (外 個 電電 HAB部門) (SinOp? OUTER? tHI? CW/PH?))
+(SinHB (外 個 電電 H14部門) out-of-ja1 (SinOp? 外? tHI? CW/PH?  14MHz?))
+(SinHB (外 個 電電 H21部門) out-of-ja1 (SinOp? 外? tHI? CW/PH?  21MHz?))
+(SinHB (外 個 電電 H28部門) out-of-ja1 (SinOp? 外? tHI? CW/PH?  28MHz?))
+(SinHB (外 個 電電 H50部門) out-of-ja1 (SinOp? 外? tHI? CW/PH?  50MHz?))
+(SinHB (外 個 電電 HAB部門) out-of-ja1 (SinOp? 外? tHI? CW/PH?))
 
 ; 1エリア内 団体 アナログ部門
-(MulAB (内 団 電信 ALL部門) (MulOp? INNER? tAN? MORSE?))
-(MulAB (内 団 電電 ALL部門) (MulOp? INNER? tAN? CW/PH?))
+(MulAB (内 団 電信 ALL部門) cities-ja1 (MulOp? 内? tAN? MORSE?))
+(MulAB (内 団 電電 ALL部門) cities-ja1 (MulOp? 内? tAN? CW/PH?))
 
 ; 1エリア外 団体 アナログ部門
-(MulAB (外 団 電信 ALL部門) (MulOp? OUTER? tAN? MORSE?))
-(MulAB (外 団 電電 ALL部門) (MulOp? OUTER? tAN? CW/PH?))
+(MulAB (外 団 電信 ALL部門) out-of-ja1 (MulOp? 外? tAN? MORSE?))
+(MulAB (外 団 電電 ALL部門) out-of-ja1 (MulOp? 外? tAN? CW/PH?))
 
 ; 個人 デジタル部門
-(SinDG (内 個 離散 ALL部門) (SinOp? INNER? tDG? DIGIT?))
-(SinDG (外 個 離散 ALL部門) (SinOp? OUTER? tDG? DIGIT?))
+(SinDG (内 個 離散 ALL部門) cities-ja1 (SinOp? 内? tDG? DIGIT?))
+(SinDG (外 個 離散 ALL部門) out-of-ja1 (SinOp? 外? tDG? DIGIT?))
 
 ; 団体 デジタル部門
-(MulDG (内 団 離散 ALL部門) (MulOp? INNER? tDG? DIGIT?))
-(MulDG (外 団 離散 ALL部門) (MulOp? OUTER? tDG? DIGIT?))
+(MulDG (内 団 離散 ALL部門) cities-ja1 (MulOp? 内? tDG? DIGIT?))
+(MulDG (外 団 離散 ALL部門) out-of-ja1 (MulOp? 外? tDG? DIGIT?))
 
 ; 個人 総合部門
-(SinJS (内 個 総合 ALL部門) (SinOp? INNER? tJS? AN/DG?))
-(SinJS (外 個 総合 ALL部門) (SinOp? OUTER? tJS? AN/DG?))
+(SinJS (内 個 総合 ALL部門) cities-ja1 (SinOp? 内? tJS? AN/DG?))
+(SinJS (外 個 総合 ALL部門) out-of-ja1 (SinOp? 外? tJS? AN/DG?))
 
 ; 団体 総合部門
-(MulJS (内 団 総合 ALL部門) (MulOp? INNER? tJS? AN/DG?))
-(MulJS (外 団 総合 ALL部門) (MulOp? OUTER? tJS? AN/DG?))
+(MulJS (内 団 総合 ALL部門) cities-ja1 (MulOp? 内? tJS? AN/DG?))
+(MulJS (外 団 総合 ALL部門) out-of-ja1 (MulOp? 外? tJS? AN/DG?))

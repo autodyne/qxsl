@@ -7,6 +7,7 @@ package qxsl.ruler;
 
 import java.util.List;
 
+import qxsl.local.LocalCityItem;
 import qxsl.model.Item;
 
 /**
@@ -66,6 +67,16 @@ public abstract class Section extends Library {
 	public final boolean isAbsence() {
 		return this instanceof Absence;
 	}
+
+	/**
+	 * この部門に参加可能な運用場所を返します。
+	 *
+	 *
+	 * @return 運用場所
+	 *
+	 * @since 2022/06/22
+	 */
+	public abstract List<LocalCityItem> getCityList();
 
 	/**
 	 * 指定された交信記録の妥当性を検査します。

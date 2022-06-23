@@ -715,7 +715,7 @@ removes elements for which the specified function returns false.
 takes four functions and returns a [`section`](https://nextzlog.github.io/qxsl/doc/qxsl/ruler/Section.html) object.
 
 ```lisp
-(section name code verify unique entity result)
+(section name code cities verify unique entity result)
 ```
 
 ### set

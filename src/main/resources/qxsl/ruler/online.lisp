@@ -10,11 +10,9 @@
 
 ; area validation
 (defun area? it
-	(and
-		(現存? it)
-		(cond
-			((AREA8? it) (支庁? it))
-			((always it) (府県? it)))))
+	(cond
+		((AREA8? it) (every it 現存? 支庁?))
+		((always it) (every it 現存? 府県?))))
 
 ; contact validation
 (defmacro score conds
@@ -60,13 +58,16 @@
 ; section macros
 (defun rule s ((method 'add Contest Section) RT s))
 (defmacro label args `(format "%s %s 部門" ,@args))
-(defmacro build (n c p) `(section ,n ,c ,p unique entity result))
-(defmacro SinOp (n c p) `(rule (build (label ,n) ,c (score ,p))))
-(defmacro MulOp (n c p) `(rule (build (label ,n) ,c (score ,p))))
+(defmacro build (n c a p) `(section ,n ,c ,a ,p unique entity result))
+(defmacro SinOp (n c a p) `(rule (build (label ,n) ,c ,a (score ,p))))
+(defmacro MulOp (n c a p) `(rule (build (label ,n) ,c ,a (score ,p))))
 
-(SinOp (個 電信) 電信 (SinOp? band? time? area? MORSE?))
-(SinOp (個 電話) 電話 (SinOp? band? time? area? PHONE?))
-(SinOp (個 電電) 電電 (SinOp? band? time? area? CW/PH?))
-(MulOp (団 電信) 電信 (MulOp? band? time? area? MORSE?))
-(MulOp (団 電話) 電話 (MulOp? band? time? area? PHONE?))
-(MulOp (団 電電) 電電 (MulOp? band? time? area? CW/PH?))
+; prefectures only
+(setq cities (remove-if-not (city-match "\\d{2}") CITY-LIST))
+
+(SinOp (個 電信) 電信 cities (SinOp? band? time? area? MORSE?))
+(SinOp (個 電話) 電話 cities (SinOp? band? time? area? PHONE?))
+(SinOp (個 電電) 電電 cities (SinOp? band? time? area? CW/PH?))
+(MulOp (団 電信) 電信 cities (MulOp? band? time? area? MORSE?))
+(MulOp (団 電話) 電話 cities (MulOp? band? time? area? PHONE?))
+(MulOp (団 電電) 電電 cities (MulOp? band? time? area? CW/PH?))

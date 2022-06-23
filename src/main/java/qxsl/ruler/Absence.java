@@ -5,6 +5,9 @@
 *******************************************************************************/
 package qxsl.ruler;
 
+import java.util.List;
+
+import qxsl.local.LocalCityItem;
 import qxsl.model.Item;
 
 /**
@@ -16,6 +19,19 @@ import qxsl.model.Item;
  * @since 2020/11/23
  */
 public abstract class Absence extends Section {
+	/**
+	 * この部門に参加可能な運用場所を返します。
+	 *
+	 *
+	 * @return 空のリスト
+	 *
+	 * @since 2022/06/22
+	 */
+	@Override
+	public final List<LocalCityItem> getCityList() {
+		return List.of();
+	}
+
 	/**
 	 * 指定された交信記録の妥当性を検査します。
 	 *
