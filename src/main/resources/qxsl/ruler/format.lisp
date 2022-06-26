@@ -78,8 +78,8 @@
 ;; TIME FIELD ACCESS ROUTINES
 
 ; time access for adif
-(defun adif-dISO it (replace (adif-DATE it) "(?<=^.{4}|^.{6})" "-"))
-(defun adif-tISO it (replace (adif-TIME it) "(?<=^.{2}|^.{4})" ":"))
+(defun adif-dISO it (replace (adif-DATE it) "(?<=^.{4}|^.{6})(?=.{2})" "-"))
+(defun adif-tISO it (replace (adif-TIME it) "(?<=^.{2}|^.{4})(?=.{2})" ":"))
 (defun adif-time it (format "%sT%sZ" (adif-dISO it) (adif-tISO it)))
 
 ; time set for adif
