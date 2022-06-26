@@ -258,7 +258,7 @@ Give arguments to call the constructor and method.
 ```
 
 For instance methods, the first argument must be the instance.
-This argument is not needed when calling constructors or static methods.
+This argument is not required when calling constructors or static methods.
 The second and subsequent arguments are passed to the constructor or method as their arguments.
 To reference a Java field, use the `access` function.
 

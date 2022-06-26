@@ -1,4 +1,4 @@
-qxsl: Amateur-Radio Logging Library & LISP
+QxSL: Amateur-Radio Logging Library & LISP
 ====
 
 ![image](https://img.shields.io/badge/Gradle-7-red.svg)
@@ -6,7 +6,7 @@ qxsl: Amateur-Radio Logging Library & LISP
 ![image](https://img.shields.io/badge/GraalVM-20.0-red.svg)
 ![image](https://img.shields.io/badge/license-LGPL3-darkblue.svg)
 
-qxsl is a Java library for processing amateur-radio log files, including scoring and tabulation frameworks for ham radio contests.
+QxSL is a Java library for processing amateur-radio log files, including scoring and tabulation frameworks for ham radio contests.
 
 ## Features
 
@@ -17,12 +17,12 @@ qxsl is a Java library for processing amateur-radio log files, including scoring
 ## Documents
 
 - [Javadoc](https://nextzlog.github.io/qxsl/doc/index.html)
-- [コンテスト運営を支援する自動集計システム (PDF)](https://pafelog.net/ats4.pdf)
+- [ATS-4 (PDF)](https://pafelog.net/ats4.pdf)
 
 ## Applications
 
-- [zLog+ ZyLO](https://github.com/nextzlog/zylo).
-- [Automatic Acceptance & Tabulation System (ATS)](https://github.com/nextzlog/ats4) for [the ALLJA1 contest](http://ja1zlo.u-tokyo.org/allja1).
+- [ZyLO](https://github.com/nextzlog/zylo).
+- [ATS-4](https://github.com/nextzlog/ats4) for [ALLJA1](http://ja1zlo.u-tokyo.org/allja1).
 
 ## Sample Codes
 
