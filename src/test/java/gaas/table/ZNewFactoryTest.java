@@ -62,7 +62,7 @@ public final class ZNewFactoryTest extends Assertions {
 			item.set(bands.get(randInt(bands.size())));
 			item.set(new Call(alnum(12)));
 			item.set(modes.get(randInt(modes.size())));
-			item.set(new Note(alnum(66)));
+			item.set(new Note(alnum(64)));
 			item.set(new Name(alnum(14)));
 			item.set(new Mul1(alnum(30)));
 			item.set(new Mul2(alnum(30)));

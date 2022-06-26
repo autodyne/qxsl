@@ -114,19 +114,22 @@ public final class ZBinDecoder extends TableDecoder {
 		call(item);
 		sent(item);
 		rcvd(item);
-		source.skipBytes(0x1);
+		source.skipBytes(1);
 		sRST(item);
 		rRST(item);
-		source.skipBytes(0x4);
+		source.skipBytes(4);
 		mode(item);
 		band(item);
 		watt(item);
 		mul1(item);
 		mul2(item);
-		source.skipBytes(0x3);
+		source.skipBytes(3);
 		name(item);
 		note(item);
-		source.skipBytes(0xE);
+		source.skipBytes(4);
+		source.skipBytes(4); // Pow2
+		source.skipBytes(4); // Rsv2
+		source.skipBytes(4); // Rsv3
 		return item;
 	}
 
@@ -321,6 +324,6 @@ public final class ZBinDecoder extends TableDecoder {
 	 * @throws IOException 読み取りに失敗した場合
 	 */
 	private final void note(Item item) throws IOException {
-		item.set(fields.cache(Qxsl.NOTE).field(read(66)));
+		item.set(fields.cache(Qxsl.NOTE).field(read(64)));
 	}
 }

@@ -30,6 +30,7 @@ import gaas.table.ZBinFactory.WattEnum;
 public final class ZBinEncoder extends TableEncoder {
 	private final DataOutputStream target;
 	private final DateTime tDTime;
+	private int numQSOs = 0;
 
 	/**
 	 * 指定された出力に書き込むエンコーダを構築します。
@@ -161,8 +162,9 @@ public final class ZBinEncoder extends TableEncoder {
 		write(30, item.get(Qxsl.MUL2));
 		target.write(new byte[3]);
 		write(14, item.get(Qxsl.NAME));
-		write(66, item.get(Qxsl.NOTE));
-		target.write(new byte[14]);
+		write(64, item.get(Qxsl.NOTE));
+		target.write(new byte[12]);
+		writeID(numQSOs++);
 		target.flush();
 	}
 
@@ -247,5 +249,19 @@ public final class ZBinEncoder extends TableEncoder {
 		final var watts = WattEnum.valueOf(watt);
 		if(watts == null) target.writeByte(0);
 		else target.writeByte(watts.ordinal());
+	}
+
+	/**
+	 * 交信記録の識別のための番号を書き込みます。
+	 *
+	 *
+	 * @param id 番号
+	 *
+	 * @throws IOException 書き込みに失敗した場合
+	 *
+	 * @since 2022/06/26
+	 */
+	private final void writeID(int id) throws IOException {
+		target.writeInt(Integer.reverseBytes(id * 100));
 	}
 }
