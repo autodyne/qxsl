@@ -29,6 +29,9 @@
 (setq key-adif-code (name adif "SRX"))
 (setq key-adif-CODE (name adif "STX"))
 
+; field keys for adif (N1MM)
+(setq key-n1mm-code (name adif "APP_N1MM_EXCHANGE1"))
+
 ; field access for qxsl
 (defun qxsl-time it (getf it key-qxsl-time))
 (defun qxsl-call it (getf it key-qxsl-call))
@@ -51,6 +54,9 @@
 (defun adif-RSTQ it (getf it key-adif-RSTQ))
 (defun adif-code it (getf it key-adif-code))
 (defun adif-CODE it (getf it key-adif-CODE))
+
+; field access for adif (N1MM)
+(defun n1mm-code it (getf it key-n1mm-code))
 
 ; field set for qxsl
 (defun set-qxsl-time (it val) (setf it key-qxsl-time val))
@@ -240,8 +246,8 @@
 
 ; mode enumeration
 (setq MORSE "(?i)CW")
-(setq PHONE "(?i)PH|AM|FM|[DS]SB")
-(setq DIGIT "(?i)DG|FT4|FT8|RTTY")
+(setq PHONE "(?i)PH|AM|FM|[DSLU]SB")
+(setq DIGIT "(?i)DG|FT[48]|RTTY|MFSK")
 
 ; mode access for cqww
 (defun cqww-mode it
@@ -311,12 +317,14 @@
 
 (defun normalize (it fmt)
 	(cond
+		((n1mm? it) (normalize-n1mm it))
 		((adif? it) (normalize-adif it))
 		((cqww? it) (normalize-cqww it))
 		((qxsl? it) (normalize-qxsl it))
 		((zdos? it) (normalize-zdos it))))
 
 ; format identification
+(defun n1mm? it (not (null? (n1mm-code it))))
 (defun adif? it (not (null? (adif-TIME it))))
 (defun qxsl? it (not (null? (qxsl-rstq it))))
 (defun zdos? it (not (every it adif? qxsl? cqww?)))
@@ -373,6 +381,11 @@
 		(set-qxsl-RSTQ new (adif-RSTQ it))
 		(set-qxsl-code new (adif-code it))
 		(set-qxsl-CODE new (adif-CODE it)) new))
+
+; field conversion from adif (N1MM)
+(defun normalize-n1mm it
+	(let new (normalize-adif it)
+		(set-qxsl-code new (n1mm-code it)) new))
 
 ; field conversion into cqww
 (defun transform-cqww it
