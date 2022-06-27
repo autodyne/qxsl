@@ -1,4 +1,5 @@
 1エリア内 個人 電信限定 1.9MHz部門,    22,    418, qxml:adis:adxs:cbin:cqww:ctxt:jarl:zall:zbin:zdos:znew
+1エリア内 個人 電信電話 1.9MHz部門,    22,    418, qxml:adis:adxs:cbin:cqww:ctxt:jarl:zall:zbin:zdos:znew
 1エリア内 個人 電信限定 3.5MHz部門,    52,   2080, qxml:adis:adxs:cbin:cqww:ctxt:jarl:zall:zbin:zdos:znew
 1エリア内 個人 電信電話 3.5MHz部門,    53,   2173, qxml:adis:adxs:cbin:cqww:ctxt:jarl:zall:zbin:zdos:znew
 1エリア内 個人 電信限定 7MHz部門,      89,   5607, qxml:adis:adxs:cbin:cqww:ctxt:jarl:zall:zbin:zdos:znew
@@ -6,6 +7,7 @@
 1エリア内 個人 電信限定 1.9-7MHz部門, 163,  19886, qxml:adis:adxs:cbin:cqww:ctxt:jarl:zall:zbin:zdos:znew
 1エリア内 個人 電信電話 1.9-7MHz部門, 177,  23010, qxml:adis:adxs:cbin:cqww:ctxt:jarl:zall:zbin:zdos:znew
 1エリア外 個人 電信限定 1.9MHz部門,    14,    196, qxml:adis:adxs:cbin:cqww:ctxt:jarl:zall:zbin:zdos:znew
+1エリア外 個人 電信電話 1.9MHz部門,    14,    196, qxml:adis:adxs:cbin:cqww:ctxt:jarl:zall:zbin:zdos:znew
 1エリア外 個人 電信限定 3.5MHz部門,    28,    728, qxml:adis:adxs:cbin:cqww:ctxt:jarl:zall:zbin:zdos:znew
 1エリア外 個人 電信電話 3.5MHz部門,    29,    783, qxml:adis:adxs:cbin:cqww:ctxt:jarl:zall:zbin:zdos:znew
 1エリア外 個人 電信限定 7MHz部門,      39,   1404, qxml:adis:adxs:cbin:cqww:ctxt:jarl:zall:zbin:zdos:znew

@@ -136,6 +136,7 @@
 (SinLB (内 個 電信 LAB部門) cities-ja1 (SinOp? 内? tLO? MORSE?))
 
 ; 1エリア内 個人 電信電話 ローバンド部門
+(SinLB (内 個 電電 L19部門) cities-ja1 (SinOp? 内? tLO? CW/PH? 1.9MHz?))
 (SinLB (内 個 電電 L35部門) cities-ja1 (SinOp? 内? tLO? CW/PH? 3.5MHz?))
 (SinLB (内 個 電電 L70部門) cities-ja1 (SinOp? 内? tLO? CW/PH?   7MHz?))
 (SinLB (内 個 電電 LAB部門) cities-ja1 (SinOp? 内? tLO? CW/PH?))
@@ -147,6 +148,7 @@
 (SinLB (外 個 電信 LAB部門) out-of-ja1 (SinOp? 外? tLO? MORSE?))
 
 ; 1エリア外 個人 電信電話 ローバンド部門
+(SinLB (外 個 電電 L19部門) out-of-ja1 (SinOp? 外? tLO? CW/PH? 1.9MHz?))
 (SinLB (外 個 電電 L35部門) out-of-ja1 (SinOp? 外? tLO? CW/PH? 3.5MHz?))
 (SinLB (外 個 電電 L70部門) out-of-ja1 (SinOp? 外? tLO? CW/PH?   7MHz?))
 (SinLB (外 個 電電 LAB部門) out-of-ja1 (SinOp? 外? tLO? CW/PH?))
