@@ -9,6 +9,8 @@ import java.util.concurrent.Callable;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
+import picocli.CommandLine.Model.CommandSpec;
+import picocli.CommandLine.Spec;
 
 /**
  * コマンドラインツールが提供するコマンド群を定義します。
@@ -18,22 +20,21 @@ import picocli.CommandLine.Command;
  *
  * @since 2020/11/09
  */
-@Command(name = "qxsl", subcommands = {
-	Filter.class,
-	Format.class,
-	Melody.class
-})
-
+@Command(name = "qxsl", subcommands = {Format.class, Melody.class})
 public final class Gadget implements Callable<Integer> {
+	@Spec
+	CommandSpec spec;
+
 	/**
-	 * 省略されたコマンドを実行して終了コードを返します。
+	 * 使用方法の説明を表示します。
 	 *
 	 *
 	 * @return 終了コード
 	 */
 	@Override
 	public Integer call() {
-		return new Filter().call();
+		spec.commandLine().usage(System.err);
+		return 1;
 	}
 
 	/**

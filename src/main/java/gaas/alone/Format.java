@@ -8,6 +8,7 @@ package gaas.alone;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.StringJoiner;
 import java.util.concurrent.Callable;
 
 import qxsl.ruler.RuleKit;
@@ -27,15 +28,27 @@ import picocli.CommandLine.Parameters;
  */
 @Command(name = "format", description = {"convert file format"})
 public final class Format implements Callable<Integer> {
-	@Parameters(index = "0", description = {"source file"})
+	@Parameters
 	private Path source;
-	@Parameters(index = "1", description = {"target file"})
+	@Parameters
 	private Path target;
-	@Parameters(index = "2", description = {"format name"})
+	@Parameters(description = {"${CANDIDATES}"})
 	private String format;
 
 	/**
-	 * サブコマンドを実行して終了コードを返します。
+	 * 使用方法の説明を準備します。
+	 *
+	 *
+	 * @since 2022/06/27
+	 */
+	public Format() {
+		final var join = new StringJoiner(", ");
+		for(var f: new TableManager()) join.add(f.type());
+		System.setProperty("CANDIDATES", join.toString());
+	}
+
+	/**
+	 * サブコマンドを実行します。
 	 *
 	 *
 	 * @return 終了コード

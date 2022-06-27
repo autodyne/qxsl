@@ -372,11 +372,6 @@
 		"allPublicFields": true
 	},
 	{
-		"name": "gaas.alone.Filter",
-		"allPublicConstructors": true,
-		"allPublicMethods": true
-	},
-	{
 		"name": "gaas.alone.Format",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,

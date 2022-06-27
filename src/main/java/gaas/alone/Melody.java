@@ -33,7 +33,7 @@ public final class Melody implements Callable<Integer> {
 	private String text;
 
 	/**
-	 * サブコマンドを実行して終了コードを返します。
+	 * サブコマンドを実行します。
 	 *
 	 *
 	 * @return 終了コード
