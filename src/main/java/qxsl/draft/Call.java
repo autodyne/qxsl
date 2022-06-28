@@ -20,7 +20,7 @@ import static java.text.Normalizer.Form.NFKC;
  * @since 2013/06/08
  */
 public final class Call extends Qxsl<String> {
-	private static final String PATTERN = "\\w+(/\\w+)?";
+	private static final String PATTERN = "^\\w+(/\\w+)?$";
 
 	/**
 	 * 呼出符号を指定して属性を構築します。
