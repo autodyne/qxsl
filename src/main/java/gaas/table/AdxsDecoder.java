@@ -263,7 +263,8 @@ public final class AdxsDecoder extends TableDecoder {
 	private final void field(Tuple tuple) throws XMLStreamException {
 		final var tag = reader.nextTag().asStartElement().getName();
 		final var key = new QName(NURI, tag.getLocalPart());
-		final var val = reader.nextEvent().asCharacters();
+		final var end = reader.peek().isEndElement();
+		final var val = end? "": reader.nextEvent().asCharacters();
 		tuple.set(fields.cache(key).field(val.toString()));
 		close(tag);
 	}
