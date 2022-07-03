@@ -10,12 +10,13 @@ mainClassName = 'gaas.utils.CommandApp'
 repositories.mavenCentral()
 
 dependencies {
-	implementation 'info.picocli:picocli:4.5.2'
+	implementation 'info.picocli:picocli:+'
 	testImplementation 'org.assertj:assertj-core:+'
 	testImplementation 'org.jruby:jruby-core:+'
 	testImplementation 'org.junit.jupiter:junit-jupiter-engine:+'
 	testImplementation 'org.junit.jupiter:junit-jupiter-params:+'
 	testImplementation 'junit:junit:+'
+	annotationProcessor 'info.picocli:picocli-codegen:+'
 }
 
 compileJava {

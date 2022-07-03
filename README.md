@@ -5,6 +5,7 @@ QxSL: Amateur-Radio Logging Library & LISP
 ![image](https://img.shields.io/badge/OpenJDK-SE11-red.svg)
 ![image](https://img.shields.io/badge/GraalVM-20.0-red.svg)
 ![image](https://img.shields.io/badge/license-LGPL3-darkblue.svg)
+![build](https://github.com/nextzlog/qxsl/actions/workflows/build.yaml/badge.svg)
 
 QxSL is a Java library for processing amateur-radio log files, including scoring and tabulation frameworks for ham radio contests.
 
@@ -176,7 +177,7 @@ dependencies {
 $ gradle build javadoc publish
 ```
 
-You can create a native command line application instead of a JAR file.
+You can create a [native command line application](https://github.com/nextzlog/qxsl/releases/tag/nightly) instead of a JAR file.
 [GraalVM](https://www.graalvm.org) must be installed before compilation.
 Then run the commands manually as follows:
 

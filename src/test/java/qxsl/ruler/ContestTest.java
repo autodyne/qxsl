@@ -8,8 +8,11 @@ package qxsl.ruler;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -28,6 +31,25 @@ import gaas.utils.AssetUtils;
  * @since 2020/10/14
  */
 public final class ContestTest extends Assertions {
+	private static final String JST = "Asia/Tokyo";
+	private final TimeZone timeZone;
+	private final TimeZone testZone;
+
+	public ContestTest() {
+		this.timeZone = TimeZone.getDefault();
+		this.testZone = TimeZone.getTimeZone(JST);
+	}
+
+	@BeforeEach
+	public void prepareSystemTimeZone() {
+		TimeZone.setDefault(timeZone);
+	}
+
+	@AfterEach
+	public void restoreSystemTimeZone() {
+		TimeZone.setDefault(testZone);
+	}
+
 	@ParameterizedTest
 	@MethodSource({"constraintsJA1", "constraintsRTC"})
 	public void testSummarize(Constraint cs, String fmt) {

@@ -1,0 +1,28 @@
+name: build
+on:
+  push:
+    branches:
+    - master
+jobs:
+  BuildQxSL:
+    runs-on: windows-latest
+    env:
+      GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: graalvm/setup-graalvm@v1
+      with:
+        version: '21.3.2'
+        java-version: 11
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        components: native-image
+    - uses: gradle/gradle-build-action@v1
+      with:
+        arguments: build
+        gradle-version: current
+    - run: choco install upx
+    - run: cp build/libs/qxsl.jar .
+    - run: native-image -jar qxsl.jar
+    - run: upx --lzma --best qxsl.exe
+    - run: gh release upload nightly qxsl.jar --clobber
+    - run: gh release upload nightly qxsl.exe --clobber
