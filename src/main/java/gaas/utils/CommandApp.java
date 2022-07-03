@@ -3,7 +3,7 @@
  * License: GNU Lesser General Public License v3.0 (see LICENSE)
  * Author: Journal of Hamradio Informatics (https://pafelog.net)
 *******************************************************************************/
-package gaas.alone;
+package gaas.utils;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,6 +15,7 @@ import qxsl.ruler.RuleKit;
 import qxsl.sheet.SheetOrTable;
 import qxsl.table.TableManager;
 
+import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 
@@ -26,8 +27,8 @@ import picocli.CommandLine.Parameters;
  *
  * @since 2020/11/09
  */
-@Command(name = "format", description = {"convert file format"})
-public final class Format implements Callable<Integer> {
+@Command(name = "qxsl", description = {"contest log processor"})
+public final class CommandApp implements Callable<Integer> {
 	@Parameters
 	private Path source;
 	@Parameters
@@ -36,22 +37,24 @@ public final class Format implements Callable<Integer> {
 	private String format;
 
 	/**
-	 * 使用方法の説明を準備します。
+	 * 取扱説明を準備します。
 	 *
 	 *
 	 * @since 2022/06/27
 	 */
-	public Format() {
+	public CommandApp() {
 		final var join = new StringJoiner(", ");
 		for(var f: new TableManager()) join.add(f.type());
 		System.setProperty("CANDIDATES", join.toString());
 	}
 
 	/**
-	 * サブコマンドを実行します。
+	 * 交信記録を処理します。
 	 *
 	 *
 	 * @return 終了コード
+	 *
+	 * @throws IOException 入出力に失敗した場合
 	 */
 	@Override
 	public Integer call() throws IOException {
@@ -63,5 +66,15 @@ public final class Format implements Callable<Integer> {
 		final var data = util.transform(norm, form.type());
 		Files.write(target, form.encode(data));
 		return 0;
+	}
+
+	/**
+	 * コマンドラインツールを起動します。
+	 *
+	 *
+	 * @param args コマンドライン引数
+	 */
+	public static final void main(String[] args) {
+		System.exit(new CommandLine(new CommandApp()).execute(args));
 	}
 }

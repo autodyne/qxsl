@@ -1,5 +1,11 @@
 [
 	{
+		"name": "com.sun.org.apache.xerces.internal.impl.dv.xs.ExtendedSchemaDVFactoryImpl",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
 		"name": "com.sun.org.apache.xerces.internal.impl.dv.xs.SchemaDVFactoryImpl",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
@@ -370,27 +376,6 @@
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
 		"allPublicFields": true
-	},
-	{
-		"name": "gaas.alone.Format",
-		"allPublicConstructors": true,
-		"allPublicMethods": true,
-		"fields": [
-			{"name": "format"},
-			{"name": "source"},
-			{"name": "target"}
-		]
-	},
-	{
-		"name": "gaas.alone.Melody",
-		"allPublicConstructors": true,
-		"allPublicMethods": true,
-		"fields": [
-			{"name": "rate"},
-			{"name": "text"},
-			{"name": "tone"},
-			{"name": "wpms"}
-		]
 	},
 	{
 		"name": "gaas.draft.BandFactory",

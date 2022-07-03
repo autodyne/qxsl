@@ -181,8 +181,8 @@ You can create a native command line application instead of a JAR file.
 Then run the commands manually as follows:
 
 ```shell
-$ native-image -cp build/libs/qxsl.jar
-$ qxsl.exe format foo.adi bar.adx adxs
+$ native-image -jar build/libs/qxsl.jar
+$ qxsl.exe source.zlox target.qxml qxml
 ```
 
 ## Contribution
