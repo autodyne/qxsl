@@ -150,8 +150,8 @@ public final class JarlDecoder extends PrintDecoder {
 	 * @param text 周波数帯の文字列
 	 */
 	private final void band(Item item, String text) {
-		final double kHz = Double.parseDouble(text) * 1000;
-		item.set(fields.cache(Qxsl.BAND).field((int) kHz));
+		final var band = String.format("%sMHz", text);
+		item.set(fields.cache(Qxsl.BAND).field(band));
 	}
 
 	/**

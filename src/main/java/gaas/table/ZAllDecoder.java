@@ -235,11 +235,9 @@ public final class ZAllDecoder extends PrintDecoder {
 	 * @param text 周波数帯の文字列
 	 */
 	private final void band(Item item, String text) {
-		final var num = text.replaceAll("G$", "");
-		final var exp = text.endsWith("G")? 1e6: 1e3;
-		final var val = Double.parseDouble(num);
-		final var kHz = String.valueOf(exp * val);
-		item.set(fields.cache(Qxsl.BAND).field(kHz));
+		final var peel = text.replaceAll("G", "000");
+		final var band = peel.replaceAll("$", "MHz");
+		item.set(fields.cache(Qxsl.BAND).field(band));
 	}
 
 	/**

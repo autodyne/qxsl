@@ -154,30 +154,7 @@ public final class CTxtDecoder extends PrintDecoder {
 	 * @param text 周波数帯の文字列
 	 */
 	private final void band(Item item, String text) {
-		final var num = text.replaceAll("[GMk]Hz$", "");
-		final var exp = getBandUnit(text.trim());
-		final var val = Double.parseDouble(num);
-		final var kHz = String.valueOf(exp * val);
-		item.set(fields.cache(Qxsl.BAND).field(kHz));
-	}
-
-	/**
-	 * 指定された周波数の文字列の単位を返します。
-	 *
-	 *
-	 * @param text 周波数の文字列
-	 *
-	 * @return 単位
-	 *
-	 * @since 2020/09/06
-	 */
-	private final double getBandUnit(String text) {
-		switch(text.substring(text.length() - 3)) {
-			case "GHz": return 1e6;
-			case "MHz": return 1e3;
-			case "kHz": return 1e0;
-		}
-		throw new NumberFormatException(text);
+		item.set(fields.cache(Qxsl.BAND).field(text));
 	}
 
 	/**

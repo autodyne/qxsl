@@ -43,7 +43,7 @@ public final class BandFactory implements FieldFactory {
 	 */
 	@Override
 	public final Field decode(String value) {
-		return new Band(new BigDecimal(value));
+		return new Band(decodeBand(value));
 	}
 
 	/**
@@ -57,5 +57,28 @@ public final class BandFactory implements FieldFactory {
 	@Override
 	public final String encode(Field field) {
 		return ((Band) field).value().toPlainString();
+	}
+
+	/**
+	 * 単位付き文字列を解析してキロヘルツ単位の値を返します。
+	 *
+	 *
+	 * @param text 単位付き文字列 "1.9MHz"等
+	 *
+	 * @return キロヘルツ単位の波長
+	 *
+	 * @throws NumberFormatException 書式の例外
+	 */
+	private final BigDecimal decodeBand(String text) {
+		final var digit = text.replaceAll("[kMG]?Hz$", "");
+		final var value = new BigDecimal(digit);
+		switch(text.substring(digit.length())) {
+			case    "": return value;
+			case  "Hz": return value.scaleByPowerOfTen(-3);
+			case "kHz": return value.scaleByPowerOfTen(+0);
+			case "MHz": return value.scaleByPowerOfTen(+3);
+			case "GHz": return value.scaleByPowerOfTen(+6);
+			default: throw new NumberFormatException(text);
+		}
 	}
 }

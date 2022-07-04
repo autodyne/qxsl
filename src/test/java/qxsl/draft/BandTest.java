@@ -23,10 +23,10 @@ import qxsl.junit.RandomNumberParameterExtension;
 public final class BandTest extends Assertions {
 	@Test
 	public void testEquals() {
-		assertThat(new Band("1.9MHz")).isEqualTo(new Band(1_900));
-		assertThat(new Band("3.5MHz")).isEqualTo(new Band(3_500));
-		assertThat(new Band("144MHz")).isEqualTo(new Band(144_000));
-		assertThat(new Band("2.4GHz")).isEqualTo(new Band(2_400_000));
+		assertThat(Band.parse("1.9MHz")).isEqualTo(new Band(1_900));
+		assertThat(Band.parse("3.5MHz")).isEqualTo(new Band(3_500));
+		assertThat(Band.parse("144MHz")).isEqualTo(new Band(144_000));
+		assertThat(Band.parse("2.4GHz")).isEqualTo(new Band(2_400_000));
 	}
 
 	@Test

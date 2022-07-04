@@ -9,6 +9,8 @@ import java.math.BigDecimal;
 
 import qxsl.value.Tuple;
 
+import gaas.draft.BandFactory;
+
 /**
  * 交信の周波数帯を表す属性の実装です。
  *
@@ -29,16 +31,6 @@ public final class Band extends Qxsl<BigDecimal> {
 	}
 
 	/**
-	 * 単位付きの文字列から属性を構築します。
-	 *
-	 *
-	 * @param text 単位付きの文字列
-	 */
-	public Band(String text) {
-		this(Band.parse(text));
-	}
-
-	/**
 	 * 周波数を指定して属性を構築します。
 	 *
 	 *
@@ -49,17 +41,17 @@ public final class Band extends Qxsl<BigDecimal> {
 	}
 
 	/**
-	 * 交信記録の周波数を抽出します。
+	 * 指定された文字列が表す周波数を返します。
 	 *
 	 *
-	 * @param tuple 交信記録
+	 * @param text 単位付きの文字列
 	 *
-	 * @return 周波数の属性
+	 * @return 周波数帯
 	 *
-	 * @since 2020/10/28
+	 * @since 2022/07/04
 	 */
-	public static final Band from(Tuple tuple) {
-		return (Band) tuple.get(Qxsl.BAND);
+	public static final Band parse(String text) {
+		return (Band) new BandFactory().decode(text);
 	}
 
 	/**
@@ -116,27 +108,6 @@ public final class Band extends Qxsl<BigDecimal> {
 	public final String toDecimalString(int exp) {
 		final var d = value().scaleByPowerOfTen(-exp);
 		return d.stripTrailingZeros().toPlainString();
-	}
-
-	/**
-	 * 単位付き文字列を解析してキロヘルツ単位の値を返します。
-	 *
-	 *
-	 * @param text 単位付き文字列 "1.9MHz"等
-	 *
-	 * @return キロヘルツ単位の波長
-	 */
-	private static BigDecimal parse(String text) {
-		final var FIX = "(?<=\\d)(?=[kMG]?Hz)";
-		final var tup = text.split(FIX);
-		final var val = new BigDecimal(tup[0]);
-		switch(tup[1]) {
-			case  "Hz": return val.scaleByPowerOfTen(-3);
-			case "kHz": return val.scaleByPowerOfTen(+0);
-			case "MHz": return val.scaleByPowerOfTen(+3);
-			case "GHz": return val.scaleByPowerOfTen(+6);
-		}
-		throw new NumberFormatException(text);
 	}
 
 	/**
