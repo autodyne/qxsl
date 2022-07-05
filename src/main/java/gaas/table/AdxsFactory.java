@@ -23,7 +23,7 @@ import qxsl.table.TableDecoder;
 import qxsl.table.TableEncoder;
 
 /**
- * ADIFのうちADXと呼ばれる新方式の書式の部分的な実装です。
+ * ADIFの交信記録が従うADX書式の部分的な実装です。
  *
  *
  * @author 無線部開発班

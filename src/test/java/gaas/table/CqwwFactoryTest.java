@@ -20,7 +20,7 @@ import static qxsl.junit.RandomNumberParameterExtension.randInt;
 import static qxsl.junit.RandomStringParameterExtension.alnum;
 
 /**
- * {@link CqwwFactory}クラスのテスト用クラスです。
+ * {@link CqwwFactory}クラスの挙動を検査します。
  *
  *
  * @author 無線部開発班

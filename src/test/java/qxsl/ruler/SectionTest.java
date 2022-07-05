@@ -12,7 +12,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 /**
- * {@link Section}クラスのテスト用クラスです。
+ * {@link Section}クラスの挙動を検査します。
  *
  *
  * @author 無線部開発班

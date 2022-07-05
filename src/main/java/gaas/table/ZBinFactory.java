@@ -27,7 +27,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 import static java.time.temporal.ChronoUnit.MILLIS;
 
 /**
- * zLogバイナリファイルの書式です。
+ * zLogの交信記録が従うZLO書式の互換実装です。
  *
  *
  * @author 無線部開発班
@@ -320,7 +320,7 @@ public final class ZBinFactory extends BasicFactory {
 		}
 
 		/**
-		 * 指定された時刻をデコードします。
+		 * 指定された時刻を解読します。
 		 *
 		 *
 		 * @param data 時刻のビット列

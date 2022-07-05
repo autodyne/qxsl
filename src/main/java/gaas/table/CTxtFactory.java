@@ -13,7 +13,7 @@ import qxsl.table.TableDecoder;
 import qxsl.table.TableEncoder;
 
 /**
- * 2016年4月以前のCTESTWINのテキストファイルの書式です。
+ * CTESTWINの交信記録が従うLOG書式の互換実装です。
  *
  *
  * @author 無線部開発班

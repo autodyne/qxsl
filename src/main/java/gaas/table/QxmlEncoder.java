@@ -26,7 +26,7 @@ import static gaas.table.QxmlFactory.*;
 import static javax.xml.stream.XMLOutputFactory.IS_REPAIRING_NAMESPACES;
 
 /**
- * 交信記録をQXML書式に直列化するエンコーダです。
+ * 標準構造の交信記録をQXML書式で永続化します。
  *
  *
  * @author 無線部開発班
@@ -226,7 +226,7 @@ public final class QxmlEncoder extends TableEncoder {
 	}
 
 	/**
-	 * 属性を直列化してストリームに出力します。
+	 * 属性を文字列に変換してストリームに出力します。
 	 *
 	 *
 	 * @param field 出力する属性

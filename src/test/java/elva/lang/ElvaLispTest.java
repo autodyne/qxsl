@@ -15,7 +15,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import gaas.utils.AssetUtils;
 
 /**
- * {@link ElvaLisp}クラスのテスト用クラスです。
+ * {@link ElvaLisp}クラスの挙動を検査します。
  *
  *
  * @author 無線部開発班

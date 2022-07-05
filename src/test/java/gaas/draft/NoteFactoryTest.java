@@ -17,7 +17,7 @@ import qxsl.junit.RandomStringParameterExtension;
 import qxsl.junit.RandomStringParameterExtension.RandomString;
 
 /**
- * {@link NoteFactory}クラスのテスト用クラスです。
+ * {@link NoteFactory}クラスの挙動を検査します。
  *
  *
  * @author 無線部開発班

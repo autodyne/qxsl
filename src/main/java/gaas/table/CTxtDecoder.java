@@ -17,7 +17,7 @@ import qxsl.model.Item;
 import qxsl.table.PrintDecoder;
 
 /**
- * CTESTWIN書式で直列化された交信記録をデコードします。
+ * CTESTWIN書式で永続化された交信記録を解読します。
  *
  *
  * @author 無線部開発班

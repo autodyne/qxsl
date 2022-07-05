@@ -17,7 +17,7 @@ import qxsl.junit.RandomNumberParameterExtension;
 import qxsl.junit.RandomNumberParameterExtension.RandomNumber;
 
 /**
- * {@link BandFactory}クラスのテスト用クラスです。
+ * {@link BandFactory}クラスの挙動を検査します。
  *
  *
  * @author 無線部開発班

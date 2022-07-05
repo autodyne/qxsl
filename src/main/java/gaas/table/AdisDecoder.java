@@ -21,7 +21,7 @@ import static gaas.table.AdisFactory.EOR;
 import static gaas.table.AdisFactory.URI;
 
 /**
- * ADIサブセット書式で直列化された交信記録をデコードします。
+ * ADI書式で永続化された交信記録を解読します。
  *
  *
  * @author 無線部開発班

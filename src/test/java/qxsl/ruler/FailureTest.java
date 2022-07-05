@@ -14,7 +14,7 @@ import qxsl.junit.RandomStringParameterExtension.RandomString;
 import qxsl.model.Item;
 
 /**
- * {@link Failure}クラスのテスト用クラスです。
+ * {@link Failure}クラスの挙動を検査します。
  *
  *
  * @author 無線部開発班

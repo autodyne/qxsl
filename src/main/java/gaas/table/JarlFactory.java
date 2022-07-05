@@ -13,7 +13,7 @@ import qxsl.table.TableDecoder;
 import qxsl.table.TableEncoder;
 
 /**
- * JARLサマリーシートR2.0の交信記録を表現する書式です。
+ * JARL制定の交信記録が従うR2.0書式の互換実装です。
  *
  *
  * @author 無線部開発班

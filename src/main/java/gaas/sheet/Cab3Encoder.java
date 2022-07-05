@@ -14,7 +14,7 @@ import java.util.Map;
 import qxsl.sheet.SheetEncoder;
 
 /**
- * Cabrilloサマリーシートを作成するエンコーダの実装です。
+ * 所定の構造の要約書類をCabrillo書式で永続化します。
  *
  *
  * @author 無線部開発班

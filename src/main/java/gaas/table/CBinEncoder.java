@@ -25,7 +25,7 @@ import gaas.table.CBinFactory.DateTime;
 import gaas.table.CBinFactory.ModeEnum;
 
 /**
- * 交信記録をLG8書式に直列化するエンコーダです。
+ * 標準構造の交信記録をLG8書式で永続化します。
  *
  *
  * @author 無線部開発班
@@ -171,7 +171,7 @@ public final class CBinEncoder extends TableEncoder {
 	 *
 	 *
 	 * @param n 最大文字数
-	 * @param f 直列化する属性
+	 * @param f 対象の属性
 	 *
 	 * @throws IOException 書き込みに失敗した場合
 	 */

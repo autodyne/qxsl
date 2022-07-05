@@ -23,7 +23,7 @@ import qxsl.table.TableDecoder;
 import qxsl.table.TableEncoder;
 
 /**
- * ADIFと比較して名前空間による拡張性が特徴的なQXMLの書式です。
+ * QxSLの交信記録が従うQXML書式の標準実装です。
  *
  *
  * @author 無線部開発班

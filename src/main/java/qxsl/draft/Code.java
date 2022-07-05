@@ -8,7 +8,7 @@ package qxsl.draft;
 import qxsl.value.Tuple;
 
 /**
- * 交信の交換番号を表す属性の実装です。
+ * 交信のナンバーを表す属性の実装です。
  *
  *
  * @author 無線部開発班
@@ -17,22 +17,22 @@ import qxsl.value.Tuple;
  */
 public final class Code extends Qxsl<String> {
 	/**
-	 * 交換番号を指定して属性を構築します。
+	 * ナンバーを指定して属性を構築します。
 	 *
 	 *
-	 * @param code 交換番号
+	 * @param code ナンバー
 	 */
 	public Code(String code) {
 		super(CODE, code);
 	}
 
 	/**
-	 * 交信記録の交換番号を抽出します。
+	 * 交信記録のナンバーを抽出します。
 	 *
 	 *
 	 * @param tuple 交信記録
 	 *
-	 * @return 交換番号の属性
+	 * @return ナンバーの属性
 	 *
 	 * @since 2020/10/28
 	 */

@@ -14,7 +14,7 @@ import qxsl.model.Item;
 import qxsl.table.TableDecoder;
 
 /**
- * zLogバイナリデータで直列化された交信記録をデコードします。
+ * zLogのZLOX書式で永続化された交信記録を解読します。
  *
  *
  * @author 無線部開発班

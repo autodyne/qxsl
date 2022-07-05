@@ -13,7 +13,7 @@ import qxsl.model.Item;
 import qxsl.table.TableEncoder;
 
 /**
- * 交信記録をzLogバイナリデータに直列化するエンコーダです。
+ * 標準構造の交信記録をzLogのZLOX書式で永続化します。
  *
  *
  * @author 無線部開発班

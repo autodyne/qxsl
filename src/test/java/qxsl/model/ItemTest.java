@@ -13,7 +13,7 @@ import qxsl.draft.*;
 import static gaas.table.QxmlFactory.ITEM;
 
 /**
- * {@link Item}クラスのテスト用クラスです。
+ * {@link Item}クラスの挙動を検査します。
  *
  *
  * @author 無線部開発班

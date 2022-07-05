@@ -21,7 +21,7 @@ import qxsl.table.TableManager;
 import static qxsl.junit.RandomStringParameterExtension.alnum;
 
 /**
- * {@link AdxsFactory}クラスのテスト用クラスです。
+ * {@link AdxsFactory}クラスの挙動を検査します。
  *
  *
  * @author 無線部開発班

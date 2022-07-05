@@ -16,7 +16,7 @@ import qxsl.draft.Watt;
 import static gaas.table.QxmlFactory.SENT;
 
 /**
- * {@link Sent}クラスのテスト用クラスです。
+ * {@link Sent}クラスの挙動を検査します。
  *
  *
  * @author 無線部開発班

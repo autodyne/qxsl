@@ -21,7 +21,7 @@ import static java.time.ZoneOffset.UTC;
 import static java.time.temporal.ChronoUnit.SECONDS;
 
 /**
- * CTESTWINバイナリファイルのうちLG8と呼ばれる書式です。
+ * CTESTWINの交信記録が従うLG8書式の互換実装です。
  *
  *
  * @author 無線部開発班
@@ -245,7 +245,7 @@ public final class CBinFactory extends BasicFactory {
 		}
 
 		/**
-		 * 指定された時刻をデコードします。
+		 * 指定された時刻を解読します。
 		 *
 		 * @param binary 時刻のビット列
 		 *

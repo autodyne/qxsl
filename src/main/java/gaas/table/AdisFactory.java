@@ -13,7 +13,7 @@ import qxsl.table.TableDecoder;
 import qxsl.table.TableEncoder;
 
 /**
- * ADIFのうちADIと呼ばれる旧方式の書式の部分的な実装です。
+ * ADIFの交信記録が従うADI書式の部分的な実装です。
  *
  *
  * @author 無線部開発班

@@ -13,7 +13,7 @@ import qxsl.draft.Qxsl;
 import gaas.draft.*;
 
 /**
- * {@link FieldManager}クラスのテスト用クラスです。
+ * {@link FieldManager}クラスの挙動を検査します。
  *
  *
  * @author 無線部開発班

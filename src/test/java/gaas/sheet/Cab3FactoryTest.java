@@ -25,7 +25,7 @@ import static qxsl.junit.RandomNumberParameterExtension.randInt;
 import static qxsl.junit.RandomStringParameterExtension.alnum;
 
 /**
- * {@link Cab3Factory}クラスのテスト用クラスです。
+ * {@link Cab3Factory}クラスの挙動を検査します。
  *
  *
  * @author 無線部開発班

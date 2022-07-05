@@ -20,7 +20,7 @@ import gaas.table.CBinFactory.DateTime;
 import gaas.table.CBinFactory.ModeEnum;
 
 /**
- * LG8書式で直列化された交信記録をデコードします。
+ * LG8書式で永続化された交信記録を解読します。
  *
  *
  * @author 無線部開発班

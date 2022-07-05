@@ -17,7 +17,7 @@ import qxsl.junit.RandomStringParameterExtension;
 import qxsl.junit.RandomStringParameterExtension.RandomString;
 
 /**
- * {@link WattFactory}クラスのテスト用クラスです。
+ * {@link WattFactory}クラスの挙動を検査します。
  *
  *
  * @author 無線部開発班

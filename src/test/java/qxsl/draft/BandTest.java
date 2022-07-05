@@ -12,7 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import qxsl.junit.RandomNumberParameterExtension;
 
 /**
- * {@link Band}クラスのテスト用クラスです。
+ * {@link Band}クラスの挙動を検査します。
  *
  *
  * @author 無線部開発班

@@ -28,7 +28,7 @@ import static gaas.table.QxmlFactory.RCVD;
 import static gaas.table.QxmlFactory.SENT;
 
 /**
- * QXML書式で直列化された交信記録をデコードします。
+ * QXML書式で永続化された交信記録を解読します。
  *
  *
  * @author 無線部開発班

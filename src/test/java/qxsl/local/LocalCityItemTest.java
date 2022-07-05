@@ -9,7 +9,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
- * {@link LocalCityItem}クラスのテスト用クラスです。
+ * {@link LocalCityItem}クラスの挙動を検査します。
  *
  *
  * @author 無線部開発班

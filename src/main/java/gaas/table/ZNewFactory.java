@@ -13,7 +13,7 @@ import qxsl.table.TableDecoder;
 import qxsl.table.TableEncoder;
 
 /**
- * zLogバイナリファイルの新たな書式です。
+ * zLogの交信記録が従うZLOX書式の互換実装です。
  *
  *
  * @author 無線部開発班

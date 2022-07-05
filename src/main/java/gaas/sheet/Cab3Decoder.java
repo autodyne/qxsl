@@ -15,7 +15,7 @@ import java.util.StringJoiner;
 import qxsl.sheet.SheetDecoder;
 
 /**
- * Cabrilloサマリーシートを開封するデコーダの実装です。
+ * Cabrillo書式で永続化された要約書類を解読します。
  *
  *
  * @author 無線部開発班

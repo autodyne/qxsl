@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import gaas.table.*;
 
 /**
- * {@link TableManager}クラスのテスト用クラスです。
+ * {@link TableManager}クラスの挙動を検査します。
  *
  *
  * @author 無線部開発班

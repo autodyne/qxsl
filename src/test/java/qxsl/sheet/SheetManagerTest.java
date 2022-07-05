@@ -12,7 +12,7 @@ import gaas.sheet.Cab3Factory;
 import gaas.sheet.JarlFactory;
 
 /**
- * {@link SheetManager}クラスのテスト用クラスです。
+ * {@link SheetManager}クラスの挙動を検査します。
  *
  *
  * @author 無線部開発班

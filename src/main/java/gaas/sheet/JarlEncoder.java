@@ -16,7 +16,7 @@ import qxsl.sheet.SheetEncoder;
 import static gaas.sheet.JarlFactory.SUM;
 
 /**
- * JARLサマリーシートを作成するエンコーダの実装です。
+ * 所定の構造の要約書類をJARL書式で永続化します。
  *
  *
  * @author 無線部開発班

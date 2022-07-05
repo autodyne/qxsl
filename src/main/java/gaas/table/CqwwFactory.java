@@ -14,7 +14,7 @@ import qxsl.table.TableDecoder;
 import qxsl.table.TableEncoder;
 
 /**
- * CQWWコンテストの交信記録を表すCabrillo書式です。
+ * Cabrilloの交信記録が従うV3.0書式の互換実装です。
  *
  *
  * @author 無線部開発班

@@ -13,7 +13,7 @@ import qxsl.sheet.SheetDecoder;
 import qxsl.sheet.SheetEncoder;
 
 /**
- * CabrilloV3(V2)の要約書類を表現する書式です。
+ * Cabrilloの要約書類が従うV3.0書式の互換実装です。
  *
  *
  * @author 無線部開発班

@@ -14,7 +14,7 @@ import qxsl.field.FieldManager;
 import qxsl.field.FieldManager.Cache;
 
 /**
- * {@link TimeFactory}クラスのテスト用クラスです。
+ * {@link TimeFactory}クラスの挙動を検査します。
  *
  *
  * @author 無線部開発班

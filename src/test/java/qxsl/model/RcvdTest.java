@@ -16,7 +16,7 @@ import qxsl.draft.Watt;
 import static gaas.table.QxmlFactory.RCVD;
 
 /**
- * {@link Rcvd}クラスのテスト用クラスです。
+ * {@link Rcvd}クラスの挙動を検査します。
  *
  *
  * @author 無線部開発班

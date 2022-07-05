@@ -17,7 +17,7 @@ import qxsl.junit.RandomStringParameterExtension;
 import qxsl.junit.RandomStringParameterExtension.RandomString;
 
 /**
- * {@link Mul2Factory}クラスのテスト用クラスです。
+ * {@link Mul2Factory}クラスの挙動を検査します。
  *
  *
  * @author 無線部開発班

@@ -66,7 +66,7 @@ public abstract class Qxsl<V> extends Field<V> {
 	public static final QName CALL = new QName(URI, "call", PRE);
 
 	/**
-	 * 交信の交換番号を表す属性の名前です。
+	 * 交信のナンバーを表す属性の名前です。
 	 */
 	public static final QName CODE = new QName(URI, "code", PRE);
 

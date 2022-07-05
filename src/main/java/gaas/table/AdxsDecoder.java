@@ -24,7 +24,7 @@ import qxsl.value.Tuple;
 import static gaas.table.AdxsFactory.*;
 
 /**
- * ADXサブセット書式で直列化された交信記録をデコードします。
+ * ADX書式で永続化された交信記録を解読します。
  *
  *
  * @author 無線部開発班

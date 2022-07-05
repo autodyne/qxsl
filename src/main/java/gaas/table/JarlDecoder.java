@@ -17,7 +17,7 @@ import qxsl.model.Item;
 import qxsl.table.PrintDecoder;
 
 /**
- * JARL書式で直列化された交信記録をデコードします。
+ * JARL書式で永続化された交信記録を解読します。
  *
  *
  * @author 無線部開発班

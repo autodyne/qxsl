@@ -17,7 +17,7 @@ import qxsl.junit.RandomNumberParameterExtension;
 import qxsl.junit.RandomNumberParameterExtension.RandomNumber;
 
 /**
- * {@link RSTQFactory}クラスのテスト用クラスです。
+ * {@link RSTQFactory}クラスの挙動を検査します。
  *
  *
  * @author 無線部開発班

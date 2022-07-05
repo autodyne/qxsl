@@ -23,7 +23,7 @@ import static gaas.sheet.JarlFactory.DOC;
 import static java.util.stream.Collectors.joining;
 
 /**
- * JARLサマリーシートを開封するデコーダの実装です。
+ * JARL書式で永続化された要約書類を解読します。
  *
  *
  * @author 無線部開発班

@@ -21,7 +21,7 @@ import qxsl.sheet.SheetDecoder;
 import qxsl.sheet.SheetEncoder;
 
 /**
- * JARLサマリーシートR2.0の要約書類を表現する書式です。
+ * JARL制定の要約書類が従うR2.1書式の互換実装です。
  *
  *
  * @author 無線部開発班

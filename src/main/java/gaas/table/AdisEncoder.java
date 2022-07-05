@@ -21,7 +21,7 @@ import static gaas.table.AdisFactory.URI;
 import static java.time.format.DateTimeFormatter.ofPattern;
 
 /**
- * 交信記録をADI書式に直列化するエンコーダです。
+ * 標準構造の交信記録をADI書式で永続化します。
  *
  *
  * @author 無線部開発班

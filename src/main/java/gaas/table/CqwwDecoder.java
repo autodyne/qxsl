@@ -21,7 +21,7 @@ import gaas.table.CqwwFactory.BandEnum;
 import static java.time.ZoneOffset.UTC;
 
 /**
- * Cabrillo書式で直列化された交信記録をデコードします。
+ * Cabrillo書式で永続化された交信記録を解読します。
  *
  *
  * @author 無線部開発班

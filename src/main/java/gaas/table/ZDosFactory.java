@@ -13,7 +13,7 @@ import qxsl.table.TableDecoder;
 import qxsl.table.TableEncoder;
 
 /**
- * zLogテキストファイルのうちDOS版と互換の書式です。
+ * zLogの交信記録が従うDOS書式の互換実装です。
  *
  *
  * @author 無線部開発班

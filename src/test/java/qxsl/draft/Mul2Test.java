@@ -13,7 +13,7 @@ import qxsl.junit.RandomStringParameterExtension;
 import qxsl.junit.RandomStringParameterExtension.RandomString;
 
 /**
- * {@link Mul2}クラスのテスト用クラスです。
+ * {@link Mul2}クラスの挙動を検査します。
  *
  *
  * @author 無線部開発班

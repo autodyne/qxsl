@@ -23,7 +23,7 @@ import qxsl.model.Item;
 import gaas.utils.AssetUtils;
 
 /**
- * {@link Contest}クラスのテスト用クラスです。
+ * {@link Contest}クラスの挙動を検査します。
  *
  *
  * @author 無線部開発班

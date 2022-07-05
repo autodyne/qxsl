@@ -17,7 +17,7 @@ import qxsl.table.PrintEncoder;
 import qxsl.value.Field;
 
 /**
- * 交信記録をJARL書式に直列化するエンコーダです。
+ * 標準構造の交信記録をJARL書式で永続化します。
  *
  *
  * @author 無線部開発班

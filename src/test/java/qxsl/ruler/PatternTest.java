@@ -25,7 +25,7 @@ import qxsl.table.TableManager;
 import gaas.utils.AssetUtils;
 
 /**
- * {@link Pattern}クラスのテスト用クラスです。
+ * {@link Pattern}クラスの挙動を検査します。
  *
  *
  * @author 無線部開発班

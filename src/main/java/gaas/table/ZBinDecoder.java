@@ -21,7 +21,7 @@ import gaas.table.ZBinFactory.ModeEnum;
 import gaas.table.ZBinFactory.WattEnum;
 
 /**
- * zLogバイナリデータで直列化された交信記録をデコードします。
+ * zLogのZLO書式で永続化された交信記録を解読します。
  *
  *
  * @author 無線部開発班

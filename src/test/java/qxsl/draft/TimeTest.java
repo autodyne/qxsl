@@ -11,7 +11,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
- * {@link Time}クラスのテスト用クラスです。
+ * {@link Time}クラスの挙動を検査します。
  *
  *
  * @author 無線部開発班

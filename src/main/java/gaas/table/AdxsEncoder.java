@@ -21,7 +21,7 @@ import static gaas.table.AdxsFactory.*;
 import static javax.xml.stream.XMLOutputFactory.IS_REPAIRING_NAMESPACES;
 
 /**
- * 交信記録をADX書式に直列化するエンコーダです。
+ * 標準構造の交信記録をADX書式で永続化します。
  *
  *
  * @author 無線部開発班
@@ -181,7 +181,7 @@ public final class AdxsEncoder extends TableEncoder {
 	 *
 	 * @since 2020/09/05
 	 */
-	public final XMLStreamWriter writer() throws IOException {
+	private final XMLStreamWriter writer() throws IOException {
 		try {
 			final var factor = XMLOutputFactory.newInstance();
 			factor.setProperty(IS_REPAIRING_NAMESPACES, true);
@@ -192,7 +192,7 @@ public final class AdxsEncoder extends TableEncoder {
 	}
 
 	/**
-	 * 属性を直列化してストリームに出力します。
+	 * 属性を文字列に変換してストリームに出力します。
 	 *
 	 *
 	 * @param field 出力する属性
