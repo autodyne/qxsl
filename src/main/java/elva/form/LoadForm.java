@@ -12,7 +12,7 @@ import elva.lang.NativeOp;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
-import gaas.utils.AssetUtils;
+import qxsl.utils.AssetUtil;
 
 /**
  * loads the specified LISP file.
@@ -31,7 +31,7 @@ public final class LoadForm extends NativeOp {
 	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
 		final var name = eval.apply(args.head()).text();
-		final var text = AssetUtils.root().string(name);
+		final var text = AssetUtil.root().string(name);
 		return ElvaLisp.scan(text).map(eval).last();
 	}
 }

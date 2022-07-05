@@ -13,7 +13,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import gaas.utils.AssetUtils;
+import qxsl.utils.AssetUtil;
 
 /**
  * {@link SyntaxOp}クラスの挙動を検査します。
@@ -96,7 +96,7 @@ public final class SyntaxOpTest extends Assertions {
 	private static final List<Arguments> source() throws Exception {
 		final var elva = new ElvaLisp();
 		final var list = new LinkedList<Arguments>();
-		final var util = new AssetUtils(SyntaxOp.class);
+		final var util = new AssetUtil(SyntaxOp.class);
 		for (var line: util.listLines("SyntaxOp.lisp")) {
 			list.add(Arguments.of(elva.eval(line), line));
 		}

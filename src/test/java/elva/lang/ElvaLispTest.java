@@ -12,7 +12,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import gaas.utils.AssetUtils;
+import qxsl.utils.AssetUtil;
 
 /**
  * {@link ElvaLisp}クラスの挙動を検査します。
@@ -38,6 +38,6 @@ public final class ElvaLispTest extends Assertions {
 	}
 
 	private static final Stream<String> source() {
-		return AssetUtils.from(elva).lines("ElvaLisp.lisp");
+		return AssetUtil.from(elva).lines("ElvaLisp.lisp");
 	}
 }

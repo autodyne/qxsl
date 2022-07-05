@@ -3,7 +3,7 @@
  * License: GNU Lesser General Public License v3.0 (see LICENSE)
  * Author: Journal of Hamradio Informatics (https://pafelog.net)
 *******************************************************************************/
-package gaas.morse;
+package qxsl.utils;
 
 import java.nio.ByteBuffer;
 import javax.sound.sampled.AudioFormat;

@@ -7,8 +7,6 @@ package qxsl.draft;
 
 import java.math.BigDecimal;
 
-import qxsl.value.Tuple;
-
 import gaas.draft.BandFactory;
 
 /**

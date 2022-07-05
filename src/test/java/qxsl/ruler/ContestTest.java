@@ -19,8 +19,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import qxsl.model.Item;
-
-import gaas.utils.AssetUtils;
+import qxsl.utils.AssetUtil;
 
 /**
  * {@link Contest}クラスの挙動を検査します。
@@ -76,7 +75,7 @@ public final class ContestTest extends Assertions {
 
 	private static final List<Arguments> load(String name) {
 		final var list = new ArrayList<Arguments>();
-		final var util = new AssetUtils(Contest.class);
+		final var util = new AssetUtil(Contest.class);
 		for(final var v: util.listLines(name.concat(".test"))) {
 			final var cs = new Constraint(name, v.split(", +", 4));
 			for(var fmt: cs.forms) list.add(Arguments.of(cs, fmt));
@@ -105,7 +104,7 @@ public final class ContestTest extends Assertions {
 
 		public List<Item> getItems(String format) {
 			final var path = name.concat(".").concat(format);
-			return new AssetUtils(Contest.class).items(path);
+			return new AssetUtil(Contest.class).items(path);
 		}
 
 		@Override

@@ -69,7 +69,7 @@ public final class ZBinFactory extends BasicFactory {
 	}
 
 	/**
-	 * zLogバイナリデータの周波数帯の列挙型です。
+	 * zLogの周波数帯の列挙型です。
 	 *
 	 *
 	 * @author 無線部開発班
@@ -149,7 +149,7 @@ public final class ZBinFactory extends BasicFactory {
 	}
 
 	/**
-	 * zLogバイナリデータの通信方式の列挙型です。
+	 * zLogの通信方式の列挙型です。
 	 *
 	 *
 	 * @author 無線部開発班
@@ -214,7 +214,7 @@ public final class ZBinFactory extends BasicFactory {
 	}
 
 	/**
-	 * zLogバイナリデータの送信電力の列挙型です。
+	 * zLogの送信電力の列挙型です。
 	 *
 	 *
 	 * @author 無線部開発班

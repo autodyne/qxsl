@@ -21,8 +21,7 @@ import qxsl.draft.Time;
 import qxsl.model.Item;
 import qxsl.table.TableFactory;
 import qxsl.table.TableManager;
-
-import gaas.utils.AssetUtils;
+import qxsl.utils.AssetUtil;
 
 /**
  * {@link Pattern}クラスの挙動を検査します。
@@ -58,7 +57,7 @@ public final class PatternTest extends Assertions {
 	private static final List<Arguments> items() {
 		final var fmts = new TableManager();
 		final var list = new ArrayList<Arguments>();
-		final var util = new AssetUtils(Pattern.class);
+		final var util = new AssetUtil(Pattern.class);
 		for (final var item: util.items("allja1.qxml")) {
 			for (var f: fmts) list.add(Arguments.of(item, f));
 		}

@@ -3,7 +3,7 @@
  * License: GNU Lesser General Public License v3.0 (see LICENSE)
  * Author: Journal of Hamradio Informatics (https://pafelog.net)
 *******************************************************************************/
-package gaas.utils;
+package qxsl.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,7 +29,7 @@ import static java.util.stream.Collectors.joining;
  *
  * @since 2020/10/27
  */
-public final class AssetUtils {
+public final class AssetUtil {
 	private final Class<?> type;
 
 	/**
@@ -38,7 +38,7 @@ public final class AssetUtils {
 	 *
 	 * @param type 検索の起点となるクラス
 	 */
-	public AssetUtils(Class<?> type) {
+	public AssetUtil(Class<?> type) {
 		this.type = type;
 	}
 
@@ -48,8 +48,8 @@ public final class AssetUtils {
 	 *
 	 * @return インスタンス
 	 */
-	public static final AssetUtils root() {
-		return new AssetUtils(null);
+	public static final AssetUtil root() {
+		return new AssetUtil(null);
 	}
 
 	/**
@@ -60,8 +60,8 @@ public final class AssetUtils {
 	 *
 	 * @return インスタンス
 	 */
-	public static final AssetUtils from(Object obj) {
-		return new AssetUtils(obj.getClass());
+	public static final AssetUtil from(Object obj) {
+		return new AssetUtil(obj.getClass());
 	}
 
 	/**
@@ -73,7 +73,7 @@ public final class AssetUtils {
 	 * @since 2020/10/27
 	 */
 	public final ClassLoader getClassLoader() {
-		return AssetUtils.class.getClassLoader();
+		return AssetUtil.class.getClassLoader();
 	}
 
 	/**

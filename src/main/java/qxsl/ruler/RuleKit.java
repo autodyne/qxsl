@@ -13,7 +13,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-import gaas.utils.AssetUtils;
+import qxsl.utils.AssetUtil;
 
 /**
  * ドメイン特化言語でコンテストを定義します。
@@ -124,7 +124,7 @@ public final class RuleKit {
 	 * @throws UncheckedIOException 読み取りまたは評価の例外
 	 */
 	public static final Library load(String path) {
-		final var lib = new AssetUtils(Library.class);
+		final var lib = new AssetUtil(Library.class);
 		return forFile(path).eval(lib.string(path));
 	}
 }

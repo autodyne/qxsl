@@ -9,7 +9,7 @@ import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.Properties;
 
-import gaas.utils.AssetUtils;
+import qxsl.utils.AssetUtil;
 
 /**
  * 書式の説明を設定ファイルから取得する仕組みを提供します。
@@ -33,7 +33,7 @@ public abstract class BasicFactory extends SheetFactory {
 	 */
 	public BasicFactory(String name) {
 		this.name = name;
-		this.conf = AssetUtils.from(this).properties(name);
+		this.conf = AssetUtil.from(this).properties(name);
 	}
 
 	/**
@@ -81,7 +81,7 @@ public abstract class BasicFactory extends SheetFactory {
 		final var text = get("desc-text");
 		final var file = get("desc-file");
 		if(text != null) return text;
-		return AssetUtils.from(this).string(file);
+		return AssetUtil.from(this).string(file);
 	}
 
 	/**

@@ -3,13 +3,11 @@
  * License: GNU Lesser General Public License v3.0 (see LICENSE)
  * Author: Journal of Hamradio Informatics (https://pafelog.net)
 *******************************************************************************/
-package gaas.morse;
+package qxsl.utils;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import gaas.utils.AssetUtils;
 
 /**
  * 文字列とモールス符号の変換器です。
@@ -27,7 +25,7 @@ public final class MorseCode {
 	 */
 	public MorseCode() {
 		this.map = new HashMap<>();
-		final var util = AssetUtils.from(this);
+		final var util = AssetUtil.from(this);
 		for(var v: util.listLines("morse.dat")) {
 			map.put(v.charAt(0), v.substring(1));
 		}

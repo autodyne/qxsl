@@ -23,7 +23,7 @@ import javax.script.ScriptEngineFactory;
 import elva.warn.ElvaLexicalException;
 import elva.warn.ElvaRuntimeException;
 
-import gaas.utils.AssetUtils;
+import qxsl.utils.AssetUtil;
 
 import static elva.lang.NameNode.Quote.QUASI;
 import static elva.lang.NameNode.Quote.QUOTE;
@@ -192,7 +192,7 @@ public final class ElvaLisp extends AbstractScriptEngine {
 		 */
 		public Lexical(String exp) throws IOException {
 			this.tokens = new LinkedList<>();
-			final var p = AssetUtils.from(this).string(LEX);
+			final var p = AssetUtil.from(this).string(LEX);
 			final var mat = Pattern.compile(p).matcher(exp);
 			while(mat.find()) this.tokens.add(mat.group(1));
 		}

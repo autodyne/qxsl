@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import gaas.utils.AssetUtils;
+import qxsl.utils.AssetUtil;
 
 /**
  * ライブラリが内蔵する都市または地域のデータベースです。
@@ -87,7 +87,7 @@ public final class LocalCityBase {
 	 * @throws UncheckedIOException 存在しない場合
 	 */
 	public static final LocalCityBase load(String name) {
-		final var lines = AssetUtils.root().lines(name);
+		final var lines = AssetUtil.root().lines(name);
 		final var route = lines.map(LocalCityItem::new);
 		return new LocalCityBase(route);
 	}

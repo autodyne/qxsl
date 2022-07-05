@@ -3,7 +3,7 @@
  * License: GNU Lesser General Public License v3.0 (see LICENSE)
  * Author: Journal of Hamradio Informatics (https://pafelog.net)
 *******************************************************************************/
-package gaas.utils;
+package qxsl.utils;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,7 +20,7 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 
 /**
- * 指定された交信記録の内容を指定された書式に変換します。
+ * 交信記録を指定された書式に変換するコマンドです。
  *
  *
  * @author 無線部開発班
@@ -28,7 +28,7 @@ import picocli.CommandLine.Parameters;
  * @since 2020/11/09
  */
 @Command(name = "qxsl", description = {"contest log processor"})
-public final class CommandApp implements Callable<Integer> {
+public final class ShellUtil implements Callable<Integer> {
 	@Parameters
 	private Path source;
 	@Parameters
@@ -37,19 +37,19 @@ public final class CommandApp implements Callable<Integer> {
 	private String format;
 
 	/**
-	 * 取扱説明を準備します。
+	 * コマンドを準備します。
 	 *
 	 *
 	 * @since 2022/06/27
 	 */
-	public CommandApp() {
+	public ShellUtil() {
 		final var join = new StringJoiner(", ");
 		for(var f: new TableManager()) join.add(f.type());
 		System.setProperty("CANDIDATES", join.toString());
 	}
 
 	/**
-	 * 交信記録を処理します。
+	 * コマンドを実行します。
 	 *
 	 *
 	 * @return 終了コード
@@ -69,12 +69,12 @@ public final class CommandApp implements Callable<Integer> {
 	}
 
 	/**
-	 * コマンドラインツールを起動します。
+	 * コマンドを起動します。
 	 *
 	 *
 	 * @param args コマンドライン引数
 	 */
 	public static final void main(String[] args) {
-		System.exit(new CommandLine(new CommandApp()).execute(args));
+		System.exit(new CommandLine(new ShellUtil()).execute(args));
 	}
 }
