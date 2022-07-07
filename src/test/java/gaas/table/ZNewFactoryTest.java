@@ -58,7 +58,7 @@ public final class ZNewFactoryTest extends Assertions {
 		final var items = new ArrayList<Item>();
 		for (int row = 0; row < numItems; row++) {
 			final var item = new Item();
-			item.set(Time.now().copyDropSecond());
+			item.set(Time.now().drop());
 			item.set(bands.get(randInt(bands.size())));
 			item.set(new Call(alnum(12)));
 			item.set(modes.get(randInt(modes.size())));

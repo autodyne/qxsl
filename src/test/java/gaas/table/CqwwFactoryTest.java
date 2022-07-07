@@ -48,7 +48,7 @@ public final class CqwwFactoryTest extends Assertions {
 		final var items = new ArrayList<Item>();
 		for (int row = 0; row < numItems; row++) {
 			final var item = new Item();
-			item.set(Time.now().copyDropSecond());
+			item.set(Time.now().drop());
 			item.set(bands.get(randInt(bands.size())));
 			item.set(new Call(alnum(13)));
 			item.set(new Mode(alnum(2)));

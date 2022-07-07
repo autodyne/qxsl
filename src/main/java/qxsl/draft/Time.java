@@ -7,6 +7,7 @@ package qxsl.draft;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 import qxsl.value.Tuple;
@@ -39,7 +40,7 @@ public final class Time extends Qxsl<ZonedDateTime> {
 	 *
 	 * @param time 交信日時
 	 */
-	public Time(Instant time) {
+	public Time(LocalDateTime time) {
 		this(time.atZone(systemDefault()));
 	}
 
@@ -49,8 +50,18 @@ public final class Time extends Qxsl<ZonedDateTime> {
 	 *
 	 * @param time 交信日時
 	 */
-	public Time(LocalDateTime time) {
+	public Time(Instant time) {
 		this(time.atZone(systemDefault()));
+	}
+
+	/**
+	 * 現在時刻で属性を構築します。
+	 *
+	 *
+	 * @return 現在時刻の属性
+	 */
+	public static final Time now() {
+		return new Time(ZonedDateTime.now());
 	}
 
 	/**
@@ -68,16 +79,6 @@ public final class Time extends Qxsl<ZonedDateTime> {
 	}
 
 	/**
-	 * 現在時刻で属性を構築します。
-	 *
-	 *
-	 * @return 現在時刻の属性
-	 */
-	public static final Time now() {
-		return new Time(ZonedDateTime.now());
-	}
-
-	/**
 	 * 指定された年で複製します。
 	 *
 	 *
@@ -87,7 +88,7 @@ public final class Time extends Qxsl<ZonedDateTime> {
 	 *
 	 * @since 2020/10/28
 	 */
-	public final Time ofYear(int year) {
+	public final Time year(int year) {
 		return new Time(value().withYear(year));
 	}
 
@@ -99,7 +100,7 @@ public final class Time extends Qxsl<ZonedDateTime> {
 	 *
 	 * @since 2020/10/28
 	 */
-	public final Time copyDropSecond() {
+	public final Time drop() {
 		return new Time(value().truncatedTo(MINUTES));
 	}
 
@@ -111,6 +112,20 @@ public final class Time extends Qxsl<ZonedDateTime> {
 	 */
 	public final ZonedDateTime local() {
 		return value().withZoneSameInstant(systemDefault());
+	}
+
+	/**
+	 * 指定された時間帯で時刻を複製します。
+	 *
+	 *
+	 * @param zoneId 時間帯
+	 *
+	 * @return 時刻
+	 *
+	 * @since 2022/06/25
+	 */
+	public final Time atZone(ZoneId zoneId) {
+		return new Time(value().withZoneSameInstant(zoneId));
 	}
 
 	/**

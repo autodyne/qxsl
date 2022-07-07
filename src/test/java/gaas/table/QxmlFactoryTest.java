@@ -37,7 +37,7 @@ public final class QxmlFactoryTest extends Assertions {
 		final var items = new ArrayList<Item>();
 		for (int row = 0; row < numItems; row++) {
 			final var item = new Item();
-			item.set(Time.now().copyDropSecond());
+			item.set(Time.now().drop());
 			item.set(new Band(randInt(10_000_000)));
 			item.set(new Call(alnum(10)));
 			item.set(new Name(alnum(10)));

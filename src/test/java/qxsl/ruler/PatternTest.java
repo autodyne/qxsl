@@ -41,9 +41,9 @@ public final class PatternTest extends Assertions {
 		final var seq2 = rule.normalize(fmt.decode(seq1), fmt.type());
 		final var back = seq2.get(0);
 		back.set(Name.from(item));
-		if (Mode.from(back).isRTTY()) back.set(Mode.from(item));
-		item.set(Time.from(item).ofYear(2020).copyDropSecond());
-		back.set(Time.from(back).ofYear(2020).copyDropSecond());
+		back.set(Mode.from(item));
+		item.set(Time.from(item).year(2020).drop());
+		back.set(Time.from(back).year(2020).drop());
 		assertThat(item).isEqualTo(back);
 	}
 

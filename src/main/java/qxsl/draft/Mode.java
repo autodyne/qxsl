@@ -27,30 +27,6 @@ public final class Mode extends Qxsl<String> {
 	}
 
 	/**
-	 * 通信方式が聴覚電信か確認します。
-	 *
-	 *
-	 * @return CWの場合は真
-	 *
-	 * @since 2020/10/28
-	 */
-	public final boolean isCW() {
-		return value().equals("CW");
-	}
-
-	/**
-	 * 通信方式が印字電信か確認します。
-	 *
-	 *
-	 * @return RTTYの場合は真
-	 *
-	 * @since 2020/10/28
-	 */
-	public final boolean isRTTY() {
-		return value().equals("RTTY");
-	}
-
-	/**
 	 * 交信記録の通信方式を抽出します。
 	 *
 	 *
