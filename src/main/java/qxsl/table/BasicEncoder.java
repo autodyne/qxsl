@@ -29,8 +29,8 @@ public abstract class BasicEncoder extends TableEncoder {
 	private final Set<QName> itemFields;
 	private final Set<QName> rcvdFields;
 	private final Set<QName> sentFields;
-	private final String fieldURI;
-	private final Properties conf;
+	private final String fieldSpace;
+	private final Properties config;
 
 	/**
 	 * 指定された書式のエンコーダを初期化します。
@@ -41,8 +41,8 @@ public abstract class BasicEncoder extends TableEncoder {
 	 * @throws UncheckedIOException 設定の取得時の例外
 	 */
 	public BasicEncoder(String type) {
-		this.conf = AssetUtil.from(this).properties(type);
-		this.fieldURI = get("field-uri");
+		this.config = AssetUtil.from(this).properties(type);
+		this.fieldSpace = get("field-space");
 		this.itemFields = new HashSet<>();
 		this.rcvdFields = new HashSet<>();
 		this.sentFields = new HashSet<>();
@@ -60,7 +60,7 @@ public abstract class BasicEncoder extends TableEncoder {
 	 * @return 設定の値
 	 */
 	public final String get(String key) {
-		return conf.getProperty(key, "");
+		return config.getProperty(key, "");
 	}
 
 	/**
@@ -126,7 +126,7 @@ public abstract class BasicEncoder extends TableEncoder {
 	 * @since 2022/07/07
 	 */
 	private final void verifyItem(Field field) throws IOException {
-		if(!this.fieldURI.equals(field.name().getNamespaceURI())) {
+		if(!this.fieldSpace.equals(field.name().getNamespaceURI())) {
 			if(this.itemFields.contains(field.name())) return;
 			final var text = "Item does not support field %s";
 			throw new IOException(String.format(text, field));
@@ -144,7 +144,7 @@ public abstract class BasicEncoder extends TableEncoder {
 	 * @since 2022/07/07
 	 */
 	private final void verifyRcvd(Field field) throws IOException {
-		if(!this.fieldURI.equals(field.name().getNamespaceURI())) {
+		if(!this.fieldSpace.equals(field.name().getNamespaceURI())) {
 			if(this.rcvdFields.contains(field.name())) return;
 			final var text = "Rcvd does not support field %s";
 			throw new IOException(String.format(text, field));
@@ -162,7 +162,7 @@ public abstract class BasicEncoder extends TableEncoder {
 	 * @since 2022/07/07
 	 */
 	private final void verifySent(Field field) throws IOException {
-		if(!this.fieldURI.equals(field.name().getNamespaceURI())) {
+		if(!this.fieldSpace.equals(field.name().getNamespaceURI())) {
 			if(this.sentFields.contains(field.name())) return;
 			final var text = "Sent does not support field %s";
 			throw new IOException(String.format(text, field));

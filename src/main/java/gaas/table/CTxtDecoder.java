@@ -12,7 +12,6 @@ import java.time.format.DateTimeFormatter;
 
 import qxsl.draft.Qxsl;
 import qxsl.draft.Time;
-import qxsl.field.FieldManager;
 import qxsl.model.Item;
 import qxsl.table.PrintDecoder;
 
@@ -32,7 +31,6 @@ public final class CTxtDecoder extends PrintDecoder {
 	private static final int SENT = 5;
 	private static final int RCVD = 6;
 	private final DateTimeFormatter tstamp;
-	private final FieldManager fields;
 
 	/**
 	 * 指定された入力を読み込むデコーダを構築します。
@@ -42,7 +40,6 @@ public final class CTxtDecoder extends PrintDecoder {
 	 */
 	public CTxtDecoder(Reader reader) {
 		super("ctxt", reader);
-		this.fields = new FieldManager();
 		this.tstamp = getTimeDecoderOld();
 	}
 
@@ -140,7 +137,7 @@ public final class CTxtDecoder extends PrintDecoder {
 	 * @param text コールサインの文字列
 	 */
 	private final void call(Item item, String text) {
-		item.set(fields.cache(Qxsl.CALL).field(text));
+		item.set(cache(Qxsl.CALL, text));
 	}
 
 	/**
@@ -151,7 +148,7 @@ public final class CTxtDecoder extends PrintDecoder {
 	 * @param text 周波数帯の文字列
 	 */
 	private final void band(Item item, String text) {
-		item.set(fields.cache(Qxsl.BAND).field(text));
+		item.set(cache(Qxsl.BAND, text));
 	}
 
 	/**
@@ -162,7 +159,7 @@ public final class CTxtDecoder extends PrintDecoder {
 	 * @param text 通信方式の文字列
 	 */
 	private final void mode(Item item, String text) {
-		item.set(fields.cache(Qxsl.MODE).field(text));
+		item.set(cache(Qxsl.MODE, text));
 	}
 
 	/**
@@ -173,7 +170,7 @@ public final class CTxtDecoder extends PrintDecoder {
 	 * @param text ナンバーの文字列
 	 */
 	private final void sent(Item item, String text) {
-		item.getSent().set(fields.cache(Qxsl.CODE).field(text));
+		item.getSent().set(cache(Qxsl.CODE, text));
 	}
 
 	/**
@@ -184,6 +181,6 @@ public final class CTxtDecoder extends PrintDecoder {
 	 * @param text ナンバーの文字列
 	 */
 	private final void rcvd(Item item, String text) {
-		item.getRcvd().set(fields.cache(Qxsl.CODE).field(text));
+		item.getRcvd().set(cache(Qxsl.CODE, text));
 	}
 }

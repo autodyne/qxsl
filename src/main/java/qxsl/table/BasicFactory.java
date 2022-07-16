@@ -24,20 +24,18 @@ import qxsl.utils.AssetUtil;
  * @since 2019/06/16
  */
 public abstract class BasicFactory extends TableFactory {
-	private final String name;
-	private final Properties conf;
+	private final Properties config;
 
 	/**
 	 * 指定された名前の書式を初期化します。
 	 *
 	 *
-	 * @param name 書式の名前
+	 * @param type 書式の名前
 	 *
 	 * @throws UncheckedIOException 設定の取得時の例外
 	 */
-	public BasicFactory(String name) {
-		this.name = name;
-		this.conf = AssetUtil.from(this).properties(name);
+	public BasicFactory(String type) {
+		this.config = AssetUtil.from(this).properties(type);
 	}
 
 	/**
@@ -49,7 +47,7 @@ public abstract class BasicFactory extends TableFactory {
 	 * @return 設定の値
 	 */
 	public final String get(String key) {
-		return conf.getProperty(key);
+		return config.getProperty(key);
 	}
 
 	/**
@@ -60,7 +58,7 @@ public abstract class BasicFactory extends TableFactory {
 	 */
 	@Override
 	public final String type() {
-		return name;
+		return get("type");
 	}
 
 	/**

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
+<entry key="type">adis</entry>
 <entry key="name">Sub ADIF (ADI)</entry>
 <entry key="extensions">adi</entry>
 <entry key="desc-text">
@@ -16,5 +17,5 @@ ADIF
 </entry>
 <entry key="created">uuuuMMdd HHmmss</entry>
 <entry key="regex">&lt;(\w+?):(\d+?)(:\w)?&gt;</entry>
-<entry key="field-uri">adif.org</entry>
+<entry key="field-space">adif.org</entry>
 </properties>

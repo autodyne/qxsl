@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 import qxsl.draft.Qxsl;
-import qxsl.field.FieldManager;
 import qxsl.model.Item;
 import qxsl.table.BasicDecoder;
 
@@ -30,7 +29,6 @@ import gaas.table.ZBinFactory.WattEnum;
  */
 public final class ZBinDecoder extends BasicDecoder {
 	private final DataInputStream source;
-	private final FieldManager fields;
 	private DateTime tDTime;
 
 	/**
@@ -42,7 +40,6 @@ public final class ZBinDecoder extends BasicDecoder {
 	public ZBinDecoder(InputStream stream) {
 		super("zbin");
 		this.source = new DataInputStream(stream);
-		this.fields = new FieldManager();
 	}
 
 	/**
@@ -187,7 +184,7 @@ public final class ZBinDecoder extends BasicDecoder {
 	 * @throws IOException 読み取りに失敗した場合
 	 */
 	private final void call(Item item) throws IOException {
-		item.set(fields.cache(Qxsl.CALL).field(read(12)));
+		item.set(cache(Qxsl.CALL, read(12)));
 	}
 
 	/**
@@ -199,7 +196,7 @@ public final class ZBinDecoder extends BasicDecoder {
 	 * @throws IOException 読み取りに失敗した場合
 	 */
 	private final void sent(Item item) throws IOException {
-		item.getSent().set(fields.cache(Qxsl.CODE).field(read(30)));
+		item.getSent().set(cache(Qxsl.CODE, read(30)));
 	}
 
 	/**
@@ -211,7 +208,7 @@ public final class ZBinDecoder extends BasicDecoder {
 	 * @throws IOException 読み取りに失敗した場合
 	 */
 	private final void rcvd(Item item) throws IOException {
-		item.getRcvd().set(fields.cache(Qxsl.CODE).field(read(30)));
+		item.getRcvd().set(cache(Qxsl.CODE, read(30)));
 	}
 
 	/**
@@ -224,7 +221,7 @@ public final class ZBinDecoder extends BasicDecoder {
 	 */
 	private final void sRST(Item item) throws IOException {
 		final var rst = Short.reverseBytes(source.readShort());
-		item.getSent().set(fields.cache(Qxsl.RSTQ).field(rst));
+		item.getSent().set(cache(Qxsl.RSTQ, rst));
 	}
 
 	/**
@@ -237,7 +234,7 @@ public final class ZBinDecoder extends BasicDecoder {
 	 */
 	private final void rRST(Item item) throws IOException {
 		final var rst = Short.reverseBytes(source.readShort());
-		item.getRcvd().set(fields.cache(Qxsl.RSTQ).field(rst));
+		item.getRcvd().set(cache(Qxsl.RSTQ, rst));
 	}
 
 	/**
@@ -287,7 +284,7 @@ public final class ZBinDecoder extends BasicDecoder {
 	 * @since 2020/10/28
 	 */
 	private final void mul1(Item item) throws IOException {
-		item.set(fields.cache(Qxsl.MUL1).field(read(30)));
+		item.set(cache(Qxsl.MUL1, read(30)));
 	}
 
 	/**
@@ -301,7 +298,7 @@ public final class ZBinDecoder extends BasicDecoder {
 	 * @since 2020/10/28
 	 */
 	private final void mul2(Item item) throws IOException {
-		item.set(fields.cache(Qxsl.MUL2).field(read(30)));
+		item.set(cache(Qxsl.MUL2, read(30)));
 	}
 
 	/**
@@ -313,7 +310,7 @@ public final class ZBinDecoder extends BasicDecoder {
 	 * @throws IOException 読み取りに失敗した場合
 	 */
 	private final void name(Item item) throws IOException {
-		item.set(fields.cache(Qxsl.NAME).field(read(14)));
+		item.set(cache(Qxsl.NAME, read(14)));
 	}
 
 	/**
@@ -325,6 +322,6 @@ public final class ZBinDecoder extends BasicDecoder {
 	 * @throws IOException 読み取りに失敗した場合
 	 */
 	private final void note(Item item) throws IOException {
-		item.set(fields.cache(Qxsl.NOTE).field(read(64)));
+		item.set(cache(Qxsl.NOTE, read(64)));
 	}
 }

@@ -12,7 +12,6 @@ import java.time.format.DateTimeFormatter;
 
 import qxsl.draft.Qxsl;
 import qxsl.draft.Time;
-import qxsl.field.FieldManager;
 import qxsl.model.Item;
 import qxsl.table.PrintDecoder;
 
@@ -38,7 +37,6 @@ public final class ZAllDecoder extends PrintDecoder {
 	private static final int NOTE = 11;
 	private static final String EMPTY = "";
 	private final DateTimeFormatter tstamp;
-	private final FieldManager fields;
 
 	/**
 	 * 指定された入力を読み込むデコーダを構築します。
@@ -48,7 +46,6 @@ public final class ZAllDecoder extends PrintDecoder {
 	 */
 	public ZAllDecoder(Reader reader) {
 		super("zall", reader);
-		this.fields = new FieldManager();
 		this.tstamp = getTimeDecoder();
 	}
 
@@ -151,7 +148,7 @@ public final class ZAllDecoder extends PrintDecoder {
 	 * @param text コールサインの文字列
 	 */
 	private final void call(Item item, String text) {
-		item.set(fields.cache(Qxsl.CALL).field(text));
+		item.set(cache(Qxsl.CALL, text));
 	}
 
 	/**
@@ -162,7 +159,7 @@ public final class ZAllDecoder extends PrintDecoder {
 	 * @param text レポートの文字列
 	 */
 	private final void sRST(Item item, String text) {
-		item.getSent().set(fields.cache(Qxsl.RSTQ).field(text));
+		item.getSent().set(cache(Qxsl.RSTQ, text));
 	}
 
 	/**
@@ -173,7 +170,7 @@ public final class ZAllDecoder extends PrintDecoder {
 	 * @param text ナンバーの文字列
 	 */
 	private final void sent(Item item, String text) {
-		item.getSent().set(fields.cache(Qxsl.CODE).field(text));
+		item.getSent().set(cache(Qxsl.CODE, text));
 	}
 
 	/**
@@ -184,7 +181,7 @@ public final class ZAllDecoder extends PrintDecoder {
 	 * @param text レポートの文字列
 	 */
 	private final void rRST(Item item, String text) {
-		item.getRcvd().set(fields.cache(Qxsl.RSTQ).field(text));
+		item.getRcvd().set(cache(Qxsl.RSTQ, text));
 	}
 
 	/**
@@ -195,7 +192,7 @@ public final class ZAllDecoder extends PrintDecoder {
 	 * @param text ナンバーの文字列
 	 */
 	private final void rcvd(Item item, String text) {
-		item.getRcvd().set(fields.cache(Qxsl.CODE).field(text));
+		item.getRcvd().set(cache(Qxsl.CODE, text));
 	}
 
 	/**
@@ -208,7 +205,7 @@ public final class ZAllDecoder extends PrintDecoder {
 	 * @since 2020/10/28
 	 */
 	private final void mul1(Item item, String text) {
-		item.set(fields.cache(Qxsl.MUL1).field(text));
+		item.set(cache(Qxsl.MUL1, text));
 	}
 
 	/**
@@ -221,7 +218,7 @@ public final class ZAllDecoder extends PrintDecoder {
 	 * @since 2020/10/28
 	 */
 	private final void mul2(Item item, String text) {
-		item.set(fields.cache(Qxsl.MUL2).field(text));
+		item.set(cache(Qxsl.MUL2, text));
 	}
 
 	/**
@@ -234,7 +231,7 @@ public final class ZAllDecoder extends PrintDecoder {
 	private final void band(Item item, String text) {
 		final var peel = text.replaceAll("G", "000");
 		final var band = peel.replaceAll("$", "MHz");
-		item.set(fields.cache(Qxsl.BAND).field(band));
+		item.set(cache(Qxsl.BAND, band));
 	}
 
 	/**
@@ -245,7 +242,7 @@ public final class ZAllDecoder extends PrintDecoder {
 	 * @param text 通信方式の文字列
 	 */
 	private final void mode(Item item, String text) {
-		item.set(fields.cache(Qxsl.MODE).field(text));
+		item.set(cache(Qxsl.MODE, text));
 	}
 
 	/**
@@ -259,7 +256,7 @@ public final class ZAllDecoder extends PrintDecoder {
 		final int bidx = text.indexOf("%%", 2);
 		final var name = bidx > 0? text.substring(2, bidx): EMPTY;
 		final var note = bidx > 0? text.substring(bidx + 2): text;
-		item.set(fields.cache(Qxsl.NAME).field(name.trim()));
-		item.set(fields.cache(Qxsl.NOTE).field(note.trim()));
+		item.set(cache(Qxsl.NAME, name.trim()));
+		item.set(cache(Qxsl.NOTE, note.trim()));
 	}
 }

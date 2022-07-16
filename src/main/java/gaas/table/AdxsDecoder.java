@@ -16,7 +16,6 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
-import qxsl.field.FieldManager;
 import qxsl.model.Item;
 import qxsl.table.BasicDecoder;
 import qxsl.value.Tuple;
@@ -32,7 +31,6 @@ import static gaas.table.AdxsFactory.*;
  * @since 2019/07/08
  */
 public final class AdxsDecoder extends BasicDecoder {
-	private final FieldManager fields;
 	private final AdxsFactory format;
 	private final Reader source;
 	private XMLEventReader reader;
@@ -48,7 +46,6 @@ public final class AdxsDecoder extends BasicDecoder {
 		super("adxs");
 		this.format = format;
 		this.source = reader;
-		this.fields = new FieldManager();
 	}
 
 	/**
@@ -266,7 +263,7 @@ public final class AdxsDecoder extends BasicDecoder {
 		final var key = new QName(NURI, tag.getLocalPart());
 		final var end = reader.peek().isEndElement();
 		final var val = end? "": reader.nextEvent().asCharacters();
-		tuple.set(fields.cache(key).field(val.toString()));
+		tuple.set(cache(key, val.toString()));
 		close(tag);
 	}
 }

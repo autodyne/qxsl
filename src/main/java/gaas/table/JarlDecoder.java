@@ -12,7 +12,6 @@ import java.time.format.DateTimeFormatter;
 
 import qxsl.draft.Qxsl;
 import qxsl.draft.Time;
-import qxsl.field.FieldManager;
 import qxsl.model.Item;
 import qxsl.table.PrintDecoder;
 
@@ -35,7 +34,6 @@ public final class JarlDecoder extends PrintDecoder {
 	private static final int RCVD = 8;
 	private static final int MUL1 = 9;
 	private final DateTimeFormatter tstamp;
-	private final FieldManager fields;
 
 	/**
 	 * 指定された入力を読み込むデコーダを構築します。
@@ -45,7 +43,6 @@ public final class JarlDecoder extends PrintDecoder {
 	 */
 	public JarlDecoder(Reader reader) {
 		super("jarl", reader);
-		this.fields = new FieldManager();
 		this.tstamp = getTimeDecoder();
 	}
 
@@ -147,8 +144,7 @@ public final class JarlDecoder extends PrintDecoder {
 	 * @param text 周波数帯の文字列
 	 */
 	private final void band(Item item, String text) {
-		final var band = String.format("%sMHz", text);
-		item.set(fields.cache(Qxsl.BAND).field(band));
+		item.set(cache(Qxsl.BAND, text.concat("MHz")));
 	}
 
 	/**
@@ -159,7 +155,7 @@ public final class JarlDecoder extends PrintDecoder {
 	 * @param text 通信方式の文字列
 	 */
 	private final void mode(Item item, String text) {
-		item.set(fields.cache(Qxsl.MODE).field(text));
+		item.set(cache(Qxsl.MODE, text));
 	}
 
 	/**
@@ -170,7 +166,7 @@ public final class JarlDecoder extends PrintDecoder {
 	 * @param text 呼出符号の文字列
 	 */
 	private final void call(Item item, String text) {
-		item.set(fields.cache(Qxsl.CALL).field(text));
+		item.set(cache(Qxsl.CALL, text));
 	}
 
 	/**
@@ -181,7 +177,7 @@ public final class JarlDecoder extends PrintDecoder {
 	 * @param text レポートの文字列
 	 */
 	private final void sRST(Item item, String text) {
-		item.getSent().set(fields.cache(Qxsl.RSTQ).field(text));
+		item.getSent().set(cache(Qxsl.RSTQ, text));
 	}
 
 	/**
@@ -192,7 +188,7 @@ public final class JarlDecoder extends PrintDecoder {
 	 * @param text ナンバーの文字列
 	 */
 	private final void sent(Item item, String text) {
-		item.getSent().set(fields.cache(Qxsl.CODE).field(text));
+		item.getSent().set(cache(Qxsl.CODE, text));
 	}
 
 	/**
@@ -203,7 +199,7 @@ public final class JarlDecoder extends PrintDecoder {
 	 * @param text レポートの文字列
 	 */
 	private final void rRST(Item item, String text) {
-		item.getRcvd().set(fields.cache(Qxsl.RSTQ).field(text));
+		item.getRcvd().set(cache(Qxsl.RSTQ, text));
 	}
 
 	/**
@@ -214,7 +210,7 @@ public final class JarlDecoder extends PrintDecoder {
 	 * @param text ナンバーの文字列
 	 */
 	private final void rcvd(Item item, String text) {
-		item.getRcvd().set(fields.cache(Qxsl.CODE).field(text));
+		item.getRcvd().set(cache(Qxsl.CODE, text));
 	}
 
 	/**
@@ -225,6 +221,6 @@ public final class JarlDecoder extends PrintDecoder {
 	 * @param text ナンバーの文字列
 	 */
 	private final void mul1(Item item, String text) {
-		item.set(fields.cache(Qxsl.MUL1).field(text));
+		item.set(cache(Qxsl.MUL1, text));
 	}
 }

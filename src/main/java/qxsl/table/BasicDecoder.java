@@ -11,8 +11,11 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.util.Properties;
+import javax.xml.namespace.QName;
 
+import qxsl.field.FieldManager;
 import qxsl.utils.AssetUtil;
+import qxsl.value.Field;
 
 /**
  * 書式の説明を設定ファイルから取得する機能を提供します。
@@ -23,7 +26,8 @@ import qxsl.utils.AssetUtil;
  * @since 2022/07/16
  */
 public abstract class BasicDecoder extends TableDecoder {
-	private final Properties conf;
+	private final FieldManager fields;
+	private final Properties config;
 
 	/**
 	 * 指定された書式のデコーダを初期化します。
@@ -34,7 +38,8 @@ public abstract class BasicDecoder extends TableDecoder {
 	 * @throws UncheckedIOException 設定の取得時の例外
 	 */
 	public BasicDecoder(String type) {
-		this.conf = AssetUtil.from(this).properties(type);
+		this.config = AssetUtil.from(this).properties(type);
+		this.fields = new FieldManager();
 	}
 
 	/**
@@ -46,7 +51,7 @@ public abstract class BasicDecoder extends TableDecoder {
 	 * @return 設定の値
 	 */
 	public final String get(String key) {
-		return conf.getProperty(key, "");
+		return config.getProperty(key, "");
 	}
 
 	/**
@@ -75,5 +80,35 @@ public abstract class BasicDecoder extends TableDecoder {
 	 */
 	public final DateTimeFormatter getTimeDecoder() {
 		return DateTimeFormatter.ofPattern(get("time-decoder"));
+	}
+
+	/**
+	 * 指定された名前と整数値から属性を生成します。
+	 *
+	 *
+	 * @param field 名前
+	 * @param value 整数値
+	 *
+	 * @return 属性
+	 *
+	 * @since 2022/07/16
+	 */
+	public final Field cache(QName field, int value) {
+		return fields.cache(field).field(value);
+	}
+
+	/**
+	 * 指定された名前と文字列から属性を生成します。
+	 *
+	 *
+	 * @param field 名前
+	 * @param value 値の文字列
+	 *
+	 * @return 属性
+	 *
+	 * @since 2022/07/16
+	 */
+	public final Field cache(QName field, String value) {
+		return fields.cache(field).field(value);
 	}
 }

@@ -96,8 +96,8 @@ public final class AdisEncoder extends PrintEncoder {
 	 * @throws IOException 書き込みに失敗した場合
 	 */
 	private final void field(Field field) throws IOException {
-		final var local = field.name().getLocalPart();
-		final var value = fields.encode(field);
-		print(String.format("<%s:%d>%s", local, value.length(), value));
+		final var key = field.name().getLocalPart();
+		final var val = fields.encode(field);
+		print(String.format("<%s:%d>%s", key, val.length(), val));
 	}
 }

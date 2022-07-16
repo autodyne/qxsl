@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 import qxsl.draft.Qxsl;
-import qxsl.field.FieldManager;
 import qxsl.model.Item;
 import qxsl.table.BasicDecoder;
 
@@ -29,7 +28,6 @@ import gaas.table.CBinFactory.ModeEnum;
  */
 public final class CBinDecoder extends BasicDecoder {
 	private final DataInputStream source;
-	private final FieldManager fields;
 	private DateTime cDTime;
 	private int numQSOs;
 
@@ -42,7 +40,6 @@ public final class CBinDecoder extends BasicDecoder {
 	public CBinDecoder(InputStream stream) {
 		super("cbin");
 		this.source = new DataInputStream(stream);
-		this.fields = new FieldManager();
 		this.cDTime = new DateTime();
 	}
 
@@ -171,7 +168,7 @@ public final class CBinDecoder extends BasicDecoder {
 	 * @throws IOException 読み取りに失敗した場合
 	 */
 	private final void call(Item item) throws IOException {
-		item.set(fields.cache(Qxsl.CALL).field(read(20)));
+		item.set(cache(Qxsl.CALL, read(20)));
 	}
 
 	/**
@@ -183,7 +180,7 @@ public final class CBinDecoder extends BasicDecoder {
 	 * @throws IOException 読み取りに失敗した場合
 	 */
 	private final void sent(Item item) throws IOException {
-		item.getSent().set(fields.cache(Qxsl.CODE).field(read(30)));
+		item.getSent().set(cache(Qxsl.CODE, read(30)));
 	}
 
 	/**
@@ -195,7 +192,7 @@ public final class CBinDecoder extends BasicDecoder {
 	 * @throws IOException 読み取りに失敗した場合
 	 */
 	private final void rcvd(Item item) throws IOException {
-		item.getRcvd().set(fields.cache(Qxsl.CODE).field(read(30)));
+		item.getRcvd().set(cache(Qxsl.CODE, read(30)));
 	}
 
 	/**
@@ -231,7 +228,7 @@ public final class CBinDecoder extends BasicDecoder {
 	 * @throws IOException 読み取りに失敗した場合
 	 */
 	private final void name(Item item) throws IOException {
-		item.set(fields.cache(Qxsl.NAME).field(read(20)));
+		item.set(cache(Qxsl.NAME, read(20)));
 	}
 
 	/**
@@ -243,6 +240,6 @@ public final class CBinDecoder extends BasicDecoder {
 	 * @throws IOException 読み取りに失敗した場合
 	 */
 	private final void note(Item item) throws IOException {
-		item.set(fields.cache(Qxsl.NOTE).field(read(50)));
+		item.set(cache(Qxsl.NOTE, read(50)));
 	}
 }

@@ -12,7 +12,6 @@ import java.time.format.DateTimeFormatter;
 
 import qxsl.draft.Qxsl;
 import qxsl.draft.Time;
-import qxsl.field.FieldManager;
 import qxsl.model.Item;
 import qxsl.table.PrintDecoder;
 
@@ -38,7 +37,6 @@ public final class CqwwDecoder extends PrintDecoder {
 	private static final int RRST = 7;
 	private static final int RCVD = 8;
 	private final DateTimeFormatter tstamp;
-	private final FieldManager fields;
 
 	/**
 	 * 指定された入力を読み込むデコーダを構築します。
@@ -48,7 +46,6 @@ public final class CqwwDecoder extends PrintDecoder {
 	 */
 	public CqwwDecoder(Reader reader) {
 		super("cqww", reader);
-		this.fields = new FieldManager();
 		this.tstamp = getTimeDecoder();
 	}
 
@@ -140,7 +137,7 @@ public final class CqwwDecoder extends PrintDecoder {
 	 * @param text コールサインの文字列
 	 */
 	private final void call(Item item, String text) {
-		item.set(fields.cache(Qxsl.CALL).field(text));
+		item.set(cache(Qxsl.CALL, text));
 	}
 
 	/**
@@ -162,7 +159,7 @@ public final class CqwwDecoder extends PrintDecoder {
 	 * @param text 通信方式の文字列
 	 */
 	private final void mode(Item item, String text) {
-		item.set(fields.cache(Qxsl.MODE).field(text));
+		item.set(cache(Qxsl.MODE, text));
 	}
 
 	/**
@@ -173,7 +170,7 @@ public final class CqwwDecoder extends PrintDecoder {
 	 * @param text レポートの文字列
 	 */
 	private final void sRST(Item item, String text) {
-		item.getSent().set(fields.cache(Qxsl.RSTQ).field(text));
+		item.getSent().set(cache(Qxsl.RSTQ, text));
 	}
 
 	/**
@@ -184,7 +181,7 @@ public final class CqwwDecoder extends PrintDecoder {
 	 * @param text ナンバーの文字列
 	 */
 	private final void sent(Item item, String text) {
-		item.getSent().set(fields.cache(Qxsl.CODE).field(text));
+		item.getSent().set(cache(Qxsl.CODE, text));
 	}
 
 	/**
@@ -195,7 +192,7 @@ public final class CqwwDecoder extends PrintDecoder {
 	 * @param text レポートの文字列
 	 */
 	private final void rRST(Item item, String text) {
-		item.getRcvd().set(fields.cache(Qxsl.RSTQ).field(text));
+		item.getRcvd().set(cache(Qxsl.RSTQ, text));
 	}
 
 	/**
@@ -206,6 +203,6 @@ public final class CqwwDecoder extends PrintDecoder {
 	 * @param text ナンバーの文字列
 	 */
 	private final void rcvd(Item item, String text) {
-		item.getRcvd().set(fields.cache(Qxsl.CODE).field(text));
+		item.getRcvd().set(cache(Qxsl.CODE, text));
 	}
 }

@@ -11,7 +11,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.xml.namespace.QName;
 
-import qxsl.field.FieldManager;
 import qxsl.model.Item;
 import qxsl.table.PrintDecoder;
 import qxsl.value.Field;
@@ -29,7 +28,6 @@ import static gaas.table.AdisFactory.URI;
  * @since 2019/07/08
  */
 public final class AdisDecoder extends PrintDecoder {
-	private final FieldManager fields;
 	private final Pattern pattern;
 	private boolean isValid;
 
@@ -41,7 +39,6 @@ public final class AdisDecoder extends PrintDecoder {
 	 */
 	public AdisDecoder(Reader reader) {
 		super("adis", reader);
-		this.fields = new FieldManager();
 		this.pattern = Pattern.compile(get("regex"));
 	}
 
@@ -122,10 +119,9 @@ public final class AdisDecoder extends PrintDecoder {
 	 * @since 2020/09/06
 	 */
 	private final Field field(Matcher match, String field) {
-		final int index = match.end();
-		final var local = match.group(1).toUpperCase();
-		final var bytes = Integer.parseInt(match.group(2));
-		final var value = field.substring(index, index + bytes);
-		return fields.cache(new QName(URI, local)).field(value);
+		final var sub = field.substring(match.end());
+		final var key = match.group(1).toUpperCase();
+		final var num = Integer.parseInt(match.group(2));
+		return cache(new QName(URI, key), sub.substring(0, num));
 	}
 }

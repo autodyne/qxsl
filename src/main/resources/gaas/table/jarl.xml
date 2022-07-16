@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
+<entry key="type">jarl</entry>
 <entry key="name">JARL LOG (R2.1)</entry>
 <entry key="extensions">txt</entry>
 <entry key="desc-text">
