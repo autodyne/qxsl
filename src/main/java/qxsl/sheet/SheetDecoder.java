@@ -8,7 +8,7 @@ package qxsl.sheet;
 import java.io.IOException;
 
 /**
- * 永続化された要約書類を読み取るためのデコーダです。
+ * 所定の書式の要約書類を所定の構造に読み込む仕組みです。
  *
  *
  * @author 無線部開発班

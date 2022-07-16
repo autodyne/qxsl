@@ -16,7 +16,7 @@ import qxsl.model.Item;
 import qxsl.table.TableManager;
 
 /**
- * 要約書類または交信記録から適切な書式で交信記録を読み取ります。
+ * 書式を自動判別してバイト列の交信記録を読み取ります。
  *
  *
  * @author 無線部開発班

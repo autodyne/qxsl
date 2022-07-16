@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 /**
- * 文字列による交信記録を書き出すためのエンコーダの共通実装です。
+ * 印字可能な文字列の交信記録を書き出す機能を提供します。
  *
  *
  * @author 無線部開発班

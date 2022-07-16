@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.StringJoiner;
 
 /**
- * 交信記録を要約する書式はこのインターフェースを継承します。
+ * 所定の書式で要約書類を読み書きする機能を提供します。
  *
  *
  * @author 無線部開発班

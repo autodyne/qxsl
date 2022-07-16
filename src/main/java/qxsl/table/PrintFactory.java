@@ -9,7 +9,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 
 /**
- * 印字可能な文字列で交信記録を表す書式の共通実装です。
+ * 印字可能な文字列の交信記録を処理する機能を提供します。
  *
  *
  * @author 無線部開発班

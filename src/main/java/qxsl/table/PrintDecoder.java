@@ -11,7 +11,7 @@ import java.io.Reader;
 import java.util.LinkedList;
 
 /**
- * 文字列による交信記録を読み込むためのデコーダの共通実装です。
+ * 印字可能な文字列の交信記録を読み込む機能を提供します。
  *
  *
  * @author 無線部開発班

@@ -12,7 +12,7 @@ import java.util.StringJoiner;
 import qxsl.model.Item;
 
 /**
- * 交信記録を永続化する書式はこのインターフェースを継承します。
+ * 所定の書式で交信記録を読み書きする機能を提供します。
  *
  *
  * @author 無線部開発班

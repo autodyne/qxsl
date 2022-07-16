@@ -12,7 +12,7 @@ import java.util.List;
 import qxsl.model.Item;
 
 /**
- * 永続化された交信記録を読み取るためのデコーダです。
+ * 所定の書式の交信記録を標準構造に読み込む仕組みです。
  *
  *
  * @author 無線部開発班

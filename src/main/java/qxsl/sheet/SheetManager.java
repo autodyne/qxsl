@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.ServiceLoader;
 
 /**
- * 要約書類の書式をクラスパスから自動的に検出して管理します。
+ * 要約書類の書式を自動的に検出して管理する仕組みです。
  *
  *
  * @author 無線部開発班

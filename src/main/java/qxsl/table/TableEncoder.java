@@ -11,7 +11,7 @@ import java.util.List;
 import qxsl.model.Item;
 
 /**
- * 交信記録を所定の書式で永続化するためのエンコーダです。
+ * 標準構造の交信記録を所定の書式に書き出す仕組みです。
  *
  *
  * @author 無線部開発班

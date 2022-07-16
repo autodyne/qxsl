@@ -9,7 +9,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 
 /**
- * 印字可能な文字列で要約書類を表す書式の共通実装です。
+ * 印字可能な文字列の要約書類を処理する機能を提供します。
  *
  *
  * @author 無線部開発班

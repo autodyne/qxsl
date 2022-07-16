@@ -8,7 +8,7 @@ package qxsl.sheet;
 import java.io.IOException;
 
 /**
- * 要約書類を所定の書式で永続化するためのエンコーダです。
+ * 所定の構造の要約書類を所定の書式に書き出す仕組みです。
  *
  *
  * @author 無線部開発班

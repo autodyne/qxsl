@@ -12,7 +12,7 @@ import java.util.Properties;
 import qxsl.utils.AssetUtil;
 
 /**
- * 書式の説明を設定ファイルから取得する仕組みを提供します。
+ * 書式の説明を設定ファイルから取得する機能を提供します。
  *
  *
  * @author 無線部開発班
