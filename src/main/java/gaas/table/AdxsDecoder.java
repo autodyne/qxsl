@@ -31,7 +31,6 @@ import static gaas.table.AdxsFactory.*;
  * @since 2019/07/08
  */
 public final class AdxsDecoder extends BasicDecoder {
-	private final AdxsFactory format;
 	private final Reader source;
 	private XMLEventReader reader;
 
@@ -40,11 +39,9 @@ public final class AdxsDecoder extends BasicDecoder {
 	 *
 	 *
 	 * @param reader 入力
-	 * @param format 書式
 	 */
-	public AdxsDecoder(Reader reader, AdxsFactory format) {
+	public AdxsDecoder(Reader reader) {
 		super("adxs");
-		this.format = format;
 		this.source = reader;
 	}
 
@@ -192,7 +189,7 @@ public final class AdxsDecoder extends BasicDecoder {
 	 */
 	private final XMLEventReader reader() throws IOException {
 		try {
-			final var string = format.valid(this.source);
+			final var string = verify(this.source);
 			final var factor = XMLInputFactory.newInstance();
 			final var reader = factor.createXMLEventReader(string);
 			return factor.createFilteredReader(reader, new Skip());

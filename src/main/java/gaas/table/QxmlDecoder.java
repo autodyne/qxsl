@@ -19,7 +19,7 @@ import javax.xml.stream.events.XMLEvent;
 
 import qxsl.field.FieldManager;
 import qxsl.model.Item;
-import qxsl.table.TableDecoder;
+import qxsl.table.BasicDecoder;
 import qxsl.value.Tuple;
 
 import static gaas.table.QxmlFactory.ITEM;
@@ -35,9 +35,8 @@ import static gaas.table.QxmlFactory.SENT;
  *
  * @since 2013/02/22
  */
-public final class QxmlDecoder extends TableDecoder {
+public final class QxmlDecoder extends BasicDecoder {
 	private final FieldManager fields;
-	private final QxmlFactory format;
 	private final Reader source;
 	private XMLEventReader reader;
 
@@ -46,11 +45,10 @@ public final class QxmlDecoder extends TableDecoder {
 	 *
 	 *
 	 * @param reader 入力
-	 * @param format 書式
 	 */
-	public QxmlDecoder(Reader reader, QxmlFactory format) {
+	public QxmlDecoder(Reader reader) {
+		super("qxml");
 		this.fields = new FieldManager();
-		this.format = format;
 		this.source = reader;
 	}
 
@@ -190,7 +188,7 @@ public final class QxmlDecoder extends TableDecoder {
 	 */
 	private final XMLEventReader reader() throws IOException {
 		try {
-			final var string = format.valid(this.source);
+			final var string = verify(this.source);
 			final var factor = XMLInputFactory.newInstance();
 			final var reader = factor.createXMLEventReader(string);
 			return factor.createFilteredReader(reader, new Skip());
