@@ -53,8 +53,8 @@ public final class CqwwFactoryTest extends Assertions {
 			item.set(new Call(alnum(13)));
 			item.set(new Mode(alnum(2)));
 			item.getRcvd().set(new RSTQ(randInt(600)));
-			item.getRcvd().set(new Code(alnum(6)));
 			item.getSent().set(new RSTQ(randInt(600)));
+			item.getRcvd().set(new Code(alnum(6)));
 			item.getSent().set(new Code(alnum(6)));
 			items.add(item);
 		}

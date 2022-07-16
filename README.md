@@ -11,7 +11,7 @@ QxSL is a Java library for processing amateur-radio log files, including scoring
 
 ## Features
 
-- provides log en/decoders for QXML, [ADIF](http://adif.org), [Cabrillo](https://wwrof.org/cabrillo/), [zLog](http://www.zlog.org), [CTESTWIN](http://e.gmobb.jp/ctestwin/Download.html), etc.
+- provides log en/decoders for QXML, [ADIF](https://adif.org), [Cabrillo](https://wwrof.org/cabrillo/), [zLog](https://zlog.org), [CTESTWIN](http://e.gmobb.jp/ctestwin/Download.html), [HAMLOG](http://www.hamlog.com), etc.
 - provides tabulation & scoring frameworks for amateur-radio contests and awards.
 - provides the rulekit framework which allows you to write contest rules in JS, Ruby, Python, and LISP.
 
@@ -23,7 +23,7 @@ QxSL is a Java library for processing amateur-radio log files, including scoring
 ## Applications
 
 - [ZyLO](https://github.com/nextzlog/zylo).
-- [ATS-4](https://github.com/nextzlog/ats4) for [ALLJA1](http://ja1zlo.u-tokyo.org/allja1).
+- [ATS-4](https://github.com/nextzlog/ats4) for [ALLJA1](https://ja1zlo.u-tokyo.org/allja1).
 
 ## Sample Codes
 
@@ -145,6 +145,7 @@ The following LISP programs are bundled inside the JAR file, as sample codes in 
 |`znew`|zLog    |`.zlox`|
 |`zdos`|zLog    |`.txt` |
 |`zall`|zLog    |`.all` |
+|`hbin`|HAMLOG  |`.hdb` |
 |`cbin`|CTESTWIN|`.lg8` |
 |`ctxt`|CTESTWIN|`.txt` |
 

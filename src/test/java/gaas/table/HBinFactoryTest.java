@@ -20,19 +20,20 @@ import static qxsl.junit.RandomNumberParameterExtension.randInt;
 import static qxsl.junit.RandomStringParameterExtension.alnum;
 
 /**
- * {@link JarlFactory}クラスの挙動を検査します。
+ * {@link HBinFactory}クラスの挙動を検査します。
  *
  *
  * @author 無線部開発班
  *
- * @since 2017/02/26
+ * @since 2022/07/16
  */
-public final class JarlFactoryTest extends Assertions {
-	private final JarlFactory format = new JarlFactory();
+public final class HBinFactoryTest extends Assertions {
+	private final HBinFactory format = new HBinFactory();
 	private final TableManager tables = new TableManager();
 	private final ArrayList<Band> bands = new ArrayList<>();
+	private final ArrayList<Watt> watts = new ArrayList<>();
 
-	public JarlFactoryTest() {
+	public HBinFactoryTest() {
 		bands.add(new Band(3_500));
 		bands.add(new Band(7_000));
 		bands.add(new Band(14_000));
@@ -49,14 +50,13 @@ public final class JarlFactoryTest extends Assertions {
 			final var item = new Item();
 			item.set(Time.now().drop());
 			item.set(bands.get(randInt(bands.size())));
-			item.set(new Call(alnum(13)));
-			item.set(new Mode(alnum(5)));
-			item.set(new Mul1(alnum(7)));
+			item.set(new Call(alnum(20)));
+			item.set(new Mode(alnum(4)));
+			item.set(new Note(alnum(54)));
+			item.set(new Name(alnum(12)));
 			item.getRcvd().set(new RSTQ(randInt(600)));
 			item.getSent().set(new RSTQ(randInt(600)));
-			item.getRcvd().set(new Code(alnum(7)));
-			item.getSent().set(new Code(alnum(7)));
-			items.add(item);
+			item.getRcvd().set(new Code(alnum(6)));
 		}
 		assertThat(format.decode(format.encode(items))).isEqualTo(items);
 		assertThat(tables.decode(format.encode(items))).isEqualTo(items);

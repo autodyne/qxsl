@@ -7,5 +7,6 @@ gaas.table.CTxtFactory
 gaas.table.ZAllFactory
 gaas.table.ZDosFactory
 gaas.table.CBinFactory
+gaas.table.HBinFactory
 gaas.table.ZBinFactory
 gaas.table.ZNewFactory

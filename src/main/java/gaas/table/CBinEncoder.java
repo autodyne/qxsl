@@ -195,7 +195,7 @@ public final class CBinEncoder extends BasicEncoder {
 	 * @throws IOException 書き込みに失敗した場合
 	 */
 	private final void time(Time time) throws IOException {
-		if(time == null) target.writeLong(0);
+		if(time == null) target.write(new byte[8]);
 		else target.writeLong(cDTime.encode(time));
 	}
 

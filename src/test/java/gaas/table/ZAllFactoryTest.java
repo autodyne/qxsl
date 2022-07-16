@@ -56,8 +56,8 @@ public final class ZAllFactoryTest extends Assertions {
 			item.set(new Mul1(alnum(5)));
 			item.set(new Mul2(alnum(5)));
 			item.getRcvd().set(new RSTQ(randInt(600)));
-			item.getRcvd().set(new Code(alnum(7)));
 			item.getSent().set(new RSTQ(randInt(600)));
+			item.getRcvd().set(new Code(alnum(7)));
 			item.getSent().set(new Code(alnum(7)));
 			items.add(item);
 		}

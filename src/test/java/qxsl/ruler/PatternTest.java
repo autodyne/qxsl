@@ -15,6 +15,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import qxsl.draft.Code;
 import qxsl.draft.Mode;
 import qxsl.draft.Name;
 import qxsl.draft.Time;
@@ -44,6 +45,7 @@ public final class PatternTest extends Assertions {
 		back.set(Mode.from(item));
 		item.set(Time.from(item).year(2020).drop());
 		back.set(Time.from(back).year(2020).drop());
+		back.getSent().set(Code.from(item.getSent()));
 		assertThat(item).isEqualTo(back);
 	}
 

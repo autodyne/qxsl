@@ -67,8 +67,8 @@ public final class ZNewFactoryTest extends Assertions {
 			item.set(new Mul1(alnum(30)));
 			item.set(new Mul2(alnum(30)));
 			item.getRcvd().set(new RSTQ(randInt(600)));
-			item.getRcvd().set(new Code(alnum(30)));
 			item.getSent().set(new RSTQ(randInt(600)));
+			item.getRcvd().set(new Code(alnum(30)));
 			item.getSent().set(new Code(alnum(30)));
 			item.getSent().set(watts.get(randInt(watts.size())));
 			items.add(item);

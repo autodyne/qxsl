@@ -312,6 +312,7 @@
 		((equal fmt "zall") (transform-zlog it))
 		((equal fmt "zdos") (transform-zdos it))
 		((equal fmt "cbin") (transform-zdos it))
+		((equal fmt "hbin") (transform-qxsl it))
 		((equal fmt "zbin") (transform-zlog it))
 		((equal fmt "znew") (transform-zlog it))))
 

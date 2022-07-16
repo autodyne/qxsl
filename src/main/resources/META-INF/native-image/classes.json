@@ -486,6 +486,12 @@
 		"allPublicFields": true
 	},
 	{
+		"name": "gaas.table.HBinFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
 		"name": "gaas.table.JarlFactory",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,

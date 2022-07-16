@@ -115,6 +115,7 @@ public final class CBinFactory extends BasicFactory {
 		/**
 		 * この列挙子に対応する周波数帯を返します。
 		 *
+		 *
 		 * @return 周波数帯
 		 */
 		public Band toBand() {
@@ -123,6 +124,7 @@ public final class CBinFactory extends BasicFactory {
 
 		/**
 		 * 指定された周波数に対応する列挙子を返します。
+		 *
 		 *
 		 * @param band 周波数
 		 *
@@ -135,6 +137,7 @@ public final class CBinFactory extends BasicFactory {
 
 		/**
 		 * 指定された序数に対応する列挙子を返します。
+		 *
 		 *
 		 * @param band 序数
 		 *
@@ -195,6 +198,7 @@ public final class CBinFactory extends BasicFactory {
 		/**
 		 * この列挙子に対応するモードを返します。
 		 *
+		 *
 		 * @return モード
 		 */
 		public Mode toMode() {
@@ -203,6 +207,7 @@ public final class CBinFactory extends BasicFactory {
 
 		/**
 		 * 指定されたモードに対応する列挙子を返します。
+		 *
 		 *
 		 * @param mode モード
 		 *
@@ -215,6 +220,7 @@ public final class CBinFactory extends BasicFactory {
 
 		/**
 		 * 指定された序数に対応する列挙子を返します。
+		 *
 		 *
 		 * @param mode 序数
 		 *
@@ -247,6 +253,7 @@ public final class CBinFactory extends BasicFactory {
 		/**
 		 * 指定された時刻を解読します。
 		 *
+		 *
 		 * @param binary 時刻のビット列
 		 *
 		 * @return 日時
@@ -258,6 +265,7 @@ public final class CBinFactory extends BasicFactory {
 
 		/**
 		 * 指定された日時をエンコードします。
+		 *
 		 *
 		 * @param field 日時
 		 *
