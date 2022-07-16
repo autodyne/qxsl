@@ -8,6 +8,7 @@ package gaas.sheet;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.stream.EventFilter;
@@ -16,6 +17,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
 
+import qxsl.sheet.PrintDecoder;
 import qxsl.sheet.SheetDecoder;
 
 import static gaas.sheet.JarlFactory.DOC;
@@ -30,10 +32,9 @@ import static java.util.stream.Collectors.joining;
  *
  * @since 2014/11/04
  */
-public final class JarlDecoder implements SheetDecoder {
+public final class JarlDecoder extends PrintDecoder {
 	private final Map<String, String> values;
 	private final BufferedReader source;
-	private final JarlFactory format;
 	private XMLEventReader reader;
 
 	/**
@@ -41,12 +42,11 @@ public final class JarlDecoder implements SheetDecoder {
 	 *
 	 *
 	 * @param reader 入力
-	 * @param format 書式
 	 */
-	public JarlDecoder(Reader reader, JarlFactory format) {
-		this.source = new BufferedReader(reader);
+	public JarlDecoder(Reader reader) {
+		super("jarl", "SJIS");
 		this.values = new HashMap<>();
-		this.format = format;
+		this.source = new BufferedReader(reader);
 	}
 
 	/**
@@ -63,19 +63,6 @@ public final class JarlDecoder implements SheetDecoder {
 		} catch (XMLStreamException ex) {
 			throw new IOException(ex);
 		}
-	}
-
-	/**
-	 * 指定された属性の値を返します。
-	 *
-	 *
-	 * @param key 属性の名前
-	 *
-	 * @return 属性の値
-	 */
-	@Override
-	public final byte[] getBinary(String key) {
-		return format.stringToByteArray(getString(key));
 	}
 
 	/**
@@ -138,9 +125,9 @@ public final class JarlDecoder implements SheetDecoder {
 	 */
 	private final XMLEventReader reader() throws IOException {
 		try {
-			final var string = format.valid(preprocess());
+			final var reader = verify(new StringReader(preprocess()));
 			final var factor = XMLInputFactory.newInstance();
-			final var source = factor.createXMLEventReader(string);
+			final var source = factor.createXMLEventReader(reader);
 			return factor.createFilteredReader(source, new Skip());
 		} catch (XMLStreamException ex) {
 			throw new IOException(ex);
@@ -157,8 +144,8 @@ public final class JarlDecoder implements SheetDecoder {
 	 */
 	private final String preprocess() throws IOException {
 		final var text = source.lines().collect(joining("\n"));
-		final var bare = format.get("BARE");
-		final var quot = format.get("QUOT");
+		final var bare = get("BARE");
+		final var quot = get("QUOT");
 		final var form = text.replaceAll(bare, quot);
 		return String.format("<%1$s>%2$s</%1$s>", DOC, form);
 	}

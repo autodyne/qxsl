@@ -38,7 +38,7 @@ public final class Cab3Factory extends PrintFactory {
 	 */
 	@Override
 	public final SheetDecoder decoder(Reader reader) {
-		return new Cab3Decoder(reader, this);
+		return new Cab3Decoder(reader);
 	}
 
 	/**
@@ -51,6 +51,6 @@ public final class Cab3Factory extends PrintFactory {
 	 */
 	@Override
 	public final SheetEncoder encoder(Writer writer) {
-		return new Cab3Encoder(writer, this);
+		return new Cab3Encoder(writer);
 	}
 }

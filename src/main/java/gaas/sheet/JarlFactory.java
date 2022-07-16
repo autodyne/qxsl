@@ -5,14 +5,9 @@
 *******************************************************************************/
 package gaas.sheet;
 
-import java.io.IOException;
 import java.io.Reader;
-import java.io.StringReader;
 import java.io.Writer;
 import javax.xml.namespace.QName;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
 
 import org.xml.sax.SAXException;
 
@@ -31,8 +26,6 @@ import qxsl.sheet.SheetEncoder;
 public final class JarlFactory extends PrintFactory {
 	public static final QName DOC = new QName("DOCUMENT");
 	public static final QName SUM = new QName("SUMMARYSHEET");
-	private final String JXSD = "jarl.xsd";
-	private final Schema schema;
 
 	/**
 	 * 構文の定義を読み取って書式を構築します。
@@ -42,7 +35,6 @@ public final class JarlFactory extends PrintFactory {
 	 */
 	public JarlFactory() throws SAXException {
 		super("jarl", "SJIS");
-		this.schema = loadSchema();
 	}
 
 	/**
@@ -55,7 +47,7 @@ public final class JarlFactory extends PrintFactory {
 	 */
 	@Override
 	public final SheetDecoder decoder(Reader reader) {
-		return new JarlDecoder(reader, this);
+		return new JarlDecoder(reader);
 	}
 
 	/**
@@ -68,42 +60,6 @@ public final class JarlFactory extends PrintFactory {
 	 */
 	@Override
 	public final SheetEncoder encoder(Writer writer) {
-		return new JarlEncoder(writer, this);
-	}
-
-	/**
-	 * 書式の構文の定義をリソースから読み取ります。
-	 *
-	 *
-	 * @return スキーマ
-	 *
-	 * @throws SAXException スキーマの例外
-	 *
-	 * @since 2020/09/05
-	 */
-	private final Schema loadSchema() throws SAXException {
-		final var fact = SchemaFactory.newDefaultInstance();
-		return fact.newSchema(getClass().getResource(JXSD));
-	}
-
-	/**
-	 * 指定された文字列がこの書式に従うか検証します。
-	 *
-	 *
-	 * @param string 文字列
-	 *
-	 * @return 読み取った文字列を読み直す入力
-	 *
-	 * @throws IOException 構文または読み取り時の例外
-	 */
-	public Reader valid(String string) throws IOException {
-		try {
-			final var reader = new StringReader(string);
-			final var source = new StreamSource(reader);
-			this.schema.newValidator().validate(source);
-			return new StringReader(string);
-		} catch (SAXException ex) {
-			throw new IOException(ex);
-		}
+		return new JarlEncoder(writer);
 	}
 }

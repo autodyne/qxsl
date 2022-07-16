@@ -11,7 +11,7 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
-import qxsl.sheet.SheetEncoder;
+import qxsl.sheet.PrintEncoder;
 
 import static gaas.sheet.JarlFactory.SUM;
 
@@ -23,10 +23,9 @@ import static gaas.sheet.JarlFactory.SUM;
  *
  * @since 2017/03/11
  */
-public final class JarlEncoder implements SheetEncoder {
+public final class JarlEncoder extends PrintEncoder {
 	private final Map<String, String> values;
 	private final PrintWriter target;
-	private final JarlFactory format;
 	private final String LOGKEY;
 
 	/**
@@ -34,13 +33,12 @@ public final class JarlEncoder implements SheetEncoder {
 	 *
 	 *
 	 * @param writer 出力
-	 * @param format 書式
 	 */
-	public JarlEncoder(Writer writer, JarlFactory format) {
-		this.target = new PrintWriter(writer, true);
+	public JarlEncoder(Writer writer) {
+		super("jarl", "SJIS");
+		this.LOGKEY = getTableKey();
 		this.values = new HashMap<>();
-		this.format = format;
-		this.LOGKEY = format.getTableKey();
+		this.target = new PrintWriter(writer, true);
 	}
 
 	/**
@@ -52,18 +50,6 @@ public final class JarlEncoder implements SheetEncoder {
 	@Override
 	public final void close() throws IOException {
 		target.close();
-	}
-
-	/**
-	 * 指定された属性と属性値を設定します。
-	 *
-	 *
-	 * @param key 属性の名前
-	 * @param val 属性の値
-	 */
-	@Override
-	public final void set(String key, byte[] val) {
-		set(key, format.byteArrayToString(val));
 	}
 
 	/**

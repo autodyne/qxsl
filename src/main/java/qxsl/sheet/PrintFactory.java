@@ -34,30 +34,6 @@ public abstract class PrintFactory extends BasicFactory {
 	}
 
 	/**
-	 * 指定された文字列をバイト列に変換します。
-	 *
-	 *
-	 * @param text 文字列
-	 *
-	 * @return バイト列
-	 */
-	public final byte[] stringToByteArray(Object text) {
-		return String.valueOf(text).getBytes(cset);
-	}
-
-	/**
-	 * 指定されたバイト列を文字列に変換します。
-	 *
-	 *
-	 * @param data バイト列
-	 *
-	 * @return 文字列
-	 */
-	public final String byteArrayToString(byte[] data) {
-		return new String(data, cset);
-	}
-
-	/**
 	 * 指定された入力を読み込むデコーダを返します。
 	 *
 	 *

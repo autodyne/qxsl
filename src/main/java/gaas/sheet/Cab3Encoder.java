@@ -11,7 +11,7 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
-import qxsl.sheet.SheetEncoder;
+import qxsl.sheet.PrintEncoder;
 
 /**
  * 所定の構造の要約書類をCabrillo書式で永続化します。
@@ -21,22 +21,20 @@ import qxsl.sheet.SheetEncoder;
  *
  * @since 2019/05/03
  */
-public final class Cab3Encoder implements SheetEncoder {
+public final class Cab3Encoder extends PrintEncoder {
 	private final Map<String, String> values;
 	private final PrintWriter target;
-	private final Cab3Factory format;
 
 	/**
 	 * 指定された出力に書き込むエンコーダを構築します。
 	 *
 	 *
 	 * @param writer 出力
-	 * @param format 書式
 	 */
-	public Cab3Encoder(Writer writer, Cab3Factory format) {
-		this.target = new PrintWriter(writer, true);
+	public Cab3Encoder(Writer writer) {
+		super("cab3", "ASCII");
 		this.values = new HashMap<>();
-		this.format = format;
+		this.target = new PrintWriter(writer, true);
 	}
 
 	/**
@@ -48,18 +46,6 @@ public final class Cab3Encoder implements SheetEncoder {
 	@Override
 	public final void close() throws IOException {
 		target.close();
-	}
-
-	/**
-	 * 指定された属性と属性値を設定します。
-	 *
-	 *
-	 * @param key 属性の名前
-	 * @param val 属性の値
-	 */
-	@Override
-	public final void set(String key, byte[] val) {
-		set(key, format.byteArrayToString(val));
 	}
 
 	/**

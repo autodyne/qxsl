@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
 
+import qxsl.sheet.PrintDecoder;
 import qxsl.sheet.SheetDecoder;
 
 /**
@@ -22,22 +23,20 @@ import qxsl.sheet.SheetDecoder;
  *
  * @since 2019/05/03
  */
-public final class Cab3Decoder implements SheetDecoder {
+public final class Cab3Decoder extends PrintDecoder {
 	private final Map<String, StringJoiner> values;
 	private final BufferedReader source;
-	private final Cab3Factory format;
 
 	/**
 	 * 指定された入力を読み込むデコーダを構築します。
 	 *
 	 *
 	 * @param reader 入力
-	 * @param format 書式
 	 */
-	public Cab3Decoder(Reader reader, Cab3Factory format) {
-		this.source = new BufferedReader(reader);
+	public Cab3Decoder(Reader reader) {
+		super("cab3", "ASCII");
 		this.values = new HashMap<>();
-		this.format = format;
+		this.source = new BufferedReader(reader);
 	}
 
 	/**
@@ -49,19 +48,6 @@ public final class Cab3Decoder implements SheetDecoder {
 	@Override
 	public final void close() throws IOException {
 		source.close();
-	}
-
-	/**
-	 * 指定された属性の値を返します。
-	 *
-	 *
-	 * @param key 属性の名前
-	 *
-	 * @return 属性の値
-	 */
-	@Override
-	public final byte[] getBinary(String key) {
-		return format.stringToByteArray(getString(key));
 	}
 
 	/**

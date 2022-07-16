@@ -24,6 +24,7 @@ mon day time  callsign      sent         rcvd      multi   MHz mode pts memo
   6   1 1738 JA1YGX     100110       59100105     100105     7 SSB  1   
 &lt;/LOGSHEET&gt;
 </entry>
+<entry key="schema">jarl.xsd</entry>
 <entry key="BARE">&lt;(\S+?) (\S+?)=([^\s"]+?)&gt;</entry>
 <entry key="QUOT">&lt;$1 $2=&quot;$3&quot;&gt;</entry>
 </properties>
