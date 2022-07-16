@@ -13,4 +13,18 @@ QSO: 28000 CW 2017-06-03 1651 JA1ZLO        599 100110 QC2SOA        599 1308   
 </entry>
 <entry key="time-decoder">uuuu-MM-dd HHmm</entry>
 <entry key="time-encoder">uuuu-MM-dd HHmm</entry>
+<entry key="item-fields">
+{qxsl.org}band,
+{qxsl.org}mode,
+{qxsl.org}time,
+{qxsl.org}call
+</entry>
+<entry key="rcvd-fields">
+{qxsl.org}rstq,
+{qxsl.org}code
+</entry>
+<entry key="sent-fields">
+{qxsl.org}rstq,
+{qxsl.org}code
+</entry>
 </properties>

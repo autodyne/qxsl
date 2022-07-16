@@ -4,4 +4,18 @@
 <entry key="name">CTESTWIN (LG8)</entry>
 <entry key="extensions">lg8</entry>
 <entry key="desc-text"></entry>
+<entry key="item-fields">
+{qxsl.org}call,
+{qxsl.org}mode,
+{qxsl.org}band,
+{qxsl.org}time,
+{qxsl.org}name,
+{qxsl.org}note
+</entry>
+<entry key="rcvd-fields">
+{qxsl.org}code
+</entry>
+<entry key="sent-fields">
+{qxsl.org}code
+</entry>
 </properties>

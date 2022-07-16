@@ -16,4 +16,5 @@ ADIF
 </entry>
 <entry key="created">uuuuMMdd HHmmss</entry>
 <entry key="regex">&lt;(\w+?):(\d+?)(:\w)?&gt;</entry>
+<entry key="field-uri">adif.org</entry>
 </properties>

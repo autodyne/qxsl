@@ -4,4 +4,23 @@
 <entry key="name">zLog (ZLOX)</entry>
 <entry key="extensions">zlox</entry>
 <entry key="desc-text"></entry>
+<entry key="item-fields">
+{qxsl.org}time,
+{qxsl.org}call,
+{qxsl.org}mode,
+{qxsl.org}band,
+{qxsl.org}mul1,
+{qxsl.org}mul2,
+{qxsl.org}name,
+{qxsl.org}note
+</entry>
+<entry key="rcvd-fields">
+{qxsl.org}code,
+{qxsl.org}rstq
+</entry>
+<entry key="sent-fields">
+{qxsl.org}code,
+{qxsl.org}rstq,
+{qxsl.org}watt
+</entry>
 </properties>

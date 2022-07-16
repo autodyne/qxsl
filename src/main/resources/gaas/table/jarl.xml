@@ -12,4 +12,19 @@ DATE (JST) TIME   BAND MODE  CALLSIGN      SENTNo      RCVDNo      Mlt    Pts
 </entry>
 <entry key="time-decoder">uuuu-MM-dd HH:mm</entry>
 <entry key="time-encoder">uuuu-MM-dd HH:mm</entry>
+<entry key="item-fields">
+{qxsl.org}time,
+{qxsl.org}band,
+{qxsl.org}mode,
+{qxsl.org}call,
+{qxsl.org}mul1
+</entry>
+<entry key="rcvd-fields">
+{qxsl.org}rstq,
+{qxsl.org}code
+</entry>
+<entry key="sent-fields">
+{qxsl.org}rstq,
+{qxsl.org}code
+</entry>
 </properties>

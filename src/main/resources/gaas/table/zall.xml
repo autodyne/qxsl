@@ -14,4 +14,22 @@ Examples:
 <entry key="head-text">zLog for Windows</entry>
 <entry key="time-decoder">uuuu/MM/dd HH:mm</entry>
 <entry key="time-encoder">uuuu/MM/dd HH:mm</entry>
+<entry key="item-fields">
+{qxsl.org}time,
+{qxsl.org}call,
+{qxsl.org}mul1,
+{qxsl.org}mul2,
+{qxsl.org}band,
+{qxsl.org}mode,
+{qxsl.org}name,
+{qxsl.org}note
+</entry>
+<entry key="rcvd-fields">
+{qxsl.org}rstq,
+{qxsl.org}code
+</entry>
+<entry key="sent-fields">
+{qxsl.org}rstq,
+{qxsl.org}code
+</entry>
 </properties>

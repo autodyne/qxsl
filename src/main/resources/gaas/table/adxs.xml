@@ -4,4 +4,5 @@
 <entry key="name">Sub ADIF (ADX)</entry>
 <entry key="extensions">adx</entry>
 <entry key="desc-file">adxs.xsd</entry>
+<entry key="field-uri">adif.org</entry>
 </properties>

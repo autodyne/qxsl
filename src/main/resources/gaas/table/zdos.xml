@@ -16,4 +16,19 @@ mon day time  callsign      sent         rcvd      multi   MHz mode pts memo
 </entry>
 <entry key="time-decoder">M  ppd HHmm</entry>
 <entry key="time-encoder">MM  dd HHmm</entry>
+<entry key="item-fields">
+{qxsl.org}time,
+{qxsl.org}call,
+{qxsl.org}mul1,
+{qxsl.org}band,
+{qxsl.org}mode,
+{qxsl.org}name,
+{qxsl.org}note
+</entry>
+<entry key="rcvd-fields">
+{qxsl.org}code
+</entry>
+<entry key="sent-fields">
+{qxsl.org}code
+</entry>
 </properties>
