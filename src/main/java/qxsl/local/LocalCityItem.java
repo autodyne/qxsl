@@ -24,12 +24,11 @@ public final class LocalCityItem implements Serializable {
 	 * 指定された地域を構築します。
 	 *
 	 *
-	 * @param values 地域の詳細を表す文字列
+	 * @param path 地域の絶対パス
 	 */
-	protected LocalCityItem(String values) {
-		final var strm = Arrays.stream(values.split(" +"));
-		this.path = strm.distinct().toArray(String[]::new);
-		this.size = this.path.length - 1;
+	public LocalCityItem(String...path) {
+		this.path = path;
+		this.size = path.length - 1;
 	}
 
 	/**

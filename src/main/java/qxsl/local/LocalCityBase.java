@@ -8,10 +8,10 @@ package qxsl.local;
 import java.io.UncheckedIOException;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import qxsl.utils.AssetUtil;
 
@@ -32,10 +32,10 @@ public final class LocalCityBase {
 	 * 指定された内容を収録するデータベースを構築します。
 	 *
 	 *
-	 * @param stream 内容
+	 * @param list 内容
 	 */
-	private LocalCityBase(Stream<LocalCityItem> stream) {
-		this.list = stream.collect(Collectors.toList());
+	private LocalCityBase(List<LocalCityItem> list) {
+		this.list = list;
 		this.forwardMap = new HashMap<>();
 		this.reverseMap = new HashMap<>();
 		for(var v: list) forwardMap.put(v.code(), v);
@@ -87,8 +87,22 @@ public final class LocalCityBase {
 	 * @throws UncheckedIOException 存在しない場合
 	 */
 	public static final LocalCityBase load(String name) {
-		final var lines = AssetUtil.root().lines(name);
-		final var route = lines.map(LocalCityItem::new);
-		return new LocalCityBase(route);
+		final var ls = AssetUtil.root().lines(name);
+		final var db = ls.map(LocalCityBase::parse);
+		return new LocalCityBase(db.collect(Collectors.toList()));
+	}
+
+	/**
+	 * 指定された文字列からエントリを生成します。
+	 *
+	 *
+	 * @param entry データベースの行
+	 *
+	 * @return エントリ
+	 */
+	private static final LocalCityItem parse(String entry) {
+		final var list = new LinkedHashSet<String>();
+		for(final var val: entry.split("\\h+")) list.add(val);
+		return new LocalCityItem(list.toArray(new String[0]));
 	}
 }
