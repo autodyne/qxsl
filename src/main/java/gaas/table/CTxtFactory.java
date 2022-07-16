@@ -38,7 +38,7 @@ public final class CTxtFactory extends PrintFactory {
 	 */
 	@Override
 	public final TableDecoder decoder(Reader reader) {
-		return new CTxtDecoder(reader, this);
+		return new CTxtDecoder(reader);
 	}
 
 	/**
@@ -51,6 +51,6 @@ public final class CTxtFactory extends PrintFactory {
 	 */
 	@Override
 	public final TableEncoder encoder(Writer writer) {
-		return new CTxtEncoder(writer, this);
+		return new CTxtEncoder(writer);
 	}
 }

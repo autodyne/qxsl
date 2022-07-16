@@ -6,6 +6,7 @@
 package qxsl.table;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.io.Writer;
 
 /**
@@ -16,16 +17,20 @@ import java.io.Writer;
  *
  * @since 2013/06/24
  */
-public abstract class PrintEncoder extends TableEncoder {
+public abstract class PrintEncoder extends BasicEncoder {
 	private final Writer writer;
 
 	/**
 	 * 指定された出力に書き込むエンコーダを構築します。
 	 *
 	 *
+	 * @param type 書式の名前
 	 * @param writer 交信記録を書き込む出力
+	 *
+	 * @throws UncheckedIOException 設定の取得時の例外
 	 */
-	public PrintEncoder(Writer writer) {
+	public PrintEncoder(String type, Writer writer) {
+		super(type);
 		this.writer = writer;
 	}
 

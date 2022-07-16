@@ -39,20 +39,17 @@ public final class CqwwDecoder extends PrintDecoder {
 	private static final int RCVD = 8;
 	private final DateTimeFormatter tstamp;
 	private final FieldManager fields;
-	private final CqwwFactory format;
 
 	/**
 	 * 指定された入力を読み込むデコーダを構築します。
 	 *
 	 *
 	 * @param reader 入力
-	 * @param format 書式
 	 */
-	public CqwwDecoder(Reader reader, CqwwFactory format) {
-		super(reader);
-		this.format = format;
+	public CqwwDecoder(Reader reader) {
+		super("cqww", reader);
 		this.fields = new FieldManager();
-		this.tstamp = format.getTimeDecoder();
+		this.tstamp = getTimeDecoder();
 	}
 
 	/**

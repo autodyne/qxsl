@@ -13,7 +13,7 @@ import javax.xml.stream.XMLStreamWriter;
 
 import qxsl.field.FieldManager;
 import qxsl.model.Item;
-import qxsl.table.TableEncoder;
+import qxsl.table.BasicEncoder;
 import qxsl.value.Field;
 
 import static gaas.table.AdxsFactory.*;
@@ -28,7 +28,7 @@ import static javax.xml.stream.XMLOutputFactory.IS_REPAIRING_NAMESPACES;
  *
  * @since 2019/07/08
  */
-public final class AdxsEncoder extends TableEncoder {
+public final class AdxsEncoder extends BasicEncoder {
 	private final FieldManager fields;
 	private final Writer target;
 	private XMLStreamWriter writer;
@@ -40,8 +40,9 @@ public final class AdxsEncoder extends TableEncoder {
 	 * @param writer 出力
 	 */
 	public AdxsEncoder(Writer writer) {
-		this.fields = new FieldManager();
+		super("adxs");
 		this.target = writer;
+		this.fields = new FieldManager();
 	}
 
 	/**
@@ -108,40 +109,6 @@ public final class AdxsEncoder extends TableEncoder {
 			writer.flush();
 		} catch (XMLStreamException ex) {
 			throw new IOException(ex);
-		}
-	}
-
-	/**
-	 * ストリームに書き込まずに交信記録を検査します。
-	 *
-	 *
-	 * @param item 交信記録
-	 *
-	 * @throws IOException 検査の結果の例外
-	 *
-	 * @since 2020/09/04
-	 */
-	@Override
-	public final void verify(Item item) throws IOException {
-		for(var f: item) verify(f);
-		for(var f: item.getRcvd()) verify(f);
-		for(var f: item.getSent()) verify(f);
-	}
-
-	/**
-	 * ストリームに書き込まずに属性を検査します。
-	 *
-	 *
-	 * @param fld 属性
-	 *
-	 * @throws IOException 検査の結果の例外
-	 *
-	 * @since 2020/09/04
-	 */
-	private final void verify(Field fld) throws IOException {
-		if(!NURI.equals(fld.name().getNamespaceURI())) {
-			final var str = "field element '%s' is not supported";
-			throw new IOException(String.format(str, fld.name()));
 		}
 	}
 

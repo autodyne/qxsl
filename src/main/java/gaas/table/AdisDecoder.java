@@ -30,7 +30,6 @@ import static gaas.table.AdisFactory.URI;
  */
 public final class AdisDecoder extends PrintDecoder {
 	private final FieldManager fields;
-	private final AdisFactory format;
 	private final Pattern pattern;
 	private boolean isValid;
 
@@ -39,14 +38,11 @@ public final class AdisDecoder extends PrintDecoder {
 	 *
 	 *
 	 * @param reader 入力
-	 * @param format 書式
 	 */
-	public AdisDecoder(Reader reader, AdisFactory format) {
-		super(reader);
+	public AdisDecoder(Reader reader) {
+		super("adis", reader);
 		this.fields = new FieldManager();
-		this.format = format;
-		this.isValid = false;
-		this.pattern = Pattern.compile(format.get("regex"));
+		this.pattern = Pattern.compile(get("regex"));
 	}
 
 	/**

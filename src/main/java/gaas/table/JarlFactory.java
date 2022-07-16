@@ -38,7 +38,7 @@ public final class JarlFactory extends PrintFactory {
 	 */
 	@Override
 	public final TableDecoder decoder(Reader reader) {
-		return new JarlDecoder(reader, this);
+		return new JarlDecoder(reader);
 	}
 
 	/**
@@ -51,6 +51,6 @@ public final class JarlFactory extends PrintFactory {
 	 */
 	@Override
 	public final TableEncoder encoder(Writer writer) {
-		return new JarlEncoder(writer, this);
+		return new JarlEncoder(writer);
 	}
 }

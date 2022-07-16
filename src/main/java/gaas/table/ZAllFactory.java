@@ -38,7 +38,7 @@ public final class ZAllFactory extends PrintFactory {
 	 */
 	@Override
 	public final TableDecoder decoder(Reader reader) {
-		return new ZAllDecoder(reader, this);
+		return new ZAllDecoder(reader);
 	}
 
 	/**
@@ -51,6 +51,6 @@ public final class ZAllFactory extends PrintFactory {
 	 */
 	@Override
 	public final TableEncoder encoder(Writer writer) {
-		return new ZAllEncoder(writer, this);
+		return new ZAllEncoder(writer);
 	}
 }

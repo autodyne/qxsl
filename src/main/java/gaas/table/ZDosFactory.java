@@ -38,7 +38,7 @@ public final class ZDosFactory extends PrintFactory {
 	 */
 	@Override
 	public final TableDecoder decoder(Reader reader) {
-		return new ZDosDecoder(reader, this);
+		return new ZDosDecoder(reader);
 	}
 
 	/**
@@ -51,6 +51,6 @@ public final class ZDosFactory extends PrintFactory {
 	 */
 	@Override
 	public final TableEncoder encoder(Writer writer) {
-		return new ZDosEncoder(writer, this);
+		return new ZDosEncoder(writer);
 	}
 }

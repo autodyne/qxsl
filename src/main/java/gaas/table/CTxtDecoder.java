@@ -33,20 +33,17 @@ public final class CTxtDecoder extends PrintDecoder {
 	private static final int RCVD = 6;
 	private final DateTimeFormatter tstamp;
 	private final FieldManager fields;
-	private final CTxtFactory format;
 
 	/**
 	 * 指定された入力を読み込むデコーダを構築します。
 	 *
 	 *
 	 * @param reader 入力
-	 * @param format 書式
 	 */
-	public CTxtDecoder(Reader reader, CTxtFactory format) {
-		super(reader);
-		this.format = format;
+	public CTxtDecoder(Reader reader) {
+		super("ctxt", reader);
 		this.fields = new FieldManager();
-		this.tstamp = format.getTimeDecoderOld();
+		this.tstamp = getTimeDecoderOld();
 	}
 
 	/**

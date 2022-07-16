@@ -8,6 +8,7 @@ package qxsl.table;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.UncheckedIOException;
 import java.util.LinkedList;
 
 /**
@@ -18,7 +19,7 @@ import java.util.LinkedList;
  *
  * @since 2013/06/24
  */
-public abstract class PrintDecoder extends TableDecoder {
+public abstract class PrintDecoder extends BasicDecoder {
 	private static final int AHEAD_LIMIT = 1000;
 	private final BufferedReader reader;
 
@@ -26,9 +27,13 @@ public abstract class PrintDecoder extends TableDecoder {
 	 * 指定された入力を読み込むデコーダを構築します。
 	 *
 	 *
+	 * @param type 書式の名前
 	 * @param reader 交信記録を読み込む入力
+	 *
+	 * @throws UncheckedIOException 設定の取得時の例外
 	 */
-	public PrintDecoder(Reader reader) {
+	public PrintDecoder(String type, Reader reader) {
+		super(type);
 		this.reader = new BufferedReader(reader);
 	}
 

@@ -13,7 +13,7 @@ import java.util.Arrays;
 import qxsl.draft.Qxsl;
 import qxsl.field.FieldManager;
 import qxsl.model.Item;
-import qxsl.table.TableDecoder;
+import qxsl.table.BasicDecoder;
 
 import gaas.table.ZBinFactory.BandEnum;
 import gaas.table.ZBinFactory.DateTime;
@@ -28,7 +28,7 @@ import gaas.table.ZBinFactory.WattEnum;
  *
  * @since 2013/02/23
  */
-public final class ZBinDecoder extends TableDecoder {
+public final class ZBinDecoder extends BasicDecoder {
 	private final DataInputStream source;
 	private final FieldManager fields;
 	private DateTime tDTime;
@@ -40,6 +40,7 @@ public final class ZBinDecoder extends TableDecoder {
 	 * @param stream 入力
 	 */
 	public ZBinDecoder(InputStream stream) {
+		super("zbin");
 		this.source = new DataInputStream(stream);
 		this.fields = new FieldManager();
 	}

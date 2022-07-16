@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 import qxsl.model.Item;
-import qxsl.table.TableDecoder;
+import qxsl.table.BasicDecoder;
 
 /**
  * zLogのZLOX書式で永続化された交信記録を解読します。
@@ -21,7 +21,7 @@ import qxsl.table.TableDecoder;
  *
  * @since 2022/06/22
  */
-public final class ZNewDecoder extends TableDecoder {
+public final class ZNewDecoder extends BasicDecoder {
 	private final DataInputStream source;
 	private final ZBinDecoder reader;
 	private int numQSOs;
@@ -33,6 +33,7 @@ public final class ZNewDecoder extends TableDecoder {
 	 * @param stream 入力
 	 */
 	public ZNewDecoder(InputStream stream) {
+		super("znew");
 		this.source = new DataInputStream(stream);
 		this.reader = new ZBinDecoder(stream);
 	}

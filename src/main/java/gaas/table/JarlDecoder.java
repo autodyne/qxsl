@@ -36,20 +36,17 @@ public final class JarlDecoder extends PrintDecoder {
 	private static final int MUL1 = 9;
 	private final DateTimeFormatter tstamp;
 	private final FieldManager fields;
-	private final JarlFactory format;
 
 	/**
 	 * 指定された入力を読み込むデコーダを構築します。
 	 *
 	 *
 	 * @param reader 入力
-	 * @param format 書式
 	 */
-	public JarlDecoder(Reader reader, JarlFactory format) {
-		super(reader);
-		this.format = format;
+	public JarlDecoder(Reader reader) {
+		super("jarl", reader);
 		this.fields = new FieldManager();
-		this.tstamp = format.getTimeDecoder();
+		this.tstamp = getTimeDecoder();
 	}
 
 	/**

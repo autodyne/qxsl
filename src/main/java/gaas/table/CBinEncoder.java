@@ -17,7 +17,7 @@ import qxsl.draft.Name;
 import qxsl.draft.Qxsl;
 import qxsl.draft.Time;
 import qxsl.model.Item;
-import qxsl.table.TableEncoder;
+import qxsl.table.BasicEncoder;
 import qxsl.value.Field;
 
 import gaas.table.CBinFactory.BandEnum;
@@ -32,7 +32,7 @@ import gaas.table.CBinFactory.ModeEnum;
  *
  * @since 2019/05/04
  */
-public final class CBinEncoder extends TableEncoder {
+public final class CBinEncoder extends BasicEncoder {
 	private final DataOutputStream target;
 	private final DateTime cDTime;
 	private final Set<Name> names;
@@ -46,6 +46,7 @@ public final class CBinEncoder extends TableEncoder {
 	 * @param stream 出力
 	 */
 	public CBinEncoder(OutputStream stream) {
+		super("cbin");
 		this.names = new LinkedHashSet<Name>();
 		this.target = new DataOutputStream(stream);
 		this.cDTime = new DateTime();
@@ -91,45 +92,6 @@ public final class CBinEncoder extends TableEncoder {
 	public final void foot() throws IOException {
 		confs();
 		names();
-	}
-
-	/**
-	 * ストリームに書き込まずに交信記録を検査します。
-	 *
-	 *
-	 * @param item 交信記録
-	 *
-	 * @throws IOException 検査の結果の例外
-	 *
-	 * @since 2020/09/04
-	 */
-	@Override
-	public final void verify(Item item) throws IOException {
-		for(var f: item) verify(f);
-		for(var f: item.getRcvd()) verify(f);
-		for(var f: item.getSent()) verify(f);
-	}
-
-	/**
-	 * ストリームに書き込まずに属性を検査します。
-	 *
-	 *
-	 * @param fld 属性
-	 *
-	 * @throws IOException 検査の結果の例外
-	 *
-	 * @since 2020/09/04
-	 */
-	private final void verify(Field fld) throws IOException {
-		if(fld.name().equals(Qxsl.CALL)) return;
-		if(fld.name().equals(Qxsl.CODE)) return;
-		if(fld.name().equals(Qxsl.MODE)) return;
-		if(fld.name().equals(Qxsl.BAND)) return;
-		if(fld.name().equals(Qxsl.TIME)) return;
-		if(fld.name().equals(Qxsl.NAME)) return;
-		if(fld.name().equals(Qxsl.NOTE)) return;
-		final var str = "field element '%s' is not supported";
-		throw new IOException(String.format(str, fld.name()));
 	}
 
 	/**

@@ -42,7 +42,7 @@ public final class AdisFactory extends PrintFactory {
 	 */
 	@Override
 	public final TableDecoder decoder(Reader reader) {
-		return new AdisDecoder(reader, this);
+		return new AdisDecoder(reader);
 	}
 
 	/**
@@ -55,6 +55,6 @@ public final class AdisFactory extends PrintFactory {
 	 */
 	@Override
 	public final TableEncoder encoder(Writer writer) {
-		return new AdisEncoder(writer, this);
+		return new AdisEncoder(writer);
 	}
 }

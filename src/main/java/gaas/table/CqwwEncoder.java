@@ -14,7 +14,6 @@ import qxsl.draft.Qxsl;
 import qxsl.draft.Time;
 import qxsl.model.Item;
 import qxsl.table.PrintEncoder;
-import qxsl.value.Field;
 
 import gaas.table.CqwwFactory.BandEnum;
 
@@ -29,20 +28,18 @@ import static java.time.ZoneOffset.UTC;
  * @since 2019/05/04
  */
 public final class CqwwEncoder extends PrintEncoder {
+	private static final String QSO = "QSO:";
 	private final DateTimeFormatter tstamp;
-	private final CqwwFactory format;
 
 	/**
 	 * 指定された出力に書き込むエンコーダを構築します。
 	 *
 	 *
 	 * @param writer 出力
-	 * @param format 書式
 	 */
-	public CqwwEncoder(Writer writer, CqwwFactory format) {
-		super(writer);
-		this.format = format;
-		this.tstamp = format.getTimeEncoder();
+	public CqwwEncoder(Writer writer) {
+		super("cqww", writer);
+		this.tstamp = getTimeEncoder();
 	}
 
 	/**
@@ -68,44 +65,6 @@ public final class CqwwEncoder extends PrintEncoder {
 	public final void foot() throws IOException {}
 
 	/**
-	 * ストリームに書き込まずに交信記録を検査します。
-	 *
-	 *
-	 * @param item 交信記録
-	 *
-	 * @throws IOException 検査の結果の例外
-	 *
-	 * @since 2020/09/04
-	 */
-	@Override
-	public final void verify(Item item) throws IOException {
-		for(var f: item) verify(f);
-		for(var f: item.getRcvd()) verify(f);
-		for(var f: item.getSent()) verify(f);
-	}
-
-	/**
-	 * ストリームに書き込まずに属性を検査します。
-	 *
-	 *
-	 * @param fld 属性
-	 *
-	 * @throws IOException 検査の結果の例外
-	 *
-	 * @since 2020/09/04
-	 */
-	private final void verify(Field fld) throws IOException {
-		if(fld.name().equals(Qxsl.BAND)) return;
-		if(fld.name().equals(Qxsl.MODE)) return;
-		if(fld.name().equals(Qxsl.TIME)) return;
-		if(fld.name().equals(Qxsl.RSTQ)) return;
-		if(fld.name().equals(Qxsl.CODE)) return;
-		if(fld.name().equals(Qxsl.CALL)) return;
-		final var str = "field element '%s' is not supported";
-		throw new IOException(String.format(str, fld.name()));
-	}
-
-	/**
 	 * ストリームの現在位置に交信記録を書き込みます。
 	 *
 	 *
@@ -117,7 +76,7 @@ public final class CqwwEncoder extends PrintEncoder {
 	 */
 	@Override
 	public final void output(Item item) throws IOException {
-		space(format.QSO);
+		space(QSO);
 		band((Band) item.some(Qxsl.BAND));
 		space(item.some(Qxsl.MODE).padHead(2));
 		time((Time) item.some(Qxsl.TIME));

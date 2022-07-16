@@ -18,7 +18,7 @@ import javax.xml.stream.events.XMLEvent;
 
 import qxsl.field.FieldManager;
 import qxsl.model.Item;
-import qxsl.table.TableDecoder;
+import qxsl.table.BasicDecoder;
 import qxsl.value.Tuple;
 
 import static gaas.table.AdxsFactory.*;
@@ -31,7 +31,7 @@ import static gaas.table.AdxsFactory.*;
  *
  * @since 2019/07/08
  */
-public final class AdxsDecoder extends TableDecoder {
+public final class AdxsDecoder extends BasicDecoder {
 	private final FieldManager fields;
 	private final AdxsFactory format;
 	private final Reader source;
@@ -45,9 +45,10 @@ public final class AdxsDecoder extends TableDecoder {
 	 * @param format 書式
 	 */
 	public AdxsDecoder(Reader reader, AdxsFactory format) {
-		this.fields = new FieldManager();
+		super("adxs");
 		this.format = format;
 		this.source = reader;
+		this.fields = new FieldManager();
 	}
 
 	/**

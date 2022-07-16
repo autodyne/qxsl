@@ -16,7 +16,6 @@ import qxsl.value.Field;
 
 import static gaas.table.AdisFactory.EOH;
 import static gaas.table.AdisFactory.EOR;
-import static gaas.table.AdisFactory.URI;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
 
@@ -30,19 +29,16 @@ import static java.time.format.DateTimeFormatter.ofPattern;
  */
 public final class AdisEncoder extends PrintEncoder {
 	private final FieldManager fields;
-	private final AdisFactory format;
 
 	/**
 	 * 指定された出力に書き込むエンコーダを構築します。
 	 *
 	 *
 	 * @param writer 出力
-	 * @param format 書式
 	 */
-	public AdisEncoder(Writer writer, AdisFactory format) {
-		super(writer);
+	public AdisEncoder(Writer writer) {
+		super("adis", writer);
 		this.fields = new FieldManager();
-		this.format = format;
 	}
 
 	/**
@@ -55,8 +51,8 @@ public final class AdisEncoder extends PrintEncoder {
 	 */
 	@Override
 	public final void head() throws IOException {
-		final var head = format.getHeaderText();
-		final var stmp = ofPattern(format.get("created"));
+		final var head = getHeaderText();
+		final var stmp = ofPattern(get("created"));
 		final var time = ZonedDateTime.now().format(stmp);
 		print(String.format(head, time.length(), time));
 		print(EOH);
@@ -73,38 +69,6 @@ public final class AdisEncoder extends PrintEncoder {
 	 */
 	@Override
 	public final void foot() throws IOException {}
-
-	/**
-	 * ストリームに書き込まずに交信記録を検査します。
-	 *
-	 *
-	 * @param item 交信記録
-	 *
-	 * @throws IOException 検査の結果の例外
-	 *
-	 * @since 2020/09/04
-	 */
-	@Override
-	public final void verify(Item item) throws IOException {
-		for(var f: item) verify(f);
-	}
-
-	/**
-	 * ストリームに書き込まずに属性を検査します。
-	 *
-	 *
-	 * @param fld 属性
-	 *
-	 * @throws IOException 検査の結果の例外
-	 *
-	 * @since 2020/09/04
-	 */
-	private final void verify(Field fld) throws IOException {
-		if(!URI.equals(fld.name().getNamespaceURI())) {
-			final var str = "field element '%s' is not supported";
-			throw new IOException(String.format(str, fld.name()));
-		}
-	}
 
 	/**
 	 * ストリームの現在位置に交信記録を書き込みます。

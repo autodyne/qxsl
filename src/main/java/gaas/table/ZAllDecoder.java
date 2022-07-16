@@ -39,20 +39,17 @@ public final class ZAllDecoder extends PrintDecoder {
 	private static final String EMPTY = "";
 	private final DateTimeFormatter tstamp;
 	private final FieldManager fields;
-	private final ZAllFactory format;
 
 	/**
 	 * 指定された入力を読み込むデコーダを構築します。
 	 *
 	 *
 	 * @param reader 入力
-	 * @param format 書式
 	 */
-	public ZAllDecoder(Reader reader, ZAllFactory format) {
-		super(reader);
-		this.format = format;
+	public ZAllDecoder(Reader reader) {
+		super("zall", reader);
 		this.fields = new FieldManager();
-		this.tstamp = format.getTimeDecoder();
+		this.tstamp = getTimeDecoder();
 	}
 
 	/**

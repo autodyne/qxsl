@@ -22,8 +22,6 @@ import qxsl.table.TableEncoder;
  * @since 2019/05/04
  */
 public final class CqwwFactory extends PrintFactory {
-	public static final String QSO = "QSO:";
-
 	/**
 	 * 書式を構築します。
 	 */
@@ -41,7 +39,7 @@ public final class CqwwFactory extends PrintFactory {
 	 */
 	@Override
 	public final TableDecoder decoder(Reader reader) {
-		return new CqwwDecoder(reader, this);
+		return new CqwwDecoder(reader);
 	}
 
 	/**
@@ -54,7 +52,7 @@ public final class CqwwFactory extends PrintFactory {
 	 */
 	@Override
 	public final TableEncoder encoder(Writer writer) {
-		return new CqwwEncoder(writer, this);
+		return new CqwwEncoder(writer);
 	}
 
 	/**

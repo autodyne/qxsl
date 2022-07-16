@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import qxsl.model.Item;
-import qxsl.table.TableEncoder;
+import qxsl.table.BasicEncoder;
 
 /**
  * 標準構造の交信記録をzLogのZLOX書式で永続化します。
@@ -20,7 +20,7 @@ import qxsl.table.TableEncoder;
  *
  * @since 2022/06/22
  */
-public final class ZNewEncoder extends TableEncoder {
+public final class ZNewEncoder extends BasicEncoder {
 	private final DataOutputStream target;
 	private final ZBinEncoder writer;
 
@@ -31,6 +31,7 @@ public final class ZNewEncoder extends TableEncoder {
 	 * @param stream 出力
 	 */
 	public ZNewEncoder(OutputStream stream) {
+		super("znew");
 		this.target = new DataOutputStream(stream);
 		this.writer = new ZBinEncoder(stream);
 	}
@@ -75,21 +76,6 @@ public final class ZNewEncoder extends TableEncoder {
 	 */
 	@Override
 	public final void foot() throws IOException {}
-
-	/**
-	 * ストリームに書き込まずに交信記録を検査します。
-	 *
-	 *
-	 * @param item 交信記録
-	 *
-	 * @throws IOException 検査の結果の例外
-	 *
-	 * @since 2020/09/04
-	 */
-	@Override
-	public final void verify(Item item) throws IOException {
-		writer.verify(item);
-	}
 
 	/**
 	 * ストリームの現在位置に交信記録を書き込みます。

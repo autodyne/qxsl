@@ -36,20 +36,17 @@ public final class ZDosDecoder extends PrintDecoder {
 	private static final String EMPTY = "";
 	private final DateTimeFormatter tstamp;
 	private final FieldManager fields;
-	private final ZDosFactory format;
 
 	/**
 	 * 指定された入力を読み込むデコーダを構築します。
 	 *
 	 *
 	 * @param reader 入力
-	 * @param format 書式
 	 */
-	public ZDosDecoder(Reader reader, ZDosFactory format) {
-		super(reader);
-		this.format = format;
+	public ZDosDecoder(Reader reader) {
+		super("zdos", reader);
 		this.fields = new FieldManager();
-		this.tstamp = format.getTimeDecoderOld();
+		this.tstamp = getTimeDecoderOld();
 	}
 
 	/**
