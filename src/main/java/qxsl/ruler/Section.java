@@ -39,10 +39,10 @@ public abstract class Section extends Library {
 	public abstract String name();
 
 	/**
-	 * 部門の番号を返します。
+	 * 部門の分類を返します。
 	 *
 	 *
-	 * @return 番号
+	 * @return 分類
 	 */
 	public abstract String code();
 

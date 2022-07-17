@@ -6,6 +6,7 @@
 package elva.form;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 
 import elva.lang.ElvaEval;
 import elva.lang.FormBase;
@@ -16,6 +17,7 @@ import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
 import qxsl.ruler.Contest;
+import qxsl.ruler.Section;
 
 /**
  * creates and returns a contest object.
@@ -169,5 +171,37 @@ final class ContestImpl extends Contest {
 	@Override
 	public final LocalDate getDeadLine(int year) {
 		return eval.apply(dead.form(year)).to(LocalDate.class);
+	}
+
+	/**
+	 * 複数の部門に登録可能な場合の限度を確認します。
+	 *
+	 *
+	 * @param code 確認の対象となる部門の分類
+	 *
+	 * @return 登録可能な個数の限度
+	 *
+	 * @since 2022/07/17
+	 */
+	@Override
+	public final int limitMultipleEntry(String code) {
+		return 1;
+	}
+
+	/**
+	 * 指定された部門にまとめて登録可能か確認します。
+	 *
+	 *
+	 * @param entries 参加を試みる部門の配列
+	 *
+	 * @return 規約に違反する場合は真
+	 *
+	 * @since 2022/07/17
+	 */
+	@Override
+	public final boolean conflict(Section[] entries) {
+		final var codes = new HashSet<String>();
+		for(var e: entries) codes.add(e.code());
+		return codes.size() < entries.length;
 	}
 }

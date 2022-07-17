@@ -105,10 +105,10 @@ final class SectionImpl extends Section {
 	}
 
 	/**
-	 * 部門の番号を返します。
+	 * 部門の分類を返します。
 	 *
 	 *
-	 * @return 部門の番号
+	 * @return 部門の分類
 	 */
 	@Override
 	public final String code() {

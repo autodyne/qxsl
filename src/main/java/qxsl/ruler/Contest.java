@@ -7,9 +7,9 @@ package qxsl.ruler;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * コンテストの規約はこのクラスを継承します。
@@ -20,17 +20,17 @@ import java.util.List;
  * @since 2016/11/25
  */
 public abstract class Contest extends Library implements Iterable<Section> {
-	private final List<Section> list;
+	private final Map<String, Section> map;
 
 	/**
 	 * 指定された部門を有する規約を構築します。
 	 *
 	 *
-	 * @param sects 部門の集合
+	 * @param sections 部門の集合
 	 */
-	public Contest(Section...sects) {
-		this.list = new ArrayList<>();
-		for(var s: sects) this.add(s);
+	public Contest(Section...sections) {
+		this.map = new LinkedHashMap<>();
+		for(var s: sections) this.add(s);
 	}
 
 	/**
@@ -149,12 +149,12 @@ public abstract class Contest extends Library implements Iterable<Section> {
 	 * 指定された部門をこの規約に追加します。
 	 *
 	 *
-	 * @param sec 追加する部門
+	 * @param section 追加する部門
 	 *
 	 * @return この規約
 	 */
-	public final Contest add(Section sec) {
-		this.list.add(sec);
+	public final Contest add(Section section) {
+		this.map.put(section.name(), section);
 		return this;
 	}
 
@@ -162,12 +162,12 @@ public abstract class Contest extends Library implements Iterable<Section> {
 	 * 指定された部門をこの規約から削除します。
 	 *
 	 *
-	 * @param sec 削除する部門
+	 * @param section 削除する部門
 	 *
 	 * @return この規約
 	 */
-	public final Contest remove(Section sec) {
-		this.list.remove(sec);
+	public final Contest remove(Section section) {
+		this.map.remove(section.name());
 		return this;
 	}
 
@@ -179,7 +179,7 @@ public abstract class Contest extends Library implements Iterable<Section> {
 	 */
 	@Override
 	public final Iterator<Section> iterator() {
-		return list.iterator();
+		return map.values().iterator();
 	}
 
 	/**
@@ -191,7 +191,30 @@ public abstract class Contest extends Library implements Iterable<Section> {
 	 * @return 該当する部門
 	 */
 	public final Section section(String name) {
-		for(var s: list) if(s.name().equals(name)) return s;
-		return null;
+		return this.map.get(name);
 	}
+
+	/**
+	 * 複数の部門に登録可能な場合の限度を確認します。
+	 *
+	 *
+	 * @param code 確認の対象となる部門の分類
+	 *
+	 * @return 登録可能な個数の限度
+	 *
+	 * @since 2022/07/17
+	 */
+	public abstract int limitMultipleEntry(String code);
+
+	/**
+	 * 指定された部門にまとめて登録可能か確認します。
+	 *
+	 *
+	 * @param entries 参加を試みる部門の配列
+	 *
+	 * @return 規約に違反する場合は真
+	 *
+	 * @since 2022/07/17
+	 */
+	public abstract boolean conflict(Section[] entries);
 }
