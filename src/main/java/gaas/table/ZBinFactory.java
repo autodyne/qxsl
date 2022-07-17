@@ -279,8 +279,10 @@ public final class ZBinFactory extends BasicFactory {
 	 * @since 2013/02/23
 	 */
 	public static final class DateTime {
-		private static final long MS_DAY = 86400000;
-		private static final long USEUTC = 0x7FFF;
+		private static final int MS_DAY = 86400000;
+		private static final int USEUTC = 0x7FFF;
+		private static final int USEJST = 0;
+		private static final int SECS = -60;
 		private final ZonedDateTime epoch;
 
 		/**
@@ -314,9 +316,10 @@ public final class ZBinFactory extends BasicFactory {
 		 * @since 2020/09/07
 		 */
 		public final short getOffset() {
-			final var zone = this.epoch.getOffset();
-			final var secs = zone.getTotalSeconds();
-			return Short.reverseBytes((short) (-secs / 60));
+			final var off = this.epoch.getOffset();
+			final int min = off.getTotalSeconds() / SECS;
+			final int val = off.equals(UTC)? USEUTC: min;
+			return Short.reverseBytes((short) val);
 		}
 
 		/**
@@ -339,12 +342,12 @@ public final class ZBinFactory extends BasicFactory {
 		 * 指定された日時をエンコードします。
 		 *
 		 *
-		 * @param field 日時
+		 * @param time 日時
 		 *
 		 * @return 時刻のビット列
 		 */
-		public final long encode(Time field) {
-			final var m = epoch.until(field.value(), MILLIS);
+		public final long encode(Time time) {
+			final var m = epoch.until(time.value(), MILLIS);
 			final var d = abs((double) m) % MS_DAY / MS_DAY;
 			final var b = Double.doubleToLongBits(d + m / MS_DAY);
 			return Long.reverseBytes(b);
@@ -359,10 +362,11 @@ public final class ZBinFactory extends BasicFactory {
 		 * @return 時刻の解析器
 		 */
 		public static final DateTime newInstance(short bits) {
-			final var zone = Short.reverseBytes(bits);
-			final var mins = -60 * zone;
-			if(zone == DateTime.USEUTC) return new DateTime(UTC);
-			return new DateTime(ZoneOffset.ofTotalSeconds(mins));
+			final int min = Short.reverseBytes(bits);
+			final var JST = ZoneId.of("JST", ZoneId.SHORT_IDS);
+			if(min == DateTime.USEUTC) return new DateTime(UTC);
+			if(min == DateTime.USEJST) return new DateTime(JST);
+			return new DateTime(ZoneOffset.ofTotalSeconds(SECS * min));
 		}
 	}
 }
