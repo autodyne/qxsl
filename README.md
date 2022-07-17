@@ -189,7 +189,8 @@ $ qxsl.exe source.zlox target.qxml qxml
 
 ## Contribution
 
-Feel free to contact [@nextzlog](https://twitter.com/nextzlog) on Twitter.
+Feel free to make issues at [nextzlog/todo](https://github.com/nextzlog/todo).
+Follow [@nextzlog](https://twitter.com/nextzlog) on Twitter.
 
 ## License
 
