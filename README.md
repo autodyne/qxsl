@@ -134,7 +134,7 @@ The following LISP programs are bundled inside the JAR file, as sample codes in 
 
 ### TableFactory
 
-| name | format | ext   |
+| type | format | ext   |
 |------|--------|-------|
 |`qxml`|QXML    |       |
 |`jarl`|JARL    |       |
@@ -151,7 +151,7 @@ The following LISP programs are bundled inside the JAR file, as sample codes in 
 
 ### SheetFactory
 
-| name | format  |
+| type | format  |
 |------|---------|
 |`jarl`|JARL R2.0|
 |`cab3`|Cabrillo3|

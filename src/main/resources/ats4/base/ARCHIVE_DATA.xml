@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<entry key="createTable">
+CREATE TABLE IF NOT EXISTS ARCHIVE_DATA (
+	id int IDENTITY,
+	call varchar(16),
+	file varchar(64),
+	data blob,
+	primary key(id)
+);
+</entry>
+<entry key="deleteTable">
+DROP TABLE IF EXISTS ARCHIVE_DATA;
+</entry>
+<entry key="push">
+INSERT INTO ARCHIVE_DATA (
+	call,
+	file,
+	data
+) VALUES(?, ?, ?);
+</entry>
+<entry key="drop">
+DELETE FROM ARCHIVE_DATA WHERE
+	call = ? AND
+	file = ? AND
+	data = ?;
+</entry>
+<entry key="list">
+SELECT
+	call,
+	file,
+	data
+FROM ARCHIVE_DATA;
+</entry>
+<entry key="call">
+SELECT
+	call,
+	file,
+	data
+FROM ARCHIVE_DATA WHERE
+	call = ?
+ORDER BY id;
+</entry>
+</properties>
