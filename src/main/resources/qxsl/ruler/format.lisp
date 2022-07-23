@@ -430,3 +430,6 @@
 		(set-qxsl-RSTQ new (zdos-RSTQ it))
 		(set-qxsl-code new (zdos-code it))
 		(set-qxsl-CODE new (zdos-CODE it)) new))
+
+; returns the environment
+(pattern normalize transform)

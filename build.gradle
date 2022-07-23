@@ -10,13 +10,11 @@ mainClassName = 'qxsl.utils.ShellUtil'
 repositories.mavenCentral()
 
 dependencies {
-	implementation 'info.picocli:picocli:4.6.3'
 	testImplementation 'org.assertj:assertj-core:+'
 	testImplementation 'org.jruby:jruby-core:+'
 	testImplementation 'org.junit.jupiter:junit-jupiter-engine:+'
 	testImplementation 'org.junit.jupiter:junit-jupiter-params:+'
 	testImplementation 'junit:junit:+'
-	annotationProcessor 'info.picocli:picocli-codegen:4.6.3'
 }
 
 compileJava {

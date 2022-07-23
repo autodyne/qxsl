@@ -76,5 +76,5 @@
 (defun AREA9? it (member (CITY it) cities-area9))
 (defun AREA0? it (member (CITY it) cities-area0))
 
-; returns the environment as a pattern
+; returns the environment
 (pattern normalize transform)

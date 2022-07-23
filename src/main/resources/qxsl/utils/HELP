@@ -1,0 +1,5 @@
+Usage: qxsl <source> <target> <format>
+amateur-radio contest log processor
+  <source> source file, e.g., foo.adi
+  <target> target file, e.g., bar.txt
+  <format> file format, e.g., {}
