@@ -6,10 +6,9 @@
 package qxsl.ruler;
 
 import java.time.LocalDate;
+import java.time.Year;
 import java.time.ZoneId;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * コンテストの規約はこのクラスを継承します。
@@ -45,6 +44,18 @@ public abstract class Contest extends Library implements Iterable<Section> {
 	}
 
 	/**
+	 * コンテストの開催年を返します。
+	 *
+	 *
+	 * @return 名前
+	 *
+	 * @since 2022/07/23
+	 */
+	public int year() {
+		return Year.now().getValue();
+	}
+
+	/**
 	 * コンテストの名前を返します。
 	 *
 	 *
@@ -53,28 +64,58 @@ public abstract class Contest extends Library implements Iterable<Section> {
 	public abstract String name();
 
 	/**
-	 * コンテストの主催者を返します。
+	 * コンテストの運営の名前を返します。
 	 *
 	 *
-	 * @return コンテストの主催者
+	 * @return 運営の名前
 	 */
 	public abstract String host();
 
 	/**
-	 * コンテストの連絡先を返します。
+	 * コンテストの運営の連絡先を返します。
 	 *
 	 *
-	 * @return コンテストの連絡先
+	 * @return 運営の連絡先
 	 */
 	public abstract String mail();
 
 	/**
-	 * コンテストの規約の場所を返します。
+	 * コンテストの規約の参照先を返します。
 	 *
 	 *
-	 * @return コンテストの規約の場所
+	 * @return 規約の参照先
 	 */
 	public abstract String link();
+
+	/**
+	 * コンテストの開始日を計算します。
+	 *
+	 *
+	 * @return 開始日
+	 */
+	public final LocalDate getStartDay() {
+		return getStartDay(year());
+	}
+
+	/**
+	 * コンテストの終了日を計算します。
+	 *
+	 *
+	 * @return 終了日
+	 */
+	public final LocalDate getFinalDay() {
+		return getFinalDay(year());
+	}
+
+	/**
+	 * コンテストの締切日を計算します。
+	 *
+	 *
+	 * @return 締切日
+	 */
+	public final LocalDate getDeadLine() {
+		return getDeadLine(year());
+	}
 
 	/**
 	 * 指定された年のコンテストの開始日を計算します。
@@ -107,42 +148,49 @@ public abstract class Contest extends Library implements Iterable<Section> {
 	public abstract LocalDate getDeadLine(int year);
 
 	/**
-	 * 指定された年の参加登録が受付可能か確認します。
+	 * 現時点で参加登録が受付可能か確認します。
 	 *
 	 *
-	 * @param year 開催年
+	 * @return 現在時刻で受付可能な場合は真
+	 */
+	public final boolean accept() {
+		return accept(ZoneId.systemDefault());
+	}
+
+	/**
+	 * 現時点で集計結果が閲覧可能か確認します。
+	 *
+	 *
+	 * @return 現在時刻で閲覧可能な場合は真
+	 */
+	public final boolean finish() {
+		return finish(ZoneId.systemDefault());
+	}
+
+	/**
+	 * 現時点で参加登録が受付可能か確認します。
+	 *
+	 *
 	 * @param zone タイムゾーン
 	 *
 	 * @return 現在時刻で受付可能な場合は真
 	 */
-	public boolean accept(int year, ZoneId zone) {
-		return !expired(year, LocalDate.now(zone));
+	public boolean accept(ZoneId zone) {
+		final var dead = this.getDeadLine(year());
+		return !LocalDate.now(zone).isAfter(dead);
 	}
 
 	/**
-	 * 指定された年の集計結果が閲覧可能か確認します。
+	 * 現時点で集計結果が閲覧可能か確認します。
 	 *
 	 *
-	 * @param year 開催年
 	 * @param zone タイムゾーン
 	 *
 	 * @return 現在時刻で閲覧可能な場合は真
 	 */
-	public boolean finish(int year, ZoneId zone) {
-		return expired(year, LocalDate.now(zone));
-	}
-
-	/**
-	 * 指定された年の締切日を経過した後か確認します。
-	 *
-	 *
-	 * @param year 開催年
-	 * @param date 時刻
-	 *
-	 * @return 経過後は真
-	 */
-	private boolean expired(int year, LocalDate date) {
-		return date.isAfter(getDeadLine(year));
+	public boolean finish(ZoneId zone) {
+		final var dead = this.getDeadLine(year());
+		return dead.isBefore(LocalDate.now(zone));
 	}
 
 	/**
@@ -192,6 +240,36 @@ public abstract class Contest extends Library implements Iterable<Section> {
 	 */
 	public final Section section(String name) {
 		return this.map.get(name);
+	}
+
+	/**
+	 * この規約の部門の名前のリストを返します。
+	 *
+	 *
+	 * @return 部門の名前のリスト
+	 *
+	 * @since 2022/07/18
+	 */
+	public final List<String> getSectionNames() {
+		final var set = new LinkedHashSet<String>();
+		for(final var s: this) set.add(s.name());
+		final var seq = new LinkedList<String>(set);
+		return Collections.unmodifiableList(seq);
+	}
+
+	/**
+	 * この規約の部門の分類のリストを返します。
+	 *
+	 *
+	 * @return 部門の分類のリスト
+	 *
+	 * @since 2022/07/18
+	 */
+	public final List<String> getSectionCodes() {
+		final var set = new LinkedHashSet<String>();
+		for(final var s: this) set.add(s.code());
+		final var seq = new LinkedList<String>(set);
+		return Collections.unmodifiableList(seq);
 	}
 
 	/**

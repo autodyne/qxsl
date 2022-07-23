@@ -20,6 +20,11 @@ import qxsl.model.Item;
  */
 public abstract class Section extends Library {
 	/**
+	 * 部門を構築します。
+	 */
+	public Section() {}
+
+	/**
 	 * 部門の名前を返します。
 	 *
 	 *
@@ -125,22 +130,6 @@ public abstract class Section extends Library {
 	public abstract int result(Summary items);
 
 	/**
-	 * 指定された総得点で入賞するか確認します。
-	 *
-	 *
-	 * @param result 総得点
-	 * @param scores 総得点の配列
-	 *
-	 * @return 入賞する場合は真
-	 */
-	public boolean win(int result, int[] scores) {
-		int rank = 0;
-		final int size = scores.length;
-		for(int score: scores) if(score > result) rank++;
-		return rank < Math.min(7, Math.ceil(0.1 * size));
-	}
-
-	/**
 	 * 指定された交信記録のマルチを集計します。
 	 *
 	 *
@@ -152,5 +141,20 @@ public abstract class Section extends Library {
 	 */
 	public final Summary summarize(List<Item> list) {
 		return new Summary(this, list);
+	}
+
+	/**
+	 * 指定された得点分布で入賞局数を返します。
+	 *
+	 *
+	 * @param scores 総得点の配列
+	 *
+	 * @return 入賞する参加局の数
+	 *
+	 * @since 2022/07/23
+	 */
+	public int getAwardLimit(int[] scores) {
+		final double size = 0.1 * scores.length;
+		return (int) Math.min(7, Math.ceil(size));
 	}
 }
