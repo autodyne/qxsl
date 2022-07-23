@@ -1,0 +1,115 @@
+/*******************************************************************************
+ * Amateur Radio Operational Logging Library 'qxsl' since 2013 February 16th
+ * License: GNU Lesser General Public License v3.0 (see LICENSE)
+ * Author: Journal of Hamradio Informatics (https://pafelog.net)
+*******************************************************************************/
+package ats4.base;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.List;
+
+import qxsl.ruler.Section;
+
+import ats4.data.RankingData;
+import ats4.warn.TableAccessException;
+import ats4.warn.TableSchemaException;
+
+/**
+ * 参加局の成績順位を管理する機能を提供します。
+ *
+ *
+ * @author 無線部開発班
+ *
+ * @since 2022/07/17
+ */
+public final class RankingTable extends AccountTable<RankingData> {
+	/**
+	 * 指定されたデータベースを利用します。
+	 *
+	 *
+	 * @param conn データベースの接続
+	 *
+	 * @throws TableAccessException 疎通の障害
+	 */
+	public RankingTable(Connection conn) {
+		super(conn, "RANKING_DATA");
+	}
+
+	/**
+	 * 検索結果に対応するレコードを構築します。
+	 *
+	 *
+	 * @param rs 検索結果
+	 *
+	 * @return レコード
+	 *
+	 * @throws TableSchemaException 構造の問題
+	 */
+	@Override
+	public final RankingData parse(ResultSet rs) {
+		return new RankingData(rs);
+	}
+
+	/**
+	 * 指定された呼出符号のレコードを返します。
+	 *
+	 *
+	 * @param call 呼出符号
+	 *
+	 * @return 対応するレコード
+	 *
+	 * @throws TableAccessException 疎通の障害
+	 * @throws TableSchemaException 構造の問題
+	 */
+	public final List<RankingData> byCall(String call) {
+		return new Select("call").value(call).execute();
+	}
+
+	/**
+	 * 指定された登録部門のレコードを返します。
+	 *
+	 *
+	 * @param sect 登録部門
+	 *
+	 * @return 対応するレコード
+	 *
+	 * @throws TableAccessException 疎通の障害
+	 * @throws TableSchemaException 構造の問題
+	 */
+	public final List<RankingData> bySect(String sect) {
+		return new Select("sect").value(sect).execute();
+	}
+
+	/**
+	 * 指定された登録部門のレコードを返します。
+	 *
+	 *
+	 * @param sect 登録部門
+	 *
+	 * @return 対応するレコード
+	 *
+	 * @throws TableAccessException 疎通の障害
+	 * @throws TableSchemaException 構造の問題
+	 */
+	public final List<RankingData> bySect(Section sect) {
+		return bySect(sect.name());
+	}
+
+	/**
+	 * 指定された登録部門の入賞局数を返します。
+	 *
+	 *
+	 * @param sect 登録部門
+	 *
+	 * @return 入賞する参加局の数
+	 *
+	 * @throws TableAccessException 疎通の障害
+	 * @throws TableSchemaException 構造の問題
+	 */
+	public final int getAwardLimit(Section sect) {
+		final var group = bySect(sect.name()).stream();
+		final var total = group.mapToInt(e -> e.total);
+		return sect.getAwardLimit(total.toArray());
+	}
+}
