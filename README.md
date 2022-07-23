@@ -17,7 +17,7 @@ QxSL is a Java library for processing amateur-radio log files, including scoring
 
 ## Documents
 
-- [Javadoc](https://nextzlog.github.io/qxsl/doc/index.html)
+- [Javadoc](https://nextzlog.github.io/qxsl/docs)
 - [ATS-4 (PDF)](https://pafelog.net/ats4.pdf)
 
 ## Applications

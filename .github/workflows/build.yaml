@@ -4,25 +4,60 @@ on:
     branches:
     - master
 jobs:
-  BuildQxSL:
-    runs-on: windows-latest
+  BuildJAR:
+    runs-on: ubuntu-latest
     env:
-      GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      NAME: github-actions[bot]
+      MAIL: github-actions[bot]@users.noreply.github.com
+      HEAD: ${{github.event.head_commit.message}}
+      DIST: ./dist
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - uses: actions/checkout@v2
+      with:
+        ref: gh-pages
+        path: ${{env.DIST}}
+    - uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 11
+    - uses: gradle/gradle-build-action@v1
+      with:
+        arguments: publish javadoc
+        gradle-version: current
+    - uses: actions/upload-artifact@v2
+      with:
+        name: build
+        path: build/libs/qxsl.jar
+    - name: 'publish docs'
+      run: |
+        git config user.name  ${{env.NAME}}
+        git config user.email ${{env.MAIL}}
+        git add docs mvn
+        git commit -m '${{env.HEAD}}'
+        git push
+      working-directory: ${{env.DIST}}
+  BuildEXE:
+    needs: BuildJAR
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/download-artifact@v2
     - uses: graalvm/setup-graalvm@v1
       with:
         version: '21.3.2'
         java-version: 11
         github-token: ${{secrets.GITHUB_TOKEN}}
         components: native-image
-    - uses: gradle/gradle-build-action@v1
-      with:
-        arguments: build
-        gradle-version: current
-    - run: choco install upx
-    - run: cp build/libs/qxsl.jar .
-    - run: native-image -jar qxsl.jar
-    - run: upx --lzma --best qxsl.exe
-    - run: gh release upload nightly qxsl.jar --clobber
-    - run: gh release upload nightly qxsl.exe --clobber
+    - name: 'native-image'
+      run: |
+        choco install upx
+        cp build/qxsl.jar .
+        native-image -jar qxsl.jar
+        upx --lzma --best qxsl.exe
+        gh release upload nightly qxsl.jar --clobber
+        gh release upload nightly qxsl.exe --clobber
+      env:
+        GH_TOKEN: ${{secrets.GITHUB_TOKEN}}

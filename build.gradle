@@ -38,15 +38,10 @@ jar.from configurations.compileClasspath.collect {
 	it.isDirectory()? it: zipTree(it)
 }
 
-task checkout(type: Exec) {
-	commandLine 'git', 'worktree', 'add', dist, 'gh-pages'
-	enabled = !file(dist).exists()
-}
-
 javadoc {
 	exclude 'elva/**'
 	exclude 'gaas/**'
-	destinationDir = file("$dist/doc")
+	destinationDir = file("$dist/docs")
 	options.links("https://docs.oracle.com/en/java/javase/$java/docs/api/")
 	options.header("<a href='https://github.com/nextzlog/qxsl'>GitHub</a>")
 	options.charSet = options.encoding = utf8
@@ -65,6 +60,5 @@ publishing.publications {
 	}
 }
 
-javadoc.dependsOn(checkout)
-publish.dependsOn(checkout)
-publish.mustRunAfter(checkout)
+publish.dependsOn(build)
+publish.mustRunAfter(build)
