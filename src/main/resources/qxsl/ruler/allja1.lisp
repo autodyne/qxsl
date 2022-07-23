@@ -102,11 +102,11 @@
 (defmacro MulOp (n c a p) `(build (label ,n) ,c ,a (score ,p) EntityMulOp))
 
 ; section codes
-(setq cSinHB "個人部門 (09:00-12:00)")
-(setq cSinLB "個人部門 (16:00-20:00)")
-(setq cSinDG "個人部門 (13:00-15:00)")
-(setq cMulAB "団体部門 (アナログ)")
-(setq cMulDG "団体部門 (デジタル)")
+(setq cSinHB "個人部門 09:00-12:00")
+(setq cSinLB "個人部門 16:00-20:00")
+(setq cSinDG "個人部門 13:00-15:00")
+(setq cMulAB "団体部門 アナログ")
+(setq cMulDG "団体部門 デジタル")
 (setq cMixJS "総合部門")
 
 ; remove prefectures
@@ -123,11 +123,12 @@
 (defmacro MulJS (name area test) `(MulOp ,name cMixJS ,area ,test))
 
 ; 不参加
-(rule (absence (format "%s 不参加" cSinHB) cSinHB))
-(rule (absence (format "%s 不参加" cSinLB) cSinLB))
-(rule (absence (format "%s 不参加" cSinDG) cSinDG))
-(rule (absence (format "%s 不参加" cMulAB) cMulAB))
-(rule (absence (format "%s 不参加" cMulDG) cMulDG))
+(rule (absence (format "%s 不参加 (チェックログ)" cSinHB) cSinHB))
+(rule (absence (format "%s 不参加 (チェックログ)" cSinLB) cSinLB))
+(rule (absence (format "%s 不参加 (チェックログ)" cSinDG) cSinDG))
+(rule (absence (format "%s 不参加 (チェックログ)" cMulAB) cMulAB))
+(rule (absence (format "%s 不参加 (チェックログ)" cMulDG) cMulDG))
+(rule (absence (format "%s 不参加 (チェックログ)" cMixJS) cMixJS))
 
 ; 1エリア内 個人 電信限定 ローバンド部門
 (SinLB (内 個 電信 L19部門) cities-ja1 (SinOp? 内? tLO? MORSE? 1.9MHz?))
