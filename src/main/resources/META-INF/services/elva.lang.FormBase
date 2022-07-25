@@ -1,4 +1,3 @@
-elva.form.AbsenceForm
 elva.form.AccessForm
 elva.form.AccessSpForm
 elva.form.AddForm
@@ -12,7 +11,6 @@ elva.form.CatchForm
 elva.form.CddrForm
 elva.form.CdrForm
 elva.form.ConsForm
-elva.form.ContestForm
 elva.form.DivForm
 elva.form.EqForm
 elva.form.EqualForm
@@ -42,12 +40,10 @@ elva.form.NotForm
 elva.form.NthForm
 elva.form.NullForm
 elva.form.OrForm
-elva.form.PatternForm
 elva.form.PrintForm
 elva.form.QuasiForm
 elva.form.QuoteForm
 elva.form.RemoveIfForm
-elva.form.SectionForm
 elva.form.SetForm
 elva.form.SubForm
 elva.form.SubSeqForm
@@ -58,3 +54,7 @@ elva.form.TypeForm
 elva.form.UqsplForm
 elva.form.UquotForm
 elva.form.XorForm
+gaas.ruler.AbsenceForm
+gaas.ruler.ContestForm
+gaas.ruler.PatternForm
+gaas.ruler.SectionForm

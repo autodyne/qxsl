@@ -3,7 +3,7 @@
  * License: GNU Lesser General Public License v3.0 (see LICENSE)
  * Author: Journal of Hamradio Informatics (https://pafelog.net)
 *******************************************************************************/
-package elva.form;
+package gaas.ruler;
 
 import java.util.List;
 

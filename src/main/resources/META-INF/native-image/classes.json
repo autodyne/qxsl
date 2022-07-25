@@ -12,12 +12,6 @@
 		"allPublicFields": true
 	},
 	{
-		"name": "elva.form.AbsenceForm",
-		"allPublicConstructors": true,
-		"allPublicMethods": true,
-		"allPublicFields": true
-	},
-	{
 		"name": "elva.form.AccessForm",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
@@ -91,12 +85,6 @@
 	},
 	{
 		"name": "elva.form.ConsForm",
-		"allPublicConstructors": true,
-		"allPublicMethods": true,
-		"allPublicFields": true
-	},
-	{
-		"name": "elva.form.ContestForm",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
 		"allPublicFields": true
@@ -276,12 +264,6 @@
 		"allPublicFields": true
 	},
 	{
-		"name": "elva.form.PatternForm",
-		"allPublicConstructors": true,
-		"allPublicMethods": true,
-		"allPublicFields": true
-	},
-	{
 		"name": "elva.form.PrintForm",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
@@ -301,12 +283,6 @@
 	},
 	{
 		"name": "elva.form.RemoveIfForm",
-		"allPublicConstructors": true,
-		"allPublicMethods": true,
-		"allPublicFields": true
-	},
-	{
-		"name": "elva.form.SectionForm",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
 		"allPublicFields": true
@@ -439,6 +415,30 @@
 	},
 	{
 		"name": "gaas.draft.WattFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.ruler.AbsenceForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.ruler.ContestForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.ruler.PatternForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "gaas.ruler.SectionForm",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
 		"allPublicFields": true
