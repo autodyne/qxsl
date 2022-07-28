@@ -11,7 +11,7 @@ QxSL is a Java library for processing amateur-radio log files, including scoring
 
 ## Features
 
-- provides log en/decoders for QXML, [ADIF](https://adif.org), [Cabrillo](https://wwrof.org/cabrillo/), [zLog](https://zlog.org), [CTESTWIN](http://e.gmobb.jp/ctestwin/Download.html), [HAMLOG](http://www.hamlog.com), etc.
+- provides log en/decoders for QXML, [ADIF](https://adif.org), [Cabrillo](https://wwrof.org/cabrillo), [zLog](https://zlog.org), [CTESTWIN](http://e.gmobb.jp/ctestwin/Download.html), [HAMLOG](http://www.hamlog.com), etc.
 - provides tabulation & scoring frameworks for amateur-radio contests and awards.
 - provides the rulekit framework which allows you to write contest rules in JS, Ruby, Python, and LISP.
 
@@ -27,7 +27,7 @@ QxSL is a Java library for processing amateur-radio log files, including scoring
 
 ## Sample Codes
 
-Because we are [Scalalians](https://www.scala-lang.org/), please be patient to read Scala codes!
+Because we are [Scalalians](https://www.scala-lang.org), please be patient to read Scala codes!
 
 ### Document Model
 
@@ -172,7 +172,7 @@ dependencies {
 
 ## Build
 
-[Gradle](https://gradle.org/) retrieves dependent libraries, runs tests, and generates a JAR file automatically.
+[Gradle](https://gradle.org) retrieves dependent libraries, runs tests, and generates a JAR file automatically.
 
 ```shell
 $ gradle build javadoc publish

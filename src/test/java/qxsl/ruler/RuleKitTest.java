@@ -19,13 +19,11 @@ import org.junit.jupiter.api.Test;
 public final class RuleKitTest extends Assertions {
 	@Test
 	public void testForFile() {
-		assertThat(RuleKit.forFile("q.lisp").name()).isEqualTo("elva");
-		assertThat(RuleKit.forFile("xsl.rb").name()).isEqualTo("ruby");
+		assertThat(RuleKit.forFile(".lisp").name()).isEqualTo("elva");
 	}
 
 	@Test
 	public void testForName() {
 		assertThat(RuleKit.forName("elva").name()).isEqualTo("elva");
-		assertThat(RuleKit.forName("ruby").name()).isEqualTo("ruby");
 	}
 }
