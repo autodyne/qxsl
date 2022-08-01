@@ -52,18 +52,6 @@ public abstract class Section extends Library {
 	public abstract String code();
 
 	/**
-	 * キャッシュを返します。
-	 *
-	 *
-	 * @return キャッシュ
-	 *
-	 * @since 2020/11/15
-	 */
-	public final Section cache() {
-		return isAbsence()? this: new Promise(this);
-	}
-
-	/**
 	 * この部門が不参加部門であるか確認します。
 	 *
 	 *
@@ -72,16 +60,6 @@ public abstract class Section extends Library {
 	public final boolean isAbsence() {
 		return this instanceof Absence;
 	}
-
-	/**
-	 * この部門に参加可能な運用場所を返します。
-	 *
-	 *
-	 * @return 運用場所
-	 *
-	 * @since 2022/06/22
-	 */
-	public abstract List<LocalCityItem> getCityList();
 
 	/**
 	 * 指定された交信記録の妥当性を検査します。
@@ -157,4 +135,14 @@ public abstract class Section extends Library {
 		final double size = 0.1 * scores.length;
 		return (int) Math.min(7, Math.ceil(size));
 	}
+
+	/**
+	 * この部門に参加可能な運用場所を返します。
+	 *
+	 *
+	 * @return 運用場所のリスト
+	 *
+	 * @since 2022/06/22
+	 */
+	public abstract List<LocalCityItem> getCityList();
 }

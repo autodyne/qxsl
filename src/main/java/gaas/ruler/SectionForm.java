@@ -116,19 +116,6 @@ final class SectionImpl extends Section {
 	}
 
 	/**
-	 * この部門に参加可能な運用場所を返します。
-	 *
-	 *
-	 * @return 運用場所
-	 *
-	 * @since 2022/06/22
-	 */
-	@Override
-	public final List<LocalCityItem> getCityList() {
-		return List.of(area.cast(LocalCityItem.class));
-	}
-
-	/**
 	 * 指定された交信記録の妥当性を検査します。
 	 *
 	 *
@@ -180,5 +167,18 @@ final class SectionImpl extends Section {
 	@Override
 	public final Element entity(Item item) {
 		return new Element(eval.apply(mult.form(item)).list().toArray());
+	}
+
+	/**
+	 * この部門に参加可能な運用場所を返します。
+	 *
+	 *
+	 * @return 運用場所
+	 *
+	 * @since 2022/06/22
+	 */
+	@Override
+	public final List<LocalCityItem> getCityList() {
+		return List.of(area.cast(LocalCityItem.class));
 	}
 }

@@ -20,19 +20,6 @@ import qxsl.model.Item;
  */
 public abstract class Absence extends Section {
 	/**
-	 * この部門に参加可能な運用場所を返します。
-	 *
-	 *
-	 * @return 空のリスト
-	 *
-	 * @since 2022/06/22
-	 */
-	@Override
-	public final List<LocalCityItem> getCityList() {
-		return List.of();
-	}
-
-	/**
 	 * 指定された交信記録の妥当性を検査します。
 	 *
 	 *
@@ -88,5 +75,18 @@ public abstract class Absence extends Section {
 	@Override
 	public final int result(Summary items) {
 		return 0;
+	}
+
+	/**
+	 * この部門に参加可能な運用場所を返します。
+	 *
+	 *
+	 * @return 空のリスト
+	 *
+	 * @since 2022/06/22
+	 */
+	@Override
+	public final List<LocalCityItem> getCityList() {
+		return List.of();
 	}
 }
