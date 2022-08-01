@@ -39,4 +39,17 @@ public final class Note extends Qxsl<String> {
 	public static final Note from(Tuple tuple) {
 		return (Note) tuple.get(Qxsl.NOTE);
 	}
+
+	/**
+	 * この属性の値が有効か検証します。
+	 *
+	 *
+	 * @return 有効な場合は真
+	 *
+	 * @since 2022/08/01
+	 */
+	@Override
+	public final boolean valid() {
+		return true;
+	}
 }

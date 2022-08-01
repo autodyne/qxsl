@@ -158,9 +158,28 @@ public final class FieldManager implements Iterable<FieldFactory> {
 			this.value = value;
 		}
 
+		/**
+		 * この属性の値を返します。
+		 *
+		 *
+		 * @return 属性の値
+		 */
 		@Override
-		public String value() {
+		public final String value() {
 			return value;
+		}
+
+		/**
+		 * この属性の値が有効か検証します。
+		 *
+		 *
+		 * @return 有効な場合は真
+		 *
+		 * @since 2022/08/01
+		 */
+		@Override
+		public final boolean valid() {
+			return true;
 		}
 	}
 

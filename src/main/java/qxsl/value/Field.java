@@ -53,6 +53,16 @@ public abstract class Field<V> {
 	public abstract V value();
 
 	/**
+	 * この属性の値が有効か検証します。
+	 *
+	 *
+	 * @return 有効な場合は真
+	 *
+	 * @since 2022/08/01
+	 */
+	public abstract boolean valid();
+
+	/**
 	 * この属性が{@link Any}か確認します。
 	 *
 	 *

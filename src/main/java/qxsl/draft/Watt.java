@@ -39,4 +39,23 @@ public final class Watt extends Qxsl<String> {
 	public static final Watt from(Tuple tuple) {
 		return (Watt) tuple.get(Qxsl.WATT);
 	}
+
+	/**
+	 * この属性の値が有効か検証します。
+	 *
+	 *
+	 * @return 有効な場合は真
+	 *
+	 * @since 2022/08/01
+	 */
+	@Override
+	public final boolean valid() {
+		switch(value()) {
+			case "P": return true;
+			case "L": return true;
+			case "M": return true;
+			case "H": return true;
+			default: return false;
+		}
+	}
 }

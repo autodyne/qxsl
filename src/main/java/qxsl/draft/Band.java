@@ -53,6 +53,19 @@ public final class Band extends Qxsl<BigDecimal> {
 	}
 
 	/**
+	 * この属性の値が有効か検証します。
+	 *
+	 *
+	 * @return 有効な場合は真
+	 *
+	 * @since 2022/08/01
+	 */
+	@Override
+	public final boolean valid() {
+		return true;
+	}
+
+	/**
 	 * 周波数を表す適切な単位の文字列を返します。
 	 *
 	 *

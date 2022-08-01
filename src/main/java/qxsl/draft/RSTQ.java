@@ -53,19 +53,18 @@ public final class RSTQ extends Qxsl<Integer> {
 	}
 
 	/**
-	 * 指定された整数値がレポートであるかを確認します。
+	 * この属性の値が有効か検証します。
 	 *
 	 *
-	 * @param rst 値
+	 * @return 有効な場合は真
 	 *
-	 * @return 正規形のレポートに変換可能な場合は真
-	 *
-	 * @since 2020/10/28
+	 * @since 2022/08/01
 	 */
-	public static final boolean isValid(int rst) {
-		final int r = (rst / 100) % 10;
-		final int s = (rst / 10) % 10;
-		final int t = (rst / 1) % 10;
+	@Override
+	public final boolean valid() {
+		final int r = (value() / 100) % 10;
+		final int s = (value() / 10) % 10;
+		final int t = (value() / 1) % 10;
 		if(r < 1 && r > 5) return false;
 		if(s < 1 && s > 9) return false;
 		if(t < 1 && t > 9) return false;

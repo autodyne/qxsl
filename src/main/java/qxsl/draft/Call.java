@@ -5,11 +5,11 @@
 *******************************************************************************/
 package qxsl.draft;
 
-import java.text.Normalizer;
-
+import qxsl.utils.AssetUtil;
 import qxsl.value.Tuple;
 
 import static java.text.Normalizer.Form.NFKC;
+import static java.text.Normalizer.normalize;
 
 /**
  * 相手の呼出符号を表す属性の実装です。
@@ -20,8 +20,6 @@ import static java.text.Normalizer.Form.NFKC;
  * @since 2013/06/08
  */
 public final class Call extends Qxsl<String> {
-	private static final String PATTERN = "^\\w+(/\\w+)?$";
-
 	/**
 	 * 呼出符号を指定して属性を構築します。
 	 *
@@ -29,7 +27,7 @@ public final class Call extends Qxsl<String> {
 	 * @param call 呼出符号
 	 */
 	public Call(String call) {
-		super(CALL, normalize(call));
+		super(CALL, normalize(call.toUpperCase(), NFKC));
 	}
 
 	/**
@@ -47,7 +45,7 @@ public final class Call extends Qxsl<String> {
 	}
 
 	/**
-	 * 斜線より後の部分文字列を除く呼出符号を返します。
+	 * 斜線より前の呼出符号を返します。
 	 *
 	 *
 	 * @return 呼出符号
@@ -57,30 +55,18 @@ public final class Call extends Qxsl<String> {
 	}
 
 	/**
-	 * 指定された文字列が呼出符号であるかを確認します。
+	 * この属性の値が有効か検証します。
 	 *
 	 *
-	 * @param call 文字列
+	 * @return 有効な場合は真
 	 *
-	 * @return 正規形の呼出符号に変換可能な場合は真
-	 *
-	 * @since 2020/10/12
+	 * @since 2022/08/01
 	 */
-	public static final boolean isValid(String call) {
-		return normalize(call).matches(PATTERN);
-	}
-
-	/**
-	 * 指定された呼出符号を正規形の文字列に変換します。
-	 *
-	 *
-	 * @param call 呼出符号
-	 *
-	 * @return 大文字または数字または記号の列
-	 *
-	 * @since 2020/10/12
-	 */
-	public static final String normalize(String call) {
-		return Normalizer.normalize(call.toUpperCase(), NFKC);
+	@Override
+	public final boolean valid() {
+		final var asset = AssetUtil.from(this);
+		final var local = CALL.getLocalPart();
+		final var regex = asset.string(local);
+		return value().matches(regex);
 	}
 }

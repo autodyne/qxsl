@@ -39,4 +39,17 @@ public final class Mul2 extends Qxsl<String> {
 	public static final Mul2 from(Tuple tuple) {
 		return (Mul2) tuple.get(Qxsl.MUL2);
 	}
+
+	/**
+	 * この属性の値が有効か検証します。
+	 *
+	 *
+	 * @return 有効な場合は真
+	 *
+	 * @since 2022/08/01
+	 */
+	@Override
+	public final boolean valid() {
+		return true;
+	}
 }

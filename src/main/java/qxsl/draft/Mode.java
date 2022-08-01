@@ -39,4 +39,17 @@ public final class Mode extends Qxsl<String> {
 	public static final Mode from(Tuple tuple) {
 		return (Mode) tuple.get(Qxsl.MODE);
 	}
+
+	/**
+	 * この属性の値が有効か検証します。
+	 *
+	 *
+	 * @return 有効な場合は真
+	 *
+	 * @since 2022/08/01
+	 */
+	@Override
+	public final boolean valid() {
+		return true;
+	}
 }

@@ -129,6 +129,19 @@ public final class Time extends Qxsl<ZonedDateTime> {
 	}
 
 	/**
+	 * この属性の値が有効か検証します。
+	 *
+	 *
+	 * @return 有効な場合は真
+	 *
+	 * @since 2022/08/01
+	 */
+	@Override
+	public final boolean valid() {
+		return true;
+	}
+
+	/**
 	 * 指定されたオブジェクトと等値であるか確認します。
 	 *
 	 *
