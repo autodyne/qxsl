@@ -43,17 +43,8 @@
 (setq 電話 "電話限定")
 (setq 電電 "電信電話")
 
-; contest definition
-(setq NAME "リアルタイムコンテスト")
-(setq HOST "東大無線部")
-(setq MAIL "allja1@ja1zlo.u-tokyo.org")
-(setq LINK "ja1zlo.u-tokyo.org/rt")
-
-; contest schedule
-(defun startday year (schedule year 2 4 "SATURDAY"))
-(defun finalday year (schedule year 2 4 "SATURDAY"))
-(defun deadline year (schedule year 2 4 "SATURDAY"))
-(setq RT (contest NAME HOST MAIL LINK startday finalday deadline))
+; contest
+(setq RT (contest "リアルタイムコンテスト"))
 
 ; section macros
 (defun rule s ((method 'add Contest Section) RT s))

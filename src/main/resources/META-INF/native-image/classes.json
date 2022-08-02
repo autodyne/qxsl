@@ -1746,6 +1746,12 @@
 		"allPublicFields": true
 	},
 	{
+		"name": "qxsl.ruler.Program",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
 		"name": "qxsl.ruler.RuleKit",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,

@@ -82,17 +82,8 @@
 (setq HAB部門 "14-50MHz")
 (setq ALL部門 "")
 
-; contest definition
-(setq NAME "ALLJA1")
-(setq HOST "東大無線部")
-(setq MAIL "allja1@ja1zlo.u-tokyo.org")
-(setq LINK "ja1zlo.u-tokyo.org/allja1")
-
-; contest schedule
-(defun startday year (schedule year 6 4 "SATURDAY"))
-(defun finalday year (schedule year 6 4 "SATURDAY"))
-(defun deadline year (schedule year 7 3 "SATURDAY"))
-(setq JA1 (contest NAME HOST MAIL LINK startday finalday deadline))
+; contest
+(setq JA1 (contest "ALLJA1"))
 
 ; section macros
 (defun rule s ((method! 'add) JA1 s))

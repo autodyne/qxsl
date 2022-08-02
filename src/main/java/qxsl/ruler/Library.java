@@ -15,7 +15,19 @@ package qxsl.ruler;
  */
 public abstract class Library {
 	/**
-	 * コンテストの規約として返します。
+	 * コンテストの日程に型変換します。
+	 *
+	 *
+	 * @return コンテストの日程
+	 *
+	 * @throws ClassCastException 型の誤り
+	 */
+	public final Program program() {
+		return (Program) this;
+	}
+
+	/**
+	 * コンテストの規約に型変換します。
 	 *
 	 *
 	 * @return コンテストの規約
@@ -25,7 +37,7 @@ public abstract class Library {
 	}
 
 	/**
-	 * コンテストの部門として返します。
+	 * コンテストの部門に型変換します。
 	 *
 	 *
 	 * @return コンテストの部門
@@ -35,7 +47,7 @@ public abstract class Library {
 	}
 
 	/**
-	 * 交信記録の構造式として返します。
+	 * 交信記録の構造式に型変換します。
 	 *
 	 *
 	 * @return 交信記録の構造
