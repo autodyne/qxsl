@@ -4,6 +4,6 @@
 <entry key="type">qxml</entry>
 <entry key="name">QXML</entry>
 <entry key="extensions">xml,qxml</entry>
-<entry key="desc-file">qxml.xsd</entry>
+<entry key="desc-file">qxml.txt</entry>
 <entry key="schema">qxml.xsd</entry>
 </properties>

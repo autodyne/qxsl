@@ -4,7 +4,7 @@
 <entry key="type">adxs</entry>
 <entry key="name">Sub ADIF (ADX)</entry>
 <entry key="extensions">adx</entry>
-<entry key="desc-file">adxs.xsd</entry>
+<entry key="desc-file">adxs.txt</entry>
 <entry key="schema">adxs.xsd</entry>
 <entry key="field-space">adif.org</entry>
 </properties>

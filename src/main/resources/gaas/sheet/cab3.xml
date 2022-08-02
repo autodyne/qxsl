@@ -5,11 +5,10 @@
 <entry key="table">QSO</entry>
 <entry key="extensions">cbr</entry>
 <entry key="desc-text">
-Example:
 START-OF-LOG: 3.0
 CALLSIGN: JA1ZLO
-QSO: 14000 CW 2017-06-03 1617 JA1ZLO        599 100110 QV1DOK        599 120103 0
-QSO: 28000 CW 2017-06-03 1651 JA1ZLO        599 100110 QC2SOA        599 1308   0
+QSO: 14000 CW 2017-06-04 0015 JA1ZLO        599 100110 QV1DOK        599 120103 0
+QSO: 28000 CW 2017-06-04 0130 JA1ZLO        599 100110 QQ1VZP        599 110304 0
 END-OF-LOG:
 </entry>
 </properties>

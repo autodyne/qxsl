@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list xmlns:qxsl="qxsl.org">
+	<item qxsl:call="QV1DOK" qxsl:time="2017-06-04T00:15:00Z" qxsl:band="14000" qxsl:mode="CW">
+		<rcvd qxsl:rstq="599" qxsl:code="120103"/>
+		<sent qxsl:rstq="599" qxsl:code="100110"/>
+	</item>
+	<item qxsl:call="QQ1VZP" qxsl:time="2017-06-04T01:30:00Z" qxsl:band="28000" qxsl:mode="CW">
+		<rcvd qxsl:rstq="599" qxsl:code="110304"/>
+		<sent qxsl:rstq="599" qxsl:code="100110"/>
+	</item>
+</list>

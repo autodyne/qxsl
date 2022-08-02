@@ -9,8 +9,8 @@ Template:
  MM  dd HHmm CCCCCCCCCC SSSSSSSSSSSS RRRRRRRRRRRR ****** BBBBB EEEE *** NNNN
 
 Examples:
-  6   4 0117     QV1DOK    599100110    599120103           14   CW 1
-  6   4 0151     QC2SOA    599100110      5991308           50   CW 1
+  6   4 0915 QV1DOK     599100110    599120103              14 CW   1
+  6   4 1030 QQ1VZP     599100110    599110304              28 CW   1
 </entry>
 <entry key="head-text">
 mon day time  callsign      sent         rcvd      multi   MHz mode pts memo
