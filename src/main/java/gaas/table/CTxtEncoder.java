@@ -8,9 +8,7 @@ package gaas.table;
 import java.io.IOException;
 import java.io.Writer;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
 
-import qxsl.draft.Band;
 import qxsl.draft.Qxsl;
 import qxsl.draft.Time;
 import qxsl.model.Item;
@@ -77,13 +75,13 @@ public final class CTxtEncoder extends PrintEncoder {
 	 */
 	@Override
 	public final void output(Item item) throws IOException {
-		space(String.format("%4d", count++));
+		space(String.format("%4d", ++count));
 		time((Time) item.some(Qxsl.TIME));
-		space(item.some(Qxsl.CALL).padHead(11));
-		band((Band) item.some(Qxsl.BAND));
-		space(item.some(Qxsl.MODE).padHead(4));
-		space(item.getSent().some(Qxsl.CODE).padHead(12));
-		space(item.getRcvd().some(Qxsl.CODE).padHead(12));
+		space(item.some(Qxsl.CALL).padTail(11));
+		space(item.some(Qxsl.BAND).padHead(7));
+		space(item.some(Qxsl.MODE).padTail(4));
+		space(item.getSent().some(Qxsl.CODE).padTail(12));
+		space(item.getRcvd().some(Qxsl.CODE).padTail(12));
 		println();
 	}
 
@@ -98,17 +96,5 @@ public final class CTxtEncoder extends PrintEncoder {
 	private void time(Time date) throws IOException {
 		if(date == null) space(" ".repeat(10));
 		else space(tstamp.format(date.local()));
-	}
-
-	/**
-	 * 指定された周波数帯を文字列として出力します。
-	 *
-	 *
-	 * @param band 出力する周波数帯
-	 *
-	 * @throws IOException 書き込みに失敗した場合
-	 */
-	private void band(Band band) throws IOException {
-		space(String.format("%-7.7s", Objects.toString(band, "")));
 	}
 }

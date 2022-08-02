@@ -79,12 +79,12 @@ public final class ZDosEncoder extends PrintEncoder {
 	public final void output(Item item) throws IOException {
 		space("");
 		time((Time) item.some(Qxsl.TIME));
-		space(item.some(Qxsl.CALL).padHead(10));
-		space(item.getSent().some(Qxsl.CODE).padHead(12));
-		space(item.getRcvd().some(Qxsl.CODE).padHead(12));
-		space(item.some(Qxsl.MUL1).padHead(6));
+		space(item.some(Qxsl.CALL).padTail(10));
+		space(item.getSent().some(Qxsl.CODE).padTail(12));
+		space(item.getRcvd().some(Qxsl.CODE).padTail(12));
+		space(item.some(Qxsl.MUL1).padTail(6));
 		band((Band) item.some(Qxsl.BAND));
-		space(item.some(Qxsl.MODE).padHead(4));
+		space(item.some(Qxsl.MODE).padTail(4));
 		space("1  ");
 		name((Name) item.some(Qxsl.NAME));
 		note((Note) item.some(Qxsl.NOTE));

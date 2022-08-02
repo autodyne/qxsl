@@ -76,13 +76,13 @@ public final class JarlEncoder extends PrintEncoder {
 	public final void output(Item item) throws IOException {
 		time((Time) item.some(Qxsl.TIME));
 		band((Band) item.some(Qxsl.BAND));
-		space(item.some(Qxsl.MODE).padHead(5));
-		space(item.some(Qxsl.CALL).padHead(13));
-		space(item.getSent().some(Qxsl.RSTQ).padHead(3));
-		space(item.getSent().some(Qxsl.CODE).padHead(7));
-		space(item.getRcvd().some(Qxsl.RSTQ).padHead(3));
-		space(item.getRcvd().some(Qxsl.CODE).padHead(7));
-		space(item.some(Qxsl.MUL1).padHead(7));
+		space(item.some(Qxsl.MODE).padTail(5));
+		space(item.some(Qxsl.CALL).padTail(13));
+		space(item.getSent().some(Qxsl.RSTQ).padTail(3));
+		space(item.getSent().some(Qxsl.CODE).padTail(7));
+		space(item.getRcvd().some(Qxsl.RSTQ).padTail(3));
+		space(item.getRcvd().some(Qxsl.CODE).padTail(7));
+		space(item.some(Qxsl.MUL1).padTail(7));
 		print("   1");
 		println();
 	}

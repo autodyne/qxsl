@@ -16,7 +16,7 @@ Examples:
 mon day time  callsign      sent         rcvd      multi   MHz mode pts memo
 </entry>
 <entry key="time-decoder">M  ppd HHmm</entry>
-<entry key="time-encoder">MM  dd HHmm</entry>
+<entry key="time-encoder">ppM  ppd HHmm</entry>
 <entry key="item-fields">
 {qxsl.org}time,
 {qxsl.org}call,

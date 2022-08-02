@@ -13,7 +13,7 @@ Examples:
    2  6/ 4 1030 QQ1VZP        28MHz CW   599100110    599110304
 </entry>
 <entry key="time-decoder">M/ppd HHmm</entry>
-<entry key="time-encoder">MM/dd HHmm</entry>
+<entry key="time-encoder">ppM/ppd HHmm</entry>
 <entry key="item-fields">
 {qxsl.org}time,
 {qxsl.org}call,
