@@ -5,8 +5,6 @@
 *******************************************************************************/
 package qxsl.draft;
 
-import qxsl.value.Tuple;
-
 /**
  * 交信記録の備考を表す属性の実装です。
  *
@@ -24,20 +22,6 @@ public final class Note extends Qxsl<String> {
 	 */
 	public Note(String note) {
 		super(NOTE, note);
-	}
-
-	/**
-	 * 交信記録の備考を抽出します。
-	 *
-	 *
-	 * @param tuple 交信記録
-	 *
-	 * @return 備考の属性
-	 *
-	 * @since 2020/10/28
-	 */
-	public static final Note from(Tuple tuple) {
-		return (Note) tuple.get(Qxsl.NOTE);
 	}
 
 	/**

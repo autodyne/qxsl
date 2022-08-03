@@ -5,8 +5,6 @@
 *******************************************************************************/
 package qxsl.draft;
 
-import qxsl.value.Tuple;
-
 /**
  * 更なる獲得番号を表す属性の実装です。
  *
@@ -24,20 +22,6 @@ public final class Mul2 extends Qxsl<String> {
 	 */
 	public Mul2(String code) {
 		super(MUL2, code);
-	}
-
-	/**
-	 * 交信記録の獲得番号を抽出します。
-	 *
-	 *
-	 * @param tuple 交信記録
-	 *
-	 * @return 獲得番号の属性
-	 *
-	 * @since 2020/10/28
-	 */
-	public static final Mul2 from(Tuple tuple) {
-		return (Mul2) tuple.get(Qxsl.MUL2);
 	}
 
 	/**

@@ -5,8 +5,6 @@
 *******************************************************************************/
 package qxsl.draft;
 
-import qxsl.value.Tuple;
-
 /**
  * 交信のレポートを表す属性の実装です。
  *
@@ -36,20 +34,6 @@ public final class RSTQ extends Qxsl<Integer> {
 	 */
 	public RSTQ(int r, int s, int t) {
 		this(r * 100 + s * 10 + t);
-	}
-
-	/**
-	 * 交信記録のレポートを抽出します。
-	 *
-	 *
-	 * @param tuple 交信記録
-	 *
-	 * @return レポートの属性
-	 *
-	 * @since 2020/10/28
-	 */
-	public static final RSTQ from(Tuple tuple) {
-		return (RSTQ) tuple.get(Qxsl.RSTQ);
 	}
 
 	/**

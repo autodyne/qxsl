@@ -5,8 +5,6 @@
 *******************************************************************************/
 package qxsl.draft;
 
-import qxsl.value.Tuple;
-
 /**
  * 交信の送信電力を表す属性の実装です。
  *
@@ -24,20 +22,6 @@ public final class Watt extends Qxsl<String> {
 	 */
 	public Watt(String watt) {
 		super(WATT, watt);
-	}
-
-	/**
-	 * 交信記録の送信電力を抽出します。
-	 *
-	 *
-	 * @param tuple 交信記録
-	 *
-	 * @return 送信電力の属性
-	 *
-	 * @since 2020/10/28
-	 */
-	public static final Watt from(Tuple tuple) {
-		return (Watt) tuple.get(Qxsl.WATT);
 	}
 
 	/**

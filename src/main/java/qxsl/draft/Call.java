@@ -6,7 +6,6 @@
 package qxsl.draft;
 
 import qxsl.utils.AssetUtil;
-import qxsl.value.Tuple;
 
 import static java.text.Normalizer.Form.NFKC;
 import static java.text.Normalizer.normalize;
@@ -28,20 +27,6 @@ public final class Call extends Qxsl<String> {
 	 */
 	public Call(String call) {
 		super(CALL, normalize(call.toUpperCase(), NFKC));
-	}
-
-	/**
-	 * 交信記録の呼出符号を抽出します。
-	 *
-	 *
-	 * @param tuple 交信記録
-	 *
-	 * @return 呼出符号の属性
-	 *
-	 * @since 2020/10/28
-	 */
-	public static final Call from(Tuple tuple) {
-		return (Call) tuple.get(Qxsl.CALL);
 	}
 
 	/**

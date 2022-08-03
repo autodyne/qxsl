@@ -5,8 +5,6 @@
 *******************************************************************************/
 package qxsl.draft;
 
-import qxsl.value.Tuple;
-
 /**
  * 運用者の個人名を表す属性の実装です。
  *
@@ -24,20 +22,6 @@ public final class Name extends Qxsl<String> {
 	 */
 	public Name(String name) {
 		super(NAME, name);
-	}
-
-	/**
-	 * 交信記録の運用者名を抽出します。
-	 *
-	 *
-	 * @param tuple 交信記録
-	 *
-	 * @return 運用者名の属性
-	 *
-	 * @since 2020/10/28
-	 */
-	public static final Name from(Tuple tuple) {
-		return (Name) tuple.get(Qxsl.NAME);
 	}
 
 	/**

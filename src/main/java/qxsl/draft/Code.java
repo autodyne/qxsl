@@ -5,8 +5,6 @@
 *******************************************************************************/
 package qxsl.draft;
 
-import qxsl.value.Tuple;
-
 /**
  * 交信のナンバーを表す属性の実装です。
  *
@@ -24,20 +22,6 @@ public final class Code extends Qxsl<String> {
 	 */
 	public Code(String code) {
 		super(CODE, code);
-	}
-
-	/**
-	 * 交信記録のナンバーを抽出します。
-	 *
-	 *
-	 * @param tuple 交信記録
-	 *
-	 * @return ナンバーの属性
-	 *
-	 * @since 2020/10/28
-	 */
-	public static final Code from(Tuple tuple) {
-		return (Code) tuple.get(Qxsl.CODE);
 	}
 
 	/**

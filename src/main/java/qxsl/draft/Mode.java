@@ -5,8 +5,6 @@
 *******************************************************************************/
 package qxsl.draft;
 
-import qxsl.value.Tuple;
-
 /**
  * 交信の通信方式を表す属性の実装です。
  *
@@ -24,20 +22,6 @@ public final class Mode extends Qxsl<String> {
 	 */
 	public Mode(String mode) {
 		super(MODE, mode.toUpperCase());
-	}
-
-	/**
-	 * 交信記録の通信方式を抽出します。
-	 *
-	 *
-	 * @param tuple 交信記録
-	 *
-	 * @return 通信方式の属性
-	 *
-	 * @since 2020/10/28
-	 */
-	public static final Mode from(Tuple tuple) {
-		return (Mode) tuple.get(Qxsl.MODE);
 	}
 
 	/**
