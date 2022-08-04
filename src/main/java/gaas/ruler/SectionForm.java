@@ -125,7 +125,8 @@ final class SectionImpl extends Section {
 	 */
 	@Override
 	public final Message verify(Item item) {
-		return eval.apply(test.form(item)).to(Message.class);
+		final var app = this.test.form(item);
+		return eval.apply(app).to(Message.class);
 	}
 
 	/**
@@ -138,7 +139,9 @@ final class SectionImpl extends Section {
 	 */
 	@Override
 	public final Element unique(Item item) {
-		return new Element(eval.apply(call.form(item)).value());
+		final var app = this.call.form(item);
+		final var val = this.eval.apply(app);
+		return new Element(val.value());
 	}
 
 	/**
@@ -153,7 +156,9 @@ final class SectionImpl extends Section {
 	 */
 	@Override
 	public final int result(Summary items) {
-		return eval.apply(calc.form(items.toArray())).real().toInt();
+		final var data = items.toArray();
+		final var form = calc.form(data);
+		return eval.apply(form).real().toInt();
 	}
 
 	/**
@@ -166,7 +171,9 @@ final class SectionImpl extends Section {
 	 */
 	@Override
 	public final Element entity(Item item) {
-		return new Element(eval.apply(mult.form(item)).list().toArray());
+		final var app = this.mult.form(item);
+		final var val = this.eval.apply(app);
+		return new Element(val.list().toArray());
 	}
 
 	/**

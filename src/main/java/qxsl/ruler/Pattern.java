@@ -21,6 +21,11 @@ import static java.util.stream.Collectors.toList;
  */
 public abstract class Pattern extends Library {
 	/**
+	 * ライブラリを構築します。
+	 */
+	public Pattern() {}
+
+	/**
 	 * 交信記録をライブラリが定義する標準構造に変換します。
 	 *
 	 *

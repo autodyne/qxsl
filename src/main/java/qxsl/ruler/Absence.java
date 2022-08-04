@@ -20,6 +20,11 @@ import qxsl.model.Item;
  */
 public abstract class Absence extends Section {
 	/**
+	 * 部門を構築します。
+	 */
+	public Absence() {}
+
+	/**
 	 * 指定された交信記録の妥当性を検査します。
 	 *
 	 *

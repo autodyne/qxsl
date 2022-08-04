@@ -22,6 +22,11 @@ public abstract class TableEncoder implements AutoCloseable {
 	private int count = -1;
 
 	/**
+	 * エンコーダを構築します。
+	 */
+	public TableEncoder() {}
+
+	/**
 	 * ストリームに交信記録を書き込みます。
 	 *
 	 *

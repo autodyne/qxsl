@@ -19,6 +19,11 @@ import java.util.StringJoiner;
  */
 public abstract class SheetFactory {
 	/**
+	 * 書式を構築します。
+	 */
+	public SheetFactory() {}
+
+	/**
 	 * この書式を識別する完全な名前を返します。
 	 *
 	 *

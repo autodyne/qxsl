@@ -21,6 +21,11 @@ import qxsl.model.Item;
  */
 public abstract class TableDecoder implements AutoCloseable {
 	/**
+	 * デコーダを構築します。
+	 */
+	public TableDecoder() {}
+
+	/**
 	 * ストリームの交信記録を読み取ります。
 	 *
 	 *

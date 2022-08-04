@@ -15,6 +15,11 @@ package qxsl.ruler;
  */
 public abstract class Library {
 	/**
+	 * ライブラリを構築します。
+	 */
+	public Library() {}
+
+	/**
 	 * コンテストの日程に型変換します。
 	 *
 	 *
@@ -31,6 +36,8 @@ public abstract class Library {
 	 *
 	 *
 	 * @return コンテストの規約
+	 *
+	 * @throws ClassCastException 型の誤り
 	 */
 	public final Contest contest() {
 		return (Contest) this;
@@ -41,6 +48,8 @@ public abstract class Library {
 	 *
 	 *
 	 * @return コンテストの部門
+	 *
+	 * @throws ClassCastException 型の誤り
 	 */
 	public final Section section() {
 		return (Section) this;
@@ -51,6 +60,8 @@ public abstract class Library {
 	 *
 	 *
 	 * @return 交信記録の構造
+	 *
+	 * @throws ClassCastException 型の誤り
 	 */
 	public final Pattern pattern() {
 		return (Pattern) this;

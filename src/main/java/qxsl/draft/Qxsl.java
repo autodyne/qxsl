@@ -10,7 +10,7 @@ import javax.xml.namespace.QName;
 import qxsl.value.Field;
 
 /**
- * QXMLが標準仕様でサポートする属性の名前を定義します。
+ * 標準的な属性の名前空間を定義します。
  *
  *
  * @author 無線部開発班
@@ -23,7 +23,7 @@ public abstract class Qxsl<V> extends Field<V> {
 	private final V value;
 
 	/**
-	 * 指定した名前と値の属性を構築します。
+	 * 指定された名前と属性値を設定します。
 	 *
 	 *
 	 * @param qname 属性の名前
@@ -46,12 +46,12 @@ public abstract class Qxsl<V> extends Field<V> {
 	}
 
 	/**
-	 * 標準的な属性に共通する名前空間です。
+	 * 標準的な属性が所属する名前空間です。
 	 */
 	public static final String URI = "qxsl.org";
 
 	/**
-	 * 標準的な属性に共通する接頭辞です。
+	 * 標準的な属性に設定される接頭辞です。
 	 */
 	public static final String PRE = "qxsl";
 

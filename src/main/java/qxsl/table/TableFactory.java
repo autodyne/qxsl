@@ -21,6 +21,11 @@ import qxsl.model.Item;
  */
 public abstract class TableFactory {
 	/**
+	 * 書式を構築します。
+	 */
+	public TableFactory() {}
+
+	/**
 	 * この書式を識別する完全な名前を返します。
 	 *
 	 *

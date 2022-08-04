@@ -13,7 +13,7 @@ import qxsl.field.FieldFactory;
 import qxsl.value.Field;
 
 /**
- * 交信の交換番号を表す属性を永続化する書式です。
+ * 交信のナンバーを表す属性を永続化する書式です。
  *
  *
  * @author 無線部開発班
