@@ -308,6 +308,7 @@
 		((equal fmt "adis") (transform-adif it))
 		((equal fmt "cqww") (transform-cqww it))
 		((equal fmt "jarl") (transform-jarl it))
+		((equal fmt "jswl") (transform-jswl it))
 		((equal fmt "ctxt") (transform-ctxt it))
 		((equal fmt "zall") (transform-zlog it))
 		((equal fmt "zdos") (transform-zdos it))
@@ -318,6 +319,7 @@
 
 (defun normalize (it fmt)
 	(cond
+		((SWL? fmt) (normalize-jswl it))
 		((n1mm? it) (normalize-n1mm it))
 		((adif? it) (normalize-adif it))
 		((cqww? it) (normalize-cqww it))
@@ -325,6 +327,7 @@
 		((zdos? it) (normalize-zdos it))))
 
 ; format identification
+(defun SWL? fmt (member fmt (list "SWL" "jswl")))
 (defun n1mm? it (not (null? (n1mm-code it))))
 (defun adif? it (not (null? (adif-TIME it))))
 (defun qxsl? it (not (null? (qxsl-rstq it))))
@@ -404,6 +407,16 @@
 (defun transform-jarl it
 	(let new (transform-qxsl it)
 		(set-qxsl-name new null) new))
+
+; field conversion into jswl
+(defun transform-jswl it
+	(let new (transform-jarl it)
+		(set-qxsl-RSTQ new null) new))
+
+; field conversion from qxsl
+(defun normalize-jswl it
+	(let new (normalize-qxsl it)
+		(set-qxsl-RSTQ new (if (PHONE? it) 59 599)) new))
 
 ; field conversion into ctxt
 (defun transform-ctxt it

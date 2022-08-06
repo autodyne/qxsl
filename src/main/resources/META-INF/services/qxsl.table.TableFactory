@@ -3,6 +3,7 @@ gaas.table.AdxsFactory
 gaas.table.AdisFactory
 gaas.table.CqwwFactory
 gaas.table.JarlFactory
+gaas.table.JSwlFactory
 gaas.table.CTxtFactory
 gaas.table.ZAllFactory
 gaas.table.ZDosFactory

@@ -137,7 +137,8 @@ The following LISP programs are bundled inside the JAR file, as sample codes in 
 | type | format | ext   |
 |------|--------|-------|
 |`qxml`|QXML    |       |
-|`jarl`|JARL    |       |
+|`jarl`|JARL LOG|       |
+|`jswl`|JARL SWL|       |
 |`adis`|ADIF    |`.adi` |
 |`adxs`|ADIF    |`.adx` |
 |`cqww`|CQWW    |`.cbr` |
