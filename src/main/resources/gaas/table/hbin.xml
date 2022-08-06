@@ -11,7 +11,8 @@
 {qxsl.org}band,
 {qxsl.org}mode,
 {qxsl.org}name,
-{qxsl.org}note
+{qxsl.org}note,
+{qxsl.org}text
 </entry>
 <entry key="rcvd-fields">
 {qxsl.org}code,

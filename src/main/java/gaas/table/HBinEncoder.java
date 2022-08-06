@@ -128,7 +128,7 @@ public final class HBinEncoder extends BasicEncoder {
 		write(item.get(Qxsl.NAME), Column.NAME);
 		write(null, Column.QTH);
 		write(item.get(Qxsl.NOTE), Column.RMK1);
-		write(null, Column.RMK2);
+		write(item.get(Qxsl.TEXT), Column.RMK2);
 		target.flush();
 	}
 

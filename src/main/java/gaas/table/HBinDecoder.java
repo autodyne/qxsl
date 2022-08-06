@@ -123,7 +123,7 @@ public final class HBinDecoder extends BasicDecoder {
 		name(item);
 		skip(Column.QTH);
 		note(item);
-		skip(Column.RMK2);
+		text(item);
 		source.readByte();
 		return item;
 	}
@@ -311,5 +311,17 @@ public final class HBinDecoder extends BasicDecoder {
 	 */
 	private final void note(Item item) throws IOException {
 		item.set(cache(Qxsl.NOTE, read(Column.RMK1)));
+	}
+
+	/**
+	 * 交信記録に交信の補足を読み取ります。
+	 *
+	 *
+	 * @param item 設定する交信記録
+	 *
+	 * @throws IOException 読み取りに失敗した場合
+	 */
+	private final void text(Item item) throws IOException {
+		item.set(cache(Qxsl.TEXT, read(Column.RMK2)));
 	}
 }

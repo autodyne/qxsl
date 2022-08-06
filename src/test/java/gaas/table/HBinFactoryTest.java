@@ -53,6 +53,7 @@ public final class HBinFactoryTest extends Assertions {
 			item.set(new Call(alnum(20)));
 			item.set(new Mode(alnum(4)));
 			item.set(new Note(alnum(54)));
+			item.set(new Text(alnum(54)));
 			item.set(new Name(alnum(12)));
 			item.getRcvd().set(new RSTQ(randInt(600)));
 			item.getSent().set(new RSTQ(randInt(600)));
