@@ -221,6 +221,6 @@ public final class JarlDecoder extends PrintDecoder {
 	 * @param text ナンバーの文字列
 	 */
 	private final void mul1(Item item, String text) {
-		item.set(cache(Qxsl.MUL1, text));
+		item.set(cache(Qxsl.MUL1, "-".equals(text)? null: text));
 	}
 }

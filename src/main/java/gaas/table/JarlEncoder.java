@@ -82,8 +82,8 @@ public final class JarlEncoder extends PrintEncoder {
 		space(item.getSent().some(Qxsl.CODE).padTail(7));
 		space(item.getRcvd().some(Qxsl.RSTQ).padTail(3));
 		space(item.getRcvd().some(Qxsl.CODE).padTail(7));
-		space(item.some(Qxsl.MUL1).padTail(7));
-		print("   1");
+		empty(item.some(Qxsl.MUL1).padTail(6));
+		print("  1");
 		println();
 	}
 

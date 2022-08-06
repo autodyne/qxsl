@@ -80,4 +80,22 @@ public abstract class PrintEncoder extends BasicEncoder {
 		writer.write(str);
 		writer.write(' ');
 	}
+
+	/**
+	 * 指定された文字列を空白付きで出力します。
+	 * 空白文字列の場合はハイフンを出力します。
+	 *
+	 *
+	 * @param str 出力する文字列
+	 *
+	 * @throws IOException 書き込みに失敗した場合
+	 */
+	public final void empty(String str) throws IOException {
+		if(str.trim().isEmpty()) {
+			writer.write('-');
+			space(str.substring(1));
+		} else {
+			space(str);
+		}
+	}
 }

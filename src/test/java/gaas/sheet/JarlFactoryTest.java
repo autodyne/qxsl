@@ -56,7 +56,7 @@ public final class JarlFactoryTest extends Assertions {
 			item.set(bands.get(randInt(bands.size())));
 			item.set(new Call(alnum(13)));
 			item.set(new Mode(alnum(5)));
-			item.set(new Mul1(alnum(7)));
+			item.set(new Mul1(alnum(6)));
 			item.getRcvd().set(new RSTQ(randInt(600)));
 			item.getRcvd().set(new Code(alnum(7)));
 			item.getSent().set(new RSTQ(randInt(600)));
