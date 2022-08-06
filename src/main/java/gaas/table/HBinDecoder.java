@@ -218,7 +218,7 @@ public final class HBinDecoder extends BasicDecoder {
 	}
 
 	/**
-	 * 交信記録に相手局のコールサインを読み取ります。
+	 * 交信記録に呼出符号を読み取ります。
 	 *
 	 *
 	 * @param item 設定する交信記録
@@ -230,7 +230,7 @@ public final class HBinDecoder extends BasicDecoder {
 	}
 
 	/**
-	 * 交信記録に相手局から受信したナンバーを読み取ります。
+	 * 交信記録にナンバーを読み取ります。
 	 *
 	 *
 	 * @param item 設定する交信記録
@@ -242,7 +242,7 @@ public final class HBinDecoder extends BasicDecoder {
 	}
 
 	/**
-	 * 交信記録に相手局まで送信したレポートを読み取ります。
+	 * 交信記録に相手局宛てのレポートを読み取ります。
 	 *
 	 *
 	 * @param item 設定する交信記録
@@ -254,7 +254,7 @@ public final class HBinDecoder extends BasicDecoder {
 	}
 
 	/**
-	 * 交信記録に相手局から受信したレポートを読み取ります。
+	 * 交信記録に相手局からのレポートを読み取ります。
 	 *
 	 *
 	 * @param item 設定する交信記録

@@ -12,6 +12,7 @@ import java.util.Arrays;
 
 import qxsl.draft.Qxsl;
 import qxsl.model.Item;
+import qxsl.model.Node;
 import qxsl.table.BasicDecoder;
 
 import gaas.table.CBinFactory.BandEnum;
@@ -98,17 +99,17 @@ public final class CBinDecoder extends BasicDecoder {
 	@Override
 	public final Item next() throws IOException {
 		final var item = new Item();
-		call(item);
-		sent(item);
-		rcvd(item);
-		mode(item);
+		call(item.getBoth());
+		code(item.getSent());
+		code(item.getRcvd());
+		mode(item.getBoth());
 		source.read();
-		band(item);
+		band(item.getBoth());
 		source.skipBytes(5);
-		time(item);
-		name(item);
+		time(item.getBoth());
+		name(item.getBoth());
 		source.skipBytes(2);
-		note(item);
+		note(item.getBoth());
 		source.skipBytes(2);
 		this.numQSOs--;
 		return item;
@@ -151,95 +152,83 @@ public final class CBinDecoder extends BasicDecoder {
 	 * 交信記録に交信日時を読み取ります。
 	 *
 	 *
-	 * @param item 設定する交信記録
+	 * @param node 設定する交信記録
 	 *
 	 * @throws IOException 読み取りに失敗した場合
 	 */
-	private final void time(Item item) throws IOException {
-		item.set(cDTime.decode(source.readLong()));
+	private final void time(Node node) throws IOException {
+		node.set(cDTime.decode(source.readLong()));
 	}
 
 	/**
-	 * 交信記録に相手局のコールサインを読み取ります。
+	 * 交信記録に呼出符号を読み取ります。
 	 *
 	 *
-	 * @param item 設定する交信記録
+	 * @param node 設定する交信記録
 	 *
 	 * @throws IOException 読み取りに失敗した場合
 	 */
-	private final void call(Item item) throws IOException {
-		item.set(cache(Qxsl.CALL, read(20)));
+	private final void call(Node node) throws IOException {
+		node.set(cache(Qxsl.CALL, read(20)));
 	}
 
 	/**
-	 * 交信記録に相手局まで送信したナンバーを読み取ります。
+	 * 交信記録にナンバーを読み取ります。
 	 *
 	 *
-	 * @param item 設定する交信記録
-	 *
-	 * @throws IOException 読み取りに失敗した場合
-	 */
-	private final void sent(Item item) throws IOException {
-		item.getSent().set(cache(Qxsl.CODE, read(30)));
-	}
-
-	/**
-	 * 交信記録に相手局から受信したナンバーを読み取ります。
-	 *
-	 *
-	 * @param item 設定する交信記録
+	 * @param node 設定する交信記録
 	 *
 	 * @throws IOException 読み取りに失敗した場合
 	 */
-	private final void rcvd(Item item) throws IOException {
-		item.getRcvd().set(cache(Qxsl.CODE, read(30)));
+	private final void code(Node node) throws IOException {
+		node.set(cache(Qxsl.CODE, read(30)));
 	}
 
 	/**
 	 * 交信記録に通信方式を読み取ります。
 	 *
 	 *
-	 * @param item 設定する交信記録
+	 * @param node 設定する交信記録
 	 *
 	 * @throws IOException 読み取りに失敗した場合
 	 */
-	private final void mode(Item item) throws IOException {
-		item.set(ModeEnum.forIndex(source.read()).toMode());
+	private final void mode(Node node) throws IOException {
+		node.set(ModeEnum.forIndex(source.read()).toMode());
 	}
 
 	/**
 	 * 交信記録に周波数帯を読み取ります。
 	 *
 	 *
-	 * @param item 設定する交信記録
+	 * @param node 設定する交信記録
 	 *
 	 * @throws IOException 読み取りに失敗した場合
 	 */
-	private final void band(Item item) throws IOException {
-		item.set(BandEnum.forIndex(source.read()).toBand());
+	private final void band(Node node) throws IOException {
+		node.set(BandEnum.forIndex(source.read()).toBand());
 	}
 
 	/**
 	 * 交信記録に運用者名を読み取ります。
 	 *
 	 *
-	 * @param item 設定する交信記録
+	 * @param node 設定する交信記録
 	 *
 	 * @throws IOException 読み取りに失敗した場合
 	 */
-	private final void name(Item item) throws IOException {
-		item.set(cache(Qxsl.NAME, read(20)));
+	private final void name(Node node) throws IOException {
+		node.set(cache(Qxsl.NAME, read(20)));
 	}
 
 	/**
 	 * 交信記録に交信の備考を読み取ります。
 	 *
 	 *
-	 * @param item 設定する交信記録
+	 * @param node 設定する交信記録
 	 *
 	 * @throws IOException 読み取りに失敗した場合
 	 */
-	private final void note(Item item) throws IOException {
-		item.set(cache(Qxsl.NOTE, read(50)));
+	private final void note(Node node) throws IOException {
+		node.set(cache(Qxsl.NOTE, read(50)));
 	}
 }

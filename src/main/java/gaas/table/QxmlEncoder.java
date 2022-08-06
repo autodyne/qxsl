@@ -194,7 +194,7 @@ public final class QxmlEncoder extends TableEncoder {
 	}
 
 	/**
-	 * ストリームに1件の相手局から受信した情報を出力します。
+	 * ストリームに相手局からの情報を出力します。
 	 *
 	 *
 	 * @param rcvd 出力する相手局から受信した情報
@@ -210,7 +210,7 @@ public final class QxmlEncoder extends TableEncoder {
 	}
 
 	/**
-	 * ストリームに1件の相手局まで送信した情報を出力します。
+	 * ストリームに相手局宛ての情報を出力します。
 	 *
 	 *
 	 * @param sent 出力する相手局まで送信した情報

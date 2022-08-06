@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import qxsl.draft.Qxsl;
 import qxsl.draft.Time;
 import qxsl.model.Item;
+import qxsl.model.Node;
 import qxsl.table.PrintDecoder;
 
 /**
@@ -93,15 +94,15 @@ public final class JarlDecoder extends PrintDecoder {
 		try {
 			final var vals = readLine().split("\\s+");
 			vals[TIME] = vals[0].concat(" ").concat(vals[1]);
-			if(vals.length > TIME) time(item, vals[TIME]);
-			if(vals.length > BAND) band(item, vals[BAND]);
-			if(vals.length > MODE) mode(item, vals[MODE]);
-			if(vals.length > CALL) call(item, vals[CALL]);
-			if(vals.length > SRST) sRST(item, vals[SRST]);
-			if(vals.length > SENT) sent(item, vals[SENT]);
-			if(vals.length > RRST) rRST(item, vals[RRST]);
-			if(vals.length > RCVD) rcvd(item, vals[RCVD]);
-			if(vals.length > MUL1) mul1(item, vals[MUL1]);
+			if(vals.length > TIME) time(item.getBoth(), vals[TIME]);
+			if(vals.length > BAND) band(item.getBoth(), vals[BAND]);
+			if(vals.length > MODE) mode(item.getBoth(), vals[MODE]);
+			if(vals.length > CALL) call(item.getBoth(), vals[CALL]);
+			if(vals.length > SRST) rstq(item.getSent(), vals[SRST]);
+			if(vals.length > SENT) code(item.getSent(), vals[SENT]);
+			if(vals.length > RRST) rstq(item.getRcvd(), vals[RRST]);
+			if(vals.length > RCVD) code(item.getRcvd(), vals[RCVD]);
+			if(vals.length > MUL1) mul1(item.getBoth(), vals[MUL1]);
 			return item;
 		} catch (RuntimeException ex) {
 			throw new IOException(ex);
@@ -129,98 +130,76 @@ public final class JarlDecoder extends PrintDecoder {
 	 * 交信記録に交信日時を設定します。
 	 *
 	 *
-	 * @param item 設定する交信記録
+	 * @param node 設定する交信記録
 	 * @param text 交信日時の文字列
 	 */
-	private final void time(Item item, String text) {
-		item.set(new Time(LocalDateTime.parse(text, tstamp)));
+	private final void time(Node node, String text) {
+		node.set(new Time(LocalDateTime.parse(text, tstamp)));
 	}
 
 	/**
 	 * 交信記録に周波数帯を設定します。
 	 *
 	 *
-	 * @param item 設定する交信記録
+	 * @param node 設定する交信記録
 	 * @param text 周波数帯の文字列
 	 */
-	private final void band(Item item, String text) {
-		item.set(cache(Qxsl.BAND, text.concat("MHz")));
+	private final void band(Node node, String text) {
+		node.set(cache(Qxsl.BAND, text.concat("MHz")));
 	}
 
 	/**
 	 * 交信記録に通信方式を設定します。
 	 *
 	 *
-	 * @param item 設定する交信記録
+	 * @param node 設定する交信記録
 	 * @param text 通信方式の文字列
 	 */
-	private final void mode(Item item, String text) {
-		item.set(cache(Qxsl.MODE, text));
+	private final void mode(Node node, String text) {
+		node.set(cache(Qxsl.MODE, text));
 	}
 
 	/**
-	 * 交信記録に相手局の呼出符号を設定します。
+	 * 交信記録に呼出符号を設定します。
 	 *
 	 *
-	 * @param item 設定する交信記録
+	 * @param node 設定する交信記録
 	 * @param text 呼出符号の文字列
 	 */
-	private final void call(Item item, String text) {
-		item.set(cache(Qxsl.CALL, text));
+	private final void call(Node node, String text) {
+		node.set(cache(Qxsl.CALL, text));
 	}
 
 	/**
-	 * 交信記録に相手局まで送信したレポートを設定します。
+	 * 交信記録にレポートを設定します。
 	 *
 	 *
-	 * @param item 設定する交信記録
+	 * @param node 設定する交信記録
 	 * @param text レポートの文字列
 	 */
-	private final void sRST(Item item, String text) {
-		item.getSent().set(cache(Qxsl.RSTQ, text));
+	private final void rstq(Node node, String text) {
+		node.set(cache(Qxsl.RSTQ, text));
 	}
 
 	/**
-	 * 交信記録に相手局まで送信したナンバーを設定します。
+	 * 交信記録にナンバーを設定します。
 	 *
 	 *
-	 * @param item 設定する交信記録
+	 * @param node 設定する交信記録
 	 * @param text ナンバーの文字列
 	 */
-	private final void sent(Item item, String text) {
-		item.getSent().set(cache(Qxsl.CODE, text));
-	}
-
-	/**
-	 * 交信記録に相手局から受信したレポートを設定します。
-	 *
-	 *
-	 * @param item 設定する交信記録
-	 * @param text レポートの文字列
-	 */
-	private final void rRST(Item item, String text) {
-		item.getRcvd().set(cache(Qxsl.RSTQ, text));
-	}
-
-	/**
-	 * 交信記録に相手局から受信したナンバーを設定します。
-	 *
-	 *
-	 * @param item 設定する交信記録
-	 * @param text ナンバーの文字列
-	 */
-	private final void rcvd(Item item, String text) {
-		item.getRcvd().set(cache(Qxsl.CODE, text));
+	private final void code(Node node, String text) {
+		node.set(cache(Qxsl.CODE, text));
 	}
 
 	/**
 	 * 交信記録に獲得番号を設定します。
 	 *
 	 *
-	 * @param item 設定する交信記録
+	 * @param node 設定する交信記録
 	 * @param text ナンバーの文字列
 	 */
-	private final void mul1(Item item, String text) {
-		item.set(cache(Qxsl.MUL1, "-".equals(text)? null: text));
+	private final void mul1(Node node, String text) {
+		node.set(cache(Qxsl.MUL1, "-".equals(text)? null: text));
 	}
 }
