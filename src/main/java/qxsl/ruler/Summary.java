@@ -13,7 +13,6 @@ import java.util.stream.Stream;
 import qxsl.model.Item;
 
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 
 /**
  * 有効な交信と無効な交信と得点を保持します。
@@ -24,6 +23,7 @@ import static java.util.stream.Collectors.toSet;
  * @since 2016/11/26
  */
 public final class Summary implements Serializable {
+	private static final String DUPE = "DUPE";
 	private final Map<Element, Message> acc;
 	private final List<Message> rej;
 	private final List<Element> mul;
@@ -37,27 +37,30 @@ public final class Summary implements Serializable {
 	 * @param list 交信記録
 	 */
 	public Summary(Section rule, List<Item> list) {
+		this.sec = rule;
 		this.acc = new LinkedHashMap<>();
 		this.rej = new ArrayList<>(list.size());
 		this.mul = new ArrayList<>(list.size());
-		this.sec = rule;
-		sort(list);
-		for(var v: accepted()) mul.add(sec.entity(v.item()));
+		for(var item: list) addItem(item);
+		for(var m: acc.values()) {
+			final var item = m.item();
+			mul.add(sec.entity(item));
+		}
 	}
 
 	/**
 	 * 有効な交信と無効な交信を分離します。
 	 *
 	 *
-	 * @param list 交信記録
+	 * @param item 交信記録
 	 */
-	private final void sort(List<Item> list) {
-		for(var item: list) {
-			final var msg = sec.verify(item);
-			final var idx = sec.unique(msg.item());
-			if(acc.containsKey(idx)) rej.add(msg);
-			else if(msg.isFailure()) rej.add(msg);
-			else if(msg.isSuccess()) acc.put(idx, msg);
+	private final void addItem(Item item) {
+		final var msg = sec.verify(item);
+		if(msg.isFailure()) rej.add(msg);
+		else {
+			final var idx = this.sec.unique(msg.item());
+			if(!acc.containsKey(idx)) acc.put(idx, msg);
+			else rej.add(new Failure(msg.item(), DUPE));
 		}
 	}
 
@@ -114,7 +117,9 @@ public final class Summary implements Serializable {
 	 * @since 2020/02/26
 	 */
 	private final Set<Element> keys(int rank) {
-		return mul.stream().map(m -> m.get(rank)).collect(toSet());
+		final var set = new HashSet<Element>();
+		for(var el: mul) set.add(el.get(rank));
+		return Collections.unmodifiableSet(set);
 	}
 
 	/**
@@ -125,9 +130,10 @@ public final class Summary implements Serializable {
 	 *
 	 * @since 2020/02/26
 	 */
-	public final Stream<Set<Element>> entity() {
-		final var size = mul.stream().mapToInt(mul -> mul.size()).min();
-		return IntStream.range(0, size.getAsInt()).mapToObj(this::keys);
+	public final List<Set<Element>> keySets() {
+		final var size = this.mul.stream().mapToInt(Element::size);
+		final var rank = IntStream.range(0, size.min().getAsInt());
+		return rank.mapToObj(this::keys).collect(toList());
 	}
 
 	/**
@@ -139,8 +145,9 @@ public final class Summary implements Serializable {
 	 * @since 2020/09/03
 	 */
 	public final Object[] toArray() {
-		final var score = Stream.of(score());
-		final var mults = entity().map(Set::toArray);
-		return Stream.concat(score, mults).toArray();
+		final var score = Stream.of(this.score());
+		final var mults = this.keySets().stream();
+		final var lists = mults.map(Set::toArray);
+		return Stream.concat(score, lists).toArray();
 	}
 }
