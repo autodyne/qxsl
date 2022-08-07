@@ -206,10 +206,3 @@
 ; get city from the specified code or name
 (setq city<-code (method 'getByCode LocalCityBase String))
 (setq city<-name (method 'getByName LocalCityBase String))
-
-; contest schedule
-(defun schedule (year month week day)
-	(let day ((method! 'valueOf DayOfWeek) day)
-		(let adj (method! 'dayOfWeekInMonth TemporalAdjusters)
-			(let 1st ((method! 'of LocalDate) year month 1)
-				((method! 'with LocalDate) 1st (adj week day))))))

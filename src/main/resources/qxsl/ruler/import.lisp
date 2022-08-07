@@ -11,15 +11,9 @@
 (import java.math.BigDecimal)
 (import java.math.RoundingMode)
 
-(import java.time.DayOfWeek)
-(import java.time.LocalDate)
-(import java.time.LocalDateTime)
-(import java.time.Month)
 (import java.time.ZoneId)
 (import java.time.ZonedDateTime)
 (import java.time.format.DateTimeFormatter)
-(import java.time.temporal.TemporalAdjuster)
-(import java.time.temporal.TemporalAdjusters)
 
 (import javax.xml.namespace.QName)
 
