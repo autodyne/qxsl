@@ -408,6 +408,12 @@
 		"allPublicFields": true
 	},
 	{
+		"name": "gaas.draft.SignFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
 		"name": "gaas.draft.TextFactory",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
@@ -1651,6 +1657,12 @@
 	},
 	{
 		"name": "qxsl.draft.RSTQ",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "qxsl.draft.Sign",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
 		"allPublicFields": true

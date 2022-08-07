@@ -101,6 +101,11 @@ public abstract class Qxsl<V> extends Field<V> {
 	public static final QName RSTQ = new QName(URI, "rstq", PRE);
 
 	/**
+	 * 交信の照合結果を表す属性の名前です。
+	 */
+	public static final QName SIGN = new QName(URI, "sign", PRE);
+
+	/**
 	 * 交信記録の補足を表す属性の名前です。
 	 */
 	public static final QName TEXT = new QName(URI, "text", PRE);

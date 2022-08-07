@@ -7,6 +7,7 @@ gaas.draft.Mul2Factory
 gaas.draft.NameFactory
 gaas.draft.NoteFactory
 gaas.draft.RSTQFactory
+gaas.draft.SignFactory
 gaas.draft.TextFactory
 gaas.draft.TimeFactory
 gaas.draft.WattFactory
