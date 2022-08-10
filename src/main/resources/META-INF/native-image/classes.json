@@ -66,6 +66,12 @@
 		"allPublicFields": true
 	},
 	{
+		"name": "elva.form.CaseForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
 		"name": "elva.form.CatchForm",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,

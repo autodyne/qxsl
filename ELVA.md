@@ -398,6 +398,14 @@ returns the first element of the specified list.
 (car list)
 ```
 
+### case
+
+evaluates the expression specified by the key.
+
+```lisp
+(case condition (key value)*)
+```
+
 ### catch
 
 evaluates the expression and returns an error.

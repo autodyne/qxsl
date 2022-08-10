@@ -7,6 +7,7 @@ elva.form.AssertForm
 elva.form.BlockForm
 elva.form.CadrForm
 elva.form.CarForm
+elva.form.CaseForm
 elva.form.CatchForm
 elva.form.CddrForm
 elva.form.CdrForm
