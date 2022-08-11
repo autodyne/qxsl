@@ -108,8 +108,8 @@ public final class CBinEncoder extends BasicEncoder {
 	public final void output(Item item) throws IOException {
 		if(last != null) target.writeShort(0x0180);
 		write(20, item.get(Qxsl.CALL));
-		write(30, item.getSent().get(Qxsl.CODE));
-		write(30, item.getRcvd().get(Qxsl.CODE));
+		write(30, item.getSent(Qxsl.CODE));
+		write(30, item.getRcvd(Qxsl.CODE));
 		mode((Mode) item.get(Qxsl.MODE));
 		target.writeByte(0);
 		band((Band) item.get(Qxsl.BAND));

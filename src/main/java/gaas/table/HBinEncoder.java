@@ -117,12 +117,12 @@ public final class HBinEncoder extends BasicEncoder {
 		target.write(0x20);
 		write(item.get(Qxsl.CALL), Column.CALLS, Column.IGN);
 		time((Time) item.get(Qxsl.TIME));
-		write(item.getRcvd().get(Qxsl.CODE), Column.CODE);
+		write(item.getRcvd(Qxsl.CODE), Column.CODE);
 		write(null, Column.GL);
 		write(null, Column.QSL);
 		write(null, Column.FLAG);
-		write(item.getSent().get(Qxsl.RSTQ), Column.HIS);
-		write(item.getRcvd().get(Qxsl.RSTQ), Column.MY);
+		write(item.getSent(Qxsl.RSTQ), Column.HIS);
+		write(item.getRcvd(Qxsl.RSTQ), Column.MY);
 		band((Band) item.get(Qxsl.BAND));
 		write(item.get(Qxsl.MODE), Column.MODE);
 		write(item.get(Qxsl.NAME), Column.NAME);

@@ -107,15 +107,15 @@ public final class ZBinEncoder extends BasicEncoder {
 	public final void output(Item item) throws IOException {
 		time((Time) item.get(Qxsl.TIME));
 		write(12, item.get(Qxsl.CALL));
-		write(30, item.getSent().get(Qxsl.CODE));
-		write(30, item.getRcvd().get(Qxsl.CODE));
+		write(30, item.getSent(Qxsl.CODE));
+		write(30, item.getRcvd(Qxsl.CODE));
 		target.write(new byte[1]);
-		rstq((RSTQ) item.getSent().get(Qxsl.RSTQ));
-		rstq((RSTQ) item.getRcvd().get(Qxsl.RSTQ));
+		rstq((RSTQ) item.getSent(Qxsl.RSTQ));
+		rstq((RSTQ) item.getRcvd(Qxsl.RSTQ));
 		target.write(new byte[4]);
 		mode((Mode) item.get(Qxsl.MODE));
 		band((Band) item.get(Qxsl.BAND));
-		watt((Watt) item.getSent().get(Qxsl.WATT));
+		watt((Watt) item.getSent(Qxsl.WATT));
 		write(30, item.get(Qxsl.MUL1));
 		write(30, item.get(Qxsl.MUL2));
 		target.write(new byte[3]);

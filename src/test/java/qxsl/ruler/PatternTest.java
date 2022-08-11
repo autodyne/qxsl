@@ -43,7 +43,7 @@ public final class PatternTest extends Assertions {
 		back.set(item.get(Qxsl.MODE));
 		item.set(((Time) item.get(Qxsl.TIME)).year(2020).drop());
 		back.set(((Time) back.get(Qxsl.TIME)).year(2020).drop());
-		back.getSent().set(item.getSent().get(Qxsl.CODE));
+		back.getSent().set(item.getSent(Qxsl.CODE));
 		assertThat(item).isEqualTo(back);
 	}
 

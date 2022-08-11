@@ -69,6 +69,48 @@ public final class Item extends Tuple {
 	}
 
 	/**
+	 * 送受信局間に共通の属性を返します。
+	 *
+	 *
+	 * @param key 属性の名前
+	 *
+	 * @return 送受信局間に共通の属性
+	 *
+	 * @since 2022/08/11
+	 */
+	public final Field getBoth(QName key) {
+		return both.get(key);
+	}
+
+	/**
+	 * 相手局から受信した属性を返します。
+	 *
+	 *
+	 * @param key 属性の名前
+	 *
+	 * @return 相手局から受信した属性
+	 *
+	 * @since 2022/08/11
+	 */
+	public final Field getRcvd(QName key) {
+		return rcvd.get(key);
+	}
+
+	/**
+	 * 相手局まで送信した属性を返します。
+	 *
+	 *
+	 * @param key 属性の名前
+	 *
+	 * @return 相手局まで送信した属性
+	 *
+	 * @since 2022/08/11
+	 */
+	public final Field getSent(QName key) {
+		return sent.get(key);
+	}
+
+	/**
 	 * この要素のハッシュ値を計算します。
 	 *
 	 *
@@ -110,7 +152,7 @@ public final class Item extends Tuple {
 		join.add(both.toString());
 		join.add(rcvd.toString());
 		join.add(sent.toString());
-		return String.format("%s={%s}", name(), join);
+		return String.format("{%s}", join);
 	}
 
 	/**
