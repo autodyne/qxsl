@@ -16,7 +16,8 @@
 
 ; contact validation
 (defmacro score conds
-	`(verify ,conds (lambda it 1)))
+	`(verify ,conds
+		(lambda it (if (null? (qxsl-sign it)) 1 2))))
 
 ; keys for identification
 (defun unique it
