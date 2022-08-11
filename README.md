@@ -36,7 +36,7 @@ Each `Item` contains some `Field` objects, which indicate properties such as `Ti
 In addition, each `Item` holds two `Node` objects, namely `Rcvd` and `Sent`, which involve some messages (`Field`s) exchanged by the operator and the contacted station.
 
 ```Scala
-import qxsl.model.{Item,Rcvd,Sent}
+import qxsl.model.{Item, Rcvd, Sent}
 val item: Item = new Item
 val rcvd: Rcvd = item.getRcvd
 val sent: Sent = item.getSent
@@ -74,20 +74,21 @@ This mechanism is utilized for en/decoding the *QXML* format, which is an altern
 ### Decoding & Encoding
 
 The package `qxsl.table` provides a basic framework for en/decoding log files including QXML and ADIF.
-The class `TableManager` detects individual formats (`TableFactory`s) from the class path automatically, and also provides the `detect` method for automatic format detection.
+The class `TableManager` detects individual formats (`TableFactory`s) from the class path automatically, and also provides the `decode` method for automatic format detection.
 
 ```Scala
 val tables = new qxsl.table.TableManager()
-val table: List[Item] = tables.decode(Files.readAllBytes(path))
-tables.getFactory("qxml").encoder(Files.newOutputStream(path)).encode(table)
+val table: java.util.List[Item] = tables.decode(Files.readAllBytes(path))
+tables.factory("qxml").encoder(Files.newOutputStream(path)).encode(table)
 ```
 
 The package `qxsl.sheet` provides an en/decoding framework similar to the `qxsl.table` package, except that `qxsl.sheet` handles contest summary sheets such as Cabrillo and [JARL summary sheet](https://www.jarl.org/Japanese/1_Tanoshimo/1-1_Contest/e-log.htm) R2.0.
-The class `SheetManager` manages individual `SheetFactory` implementations, and also provides the `unpack` method useful for extracting table items from a summary sheet.
+The class `SheetManager` manages individual `SheetFactory` implementations.
+The class `SheetOrTable` provides the `unpack` method useful for extracting table items from a summary sheet.
 
 ```Scala
-val sheets = new qxsl.sheet.SheetManager()
-val table: List[Item] = tables.decode(sheets.unpack(Files.readAllBytes(path)))
+val sheets = new qxsl.sheet.SheetOrTable()
+val table: java.util.List[Item] = sheets.unpack(Files.readAllBytes(path))
 ```
 
 ### Scoring for Awards & Contests
@@ -96,23 +97,23 @@ The package `qxsl.ruler` provides a rulemaking framework for amateur radio award
 Each contest is represented as a `Contest` object, which is provided by a `RuleKit` object or a script engine to define the contest.
 
 ```Scala
-import qxsl.ruler.{Contest,RuleKit}
+import qxsl.ruler.{Contest, RuleKit}
 val engine = RuleKit.forName("elva")
 val stream = engine.getClass().getResourceAsStream("allja1.lisp")
-val allja1 = engine.contest(new InputStreamReader(stream, UTF_8))
+val allja1 = engine.eval(new InputStreamReader(stream)).contest()
 ```
 
 Each contest involves multiple `Section` objects.
 The `Section` object accepts `List[Item]` and validates the communications one by one, by invoking the `summarize` method.
 
 ```Scala
-import qxsl.ruler.{Section,Summary}
-for(section: Section <- allja1.getSections().asScala) {
+import qxsl.ruler.{Section, Summary}
+for(section: Section <- allja1.asScala) {
   val summary: Summary = section.summarize(table)
-  println(section.getCode())
-  println(section.getName())
-  summary.accepted.asScala.foreach(println)
-  summary.rejected.asScala.foreach(println)
+  println(section.code())
+  println(section.name())
+  summary.accepted().asScala.foreach(println)
+  summary.rejected().asScala.foreach(println)
   println(summary.score())
   println(summary.total())
 }
