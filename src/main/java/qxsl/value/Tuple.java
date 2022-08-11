@@ -5,6 +5,7 @@
 *******************************************************************************/
 package qxsl.value;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import javax.xml.namespace.QName;
 
@@ -16,7 +17,7 @@ import javax.xml.namespace.QName;
  *
  * @since 2015/08/05
  */
-public abstract class Tuple implements Iterable<Field> {
+public abstract class Tuple implements Iterable<Field>, Serializable {
 	private final QName name;
 
 	/**

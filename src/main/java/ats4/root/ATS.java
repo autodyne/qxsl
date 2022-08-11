@@ -8,7 +8,11 @@ package ats4.root;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import qxsl.ruler.Pattern;
+import qxsl.ruler.RuleKit;
+
 import ats4.base.ArchiveTable;
+import ats4.base.MessageTable;
 import ats4.base.RankingTable;
 import ats4.base.StationTable;
 import ats4.warn.TableAccessException;
@@ -24,6 +28,7 @@ import ats4.warn.TableAccessException;
 public final class ATS implements AutoCloseable {
 	private final Connection conn;
 	private final ArchiveTable archives;
+	private final MessageTable messages;
 	private final RankingTable rankings;
 	private final StationTable stations;
 
@@ -36,8 +41,24 @@ public final class ATS implements AutoCloseable {
 	 * @throws TableAccessException 疎通の障害
 	 */
 	public ATS(Connection conn) {
+		this(conn, RuleKit.load("format.lisp").pattern());
+	}
+
+	/**
+	 * 指定されたデータベースを利用します。
+	 *
+	 *
+	 * @param conn データベースの接続
+	 * @param rule 交信記録の変換規則
+	 *
+	 * @throws TableAccessException 疎通の障害
+	 *
+	 * @since 2022/08/11
+	 */
+	public ATS(Connection conn, Pattern rule) {
 		try {
 			this.archives = new ArchiveTable(conn);
+			this.messages = new MessageTable(conn, rule);
 			this.rankings = new RankingTable(conn);
 			this.stations = new StationTable(conn);
 		} finally {
@@ -70,6 +91,16 @@ public final class ATS implements AutoCloseable {
 	}
 
 	/**
+	 * 交信相手を管理するテーブルを返します。
+	 *
+	 *
+	 * @return 交信相手を管理するテーブル
+	 */
+	public final MessageTable messages() {
+		return messages;
+	}
+
+	/**
 	 * 成績順位を管理するテーブルを返します。
 	 *
 	 *
@@ -99,6 +130,7 @@ public final class ATS implements AutoCloseable {
 	 */
 	public final ATS createTables() {
 		archives.createTable();
+		messages.createTable();
 		rankings.createTable();
 		stations.createTable();
 		return this;
@@ -114,6 +146,7 @@ public final class ATS implements AutoCloseable {
 	 */
 	public final ATS deleteTables() {
 		archives.deleteTable();
+		messages.deleteTable();
 		rankings.deleteTable();
 		stations.deleteTable();
 		return this;
@@ -129,6 +162,7 @@ public final class ATS implements AutoCloseable {
 	 */
 	public final void drop(String call) {
 		for(var e: archives.byCall(call)) archives.drop(e);
+		for(var e: messages.byCall(call)) messages.drop(e);
 		for(var e: rankings.byCall(call)) rankings.drop(e);
 		for(var e: stations.byCall(call)) stations.drop(e);
 	}

@@ -19,7 +19,7 @@ import qxsl.ruler.Pattern;
 /**
  * creates and returns a pattern object.
  * <pre>
- * (pattern normalize transform)
+ * (pattern normalize transform cross-check)
  * </pre>
  *
  *
@@ -28,7 +28,7 @@ import qxsl.ruler.Pattern;
  * @since 2020/09/26
  */
 @Name("pattern")
-@Args(min = 2, max = 2)
+@Args(min = 3, max = 3)
 public final class PatternForm extends NativeOp {
 	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
@@ -47,6 +47,7 @@ public final class PatternForm extends NativeOp {
 final class PatternImpl extends Pattern {
 	private final FormBase norm;
 	private final FormBase tran;
+	private final FormBase xref;
 	private final ElvaEval eval;
 
 	/**
@@ -59,6 +60,7 @@ final class PatternImpl extends Pattern {
 	public PatternImpl(ListBase rule, ElvaEval eval) {
 		this.norm = eval.apply(rule.get(0)).form();
 		this.tran = eval.apply(rule.get(1)).form();
+		this.xref = eval.apply(rule.get(2)).form();
 		this.eval = eval;
 	}
 
@@ -75,6 +77,22 @@ final class PatternImpl extends Pattern {
 	@Override
 	public final Object get(String name) {
 		return eval.apply(new NameNode(name)).value();
+	}
+
+	/**
+	 * 相互に交信が成立した無線局間で交信記録を照合します。
+	 *
+	 *
+	 * @param a 片方の無線局の交信記録
+	 * @param b 他方の無線局の交信記録
+	 *
+	 * @return 照合の結果
+	 *
+	 * @since 2022/08/11
+	 */
+	@Override
+	public final boolean match(Item a, Item b) {
+		return eval.apply(xref.form(a, b)).bool();
 	}
 
 	/**

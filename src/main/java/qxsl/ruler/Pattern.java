@@ -26,6 +26,19 @@ public abstract class Pattern extends Library {
 	public Pattern() {}
 
 	/**
+	 * 相互に交信が成立した無線局間で交信記録を照合します。
+	 *
+	 *
+	 * @param a 片方の無線局の交信記録
+	 * @param b 他方の無線局の交信記録
+	 *
+	 * @return 照合の結果
+	 *
+	 * @since 2022/08/11
+	 */
+	public abstract boolean match(Item a, Item b);
+
+	/**
 	 * 交信記録をライブラリが定義する標準構造に変換します。
 	 *
 	 *

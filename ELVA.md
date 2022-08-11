@@ -683,7 +683,7 @@ performs or operation and returns a bool value.
 creates and returns a [`pattern`](https://nextzlog.github.io/qxsl/doc/qxsl/ruler/Pattern.html) object.
 
 ```lisp
-(pattern normalize transform)
+(pattern normalize transform cross-check)
 ```
 
 ### print

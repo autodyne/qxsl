@@ -10,8 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.function.Predicate;
 
-import qxsl.ruler.Contest;
-import qxsl.ruler.Section;
 import qxsl.ruler.Summary;
 
 import ats4.base.RankingTable;
@@ -110,18 +108,6 @@ public final class RankingData implements AccountData {
 		this.score = summary.score();
 		this.total = summary.total();
 		return this;
-	}
-
-	/**
-	 * 指定された規約で該当する部門を返します。
-	 *
-	 *
-	 * @param contest 規約
-	 *
-	 * @return 部門
-	 */
-	public final Section rule(Contest contest) {
-		return contest.section(this.sect);
 	}
 
 	/**

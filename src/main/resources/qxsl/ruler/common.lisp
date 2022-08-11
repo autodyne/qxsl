@@ -171,6 +171,11 @@
 ; get ZonedDateTime at another time zone
 (setq at-zone (method 'withZoneSameInstant ZonedDateTime ZoneId))
 
+; get time lag
+(setq SECONDS ((access 'SECONDS ChronoUnit)))
+(setq until (method 'until ZonedDateTime Temporal TemporalUnit))
+(defun until-secs (from to) (until from to SECONDS))
+
 ; format time into an ISO-8601 string
 (defun iso-8601 time
 	((method 'format ZonedDateTime DateTimeFormatter)

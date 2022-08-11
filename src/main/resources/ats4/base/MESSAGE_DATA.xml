@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<entry key="createTable">
+CREATE TABLE IF NOT EXISTS MESSAGE_DATA (
+	id int IDENTITY,
+	call varchar(16),
+	dest varchar(16),
+	item blob,
+	primary key(id)
+);
+</entry>
+<entry key="deleteTable">
+DROP TABLE IF EXISTS MESSAGE_DATA;
+</entry>
+<entry key="push">
+INSERT INTO MESSAGE_DATA (
+	call,
+	dest,
+	item
+) VALUES(?, ?, ?);
+</entry>
+<entry key="drop">
+DELETE FROM MESSAGE_DATA WHERE
+	call = ? AND
+	dest = ? AND
+	item = ?;
+</entry>
+<entry key="list">
+SELECT
+	call,
+	dest,
+	item
+FROM MESSAGE_DATA ORDER BY id;
+</entry>
+<entry key="call">
+SELECT
+	call,
+	dest,
+	item
+FROM MESSAGE_DATA WHERE
+	call = ?
+ORDER BY id;
+</entry>
+<entry key="dest">
+SELECT
+	call,
+	dest,
+	item
+FROM MESSAGE_DATA WHERE
+	call = ? AND
+	dest = ?
+ORDER BY id;
+</entry>
+</properties>

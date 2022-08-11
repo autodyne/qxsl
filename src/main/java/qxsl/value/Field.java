@@ -6,6 +6,7 @@
 package qxsl.value;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Objects;
 import javax.xml.namespace.QName;
 
@@ -21,7 +22,7 @@ import qxsl.field.FieldManager.Any;
  *
  * @param <V> 属性の属性値の総称型
  */
-public abstract class Field<V> {
+public abstract class Field<V> implements Serializable {
 	private final QName qname;
 
 	/**

@@ -451,5 +451,18 @@
 		(set-qxsl-code new (zdos-code it))
 		(set-qxsl-CODE new (zdos-CODE it)) new))
 
+; time-lag between items
+(defun time-lag (a b)
+	(until-secs (qxsl-time a) (qxsl-time b)))
+
+; cross-check ignoring time
+(defun cross-check (a b)
+	(and
+		(<= -180 (time-lag a b) 180)
+		(equal (qxsl-band a) (qxsl-band b))
+		(equal (qxsl-mode a) (qxsl-mode b))
+		(equal (qxsl-code a) (qxsl-CODE b))
+		(equal (qxsl-CODE a) (qxsl-code b))))
+
 ; returns the environment
-(pattern normalize transform)
+(pattern normalize transform cross-check)
