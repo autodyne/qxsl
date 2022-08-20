@@ -5,9 +5,15 @@
 *******************************************************************************/
 package ats4.base;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.List;
+
+import qxsl.model.Item;
+import qxsl.ruler.Pattern;
+import qxsl.sheet.SheetOrTable;
 
 import ats4.data.ArchiveData;
 import ats4.warn.TableAccessException;
@@ -22,16 +28,20 @@ import ats4.warn.TableSchemaException;
  * @since 2022/07/17
  */
 public final class ArchiveTable extends AccountTable<ArchiveData> {
+	private final Pattern rule;
+
 	/**
 	 * 指定されたデータベースを利用します。
 	 *
 	 *
 	 * @param conn データベースの接続
+	 * @param rule 交信記録の変換規則
 	 *
 	 * @throws TableAccessException 疎通の障害
 	 */
-	public ArchiveTable(Connection conn) {
+	public ArchiveTable(Connection conn, Pattern rule) {
 		super(conn, "ARCHIVE_DATA");
+		this.rule = rule;
 	}
 
 	/**
@@ -62,5 +72,29 @@ public final class ArchiveTable extends AccountTable<ArchiveData> {
 	 */
 	public final List<ArchiveData> byCall(String call) {
 		return new Select("call").value(call).execute();
+	}
+
+	/**
+	 * 指定されたレコードが含む交信記録を解釈します。
+	 *
+	 *
+	 * @param data レコード
+	 * @return 交信記録
+	 *
+	 * @throws UncheckedIOException 未対応の書式の例外
+	 *
+	 * @since 2022/08/21
+	 */
+	public final List<Item> getItems(ArchiveData data) {
+		try {
+			final var sot = new SheetOrTable();
+			final var seq = sot.unpack(data.data);
+			return this.rule.normalize(seq, null);
+		} catch (UncheckedIOException ex) {
+			throw ex;
+		} catch (RuntimeException ex) {
+			final var io = new IOException(ex);
+			throw new UncheckedIOException(io);
+		}
 	}
 }

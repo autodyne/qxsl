@@ -5,14 +5,9 @@
 *******************************************************************************/
 package ats4.data;
 
-import java.io.UncheckedIOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
-
-import qxsl.model.Item;
-import qxsl.sheet.SheetOrTable;
 
 import ats4.warn.TableAccessException;
 import ats4.warn.TableSchemaException;
@@ -80,34 +75,6 @@ public final class ArchiveData implements AccountData {
 			ps.setBytes(3, this.data);
 		} catch (SQLException ex) {
 			throw new TableAccessException(ex);
-		}
-	}
-
-	/**
-	 * このレコードが含む交信記録を解釈します。
-	 *
-	 *
-	 * @return 交信記録
-	 *
-	 * @throws UncheckedIOException 未対応の書式の例外
-	 */
-	public final List<Item> toItemList() {
-		final var cl = getClass().getClassLoader();
-		return new SheetOrTable(cl).unpack(data);
-	}
-
-	/**
-	 * 交信記録のエラーを表す文字列を返します。
-	 *
-	 *
-	 * @return 警告の文字列
-	 */
-	public final String getWarningMessage() {
-		try {
-			toItemList();
-			return null;
-		} catch (UncheckedIOException ex) {
-			return ex.getCause().getMessage();
 		}
 	}
 }

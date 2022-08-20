@@ -57,7 +57,7 @@ public final class ATS implements AutoCloseable {
 	 */
 	public ATS(Connection conn, Pattern rule) {
 		try {
-			this.archives = new ArchiveTable(conn);
+			this.archives = new ArchiveTable(conn, rule);
 			this.messages = new MessageTable(conn, rule);
 			this.rankings = new RankingTable(conn);
 			this.stations = new StationTable(conn);
