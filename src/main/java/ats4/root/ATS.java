@@ -8,6 +8,7 @@ package ats4.root;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import qxsl.ruler.Contest;
 import qxsl.ruler.Pattern;
 import qxsl.ruler.RuleKit;
 
@@ -26,6 +27,7 @@ import ats4.warn.TableAccessException;
  * @since 2022/07/17
  */
 public final class ATS implements AutoCloseable {
+	private final Pattern rule;
 	private final Connection conn;
 	private final ArchiveTable archives;
 	private final MessageTable messages;
@@ -62,6 +64,7 @@ public final class ATS implements AutoCloseable {
 			this.rankings = new RankingTable(conn);
 			this.stations = new StationTable(conn);
 		} finally {
+			this.rule = rule;
 			this.conn = conn;
 		}
 	}
@@ -165,5 +168,26 @@ public final class ATS implements AutoCloseable {
 		for(var e: messages.byCall(call)) messages.drop(e);
 		for(var e: rankings.byCall(call)) rankings.drop(e);
 		for(var e: stations.byCall(call)) stations.drop(e);
+	}
+
+	/**
+	 * 指定された呼出符号の参加局の得点を更新します。
+	 *
+	 *
+	 * @param call 呼出符号
+	 * @param rule コンテストの規約
+	 *
+	 * @throws TableAccessException 疎通の障害
+	 *
+	 * @since 2022/08/21
+	 */
+	public final void update(String call, Contest rule) {
+		final var seq = messages.search(call);
+		for(var ranking: rankings.byCall(call)) {
+			final var sect = rule.section(ranking.sect);
+			rankings.drop(ranking);
+			ranking.copy(sect.summarize(seq));
+			rankings.push(ranking);
+		}
 	}
 }

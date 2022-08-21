@@ -105,4 +105,32 @@ public final class StationData implements AccountData {
 			throw new TableAccessException(ex);
 		}
 	}
+
+	/**
+	 * 交信記録のレコードを生成します。
+	 *
+	 *
+	 * @return 交信記録のレコード
+	 *
+	 * @since 2022/08/21
+	 */
+	public final ArchiveData archive() {
+		final var data = new ArchiveData();
+		data.call = this.call;
+		return data;
+	}
+
+	/**
+	 * 成績順位のレコードを生成します。
+	 *
+	 *
+	 * @return 成績順位のレコード
+	 *
+	 * @since 2022/08/21
+	 */
+	public final RankingData ranking() {
+		final var data = new RankingData();
+		data.call = this.call;
+		return data;
+	}
 }

@@ -5,9 +5,17 @@
 *******************************************************************************/
 package ats4.data;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+
+import qxsl.model.Item;
+import qxsl.table.TableManager;
 
 import ats4.warn.TableAccessException;
 import ats4.warn.TableSchemaException;
@@ -75,6 +83,43 @@ public final class ArchiveData implements AccountData {
 			ps.setBytes(3, this.data);
 		} catch (SQLException ex) {
 			throw new TableAccessException(ex);
+		}
+	}
+
+	/**
+	 * 指定された交信記録を設定します。
+	 *
+	 *
+	 * @param list 交信記録
+	 *
+	 * @return このレコード
+	 *
+	 * @since 2022/08/21
+	 */
+	public final ArchiveData load(List<Item> list) {
+		this.data = new TableManager().encode(list);
+		return this;
+	}
+
+	/**
+	 * 指定されたパスの交信記録を設定します。
+	 *
+	 *
+	 * @param path 交信記録のパス
+	 *
+	 * @return このレコード
+	 *
+	 * @throws UncheckedIOException 読み取りの例外
+	 *
+	 * @since 2022/08/21
+	 */
+	public final ArchiveData load(Path path) {
+		try {
+			this.data = Files.readAllBytes(path);
+			this.file = String.valueOf(path);
+			return this;
+		} catch (IOException ex) {
+			throw new UncheckedIOException(ex);
 		}
 	}
 }

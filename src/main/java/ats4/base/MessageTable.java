@@ -5,6 +5,7 @@
 *******************************************************************************/
 package ats4.base;
 
+import java.io.UncheckedIOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.LinkedList;
@@ -13,7 +14,9 @@ import java.util.List;
 import qxsl.draft.Sign;
 import qxsl.model.Item;
 import qxsl.ruler.Pattern;
+import qxsl.sheet.SheetOrTable;
 
+import ats4.data.ArchiveData;
 import ats4.data.MessageData;
 import ats4.warn.TableAccessException;
 import ats4.warn.TableSchemaException;
@@ -71,6 +74,20 @@ public final class MessageTable extends AccountTable<MessageData> {
 	 */
 	public final List<MessageData> byCall(String call) {
 		return new Select("call").value(call).execute();
+	}
+
+	/**
+	 * 指定された交信記録のレコードを登録します。
+	 *
+	 *
+	 * @param data レコード
+	 *
+	 * @throws UncheckedIOException 読み込みの例外
+	 *
+	 * @since 2022/08/21
+	 */
+	public final void push(ArchiveData data) {
+		push(data.call, new SheetOrTable().unpack(data.data));
 	}
 
 	/**

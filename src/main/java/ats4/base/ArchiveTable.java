@@ -7,9 +7,11 @@ package ats4.base;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.List;
+import java.util.Optional;
 
 import qxsl.model.Item;
 import qxsl.ruler.Pattern;
@@ -95,6 +97,25 @@ public final class ArchiveTable extends AccountTable<ArchiveData> {
 		} catch (RuntimeException ex) {
 			final var io = new IOException(ex);
 			throw new UncheckedIOException(io);
+		}
+	}
+
+	/**
+	 * 指定された交信記録の解釈の可能性を検査します。
+	 *
+	 *
+	 * @param path 更新記録のパス
+	 *
+	 * @return 例外の文字列
+	 *
+	 * @since 2022/08/21
+	 */
+	public final Optional<String> decodable(Path path) {
+		try {
+			getItems(new ArchiveData().load(path));
+			return Optional.empty();
+		} catch (UncheckedIOException ex) {
+			return Optional.of(ex.getMessage());
 		}
 	}
 }
