@@ -510,6 +510,12 @@
 		"allPublicFields": true
 	},
 	{
+		"name": "gaas.table.ItemFactory",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
 		"name": "gaas.table.JSwlFactory",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,

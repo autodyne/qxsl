@@ -11,3 +11,4 @@ gaas.table.CBinFactory
 gaas.table.HBinFactory
 gaas.table.ZBinFactory
 gaas.table.ZNewFactory
+gaas.table.ItemFactory

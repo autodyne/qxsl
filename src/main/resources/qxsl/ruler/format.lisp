@@ -319,7 +319,8 @@
 			("cbin" (transform-zdos it))
 			("hbin" (transform-qxsl it))
 			("zbin" (transform-zlog it))
-			("znew" (transform-zlog it)))
+			("znew" (transform-zlog it))
+			("item" (transform-qxsl it)))
 		(set-qxsl-sign new (qxsl-sign it)) new))
 
 (defun normalize (it fmt)

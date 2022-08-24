@@ -5,7 +5,7 @@
 *******************************************************************************/
 package ats4.data;
 
-import java.io.*;
+import java.io.UncheckedIOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,6 +15,8 @@ import qxsl.draft.Qxsl;
 import qxsl.draft.Sign;
 import qxsl.model.Item;
 import qxsl.ruler.Pattern;
+
+import gaas.table.ItemFactory;
 
 import ats4.warn.TableAccessException;
 import ats4.warn.TableSchemaException;
@@ -73,8 +75,6 @@ public final class MessageData implements AccountData {
 			this.item = decode(rs.getBytes("item"));
 		} catch (SQLException ex) {
 			throw new TableSchemaException(ex);
-		} catch (IOException ex) {
-			throw new UncheckedIOException(ex);
 		}
 	}
 
@@ -96,8 +96,6 @@ public final class MessageData implements AccountData {
 			ps.setBytes(3, encode(item));
 		} catch (SQLException ex) {
 			throw new TableAccessException(ex);
-		} catch (IOException ex) {
-			throw new UncheckedIOException(ex);
 		}
 	}
 
@@ -109,15 +107,10 @@ public final class MessageData implements AccountData {
 	 *
 	 * @return 交信記録
 	 *
-	 * @throws IOException 読取りの例外
+	 * @throws UncheckedIOException 交信記録の変換の例外
 	 */
-	private final Item decode(byte[] data) throws IOException {
-		final var source = new ByteArrayInputStream(data);
-		try (final var stream = new ObjectInputStream(source)) {
-			return (Item) stream.readObject();
-		} catch (ClassNotFoundException ex) {
-			throw new IOException(ex);
-		}
+	private final Item decode(byte[] data) {
+		return new ItemFactory().decode(data).get(0);
 	}
 
 	/**
@@ -128,14 +121,10 @@ public final class MessageData implements AccountData {
 	 *
 	 * @return バイト表現
 	 *
-	 * @throws IOException 書込みの例外
+	 * @throws UncheckedIOException 交信記録の変換の例外
 	 */
-	private final byte[] encode(Item item) throws IOException {
-		final var target = new ByteArrayOutputStream();
-		try (var stream = new ObjectOutputStream(target)) {
-			stream.writeObject(item);
-		}
-		return target.toByteArray();
+	private final byte[] encode(Item item) {
+		return new ItemFactory().encode(item);
 	}
 
 	/**
