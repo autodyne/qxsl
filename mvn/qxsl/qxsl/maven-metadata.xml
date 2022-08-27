@@ -3,8 +3,8 @@
   <groupId>qxsl</groupId>
   <artifactId>qxsl</artifactId>
   <versioning>
-    <latest>0.1.266</latest>
-    <release>0.1.266</release>
+    <latest>0.1.267</latest>
+    <release>0.1.267</release>
     <versions>
       <version>0.1.241</version>
       <version>0.1.242</version>
@@ -31,7 +31,8 @@
       <version>0.1.264</version>
       <version>0.1.265</version>
       <version>0.1.266</version>
+      <version>0.1.267</version>
     </versions>
-    <lastUpdated>20220827163348</lastUpdated>
+    <lastUpdated>20220827164119</lastUpdated>
   </versioning>
 </metadata>
