@@ -146,7 +146,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public abstract class <span class="typeNameLabel">Qxsl&lt;V&gt;</span>
 extends <a href="../value/Field.html" title="class in qxsl.value">Field</a>&lt;V&gt;</pre>
-<div class="block">QXMLが標準仕様でサポートする属性の名前を定義します。</div>
+<div class="block">標準的な属性の名前空間を定義します。</div>
 <dl>
 <dt><span class="simpleTagLabel">Since:</span></dt>
 <dd>2019/06/27</dd>
@@ -231,7 +231,7 @@ extends <a href="../value/Field.html" title="class in qxsl.value">Field</a>&lt;V
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#PRE">PRE</a></span></code></th>
 <td class="colLast">
-<div class="block">標準的な属性に共通する接頭辞です。</div>
+<div class="block">標準的な属性に設定される接頭辞です。</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -252,7 +252,7 @@ extends <a href="../value/Field.html" title="class in qxsl.value">Field</a>&lt;V
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#URI">URI</a></span></code></th>
 <td class="colLast">
-<div class="block">標準的な属性に共通する名前空間です。</div>
+<div class="block">標準的な属性が所属する名前空間です。</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -283,7 +283,7 @@ extends <a href="../value/Field.html" title="class in qxsl.value">Field</a>&lt;V
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(javax.xml.namespace.QName,V)">Qxsl</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.xml/javax/xml/namespace/QName.html?is-external=true" title="class or interface in javax.xml.namespace" class="externalLink">QName</a>&nbsp;qname,
     <a href="Qxsl.html" title="type parameter in Qxsl">V</a>&nbsp;value)</code></th>
 <td class="colLast">
-<div class="block">指定した名前と値の属性を構築します。</div>
+<div class="block">指定された名前と属性値を設定します。</div>
 </td>
 </tr>
 </table>
@@ -349,7 +349,7 @@ extends <a href="../value/Field.html" title="class in qxsl.value">Field</a>&lt;V
 <li class="blockList">
 <h4>URI</h4>
 <pre>public static final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a> URI</pre>
-<div class="block">標準的な属性に共通する名前空間です。</div>
+<div class="block">標準的な属性が所属する名前空間です。</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#qxsl.draft.Qxsl.URI">Constant Field Values</a></dd>
@@ -363,7 +363,7 @@ extends <a href="../value/Field.html" title="class in qxsl.value">Field</a>&lt;V
 <li class="blockList">
 <h4>PRE</h4>
 <pre>public static final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a> PRE</pre>
-<div class="block">標準的な属性に共通する接頭辞です。</div>
+<div class="block">標準的な属性に設定される接頭辞です。</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#qxsl.draft.Qxsl.PRE">Constant Field Values</a></dd>
@@ -500,7 +500,7 @@ extends <a href="../value/Field.html" title="class in qxsl.value">Field</a>&lt;V
 <h4>Qxsl</h4>
 <pre>public&nbsp;Qxsl&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.xml/javax/xml/namespace/QName.html?is-external=true" title="class or interface in javax.xml.namespace" class="externalLink">QName</a>&nbsp;qname,
             <a href="Qxsl.html" title="type parameter in Qxsl">V</a>&nbsp;value)</pre>
-<div class="block">指定した名前と値の属性を構築します。</div>
+<div class="block">指定された名前と属性値を設定します。</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>qname</code> - 属性の名前</dd>
