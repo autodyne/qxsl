@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":6,"i4":10,"i5":10,"i6":10,"i7":6,"i8":10,"i9":6,"i10":10,"i11":10,"i12":10,"i13":6,"i14":6,"i15":10,"i16":6,"i17":6,"i18":6,"i19":6,"i20":10,"i21":10,"i22":10,"i23":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":6,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -139,6 +139,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt>All Implemented Interfaces:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="Section.html" title="class in qxsl.ruler">Section</a>&gt;</code></dd>
 </dl>
+<dl>
+<dt>Direct Known Subclasses:</dt>
+<dd><code><a href="Program.html" title="class in qxsl.ruler">Program</a></code></dd>
+</dl>
 <hr>
 <pre>public abstract class <span class="typeNameLabel">Contest</span>
 extends <a href="Library.html" title="class in qxsl.ruler">Library</a>
@@ -192,171 +196,59 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#accept()">accept</a></span>()</code></th>
-<td class="colLast">
-<div class="block">現時点で参加登録が受付可能か確認します。</div>
-</td>
-</tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#accept(java.time.ZoneId)">accept</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/ZoneId.html?is-external=true" title="class or interface in java.time" class="externalLink">ZoneId</a>&nbsp;zone)</code></th>
-<td class="colLast">
-<div class="block">現時点で参加登録が受付可能か確認します。</div>
-</td>
-</tr>
-<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="Contest.html" title="class in qxsl.ruler">Contest</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#add(qxsl.ruler.Section)">add</a></span>&#8203;(<a href="Section.html" title="class in qxsl.ruler">Section</a>&nbsp;section)</code></th>
 <td class="colLast">
 <div class="block">指定された部門をこの規約に追加します。</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>abstract boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#conflict(qxsl.ruler.Section%5B%5D)">conflict</a></span>&#8203;(<a href="Section.html" title="class in qxsl.ruler">Section</a>[]&nbsp;entries)</code></th>
-<td class="colLast">
-<div class="block">指定された部門にまとめて登録可能か確認します。</div>
-</td>
-</tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#finish()">finish</a></span>()</code></th>
-<td class="colLast">
-<div class="block">現時点で集計結果が閲覧可能か確認します。</div>
-</td>
-</tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#finish(java.time.ZoneId)">finish</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/ZoneId.html?is-external=true" title="class or interface in java.time" class="externalLink">ZoneId</a>&nbsp;zone)</code></th>
-<td class="colLast">
-<div class="block">現時点で集計結果が閲覧可能か確認します。</div>
-</td>
-</tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDate.html?is-external=true" title="class or interface in java.time" class="externalLink">LocalDate</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDeadLine()">getDeadLine</a></span>()</code></th>
-<td class="colLast">
-<div class="block">コンテストの締切日を計算します。</div>
-</td>
-</tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>abstract <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDate.html?is-external=true" title="class or interface in java.time" class="externalLink">LocalDate</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDeadLine(int)">getDeadLine</a></span>&#8203;(int&nbsp;year)</code></th>
-<td class="colLast">
-<div class="block">指定された年のコンテストの締切日を計算します。</div>
-</td>
-</tr>
-<tr id="i8" class="altColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDate.html?is-external=true" title="class or interface in java.time" class="externalLink">LocalDate</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getFinalDay()">getFinalDay</a></span>()</code></th>
-<td class="colLast">
-<div class="block">コンテストの終了日を計算します。</div>
-</td>
-</tr>
-<tr id="i9" class="rowColor">
-<td class="colFirst"><code>abstract <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDate.html?is-external=true" title="class or interface in java.time" class="externalLink">LocalDate</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getFinalDay(int)">getFinalDay</a></span>&#8203;(int&nbsp;year)</code></th>
-<td class="colLast">
-<div class="block">指定された年のコンテストの終了日を計算します。</div>
-</td>
-</tr>
-<tr id="i10" class="altColor">
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSectionCodes()">getSectionCodes</a></span>()</code></th>
 <td class="colLast">
 <div class="block">この規約の部門の分類のリストを返します。</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSectionNames()">getSectionNames</a></span>()</code></th>
 <td class="colLast">
 <div class="block">この規約の部門の名前のリストを返します。</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDate.html?is-external=true" title="class or interface in java.time" class="externalLink">LocalDate</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStartDay()">getStartDay</a></span>()</code></th>
-<td class="colLast">
-<div class="block">コンテストの開始日を計算します。</div>
-</td>
-</tr>
-<tr id="i13" class="rowColor">
-<td class="colFirst"><code>abstract <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDate.html?is-external=true" title="class or interface in java.time" class="externalLink">LocalDate</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStartDay(int)">getStartDay</a></span>&#8203;(int&nbsp;year)</code></th>
-<td class="colLast">
-<div class="block">指定された年のコンテストの開始日を計算します。</div>
-</td>
-</tr>
-<tr id="i14" class="altColor">
-<td class="colFirst"><code>abstract <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#host()">host</a></span>()</code></th>
-<td class="colLast">
-<div class="block">コンテストの運営の名前を返します。</div>
-</td>
-</tr>
-<tr id="i15" class="rowColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="Section.html" title="class in qxsl.ruler">Section</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#iterator()">iterator</a></span>()</code></th>
 <td class="colLast">
 <div class="block">この規約の下の部門を反復子で返します。</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
-<td class="colFirst"><code>abstract int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#limitMultipleEntry(java.lang.String)">limitMultipleEntry</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;code)</code></th>
-<td class="colLast">
-<div class="block">複数の部門に登録可能な場合の限度を確認します。</div>
-</td>
-</tr>
-<tr id="i17" class="rowColor">
-<td class="colFirst"><code>abstract <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#link()">link</a></span>()</code></th>
-<td class="colLast">
-<div class="block">コンテストの規約の参照先を返します。</div>
-</td>
-</tr>
-<tr id="i18" class="altColor">
-<td class="colFirst"><code>abstract <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#mail()">mail</a></span>()</code></th>
-<td class="colLast">
-<div class="block">コンテストの運営の連絡先を返します。</div>
-</td>
-</tr>
-<tr id="i19" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>abstract <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#name()">name</a></span>()</code></th>
 <td class="colLast">
 <div class="block">コンテストの名前を返します。</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="Contest.html" title="class in qxsl.ruler">Contest</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#remove(qxsl.ruler.Section)">remove</a></span>&#8203;(<a href="Section.html" title="class in qxsl.ruler">Section</a>&nbsp;section)</code></th>
 <td class="colLast">
 <div class="block">指定された部門をこの規約から削除します。</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="Section.html" title="class in qxsl.ruler">Section</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#section(java.lang.String)">section</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name)</code></th>
 <td class="colLast">
 <div class="block">指定された名前の部門を検索します。</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
 <td class="colLast">
 <div class="block">コンテストの名前を返します。</div>
-</td>
-</tr>
-<tr id="i23" class="rowColor">
-<td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#year()">year</a></span>()</code></th>
-<td class="colLast">
-<div class="block">コンテストの開催年を返します。</div>
 </td>
 </tr>
 </table>
@@ -365,7 +257,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;qxsl.ruler.<a href="Library.html" title="class in qxsl.ruler">Library</a></h3>
-<code><a href="Library.html#contest()">contest</a>, <a href="Library.html#get(java.lang.String)">get</a>, <a href="Library.html#pattern()">pattern</a>, <a href="Library.html#section()">section</a></code></li>
+<code><a href="Library.html#contest()">contest</a>, <a href="Library.html#get(java.lang.String)">get</a>, <a href="Library.html#pattern()">pattern</a>, <a href="Library.html#program()">program</a>, <a href="Library.html#section()">section</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -437,22 +329,6 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 </dl>
 </li>
 </ul>
-<a id="year()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>year</h4>
-<pre class="methodSignature">public&nbsp;int&nbsp;year()</pre>
-<div class="block">コンテストの開催年を返します。</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>名前</dd>
-<dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>2022/07/23</dd>
-</dl>
-</li>
-</ul>
 <a id="name()">
 <!--   -->
 </a>
@@ -464,198 +340,6 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>名前</dd>
-</dl>
-</li>
-</ul>
-<a id="host()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>host</h4>
-<pre class="methodSignature">public abstract&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;host()</pre>
-<div class="block">コンテストの運営の名前を返します。</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>運営の名前</dd>
-</dl>
-</li>
-</ul>
-<a id="mail()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>mail</h4>
-<pre class="methodSignature">public abstract&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;mail()</pre>
-<div class="block">コンテストの運営の連絡先を返します。</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>運営の連絡先</dd>
-</dl>
-</li>
-</ul>
-<a id="link()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>link</h4>
-<pre class="methodSignature">public abstract&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;link()</pre>
-<div class="block">コンテストの規約の参照先を返します。</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>規約の参照先</dd>
-</dl>
-</li>
-</ul>
-<a id="getStartDay()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getStartDay</h4>
-<pre class="methodSignature">public final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDate.html?is-external=true" title="class or interface in java.time" class="externalLink">LocalDate</a>&nbsp;getStartDay()</pre>
-<div class="block">コンテストの開始日を計算します。</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>開始日</dd>
-</dl>
-</li>
-</ul>
-<a id="getFinalDay()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getFinalDay</h4>
-<pre class="methodSignature">public final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDate.html?is-external=true" title="class or interface in java.time" class="externalLink">LocalDate</a>&nbsp;getFinalDay()</pre>
-<div class="block">コンテストの終了日を計算します。</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>終了日</dd>
-</dl>
-</li>
-</ul>
-<a id="getDeadLine()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getDeadLine</h4>
-<pre class="methodSignature">public final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDate.html?is-external=true" title="class or interface in java.time" class="externalLink">LocalDate</a>&nbsp;getDeadLine()</pre>
-<div class="block">コンテストの締切日を計算します。</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>締切日</dd>
-</dl>
-</li>
-</ul>
-<a id="getStartDay(int)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getStartDay</h4>
-<pre class="methodSignature">public abstract&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDate.html?is-external=true" title="class or interface in java.time" class="externalLink">LocalDate</a>&nbsp;getStartDay&#8203;(int&nbsp;year)</pre>
-<div class="block">指定された年のコンテストの開始日を計算します。</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>year</code> - 開催年</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>開始日</dd>
-</dl>
-</li>
-</ul>
-<a id="getFinalDay(int)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getFinalDay</h4>
-<pre class="methodSignature">public abstract&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDate.html?is-external=true" title="class or interface in java.time" class="externalLink">LocalDate</a>&nbsp;getFinalDay&#8203;(int&nbsp;year)</pre>
-<div class="block">指定された年のコンテストの終了日を計算します。</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>year</code> - 開催年</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>終了日</dd>
-</dl>
-</li>
-</ul>
-<a id="getDeadLine(int)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getDeadLine</h4>
-<pre class="methodSignature">public abstract&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDate.html?is-external=true" title="class or interface in java.time" class="externalLink">LocalDate</a>&nbsp;getDeadLine&#8203;(int&nbsp;year)</pre>
-<div class="block">指定された年のコンテストの締切日を計算します。</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>year</code> - 開催年</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>締切日</dd>
-</dl>
-</li>
-</ul>
-<a id="accept()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>accept</h4>
-<pre class="methodSignature">public final&nbsp;boolean&nbsp;accept()</pre>
-<div class="block">現時点で参加登録が受付可能か確認します。</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>現在時刻で受付可能な場合は真</dd>
-</dl>
-</li>
-</ul>
-<a id="finish()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>finish</h4>
-<pre class="methodSignature">public final&nbsp;boolean&nbsp;finish()</pre>
-<div class="block">現時点で集計結果が閲覧可能か確認します。</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>現在時刻で閲覧可能な場合は真</dd>
-</dl>
-</li>
-</ul>
-<a id="accept(java.time.ZoneId)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>accept</h4>
-<pre class="methodSignature">public&nbsp;boolean&nbsp;accept&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/ZoneId.html?is-external=true" title="class or interface in java.time" class="externalLink">ZoneId</a>&nbsp;zone)</pre>
-<div class="block">現時点で参加登録が受付可能か確認します。</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>zone</code> - タイムゾーン</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>現在時刻で受付可能な場合は真</dd>
-</dl>
-</li>
-</ul>
-<a id="finish(java.time.ZoneId)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>finish</h4>
-<pre class="methodSignature">public&nbsp;boolean&nbsp;finish&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/ZoneId.html?is-external=true" title="class or interface in java.time" class="externalLink">ZoneId</a>&nbsp;zone)</pre>
-<div class="block">現時点で集計結果が閲覧可能か確認します。</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>zone</code> - タイムゾーン</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>現在時刻で閲覧可能な場合は真</dd>
 </dl>
 </li>
 </ul>
@@ -742,7 +426,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <a id="getSectionCodes()">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>getSectionCodes</h4>
 <pre class="methodSignature">public final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&nbsp;getSectionCodes()</pre>
@@ -752,42 +436,6 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <dd>部門の分類のリスト</dd>
 <dt><span class="simpleTagLabel">Since:</span></dt>
 <dd>2022/07/18</dd>
-</dl>
-</li>
-</ul>
-<a id="limitMultipleEntry(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>limitMultipleEntry</h4>
-<pre class="methodSignature">public abstract&nbsp;int&nbsp;limitMultipleEntry&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;code)</pre>
-<div class="block">複数の部門に登録可能な場合の限度を確認します。</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>code</code> - 確認の対象となる部門の分類</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>登録可能な個数の限度</dd>
-<dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>2022/07/17</dd>
-</dl>
-</li>
-</ul>
-<a id="conflict(qxsl.ruler.Section[])">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>conflict</h4>
-<pre class="methodSignature">public abstract&nbsp;boolean&nbsp;conflict&#8203;(<a href="Section.html" title="class in qxsl.ruler">Section</a>[]&nbsp;entries)</pre>
-<div class="block">指定された部門にまとめて登録可能か確認します。</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>entries</code> - 参加を試みる部門の配列</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>規約に違反する場合は真</dd>
-<dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>2022/07/17</dd>
 </dl>
 </li>
 </ul>

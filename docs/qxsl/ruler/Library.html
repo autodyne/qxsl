@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":6,"i2":10,"i3":10};
+var data = {"i0":10,"i1":6,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -187,7 +187,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colFirst"><code><a href="Contest.html" title="class in qxsl.ruler">Contest</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#contest()">contest</a></span>()</code></th>
 <td class="colLast">
-<div class="block">コンテストの規約として返します。</div>
+<div class="block">コンテストの規約に型変換します。</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -201,14 +201,21 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colFirst"><code><a href="Pattern.html" title="class in qxsl.ruler">Pattern</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pattern()">pattern</a></span>()</code></th>
 <td class="colLast">
-<div class="block">交信記録の構造式として返します。</div>
+<div class="block">交信記録の構造式に型変換します。</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="Program.html" title="class in qxsl.ruler">Program</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#program()">program</a></span>()</code></th>
+<td class="colLast">
+<div class="block">コンテストの日程に型変換します。</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="Section.html" title="class in qxsl.ruler">Section</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#section()">section</a></span>()</code></th>
 <td class="colLast">
-<div class="block">コンテストの部門として返します。</div>
+<div class="block">コンテストの部門に型変換します。</div>
 </td>
 </tr>
 </table>
@@ -254,6 +261,22 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="program()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>program</h4>
+<pre class="methodSignature">public final&nbsp;<a href="Program.html" title="class in qxsl.ruler">Program</a>&nbsp;program()</pre>
+<div class="block">コンテストの日程に型変換します。</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>コンテストの日程</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/ClassCastException.html?is-external=true" title="class or interface in java.lang" class="externalLink">ClassCastException</a></code> - 型の誤り</dd>
+</dl>
+</li>
+</ul>
 <a id="contest()">
 <!--   -->
 </a>
@@ -261,7 +284,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>contest</h4>
 <pre class="methodSignature">public final&nbsp;<a href="Contest.html" title="class in qxsl.ruler">Contest</a>&nbsp;contest()</pre>
-<div class="block">コンテストの規約として返します。</div>
+<div class="block">コンテストの規約に型変換します。</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>コンテストの規約</dd>
@@ -275,7 +298,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>section</h4>
 <pre class="methodSignature">public final&nbsp;<a href="Section.html" title="class in qxsl.ruler">Section</a>&nbsp;section()</pre>
-<div class="block">コンテストの部門として返します。</div>
+<div class="block">コンテストの部門に型変換します。</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>コンテストの部門</dd>
@@ -289,7 +312,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>pattern</h4>
 <pre class="methodSignature">public final&nbsp;<a href="Pattern.html" title="class in qxsl.ruler">Pattern</a>&nbsp;pattern()</pre>
-<div class="block">交信記録の構造式として返します。</div>
+<div class="block">交信記録の構造式に型変換します。</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>交信記録の構造</dd>

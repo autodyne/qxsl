@@ -103,11 +103,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="qxsl/ruler/Absence.html#%3Cinit%3E()">Absence()</a></span> - Constructor for class qxsl.ruler.<a href="qxsl/ruler/Absence.html" title="class in qxsl.ruler">Absence</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="qxsl/ruler/Contest.html#accept()">accept()</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a></dt>
+<dt><span class="memberNameLink"><a href="qxsl/ruler/Program.html#accept()">accept()</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Program.html" title="class in qxsl.ruler">Program</a></dt>
 <dd>
 <div class="block">現時点で参加登録が受付可能か確認します。</div>
 </dd>
-<dt><span class="memberNameLink"><a href="qxsl/ruler/Contest.html#accept(java.time.ZoneId)">accept(ZoneId)</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a></dt>
+<dt><span class="memberNameLink"><a href="qxsl/ruler/Program.html#accept(java.time.ZoneId)">accept(ZoneId)</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Program.html" title="class in qxsl.ruler">Program</a></dt>
 <dd>
 <div class="block">現時点で参加登録が受付可能か確認します。</div>
 </dd>
@@ -424,7 +424,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">指定された区切り文字列を発見するまで読み取ります。
  区切り文字列のうち大文字と小文字は区別されません。</div>
 </dd>
-<dt><span class="memberNameLink"><a href="qxsl/ruler/Contest.html#conflict(qxsl.ruler.Section%5B%5D)">conflict(Section[])</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a></dt>
+<dt><span class="memberNameLink"><a href="qxsl/ruler/Program.html#conflict(qxsl.ruler.Section%5B%5D)">conflict(Section[])</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Program.html" title="class in qxsl.ruler">Program</a></dt>
 <dd>
 <div class="block">指定された部門にまとめて登録可能か確認します。</div>
 </dd>
@@ -442,7 +442,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="qxsl/ruler/Library.html#contest()">contest()</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Library.html" title="class in qxsl.ruler">Library</a></dt>
 <dd>
-<div class="block">コンテストの規約として返します。</div>
+<div class="block">コンテストの規約に型変換します。</div>
 </dd>
 <dt><a href="qxsl/ruler/Contest.html" title="class in qxsl.ruler"><span class="typeNameLink">Contest</span></a> - Class in <a href="qxsl/ruler/package-summary.html">qxsl.ruler</a></dt>
 <dd>
@@ -839,11 +839,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">交信履歴のファイルの名前です。</div>
 </dd>
-<dt><span class="memberNameLink"><a href="qxsl/ruler/Contest.html#finish()">finish()</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a></dt>
+<dt><span class="memberNameLink"><a href="qxsl/ruler/Program.html#finish()">finish()</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Program.html" title="class in qxsl.ruler">Program</a></dt>
 <dd>
 <div class="block">現時点で集計結果が閲覧可能か確認します。</div>
 </dd>
-<dt><span class="memberNameLink"><a href="qxsl/ruler/Contest.html#finish(java.time.ZoneId)">finish(ZoneId)</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a></dt>
+<dt><span class="memberNameLink"><a href="qxsl/ruler/Program.html#finish(java.time.ZoneId)">finish(ZoneId)</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Program.html" title="class in qxsl.ruler">Program</a></dt>
 <dd>
 <div class="block">現時点で集計結果が閲覧可能か確認します。</div>
 </dd>
@@ -1005,19 +1005,19 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">ライブラリを読み込んだクラスローダを返します。</div>
 </dd>
-<dt><span class="memberNameLink"><a href="qxsl/ruler/Contest.html#getDeadLine()">getDeadLine()</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a></dt>
+<dt><span class="memberNameLink"><a href="qxsl/ruler/Program.html#getDeadLine()">getDeadLine()</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Program.html" title="class in qxsl.ruler">Program</a></dt>
 <dd>
-<div class="block">コンテストの締切日を計算します。</div>
+<div class="block">コンテストの締切日を返します。</div>
 </dd>
-<dt><span class="memberNameLink"><a href="qxsl/ruler/Contest.html#getDeadLine(int)">getDeadLine(int)</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a></dt>
+<dt><span class="memberNameLink"><a href="qxsl/ruler/Program.html#getDeadLine(int)">getDeadLine(int)</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Program.html" title="class in qxsl.ruler">Program</a></dt>
 <dd>
 <div class="block">指定された年のコンテストの締切日を計算します。</div>
 </dd>
-<dt><span class="memberNameLink"><a href="qxsl/ruler/Contest.html#getFinalDay()">getFinalDay()</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a></dt>
+<dt><span class="memberNameLink"><a href="qxsl/ruler/Program.html#getFinalDay()">getFinalDay()</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Program.html" title="class in qxsl.ruler">Program</a></dt>
 <dd>
-<div class="block">コンテストの終了日を計算します。</div>
+<div class="block">コンテストの終了日を返します。</div>
 </dd>
-<dt><span class="memberNameLink"><a href="qxsl/ruler/Contest.html#getFinalDay(int)">getFinalDay(int)</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a></dt>
+<dt><span class="memberNameLink"><a href="qxsl/ruler/Program.html#getFinalDay(int)">getFinalDay(int)</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Program.html" title="class in qxsl.ruler">Program</a></dt>
 <dd>
 <div class="block">指定された年のコンテストの終了日を計算します。</div>
 </dd>
@@ -1049,11 +1049,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">相手局まで送信した要素を返します。</div>
 </dd>
-<dt><span class="memberNameLink"><a href="qxsl/ruler/Contest.html#getStartDay()">getStartDay()</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a></dt>
+<dt><span class="memberNameLink"><a href="qxsl/ruler/Program.html#getStartDay()">getStartDay()</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Program.html" title="class in qxsl.ruler">Program</a></dt>
 <dd>
-<div class="block">コンテストの開始日を計算します。</div>
+<div class="block">コンテストの開始日を返します。</div>
 </dd>
-<dt><span class="memberNameLink"><a href="qxsl/ruler/Contest.html#getStartDay(int)">getStartDay(int)</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a></dt>
+<dt><span class="memberNameLink"><a href="qxsl/ruler/Program.html#getStartDay(int)">getStartDay(int)</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Program.html" title="class in qxsl.ruler">Program</a></dt>
 <dd>
 <div class="block">指定された年のコンテストの開始日を計算します。</div>
 </dd>
@@ -1151,6 +1151,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">ストリームに交信記録の冒頭を書き込みます。</div>
 </dd>
+<dt><span class="memberNameLink"><a href="qxsl/ruler/Program.html#help()">help()</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Program.html" title="class in qxsl.ruler">Program</a></dt>
+<dd>
+<div class="block">参加者を助ける文字列を返します。</div>
+</dd>
 <dt><span class="memberNameLink"><a href="qxsl/sheet/BasicFactory.html#help()">help()</a></span> - Method in class qxsl.sheet.<a href="qxsl/sheet/BasicFactory.html" title="class in qxsl.sheet">BasicFactory</a></dt>
 <dd>
 <div class="block">この書式の詳細を述べる文字列を返します。</div>
@@ -1171,7 +1175,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">使用方法を説明する例外を発生させます。</div>
 </dd>
-<dt><span class="memberNameLink"><a href="qxsl/ruler/Contest.html#host()">host()</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a></dt>
+<dt><span class="memberNameLink"><a href="qxsl/ruler/Program.html#host()">host()</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Program.html" title="class in qxsl.ruler">Program</a></dt>
 <dd>
 <div class="block">コンテストの運営の名前を返します。</div>
 </dd>
@@ -1253,7 +1257,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="qxsl/ruler/Library.html#%3Cinit%3E()">Library()</a></span> - Constructor for class qxsl.ruler.<a href="qxsl/ruler/Library.html" title="class in qxsl.ruler">Library</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="qxsl/ruler/Contest.html#limitMultipleEntry(java.lang.String)">limitMultipleEntry(String)</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a></dt>
+<dt><span class="memberNameLink"><a href="qxsl/ruler/Program.html#limitMultipleEntry(java.lang.String)">limitMultipleEntry(String)</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Program.html" title="class in qxsl.ruler">Program</a></dt>
 <dd>
 <div class="block">複数の部門に登録可能な場合の限度を確認します。</div>
 </dd>
@@ -1261,7 +1265,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">指定されたリソースを行の列として読み取ります。</div>
 </dd>
-<dt><span class="memberNameLink"><a href="qxsl/ruler/Contest.html#link()">link()</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a></dt>
+<dt><span class="memberNameLink"><a href="qxsl/ruler/Program.html#link()">link()</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Program.html" title="class in qxsl.ruler">Program</a></dt>
 <dd>
 <div class="block">コンテストの規約の参照先を返します。</div>
 </dd>
@@ -1307,7 +1311,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">参加局のメール先です。</div>
 </dd>
-<dt><span class="memberNameLink"><a href="qxsl/ruler/Contest.html#mail()">mail()</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a></dt>
+<dt><span class="memberNameLink"><a href="qxsl/ruler/Program.html#mail()">mail()</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Program.html" title="class in qxsl.ruler">Program</a></dt>
 <dd>
 <div class="block">コンテストの運営の連絡先を返します。</div>
 </dd>
@@ -1531,7 +1535,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="qxsl/ruler/Library.html#pattern()">pattern()</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Library.html" title="class in qxsl.ruler">Library</a></dt>
 <dd>
-<div class="block">交信記録の構造式として返します。</div>
+<div class="block">交信記録の構造式に型変換します。</div>
 </dd>
 <dt><a href="qxsl/ruler/Pattern.html" title="class in qxsl.ruler"><span class="typeNameLink">Pattern</span></a> - Class in <a href="qxsl/ruler/package-summary.html">qxsl.ruler</a></dt>
 <dd>
@@ -1610,6 +1614,18 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="qxsl/table/PrintEncoder.html#println()">println()</a></span> - Method in class qxsl.table.<a href="qxsl/table/PrintEncoder.html" title="class in qxsl.table">PrintEncoder</a></dt>
 <dd>
 <div class="block">改行を出力します。</div>
+</dd>
+<dt><span class="memberNameLink"><a href="qxsl/ruler/Library.html#program()">program()</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Library.html" title="class in qxsl.ruler">Library</a></dt>
+<dd>
+<div class="block">コンテストの日程に型変換します。</div>
+</dd>
+<dt><a href="qxsl/ruler/Program.html" title="class in qxsl.ruler"><span class="typeNameLink">Program</span></a> - Class in <a href="qxsl/ruler/package-summary.html">qxsl.ruler</a></dt>
+<dd>
+<div class="block">コンテストの日程はこのクラスを継承します。</div>
+</dd>
+<dt><span class="memberNameLink"><a href="qxsl/ruler/Program.html#%3Cinit%3E(qxsl.ruler.Section...)">Program(Section...)</a></span> - Constructor for class qxsl.ruler.<a href="qxsl/ruler/Program.html" title="class in qxsl.ruler">Program</a></dt>
+<dd>
+<div class="block">指定された部門を有する規約を構築します。</div>
 </dd>
 <dt><span class="memberNameLink"><a href="qxsl/utils/AssetUtil.html#properties(java.lang.String)">properties(String)</a></span> - Method in class qxsl.utils.<a href="qxsl/utils/AssetUtil.html" title="class in qxsl.utils">AssetUtil</a></dt>
 <dd>
@@ -1807,7 +1823,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="qxsl/ruler/Library.html#section()">section()</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Library.html" title="class in qxsl.ruler">Library</a></dt>
 <dd>
-<div class="block">コンテストの部門として返します。</div>
+<div class="block">コンテストの部門に型変換します。</div>
 </dd>
 <dt><span class="memberNameLink"><a href="qxsl/ruler/Contest.html#section(java.lang.String)">section(String)</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a></dt>
 <dd>
@@ -2364,7 +2380,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </a>
 <h2 class="title">Y</h2>
 <dl>
-<dt><span class="memberNameLink"><a href="qxsl/ruler/Contest.html#year()">year()</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a></dt>
+<dt><span class="memberNameLink"><a href="qxsl/ruler/Program.html#year()">year()</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Program.html" title="class in qxsl.ruler">Program</a></dt>
 <dd>
 <div class="block">コンテストの開催年を返します。</div>
 </dd>
