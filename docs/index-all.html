@@ -169,7 +169,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">参加局の交信履歴を管理する機能を提供します。</div>
 </dd>
-<dt><span class="memberNameLink"><a href="ats4/base/ArchiveTable.html#%3Cinit%3E(java.sql.Connection)">ArchiveTable(Connection)</a></span> - Constructor for class ats4.base.<a href="ats4/base/ArchiveTable.html" title="class in ats4.base">ArchiveTable</a></dt>
+<dt><span class="memberNameLink"><a href="ats4/base/ArchiveTable.html#%3Cinit%3E(java.sql.Connection,qxsl.ruler.Pattern)">ArchiveTable(Connection, Pattern)</a></span> - Constructor for class ats4.base.<a href="ats4/base/ArchiveTable.html" title="class in ats4.base">ArchiveTable</a></dt>
 <dd>
 <div class="block">指定されたデータベースを利用します。</div>
 </dd>
@@ -1024,6 +1024,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">この書式のヘッダとなる文字列を返します。</div>
 </dd>
+<dt><span class="memberNameLink"><a href="ats4/base/ArchiveTable.html#getItems(ats4.data.ArchiveData)">getItems(ArchiveData)</a></span> - Method in class ats4.base.<a href="ats4/base/ArchiveTable.html" title="class in ats4.base">ArchiveTable</a></dt>
+<dd>
+<div class="block">指定されたレコードが含む交信記録を解釈します。</div>
+</dd>
 <dt><span class="memberNameLink"><a href="ats4/data/RankingData.html#getRankFromZeroIn(ats4.base.RankingTable)">getRankFromZeroIn(RankingTable)</a></span> - Method in class ats4.data.<a href="ats4/data/RankingData.html" title="class in ats4.data">RankingData</a></dt>
 <dd>
 <div class="block">指定されたテーブルで総合順位を返します。</div>
@@ -1103,10 +1107,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="qxsl/table/BasicFactory.html#getTimeEncoder()">getTimeEncoder()</a></span> - Method in class qxsl.table.<a href="qxsl/table/BasicFactory.html" title="class in qxsl.table">BasicFactory</a></dt>
 <dd>
 <div class="block">この書式の出力時に使う時刻の書式を返します。</div>
-</dd>
-<dt><span class="memberNameLink"><a href="ats4/data/ArchiveData.html#getWarningMessage()">getWarningMessage()</a></span> - Method in class ats4.data.<a href="ats4/data/ArchiveData.html" title="class in ats4.data">ArchiveData</a></dt>
-<dd>
-<div class="block">交信記録のエラーを表す文字列を返します。</div>
 </dd>
 <dt><span class="memberNameLink"><a href="qxsl/sheet/BasicDecoder.html#getXMLSchema()">getXMLSchema()</a></span> - Method in class qxsl.sheet.<a href="qxsl/sheet/BasicDecoder.html" title="class in qxsl.sheet">BasicDecoder</a></dt>
 <dd>
@@ -2218,10 +2218,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="qxsl/draft/Band.html#toGHzString()">toGHzString()</a></span> - Method in class qxsl.draft.<a href="qxsl/draft/Band.html" title="class in qxsl.draft">Band</a></dt>
 <dd>
 <div class="block">周波数をギガヘルツ単位の文字列で返します。</div>
-</dd>
-<dt><span class="memberNameLink"><a href="ats4/data/ArchiveData.html#toItemList()">toItemList()</a></span> - Method in class ats4.data.<a href="ats4/data/ArchiveData.html" title="class in ats4.data">ArchiveData</a></dt>
-<dd>
-<div class="block">このレコードが含む交信記録を解釈します。</div>
 </dd>
 <dt><span class="memberNameLink"><a href="qxsl/draft/Band.html#toKHzString()">toKHzString()</a></span> - Method in class qxsl.draft.<a href="qxsl/draft/Band.html" title="class in qxsl.draft">Band</a></dt>
 <dd>

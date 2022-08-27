@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10};
+var data = {"i0":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -240,20 +240,6 @@ implements <a href="AccountData.html" title="interface in ats4.data">AccountData
 <div class="block">このレコードを登録する命令を設定します。</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getWarningMessage()">getWarningMessage</a></span>()</code></th>
-<td class="colLast">
-<div class="block">交信記録のエラーを表す文字列を返します。</div>
-</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../qxsl/model/Item.html" title="class in qxsl.model">Item</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toItemList()">toItemList</a></span>()</code></th>
-<td class="colLast">
-<div class="block">このレコードが含む交信記録を解釈します。</div>
-</td>
-</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -357,7 +343,7 @@ implements <a href="AccountData.html" title="interface in ats4.data">AccountData
 <a id="copyTo(java.sql.PreparedStatement)">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>copyTo</h4>
 <pre class="methodSignature">public final&nbsp;void&nbsp;copyTo&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/PreparedStatement.html?is-external=true" title="class or interface in java.sql" class="externalLink">PreparedStatement</a>&nbsp;ps)</pre>
@@ -369,36 +355,6 @@ implements <a href="AccountData.html" title="interface in ats4.data">AccountData
 <dd><code>ps</code> - クエリ</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../warn/TableAccessException.html" title="class in ats4.warn">TableAccessException</a></code> - 疎通の障害がある場合</dd>
-</dl>
-</li>
-</ul>
-<a id="toItemList()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>toItemList</h4>
-<pre class="methodSignature">public final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../qxsl/model/Item.html" title="class in qxsl.model">Item</a>&gt;&nbsp;toItemList()</pre>
-<div class="block">このレコードが含む交信記録を解釈します。</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>交信記録</dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/UncheckedIOException.html?is-external=true" title="class or interface in java.io" class="externalLink">UncheckedIOException</a></code> - 未対応の書式の例外</dd>
-</dl>
-</li>
-</ul>
-<a id="getWarningMessage()">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>getWarningMessage</h4>
-<pre class="methodSignature">public final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;getWarningMessage()</pre>
-<div class="block">交信記録のエラーを表す文字列を返します。</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>警告の文字列</dd>
 </dl>
 </li>
 </ul>
