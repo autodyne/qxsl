@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -228,20 +228,27 @@ extends <a href="AccountTable.html" title="class in ats4.base">AccountTable</a>&
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#push(ats4.data.ArchiveData)">push</a></span>&#8203;(<a href="../data/ArchiveData.html" title="class in ats4.data">ArchiveData</a>&nbsp;data)</code></th>
+<td class="colLast">
+<div class="block">指定された交信記録のレコードを登録します。</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#push(java.lang.String,java.util.List)">push</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;call,
     <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../qxsl/model/Item.html" title="class in qxsl.model">Item</a>&gt;&nbsp;list)</code></th>
 <td class="colLast">
 <div class="block">指定された交信記録のレコードを登録します。</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../qxsl/model/Item.html" title="class in qxsl.model">Item</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#search(java.lang.String)">search</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;call)</code></th>
 <td class="colLast">
 <div class="block">相手局の記録との照合結果を設定して交信記録を返します。</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../data/MessageData.html" title="class in ats4.data">MessageData</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#verify(ats4.data.MessageData)">verify</a></span>&#8203;(<a href="../data/MessageData.html" title="class in ats4.data">MessageData</a>&nbsp;data)</code></th>
 <td class="colLast">
@@ -343,6 +350,24 @@ extends <a href="AccountTable.html" title="class in ats4.base">AccountTable</a>&
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../warn/TableAccessException.html" title="class in ats4.warn">TableAccessException</a></code> - 疎通の障害</dd>
 <dd><code><a href="../warn/TableSchemaException.html" title="class in ats4.warn">TableSchemaException</a></code> - 構造の問題</dd>
+</dl>
+</li>
+</ul>
+<a id="push(ats4.data.ArchiveData)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>push</h4>
+<pre class="methodSignature">public final&nbsp;void&nbsp;push&#8203;(<a href="../data/ArchiveData.html" title="class in ats4.data">ArchiveData</a>&nbsp;data)</pre>
+<div class="block">指定された交信記録のレコードを登録します。</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>data</code> - レコード</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/UncheckedIOException.html?is-external=true" title="class or interface in java.io" class="externalLink">UncheckedIOException</a></code> - 読み込みの例外</dd>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>2022/08/21</dd>
 </dl>
 </li>
 </ul>

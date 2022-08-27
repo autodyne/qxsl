@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -249,6 +249,14 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <div class="block">連絡先等を管理するテーブルを返します。</div>
 </td>
 </tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#update(java.lang.String,qxsl.ruler.Contest)">update</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;call,
+      <a href="../../qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a>&nbsp;rule)</code></th>
+<td class="colLast">
+<div class="block">指定された呼出符号の参加局の得点を更新します。</div>
+</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -426,7 +434,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <a id="drop(java.lang.String)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>drop</h4>
 <pre class="methodSignature">public final&nbsp;void&nbsp;drop&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;call)</pre>
@@ -436,6 +444,26 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <dd><code>call</code> - 削除する呼出符号</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../warn/TableAccessException.html" title="class in ats4.warn">TableAccessException</a></code> - 疎通の障害</dd>
+</dl>
+</li>
+</ul>
+<a id="update(java.lang.String,qxsl.ruler.Contest)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>update</h4>
+<pre class="methodSignature">public final&nbsp;void&nbsp;update&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;call,
+                         <a href="../../qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a>&nbsp;rule)</pre>
+<div class="block">指定された呼出符号の参加局の得点を更新します。</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>call</code> - 呼出符号</dd>
+<dd><code>rule</code> - コンテストの規約</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="../warn/TableAccessException.html" title="class in ats4.warn">TableAccessException</a></code> - 疎通の障害</dd>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>2022/08/21</dd>
 </dl>
 </li>
 </ul>
