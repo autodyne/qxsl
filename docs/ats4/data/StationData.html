@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10};
+var data = {"i0":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -262,24 +262,10 @@ implements <a href="AccountData.html" title="interface in ats4.data">AccountData
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="ArchiveData.html" title="class in ats4.data">ArchiveData</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#archive()">archive</a></span>()</code></th>
-<td class="colLast">
-<div class="block">交信記録のレコードを生成します。</div>
-</td>
-</tr>
-<tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#copyTo(java.sql.PreparedStatement)">copyTo</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/PreparedStatement.html?is-external=true" title="class or interface in java.sql" class="externalLink">PreparedStatement</a>&nbsp;ps)</code></th>
 <td class="colLast">
 <div class="block">このレコードを登録する命令を設定します。</div>
-</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="RankingData.html" title="class in ats4.data">RankingData</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#ranking()">ranking</a></span>()</code></th>
-<td class="colLast">
-<div class="block">成績順位のレコードを生成します。</div>
 </td>
 </tr>
 </table>
@@ -425,7 +411,7 @@ implements <a href="AccountData.html" title="interface in ats4.data">AccountData
 <a id="copyTo(java.sql.PreparedStatement)">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>copyTo</h4>
 <pre class="methodSignature">public final&nbsp;void&nbsp;copyTo&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/PreparedStatement.html?is-external=true" title="class or interface in java.sql" class="externalLink">PreparedStatement</a>&nbsp;ps)</pre>
@@ -437,38 +423,6 @@ implements <a href="AccountData.html" title="interface in ats4.data">AccountData
 <dd><code>ps</code> - クエリ</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../warn/TableAccessException.html" title="class in ats4.warn">TableAccessException</a></code> - 疎通の障害がある場合</dd>
-</dl>
-</li>
-</ul>
-<a id="archive()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>archive</h4>
-<pre class="methodSignature">public final&nbsp;<a href="ArchiveData.html" title="class in ats4.data">ArchiveData</a>&nbsp;archive()</pre>
-<div class="block">交信記録のレコードを生成します。</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>交信記録のレコード</dd>
-<dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>2022/08/21</dd>
-</dl>
-</li>
-</ul>
-<a id="ranking()">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>ranking</h4>
-<pre class="methodSignature">public final&nbsp;<a href="RankingData.html" title="class in ats4.data">RankingData</a>&nbsp;ranking()</pre>
-<div class="block">成績順位のレコードを生成します。</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>成績順位のレコード</dd>
-<dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>2022/08/21</dd>
 </dl>
 </li>
 </ul>

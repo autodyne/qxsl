@@ -241,17 +241,17 @@ implements <a href="AccountData.html" title="interface in ats4.data">AccountData
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="ArchiveData.html" title="class in ats4.data">ArchiveData</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#load(java.nio.file.Path)">load</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/file/Path.html?is-external=true" title="class or interface in java.nio.file" class="externalLink">Path</a>&nbsp;path)</code></th>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getWarningMessage()">getWarningMessage</a></span>()</code></th>
 <td class="colLast">
-<div class="block">指定されたパスの交信記録を設定します。</div>
+<div class="block">交信記録のエラーを表す文字列を返します。</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="ArchiveData.html" title="class in ats4.data">ArchiveData</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#load(java.util.List)">load</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../qxsl/model/Item.html" title="class in qxsl.model">Item</a>&gt;&nbsp;list)</code></th>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../qxsl/model/Item.html" title="class in qxsl.model">Item</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toItemList()">toItemList</a></span>()</code></th>
 <td class="colLast">
-<div class="block">指定された交信記録を設定します。</div>
+<div class="block">このレコードが含む交信記録を解釈します。</div>
 </td>
 </tr>
 </table>
@@ -372,41 +372,33 @@ implements <a href="AccountData.html" title="interface in ats4.data">AccountData
 </dl>
 </li>
 </ul>
-<a id="load(java.util.List)">
+<a id="toItemList()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>load</h4>
-<pre class="methodSignature">public final&nbsp;<a href="ArchiveData.html" title="class in ats4.data">ArchiveData</a>&nbsp;load&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../qxsl/model/Item.html" title="class in qxsl.model">Item</a>&gt;&nbsp;list)</pre>
-<div class="block">指定された交信記録を設定します。</div>
+<h4>toItemList</h4>
+<pre class="methodSignature">public final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../qxsl/model/Item.html" title="class in qxsl.model">Item</a>&gt;&nbsp;toItemList()</pre>
+<div class="block">このレコードが含む交信記録を解釈します。</div>
 <dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>list</code> - 交信記録</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>このレコード</dd>
-<dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>2022/08/21</dd>
+<dd>交信記録</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/UncheckedIOException.html?is-external=true" title="class or interface in java.io" class="externalLink">UncheckedIOException</a></code> - 未対応の書式の例外</dd>
 </dl>
 </li>
 </ul>
-<a id="load(java.nio.file.Path)">
+<a id="getWarningMessage()">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>load</h4>
-<pre class="methodSignature">public final&nbsp;<a href="ArchiveData.html" title="class in ats4.data">ArchiveData</a>&nbsp;load&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/file/Path.html?is-external=true" title="class or interface in java.nio.file" class="externalLink">Path</a>&nbsp;path)</pre>
-<div class="block">指定されたパスの交信記録を設定します。</div>
+<h4>getWarningMessage</h4>
+<pre class="methodSignature">public final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;getWarningMessage()</pre>
+<div class="block">交信記録のエラーを表す文字列を返します。</div>
 <dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>path</code> - 交信記録のパス</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>このレコード</dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/UncheckedIOException.html?is-external=true" title="class or interface in java.io" class="externalLink">UncheckedIOException</a></code> - 読み取りの例外</dd>
-<dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>2022/08/21</dd>
+<dd>警告の文字列</dd>
 </dl>
 </li>
 </ul>
