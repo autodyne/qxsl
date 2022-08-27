@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":10};
+var data = {"i0":9,"i1":10,"i2":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -216,24 +216,17 @@ extends <a href="Qxsl.html" title="class in qxsl.draft">Qxsl</a>&lt;<a href="htt
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>static boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isValid(java.lang.String)">isValid</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;call)</code></th>
-<td class="colLast">
-<div class="block">指定された文字列が呼出符号であるかを確認します。</div>
-</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#normalize(java.lang.String)">normalize</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;call)</code></th>
-<td class="colLast">
-<div class="block">指定された呼出符号を正規形の文字列に変換します。</div>
-</td>
-</tr>
-<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#strip()">strip</a></span>()</code></th>
 <td class="colLast">
-<div class="block">斜線より後の部分文字列を除く呼出符号を返します。</div>
+<div class="block">斜線より前の呼出符号を返します。</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#valid()">valid</a></span>()</code></th>
+<td class="colLast">
+<div class="block">この属性の値が有効か検証します。</div>
 </td>
 </tr>
 </table>
@@ -323,46 +316,28 @@ extends <a href="Qxsl.html" title="class in qxsl.draft">Qxsl</a>&lt;<a href="htt
 <li class="blockList">
 <h4>strip</h4>
 <pre class="methodSignature">public final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;strip()</pre>
-<div class="block">斜線より後の部分文字列を除く呼出符号を返します。</div>
+<div class="block">斜線より前の呼出符号を返します。</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>呼出符号</dd>
 </dl>
 </li>
 </ul>
-<a id="isValid(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>isValid</h4>
-<pre class="methodSignature">public static final&nbsp;boolean&nbsp;isValid&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;call)</pre>
-<div class="block">指定された文字列が呼出符号であるかを確認します。</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>call</code> - 文字列</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>正規形の呼出符号に変換可能な場合は真</dd>
-<dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>2020/10/12</dd>
-</dl>
-</li>
-</ul>
-<a id="normalize(java.lang.String)">
+<a id="valid()">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>normalize</h4>
-<pre class="methodSignature">public static final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;normalize&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;call)</pre>
-<div class="block">指定された呼出符号を正規形の文字列に変換します。</div>
+<h4>valid</h4>
+<pre class="methodSignature">public final&nbsp;boolean&nbsp;valid()</pre>
+<div class="block">この属性の値が有効か検証します。</div>
 <dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>call</code> - 呼出符号</dd>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../value/Field.html#valid()">valid</a></code>&nbsp;in class&nbsp;<code><a href="../value/Field.html" title="class in qxsl.value">Field</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>大文字または数字または記号の列</dd>
+<dd>有効な場合は真</dd>
 <dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>2020/10/12</dd>
+<dd>2022/08/01</dd>
 </dl>
 </li>
 </ul>
