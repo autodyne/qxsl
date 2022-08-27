@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":6,"i2":10,"i3":6};
+var data = {"i0":6,"i1":10,"i2":6,"i3":10,"i4":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -187,6 +187,14 @@ extends <a href="Library.html" title="class in qxsl.ruler">Library</a></pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>abstract boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#match(qxsl.model.Item,qxsl.model.Item)">match</a></span>&#8203;(<a href="../model/Item.html" title="class in qxsl.model">Item</a>&nbsp;a,
+     <a href="../model/Item.html" title="class in qxsl.model">Item</a>&nbsp;b)</code></th>
+<td class="colLast">
+<div class="block">相互に交信が成立した無線局間で交信記録を照合します。</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../model/Item.html" title="class in qxsl.model">Item</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#normalize(java.util.List,java.lang.String)">normalize</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../model/Item.html" title="class in qxsl.model">Item</a>&gt;&nbsp;list,
          <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;type)</code></th>
@@ -194,7 +202,7 @@ extends <a href="Library.html" title="class in qxsl.ruler">Library</a></pre>
 <div class="block">交信記録をライブラリが定義する標準構造に変換します。</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>abstract <a href="../model/Item.html" title="class in qxsl.model">Item</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#normalize(qxsl.model.Item,java.lang.String)">normalize</a></span>&#8203;(<a href="../model/Item.html" title="class in qxsl.model">Item</a>&nbsp;item,
          <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;type)</code></th>
@@ -202,7 +210,7 @@ extends <a href="Library.html" title="class in qxsl.ruler">Library</a></pre>
 <div class="block">交信記録をライブラリが定義する標準構造に変換します。</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../model/Item.html" title="class in qxsl.model">Item</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#transform(java.util.List,java.lang.String)">transform</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../model/Item.html" title="class in qxsl.model">Item</a>&gt;&nbsp;list,
          <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;type)</code></th>
@@ -210,7 +218,7 @@ extends <a href="Library.html" title="class in qxsl.ruler">Library</a></pre>
 <div class="block">交信記録を指定された書式に適合する構造に変換します。</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>abstract <a href="../model/Item.html" title="class in qxsl.model">Item</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#transform(qxsl.model.Item,java.lang.String)">transform</a></span>&#8203;(<a href="../model/Item.html" title="class in qxsl.model">Item</a>&nbsp;item,
          <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;type)</code></th>
@@ -269,6 +277,26 @@ extends <a href="Library.html" title="class in qxsl.ruler">Library</a></pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="match(qxsl.model.Item,qxsl.model.Item)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>match</h4>
+<pre class="methodSignature">public abstract&nbsp;boolean&nbsp;match&#8203;(<a href="../model/Item.html" title="class in qxsl.model">Item</a>&nbsp;a,
+                              <a href="../model/Item.html" title="class in qxsl.model">Item</a>&nbsp;b)</pre>
+<div class="block">相互に交信が成立した無線局間で交信記録を照合します。</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>a</code> - 片方の無線局の交信記録</dd>
+<dd><code>b</code> - 他方の無線局の交信記録</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>照合の結果</dd>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>2022/08/11</dd>
+</dl>
+</li>
+</ul>
 <a id="normalize(qxsl.model.Item,java.lang.String)">
 <!--   -->
 </a>

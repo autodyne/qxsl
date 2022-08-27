@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -168,6 +168,13 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <div class="block">指定されたデータベースを利用します。</div>
 </td>
 </tr>
+<tr class="rowColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.sql.Connection,qxsl.ruler.Pattern)">ATS</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/Connection.html?is-external=true" title="class or interface in java.sql" class="externalLink">Connection</a>&nbsp;conn,
+   <a href="../../qxsl/ruler/Pattern.html" title="class in qxsl.ruler">Pattern</a>&nbsp;rule)</code></th>
+<td class="colLast">
+<div class="block">指定されたデータベースを利用します。</div>
+</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -222,13 +229,20 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 </td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="../base/MessageTable.html" title="class in ats4.base">MessageTable</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#messages()">messages</a></span>()</code></th>
+<td class="colLast">
+<div class="block">交信相手を管理するテーブルを返します。</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../base/RankingTable.html" title="class in ats4.base">RankingTable</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rankings()">rankings</a></span>()</code></th>
 <td class="colLast">
 <div class="block">成績順位を管理するテーブルを返します。</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../base/StationTable.html" title="class in ats4.base">StationTable</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stations()">stations</a></span>()</code></th>
 <td class="colLast">
@@ -262,7 +276,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <a id="&lt;init&gt;(java.sql.Connection)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>ATS</h4>
 <pre>public&nbsp;ATS&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/Connection.html?is-external=true" title="class or interface in java.sql" class="externalLink">Connection</a>&nbsp;conn)</pre>
@@ -272,6 +286,26 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <dd><code>conn</code> - データベースの接続</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../warn/TableAccessException.html" title="class in ats4.warn">TableAccessException</a></code> - 疎通の障害</dd>
+</dl>
+</li>
+</ul>
+<a id="&lt;init&gt;(java.sql.Connection,qxsl.ruler.Pattern)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>ATS</h4>
+<pre>public&nbsp;ATS&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/Connection.html?is-external=true" title="class or interface in java.sql" class="externalLink">Connection</a>&nbsp;conn,
+           <a href="../../qxsl/ruler/Pattern.html" title="class in qxsl.ruler">Pattern</a>&nbsp;rule)</pre>
+<div class="block">指定されたデータベースを利用します。</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>conn</code> - データベースの接続</dd>
+<dd><code>rule</code> - 交信記録の変換規則</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="../warn/TableAccessException.html" title="class in ats4.warn">TableAccessException</a></code> - 疎通の障害</dd>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>2022/08/11</dd>
 </dl>
 </li>
 </ul>
@@ -312,6 +346,20 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>交信履歴を管理するテーブル</dd>
+</dl>
+</li>
+</ul>
+<a id="messages()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>messages</h4>
+<pre class="methodSignature">public final&nbsp;<a href="../base/MessageTable.html" title="class in ats4.base">MessageTable</a>&nbsp;messages()</pre>
+<div class="block">交信相手を管理するテーブルを返します。</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>交信相手を管理するテーブル</dd>
 </dl>
 </li>
 </ul>
