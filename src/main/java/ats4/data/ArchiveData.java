@@ -116,7 +116,7 @@ public final class ArchiveData implements AccountData {
 	public final ArchiveData load(Path path) {
 		try {
 			this.data = Files.readAllBytes(path);
-			this.file = String.valueOf(path);
+			this.file = path.getFileName().toString();
 			return this;
 		} catch (IOException ex) {
 			throw new UncheckedIOException(ex);
