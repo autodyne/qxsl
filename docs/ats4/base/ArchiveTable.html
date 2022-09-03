@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -180,7 +180,8 @@ extends <a href="AccountTable.html" title="class in ats4.base">AccountTable</a>&
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.sql.Connection)">ArchiveTable</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/Connection.html?is-external=true" title="class or interface in java.sql" class="externalLink">Connection</a>&nbsp;conn)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.sql.Connection,qxsl.ruler.Pattern)">ArchiveTable</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/Connection.html?is-external=true" title="class or interface in java.sql" class="externalLink">Connection</a>&nbsp;conn,
+            <a href="../../qxsl/ruler/Pattern.html" title="class in qxsl.ruler">Pattern</a>&nbsp;rule)</code></th>
 <td class="colLast">
 <div class="block">指定されたデータベースを利用します。</div>
 </td>
@@ -211,6 +212,20 @@ extends <a href="AccountTable.html" title="class in ats4.base">AccountTable</a>&
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Optional.html?is-external=true" title="class or interface in java.util" class="externalLink">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#decodable(java.nio.file.Path)">decodable</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/file/Path.html?is-external=true" title="class or interface in java.nio.file" class="externalLink">Path</a>&nbsp;path)</code></th>
+<td class="colLast">
+<div class="block">指定された交信記録の解釈の可能性を検査します。</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../qxsl/model/Item.html" title="class in qxsl.model">Item</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getItems(ats4.data.ArchiveData)">getItems</a></span>&#8203;(<a href="../data/ArchiveData.html" title="class in ats4.data">ArchiveData</a>&nbsp;data)</code></th>
+<td class="colLast">
+<div class="block">指定されたレコードが含む交信記録を解釈します。</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../data/ArchiveData.html" title="class in ats4.data">ArchiveData</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.sql.ResultSet)">parse</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/ResultSet.html?is-external=true" title="class or interface in java.sql" class="externalLink">ResultSet</a>&nbsp;rs)</code></th>
 <td class="colLast">
@@ -248,17 +263,19 @@ extends <a href="AccountTable.html" title="class in ats4.base">AccountTable</a>&
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(java.sql.Connection)">
+<a id="&lt;init&gt;(java.sql.Connection,qxsl.ruler.Pattern)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ArchiveTable</h4>
-<pre>public&nbsp;ArchiveTable&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/Connection.html?is-external=true" title="class or interface in java.sql" class="externalLink">Connection</a>&nbsp;conn)</pre>
+<pre>public&nbsp;ArchiveTable&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/Connection.html?is-external=true" title="class or interface in java.sql" class="externalLink">Connection</a>&nbsp;conn,
+                    <a href="../../qxsl/ruler/Pattern.html" title="class in qxsl.ruler">Pattern</a>&nbsp;rule)</pre>
 <div class="block">指定されたデータベースを利用します。</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>conn</code> - データベースの接続</dd>
+<dd><code>rule</code> - 交信記録の変換規則</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../warn/TableAccessException.html" title="class in ats4.warn">TableAccessException</a></code> - 疎通の障害</dd>
 </dl>
@@ -297,7 +314,7 @@ extends <a href="AccountTable.html" title="class in ats4.base">AccountTable</a>&
 <a id="byCall(java.lang.String)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>byCall</h4>
 <pre class="methodSignature">public final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../data/ArchiveData.html" title="class in ats4.data">ArchiveData</a>&gt;&nbsp;byCall&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;call)</pre>
@@ -310,6 +327,44 @@ extends <a href="AccountTable.html" title="class in ats4.base">AccountTable</a>&
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../warn/TableAccessException.html" title="class in ats4.warn">TableAccessException</a></code> - 疎通の障害</dd>
 <dd><code><a href="../warn/TableSchemaException.html" title="class in ats4.warn">TableSchemaException</a></code> - 構造の問題</dd>
+</dl>
+</li>
+</ul>
+<a id="getItems(ats4.data.ArchiveData)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getItems</h4>
+<pre class="methodSignature">public final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../qxsl/model/Item.html" title="class in qxsl.model">Item</a>&gt;&nbsp;getItems&#8203;(<a href="../data/ArchiveData.html" title="class in ats4.data">ArchiveData</a>&nbsp;data)</pre>
+<div class="block">指定されたレコードが含む交信記録を解釈します。</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>data</code> - レコード</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>交信記録</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/UncheckedIOException.html?is-external=true" title="class or interface in java.io" class="externalLink">UncheckedIOException</a></code> - 未対応の書式の例外</dd>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>2022/08/21</dd>
+</dl>
+</li>
+</ul>
+<a id="decodable(java.nio.file.Path)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>decodable</h4>
+<pre class="methodSignature">public final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Optional.html?is-external=true" title="class or interface in java.util" class="externalLink">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&nbsp;decodable&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/file/Path.html?is-external=true" title="class or interface in java.nio.file" class="externalLink">Path</a>&nbsp;path)</pre>
+<div class="block">指定された交信記録の解釈の可能性を検査します。</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>path</code> - 更新記録のパス</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>例外の文字列</dd>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>2022/08/21</dd>
 </dl>
 </li>
 </ul>
