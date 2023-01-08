@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.function.Predicate;
 
+import qxsl.ruler.Contest;
 import qxsl.ruler.Summary;
 
 import ats4.base.RankingTable;
@@ -134,5 +135,24 @@ public final class RankingData implements AccountData {
 	public final int getRankFromZeroIn(RankingTable table) {
 		final var entries = table.bySect(this.sect).stream();
 		return (int) entries.filter(this.defeated()).count();
+	}
+
+	/**
+	 * このレコードが無得点を示すか確認します。
+	 *
+	 *
+	 * @param contest 規約
+	 *
+	 * @return 該当の参加部門が存在し、無得点の場合は真
+	 *
+	 * @since 2023/01/08
+	 */
+	public final boolean scoreless(Contest contest) {
+		try {
+			final var rule = contest.section(sect);
+			return !rule.isAbsence() && score == 0;
+		} catch (NullPointerException ex) {
+			return false;
+		}
 	}
 }
