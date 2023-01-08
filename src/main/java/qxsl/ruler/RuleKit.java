@@ -105,8 +105,9 @@ public final class RuleKit {
 	 * @throws UncheckedIOException 読み取りまたは評価の例外
 	 */
 	public final Library eval(Reader reader) {
+		final var binds = engine.createBindings();
 		try {
-			return (Library) engine.eval(reader);
+			return (Library) engine.eval(reader, binds);
 		} catch (ScriptException ex) {
 			final var io = new IOException(ex);
 			throw new UncheckedIOException(io);
