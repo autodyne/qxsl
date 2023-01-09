@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -269,6 +269,13 @@ implements <a href="AccountData.html" title="interface in ats4.data">AccountData
 <div class="block">指定されたテーブルで総合順位を返します。</div>
 </td>
 </tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#scoreless(qxsl.ruler.Contest)">scoreless</a></span>&#8203;(<a href="../../qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a>&nbsp;contest)</code></th>
+<td class="colLast">
+<div class="block">このレコードが無得点を示すか確認します。</div>
+</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -426,7 +433,7 @@ implements <a href="AccountData.html" title="interface in ats4.data">AccountData
 <a id="getRankFromZeroIn(ats4.base.RankingTable)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getRankFromZeroIn</h4>
 <pre class="methodSignature">public final&nbsp;int&nbsp;getRankFromZeroIn&#8203;(<a href="../base/RankingTable.html" title="class in ats4.base">RankingTable</a>&nbsp;table)</pre>
@@ -439,6 +446,24 @@ implements <a href="AccountData.html" title="interface in ats4.data">AccountData
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../warn/TableAccessException.html" title="class in ats4.warn">TableAccessException</a></code> - 疎通の障害</dd>
 <dd><code><a href="../warn/TableSchemaException.html" title="class in ats4.warn">TableSchemaException</a></code> - 構造の問題</dd>
+</dl>
+</li>
+</ul>
+<a id="scoreless(qxsl.ruler.Contest)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>scoreless</h4>
+<pre class="methodSignature">public final&nbsp;boolean&nbsp;scoreless&#8203;(<a href="../../qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a>&nbsp;contest)</pre>
+<div class="block">このレコードが無得点を示すか確認します。</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>contest</code> - 規約</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>該当の参加部門が存在し、無得点の場合は真</dd>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>2023/01/08</dd>
 </dl>
 </li>
 </ul>
