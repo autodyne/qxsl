@@ -115,17 +115,32 @@ public final class RuleKit {
 	}
 
 	/**
+	 * 指定された名前の内蔵ライブラリを取得して評価します。
+	 *
+	 *
+	 * @param path リソースのパス
+	 *
+	 * @return ライブラリの定義
+	 *
+	 * @throws UncheckedIOException 読み取りまたは評価の例外
+	 */
+	public static final Library load(String path) {
+		return forFile(path).eval(read(path));
+	}
+
+	/**
 	 * 指定された名前の内蔵ライブラリの定義を読み取ります。
 	 *
 	 *
 	 * @param path リソースのパス
 	 *
-	 * @return ライブラリの定義 未定義の場合はnull
+	 * @return ライブラリの定義
 	 *
-	 * @throws UncheckedIOException 読み取りまたは評価の例外
+	 * @throws UncheckedIOException 読み取りの例外
+	 *
+	 * @since 2023/01/09
 	 */
-	public static final Library load(String path) {
-		final var lib = new AssetUtil(Library.class);
-		return forFile(path).eval(lib.string(path));
+	public static final String read(String path) {
+		return new AssetUtil(Library.class).string(path);
 	}
 }
