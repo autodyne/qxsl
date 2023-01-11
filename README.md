@@ -5,7 +5,7 @@ QxSL: Amateur-Radio Logging Library & LISP
 ![image](https://img.shields.io/badge/OpenJDK-SE11-red.svg)
 ![image](https://img.shields.io/badge/GraalVM-20.0-red.svg)
 ![image](https://img.shields.io/badge/license-LGPL3-darkblue.svg)
-![build](https://github.com/nextzlog/qxsl/actions/workflows/build.yaml/badge.svg)
+![build](https://github.com/autodyne/qxsl/actions/workflows/build.yaml/badge.svg)
 
 QxSL is a Java library for processing amateur-radio log files, including scoring and tabulation frameworks for ham radio contests.
 
@@ -17,7 +17,7 @@ QxSL is a Java library for processing amateur-radio log files, including scoring
 
 ## Documents
 
-- [Javadoc](https://nextzlog.github.io/qxsl/docs)
+- [Javadoc](https://autodyne.github.io/qxsl/docs)
 - [ATS-4 (PDF)](https://pafelog.net/ats4.pdf)
 
 ## Applications
@@ -165,7 +165,7 @@ If you want to use the latest build, configure the `build.gradle` as follows:
 
 ```Groovy:build.gradle
 repositories.maven {
-  url('https://nextzlog.github.io/qxsl/mvn/')
+  url('https://autodyne.github.io/qxsl/mvn/')
 }
 
 dependencies {
@@ -181,7 +181,7 @@ dependencies {
 $ gradle build javadoc publish
 ```
 
-You can create a [native command line application](https://github.com/nextzlog/qxsl/releases/tag/nightly) instead of a JAR file.
+You can create a [native command line application](https://github.com/autodyne/qxsl/releases/tag/nightly) instead of a JAR file.
 [GraalVM](https://www.graalvm.org) must be installed before compilation.
 Then run the commands manually as follows:
 

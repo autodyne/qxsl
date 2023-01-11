@@ -40,7 +40,7 @@ javadoc {
 	exclude 'gaas/**'
 	destinationDir = file("$dist/docs")
 	options.links("https://docs.oracle.com/en/java/javase/$java/docs/api/")
-	options.header("<a href='https://github.com/nextzlog/qxsl'>GitHub</a>")
+	options.header("<a href='https://github.com/autodyne/qxsl'>GitHub</a>")
 	options.charSet = options.encoding = utf8
 }
 

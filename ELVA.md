@@ -320,7 +320,7 @@ This evaluates the unquoted sub expression as a list and then embeds the element
 
 ### absence
 
-creates and returns a [`absence`](https://nextzlog.github.io/qxsl/doc/qxsl/ruler/Absence.html) object.
+creates and returns a [`absence`](https://autodyne.github.io/qxsl/doc/qxsl/ruler/Absence.html) object.
 
 ```lisp
 (absence name code)
@@ -440,7 +440,7 @@ concatenates the specified value and list into a list.
 
 ### contest
 
-creates and returns a [`contest`](https://nextzlog.github.io/qxsl/doc/qxsl/ruler/Contest.html) object.
+creates and returns a [`contest`](https://autodyne.github.io/qxsl/doc/qxsl/ruler/Contest.html) object.
 
 ```lisp
 (contest name host mail link start-day final-day dead-line)
@@ -680,7 +680,7 @@ performs or operation and returns a bool value.
 
 ### pattern
 
-creates and returns a [`pattern`](https://nextzlog.github.io/qxsl/doc/qxsl/ruler/Pattern.html) object.
+creates and returns a [`pattern`](https://autodyne.github.io/qxsl/doc/qxsl/ruler/Pattern.html) object.
 
 ```lisp
 (pattern normalize transform cross-check)
@@ -720,7 +720,7 @@ removes elements for which the specified function returns false.
 
 ### section
 
-takes four functions and returns a [`section`](https://nextzlog.github.io/qxsl/doc/qxsl/ruler/Section.html) object.
+takes four functions and returns a [`section`](https://autodyne.github.io/qxsl/doc/qxsl/ruler/Section.html) object.
 
 ```lisp
 (section name code cities verify unique entity result)
