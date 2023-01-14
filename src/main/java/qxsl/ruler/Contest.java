@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Amateur Radio Operational Logging Library 'qxsl' since 2013 February 16th
- * License: GNU Lesser General Public License v3.0 (see LICENSE)
- * Author: Journal of Hamradio Informatics (https://pafelog.net)
+ * Released under the GNU Lesser General Public License (LGPL) v3 (see LICENSE)
+ * Univ. Tokyo Amateur Radio Club Development Task Force (https://nextzlog.dev)
 *******************************************************************************/
 package qxsl.ruler;
 
