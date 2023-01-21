@@ -5,9 +5,12 @@
 *******************************************************************************/
 package qxsl.ruler;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Year;
 import java.time.ZoneId;
+
+import static java.time.temporal.TemporalAdjusters.dayOfWeekInMonth;
 
 /**
  * コンテストの日程はこのクラスを継承します。
@@ -64,6 +67,7 @@ public abstract class Program extends Contest {
 
 	/**
 	 * コンテストの開催年を返します。
+	 * 半年を過ぎると翌年を返します。
 	 *
 	 *
 	 * @return 名前
@@ -71,7 +75,10 @@ public abstract class Program extends Contest {
 	 * @since 2022/07/23
 	 */
 	public int year() {
-		return Year.now().getValue();
+		final int year = Year.now().getValue();
+		final var date = this.getStartDay(year);
+		final var past = date.until(LocalDate.now());
+		return past.getMonths() >= 6? year + 1: year;
 	}
 
 	/**
@@ -203,4 +210,46 @@ public abstract class Program extends Contest {
 	 * @since 2022/07/17
 	 */
 	public abstract boolean conflict(Section[] entries);
+
+	/**
+	 * 特定の月の特定の曜日に開催されるコンテストです。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2023/01/21
+	 */
+	public static abstract class Annual extends Program {
+		private final int mon;
+		private final int nth;
+		private final DayOfWeek day;
+
+		/**
+		 * 開催日時を指定します。
+		 *
+		 *
+		 * @param mon 月
+		 * @param nth 週
+		 * @param day 曜
+		 */
+		public Annual(int mon, int nth, DayOfWeek day) {
+			this.mon = mon;
+			this.nth = nth;
+			this.day = day;
+		}
+
+		/**
+		 * 指定された年のコンテストの開始日を計算します。
+		 *
+		 *
+		 * @param year 開催年
+		 *
+		 * @return 開始日
+		 */
+		@Override
+		public final LocalDate getStartDay(int year) {
+			final var date = LocalDate.of(year, mon, 1);
+			return date.with(dayOfWeekInMonth(nth, day));
+		}
+	}
 }
