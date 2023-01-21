@@ -146,6 +146,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">参加局の宛先住所です。</div>
 </dd>
+<dt><span class="memberNameLink"><a href="qxsl/ruler/Program.Annual.html#%3Cinit%3E(int,int,java.time.DayOfWeek)">Annual(int, int, DayOfWeek)</a></span> - Constructor for class qxsl.ruler.<a href="qxsl/ruler/Program.Annual.html" title="class in qxsl.ruler">Program.Annual</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="qxsl/field/FieldManager.Any.html#%3Cinit%3E(javax.xml.namespace.QName,java.lang.String)">Any(QName, String)</a></span> - Constructor for class qxsl.field.<a href="qxsl/field/FieldManager.Any.html" title="class in qxsl.field">FieldManager.Any</a></dt>
 <dd>
 <div class="block">属性名と値を指定して<a href="qxsl/field/FieldManager.Any.html" title="class in qxsl.field"><code>FieldManager.Any</code></a>を構築します。</div>
@@ -1069,6 +1071,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">コンテストの開始日を返します。</div>
 </dd>
+<dt><span class="memberNameLink"><a href="qxsl/ruler/Program.Annual.html#getStartDay(int)">getStartDay(int)</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Program.Annual.html" title="class in qxsl.ruler">Program.Annual</a></dt>
+<dd>
+<div class="block">指定された年のコンテストの開始日を計算します。</div>
+</dd>
 <dt><span class="memberNameLink"><a href="qxsl/ruler/Program.html#getStartDay(int)">getStartDay(int)</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Program.html" title="class in qxsl.ruler">Program</a></dt>
 <dd>
 <div class="block">指定された年のコンテストの開始日を計算します。</div>
@@ -1700,6 +1706,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="qxsl/ruler/Program.html#%3Cinit%3E(qxsl.ruler.Section...)">Program(Section...)</a></span> - Constructor for class qxsl.ruler.<a href="qxsl/ruler/Program.html" title="class in qxsl.ruler">Program</a></dt>
 <dd>
 <div class="block">指定された部門を有する規約を構築します。</div>
+</dd>
+<dt><a href="qxsl/ruler/Program.Annual.html" title="class in qxsl.ruler"><span class="typeNameLink">Program.Annual</span></a> - Class in <a href="qxsl/ruler/package-summary.html">qxsl.ruler</a></dt>
+<dd>
+<div class="block">特定の月の特定の曜日に開催されるコンテストです。</div>
 </dd>
 <dt><span class="memberNameLink"><a href="qxsl/utils/AssetUtil.html#properties(java.lang.String)">properties(String)</a></span> - Method in class qxsl.utils.<a href="qxsl/utils/AssetUtil.html" title="class in qxsl.utils">AssetUtil</a></dt>
 <dd>
@@ -2534,7 +2544,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dl>
 <dt><span class="memberNameLink"><a href="qxsl/ruler/Program.html#year()">year()</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Program.html" title="class in qxsl.ruler">Program</a></dt>
 <dd>
-<div class="block">コンテストの開催年を返します。</div>
+<div class="block">コンテストの開催年を返します。
+ 半年を過ぎると翌年を返します。</div>
 </dd>
 <dt><span class="memberNameLink"><a href="qxsl/draft/Time.html#year(int)">year(int)</a></span> - Method in class qxsl.draft.<a href="qxsl/draft/Time.html" title="class in qxsl.draft">Time</a></dt>
 <dd>
