@@ -3,7 +3,7 @@
  * Released under the GNU Lesser General Public License (LGPL) v3 (see LICENSE)
  * Univ. Tokyo Amateur Radio Club Development Task Force (https://nextzlog.dev)
 *******************************************************************************/
-package gaas.ruler;
+package elva.qxsl;
 
 import elva.lang.ElvaEval;
 import elva.lang.ListBase;
@@ -12,51 +12,49 @@ import elva.lang.NativeOp;
 import elva.lang.NativeOp.Args;
 import elva.lang.NativeOp.Name;
 
-import qxsl.ruler.Absence;
+import qxsl.ruler.Contest;
 
 /**
- * creates and returns a absence object.
+ * creates and returns a contest object.
  * <pre>
- * (absence name code)
+ * (contest name)
  * </pre>
  *
  *
  * @author 無線部開発班
  *
- * @since 2020/11/23
+ * @since 2019/05/15
  */
-@Name("absence")
-@Args(min = 2, max = 2)
-public final class AbsenceForm extends NativeOp {
+@Name("contest")
+@Args(min = 1, max = 1)
+public final class ContestForm extends NativeOp {
 	@Override
 	public Object apply(ListBase args, ElvaEval eval) {
-		return new AbsenceImpl(args, eval);
+		return new ContestImpl(args, eval);
 	}
 }
 
 /**
- * LISP処理系の内部における不参加の部門の実装です。
+ * LISP処理系の内部におけるコンテストの規約の実装です。
  *
  *
  * @author 無線部開発班
  *
- * @since 2020/11/23
+ * @since 2017/02/20
  */
-final class AbsenceImpl extends Absence {
-	private final String name;
-	private final String code;
+final class ContestImpl extends Contest {
 	private final ElvaEval eval;
+	private final String name;
 
 	/**
-	 * 指定された部門定義と評価器で部門を構築します。
+	 * 指定された規約定義と評価器で規約を構築します。
 	 *
 	 *
-	 * @param rule 部門
+	 * @param rule 規約
 	 * @param eval 評価器
 	 */
-	public AbsenceImpl(ListBase rule, ElvaEval eval) {
+	public ContestImpl(ListBase rule, ElvaEval eval) {
 		this.name = eval.apply(rule.head()).text();
-		this.code = eval.apply(rule.last()).text();
 		this.eval = eval;
 	}
 
@@ -76,24 +74,13 @@ final class AbsenceImpl extends Absence {
 	}
 
 	/**
-	 * 部門の名前を返します。
+	 * コンテストの名前を返します。
 	 *
 	 *
-	 * @return 名前
+	 * @return コンテストの名前
 	 */
 	@Override
 	public final String name() {
 		return name;
-	}
-
-	/**
-	 * 部門の番号を返します。
-	 *
-	 *
-	 * @return 番号
-	 */
-	@Override
-	public final String code() {
-		return code;
 	}
 }

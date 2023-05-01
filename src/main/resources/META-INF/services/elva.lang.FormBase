@@ -55,7 +55,7 @@ elva.form.TypeForm
 elva.form.UqsplForm
 elva.form.UquotForm
 elva.form.XorForm
-gaas.ruler.AbsenceForm
-gaas.ruler.ContestForm
-gaas.ruler.PatternForm
-gaas.ruler.SectionForm
+elva.qxsl.AbsenceForm
+elva.qxsl.ContestForm
+elva.qxsl.PatternForm
+elva.qxsl.SectionForm

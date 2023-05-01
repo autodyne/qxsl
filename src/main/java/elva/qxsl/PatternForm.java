@@ -3,7 +3,7 @@
  * Released under the GNU Lesser General Public License (LGPL) v3 (see LICENSE)
  * Univ. Tokyo Amateur Radio Club Development Task Force (https://nextzlog.dev)
 *******************************************************************************/
-package gaas.ruler;
+package elva.qxsl;
 
 import elva.lang.ElvaEval;
 import elva.lang.FormBase;

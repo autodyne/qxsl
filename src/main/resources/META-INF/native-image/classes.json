@@ -360,6 +360,30 @@
 		"allPublicFields": true
 	},
 	{
+		"name": "elva.qxsl.AbsenceForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.qxsl.ContestForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.qxsl.PatternForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
+		"name": "elva.qxsl.SectionForm",
+		"allPublicConstructors": true,
+		"allPublicMethods": true,
+		"allPublicFields": true
+	},
+	{
 		"name": "gaas.draft.BandFactory",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
@@ -433,30 +457,6 @@
 	},
 	{
 		"name": "gaas.draft.WattFactory",
-		"allPublicConstructors": true,
-		"allPublicMethods": true,
-		"allPublicFields": true
-	},
-	{
-		"name": "gaas.ruler.AbsenceForm",
-		"allPublicConstructors": true,
-		"allPublicMethods": true,
-		"allPublicFields": true
-	},
-	{
-		"name": "gaas.ruler.ContestForm",
-		"allPublicConstructors": true,
-		"allPublicMethods": true,
-		"allPublicFields": true
-	},
-	{
-		"name": "gaas.ruler.PatternForm",
-		"allPublicConstructors": true,
-		"allPublicMethods": true,
-		"allPublicFields": true
-	},
-	{
-		"name": "gaas.ruler.SectionForm",
 		"allPublicConstructors": true,
 		"allPublicMethods": true,
 		"allPublicFields": true
