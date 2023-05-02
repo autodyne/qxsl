@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10};
+var data = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -134,7 +134,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public final class <span class="typeNameLabel">MorseCode</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
-<div class="block">文字列とモールス符号の変換器です。</div>
+<div class="block">欧字列をモールス符号の語列に変換します。</div>
 <dl>
 <dt><span class="simpleTagLabel">Since:</span></dt>
 <dd>2021/09/15</dd>
@@ -184,23 +184,16 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#encode(char)">encode</a></span>&#8203;(char&nbsp;ch)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#decode(java.lang.String)">decode</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;code)</code></th>
 <td class="colLast">
-<div class="block">指定された文字をモールス符号に変換します。</div>
+<div class="block">指定された符号語の列を欧字列に変換します。</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#encode(int)">encode</a></span>&#8203;(int&nbsp;ch)</code></th>
-<td class="colLast">
-<div class="block">指定された文字をモールス符号に変換します。</div>
-</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#encode(java.lang.String)">encode</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;text)</code></th>
 <td class="colLast">
-<div class="block">指定された文字列をモールス符号に変換します。</div>
+<div class="block">指定された欧字列を符号語の列に変換します。</div>
 </td>
 </tr>
 </table>
@@ -247,51 +240,35 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="encode(int)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>encode</h4>
-<pre class="methodSignature">public final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;encode&#8203;(int&nbsp;ch)</pre>
-<div class="block">指定された文字をモールス符号に変換します。</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>ch</code> - 文字</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>符号語 (長点は_ 短点は. 語尾は;)</dd>
-</dl>
-</li>
-</ul>
-<a id="encode(char)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>encode</h4>
-<pre class="methodSignature">public final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;encode&#8203;(char&nbsp;ch)</pre>
-<div class="block">指定された文字をモールス符号に変換します。</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>ch</code> - 文字</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>符号語 (長点は_ 短点は. 語尾は;)</dd>
-</dl>
-</li>
-</ul>
 <a id="encode(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>encode</h4>
+<pre class="methodSignature">public final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;encode&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;text)</pre>
+<div class="block">指定された欧字列を符号語の列に変換します。</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>text</code> - 欧字列</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>符号語の列</dd>
+</dl>
+</li>
+</ul>
+<a id="decode(java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>encode</h4>
-<pre class="methodSignature">public final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;encode&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;text)</pre>
-<div class="block">指定された文字列をモールス符号に変換します。</div>
+<h4>decode</h4>
+<pre class="methodSignature">public final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;decode&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;code)</pre>
+<div class="block">指定された符号語の列を欧字列に変換します。</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>text</code> - 文字列</dd>
+<dd><code>code</code> - 符号語の列</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>空白文字で区切られた符号語の列</dd>
+<dd>欧字列</dd>
 </dl>
 </li>
 </ul>
