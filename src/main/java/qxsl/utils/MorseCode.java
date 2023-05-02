@@ -7,10 +7,10 @@ package qxsl.utils;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.StringJoiner;
 
 /**
- * 文字列とモールス符号の変換器です。
+ * 欧字列をモールス符号の語列に変換します。
  *
  *
  * @author 無線部開発班
@@ -18,53 +18,49 @@ import java.util.stream.Collectors;
  * @since 2021/09/15
  */
 public final class MorseCode {
-	private final Map<Character, String> map;
+	private final Map<String, String> en;
+	private final Map<String, String> de;
 
 	/**
 	 * 変換器を構築します。
 	 */
 	public MorseCode() {
-		this.map = new HashMap<>();
+		this.en = new HashMap<>();
+		this.de = new HashMap<>();
 		final var util = AssetUtil.from(this);
 		for(var v: util.listLines("morse.dat")) {
-			map.put(v.charAt(0), v.substring(1));
+			en.put(v.substring(0, 1), v.substring(1));
+			de.put(v.substring(1), v.substring(0, 1));
 		}
 	}
 
 	/**
-	 * 指定された文字をモールス符号に変換します。
+	 * 指定された欧字列を符号語の列に変換します。
 	 *
 	 *
-	 * @param ch 文字
+	 * @param text 欧字列
 	 *
-	 * @return 符号語 (長点は_ 短点は. 語尾は;)
-	 */
-	public final String encode(int ch) {
-		return encode((char) ch);
-	}
-
-	/**
-	 * 指定された文字をモールス符号に変換します。
-	 *
-	 *
-	 * @param ch 文字
-	 *
-	 * @return 符号語 (長点は_ 短点は. 語尾は;)
-	 */
-	public final String encode(char ch) {
-		return map.get(Character.toUpperCase(ch));
-	}
-
-	/**
-	 * 指定された文字列をモールス符号に変換します。
-	 *
-	 *
-	 * @param text 文字列
-	 *
-	 * @return 空白文字で区切られた符号語の列
+	 * @return 符号語の列
 	 */
 	public final String encode(String text) {
-		final var join = Collectors.joining(" ");
-		return text.chars().mapToObj(this::encode).collect(join);
+		final var join = new StringJoiner(" ");
+		final var list = text.split("");
+		for(var v: list) join.add(en.get(v));
+		return join.toString().toUpperCase();
+	}
+
+	/**
+	 * 指定された符号語の列を欧字列に変換します。
+	 *
+	 *
+	 * @param code 符号語の列
+	 *
+	 * @return 欧字列
+	 */
+	public final String decode(String code) {
+		final var join = new StringJoiner("");
+		final var list = code.split(" +");
+		for(var v: list) join.add(de.get(v));
+		return join.toString().toUpperCase();
 	}
 }

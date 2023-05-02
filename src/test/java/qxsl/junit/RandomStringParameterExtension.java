@@ -38,12 +38,13 @@ public final class RandomStringParameterExtension implements ParameterResolver {
 
 	public static final String alnum(int max) {
 		final var text = new char[1 + random.nextInt(max)];
-		for (int i = 0; i < text.length; i++)
+		for (int i = 0; i < text.length; i++) {
 			switch (random.nextInt(3)) {
 				case 0: text[i] = (char) ('0' + random.nextInt(10)); break;
 				case 1: text[i] = (char) ('A' + random.nextInt(26)); break;
 				case 2: text[i] = (char) ('a' + random.nextInt(26)); break;
 			}
+		}
 		return new String(text);
 	}
 
