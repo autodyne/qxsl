@@ -86,4 +86,35 @@ public final class LocalCityItem implements Serializable {
 		if(lv >= size) throw new IndexOutOfBoundsException();
 		return String.join(" ", Arrays.copyOf(path, lv + 1));
 	}
+
+	/**
+	 * この地域のハッシュ値を計算します。
+	 *
+	 *
+	 * @return ハッシュ値
+	 *
+	 * @since 2023/05/03
+	 */
+	@Override
+	public final int hashCode() {
+		return Arrays.hashCode(path);
+	}
+
+	/**
+	 * 指定されたオブジェクトと等値であるか確認します。
+	 *
+	 *
+	 * @param obj 比較するオブジェクト
+	 *
+	 * @return この属性と等しい場合true
+	 *
+	 * @since 2023/05/03
+	 */
+	@Override
+	public final boolean equals(Object obj) {
+		if(obj instanceof LocalCityItem) {
+			final var item = (LocalCityItem) obj;
+			return Arrays.equals(path, item.path);
+		} else return false;
+	}
 }

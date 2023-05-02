@@ -87,8 +87,21 @@ public final class LocalCityBase {
 	 * @throws UncheckedIOException 存在しない場合
 	 */
 	public static final LocalCityBase load(String name) {
-		final var ls = AssetUtil.root().lines(name);
-		final var db = ls.map(LocalCityBase::parse);
+		return read(AssetUtil.root().string(name));
+	}
+
+	/**
+	 * 指定されたデータベース表現を読み取ります。
+	 *
+	 *
+	 * @param data データベースの表現
+	 *
+	 * @return データベース
+	 *
+	 * @since 2023/05/02
+	 */
+	public static final LocalCityBase read(String data) {
+		final var db = data.lines().map(LocalCityBase::parseLine);
 		return new LocalCityBase(db.collect(Collectors.toList()));
 	}
 
@@ -100,7 +113,7 @@ public final class LocalCityBase {
 	 *
 	 * @return エントリ
 	 */
-	private static final LocalCityItem parse(String entry) {
+	private static final LocalCityItem parseLine(String entry) {
 		final var list = new LinkedHashSet<String>();
 		for(final var val: entry.split("\\h+")) list.add(val);
 		return new LocalCityItem(list.toArray(new String[0]));
