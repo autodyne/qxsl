@@ -16,7 +16,7 @@ import static java.lang.Integer.MAX_VALUE;
 import static javax.sound.sampled.LineEvent.Type.STOP;
 
 /**
- * 文字列をモールス符号の波形に変換します。
+ * 欧字列をモールス符号の波形に変換します。
  *
  *
  * @author 無線部開発班
@@ -80,10 +80,10 @@ public final class MorseTone {
 	}
 
 	/**
-	 * 文字列をモールス符号の波形に変換します。
+	 * 欧字列をモールス符号の波形に変換します。
 	 *
 	 *
-	 * @param text 再生する文字列
+	 * @param text 再生する欧字列
 	 *
 	 * @return 波形
 	 */
@@ -95,7 +95,7 @@ public final class MorseTone {
 	}
 
 	/**
-	 * 文字をモールス符号の波形に変換します。
+	 * 欧字をモールス符号の波形に変換します。
 	 *
 	 *
 	 * @param buff 波形の格納先
@@ -199,10 +199,10 @@ public final class MorseTone {
 	}
 
 	/**
-	 * 指定された文字列の音響再生器を生成します。
+	 * 指定された欧字列の音響再生器を生成します。
 	 *
 	 *
-	 * @param text 文字列
+	 * @param text 欧字列
 	 *
 	 * @return 音響再生器
 	 */
