@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
+import java.net.URL;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -197,5 +198,24 @@ public final class AssetUtil {
 	public final InputStream stream(String path) {
 		if(type != null) return type.getResourceAsStream(path);
 		else return getClassLoader().getResourceAsStream(path);
+	}
+
+	/**
+	 * 指定されたウェブページの文字列を読み取ります。
+	 *
+	 *
+	 * @param url URL
+	 * @param chs 文字セット
+	 *
+	 * @return 文字列
+	 *
+	 * @throws IOException 読み取りに失敗した場合
+	 *
+	 * @since 2023/05/03
+	 */
+	public final String http(URL url, String chs) throws IOException {
+		try(var strm = new InputStreamReader(url.openStream(), chs)) {
+			return new BufferedReader(strm).lines().collect(joining("\n"));
+		}
 	}
 }
