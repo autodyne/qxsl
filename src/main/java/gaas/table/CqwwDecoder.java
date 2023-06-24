@@ -149,7 +149,9 @@ public final class CqwwDecoder extends PrintDecoder {
 	 * @param text 周波数帯の文字列
 	 */
 	private final void band(Node node, String text) {
-		node.set(BandEnum.value(text.trim()).toBand());
+		final var band = BandEnum.value(text.trim());
+		if(band != null) node.set(band.toBand());
+		else node.set(cache(Qxsl.BAND, text));
 	}
 
 	/**
