@@ -4,11 +4,11 @@
 <entry key="createTable">
 CREATE TABLE IF NOT EXISTS STATION_DATA (
 	id int IDENTITY,
-	call varchar(16),
-	name varchar(32),
-	post varchar(16),
-	addr varchar(64),
-	mail varchar(32),
+	call varchar(32),
+	name varchar(64),
+	post varchar(32),
+	addr varchar(256),
+	mail varchar(256),
 	uuid char(36),
 	note clob,
 	primary key(id)
