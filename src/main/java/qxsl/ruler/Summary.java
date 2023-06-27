@@ -55,12 +55,30 @@ public final class Summary implements Serializable {
 	 * @param item 交信記録
 	 */
 	private final void addItem(Item item) {
-		final var msg = sec.verify(item);
+		final var msg = verifyItem(item);
 		if(msg.isFailure()) rej.add(msg);
 		else {
 			final var idx = this.sec.unique(msg.item());
 			if(!acc.containsKey(idx)) acc.put(idx, msg);
 			else rej.add(new Failure(msg.item(), DUPE));
+		}
+	}
+
+	/**
+	 * 交信記録の検証結果または例外を返します。
+	 *
+	 *
+	 * @param item 交信記録
+	 *
+	 * @return 検証結果
+	 *
+	 * @since 2023/06/28
+	 */
+	private final Message verifyItem(Item item) {
+		try {
+			return sec.verify(item);
+		} catch (RuntimeException ex) {
+			return new Failure(item, ex.getMessage());
 		}
 	}
 
