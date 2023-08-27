@@ -192,8 +192,9 @@ $ qxsl.exe source.zlox target.qxml qxml
 
 ## Contribution
 
-Feel free to make issues at [nextzlog/todo](https://github.com/nextzlog/todo).
-Follow [@nextzlog](https://twitter.com/nextzlog) on Twitter.
+Pull requests are not accepted.
+QxSL is a highly extensible library and in most cases QxSL itself does not need to be modified.
+If you need enhancements, feel free to make issues at [nextzlog/todo](https://github.com/nextzlog/todo).
 
 ## License
 
