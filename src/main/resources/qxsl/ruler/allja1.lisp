@@ -17,7 +17,6 @@
 ; area validation
 (defun 内? it
 	(cond
-		((DIGIT? it) (every it 現存? 市郡?))
 		((AREA1? it) (every it 現存? 市郡?))
 		((AREA8? it) (every it 現存? 支庁?))
 		((always it) (every it 現存? 府県?))))
