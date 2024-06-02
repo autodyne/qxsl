@@ -20,9 +20,9 @@ import qxsl.model.Item;
 import qxsl.table.BasicEncoder;
 import qxsl.value.Field;
 
-import gaas.table.CBinFactory.BandEnum;
 import gaas.table.CBinFactory.DateTime;
-import gaas.table.CBinFactory.ModeEnum;
+
+import static qxsl.table.BasicFactory.FieldSet;
 
 /**
  * 標準構造の交信記録をLG8書式で永続化します。
@@ -34,7 +34,9 @@ import gaas.table.CBinFactory.ModeEnum;
  */
 public final class CBinEncoder extends BasicEncoder {
 	private final DataOutputStream target;
-	private final DateTime cDTime;
+	private final FieldSet<Band> bandSet;
+	private final FieldSet<Mode> modeSet;
+	private final DateTime chrono;
 	private final Set<Name> names;
 	private Item last;
 	private int count;
@@ -48,8 +50,10 @@ public final class CBinEncoder extends BasicEncoder {
 	public CBinEncoder(OutputStream stream) {
 		super("cbin");
 		this.names = new LinkedHashSet<Name>();
+		this.chrono = new DateTime();
 		this.target = new DataOutputStream(stream);
-		this.cDTime = new DateTime();
+		this.bandSet = CBinFactory.getBandSet();
+		this.modeSet = CBinFactory.getModeSet();
 	}
 
 	/**
@@ -195,8 +199,7 @@ public final class CBinEncoder extends BasicEncoder {
 	 * @throws IOException 書き込みに失敗した場合
 	 */
 	private final void time(Time time) throws IOException {
-		if(time == null) target.write(new byte[8]);
-		else target.writeLong(cDTime.encode(time));
+		target.writeLong(chrono.encode(time));
 	}
 
 	/**
@@ -208,9 +211,8 @@ public final class CBinEncoder extends BasicEncoder {
 	 * @throws IOException 書き込みに失敗した場合
 	 */
 	private final void mode(Mode mode) throws IOException {
-		final var modes = ModeEnum.valueOf(mode);
 		if(mode == null) target.writeByte(0);
-		else target.writeByte(modes.ordinal());
+		else target.writeByte(modeSet.indexOf(mode));
 	}
 
 	/**
@@ -222,8 +224,7 @@ public final class CBinEncoder extends BasicEncoder {
 	 * @throws IOException 書き込みに失敗した場合
 	 */
 	private final void band(Band band) throws IOException {
-		final var bands = BandEnum.valueOf(band);
-		if(bands == null) target.writeByte(0);
-		else target.writeByte(bands.ordinal());
+		if(band == null) target.writeByte(0);
+		else target.writeByte(bandSet.indexOf(band));
 	}
 }
