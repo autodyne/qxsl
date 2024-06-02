@@ -5,13 +5,16 @@
 *******************************************************************************/
 package gaas.table;
 
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
-import qxsl.model.Item;
-import qxsl.table.BasicDecoder;
+import qxsl.draft.Band;
+import qxsl.draft.Mode;
+import qxsl.draft.Watt;
+import qxsl.model.Node;
+
+import static qxsl.table.BasicFactory.FieldSet;
 
 /**
  * zLogのZLOX書式で永続化された交信記録を解読します。
@@ -21,9 +24,10 @@ import qxsl.table.BasicDecoder;
  *
  * @since 2022/06/22
  */
-public final class ZNewDecoder extends BasicDecoder {
-	private final DataInputStream source;
-	private final ZBinDecoder reader;
+public final class ZNewDecoder extends ZLogDecoder {
+	private final FieldSet<Band> bandSet;
+	private final FieldSet<Mode> modeSet;
+	private final FieldSet<Watt> wattSet;
 	private int numQSOs;
 
 	/**
@@ -33,21 +37,10 @@ public final class ZNewDecoder extends BasicDecoder {
 	 * @param stream 入力
 	 */
 	public ZNewDecoder(InputStream stream) {
-		super("znew");
-		this.source = new DataInputStream(stream);
-		this.reader = new ZBinDecoder(stream);
-	}
-
-	/**
-	 * ストリームを閉じて資源を解放します。
-	 *
-	 *
-	 * @throws IOException 解放に失敗した場合
-	 */
-	@Override
-	public final void close() throws IOException {
-		source.close();
-		reader.close();
+		super("znew", stream);
+		this.bandSet = ZNewFactory.getBandSet();
+		this.modeSet = ZNewFactory.getModeSet();
+		this.wattSet = ZNewFactory.getWattSet();
 	}
 
 	/**
@@ -64,7 +57,7 @@ public final class ZNewDecoder extends BasicDecoder {
 		source.readFully(mno);
 		final int num = source.readInt();
 		source.readFully(new byte[0x4C]);
-		reader.setTimeZone(source.readShort());
+		setTimeZone(source.readShort());
 		source.readFully(new byte[0xAA]);
 		source.readFully(new byte[0x80]);
 		this.numQSOs = Integer.reverseBytes(num);
@@ -73,32 +66,17 @@ public final class ZNewDecoder extends BasicDecoder {
 	}
 
 	/**
-	 * ストリームの交信記録の末尾を読み取ります。
+	 * 次の交信記録までバイト列を読み飛ばします。
 	 *
 	 *
 	 * @throws IOException 読み取りに失敗した場合
 	 *
-	 * @since 2020/09/04
+	 * @since 2024/06/02
 	 */
 	@Override
-	public final void foot() throws IOException {}
-
-	/**
-	 * ストリームの現在位置の交信記録を読み取ります。
-	 *
-	 *
-	 * @return 読み取った交信記録
-	 *
-	 * @throws IOException 読み取りに失敗した場合
-	 *
-	 * @since 2020/09/04
-	 */
-	@Override
-	public final Item next() throws IOException {
-		final var item = reader.next();
+	public final void skip() throws IOException {
 		source.readFully(new byte[0x80]);
 		this.numQSOs--;
-		return item;
 	}
 
 	/**
@@ -114,5 +92,44 @@ public final class ZNewDecoder extends BasicDecoder {
 	@Override
 	public final boolean hasNext() throws IOException {
 		return numQSOs > 0;
+	}
+
+	/**
+	 * 交信記録に通信方式を読み取ります。
+	 *
+	 *
+	 * @param node 設定する交信記録
+	 *
+	 * @throws IOException 読み取りに失敗した場合
+	 */
+	@Override
+	public final void mode(Node node) throws IOException {
+		node.set(modeSet.valueOf(source.read()));
+	}
+
+	/**
+	 * 交信記録に周波数帯を読み取ります。
+	 *
+	 *
+	 * @param node 設定する交信記録
+	 *
+	 * @throws IOException 読み取りに失敗した場合
+	 */
+	@Override
+	public final void band(Node node) throws IOException {
+		node.set(bandSet.valueOf(source.read()));
+	}
+
+	/**
+	 * 交信記録に送信電力を読み取ります。
+	 *
+	 *
+	 * @param node 設定する交信記録
+	 *
+	 * @throws IOException 読み取りに失敗した場合
+	 */
+	@Override
+	public final void watt(Node node) throws IOException {
+		node.set(wattSet.valueOf(source.read()));
 	}
 }
