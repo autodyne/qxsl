@@ -5,12 +5,14 @@
 *******************************************************************************/
 package gaas.table;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import qxsl.model.Item;
-import qxsl.table.BasicEncoder;
+import qxsl.draft.Band;
+import qxsl.draft.Mode;
+import qxsl.draft.Watt;
+
+import static qxsl.table.BasicFactory.FieldSet;
 
 /**
  * 標準構造の交信記録をzLogのZLOX書式で永続化します。
@@ -20,9 +22,10 @@ import qxsl.table.BasicEncoder;
  *
  * @since 2022/06/22
  */
-public final class ZNewEncoder extends BasicEncoder {
-	private final DataOutputStream target;
-	private final ZBinEncoder writer;
+public final class ZNewEncoder extends ZLogEncoder {
+	private final FieldSet<Band> bandSet;
+	private final FieldSet<Mode> modeSet;
+	private final FieldSet<Watt> wattSet;
 
 	/**
 	 * 指定された出力に書き込むエンコーダを構築します。
@@ -31,21 +34,10 @@ public final class ZNewEncoder extends BasicEncoder {
 	 * @param stream 出力
 	 */
 	public ZNewEncoder(OutputStream stream) {
-		super("znew");
-		this.target = new DataOutputStream(stream);
-		this.writer = new ZBinEncoder(stream);
-	}
-
-	/**
-	 * ストリームを閉じて資源を解放します。
-	 *
-	 *
-	 * @throws IOException 解放に失敗した場合
-	 */
-	@Override
-	public final void close() throws IOException {
-		target.close();
-		writer.close();
+		super("znew", stream);
+		this.bandSet = ZNewFactory.getBandSet();
+		this.modeSet = ZNewFactory.getModeSet();
+		this.wattSet = ZNewFactory.getWattSet();
 	}
 
 	/**
@@ -61,36 +53,60 @@ public final class ZNewEncoder extends BasicEncoder {
 		target.writeBytes("ZLOX");
 		target.writeInt(Integer.reverseBytes(count()));
 		target.write(new byte[0x4C]);
-		target.writeShort(writer.getTimeZone());
+		target.writeShort(getTimeZone());
 		target.write(new byte[0xAA]);
 		target.write(new byte[0x80]);
 	}
 
 	/**
-	 * ストリームに交信記録の末尾を書き込みます。
+	 * 次の交信記録までバイト列を書き飛ばします。
 	 *
 	 *
 	 * @throws IOException 書き込みに失敗した場合
 	 *
-	 * @since 2020/09/04
+	 * @since 2024/06/02
 	 */
 	@Override
-	public final void foot() throws IOException {}
+	public final void skip() throws IOException {
+		target.write(new byte[0x80]);
+	}
 
 	/**
-	 * ストリームの現在位置に交信記録を書き込みます。
+	 * 通信方式をバイト列に変換して書き込みます。
 	 *
 	 *
-	 * @param item 交信記録
+	 * @param mode 通信方式
 	 *
 	 * @throws IOException 書き込みに失敗した場合
-	 *
-	 * @since 2020/09/04
 	 */
 	@Override
-	public final void output(Item item) throws IOException {
-		writer.output(item);
-		target.write(new byte[0x80]);
-		target.flush();
+	public final void mode(Mode mode) throws IOException {
+		target.writeByte(modeSet.indexOf(mode));
+	}
+
+	/**
+	 * 周波数帯をバイト列に変換して書き込みます。
+	 *
+	 *
+	 * @param band 周波数帯
+	 *
+	 * @throws IOException 書き込みに失敗した場合
+	 */
+	@Override
+	public final void band(Band band) throws IOException {
+		target.writeByte(bandSet.indexOf(band));
+	}
+
+	/**
+	 * 送信電力をバイト列に変換して書き込みます。
+	 *
+	 *
+	 * @param watt 送信電力
+	 *
+	 * @throws IOException 書き込みに失敗した場合
+	 */
+	@Override
+	public final void watt(Watt watt) throws IOException {
+		target.writeByte(watt != null? wattSet.indexOf(watt): 0);
 	}
 }
