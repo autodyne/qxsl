@@ -5,15 +5,14 @@
 *******************************************************************************/
 package qxsl.table;
 
+import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.time.Year;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
 import qxsl.utils.AssetUtil;
+import qxsl.value.Field;
 
 /**
  * 書式の説明を設定ファイルから取得する機能を提供します。
@@ -98,54 +97,70 @@ public abstract class BasicFactory extends TableFactory {
 	}
 
 	/**
-	 * この書式のヘッダとなる文字列を返します。
+	 * この書式が対応する属性値を列挙する集合です。
 	 *
 	 *
-	 * @return ヘッダの文字列
+	 * @author 無線部開発班
 	 *
-	 * @since 2019/07/11
+	 * @since 2024/06/02
+	 *
+	 * @param <F> 属性値の総称型
 	 */
-	public final String getHeaderText() {
-		return get("head-text").replaceAll("^\\R+|\\R+$", "");
-	}
+	public static final class FieldSet<F extends Field<?>> {
+		private final List<F> list;
+		private final String name;
 
-	/**
-	 * この書式の入力時に使う時刻の書式を返します。
-	 *
-	 *
-	 * @return 時刻の書式
-	 *
-	 * @since 2020/09/06
-	 */
-	public final DateTimeFormatter getTimeDecoderOld() {
-		final var pattern = get("time-decoder");
-		final int current = Year.now().getValue();
-		final var factory = new DateTimeFormatterBuilder();
-		factory.parseDefaulting(ChronoField.YEAR, current);
-		return factory.appendPattern(pattern).toFormatter();
-	}
+		/**
+		 * 属性値の列挙子の集合を構築します。
+		 *
+		 *
+		 * @param name 属性の名前
+		 */
+		public FieldSet(String name) {
+			this.name = name;
+			this.list = new LinkedList<>();
+		}
 
-	/**
-	 * この書式の出力時に使う時刻の書式を返します。
-	 *
-	 *
-	 * @return 時刻の書式
-	 *
-	 * @since 2020/09/06
-	 */
-	public final DateTimeFormatter getTimeDecoder() {
-		return DateTimeFormatter.ofPattern(get("time-decoder"));
-	}
+		/**
+		 * 指定された属性を末尾に追加します。
+		 *
+		 *
+		 * @param field 属性
+		 */
+		public final void add(F field) {
+			this.list.add(field);
+		}
 
-	/**
-	 * この書式の出力時に使う時刻の書式を返します。
-	 *
-	 *
-	 * @return 時刻の書式
-	 *
-	 * @since 2020/09/06
-	 */
-	public final DateTimeFormatter getTimeEncoder() {
-		return DateTimeFormatter.ofPattern(get("time-encoder"));
+		/**
+		 * 指定された序数の属性値を返します。
+		 *
+		 *
+		 * @param index 序数
+		 *
+		 * @return 属性値
+		 *
+		 * @throws IOException 範囲外の場合
+		 */
+		public final F valueOf(int index) throws IOException {
+			if(list.size() > index) return list.get(index);
+			final var msg = "index %d is not registered within %s";
+			throw new IOException(String.format(msg, index, name));
+		}
+
+		/**
+		 * 指定された属性値の序数を返します。
+		 *
+		 *
+		 * @param value 属性値
+		 *
+		 * @return 対応する列挙子があれば返す
+		 *
+		 * @throws IOException 範囲外の場合
+		 */
+		public final int indexOf(F value) throws IOException {
+			if(list.contains(value)) return list.indexOf(value);
+			final var msg = "value %s is not registered within %s";
+			throw new IOException(String.format(msg, value, name));
+		}
 	}
 }

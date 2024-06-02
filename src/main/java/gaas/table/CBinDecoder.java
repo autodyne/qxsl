@@ -10,14 +10,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
+import qxsl.draft.Band;
+import qxsl.draft.Mode;
 import qxsl.draft.Qxsl;
 import qxsl.model.Item;
 import qxsl.model.Node;
 import qxsl.table.BasicDecoder;
 
-import gaas.table.CBinFactory.BandEnum;
 import gaas.table.CBinFactory.DateTime;
-import gaas.table.CBinFactory.ModeEnum;
+
+import static qxsl.table.BasicFactory.FieldSet;
 
 /**
  * LG8書式で永続化された交信記録を解読します。
@@ -29,7 +31,9 @@ import gaas.table.CBinFactory.ModeEnum;
  */
 public final class CBinDecoder extends BasicDecoder {
 	private final DataInputStream source;
-	private DateTime cDTime;
+	private final FieldSet<Band> bandSet;
+	private final FieldSet<Mode> modeSet;
+	private final DateTime chrono;
 	private int numQSOs;
 
 	/**
@@ -41,7 +45,9 @@ public final class CBinDecoder extends BasicDecoder {
 	public CBinDecoder(InputStream stream) {
 		super("cbin");
 		this.source = new DataInputStream(stream);
-		this.cDTime = new DateTime();
+		this.chrono = new DateTime();
+		this.bandSet = CBinFactory.getBandSet();
+		this.modeSet = CBinFactory.getModeSet();
 	}
 
 	/**
@@ -157,7 +163,7 @@ public final class CBinDecoder extends BasicDecoder {
 	 * @throws IOException 読み取りに失敗した場合
 	 */
 	private final void time(Node node) throws IOException {
-		node.set(cDTime.decode(source.readLong()));
+		node.set(chrono.decode(source.readLong()));
 	}
 
 	/**
@@ -193,7 +199,7 @@ public final class CBinDecoder extends BasicDecoder {
 	 * @throws IOException 読み取りに失敗した場合
 	 */
 	private final void mode(Node node) throws IOException {
-		node.set(ModeEnum.forIndex(source.read()).toMode());
+		node.set(modeSet.valueOf(source.read()));
 	}
 
 	/**
@@ -205,7 +211,7 @@ public final class CBinDecoder extends BasicDecoder {
 	 * @throws IOException 読み取りに失敗した場合
 	 */
 	private final void band(Node node) throws IOException {
-		node.set(BandEnum.forIndex(source.read()).toBand());
+		node.set(bandSet.valueOf(source.read()));
 	}
 
 	/**
