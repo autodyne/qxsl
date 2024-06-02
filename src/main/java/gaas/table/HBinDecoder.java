@@ -30,7 +30,7 @@ import gaas.table.HBinFactory.DateTime;
 public final class HBinDecoder extends BasicDecoder {
 	private final Map<Column, Integer> widths;
 	private final DataInputStream source;
-	private final DateTime hDTime;
+	private final DateTime chrono;
 
 	/**
 	 * 指定された入力を読み込むデコーダを構築します。
@@ -41,7 +41,7 @@ public final class HBinDecoder extends BasicDecoder {
 	public HBinDecoder(InputStream stream) {
 		super("hbin");
 		this.source = new DataInputStream(stream);
-		this.hDTime = new DateTime();
+		this.chrono = new DateTime();
 		this.widths = new HashMap<>();
 	}
 
@@ -214,7 +214,7 @@ public final class HBinDecoder extends BasicDecoder {
 		final int times = widths.get(Column.TIME);
 		final var bytes = new byte[dates + times];
 		source.readFully(bytes);
-		item.set(hDTime.decode(bytes));
+		item.set(chrono.decode(bytes));
 	}
 
 	/**

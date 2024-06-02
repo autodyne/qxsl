@@ -31,7 +31,7 @@ import gaas.table.HBinFactory.DateTime;
  */
 public final class HBinEncoder extends BasicEncoder {
 	private final DataOutputStream target;
-	private final DateTime hDTime;
+	private final DateTime chrono;
 
 	/**
 	 * 指定された出力に書き込むエンコーダを構築します。
@@ -42,7 +42,7 @@ public final class HBinEncoder extends BasicEncoder {
 	public HBinEncoder(OutputStream stream) {
 		super("hbin");
 		this.target = new DataOutputStream(stream);
-		this.hDTime = new DateTime();
+		this.chrono = new DateTime();
 	}
 
 	/**
@@ -173,8 +173,7 @@ public final class HBinEncoder extends BasicEncoder {
 	 * @throws IOException 書き込みに失敗した場合
 	 */
 	private final void time(Time time) throws IOException {
-		if(time == null) target.write(new byte[6]);
-		else target.write(hDTime.encode(time));
+		target.write(chrono.encode(time));
 	}
 
 	/**
@@ -186,10 +185,8 @@ public final class HBinEncoder extends BasicEncoder {
 	 * @throws IOException 書き込みに失敗した場合
 	 */
 	private final void band(Band band) throws IOException {
-		if(band != null) {
-			final var val = band.toDecimalString(3);
-			final var any = new Any(Qxsl.BAND, val);
-			write(any, Column.FREQ);
-		} else write(null, Column.FREQ);
+		final var val = band.toDecimalString(3);
+		final var any = new Any(Qxsl.BAND, val);
+		write(any, Column.FREQ);
 	}
 }
