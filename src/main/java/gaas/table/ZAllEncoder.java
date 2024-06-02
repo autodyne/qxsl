@@ -102,8 +102,7 @@ public final class ZAllEncoder extends PrintEncoder {
 	 * @throws IOException 書き込みに失敗した場合
 	 */
 	private final void time(Time date) throws IOException {
-		if(date == null) space(" ".repeat(16));
-		else space(tstamp.format(date.local()));
+		space(tstamp.format(date.local()));
 	}
 
 	/**

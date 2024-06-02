@@ -100,8 +100,7 @@ public final class ZDosEncoder extends PrintEncoder {
 	 * @throws IOException 書き込みに失敗した場合
 	 */
 	private final void time(Time date) throws IOException {
-		if(date == null) space(" ".repeat(12));
-		else space(tstamp.format(date.local()));
+		space(tstamp.format(date.local()));
 	}
 
 	/**

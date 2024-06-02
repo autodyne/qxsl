@@ -98,9 +98,7 @@ public final class CqwwEncoder extends PrintEncoder {
 	 * @throws IOException 書き込みに失敗した場合
 	 */
 	private final void time(Time date) throws IOException {
-		final var format = tstamp.withZone(UTC);
-		if(date == null) space(" ".repeat(15));
-		else space(format.format(date.value()));
+		space(tstamp.withZone(UTC).format(date.value()));
 	}
 
 	/**
