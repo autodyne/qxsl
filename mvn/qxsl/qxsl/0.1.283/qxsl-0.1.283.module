@@ -10,7 +10,7 @@
   },
   "createdBy": {
     "gradle": {
-      "version": "8.3"
+      "version": "8.8"
     }
   },
   "variants": [
@@ -28,10 +28,10 @@
           "name": "qxsl-0.1.283.jar",
           "url": "qxsl-0.1.283.jar",
           "size": 327684,
-          "sha512": "ea23f01ef43d60575971f32f8452dfef46b699f944010773acef2cbf45596b647c4ed8f57fd7c44935ff0074afc373e6ede06246f75f3fe99f077b5c3781be65",
-          "sha256": "377900e1d8dc061086acab2427f4498aaa355deb8a93adaf9defb693589693c3",
-          "sha1": "d6fb00b23592ddbdea7bb8b601922ab9b1872761",
-          "md5": "7e9ecc8cb76f9533deb06a72399117b0"
+          "sha512": "1303b37959364b600613f3a0ace2a420df84f54a0fa75eab07210234060ebad5066798a6063431a64c09fbc15172ec07823d748741fd99069b911c8d40a19ba2",
+          "sha256": "4df4e5d87b38dba0f0cb4d3753f7a7658d1cf1559b2fd8e7510fe2c1907c08c9",
+          "sha1": "95fe0ccb9a8b844c41ec6d909c6790a81a7fab22",
+          "md5": "75eef0d19e6cc54333f91eed5fde0bb2"
         }
       ]
     },
@@ -49,10 +49,10 @@
           "name": "qxsl-0.1.283.jar",
           "url": "qxsl-0.1.283.jar",
           "size": 327684,
-          "sha512": "ea23f01ef43d60575971f32f8452dfef46b699f944010773acef2cbf45596b647c4ed8f57fd7c44935ff0074afc373e6ede06246f75f3fe99f077b5c3781be65",
-          "sha256": "377900e1d8dc061086acab2427f4498aaa355deb8a93adaf9defb693589693c3",
-          "sha1": "d6fb00b23592ddbdea7bb8b601922ab9b1872761",
-          "md5": "7e9ecc8cb76f9533deb06a72399117b0"
+          "sha512": "1303b37959364b600613f3a0ace2a420df84f54a0fa75eab07210234060ebad5066798a6063431a64c09fbc15172ec07823d748741fd99069b911c8d40a19ba2",
+          "sha256": "4df4e5d87b38dba0f0cb4d3753f7a7658d1cf1559b2fd8e7510fe2c1907c08c9",
+          "sha1": "95fe0ccb9a8b844c41ec6d909c6790a81a7fab22",
+          "md5": "75eef0d19e6cc54333f91eed5fde0bb2"
         }
       ]
     }
