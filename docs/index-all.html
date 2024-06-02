@@ -138,10 +138,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">指定された名前の更新クエリを実行します。</div>
 </dd>
-<dt><span class="memberNameLink"><a href="qxsl/table/BasicFactory.FieldSet.html#add(F)">add(F)</a></span> - Method in class qxsl.table.<a href="qxsl/table/BasicFactory.FieldSet.html" title="class in qxsl.table">BasicFactory.FieldSet</a></dt>
-<dd>
-<div class="block">指定された属性を末尾に追加します。</div>
-</dd>
 <dt><span class="memberNameLink"><a href="qxsl/ruler/Contest.html#add(qxsl.ruler.Section)">add(Section)</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a></dt>
 <dd>
 <div class="block">指定された部門をこの規約に追加します。</div>
@@ -297,10 +293,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="qxsl/table/BasicFactory.html#%3Cinit%3E(java.lang.String)">BasicFactory(String)</a></span> - Constructor for class qxsl.table.<a href="qxsl/table/BasicFactory.html" title="class in qxsl.table">BasicFactory</a></dt>
 <dd>
 <div class="block">指定された名前の書式を初期化します。</div>
-</dd>
-<dt><a href="qxsl/table/BasicFactory.FieldSet.html" title="class in qxsl.table"><span class="typeNameLink">BasicFactory.FieldSet</span></a>&lt;<a href="qxsl/table/BasicFactory.FieldSet.html" title="type parameter in BasicFactory.FieldSet">F</a> extends <a href="qxsl/value/Field.html" title="class in qxsl.value">Field</a>&lt;?&gt;&gt; - Class in <a href="qxsl/table/package-summary.html">qxsl.table</a></dt>
-<dd>
-<div class="block">この書式が対応する属性値を列挙する集合です。</div>
 </dd>
 <dt><a href="qxsl/model/Both.html" title="class in qxsl.model"><span class="typeNameLink">Both</span></a> - Class in <a href="qxsl/model/package-summary.html">qxsl.model</a></dt>
 <dd>
@@ -881,10 +873,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">デフォルトのクラスパスを参照するインスタンスです。</div>
 </dd>
-<dt><span class="memberNameLink"><a href="qxsl/table/BasicFactory.FieldSet.html#%3Cinit%3E(java.lang.String)">FieldSet(String)</a></span> - Constructor for class qxsl.table.<a href="qxsl/table/BasicFactory.FieldSet.html" title="class in qxsl.table">BasicFactory.FieldSet</a></dt>
-<dd>
-<div class="block">属性値の列挙子の集合を構築します。</div>
-</dd>
 <dt><span class="memberNameLink"><a href="ats4/data/ArchiveData.html#file">file</a></span> - Variable in class ats4.data.<a href="ats4/data/ArchiveData.html" title="class in ats4.data">ArchiveData</a></dt>
 <dd>
 <div class="block">交信履歴のファイルの名前です。</div>
@@ -1043,6 +1031,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">この書式の先頭行の文字列を返します。</div>
 </dd>
+<dt><span class="memberNameLink"><a href="qxsl/table/BasicFactory.html#getHeaderText()">getHeaderText()</a></span> - Method in class qxsl.table.<a href="qxsl/table/BasicFactory.html" title="class in qxsl.table">BasicFactory</a></dt>
+<dd>
+<div class="block">この書式のヘッダとなる文字列を返します。</div>
+</dd>
 <dt><span class="memberNameLink"><a href="ats4/base/ArchiveTable.html#getItems(ats4.data.ArchiveData)">getItems(ArchiveData)</a></span> - Method in class ats4.base.<a href="ats4/base/ArchiveTable.html" title="class in ats4.base">ArchiveTable</a></dt>
 <dd>
 <div class="block">指定されたレコードが含む交信記録を解釈します。</div>
@@ -1111,11 +1103,23 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">この書式の出力時に使う時刻の書式を返します。</div>
 </dd>
+<dt><span class="memberNameLink"><a href="qxsl/table/BasicFactory.html#getTimeDecoder()">getTimeDecoder()</a></span> - Method in class qxsl.table.<a href="qxsl/table/BasicFactory.html" title="class in qxsl.table">BasicFactory</a></dt>
+<dd>
+<div class="block">この書式の出力時に使う時刻の書式を返します。</div>
+</dd>
 <dt><span class="memberNameLink"><a href="qxsl/table/BasicDecoder.html#getTimeDecoderOld()">getTimeDecoderOld()</a></span> - Method in class qxsl.table.<a href="qxsl/table/BasicDecoder.html" title="class in qxsl.table">BasicDecoder</a></dt>
 <dd>
 <div class="block">この書式の入力時に使う時刻の書式を返します。</div>
 </dd>
+<dt><span class="memberNameLink"><a href="qxsl/table/BasicFactory.html#getTimeDecoderOld()">getTimeDecoderOld()</a></span> - Method in class qxsl.table.<a href="qxsl/table/BasicFactory.html" title="class in qxsl.table">BasicFactory</a></dt>
+<dd>
+<div class="block">この書式の入力時に使う時刻の書式を返します。</div>
+</dd>
 <dt><span class="memberNameLink"><a href="qxsl/table/BasicEncoder.html#getTimeEncoder()">getTimeEncoder()</a></span> - Method in class qxsl.table.<a href="qxsl/table/BasicEncoder.html" title="class in qxsl.table">BasicEncoder</a></dt>
+<dd>
+<div class="block">この書式の出力時に使う時刻の書式を返します。</div>
+</dd>
+<dt><span class="memberNameLink"><a href="qxsl/table/BasicFactory.html#getTimeEncoder()">getTimeEncoder()</a></span> - Method in class qxsl.table.<a href="qxsl/table/BasicFactory.html" title="class in qxsl.table">BasicFactory</a></dt>
 <dd>
 <div class="block">この書式の出力時に使う時刻の書式を返します。</div>
 </dd>
@@ -1207,10 +1211,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </a>
 <h2 class="title">I</h2>
 <dl>
-<dt><span class="memberNameLink"><a href="qxsl/table/BasicFactory.FieldSet.html#indexOf(F)">indexOf(F)</a></span> - Method in class qxsl.table.<a href="qxsl/table/BasicFactory.FieldSet.html" title="class in qxsl.table">BasicFactory.FieldSet</a></dt>
-<dd>
-<div class="block">指定された属性値の序数を返します。</div>
-</dd>
 <dt><span class="memberNameLink"><a href="qxsl/ruler/Section.html#isAbsence()">isAbsence()</a></span> - Method in class qxsl.ruler.<a href="qxsl/ruler/Section.html" title="class in qxsl.ruler">Section</a></dt>
 <dd>
 <div class="block">この部門が不参加部門であるか確認します。</div>
@@ -2501,10 +2501,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="ats4/base/AccountTable.Update.html#value(R)">value(R)</a></span> - Method in class ats4.base.<a href="ats4/base/AccountTable.Update.html" title="class in ats4.base">AccountTable.Update</a></dt>
 <dd>
 <div class="block">指定されたレコードを写します。</div>
-</dd>
-<dt><span class="memberNameLink"><a href="qxsl/table/BasicFactory.FieldSet.html#valueOf(int)">valueOf(int)</a></span> - Method in class qxsl.table.<a href="qxsl/table/BasicFactory.FieldSet.html" title="class in qxsl.table">BasicFactory.FieldSet</a></dt>
-<dd>
-<div class="block">指定された序数の属性値を返します。</div>
 </dd>
 <dt><span class="memberNameLink"><a href="ats4/base/MessageTable.html#verify(ats4.data.MessageData)">verify(MessageData)</a></span> - Method in class ats4.base.<a href="ats4/base/MessageTable.html" title="class in ats4.base">MessageTable</a></dt>
 <dd>
