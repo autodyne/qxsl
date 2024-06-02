@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
@@ -154,6 +154,31 @@ extends <a href="TableFactory.html" title="class in qxsl.table">TableFactory</a>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<section>
+<ul class="blockList">
+<li class="blockList"><a id="nested.class.summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<table class="memberSummary">
+<caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Class</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="BasicFactory.FieldSet.html" title="class in qxsl.table">BasicFactory.FieldSet</a>&lt;<a href="BasicFactory.FieldSet.html" title="type parameter in BasicFactory.FieldSet">F</a> extends <a href="../value/Field.html" title="class in qxsl.value">Field</a>&lt;?&gt;&gt;</span></code></th>
+<td class="colLast">
+<div class="block">この書式が対応する属性値を列挙する集合です。</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+</section>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <section>
 <ul class="blockList">
@@ -207,47 +232,19 @@ extends <a href="TableFactory.html" title="class in qxsl.table">TableFactory</a>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getHeaderText()">getHeaderText</a></span>()</code></th>
-<td class="colLast">
-<div class="block">この書式のヘッダとなる文字列を返します。</div>
-</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/format/DateTimeFormatter.html?is-external=true" title="class or interface in java.time.format" class="externalLink">DateTimeFormatter</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTimeDecoder()">getTimeDecoder</a></span>()</code></th>
-<td class="colLast">
-<div class="block">この書式の出力時に使う時刻の書式を返します。</div>
-</td>
-</tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/format/DateTimeFormatter.html?is-external=true" title="class or interface in java.time.format" class="externalLink">DateTimeFormatter</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTimeDecoderOld()">getTimeDecoderOld</a></span>()</code></th>
-<td class="colLast">
-<div class="block">この書式の入力時に使う時刻の書式を返します。</div>
-</td>
-</tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/format/DateTimeFormatter.html?is-external=true" title="class or interface in java.time.format" class="externalLink">DateTimeFormatter</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTimeEncoder()">getTimeEncoder</a></span>()</code></th>
-<td class="colLast">
-<div class="block">この書式の出力時に使う時刻の書式を返します。</div>
-</td>
-</tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#help()">help</a></span>()</code></th>
 <td class="colLast">
 <div class="block">この書式の詳細を述べる文字列を返します。</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#name()">name</a></span>()</code></th>
 <td class="colLast">
 <div class="block">この書式の表示に適した文字列を返します。</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#type()">type</a></span>()</code></th>
 <td class="colLast">
@@ -378,7 +375,7 @@ extends <a href="TableFactory.html" title="class in qxsl.table">TableFactory</a>
 <a id="extensions()">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>extensions</h4>
 <pre class="methodSignature">public final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&nbsp;extensions()</pre>
@@ -388,70 +385,6 @@ extends <a href="TableFactory.html" title="class in qxsl.table">TableFactory</a>
 <dd><code><a href="TableFactory.html#extensions()">extensions</a></code>&nbsp;in class&nbsp;<code><a href="TableFactory.html" title="class in qxsl.table">TableFactory</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>拡張子のリスト</dd>
-</dl>
-</li>
-</ul>
-<a id="getHeaderText()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getHeaderText</h4>
-<pre class="methodSignature">public final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;getHeaderText()</pre>
-<div class="block">この書式のヘッダとなる文字列を返します。</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>ヘッダの文字列</dd>
-<dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>2019/07/11</dd>
-</dl>
-</li>
-</ul>
-<a id="getTimeDecoderOld()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getTimeDecoderOld</h4>
-<pre class="methodSignature">public final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/format/DateTimeFormatter.html?is-external=true" title="class or interface in java.time.format" class="externalLink">DateTimeFormatter</a>&nbsp;getTimeDecoderOld()</pre>
-<div class="block">この書式の入力時に使う時刻の書式を返します。</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>時刻の書式</dd>
-<dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>2020/09/06</dd>
-</dl>
-</li>
-</ul>
-<a id="getTimeDecoder()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getTimeDecoder</h4>
-<pre class="methodSignature">public final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/format/DateTimeFormatter.html?is-external=true" title="class or interface in java.time.format" class="externalLink">DateTimeFormatter</a>&nbsp;getTimeDecoder()</pre>
-<div class="block">この書式の出力時に使う時刻の書式を返します。</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>時刻の書式</dd>
-<dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>2020/09/06</dd>
-</dl>
-</li>
-</ul>
-<a id="getTimeEncoder()">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>getTimeEncoder</h4>
-<pre class="methodSignature">public final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/format/DateTimeFormatter.html?is-external=true" title="class or interface in java.time.format" class="externalLink">DateTimeFormatter</a>&nbsp;getTimeEncoder()</pre>
-<div class="block">この書式の出力時に使う時刻の書式を返します。</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>時刻の書式</dd>
-<dt><span class="simpleTagLabel">Since:</span></dt>
-<dd>2020/09/06</dd>
 </dl>
 </li>
 </ul>
@@ -507,7 +440,7 @@ extends <a href="TableFactory.html" title="class in qxsl.table">TableFactory</a>
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
