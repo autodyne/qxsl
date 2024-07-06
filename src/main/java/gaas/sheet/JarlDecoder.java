@@ -22,6 +22,8 @@ import qxsl.sheet.SheetDecoder;
 
 import static gaas.sheet.JarlFactory.DOC;
 
+import static java.text.Normalizer.Form.NFKC;
+import static java.text.Normalizer.normalize;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -146,8 +148,22 @@ public final class JarlDecoder extends PrintDecoder {
 		final var text = source.lines().collect(joining("\n"));
 		final var bare = get("BARE");
 		final var quot = get("QUOT");
-		final var form = text.replaceAll(bare, quot);
+		final var form = normal(text).replaceAll(bare, quot);
 		return String.format("<%1$s>%2$s</%1$s>", DOC, form);
+	}
+
+	/**
+	 * 指定された文字列を正規化します。
+	 *
+	 *
+	 * @param text 文字列
+	 *
+	 * @return 正規化された文字列
+	 *
+	 * @since 2024/07/06
+	 */
+	private final String normal(String text) {
+		return normalize(text, NFKC);
 	}
 
 	/**
