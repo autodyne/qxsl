@@ -25,6 +25,7 @@ import qxsl.table.PrintDecoder;
  * @since 2014/06/03
  */
 public final class JarlDecoder extends PrintDecoder {
+	private static final int DATE = 0;
 	private static final int TIME = 1;
 	private static final int BAND = 2;
 	private static final int MODE = 3;
@@ -34,7 +35,7 @@ public final class JarlDecoder extends PrintDecoder {
 	private static final int RRST = 7;
 	private static final int RCVD = 8;
 	private static final int MUL1 = 9;
-	private final DateTimeFormatter tstamp;
+	private final DateTimeFormatter timeDecoder;
 
 	/**
 	 * 指定された入力を読み込むデコーダを構築します。
@@ -44,7 +45,7 @@ public final class JarlDecoder extends PrintDecoder {
 	 */
 	public JarlDecoder(Reader reader) {
 		super("jarl", reader);
-		this.tstamp = getTimeDecoder();
+		this.timeDecoder = getTimeDecoder();
 	}
 
 	/**
@@ -91,10 +92,10 @@ public final class JarlDecoder extends PrintDecoder {
 	@Override
 	public final Item next() throws IOException {
 		final var item = new Item();
-		try {
+		while(true) try {
 			final var vals = readLine().split("\\s+");
-			vals[TIME] = vals[0].concat(" ").concat(vals[1]);
-			if(vals.length > TIME) time(item.getBoth(), vals[TIME]);
+			if(vals[TIME].equals("#CHECKLOG")) continue;
+			if(vals.length > TIME) time(item.getBoth(), vals);
 			if(vals.length > BAND) band(item.getBoth(), vals[BAND]);
 			if(vals.length > MODE) mode(item.getBoth(), vals[MODE]);
 			if(vals.length > CALL) call(item.getBoth(), vals[CALL]);
@@ -131,10 +132,11 @@ public final class JarlDecoder extends PrintDecoder {
 	 *
 	 *
 	 * @param node 設定する交信記録
-	 * @param text 交信日時の文字列
+	 * @param item 交信記録の属性値
 	 */
-	private final void time(Node node, String text) {
-		node.set(new Time(LocalDateTime.parse(text, tstamp)));
+	private final void time(Node node, String[] item) {
+		final var text = item[DATE].concat(" ").concat(item[TIME]);
+		node.set(new Time(LocalDateTime.parse(text, timeDecoder)));
 	}
 
 	/**
