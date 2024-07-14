@@ -60,6 +60,7 @@ SELECT
 	score,
 	total
 FROM RANKING_DATA WHERE
-	sect = ?;
+	sect = ?
+ORDER BY total DESC;
 </entry>
 </properties>
