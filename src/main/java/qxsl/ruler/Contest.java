@@ -7,6 +7,8 @@ package qxsl.ruler;
 
 import java.util.*;
 
+import qxsl.utils.LevenDist;
+
 /**
  * コンテストの規約はこのクラスを継承します。
  *
@@ -95,6 +97,22 @@ public abstract class Contest extends Library implements Iterable<Section> {
 	 */
 	public final Section section(String name) {
 		return this.map.get(name);
+	}
+
+	/**
+	 * 指定された名前に似た部門を検索します。
+	 *
+	 *
+	 * @param name 部門の名前
+	 *
+	 * @return 類似する部門
+	 *
+	 * @since 2024/07/14
+	 */
+	public final Section similar(String name) {
+		final var shtein = LevenDist.comparator(name);
+		final var stream = this.map.keySet().stream();
+		return this.map.get(stream.min(shtein).get());
 	}
 
 	/**
