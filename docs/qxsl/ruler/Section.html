@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":6,"i2":10,"i3":6,"i4":10,"i5":6,"i6":6,"i7":10,"i8":10,"i9":6,"i10":6};
+var data = {"i0":6,"i1":6,"i2":10,"i3":10,"i4":6,"i5":10,"i6":6,"i7":6,"i8":10,"i9":10,"i10":6,"i11":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -213,55 +213,62 @@ extends <a href="Library.html" title="class in qxsl.ruler">Library</a></pre>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="../local/LocalCityBase.html" title="class in qxsl.local">LocalCityBase</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCityBase()">getCityBase</a></span>()</code></th>
+<td class="colLast">
+<div class="block">この部門に参加可能な運用場所を返します。</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>abstract <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../local/LocalCityItem.html" title="class in qxsl.local">LocalCityItem</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCityList()">getCityList</a></span>()</code></th>
 <td class="colLast">
 <div class="block">この部門に参加可能な運用場所を返します。</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isAbsence()">isAbsence</a></span>()</code></th>
 <td class="colLast">
 <div class="block">この部門が不参加部門であるか確認します。</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>abstract <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#name()">name</a></span>()</code></th>
 <td class="colLast">
 <div class="block">部門の名前を返します。</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>abstract int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#result(qxsl.ruler.Summary)">result</a></span>&#8203;(<a href="Summary.html" title="class in qxsl.ruler">Summary</a>&nbsp;items)</code></th>
 <td class="colLast">
 <div class="block">指定された集計結果の総得点を計算します。</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="Summary.html" title="class in qxsl.ruler">Summary</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#summarize(java.util.List)">summarize</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../model/Item.html" title="class in qxsl.model">Item</a>&gt;&nbsp;list)</code></th>
 <td class="colLast">
 <div class="block">指定された交信記録のマルチを集計します。</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
 <td class="colLast">
 <div class="block">部門の名前を返します。</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>abstract <a href="Element.html" title="class in qxsl.ruler">Element</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unique(qxsl.model.Item)">unique</a></span>&#8203;(<a href="../model/Item.html" title="class in qxsl.model">Item</a>&nbsp;item)</code></th>
 <td class="colLast">
 <div class="block">指定された交信記録の識別子を発行します。</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>abstract <a href="Message.html" title="class in qxsl.ruler">Message</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#verify(qxsl.model.Item)">verify</a></span>&#8203;(<a href="../model/Item.html" title="class in qxsl.model">Item</a>&nbsp;item)</code></th>
 <td class="colLast">
@@ -480,6 +487,22 @@ extends <a href="Library.html" title="class in qxsl.ruler">Library</a></pre>
 <dd>入賞する参加局の数</dd>
 <dt><span class="simpleTagLabel">Since:</span></dt>
 <dd>2022/07/23</dd>
+</dl>
+</li>
+</ul>
+<a id="getCityBase()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCityBase</h4>
+<pre class="methodSignature">public final&nbsp;<a href="../local/LocalCityBase.html" title="class in qxsl.local">LocalCityBase</a>&nbsp;getCityBase()</pre>
+<div class="block">この部門に参加可能な運用場所を返します。</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>運用場所のリスト</dd>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>2024/07/15</dd>
 </dl>
 </li>
 </ul>
