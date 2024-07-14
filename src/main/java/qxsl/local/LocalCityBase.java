@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import qxsl.utils.AssetUtil;
+import qxsl.utils.LevenDist;
 
 /**
  * ライブラリが内蔵する都市または地域のデータベースです。
@@ -34,7 +35,7 @@ public final class LocalCityBase {
 	 *
 	 * @param list 内容
 	 */
-	private LocalCityBase(List<LocalCityItem> list) {
+	public LocalCityBase(List<LocalCityItem> list) {
 		this.list = list;
 		this.forwardMap = new HashMap<>();
 		this.reverseMap = new HashMap<>();
@@ -74,6 +75,20 @@ public final class LocalCityBase {
 	 */
 	public final LocalCityItem getByName(String name) {
 		return this.reverseMap.get(name);
+	}
+
+	/**
+	 * 指定された自然名に類似した地域を返します。
+	 *
+	 *
+	 * @param name 地域の自然名
+	 *
+	 * @return 地域
+	 */
+	public final LocalCityItem recommend(String name) {
+		final var shtein = LevenDist.comparator(name);
+		final var stream = reverseMap.keySet().stream();
+		return reverseMap.get(stream.min(shtein).get());
 	}
 
 	/**

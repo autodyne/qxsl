@@ -7,6 +7,7 @@ package qxsl.ruler;
 
 import java.util.List;
 
+import qxsl.local.LocalCityBase;
 import qxsl.local.LocalCityItem;
 import qxsl.model.Item;
 
@@ -134,6 +135,18 @@ public abstract class Section extends Library {
 	public int getAwardLimit(int[] scores) {
 		final double size = 0.1 * scores.length;
 		return (int) Math.min(7, Math.ceil(size));
+	}
+
+	/**
+	 * この部門に参加可能な運用場所を返します。
+	 *
+	 *
+	 * @return 運用場所のリスト
+	 *
+	 * @since 2024/07/15
+	 */
+	public final LocalCityBase getCityBase() {
+		return new LocalCityBase(getCityList());
 	}
 
 	/**
