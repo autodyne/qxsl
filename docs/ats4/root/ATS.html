@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -258,6 +258,13 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <div class="block">指定された呼出符号の参加局の得点を更新します。</div>
 </td>
 </tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateAll(qxsl.ruler.Contest)">updateAll</a></span>&#8203;(<a href="../../qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a>&nbsp;rule)</code></th>
+<td class="colLast">
+<div class="block">全ての参加局の得点を更新します。</div>
+</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -451,7 +458,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <a id="update(java.lang.String,qxsl.ruler.Contest)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>update</h4>
 <pre class="methodSignature">public final&nbsp;void&nbsp;update&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;call,
@@ -465,6 +472,24 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <dd><code><a href="../warn/TableAccessException.html" title="class in ats4.warn">TableAccessException</a></code> - 疎通の障害</dd>
 <dt><span class="simpleTagLabel">Since:</span></dt>
 <dd>2022/08/21</dd>
+</dl>
+</li>
+</ul>
+<a id="updateAll(qxsl.ruler.Contest)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>updateAll</h4>
+<pre class="methodSignature">public final&nbsp;void&nbsp;updateAll&#8203;(<a href="../../qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a>&nbsp;rule)</pre>
+<div class="block">全ての参加局の得点を更新します。</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>rule</code> - コンテストの規約</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="../warn/TableAccessException.html" title="class in ats4.warn">TableAccessException</a></code> - 疎通の障害</dd>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>2024/07/16</dd>
 </dl>
 </li>
 </ul>
