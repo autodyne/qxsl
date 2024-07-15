@@ -190,4 +190,20 @@ public final class ATS implements AutoCloseable {
 			rankings.push(ranking);
 		}
 	}
+
+	/**
+	 * 全ての参加局の得点を更新します。
+	 *
+	 *
+	 * @param rule コンテストの規約
+	 *
+	 * @throws TableAccessException 疎通の障害
+	 *
+	 * @since 2024/07/16
+	 */
+	public final void updateAll(Contest rule) {
+		for(var message: messages.list()) messages.drop(message);
+		for(var archive: archives.list()) messages.push(archive);
+		for(var station: stations.list()) update(station.call, rule);
+	}
 }
