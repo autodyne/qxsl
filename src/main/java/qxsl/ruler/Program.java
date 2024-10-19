@@ -194,7 +194,9 @@ public abstract class Program extends Contest {
 	 *
 	 * @since 2022/07/17
 	 */
-	public abstract int limitMultipleEntry(String code);
+	public int limitMultipleEntry(String code) {
+		return 1;
+	}
 
 	/**
 	 * 指定された部門にまとめて登録可能か確認します。
@@ -206,5 +208,108 @@ public abstract class Program extends Contest {
 	 *
 	 * @since 2022/07/17
 	 */
-	public abstract boolean conflict(Section[] entries);
+	public boolean conflict(Section[] entries) {
+		return entries.length > 1;
+	}
+
+	/**
+	 * 標準的な実装です。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2024/10/19
+	 */
+	public static abstract class Default extends Program {
+		private String name;
+		private String host;
+		private String mail;
+		private String link;
+		private String help;
+
+		/**
+		 * 指定された名前の規約を構築します。
+		 *
+		 *
+		 * @param name 規約の名前
+		 */
+		public Default(String name) {
+			this.name = name;
+		}
+
+		@Override
+		public final String name() {
+			return name;
+		}
+
+		@Override
+		public final String host() {
+			return host;
+		}
+
+		@Override
+		public final String mail() {
+			return mail;
+		}
+
+		@Override
+		public final String link() {
+			return link;
+		}
+
+		@Override
+		public final String help() {
+			return help;
+		}
+
+		/**
+		 * 規約の名前を設定します。
+		 *
+		 *
+		 * @param name 規約の名前
+		 */
+		public final void setName(String name) {
+			this.name = name;
+		}
+
+		/**
+		 * 運営の名前を設定します。
+		 *
+		 *
+		 * @param host 運営の名前
+		 */
+		public final void setHost(String host) {
+			this.host = host;
+		}
+
+		/**
+		 * 運営の連絡先を設定します。
+		 *
+		 *
+		 * @param mail 運営の連絡先
+		 */
+		public final void setMail(String mail) {
+			this.mail = mail;
+		}
+
+		/**
+		 * 規約の参照先を設定します。
+		 *
+		 *
+		 * @param link 規約の参照先
+		 */
+		public final void setLink(String link) {
+			this.link = link;
+		}
+
+		/**
+		 * 規約のヘルプを返します。
+		 *
+		 *
+		 * @param help ヘルプ
+		 */
+		public final void setHelp(String help) {
+			this.help = help;
+		}
+	}
 }

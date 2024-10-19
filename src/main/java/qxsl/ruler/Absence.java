@@ -94,4 +94,39 @@ public abstract class Absence extends Section {
 	public final List<LocalCityItem> getCityList() {
 		return List.of();
 	}
+
+	/**
+	 * 標準的な実装です。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2024/10/19
+	 */
+	public static abstract class Default extends Absence {
+		private final String name;
+		private final String code;
+
+		/**
+		 * 指定された部門を構築します。
+		 *
+		 *
+		 * @param name 部門の名前
+		 * @param code 部門の分類
+		 */
+		public Default(String name, String code) {
+			this.name = name;
+			this.code = code;
+		}
+
+		@Override
+		public final String name() {
+			return name;
+		}
+
+		@Override
+		public final String code() {
+			return code;
+		}
+	}
 }
