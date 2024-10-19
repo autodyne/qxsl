@@ -27,11 +27,11 @@
         {
           "name": "qxsl-0.1.296.jar",
           "url": "qxsl-0.1.296.jar",
-          "size": 329187,
-          "sha512": "3249bb3123ee6634152da48f6af1319870039dda85e54c6e8ade3bf951ade0bc795dfe28c931a00f272fb866cbfaf5fd784c11f1eaff8ba229d4e4805ea1fcd2",
-          "sha256": "8b743a19ba9f09049d71a1cdef0d43da43c8fbb53864123cee6b2fa9b2f52f5c",
-          "sha1": "5946416cb6884235df69be26333c037acd10cc37",
-          "md5": "54698f0651bf70f95d1fcd4988c5b9bc"
+          "size": 328346,
+          "sha512": "cd897fcf809eed90f28e58113473ae9edeaaa3e754bf39d560962701522c0939e36657d9dab0e656c3c700ab0ac11155e53a9971bdc79f81a318013fd83c1481",
+          "sha256": "3ab7c8d38e183d72d57974489eb9dcc482075f7907a0d9c2fbe897083f404db9",
+          "sha1": "cc7b59af74dc0054ce4f8d0d9eb16c09dfc542dc",
+          "md5": "e4a2c31ab1826261e96daad3f724ed2c"
         }
       ]
     },
@@ -48,11 +48,11 @@
         {
           "name": "qxsl-0.1.296.jar",
           "url": "qxsl-0.1.296.jar",
-          "size": 329187,
-          "sha512": "3249bb3123ee6634152da48f6af1319870039dda85e54c6e8ade3bf951ade0bc795dfe28c931a00f272fb866cbfaf5fd784c11f1eaff8ba229d4e4805ea1fcd2",
-          "sha256": "8b743a19ba9f09049d71a1cdef0d43da43c8fbb53864123cee6b2fa9b2f52f5c",
-          "sha1": "5946416cb6884235df69be26333c037acd10cc37",
-          "md5": "54698f0651bf70f95d1fcd4988c5b9bc"
+          "size": 328346,
+          "sha512": "cd897fcf809eed90f28e58113473ae9edeaaa3e754bf39d560962701522c0939e36657d9dab0e656c3c700ab0ac11155e53a9971bdc79f81a318013fd83c1481",
+          "sha256": "3ab7c8d38e183d72d57974489eb9dcc482075f7907a0d9c2fbe897083f404db9",
+          "sha1": "cc7b59af74dc0054ce4f8d0d9eb16c09dfc542dc",
+          "md5": "e4a2c31ab1826261e96daad3f724ed2c"
         }
       ]
     }
