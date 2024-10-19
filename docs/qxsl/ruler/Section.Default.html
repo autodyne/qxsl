@@ -248,37 +248,37 @@ extends <a href="Section.html" title="class in qxsl.ruler">Section</a></pre>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#set(int...)">set</a></span>&#8203;(int...&nbsp;hours)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#set(qxsl.local.LocalCityBase)">set</a></span>&#8203;(<a href="../local/LocalCityBase.html" title="class in qxsl.local">LocalCityBase</a>&nbsp;codes)</code></th>
 <td class="colLast">
-<div class="block">指定された時間帯を受容します。</div>
+<div class="block">指定された地域を受容します。</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#set(java.time.ZoneId)">set</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/ZoneId.html?is-external=true" title="class or interface in java.time" class="externalLink">ZoneId</a>&nbsp;zoneId)</code></th>
-<td class="colLast">
-<div class="block">指定された時間帯を設定します。</div>
-</td>
-</tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#set(qxsl.draft.Band...)">set</a></span>&#8203;(<a href="../draft/Band.html" title="class in qxsl.draft">Band</a>...&nbsp;bands)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBands(qxsl.draft.Band...)">setBands</a></span>&#8203;(<a href="../draft/Band.html" title="class in qxsl.draft">Band</a>...&nbsp;bands)</code></th>
 <td class="colLast">
 <div class="block">指定された周波数帯を受容します。</div>
 </td>
 </tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setHours(int...)">setHours</a></span>&#8203;(int...&nbsp;hours)</code></th>
+<td class="colLast">
+<div class="block">指定された時間帯を受容します。</div>
+</td>
+</tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#set(qxsl.draft.Mode...)">set</a></span>&#8203;(<a href="../draft/Mode.html" title="class in qxsl.draft">Mode</a>...&nbsp;modes)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setModes(qxsl.draft.Mode...)">setModes</a></span>&#8203;(<a href="../draft/Mode.html" title="class in qxsl.draft">Mode</a>...&nbsp;modes)</code></th>
 <td class="colLast">
 <div class="block">指定された通信方式を受容します。</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#set(qxsl.local.LocalCityBase)">set</a></span>&#8203;(<a href="../local/LocalCityBase.html" title="class in qxsl.local">LocalCityBase</a>&nbsp;codes)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setZoneId(java.time.ZoneId)">setZoneId</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/ZoneId.html?is-external=true" title="class or interface in java.time" class="externalLink">ZoneId</a>&nbsp;zoneId)</code></th>
 <td class="colLast">
-<div class="block">指定された地域を受容します。</div>
+<div class="block">指定された時間帯を設定します。</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
@@ -380,13 +380,13 @@ extends <a href="Section.html" title="class in qxsl.ruler">Section</a></pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="set(qxsl.draft.Band...)">
+<a id="setBands(qxsl.draft.Band...)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>set</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;set&#8203;(<a href="../draft/Band.html" title="class in qxsl.draft">Band</a>...&nbsp;bands)</pre>
+<h4>setBands</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setBands&#8203;(<a href="../draft/Band.html" title="class in qxsl.draft">Band</a>...&nbsp;bands)</pre>
 <div class="block">指定された周波数帯を受容します。</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -394,13 +394,13 @@ extends <a href="Section.html" title="class in qxsl.ruler">Section</a></pre>
 </dl>
 </li>
 </ul>
-<a id="set(qxsl.draft.Mode...)">
+<a id="setModes(qxsl.draft.Mode...)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>set</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;set&#8203;(<a href="../draft/Mode.html" title="class in qxsl.draft">Mode</a>...&nbsp;modes)</pre>
+<h4>setModes</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setModes&#8203;(<a href="../draft/Mode.html" title="class in qxsl.draft">Mode</a>...&nbsp;modes)</pre>
 <div class="block">指定された通信方式を受容します。</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -408,13 +408,13 @@ extends <a href="Section.html" title="class in qxsl.ruler">Section</a></pre>
 </dl>
 </li>
 </ul>
-<a id="set(int...)">
+<a id="setHours(int...)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>set</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;set&#8203;(int...&nbsp;hours)</pre>
+<h4>setHours</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setHours&#8203;(int...&nbsp;hours)</pre>
 <div class="block">指定された時間帯を受容します。</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -422,13 +422,13 @@ extends <a href="Section.html" title="class in qxsl.ruler">Section</a></pre>
 </dl>
 </li>
 </ul>
-<a id="set(java.time.ZoneId)">
+<a id="setZoneId(java.time.ZoneId)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>set</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;set&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/ZoneId.html?is-external=true" title="class or interface in java.time" class="externalLink">ZoneId</a>&nbsp;zoneId)</pre>
+<h4>setZoneId</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setZoneId&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/ZoneId.html?is-external=true" title="class or interface in java.time" class="externalLink">ZoneId</a>&nbsp;zoneId)</pre>
 <div class="block">指定された時間帯を設定します。</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
