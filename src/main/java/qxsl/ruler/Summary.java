@@ -134,7 +134,7 @@ public final class Summary implements Serializable {
 	 *
 	 * @since 2020/02/26
 	 */
-	private final Set<Element> keys(int rank) {
+	public final Set<Element> keys(int rank) {
 		final var set = new HashSet<Element>();
 		for(var el: mul) set.add(el.get(rank));
 		return Collections.unmodifiableSet(set);

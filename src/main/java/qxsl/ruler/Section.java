@@ -5,8 +5,12 @@
 *******************************************************************************/
 package qxsl.ruler;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+import qxsl.draft.*;
 import qxsl.local.LocalCityBase;
 import qxsl.local.LocalCityItem;
 import qxsl.model.Item;
@@ -158,4 +162,183 @@ public abstract class Section extends Library {
 	 * @since 2022/06/22
 	 */
 	public abstract List<LocalCityItem> getCityList();
+
+	/**
+	 * 標準的な内容の部門の実装です。
+	 *
+	 *
+	 * @author 無線部開発班
+	 *
+	 * @since 2024/10/19
+	 */
+	public static abstract class Default extends Section {
+		private ZoneId zoneId = ZoneId.systemDefault();
+		private LocalCityBase codes;
+		private List<Integer> hours;
+		private List<Band> bands;
+		private List<Mode> modes;
+
+		/**
+		 * 指定された周波数帯を受容します。
+		 *
+		 *
+		 * @param bands 周波数帯
+		 */
+		public void setBands(Band...bands) {
+			this.bands = List.of(bands);
+		}
+
+		/**
+		 * 指定された通信方式を受容します。
+		 *
+		 *
+		 * @param modes 通信方式
+		 */
+		public void setModes(Mode...modes) {
+			this.modes = List.of(modes);
+		}
+
+		/**
+		 * 指定された時間帯を受容します。
+		 *
+		 *
+		 * @param hours 時間帯
+		 */
+		public void setHours(int...hours) {
+			this.hours = new ArrayList<Integer>();
+			for(int hr: hours) this.hours.add(hr);
+		}
+
+		/**
+		 * 指定された時間帯を設定します。
+		 *
+		 *
+		 * @param zoneId 時間帯
+		 */
+		public void setZoneId(ZoneId zoneId) {
+			this.zoneId = zoneId;
+		}
+
+		/**
+		 * 指定された地域を受容します。
+		 *
+		 *
+		 * @param codes 地域
+		 */
+		public void set(LocalCityBase codes) {
+			this.codes = codes;
+		}
+
+		@Override
+		public final List<LocalCityItem> getCityList() {
+			return codes == null? List.of(): codes.toList();
+		}
+
+		@Override
+		public Message verify(Item item) {
+			final var band = (Band) item.getBoth(Qxsl.BAND);
+			final var mode = (Mode) item.getBoth(Qxsl.MODE);
+			final var code = (Code) item.getRcvd(Qxsl.CODE);
+			final var time = (Time) item.getBoth(Qxsl.TIME);
+			final var hour = time.atZone(zoneId).value();
+			if(!verifyBand(band)) return new Failure(item, band);
+			if(!verifyMode(mode)) return new Failure(item, mode);
+			if(!verifyTime(hour)) return new Failure(item, time);
+			if(!verifyCode(code)) return new Failure(item, code);
+			return new Success(item, points(item));
+		}
+
+		/**
+		 * 指定された周波数帯が規約に準拠するか確認します。
+		 *
+		 *
+		 * @param band 周波数帯
+		 *
+		 * @return 準拠する場合は真
+		 */
+		public boolean verifyBand(Band band) {
+			return bands == null || bands.contains(band);
+		}
+
+		/**
+		 * 指定された通信方式が規約に準拠するか確認します。
+		 *
+		 *
+		 * @param mode 通信方式
+		 *
+		 * @return 準拠する場合は真
+		 */
+		public boolean verifyMode(Mode mode) {
+			return modes == null || modes.contains(mode);
+		}
+
+		/**
+		 * 指定された交信時刻が規約に準拠するか確認します。
+		 *
+		 *
+		 * @param time 交信時刻
+		 *
+		 * @return 準拠する場合は真
+		 */
+		public boolean verifyTime(ZonedDateTime time) {
+			return hours == null || hours.contains(time.getHour());
+		}
+
+		/**
+		 * 指定されたナンバーが規約に準拠するか確認します。
+		 *
+		 *
+		 * @param code ナンバー
+		 *
+		 * @return 準拠する場合は真
+		 */
+		public boolean verifyCode(Code code) {
+			return codes == null || codes.containsCode(cityOf(code));
+		}
+
+		/**
+		 * 指定されたナンバーから市区町村番号を抽出します。
+		 *
+		 *
+		 * @param code ナンバー
+		 *
+		 * @return 市区町村番号
+		 */
+		public String cityOf(Code code) {
+			return code.value().replaceFirst("^599?", "");
+		}
+
+		/**
+		 * 指定された交信の得点を計算します。
+		 *
+		 *
+		 * @param item 交信
+		 *
+		 * @return 得点
+		 */
+		public int points(Item item) {
+			return 1;
+		}
+
+		@Override
+		public Element unique(Item item) {
+			final var call = (Call) item.getBoth(Qxsl.CALL);
+			final var band = (Band) item.getBoth(Qxsl.BAND);
+			return new Element(call, band);
+		}
+
+		@Override
+		public Element entity(Item item) {
+			final var band = (Band) item.getBoth(Qxsl.BAND);
+			final var code = (Code) item.getRcvd(Qxsl.CODE);
+			return new Element(band, cityOf(code));
+		}
+
+		@Override
+		public int result(Summary items) {
+			final int score = items.score();
+			final var mults = items.keys(0);
+			return score > 0? score * mults.size(): 0;
+		}
+	}
 }

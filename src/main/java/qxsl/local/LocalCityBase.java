@@ -54,6 +54,20 @@ public final class LocalCityBase {
 	}
 
 	/**
+	 * 指定された識別子の有無を確認します。
+	 *
+	 *
+	 * @param code 地域の識別子
+	 *
+	 * @return 存在する場合は真
+	 *
+	 * @since 2024/10/19
+	 */
+	public final boolean containsCode(String code) {
+		return this.forwardMap.containsKey(code);
+	}
+
+	/**
 	 * 指定された識別子に対応する地域を返します。
 	 *
 	 *
