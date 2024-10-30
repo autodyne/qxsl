@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -232,7 +232,7 @@ extends <a href="Section.html" title="class in qxsl.ruler">Section</a></pre>
 <td class="colFirst"><code><a href="Element.html" title="class in qxsl.ruler">Element</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#entity(qxsl.model.Item)">entity</a></span>&#8203;(<a href="../model/Item.html" title="class in qxsl.model">Item</a>&nbsp;item)</code></th>
 <td class="colLast">
-<div class="block">指定された交信記録のマルチを発行します。</div>
+<div class="block">周波数毎のナンバーを数えます。</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -260,7 +260,7 @@ extends <a href="Section.html" title="class in qxsl.ruler">Section</a></pre>
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#result(qxsl.ruler.Summary)">result</a></span>&#8203;(<a href="Summary.html" title="class in qxsl.ruler">Summary</a>&nbsp;items)</code></th>
 <td class="colLast">
-<div class="block">指定された集計結果の総得点を計算します。</div>
+<div class="block">交信の点数とマルチの個数の積を返します。</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -279,61 +279,75 @@ extends <a href="Section.html" title="class in qxsl.ruler">Section</a></pre>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCode(java.lang.String)">setCode</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;code)</code></th>
+<td class="colLast">
+<div class="block">部門の分類を設定します。</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setHours(int...)">setHours</a></span>&#8203;(int...&nbsp;hours)</code></th>
 <td class="colLast">
 <div class="block">指定された時間帯を受容します。</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setModes(qxsl.draft.Mode...)">setModes</a></span>&#8203;(<a href="../draft/Mode.html" title="class in qxsl.draft">Mode</a>...&nbsp;modes)</code></th>
 <td class="colLast">
 <div class="block">指定された通信方式を受容します。</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setName(java.lang.String)">setName</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name)</code></th>
+<td class="colLast">
+<div class="block">部門の名前を設定します。</div>
+</td>
+</tr>
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setZoneId(java.time.ZoneId)">setZoneId</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/ZoneId.html?is-external=true" title="class or interface in java.time" class="externalLink">ZoneId</a>&nbsp;zoneId)</code></th>
 <td class="colLast">
 <div class="block">指定された時間帯を設定します。</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="Element.html" title="class in qxsl.ruler">Element</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unique(qxsl.model.Item)">unique</a></span>&#8203;(<a href="../model/Item.html" title="class in qxsl.model">Item</a>&nbsp;item)</code></th>
 <td class="colLast">
-<div class="block">指定された交信記録の識別子を発行します。</div>
+<div class="block">周波数毎の呼出符号を数えます。</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code><a href="Message.html" title="class in qxsl.ruler">Message</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#verify(qxsl.model.Item)">verify</a></span>&#8203;(<a href="../model/Item.html" title="class in qxsl.model">Item</a>&nbsp;item)</code></th>
 <td class="colLast">
 <div class="block">指定された交信記録の妥当性を検査します。</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#verifyBand(qxsl.draft.Band)">verifyBand</a></span>&#8203;(<a href="../draft/Band.html" title="class in qxsl.draft">Band</a>&nbsp;band)</code></th>
 <td class="colLast">
 <div class="block">指定された周波数帯が規約に準拠するか確認します。</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#verifyCode(qxsl.draft.Code)">verifyCode</a></span>&#8203;(<a href="../draft/Code.html" title="class in qxsl.draft">Code</a>&nbsp;code)</code></th>
 <td class="colLast">
 <div class="block">指定されたナンバーが規約に準拠するか確認します。</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#verifyMode(qxsl.draft.Mode)">verifyMode</a></span>&#8203;(<a href="../draft/Mode.html" title="class in qxsl.draft">Mode</a>&nbsp;mode)</code></th>
 <td class="colLast">
 <div class="block">指定された通信方式が規約に準拠するか確認します。</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#verifyTime(java.time.ZonedDateTime)">verifyTime</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/ZonedDateTime.html?is-external=true" title="class or interface in java.time" class="externalLink">ZonedDateTime</a>&nbsp;time)</code></th>
 <td class="colLast">
@@ -389,8 +403,8 @@ extends <a href="Section.html" title="class in qxsl.ruler">Section</a></pre>
 <div class="block">指定された部門を構築します。</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>name</code> - 名前</dd>
-<dd><code>code</code> - 分類</dd>
+<dd><code>name</code> - 部門の名前</dd>
+<dd><code>code</code> - 部門の分類</dd>
 </dl>
 </li>
 </ul>
@@ -435,6 +449,34 @@ extends <a href="Section.html" title="class in qxsl.ruler">Section</a></pre>
 <dd><code><a href="Section.html#code()">code</a></code>&nbsp;in class&nbsp;<code><a href="Section.html" title="class in qxsl.ruler">Section</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>分類</dd>
+</dl>
+</li>
+</ul>
+<a id="setName(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setName</h4>
+<pre class="methodSignature">public final&nbsp;void&nbsp;setName&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name)</pre>
+<div class="block">部門の名前を設定します。</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>name</code> - 部門の名前</dd>
+</dl>
+</li>
+</ul>
+<a id="setCode(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setCode</h4>
+<pre class="methodSignature">public final&nbsp;void&nbsp;setCode&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;code)</pre>
+<div class="block">部門の分類を設定します。</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>code</code> - 部門の分類</dd>
 </dl>
 </li>
 </ul>
@@ -647,15 +689,14 @@ extends <a href="Section.html" title="class in qxsl.ruler">Section</a></pre>
 <li class="blockList">
 <h4>unique</h4>
 <pre class="methodSignature">public&nbsp;<a href="Element.html" title="class in qxsl.ruler">Element</a>&nbsp;unique&#8203;(<a href="../model/Item.html" title="class in qxsl.model">Item</a>&nbsp;item)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Section.html#unique(qxsl.model.Item)">Section</a></code></span></div>
-<div class="block">指定された交信記録の識別子を発行します。</div>
+<div class="block">周波数毎の呼出符号を数えます。</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Section.html#unique(qxsl.model.Item)">unique</a></code>&nbsp;in class&nbsp;<code><a href="Section.html" title="class in qxsl.ruler">Section</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>item</code> - 検査対象の交信記録</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>重複を除くための識別子</dd>
+<dd>周波数と呼出符号の組</dd>
 </dl>
 </li>
 </ul>
@@ -666,15 +707,14 @@ extends <a href="Section.html" title="class in qxsl.ruler">Section</a></pre>
 <li class="blockList">
 <h4>entity</h4>
 <pre class="methodSignature">public&nbsp;<a href="Element.html" title="class in qxsl.ruler">Element</a>&nbsp;entity&#8203;(<a href="../model/Item.html" title="class in qxsl.model">Item</a>&nbsp;item)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Section.html#entity(qxsl.model.Item)">Section</a></code></span></div>
-<div class="block">指定された交信記録のマルチを発行します。</div>
+<div class="block">周波数毎のナンバーを数えます。</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Section.html#entity(qxsl.model.Item)">entity</a></code>&nbsp;in class&nbsp;<code><a href="Section.html" title="class in qxsl.ruler">Section</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>item</code> - 検査対象の交信記録</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>総得点を計算する識別子の配列</dd>
+<dd>周波数とナンバーの組</dd>
 </dl>
 </li>
 </ul>
@@ -685,8 +725,7 @@ extends <a href="Section.html" title="class in qxsl.ruler">Section</a></pre>
 <li class="blockList">
 <h4>result</h4>
 <pre class="methodSignature">public&nbsp;int&nbsp;result&#8203;(<a href="Summary.html" title="class in qxsl.ruler">Summary</a>&nbsp;items)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Section.html#result(qxsl.ruler.Summary)">Section</a></code></span></div>
-<div class="block">指定された集計結果の総得点を計算します。</div>
+<div class="block">交信の点数とマルチの個数の積を返します。</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Section.html#result(qxsl.ruler.Summary)">result</a></code>&nbsp;in class&nbsp;<code><a href="Section.html" title="class in qxsl.ruler">Section</a></code></dd>
