@@ -61,4 +61,20 @@ public final class Sign extends Qxsl<ZonedDateTime> {
 	public final boolean valid() {
 		return true;
 	}
+
+	/**
+	 * 指定されたオブジェクトと等値であるか確認します。
+	 *
+	 *
+	 * @param obj 比較するオブジェクト
+	 *
+	 * @return この属性と等しい場合true
+	 *
+	 * @since 2025/04/23
+	 */
+	@Override
+	public final boolean equals(Object obj) {
+		if(!Sign.class.isInstance(obj)) return false;
+		return value().isEqual(((Sign) obj).value());
+	}
 }

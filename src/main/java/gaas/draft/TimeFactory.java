@@ -5,6 +5,7 @@
 *******************************************************************************/
 package gaas.draft;
 
+import java.time.format.DateTimeParseException;
 import javax.xml.namespace.QName;
 
 import qxsl.draft.Qxsl;
@@ -14,6 +15,7 @@ import qxsl.value.Field;
 
 import static java.time.ZonedDateTime.parse;
 import static java.time.format.DateTimeFormatter.ISO_ZONED_DATE_TIME;
+import static java.time.format.DateTimeFormatter.ofPattern;
 
 /**
  * 交信の現地時刻を表す属性を永続化する書式です。
@@ -24,6 +26,8 @@ import static java.time.format.DateTimeFormatter.ISO_ZONED_DATE_TIME;
  * @since 2013/06/08
  */
 public final class TimeFactory implements FieldFactory {
+	private static final String EXTENDED = "yyyy-MM-dd'T'HH:mm[:ss]zzz";
+
 	/**
 	 * 対応する属性の名前を返します。
 	 *
@@ -45,7 +49,11 @@ public final class TimeFactory implements FieldFactory {
 	 */
 	@Override
 	public final Field decode(String value) {
-		return new Time(parse(value, ISO_ZONED_DATE_TIME));
+		try {
+			return new Time(parse(value, ISO_ZONED_DATE_TIME));
+		} catch(DateTimeParseException ex) {
+			return new Time(parse(value, ofPattern(EXTENDED)));
+		}
 	}
 
 	/**
