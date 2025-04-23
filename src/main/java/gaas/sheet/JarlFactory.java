@@ -25,6 +25,7 @@ import qxsl.sheet.SheetEncoder;
  */
 public final class JarlFactory extends PrintFactory {
 	public static final QName DOC = new QName("DOCUMENT");
+	public static final QName LOG = new QName("LOGSHEET");
 	public static final QName SUM = new QName("SUMMARYSHEET");
 
 	/**

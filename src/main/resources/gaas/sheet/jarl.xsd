@@ -3,7 +3,7 @@
 	<xsd:element name="DOCUMENT">
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element name="SUMMARYSHEET">
+				<xsd:element name="SUMMARYSHEET" minOccurs="0">
 					<xsd:complexType>
 						<xsd:choice maxOccurs="unbounded">
 							<xsd:element type="xsd:string" name="CONTESTNAME"/>

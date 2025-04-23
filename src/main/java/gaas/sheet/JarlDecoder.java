@@ -11,6 +11,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
+import javax.xml.namespace.QName;
 import javax.xml.stream.EventFilter;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -21,6 +22,8 @@ import qxsl.sheet.PrintDecoder;
 import qxsl.sheet.SheetDecoder;
 
 import static gaas.sheet.JarlFactory.DOC;
+import static gaas.sheet.JarlFactory.LOG;
+import static gaas.sheet.JarlFactory.SUM;
 
 import static java.text.Normalizer.Form.NFKC;
 import static java.text.Normalizer.normalize;
@@ -174,10 +177,20 @@ public final class JarlDecoder extends PrintDecoder {
 	 */
 	private final void read() throws XMLStreamException {
 		reader.nextTag().asStartElement();
+		if(SUM.equals(start())) list();
+		if(LOG.equals(start())) next();
+		reader.nextTag().asEndElement();
+	}
+
+	/**
+	 * ストリームから要素の列を読み取ります。
+	 *
+	 *
+	 * @throws XMLStreamException 構文上または読取り時の例外
+	 */
+	private final void list() throws XMLStreamException {
 		reader.nextTag().asStartElement();
 		while(reader.peek().isStartElement()) next();
-		reader.nextTag().asEndElement();
-		next();
 		reader.nextTag().asEndElement();
 	}
 
@@ -191,5 +204,19 @@ public final class JarlDecoder extends PrintDecoder {
 		final var start = reader.nextEvent().asStartElement();
 		final var value = reader.getElementText().strip();
 		values.put(start.getName().getLocalPart(), value);
+	}
+
+	/**
+	 * ストリームから要素の開始を検出します。
+	 *
+	 *
+	 * @return 要素が始まる場合はその名前
+	 *
+	 * @throws XMLStreamException 構文上または読取り時の例外
+	 */
+	private final QName start() throws XMLStreamException {
+		final var start = reader.peek();
+		if(!start.isStartElement()) return null;
+		return start.asStartElement().getName();
 	}
 }
