@@ -143,7 +143,9 @@ public final class JSwlDecoder extends PrintDecoder {
 	 * @param text 周波数帯の文字列
 	 */
 	private final void band(Node node, String text) {
-		node.set(cache(Qxsl.BAND, text.replace("G", "000").concat("MHz")));
+		text = text.replaceAll("(\\d+)$", "$1MHz");
+		text = text.replaceAll("(\\d+)G", "$1GHz");
+		node.set(cache(Qxsl.BAND, text));
 	}
 
 	/**
