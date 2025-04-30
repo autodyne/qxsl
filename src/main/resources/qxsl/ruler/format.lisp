@@ -168,7 +168,7 @@
 			((<=  1200000 freq  1300000) 1.2GHz)
 			((<=  2400000 freq  2450000) 2.4GHz)
 			((<=  5600000 freq  5850000) 5.6GHz)
-			((<= 10000000 freq 10250000)  10GHz))))
+			((<= 10000000 freq 10500000)  10GHz))))
 
 ; band access for adif
 (defun adif-band it
