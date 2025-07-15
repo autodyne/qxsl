@@ -71,6 +71,7 @@ public final class CSV {
 	 */
 	private final void contest(Contest rule, StringJoiner join) {
 		for(var sec: rule) if(!sec.isAbsence()) section(sec, join);
+		for(var record: stations.list()) join.add(absence(record));
 	}
 
 	/**
@@ -113,6 +114,26 @@ public final class CSV {
 		columns.add(escape(station.mail));
 		columns.add(escape(station.note));
 		return columns.toString();
+	}
+
+	/**
+	 * 指定された不参加の局を出力します。
+	 *
+	 *
+	 * @param station 局
+	 *
+	 * @return CSVの文字列
+	 *
+	 * @throws TableAccessException 疎通の障害
+	 * @throws TableSchemaException 構造の問題
+	 *
+	 * @since 2025/07/16
+	 */
+	private final String absence(StationData station) {
+		for(var ranking: rankings.byCall(station.call)) {
+			if(!sections.section(ranking.sect).isAbsence()) return "";
+		}
+		return station.call;
 	}
 
 	/**
