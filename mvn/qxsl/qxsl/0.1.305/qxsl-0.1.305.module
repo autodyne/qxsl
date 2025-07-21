@@ -1,0 +1,60 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "qxsl",
+    "module": "qxsl",
+    "version": "0.1.305",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.14.3"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 11,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "qxsl-0.1.305.jar",
+          "url": "qxsl-0.1.305.jar",
+          "size": 333446,
+          "sha512": "872d953c8e4d5ae0bf3a8483350d212124ec8e520216944f8fde332821ba6c76df023576d84e21c7053a16f9949f2af4a9f30d4457a6d9f7155ce2ff40d86097",
+          "sha256": "5c3aa3755128072f1ecadfd2dfa0bbaec76c6c24263174f4a96e923ba5034c5b",
+          "sha1": "b31ed62b60f877e221fc3b582c1720e322e139bd",
+          "md5": "40d218d99633a67f245aea261226538d"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 11,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "qxsl-0.1.305.jar",
+          "url": "qxsl-0.1.305.jar",
+          "size": 333446,
+          "sha512": "872d953c8e4d5ae0bf3a8483350d212124ec8e520216944f8fde332821ba6c76df023576d84e21c7053a16f9949f2af4a9f30d4457a6d9f7155ce2ff40d86097",
+          "sha256": "5c3aa3755128072f1ecadfd2dfa0bbaec76c6c24263174f4a96e923ba5034c5b",
+          "sha1": "b31ed62b60f877e221fc3b582c1720e322e139bd",
+          "md5": "40d218d99633a67f245aea261226538d"
+        }
+      ]
+    }
+  ]
+}
