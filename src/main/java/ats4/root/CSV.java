@@ -133,7 +133,7 @@ public final class CSV {
 		for(var ranking: rankings.byCall(station.call)) {
 			if(!sections.section(ranking.sect).isAbsence()) return "";
 		}
-		return station.call;
+		return escape(station.call);
 	}
 
 	/**
