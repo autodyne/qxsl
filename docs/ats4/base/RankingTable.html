@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -205,34 +205,41 @@ extends <a href="AccountTable.html" title="class in ats4.base">AccountTable</a>&
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#absence(qxsl.ruler.Contest)">absence</a></span>&#8203;(<a href="../../qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a>&nbsp;rule)</code></th>
+<td class="colLast">
+<div class="block">どの部門にも不参加の呼出符号を返します。</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../data/RankingData.html" title="class in ats4.data">RankingData</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#byCall(java.lang.String)">byCall</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;call)</code></th>
 <td class="colLast">
 <div class="block">指定された呼出符号のレコードを返します。</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../data/RankingData.html" title="class in ats4.data">RankingData</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#bySect(java.lang.String)">bySect</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;sect)</code></th>
 <td class="colLast">
 <div class="block">指定された登録部門のレコードを返します。</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../data/RankingData.html" title="class in ats4.data">RankingData</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#bySect(qxsl.ruler.Section)">bySect</a></span>&#8203;(<a href="../../qxsl/ruler/Section.html" title="class in qxsl.ruler">Section</a>&nbsp;sect)</code></th>
 <td class="colLast">
 <div class="block">指定された登録部門のレコードを返します。</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAwardLimit(qxsl.ruler.Section)">getAwardLimit</a></span>&#8203;(<a href="../../qxsl/ruler/Section.html" title="class in qxsl.ruler">Section</a>&nbsp;sect)</code></th>
 <td class="colLast">
 <div class="block">指定された登録部門の入賞局数を返します。</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../data/RankingData.html" title="class in ats4.data">RankingData</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.sql.ResultSet)">parse</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/ResultSet.html?is-external=true" title="class or interface in java.sql" class="externalLink">ResultSet</a>&nbsp;rs)</code></th>
 <td class="colLast">
@@ -370,6 +377,27 @@ extends <a href="AccountTable.html" title="class in ats4.base">AccountTable</a>&
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../warn/TableAccessException.html" title="class in ats4.warn">TableAccessException</a></code> - 疎通の障害</dd>
 <dd><code><a href="../warn/TableSchemaException.html" title="class in ats4.warn">TableSchemaException</a></code> - 構造の問題</dd>
+</dl>
+</li>
+</ul>
+<a id="absence(qxsl.ruler.Contest)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>absence</h4>
+<pre class="methodSignature">public final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&nbsp;absence&#8203;(<a href="../../qxsl/ruler/Contest.html" title="class in qxsl.ruler">Contest</a>&nbsp;rule)</pre>
+<div class="block">どの部門にも不参加の呼出符号を返します。</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>rule</code> - 規約</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>見つかった呼出符号</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="../warn/TableAccessException.html" title="class in ats4.warn">TableAccessException</a></code> - 疎通の障害</dd>
+<dd><code><a href="../warn/TableSchemaException.html" title="class in ats4.warn">TableSchemaException</a></code> - 構造の問題</dd>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>2025/07/30</dd>
 </dl>
 </li>
 </ul>
