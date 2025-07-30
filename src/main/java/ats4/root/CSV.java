@@ -71,6 +71,7 @@ public final class CSV {
 	 */
 	private final void contest(Contest rule, StringJoiner join) {
 		for(var sec: rule) if(!sec.isAbsence()) section(sec, join);
+		for(var row: rankings.absence(rule)) join.add(escape(row));
 	}
 
 	/**

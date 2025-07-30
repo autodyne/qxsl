@@ -7,8 +7,11 @@ package ats4.base;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import qxsl.ruler.Contest;
 import qxsl.ruler.Section;
 
 import ats4.data.RankingData;
@@ -94,6 +97,29 @@ public final class RankingTable extends AccountTable<RankingData> {
 	 */
 	public final List<RankingData> bySect(Section sect) {
 		return bySect(sect.name());
+	}
+
+	/**
+	 * どの部門にも不参加の呼出符号を返します。
+	 *
+	 *
+	 * @param rule 規約
+	 *
+	 * @return 見つかった呼出符号
+	 *
+	 * @throws TableAccessException 疎通の障害
+	 * @throws TableSchemaException 構造の問題
+	 *
+	 * @since 2025/07/30
+	 */
+	public final List<String> absence(Contest rule) {
+		final var map = new HashMap<String, Boolean>();
+		for(var v: this.list()) {
+			boolean test = rule.section(v.sect).isAbsence();
+			map.merge(v.call, test, Boolean::logicalAnd);
+		}
+		var set = map.keySet().stream().filter(map::get);
+		return set.sorted().collect(Collectors.toList());
 	}
 
 	/**
