@@ -100,6 +100,8 @@
 ;; BAND FIELD ACCESS ROUTINES
 
 ; band enumeration for qxsl
+(setq 135kHz      135)
+(setq 475kHz      475)
 (setq 1.9MHz     1900)
 (setq 3.5MHz     3500)
 (setq   7MHz     7000)
@@ -107,6 +109,7 @@
 (setq  14MHz    14000)
 (setq  18MHz    18000)
 (setq  21MHz    21000)
+(setq  24MHz    24000)
 (setq  28MHz    28000)
 (setq  50MHz    50000)
 (setq 144MHz   144000)
@@ -117,21 +120,24 @@
 (setq  10GHz 10000000)
 
 ; band enumeration for adif
-(setq 1.9MHz-adif "160m")
-(setq 3.5MHz-adif  "80m")
-(setq   7MHz-adif  "40m")
-(setq  10MHz-adif  "30m")
-(setq  14MHz-adif  "20m")
-(setq  18MHz-adif  "17m")
-(setq  21MHz-adif  "15m")
-(setq  28MHz-adif  "10m")
-(setq  50MHz-adif   "6m")
-(setq 144MHz-adif   "2m")
-(setq 430MHz-adif "70cm")
-(setq 1.2GHz-adif "23cm")
-(setq 2.4GHz-adif "13cm")
-(setq 5.6GHz-adif  "6cm")
-(setq  10GHz-adif  "3cm")
+(setq 135kHz-adif "2190m")
+(setq 475kHz-adif  "630m")
+(setq 1.9MHz-adif  "160m")
+(setq 3.5MHz-adif   "80m")
+(setq   7MHz-adif   "40m")
+(setq  10MHz-adif   "30m")
+(setq  14MHz-adif   "20m")
+(setq  18MHz-adif   "17m")
+(setq  21MHz-adif   "15m")
+(setq  24MHz-adif   "12m")
+(setq  28MHz-adif   "10m")
+(setq  50MHz-adif    "6m")
+(setq 144MHz-adif    "2m")
+(setq 430MHz-adif  "70cm")
+(setq 1.2GHz-adif  "23cm")
+(setq 2.4GHz-adif  "13cm")
+(setq 5.6GHz-adif   "6cm")
+(setq  10GHz-adif   "3cm")
 
 ; band enumeration for CQWW
 (setq 1.9MHz-cqww     1800)
@@ -141,6 +147,7 @@
 (setq  14MHz-cqww    14000)
 (setq  18MHz-cqww    18000)
 (setq  21MHz-cqww    21000)
+(setq  24MHz-cqww    24000)
 (setq  28MHz-cqww    28000)
 (setq  50MHz-cqww    50000)
 (setq 144MHz-cqww   144000)
@@ -154,6 +161,8 @@
 (defun qxsl-band it
 	(let freq (qxsl-BAND it)
 		(cond
+			((<=      135 freq      138) 135kHz)
+			((<=      472 freq      479) 475kHz)
 			((<=     1800 freq     1913) 1.9MHz)
 			((<=     3500 freq     3687) 3.5MHz)
 			((<=     7000 freq     7200)   7MHz)
@@ -161,6 +170,7 @@
 			((<=    14000 freq    14350)  14MHz)
 			((<=    18000 freq    18168)  18MHz)
 			((<=    21000 freq    21450)  21MHz)
+			((<=    24000 freq    24990)  24MHz)
 			((<=    28000 freq    29700)  28MHz)
 			((<=    50000 freq    54000)  50MHz)
 			((<=   144000 freq   146000) 144MHz)
@@ -173,6 +183,8 @@
 ; band access for adif
 (defun adif-band it
 	(case (string-downcase (adif-BAND it))
+		(135kHz-adif 135kHz)
+		(475kHz-adif 475kHz)
 		(1.9MHz-adif 1.9MHz)
 		(3.5MHz-adif 3.5MHz)
 		(  7MHz-adif   7MHz)
@@ -180,6 +192,7 @@
 		( 14MHz-adif  14MHz)
 		( 18MHz-adif  18MHz)
 		( 21MHz-adif  21MHz)
+		( 24MHz-adif  24MHz)
 		( 28MHz-adif  28MHz)
 		( 50MHz-adif  50MHz)
 		(144MHz-adif 144MHz)
@@ -193,6 +206,8 @@
 (defun set-adif-band (it val)
 	(set-adif-BAND it
 		(case val
+			(135kHz 135kHz-adif)
+			(475kHz 475kHz-adif)
 			(1.9MHz 1.9MHz-adif)
 			(3.5MHz 3.5MHz-adif)
 			(  7MHz   7MHz-adif)
@@ -200,6 +215,7 @@
 			( 14MHz  14MHz-adif)
 			( 18MHz  18MHz-adif)
 			( 21MHz  21MHz-adif)
+			( 24MHz  24MHz-adif)
 			( 28MHz  28MHz-adif)
 			( 50MHz  50MHz-adif)
 			(144MHz 144MHz-adif)
@@ -220,6 +236,7 @@
 			( 14MHz  14MHz-cqww)
 			( 18MHz  18MHz-cqww)
 			( 21MHz  21MHz-cqww)
+			( 24MHz  24MHz-cqww)
 			( 28MHz  28MHz-cqww)
 			( 50MHz  50MHz-cqww)
 			(144MHz 144MHz-cqww)
@@ -230,6 +247,8 @@
 			( 10GHz  10GHz-cqww))))
 
 ; band validation
+(defun 135kHz? it (equal (qxsl-band it) 135kHz))
+(defun 475kHz? it (equal (qxsl-band it) 475kHz))
 (defun 1.9MHz? it (equal (qxsl-band it) 1.9MHz))
 (defun 3.5MHz? it (equal (qxsl-band it) 3.5MHz))
 (defun   7MHz? it (equal (qxsl-band it)   7MHz))
@@ -237,6 +256,7 @@
 (defun  14MHz? it (equal (qxsl-band it)  14MHz))
 (defun  18MHz? it (equal (qxsl-band it)  18MHz))
 (defun  21MHz? it (equal (qxsl-band it)  21MHz))
+(defun  24MHz? it (equal (qxsl-band it)  24MHz))
 (defun  28MHz? it (equal (qxsl-band it)  28MHz))
 (defun  50MHz? it (equal (qxsl-band it)  50MHz))
 (defun 144MHz? it (equal (qxsl-band it) 144MHz))
