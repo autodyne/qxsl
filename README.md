@@ -1,9 +1,9 @@
 QxSL: Amateur-Radio Logging Library & LISP
 ====
 
-![image](https://img.shields.io/badge/Gradle-7-red.svg)
-![image](https://img.shields.io/badge/OpenJDK-SE11-red.svg)
-![image](https://img.shields.io/badge/GraalVM-20.0-red.svg)
+![image](https://img.shields.io/badge/Gradle-9-red.svg)
+![image](https://img.shields.io/badge/OpenJDK-SE17-red.svg)
+![image](https://img.shields.io/badge/GraalVM-JDK17-red.svg)
 ![image](https://img.shields.io/badge/license-LGPL3-darkblue.svg)
 ![build](https://github.com/autodyne/qxsl/actions/workflows/build.yaml/badge.svg)
 

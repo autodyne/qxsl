@@ -3,16 +3,18 @@ apply plugin: 'maven-publish'
 
 def utf8 = 'UTF-8'
 def dist = 'dist'
-def java = JavaVersion.VERSION_11
+def java = JavaVersion.VERSION_17
+def main = 'qxsl.utils.ShellUtil'
 
-mainClassName = 'qxsl.utils.ShellUtil'
+application.mainClass.set(main)
 
 repositories.mavenCentral()
 
 dependencies {
-	testImplementation 'org.assertj:assertj-core:3.27.+'
-	testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.11.+'
-	testImplementation 'org.junit.jupiter:junit-jupiter-params:5.11.+'
+	testImplementation 'org.assertj:assertj-core:4.0.+'
+	testImplementation 'org.junit.platform:junit-platform-launcher:6.0.+'
+	testImplementation 'org.junit.jupiter:junit-jupiter-engine:6.0.+'
+	testImplementation 'org.junit.jupiter:junit-jupiter-params:6.0.+'
 }
 
 compileJava {
@@ -29,7 +31,7 @@ compileTestJava {
 
 test.useJUnitPlatform()
 
-jar.manifest.attributes 'Main-Class': mainClassName
+jar.manifest.attributes 'Main-Class': main
 jar.from configurations.compileClasspath.collect {
 	it.isDirectory()? it: zipTree(it)
 }
