@@ -29,6 +29,16 @@ public final class CallTest extends Assertions {
 	}
 
 	@Test
+	public void testValid() {
+		assertThat(new Call("JA1ZGP").valid()).isTrue();
+		assertThat(new Call("JR1ZTT").valid()).isTrue();
+		assertThat(new Call("JA1YXP/1").valid()).isTrue();
+		assertThat(new Call("JA2YKA/2").valid()).isTrue();
+		assertThat(new Call("JA1-100110").valid()).isTrue();
+		assertThat(new Call("JA1-1009/2").valid()).isTrue();
+	}
+
+	@Test
 	public void testToString(@RandomString String text) {
 		assertThat(new Call(text)).hasToString(text.toUpperCase());
 	}
